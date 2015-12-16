@@ -26,3 +26,11 @@
 *.exe
 *.out
 *.app
+
+# Covers JetBrains IDEs: CLion
+*.iml
+
+## Directory-based project format:
+.idea/
+
+.DS_Store
