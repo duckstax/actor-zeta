@@ -2,7 +2,7 @@
 #include "actor/actor_address.hpp"
 #include <iostream>
 
-namespace actor_model {
+namespace actor_zeta {
 
     book_contacts::book_contacts(std::initializer_list<actor_address> visiting_cards) {
         for (auto &i: visiting_cards)

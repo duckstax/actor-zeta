@@ -7,7 +7,7 @@
 #include "messaging/message.hpp"
 #include "fwd.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     class cooperation {
     public:
         cooperation() = default;
@@ -54,7 +54,7 @@ namespace actor_model {
 
 
     template<class V>
-    inline void send(actor_model::cooperation &c, std::string commanda, V value) {
+    inline void send(actor_zeta::cooperation &c, std::string commanda, V value) {
         c.async_send(std::move(messaging::make_message(commanda, value)));
     }
 }

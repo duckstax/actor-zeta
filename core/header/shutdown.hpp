@@ -3,7 +3,7 @@
 
 #include "fwd.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
     void shutdown(abstract_coordinator *ac);
 

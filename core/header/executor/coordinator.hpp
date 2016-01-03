@@ -6,7 +6,7 @@
 #include "worker.hpp"
 #include "abstract_coordinator.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     template<class Policy>
     class coordinator final : public abstract_coordinator {
     public:

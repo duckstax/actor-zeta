@@ -3,14 +3,14 @@
 #include "environment/group.hpp"
 #include "environment/cooperation.hpp"
 
-void ::actor_model::await_all_actors_done(actor_model::group &g) {
+void ::actor_zeta::await_all_actors_done(actor_zeta::group &g) {
 
 };
 
-void ::actor_model::await_all_actors_done(actor_model::cooperation &c) {
+void ::actor_zeta::await_all_actors_done(actor_zeta::cooperation &c) {
 
 }
 
-void ::actor_model::await_all_actors_done(actor_model::actor &a) {
+void ::actor_zeta::await_all_actors_done(actor_zeta::actor &a) {
 
 }

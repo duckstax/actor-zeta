@@ -10,7 +10,7 @@
 #include "fwd.hpp"
 #include "executor/executable.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     class local_actor : public executable, public abstract_actor {
     public:
         using mailbox_type=messaging::mail_box<messaging::message>;
@@ -24,6 +24,8 @@ namespace actor_model {
         bool async_send(messaging::message &&, executor_ptr) override;
 
         void launch();
+
+        virtual ~local_actor(){}
 
     protected:
         void attach_to_scheduler() override;
@@ -49,7 +51,7 @@ namespace actor_model {
             const std::string &name,
             behavior live
     ) {
-        live.insert("sync_contacs", actor_model::sync_contacs());
+        live.insert("sync_contacs", actor_zeta::sync_contacs());
         return actor(new local_actor(name, live, nullptr));
     };
 
@@ -58,7 +60,7 @@ namespace actor_model {
             behavior live,
             abstract_coordinator_ptr e
     ) {
-        live.insert("sync_contacs", actor_model::sync_contacs());
+        live.insert("sync_contacs", actor_zeta::sync_contacs());
         return actor(new local_actor(name, live, e));
     };
 

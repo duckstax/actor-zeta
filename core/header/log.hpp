@@ -9,7 +9,7 @@
 #include "messaging/message.hpp"
 #include "fwd.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     std::string getdata();
 
     namespace level_debug {
@@ -102,8 +102,12 @@ namespace actor_model {
         ~log();
     };
 
-    inline actor make_log(const std::string &path, actor_model::abstract_coordinator_ptr e) {
+    inline actor make_log(const std::string &path, actor_zeta::abstract_coordinator_ptr e) {
         return actor(new log(path, e));
+    }
+
+    inline actor make_log(const std::string &path) {
+        return actor(new log(path));
     }
 }
 

@@ -1,9 +1,9 @@
 #include "actor/abstract_actor.hpp"
 #include "actor/actor_address.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
-    abstract_actor::abstract_actor(std::string type, abstract_coordinator_ptr e) : actor_type(type), _executor(e) { }
+    abstract_actor::abstract_actor(const std::string& type, abstract_coordinator_ptr e) : actor_type(type), _executor(e) { }
 
     std::string abstract_actor::type() const {
         return actor_type;

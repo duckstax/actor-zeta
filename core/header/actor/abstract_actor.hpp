@@ -9,7 +9,7 @@
 #include "actor.hpp"
 #include "fwd.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
     class abstract_actor : public ref_counted {
     public:
@@ -21,7 +21,7 @@ namespace actor_model {
 
         std::string type() const;
 
-        abstract_actor(std::string type, abstract_coordinator_ptr e);
+        abstract_actor(const std::string& type, abstract_coordinator_ptr e);
 
         virtual bool async_send(messaging::message &&) = 0;
 

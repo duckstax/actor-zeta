@@ -9,7 +9,7 @@
 #include "executable.hpp"
 #include "fwd.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     template<class Policy>
     class worker final : public executor_service {
     public:

@@ -4,7 +4,7 @@
 #include "time_unit.hpp"
 #include "fwd.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     class abstract_coordinator {
     public:
         virtual void submit(executable *) = 0;

@@ -5,7 +5,7 @@
 #include "actor/local_actor.hpp"
 #include <algorithm>
 
-namespace actor_model {
+namespace actor_zeta {
 
     void cooperation::async_send(messaging::message &&msg) {
         cooperation_groups[entry_point].async_send(std::move(msg));

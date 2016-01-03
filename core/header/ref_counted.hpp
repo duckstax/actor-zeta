@@ -5,7 +5,7 @@
 #include <cstddef>
 
 
-namespace actor_model {
+namespace actor_zeta {
 
 
     class ref_counted {

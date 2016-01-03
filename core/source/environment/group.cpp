@@ -2,7 +2,7 @@
 #include "environment/group.hpp"
 #include <algorithm>
 
-namespace actor_model {
+namespace actor_zeta {
 
     void group::async_send(messaging::message &&msg) {
         unique_actors[entry_point]->async_send(std::move(msg));
@@ -73,5 +73,12 @@ namespace actor_model {
     group &group::add(actor &&a) {
         unique_actors.emplace(a.type(), std::move(a));
         return *this;
+    }
+
+    void group::sync() {
+        if(unique_actors.size()==1){
+            entry_point = (*unique_actors.begin()).first;
+        }
+
     }
 }

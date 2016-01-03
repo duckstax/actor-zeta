@@ -3,7 +3,7 @@
 
 #include <vector>
 
-namespace actor_model {
+namespace actor_zeta {
     namespace messaging {
 
         template<class T>

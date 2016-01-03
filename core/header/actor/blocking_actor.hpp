@@ -3,7 +3,7 @@
 
 #include "local_actor.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     class blocking_actor : public local_actor {
     public:
 

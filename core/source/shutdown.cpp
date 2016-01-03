@@ -2,7 +2,7 @@
 #include <thread>
 #include "executor/abstract_coordinator.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
     void shutdown(abstract_coordinator *ac) {
         //ac->shutdown();

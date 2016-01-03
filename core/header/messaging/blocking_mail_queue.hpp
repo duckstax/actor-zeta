@@ -8,7 +8,7 @@
 
 #include "mail_box.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     namespace messaging {
         template<typename T>
         class blocking_mail_queue final : public mail_box<T> {

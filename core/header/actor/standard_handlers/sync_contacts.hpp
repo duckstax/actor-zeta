@@ -5,7 +5,7 @@
 #include "actor/book_contacts.hpp"
 #include "actor/actor_address.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
     struct sync_contacs {
         void operator()(book_contacts &bc, messaging::message &&msg) {

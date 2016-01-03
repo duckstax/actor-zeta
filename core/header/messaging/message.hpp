@@ -5,7 +5,7 @@
 #include "message_priorities.hpp"
 #include "intrusive_ptr.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     namespace messaging {
 
         class message {
@@ -120,8 +120,8 @@ namespace actor_model {
         };
 
         template<typename V>
-        inline actor_model::messaging::message make_message(const std::string &command, const V &v) {
-            return actor_model::messaging::message(command, v);
+        inline actor_zeta::messaging::message make_message(const std::string &command, const V &v) {
+            return actor_zeta::messaging::message(command, v);
         }
     }
 }

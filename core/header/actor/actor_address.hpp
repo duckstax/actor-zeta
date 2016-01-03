@@ -6,7 +6,7 @@
 #include "abstract_actor.hpp"
 #include "fwd.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
     class actor_address {
     public:

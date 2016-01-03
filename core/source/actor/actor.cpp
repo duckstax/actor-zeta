@@ -2,7 +2,7 @@
 #include "actor/abstract_actor.hpp"
 #include "actor/actor_address.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
     actor::~actor() { }
 
@@ -10,7 +10,7 @@ namespace actor_model {
         return heart->adddres();
     };
 
-    inline bool actor::is_remote() const noexcept {
+    bool actor::is_remote() const noexcept {
         return heart->is_remote();
     }
 

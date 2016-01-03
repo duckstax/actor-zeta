@@ -6,7 +6,7 @@
 #include "fwd.hpp"
 
 //smart actor
-namespace actor_model {
+namespace actor_zeta {
     class actor {
     public:
         actor() = default;

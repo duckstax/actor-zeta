@@ -7,7 +7,7 @@
 #include <condition_variable>
 #include "../executable.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
 // scheduler_policy
     struct work_sharing {

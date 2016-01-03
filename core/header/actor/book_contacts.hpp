@@ -6,7 +6,7 @@
 #include <map>
 #include "fwd.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
     class book_contacts {
     public:

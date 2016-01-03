@@ -4,7 +4,7 @@
 #include <memory>
 #include <cstdint>
 
-namespace actor_model {
+namespace actor_zeta {
     namespace messaging {
         class message;
     }

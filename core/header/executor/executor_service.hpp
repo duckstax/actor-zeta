@@ -4,7 +4,7 @@
 #include "time_unit.hpp"
 #include "fwd.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     struct executor_service {
         virtual void execute(executable_ptr) = 0;
 

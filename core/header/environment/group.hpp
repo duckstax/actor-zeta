@@ -6,7 +6,7 @@
 #include "messaging/message.hpp"
 #include "fwd.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     class group {
     public:
         group() = default;
@@ -31,6 +31,8 @@ namespace actor_model {
 
         void sync(std::initializer_list<std::string>);
 
+        void sync();
+
         actor_address address_entry_point();
 
         void async_send(messaging::message &&);
@@ -48,7 +50,7 @@ namespace actor_model {
 
 
     template<class V>
-    inline void send(actor_model::group &g, std::string commanda, V value) {
+    inline void send(actor_zeta::group &g, std::string commanda, V value) {
         g.async_send(std::move(messaging::make_message(commanda, value)));
     }
 }

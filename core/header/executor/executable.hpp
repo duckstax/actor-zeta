@@ -3,7 +3,7 @@
 
 #include "fwd.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     struct executable {
         enum state {
             resume,

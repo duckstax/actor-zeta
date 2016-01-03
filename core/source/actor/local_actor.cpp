@@ -5,7 +5,7 @@
 #include "messaging/blocking_mail_queue.hpp"
 #include "executor/abstract_coordinator.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
     local_actor::local_actor(const std::string &type, behavior live, abstract_coordinator_ptr e)
             : abstract_actor(type, e),

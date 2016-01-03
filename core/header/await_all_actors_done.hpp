@@ -3,7 +3,7 @@
 
 #include "fwd.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
     void await_all_actors_done(group &g);
 

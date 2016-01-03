@@ -1,6 +1,6 @@
 #include "actor/actor_address.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
     actor_address::~actor_address() { }
 

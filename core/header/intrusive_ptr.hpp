@@ -6,7 +6,7 @@
 #include <utility>
 #include "ref_counted.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     template<class T>
     class intrusive_ptr {
     public:

@@ -1,6 +1,6 @@
 #include "ref_counted.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
     ref_counted::~ref_counted() {
         // nop

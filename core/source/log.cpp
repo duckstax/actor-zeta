@@ -1,9 +1,9 @@
 #include "log.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
     log::log(const std::string path, abstract_coordinator_ptr e) : log_j(log_path), local_actor("log", e) {
         life.insert("log",
-                    [this](actor_model::book_contacts &bc, messaging::message &&msg) {
+                    [this](actor_zeta::book_contacts &bc, messaging::message &&msg) {
                         log_j.write(bc, std::move(msg));
                     });
         log_path.open(path, std::ios_base::app);

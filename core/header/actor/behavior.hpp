@@ -3,16 +3,15 @@
 
 #include <map>
 #include <functional>
-#include <iostream>
 #include <vector>
 #include "fwd.hpp"
 
-namespace actor_model {
+namespace actor_zeta {
 
     class behavior {
     public:
 
-        using action=std::function<void(actor_model::book_contacts &, messaging::message &&)>;
+        using action=std::function<void(actor_zeta::book_contacts &, messaging::message &&)>;
 
         behavior() = default;
 
