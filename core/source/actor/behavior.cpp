@@ -2,6 +2,7 @@
 #include "actor/behavior.hpp"
 #include "actor/book_contacts.hpp"
 #include "messaging/message.hpp"
+#include "iostream"
 
 namespace actor_zeta {
 

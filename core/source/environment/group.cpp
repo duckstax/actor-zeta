@@ -34,18 +34,18 @@ namespace actor_zeta {
             }
             unique_actors[*(j)]->async_send(
                     messaging::make_message(
-                            std::string("sync_contacs"),
+                            std::string("sync_contacts"),
                             unique_actors[*(i)].address()
                     )
             );
         }
     }
 
-    group &group::add_shared(actor_address address) {
+    group &group::add_shared_address(actor_address address) {
         for (auto &i:unique_actors)
             i.second->async_send(
                     messaging::make_message(
-                            std::string("sync_contacs"),
+                            std::string("sync_contacts"),
                             address
                     )
             );
@@ -80,5 +80,23 @@ namespace actor_zeta {
             entry_point = (*unique_actors.begin()).first;
         }
 
+    }
+
+    group &group::add(const std::string &root_name, abstract_actor *aa) {
+        actor_zeta::actor_address address =aa->adddres();
+        unique_actors.emplace(aa->type(), actor(aa));
+        unique_actors[root_name]->async_send(
+                messaging::make_message(
+                        std::string("sync_contacts"),
+                        address
+                )
+        );
+        return *this;
+    }
+
+    group::group(abstract_actor *aa) {
+        std::string entry_address =aa->type();
+        unique_actors.emplace(aa->type(), actor(aa));
+        entry_point =entry_address;
     }
 }

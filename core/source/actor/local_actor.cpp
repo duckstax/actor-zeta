@@ -21,15 +21,10 @@ namespace actor_zeta {
 
     bool local_actor::async_send(messaging::message &&document, executor_ptr e) {
         bool status = mailbox->put(std::move(document));
-        // re-schedule actor
+        // schedule actor
         shedule(e);
         return status;
     }
-
-    //void local_actor::act() {
-    //    messaging::message input = mailbox->get();
-    //    life.run(contacts, std::move(input));
-    //}
 
     void local_actor::attach_to_scheduler() {
         ref();
@@ -65,7 +60,7 @@ namespace actor_zeta {
     };
 
     void local_actor::shedule(executor_ptr e) {
-        // re-schedule actor
+        // schedule actor
         if (e) {
             e->put_execute_latest(this);
         }

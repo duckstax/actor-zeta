@@ -1,6 +1,5 @@
 #include "actor/behavior.hpp"
 #include "environment/cooperation.hpp"
-#include "actor/actor.hpp"
 #include "environment/group.hpp"
 #include "actor/local_actor.hpp"
 #include <algorithm>
@@ -24,7 +23,7 @@ namespace actor_zeta {
             }
             cooperation_groups[*(j)].async_send(
                     messaging::make_message(
-                            std::string("sync_contacs"),
+                            std::string("sync_contacts"),
                             cooperation_groups[*(i)].address_entry_point()
                     )
             );
@@ -37,16 +36,8 @@ namespace actor_zeta {
         }
     }
 
-    cooperation::cooperation(std::initializer_list<actor_address> list) : sharet_contacts(list) {
-    }
-
     cooperation &cooperation::add(group &&g) {
         cooperation_groups.emplace(g.name_entry_point(), std::move(g));
-        return *this;
-    }
-
-    cooperation &cooperation::add(const std::string &key, abstract_actor *abstractActor) {
-        cooperation_groups[key].add(abstractActor);
         return *this;
     }
 
@@ -68,15 +59,10 @@ namespace actor_zeta {
         return *this;
     }
 
-    cooperation &cooperation::put_sharet(actor_address address) {
+    cooperation &cooperation::add_sharet_address(actor_address address) {
         for (auto &i:cooperation_groups) {
-            i.second.add_shared(address);
+            i.second.add_shared_address(address);
         }
-        return *this;
-    }
-
-    cooperation &cooperation::add(const std::string &name_group, actor &&a) {
-        cooperation_groups[name_group].add(std::move(a));
         return *this;
     }
 

@@ -38,8 +38,6 @@ namespace actor_zeta {
 
         void shedule(executor_ptr e);
 
-        //virtual void act();
-
         executable::state run(size_t max_throughput) override;
 
         behavior life;
@@ -51,7 +49,7 @@ namespace actor_zeta {
             const std::string &name,
             behavior live
     ) {
-        live.insert("sync_contacs", actor_zeta::sync_contacs());
+        live.insert("sync_contacts", actor_zeta::sync_contacts());
         return actor(new local_actor(name, live, nullptr));
     };
 
@@ -60,7 +58,7 @@ namespace actor_zeta {
             behavior live,
             abstract_coordinator_ptr e
     ) {
-        live.insert("sync_contacs", actor_zeta::sync_contacs());
+        live.insert("sync_contacts", actor_zeta::sync_contacts());
         return actor(new local_actor(name, live, e));
     };
 

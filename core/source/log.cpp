@@ -2,10 +2,12 @@
 
 namespace actor_zeta {
     log::log(const std::string path, abstract_coordinator_ptr e) : log_j(log_path), local_actor("log", e) {
-        life.insert("log",
-                    [this](actor_zeta::book_contacts &bc, messaging::message &&msg) {
+        life.insert(
+                "log",
+                [this](actor_zeta::book_contacts &bc, messaging::message &&msg) {
                         log_j.write(bc, std::move(msg));
-                    });
+                }
+        );
         log_path.open(path, std::ios_base::app);
     }
 
@@ -28,10 +30,13 @@ namespace actor_zeta {
         return d;
     }
 
-    log::log(const std::string path) : log_j(log_path), local_actor("log", {}, nullptr) {
-        life.insert("log", [this](book_contacts &bc, messaging::message &&msg) {
-            log_j.write(bc, std::move(msg));
-        });
+    log::log(const std::string path) : log_j(log_path), local_actor("log", nullptr) {
+        life.insert(
+                "log",
+                [this](book_contacts &bc, messaging::message &&msg) {
+                    log_j.write(bc, std::move(msg));
+                }
+        );
         log_path.open(path, std::ios_base::app);
     }
 }

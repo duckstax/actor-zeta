@@ -7,7 +7,7 @@
 
 namespace actor_zeta {
 
-    struct sync_contacs {
+    struct sync_contacts {
         void operator()(book_contacts &bc, messaging::message &&msg) {
             bc.put(msg.get<actor_address>());
         }

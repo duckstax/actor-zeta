@@ -22,12 +22,6 @@ namespace actor_zeta {
 
         ~cooperation() { };
 
-        explicit cooperation(std::initializer_list<actor_address>);
-
-        cooperation &add(const std::string &, abstract_actor *);
-
-        cooperation &add(const std::string &, actor &&);
-
         cooperation &add(group &&);
 
         void sync(std::initializer_list<std::string>);
@@ -44,12 +38,11 @@ namespace actor_zeta {
 
         cooperation &set_exeutor_all(abstract_coordinator_ptr);
 
-        cooperation &put_sharet(actor_address);
+        cooperation &add_sharet_address(actor_address);
 
     private:
         std::string entry_point;
         std::map<std::string, group> cooperation_groups;
-        std::vector<actor_address> sharet_contacts;
     };
 
 

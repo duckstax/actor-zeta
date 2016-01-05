@@ -19,6 +19,8 @@ namespace actor_zeta {
 
         group &operator=(group &&) = default;
 
+        group(abstract_actor *);
+
         ~group() { };
 
         std::string name_entry_point() const;
@@ -27,7 +29,9 @@ namespace actor_zeta {
 
         group &add(abstract_actor *);
 
-        group &add_shared(actor_address);
+        group &add(const std::string &, abstract_actor *);
+
+        group &add_shared_address(actor_address);
 
         void sync(std::initializer_list<std::string>);
 
