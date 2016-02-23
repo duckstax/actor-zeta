@@ -7,7 +7,7 @@
 #include "messaging/mail_box.hpp"
 #include "actor.hpp"
 #include "behavior.hpp"
-#include "fwd.hpp"
+#include "forwards.hpp"
 #include "executor/executable.hpp"
 
 namespace actor_zeta {

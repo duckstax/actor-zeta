@@ -2,7 +2,7 @@
 #define EXECUTOR_SERVICE_HPP
 
 #include "time_unit.hpp"
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 namespace actor_zeta {
     struct executor_service {

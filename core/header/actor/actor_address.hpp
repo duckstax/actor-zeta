@@ -4,7 +4,7 @@
 
 #include "intrusive_ptr.hpp"
 #include "abstract_actor.hpp"
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 namespace actor_zeta {
 

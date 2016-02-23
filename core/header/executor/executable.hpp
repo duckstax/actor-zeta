@@ -1,7 +1,7 @@
 #ifndef EXECUTABLE_HPP
 #define EXECUTABLE_HPP
 
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 namespace actor_zeta {
     struct executable {

@@ -2,7 +2,7 @@
 #define ABSTRACT_COORDINATOR_HPP
 
 #include "time_unit.hpp"
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 namespace actor_zeta {
     class abstract_coordinator {

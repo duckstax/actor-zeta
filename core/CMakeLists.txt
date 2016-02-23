@@ -35,12 +35,12 @@ set(HEADER_FILES
         header/messaging/message_priorities.hpp
 
         header/await_all_actors_done.hpp
-        header/fwd.hpp
+        header/environment.hpp
+        header/forwards.hpp
         header/intrusive_ptr.hpp
         header/log.hpp
         header/ref_counted.hpp
-        header/shutdown.hpp
-)
+        header/shutdown.hpp)
 
 set(SOURCE_FILES
         source/actor/abstract_actor.cpp
@@ -56,7 +56,6 @@ set(SOURCE_FILES
         source/await_all_actors_done.cpp
         source/log.cpp
         source/ref_counted.cpp
-        source/shutdown.cpp
-)
+        source/shutdown.cpp)
 
 add_library(${PROJECT} OBJECT ${SOURCE_FILES} ${HEADER_FILES})

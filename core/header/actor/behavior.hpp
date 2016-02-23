@@ -4,7 +4,7 @@
 #include <map>
 #include <functional>
 #include <vector>
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 namespace actor_zeta {
 

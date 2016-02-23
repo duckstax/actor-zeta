@@ -7,7 +7,7 @@
 #include "executor_service.hpp"
 #include <mutex>
 #include "executable.hpp"
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 namespace actor_zeta {
     template<class Policy>

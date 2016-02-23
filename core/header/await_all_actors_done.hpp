@@ -1,7 +1,7 @@
 #ifndef AWAIT_ALL_ACTORS_DONE_HPP
 #define AWAIT_ALL_ACTORS_DONE_HPP
 
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 namespace actor_zeta {
 

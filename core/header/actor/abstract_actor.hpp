@@ -7,7 +7,7 @@
 #include <string>
 #include "ref_counted.hpp"
 #include "actor.hpp"
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 namespace actor_zeta {
 

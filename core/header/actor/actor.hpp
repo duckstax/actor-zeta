@@ -3,7 +3,7 @@
 
 #include <string>
 #include "intrusive_ptr.hpp"
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 //smart actor
 namespace actor_zeta {

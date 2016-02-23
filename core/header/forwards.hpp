@@ -1,5 +1,5 @@
-#ifndef FWD_HPP
-#define FWD_HPP
+#ifndef FORWARDS_HPP
+#define FORWARDS_HPP
 
 #include <memory>
 #include <cstdint>
@@ -36,4 +36,4 @@ namespace actor_zeta {
     using abstract_coordinator_ptr=abstract_coordinator *;
 }
 
-#endif // FWD_HPP
+#endif // FORWARDS_HPP

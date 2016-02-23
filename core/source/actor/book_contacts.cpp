@@ -31,13 +31,6 @@ namespace actor_zeta {
         contacts.emplace(vc->type(), vc);
     }
 
-    std::vector<actor_address> book_contacts::to_vector() {
-        std::vector<actor_address> tmp;
-        for (auto &i:contacts)
-            tmp.emplace_back(actor_address(i.second));
-        return tmp;
-    }
-
     void book_contacts::all_view() {
         for (auto &i: contacts)
             std::cout << i.first << std::endl;
@@ -47,6 +40,17 @@ namespace actor_zeta {
     void book_contacts::put(const std::vector<actor_address> &visiting_cards) {
         for (auto &i: visiting_cards)
             contacts.emplace(i->type(), i);
-
     }
+
+    actor_address &book_contacts::group::get() {
+        return  dd[cursor];
+    }
+
+
+    void book_contacts::group::put(const actor_address &vc) {
+        dd.push_back(vc);
+        ++cursor;
+    }
+
+    book_contacts::group::group():cursor(0){}
 }

@@ -7,7 +7,7 @@
 
 #include "actor/local_actor.hpp"
 #include "messaging/message.hpp"
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 namespace actor_zeta {
     std::string getdata();

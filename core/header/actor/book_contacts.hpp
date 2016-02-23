@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 namespace actor_zeta {
 
@@ -20,13 +20,11 @@ namespace actor_zeta {
 
         void put(const std::vector<actor_address> &visiting_cards);
 
-        actor_address &get(const std::string &name);
-
         void put(const std::string name, actor_address);
 
         void put(const actor_address &vc);
 
-        std::vector<actor_address> to_vector();
+        actor_address &get(const std::string &name);
 
         /*
         * debug method
@@ -34,7 +32,20 @@ namespace actor_zeta {
         void all_view();
 
     private:
+        class group{
+        public:
+            group();
+            group(group&&)= default;
+            group&operator=(group&&)= default;
+            void put(const actor_address &vc);
+            actor_address &get();
+        private:
+            int cursor;
+            std::vector<actor_address>dd;
+        };
+
         std::map<std::string, actor_address> contacts;
+        std::map<std::string,group> groups;
     };
 }
 #endif

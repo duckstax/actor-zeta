@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 #include "messaging/message.hpp"
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 namespace actor_zeta {
     class group {
@@ -27,7 +27,7 @@ namespace actor_zeta {
 
         group &add(actor &&);
 
-        group &add(abstract_actor *);
+        group &add( abstract_actor*  );
 
         group &add(const std::string &, abstract_actor *);
 

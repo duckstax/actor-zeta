@@ -1,7 +1,7 @@
 #ifndef SHUTDOWN_HPP
 #define SHUTDOWN_HPP
 
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 namespace actor_zeta {
 

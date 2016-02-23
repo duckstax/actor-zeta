@@ -24,11 +24,13 @@ namespace actor_zeta {
                 bool status;
                 {
                     lock_guard lock(mutex);
+                    //if (mail_queue.empty())
+                    //    cv.notify_one();
                     mail_queue.emplace_back(std::forward<T>(m));
                     status = true;
                 }
-                cv.notify_one();
                 ++size_;
+                cv.notify_one();
                 return status;
             }
 
@@ -37,7 +39,7 @@ namespace actor_zeta {
                 T tmp = std::forward<T>(mail_queue.front());
                 mail_queue.pop_front();
                 --size_;
-                return tmp;
+                return std::forward<T>(tmp);
             }
 
             std::vector<T> getAll() override {

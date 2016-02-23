@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include "messaging/message.hpp"
-#include "fwd.hpp"
+#include "forwards.hpp"
 
 namespace actor_zeta {
     class cooperation {
