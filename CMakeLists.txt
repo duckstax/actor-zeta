@@ -4,8 +4,9 @@ set(PROJECT actor-zeta)
 
 project(${PROJECT} CXX)
 
-include_directories(BEFORE
-        ${PROJECT_SOURCE_DIR}/core/header
+include_directories(
+        libactor_zeta_core
+        libactor_zeta_io
 )
 
 add_compile_options(
@@ -15,12 +16,12 @@ add_compile_options(
         -fno-exceptions
 )
 
-IF (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+IF(NOT APPLE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -pthread ")
-    SET(OperatingSystem "Linux")
-ENDIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+ENDIF()
 
-add_subdirectory(core)
-add_library(${PROJECT} $<TARGET_OBJECTS:actor-zeta-core>)
+add_subdirectory(libactor_zeta_core)
+add_subdirectory(libactor_zeta_io)
+add_library(${PROJECT} $<TARGET_OBJECTS:actor-zeta-libactor_zeta_core> $<TARGET_OBJECTS:actor-zeta-libactor_zeta_io>)
 
 
