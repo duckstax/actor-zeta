@@ -1,25 +1,31 @@
 #include <utility>
 #include "actor-zeta/actor/blocking_actor.hpp"
 #include "actor-zeta/executor/executor_service.hpp"
-#include "actor-zeta/messaging/blocking_mail_queue.hpp"
 #include "actor-zeta/executor/abstract_coordinator.hpp"
 
 namespace actor_zeta {
+    void local_actor::init() {
+        life.insert("sync_contacts", actor_zeta::sync_contacts());
+    }
 
-    local_actor::local_actor(const std::string &type, behavior live, abstract_coordinator *e)
+    local_actor::local_actor(const std::string &type, std::function<behavior(local_actor *)> live,
+                             abstract_coordinator *e)
             : abstract_actor(type, e),
-              life(live),
-              mailbox(new messaging::blocking_mail_queue<messaging::message>()) { }
+              life(live(this)) {
+        init();
+    }
 
     local_actor::local_actor(const std::string &type, abstract_coordinator *ptr)
-            : abstract_actor(type, ptr), mailbox(new messaging::blocking_mail_queue<messaging::message>()) { }
+            : abstract_actor(type, ptr) {
+        init();
+    }
 
     bool local_actor::async_send(messaging::message &&document) {
         return async_send(std::move(document), nullptr);
     }
 
     bool local_actor::async_send(messaging::message &&document, executor_service *e) {
-        bool status = mailbox->put(std::move(document));
+        bool status = mailbox.put(std::move(document));
         // schedule actor
         shedule(e);
         return status;
@@ -42,7 +48,7 @@ namespace actor_zeta {
         }
 
         for (int i = 0; i < max_throughput; ++i) {
-            if (mailbox->empty()) {
+            if (mailbox.empty()) {
                 auto msg = std::move(next_message());
                 exect_event(std::move(msg));
             }
@@ -74,10 +80,11 @@ namespace actor_zeta {
     }
 
     void local_actor::exect_event(messaging::message &&msg) {
+        msg
         life.run(contacts, std::move(msg));
     }
 
     messaging::message local_actor::next_message() {
-        return mailbox->get();
+        return mailbox.get();
     }
 }

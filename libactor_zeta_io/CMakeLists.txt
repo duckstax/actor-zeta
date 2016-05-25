@@ -4,19 +4,17 @@ set(PROJECT actor-zeta-libactor_zeta_io)
 
 project(${PROJECT} CXX)
 
-include_directories(.
-        ../libactor_zeta_core/actor-zeta
-)
+include_directories(.)
 
 set(HEADER_FILES
         actor-zeta/broker.hpp
-        actor-zeta/connection.hpp
+        actor-zeta/connection_handler.hpp
         actor-zeta/forwards.hpp
         actor-zeta/multiplexer.hpp
 )
 
 set(SOURCE_FILES
-        source/broker.сpp
+        source/broker.cpp
 )
 
-add_library(${PROJECT} OBJECT ${SOURCE_FILES} ${HEADER_FILES})
+add_library(${PROJECT} OBJECT ${SOURCE_FILES} ${HEADER_FILES} )

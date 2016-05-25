@@ -2,7 +2,7 @@
 #define MULTIPLEXER_HPP
 
 #include "actor-zeta/actor/actor_address.hpp"
-#include "actor-zeta/connection.hpp"
+#include "actor-zeta/connection_handler.hpp"
 
 namespace actor_zeta {
     namespace network {
@@ -14,7 +14,6 @@ namespace actor_zeta {
 
             virtual void new_tcp_interfaces(const std::string &host, uint16_t port) = 0;
 
-            virtual void set_notify_interfaces(proxy_handler&&) = 0;
         };
 
         using unique_multiplexer_ptr = std::unique_ptr<multiplexer>;

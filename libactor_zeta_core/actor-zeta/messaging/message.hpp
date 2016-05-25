@@ -84,7 +84,7 @@ namespace actor_zeta {
                 return typeMessage;
             }
 
-            actor_address from_whom() const {
+            const actor_address& return_address() const {
                 return address;
             }
 
@@ -122,6 +122,11 @@ namespace actor_zeta {
         template<typename V>
         inline actor_zeta::messaging::message make_message(const std::string &command, const V &v) {
             return actor_zeta::messaging::message(command, v);
+        }
+
+        template<typename V>
+        inline actor_zeta::messaging::message make_message(actor_address address ,const std::string &command, const V &v) {
+            return actor_zeta::messaging::message(address,command, v);
         }
     }
 }
