@@ -80,7 +80,6 @@ namespace actor_zeta {
     }
 
     void local_actor::exect_event(messaging::message &&msg) {
-        msg
         life.run(contacts, std::move(msg));
     }
 
