@@ -1,7 +1,7 @@
 #ifndef GROUP_HPP
 #define GROUP_HPP
 
-#include <map>
+#include <unordered_map>
 #include <string>
 #include "actor-zeta/messaging/message.hpp"
 #include "actor-zeta/forwards.hpp"
@@ -48,7 +48,7 @@ namespace actor_zeta {
         group &set_exeutor_all(abstract_coordinator*);
 
     private:
-        std::map<std::string, actor> unique_actors;
+        std::unordered_map<std::string, actor> unique_actors;
         std::string entry_point;
     };
 

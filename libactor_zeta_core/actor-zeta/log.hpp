@@ -27,9 +27,9 @@ namespace actor_zeta {
         std::string msg;
         std::string date;
 
-        log_data(std::string level, std::string msg, std::string date) : level(level), msg(msg), date(date) { }
+        log_data(std::string level, std::string msg, std::string date) : level(level), msg(msg), date(date) {}
 
-        log_data() { }
+        log_data() {}
 
         std::string get() {
             return level + date + msg + new_string;
@@ -77,13 +77,13 @@ namespace actor_zeta {
 
         std::ofstream log_path;
 
-        class logger_handler {
+        class logger_handler final : public abstract_action {
         private:
             std::ofstream &log;
         public:
             logger_handler(std::ofstream &log);
 
-            void write(book_contacts &bc, messaging::message &&msg) {
+            void operator()(messaging::message &&msg) {
                 std::string str_log = msg.get<log_data>().get();
                 log << str_log;
                 log.flush();
@@ -91,8 +91,6 @@ namespace actor_zeta {
                 std::cout.flush();
             }
         };
-
-        logger_handler log_j;
     public:
 
         log(const std::string path, abstract_coordinator *e);

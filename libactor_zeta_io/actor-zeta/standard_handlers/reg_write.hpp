@@ -6,11 +6,11 @@
 
 namespace actor_zeta {
     namespace network {
-        class reg_write {
+        class reg_write: public abstract_action {
         public:
             reg_write(std::map<std::string, write_handler> &actions) : actions(actions) { }
 
-            void operator()(book_contacts &bc, messaging::message &&msg) {
+            void operator()(messaging::message &&msg) {
                 write_handler element = msg.get<write_handler>();
                 actions.emplace(element.id(), std::move(element));
             }

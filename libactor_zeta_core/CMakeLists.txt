@@ -39,7 +39,6 @@ set(HEADER_FILES
         actor-zeta/log.hpp
         actor-zeta/ref_counted.hpp
         actor-zeta/shutdown.hpp
-        actor-zeta/command.hpp
 )
 
 set(SOURCE_FILES

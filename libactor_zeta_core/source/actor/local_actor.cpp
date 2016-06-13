@@ -4,20 +4,15 @@
 #include "actor-zeta/executor/abstract_coordinator.hpp"
 
 namespace actor_zeta {
-    void local_actor::init() {
-        life.insert("sync_contacts", actor_zeta::sync_contacts());
-    }
 
-    local_actor::local_actor(const std::string &type, std::function<behavior(local_actor *)> live,
-                             abstract_coordinator *e)
-            : abstract_actor(type, e),
-              life(live(this)) {
-        init();
-    }
 
     local_actor::local_actor(const std::string &type, abstract_coordinator *ptr)
             : abstract_actor(type, ptr) {
         init();
+    }
+
+    void local_actor::init() {
+        life.insert("sync_contacts", new actor_zeta::sync_contacts(contacts));
     }
 
     bool local_actor::async_send(messaging::message &&document) {
@@ -80,7 +75,7 @@ namespace actor_zeta {
     }
 
     void local_actor::exect_event(messaging::message &&msg) {
-        life.run(contacts, std::move(msg));
+        life.run(std::move(msg));
     }
 
     messaging::message local_actor::next_message() {

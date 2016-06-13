@@ -13,50 +13,51 @@ namespace actor_zeta {
         using pointer = T *;
         using reference = T &;
 
-        constexpr intrusive_ptr() noexcept  : ptr_(nullptr) { }
+        constexpr intrusive_ptr() : ptr_(nullptr) {}
 
         intrusive_ptr(pointer raw_ptr, bool add_ref = true) {
             set_ptr(raw_ptr, add_ref);
         }
 
+        intrusive_ptr(intrusive_ptr &&other) : ptr_(other.detach()) {}
+
         intrusive_ptr(const intrusive_ptr &other) {
             set_ptr(other.get(), true);
         }
 
-        intrusive_ptr(intrusive_ptr &&other) noexcept : ptr_(other.detach()) { }
-
         template<class Y>
-        intrusive_ptr(const intrusive_ptr<Y> &r);
-
-        ~intrusive_ptr() {
-            if (ptr_) {
-                intrusive_ptr_release(ptr_);
-            }
-        };
-
-        intrusive_ptr &operator=(const intrusive_ptr &other) {
-            intrusive_ptr tmp{other};
-            swap(tmp);
-            return *this;
+        intrusive_ptr(intrusive_ptr<Y> other) : ptr_(other.detach()) {
+            static_assert(std::is_convertible<Y *, T *>::value,
+                          "Y* is not assignable to T*");
         }
-
-        template<class Y>
-        intrusive_ptr &operator=(const intrusive_ptr<Y> &other);
 
         intrusive_ptr &operator=(pointer ptr) {
             reset(ptr);
             return *this;
         }
 
-        intrusive_ptr &operator=(intrusive_ptr &&other) noexcept {
+        intrusive_ptr &operator=(intrusive_ptr other) {
             swap(other);
             return *this;
         }
 
-        //TODO: boost api
-        //void reset();
-        //TODO: boost api
-        //void reset(pointer);
+        ~intrusive_ptr() {
+            if (ptr_) {
+                intrusive_ptr_release(ptr_);
+            }
+        }
+
+        pointer detach() noexcept {
+            auto result = ptr_;
+            if (result) {
+                ptr_ = nullptr;
+            }
+            return result;
+        }
+
+        pointer release() noexcept {
+            return detach();
+        }
 
         void reset(pointer new_value = nullptr, bool add_ref = true) {
             auto old = ptr_;
@@ -64,46 +65,31 @@ namespace actor_zeta {
             if (old) {
                 intrusive_ptr_release(old);
             }
-        };
+        }
 
-        reference operator*() const noexcept {
+        pointer get() const {
+            return ptr_;
+        }
+
+        pointer operator->() const {
+            return ptr_;
+        }
+
+        reference operator*() const {
             return *ptr_;
-        };
-
-        pointer operator->() const noexcept {
-            return ptr_;
-        };
-
-        pointer get() const noexcept {
-            return ptr_;
-        };
-
-        pointer detach() noexcept {
-            auto result = ptr_;
-            ptr_ = nullptr;
-            return result;
         }
 
-        template<class... Ts>
-        void emplace(Ts &&... xs) {
-            reset(new T(std::forward<Ts>(xs)...));
-        }
-
-        pointer release() noexcept {
-            return detach();
+        bool operator!() const {
+            return ptr_ == nullptr;
         }
 
         explicit operator bool() const {
             return ptr_ != nullptr;
-        };
-
-        bool operator!() const {
-            return ptr_ == nullptr;
-        };
+        }
 
         void swap(intrusive_ptr &other) noexcept {
             std::swap(ptr_, other.ptr_);
-        };
+        }
 
         template<class C>
         intrusive_ptr<C> downcast() const {
@@ -160,7 +146,7 @@ namespace actor_zeta {
     bool operator<(intrusive_ptr<T> const &a, intrusive_ptr<U> const &b) noexcept; // never throws
 
     template<class T>
-    void swap(intrusive_ptr<T> &a, intrusive_ptr<T> &b) noexcept {
+    inline void swap(intrusive_ptr<T> &a, intrusive_ptr<T> &b) noexcept {
         a.swap(b);
     }
 
@@ -172,7 +158,7 @@ namespace actor_zeta {
     template<class T, class U>
     intrusive_ptr<T> static_pointer_cast(intrusive_ptr<U> const &r) noexcept {
         return r.template upcast<T>();
-    } // never throws
+    }
 
     template<class T, class U>
     intrusive_ptr<T> const_pointer_cast(intrusive_ptr<U> const &r) noexcept; // never throws
@@ -181,9 +167,5 @@ namespace actor_zeta {
     intrusive_ptr<T> dynamic_pointer_cast(intrusive_ptr<U> const &r) noexcept {
         return r.template downcast<T>();
     }
-/*
-template<class E, class T, class Y>
-std::basic_ostream<E, T> &operator<<(std::basic_ostream<E, T> &os, intrusive_ptr<Y> const &p);
-*/
 }
 #endif //INTRUSIVE_PTR_HPP

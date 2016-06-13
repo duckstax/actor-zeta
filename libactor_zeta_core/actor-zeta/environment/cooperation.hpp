@@ -1,7 +1,7 @@
 #ifndef COOPERATION_HPP
 #define COOPERATION_HPP
 
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <vector>
 #include "actor-zeta/messaging/message.hpp"
@@ -42,7 +42,7 @@ namespace actor_zeta {
 
     private:
         std::string entry_point;
-        std::map<std::string, group> cooperation_groups;
+        std::unordered_map<std::string, group> cooperation_groups;
     };
 
 

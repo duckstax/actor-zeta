@@ -3,7 +3,7 @@
 
 #include "actor-zeta/actor/actor_address.hpp"
 #include "message_priorities.hpp"
-#include "actor-zeta/intrusive_ptr.hpp"
+#include "memory"
 
 namespace actor_zeta {
     namespace messaging {
@@ -18,58 +18,41 @@ namespace actor_zeta {
             message &operator=(const message &) = delete;
 
             message(message &&other) {
-                std::swap(content, other.content);
-                other.content = nullptr;
-                std::swap(typeMessage, other.typeMessage);
-                std::swap(address, other.address);
-                std::swap(callback, other.callback);
-                std::swap(prioritie, other.prioritie);
+                    std::swap(data, other.data);
             }
 
             message &operator=(message &&other) {
                 if (this != &other) {
-                    std::swap(content, other.content);
-                    other.content = nullptr;
-                    std::swap(typeMessage, other.typeMessage);
-                    std::swap(address, other.address);
-                    std::swap(callback, other.callback);
-                    std::swap(prioritie, other.prioritie);
+                    std::swap(data, other.data);
                 }
                 return *this;
             };
 
-            //template<typename ValueType> any(ValueType &&); TODO:не понятно пока как подержать
-            template<typename T>
-            message(const std::string &type, const T &t)
-                    : typeMessage(type), content(new contaner<T>(t)), prioritie(message_priorities::normal),
-                      callback(false) { }
-
+            //TODO:не понятно пока как подержать
+            //template<typename ValueType> any(ValueType &&);
+            //template<typename ValueType> const ValueType * any_cast(const any *);
+            //template<typename ValueType> ValueType * any_cast(any *);
 
             template<typename T>
-            message(actor_address aa, const std::string &type, const T &t)
-                    : address(aa), typeMessage(type), content(new contaner<T>(t)),
-                      prioritie(message_priorities::normal),
-                      callback(true) { }
+            message(const std::string &type, const T &t):
+                    data(new message_data(type, new contaner<T>(t), message_priorities::normal, false)) {}
 
             template<typename T>
-            message(message_priorities p, const std::string &type, const T &t)
-                    : prioritie(p), typeMessage(type), content(new contaner<T>(t)),
-                      callback(false) { }
+            message(const std::string &type, const T &t, const actor_address &aa):
+                    data(new message_data(type, new contaner<T>(t), message_priorities::normal, true, aa)) {}
 
             template<typename T>
-            message(actor_address aa, message_priorities p, const std::string &type, const T &t)
-                    : address(aa), prioritie(p), typeMessage(type), content(new contaner<T>(t)),
-                      callback(true) { }
+            message(const std::string &type, const T &t, message_priorities p):
+                    data(new message_data(type, new contaner<T>(t), p, false)) {}
 
-            /*
-            template<typename ValueType> const ValueType * any_cast(const any *);
-            template<typename ValueType> ValueType * any_cast(any *);
-            */
+            template<typename T>
+            message(const std::string &type, const T &t, message_priorities p, const actor_address &aa)
+                    : data(new message_data(type, new contaner<T>(t), p, true, aa)) {}
 
             template<typename T>
             T get() const {
-                if (static_cast<bool>(content.get())) {
-                    return static_cast<contaner <T> *>(content.get())->data;
+                if (static_cast<bool>(data.get())) {
+                    return static_cast<contaner <T> *>(data.get()->content.get())->data;
                 }
                 else {
                     return T();//TODO:  Жесть
@@ -77,46 +60,80 @@ namespace actor_zeta {
             }
 
             operator bool() const {
-                return static_cast<bool>(content.get());
+                return static_cast<bool>(data.get());
             }
 
             std::string type() const {
-                return typeMessage;
+                return data->type_message;
             }
 
-            const actor_address& return_address() const {
-                return address;
+            const actor_address &return_address() const {
+                return data->address;
             }
 
             bool is_callback() const {
-                return callback;
+                return data->callback;
             }
 
-            const message_priorities getPrioritie() const {
-                return prioritie;
+            const message_priorities get_prioritie() const {
+                return data->prioritie;
             }
 
-            ~message() { }
+            ~message() {}
 
         private:
-            struct base_contaner : public ref_counted {
-                virtual ~base_contaner() { }
+            struct base_contaner {
+                virtual ~base_contaner() {}
             };
 
             template<typename T>
             struct contaner : base_contaner {
                 T data;
 
-                contaner(const T &data) : data(data) { }
+                contaner(const T &data) : data(data) {}
 
                 contaner &operator=(const contaner &) = delete;
             };
 
-            intrusive_ptr<base_contaner> content;
-            bool callback;
-            std::string typeMessage;
-            actor_address address;
-            message_priorities prioritie;
+            struct message_data {
+                message_data(const message_data &) = delete;
+
+                message_data &operator=(const message_data &) = delete;
+
+                message_data() = delete;
+
+                ~message_data() = default;
+
+                std::unique_ptr<base_contaner> content;
+                bool callback;
+                std::string type_message;
+                actor_address address;
+                message_priorities prioritie;
+
+                message_data(
+                        const std::string &type_message,
+                        base_contaner *ptr,
+                        message_priorities prioritie,
+                        bool callback,
+                        const actor_address &address
+                ) : content(ptr),
+                    callback(callback),
+                    type_message(type_message),
+                    address(address),
+                    prioritie(prioritie) {}
+
+                message_data(
+                        const std::string &type_message,
+                        base_contaner *ptr,
+                        message_priorities prioritie,
+                        bool callback
+                ) : content(ptr),
+                    callback(callback),
+                    type_message(type_message),
+                    prioritie(prioritie) {}
+            };
+
+            std::unique_ptr<message_data> data;
         };
 
         template<typename V>
@@ -125,8 +142,9 @@ namespace actor_zeta {
         }
 
         template<typename V>
-        inline actor_zeta::messaging::message make_message(actor_address address ,const std::string &command, const V &v) {
-            return actor_zeta::messaging::message(address,command, v);
+        inline actor_zeta::messaging::message
+        make_message(actor_address address, const std::string &command, const V &v) {
+            return actor_zeta::messaging::message(command, v, address);
         }
     }
 }

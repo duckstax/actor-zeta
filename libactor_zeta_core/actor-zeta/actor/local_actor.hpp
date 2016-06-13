@@ -15,8 +15,6 @@ namespace actor_zeta {
     public:
         using mailbox_type=messaging::blocking_mail_queue<messaging::message>;
 
-        local_actor(const std::string &, std::function<behavior(local_actor *)>, abstract_coordinator *);
-
         local_actor(const std::string &, abstract_coordinator *);
 
         bool async_send(messaging::message &&) override;

@@ -7,6 +7,8 @@ project(${PROJECT} CXX)
 include_directories(.)
 
 set(HEADER_FILES
+        actor-zeta/standard_handlers/reg_write.hpp
+        actor-zeta/standard_handlers/write.hpp
         actor-zeta/broker.hpp
         actor-zeta/connection_handler.hpp
         actor-zeta/forwards.hpp

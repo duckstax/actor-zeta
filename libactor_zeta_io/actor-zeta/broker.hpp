@@ -11,18 +11,10 @@ namespace actor_zeta {
         public:
             broker(const std::string &);
 
-            broker(const std::string &, std::function<behavior (local_actor*)>);
-
-            multiplexer &backend();
-
-            void set_backend(multiplexer *ptr);
-
             virtual ~broker() = default;
 
         private:
-            std::unique_ptr<multiplexer> backend_;
             std::map<std::string, write_handler> actions;
-            std::atomic<size_t> default_max_msg_size{16 * 1024 * 1024};
         };
     }
 }
