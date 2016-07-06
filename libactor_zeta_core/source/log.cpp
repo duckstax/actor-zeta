@@ -2,7 +2,7 @@
 
 namespace actor_zeta {
     log::log(const std::string path, abstract_coordinator *e) :local_actor("log", e) {
-        life.insert("log", new logger_handler(log_path));
+        life.insert( new logger_handler(log_path));
         log_path.open(path, std::ios_base::app);
     }
 
@@ -11,6 +11,18 @@ namespace actor_zeta {
     }
 
     log::logger_handler::logger_handler(std::ofstream &log) : log(log) { }
+
+    const std::string log::logger_handler::name() const {
+        return std::string("log");
+    }
+
+    void log::logger_handler::operator()(messaging::message &&msg) {
+        std::string str_log = msg.get<log_data>().get();
+        log << str_log;
+        log.flush();
+        std::cout << str_log;
+        std::cout.flush();
+    }
 
     std::string getdata() {
         time_t rawtime;
@@ -26,7 +38,7 @@ namespace actor_zeta {
     }
 
     log::log(const std::string path) : local_actor("log", nullptr) {
-        life.insert("log", new logger_handler(log_path));
+        life.insert( new logger_handler(log_path));
         log_path.open(path, std::ios_base::app);
     }
 }

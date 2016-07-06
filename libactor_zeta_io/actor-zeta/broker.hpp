@@ -7,13 +7,15 @@
 
 namespace actor_zeta {
     namespace network {
-        class broker : public actor_zeta::local_actor {
+        class broker : public actor_zeta::actor::local_actor {
         public:
             broker(const std::string &);
 
             virtual ~broker() = default;
 
-        private:
+        protected:
+            void initialize();
+
             std::map<std::string, write_handler> actions;
         };
     }

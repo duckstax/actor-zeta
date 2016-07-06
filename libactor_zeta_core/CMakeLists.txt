@@ -7,14 +7,18 @@ project(${PROJECT} CXX)
 include_directories(.)
 
 set(HEADER_FILES
-        actor-zeta/actor/standard_handlers/sync_contacts.hpp
+
         actor-zeta/actor/abstract_actor.hpp
         actor-zeta/actor/actor.hpp
         actor-zeta/actor/actor_address.hpp
-        actor-zeta/actor/behavior.hpp
         actor-zeta/actor/blocking_actor.hpp
-        actor-zeta/actor/book_contacts.hpp
         actor-zeta/actor/local_actor.hpp
+
+        actor-zeta/behavior/abstract_action.hpp
+        actor-zeta/behavior/action.hpp
+        actor-zeta/behavior/behavior.hpp
+        actor-zeta/contacts/book_contacts.hpp
+        actor-zeta/contacts/group_contacts.hpp
 
         actor-zeta/environment/cooperation.hpp
         actor-zeta/environment/group.hpp
@@ -32,6 +36,8 @@ set(HEADER_FILES
         actor-zeta/messaging/message.hpp
         actor-zeta/messaging/message_priorities.hpp
 
+        actor-zeta/standard_handlers/sync_contacts.hpp
+
         actor-zeta/await_all_actors_done.hpp
         actor-zeta/environment.hpp
         actor-zeta/forwards.hpp
@@ -45,9 +51,11 @@ set(SOURCE_FILES
         source/actor/abstract_actor.cpp
         source/actor/actor.cpp
         source/actor/actor_address.cpp
-        source/actor/behavior.cpp
-        source/actor/book_contacts.cpp
         source/actor/local_actor.cpp
+
+        source/behavior/behavior.cpp
+
+        source/contacts/book_contacts.cpp
 
         source/environment/cooperation.cpp
         source/environment/group.cpp
@@ -56,6 +64,6 @@ set(SOURCE_FILES
         source/log.cpp
         source/ref_counted.cpp
         source/shutdown.cpp
-)
+        source/contacts/group_contacts.cpp)
 
 add_library(${PROJECT} OBJECT ${SOURCE_FILES} ${HEADER_FILES})

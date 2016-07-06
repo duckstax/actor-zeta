@@ -8,47 +8,49 @@
 #include "actor-zeta/forwards.hpp"
 
 namespace actor_zeta {
-    class cooperation {
-    public:
-        cooperation() = default;
+    namespace environment {
+        class cooperation {
+        public:
+            cooperation() = default;
 
-        cooperation(const cooperation &a) = delete;
+            cooperation(const cooperation &a) = delete;
 
-        cooperation(cooperation &&) = default;
+            cooperation(cooperation &&) = default;
 
-        cooperation &operator=(const cooperation &a) = delete;
+            cooperation &operator=(const cooperation &a) = delete;
 
-        cooperation &operator=(cooperation &&) = default;
+            cooperation &operator=(cooperation &&) = default;
 
-        ~cooperation() { };
+            ~cooperation() {};
 
-        cooperation &add(group &&);
+            cooperation &add(group &&);
 
-        void sync(std::initializer_list<std::string>);
+            void sync(std::initializer_list<std::string>);
 
-        void sync();
+            void sync();
 
-        void async_send(messaging::message &&);
+            void async_send(messaging::message &&);
 
-        void async_send(const std::string &, messaging::message &&);
+            void async_send(const std::string &, messaging::message &&);
 
-        void async_send_all(messaging::message &&);
+            void async_send_all(messaging::message &&);
 
-        cooperation &set_exeutor(const std::string &, abstract_coordinator *);
+            cooperation &set_exeutor(const std::string &, abstract_coordinator *);
 
-        cooperation &set_exeutor_all(abstract_coordinator *);
+            cooperation &set_exeutor_all(abstract_coordinator *);
 
-        cooperation &add_sharet_address(actor_address);
+            cooperation &add_sharet_address(actor::actor_address);
 
-    private:
-        std::string entry_point;
-        std::unordered_map<std::string, group> cooperation_groups;
-    };
+        private:
+            std::string entry_point;
+            std::unordered_map<std::string, group> cooperation_groups;
+        };
 
 
-    template<class V>
-    inline void send(actor_zeta::cooperation &c, std::string commanda, V value) {
-        c.async_send(std::move(messaging::make_message(commanda, value)));
+        template<class V>
+        inline void send(actor_zeta::environment::cooperation &c, std::string commanda, V value) {
+            c.async_send(std::move(messaging::make_message(commanda, value)));
+        }
     }
 }
 #endif //COOPERATION_HPP

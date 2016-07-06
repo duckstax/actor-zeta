@@ -7,64 +7,66 @@
 
 //smart actor
 namespace actor_zeta {
-    class actor {
-    public:
-        actor() = default;
+    namespace actor {
+        class actor {
+        public:
+            actor() = default;
 
-        actor(const actor &a) = delete;
+            actor(const actor &a) = delete;
 
-        actor(actor &&a) = default;
+            actor(actor &&a) = default;
 
-        actor &operator=(const actor &a) = delete;
+            actor &operator=(const actor &a) = delete;
 
-        actor &operator=(actor &&a) = default;
+            actor &operator=(actor &&a) = default;
 
-        template<class T>
-        actor(intrusive_ptr<T> ptr) : heart(std::move(ptr)) { }
+            template<class T>
+            actor(intrusive_ptr<T> ptr) : heart(std::move(ptr)) {}
 
-        template<class T>
-        actor(T *ptr) : heart(ptr) { }
+            template<class T>
+            actor(T *ptr) : heart(ptr) {}
 
-        template<class T>
-        actor &operator=(intrusive_ptr<T> ptr) {
-            actor tmp{std::move(ptr)};
-            swap(tmp);
-            return *this;
-        }
+            template<class T>
+            actor &operator=(intrusive_ptr<T> ptr) {
+                actor tmp{std::move(ptr)};
+                swap(tmp);
+                return *this;
+            }
 
-        template<class T>
-        actor &operator=(T *ptr) {
-            actor tmp{ptr};
-            swap(tmp);
-            return *this;
-        }
+            template<class T>
+            actor &operator=(T *ptr) {
+                actor tmp{ptr};
+                swap(tmp);
+                return *this;
+            }
 
-        actor_address address() const noexcept;
+            actor_address address() const noexcept;
 
-        ~actor();
+            ~actor();
 
-        inline abstract_actor *operator->() const noexcept {
-            return heart.get();
-        }
+            inline abstract_actor *operator->() const noexcept {
+                return heart.get();
+            }
 
-        bool is_remote() const noexcept;
+            bool is_remote() const noexcept;
 
-        inline explicit operator bool() const noexcept {
-            return static_cast<bool>(heart);
-        }
+            inline explicit operator bool() const noexcept {
+                return static_cast<bool>(heart);
+            }
 
-        std::string type() const;
+            std::string type() const;
 
-        inline bool operator!() const noexcept {
-            return !heart;
-        }
+            inline bool operator!() const noexcept {
+                return !heart;
+            }
 
-    private:
+        private:
 
-        void swap(actor &) noexcept;
+            void swap(actor &) noexcept;
 
-        intrusive_ptr<abstract_actor> heart;
-    };
+            intrusive_ptr<abstract_actor> heart;
+        };
+    }
 
 }
 #endif

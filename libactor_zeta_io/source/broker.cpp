@@ -6,8 +6,14 @@ namespace actor_zeta {
     namespace network {
 
         broker::broker(const std::string &name) : local_actor(name, nullptr) {
-            life.insert("write",new write(actions));
-            life.insert("reg_write",new reg_write(actions));
+            initialize();
         }
+
+        void broker::initialize() {
+            local_actor::initialize();
+            life.insert(new write(actions));
+            life.insert(new reg_write(actions));
+        }
+
     }
 }

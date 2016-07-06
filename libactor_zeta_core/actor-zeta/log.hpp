@@ -72,24 +72,20 @@ namespace actor_zeta {
     };
 
 
-    class log : public local_actor {
+    class log final : public actor::local_actor {
     private:
 
         std::ofstream log_path;
 
-        class logger_handler final : public abstract_action {
+        class logger_handler final : public behavior::abstract_action {
         private:
             std::ofstream &log;
         public:
             logger_handler(std::ofstream &log);
 
-            void operator()(messaging::message &&msg) {
-                std::string str_log = msg.get<log_data>().get();
-                log << str_log;
-                log.flush();
-                std::cout << str_log;
-                std::cout.flush();
-            }
+            const std::string name() const ;
+
+            void operator()(messaging::message &&msg);
         };
     public:
 
@@ -100,12 +96,12 @@ namespace actor_zeta {
         ~log();
     };
 
-    inline actor make_log(const std::string &path, actor_zeta::abstract_coordinator *e) {
-        return actor(new log(path, e));
+    inline actor::actor make_log(const std::string &path, actor_zeta::abstract_coordinator *e) {
+        return actor::actor(new log(path, e));
     }
 
-    inline actor make_log(const std::string &path) {
-        return actor(new log(path));
+    inline actor::actor make_log(const std::string &path) {
+        return actor::actor(new log(path));
     }
 }
 

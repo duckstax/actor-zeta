@@ -38,7 +38,7 @@ namespace actor_zeta {
                     data(new message_data(type, new contaner<T>(t), message_priorities::normal, false)) {}
 
             template<typename T>
-            message(const std::string &type, const T &t, const actor_address &aa):
+            message(const std::string &type, const T &t, const actor::actor_address &aa):
                     data(new message_data(type, new contaner<T>(t), message_priorities::normal, true, aa)) {}
 
             template<typename T>
@@ -46,7 +46,7 @@ namespace actor_zeta {
                     data(new message_data(type, new contaner<T>(t), p, false)) {}
 
             template<typename T>
-            message(const std::string &type, const T &t, message_priorities p, const actor_address &aa)
+            message(const std::string &type, const T &t, message_priorities p, const actor::actor_address &aa)
                     : data(new message_data(type, new contaner<T>(t), p, true, aa)) {}
 
             template<typename T>
@@ -67,7 +67,7 @@ namespace actor_zeta {
                 return data->type_message;
             }
 
-            const actor_address &return_address() const {
+            const actor::actor_address &return_address() const {
                 return data->address;
             }
 
@@ -107,7 +107,7 @@ namespace actor_zeta {
                 std::unique_ptr<base_contaner> content;
                 bool callback;
                 std::string type_message;
-                actor_address address;
+                actor::actor_address address;
                 message_priorities prioritie;
 
                 message_data(
@@ -115,7 +115,7 @@ namespace actor_zeta {
                         base_contaner *ptr,
                         message_priorities prioritie,
                         bool callback,
-                        const actor_address &address
+                        const actor::actor_address &address
                 ) : content(ptr),
                     callback(callback),
                     type_message(type_message),
@@ -143,7 +143,7 @@ namespace actor_zeta {
 
         template<typename V>
         inline actor_zeta::messaging::message
-        make_message(actor_address address, const std::string &command, const V &v) {
+        make_message(actor::actor_address address, const std::string &command, const V &v) {
             return actor_zeta::messaging::message(command, v, address);
         }
     }

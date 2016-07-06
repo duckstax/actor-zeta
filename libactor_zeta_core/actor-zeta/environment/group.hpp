@@ -7,55 +7,57 @@
 #include "actor-zeta/forwards.hpp"
 
 namespace actor_zeta {
-    class group {
-    public:
-        group() = default;
+    namespace environment {
+        class group {
+        public:
+            group() = default;
 
-        group(const group &a) = delete;
+            group(const group &a) = delete;
 
-        group(group &&) = default;
+            group(group &&) = default;
 
-        group &operator=(const group &a) = delete;
+            group &operator=(const group &a) = delete;
 
-        group &operator=(group &&) = default;
+            group &operator=(group &&) = default;
 
-        group(abstract_actor *);
+            group(actor::abstract_actor *);
 
-        ~group() { };
+            ~group() {};
 
-        std::string name_entry_point() const;
+            std::string name_entry_point() const;
 
-        group &add(actor &&);
+            group &add(actor::actor &&);
 
-        group &add( abstract_actor*  );
+            group &add(actor::abstract_actor *);
 
-        group &add(const std::string &, abstract_actor *);
+            group &add(const std::string &, actor::abstract_actor *);
 
-        group &add_shared_address(actor_address);
+            group &add_shared_address(actor::actor_address);
 
-        void sync(std::initializer_list<std::string>);
+            void sync(std::initializer_list<std::string>);
 
-        void sync();
+            void sync();
 
-        actor_address address_entry_point();
+            actor::actor_address address_entry_point();
 
-        void async_send(messaging::message &&);
+            void async_send(messaging::message &&);
 
-        void async_send_all(messaging::message &&);
+            void async_send_all(messaging::message &&);
 
-        group &set_exeutor(const std::string &, abstract_coordinator*);
+            group &set_exeutor(const std::string &, abstract_coordinator *);
 
-        group &set_exeutor_all(abstract_coordinator*);
+            group &set_exeutor_all(abstract_coordinator *);
 
-    private:
-        std::unordered_map<std::string, actor> unique_actors;
-        std::string entry_point;
-    };
+        private:
+            std::unordered_map<std::string, actor::actor> unique_actors;
+            std::string entry_point;
+        };
 
 
-    template<class V>
-    inline void send(actor_zeta::group &g, std::string commanda, V value) {
-        g.async_send(std::move(messaging::make_message(commanda, value)));
+        template<class V>
+        inline void send(actor_zeta::environment::group &g, std::string commanda, V value) {
+            g.async_send(std::move(messaging::make_message(commanda, value)));
+        }
     }
 }
 #endif //GROUP_HPP
