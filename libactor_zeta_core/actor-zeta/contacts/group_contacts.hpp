@@ -21,7 +21,7 @@ namespace actor_zeta {
             const std::vector<actor_zeta::actor::actor_address> &get_all() const;
 
         private:
-            size_t cursor;
+            std::size_t cursor;
             std::vector<actor_zeta::actor::actor_address> set_contact;
         };
     }

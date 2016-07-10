@@ -1,6 +1,8 @@
 #ifndef ACTION_HPP
 #define ACTION_HPP
 
+#include <memory>
+
 #include "abstract_action.hpp"
 
 namespace actor_zeta {

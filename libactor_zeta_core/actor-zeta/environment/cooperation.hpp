@@ -4,11 +4,13 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
+
 #include "actor-zeta/messaging/message.hpp"
-#include "actor-zeta/forwards.hpp"
+#include "group.hpp"
 
 namespace actor_zeta {
     namespace environment {
+
         class cooperation {
         public:
             cooperation() = default;

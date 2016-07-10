@@ -5,6 +5,7 @@
 #include <condition_variable>
 #include <list>
 #include <memory>
+#include <atomic>
 
 #include "mail_box.hpp"
 
