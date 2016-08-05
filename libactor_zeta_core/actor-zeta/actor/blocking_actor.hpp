@@ -1,21 +1,24 @@
 #ifndef BLOCKING_ACTOR_HPP
 #define BLOCKING_ACTOR_HPP
 
+#include <mutex>
+
+#include "actor-zeta/forwards.hpp"
 #include "local_actor.hpp"
 
 namespace actor_zeta {
     namespace actor {
         class blocking_actor : public local_actor {
         public:
+            blocking_actor(environment::environment &, const std::string &);
+            virtual void act();
+            virtual executor::executable::executable_result run(executor::execution_device *, size_t) override;
+            virtual void launch(executor::execution_device *, bool) override ;
+            virtual ~blocking_actor(){}
 
-            blocking_actor(const std::string &type, abstract_coordinator *e)
-                    : local_actor(type, e) {
-                is_blocked(true);
-            }
-
-            void act() {
-
-            }
+        private:
+            std::mutex mtx;
+            std::condition_variable condition;
         };
     }
 }

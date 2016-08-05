@@ -23,10 +23,13 @@ namespace actor_zeta {
 
             cooperation &operator=(cooperation &&) = default;
 
-            ~cooperation() {};
+            ~cooperation() = default;
 
             cooperation &add(group &&);
 
+            actor_zeta::actor::actor_address get(const std::string &) const;
+
+            //pipeline
             void sync(std::initializer_list<std::string>);
 
             void sync();
@@ -36,10 +39,6 @@ namespace actor_zeta {
             void async_send(const std::string &, messaging::message &&);
 
             void async_send_all(messaging::message &&);
-
-            cooperation &set_exeutor(const std::string &, abstract_coordinator *);
-
-            cooperation &set_exeutor_all(abstract_coordinator *);
 
             cooperation &add_sharet_address(actor::actor_address);
 

@@ -37,7 +37,7 @@ namespace actor_zeta {
         }
 
         cooperation &cooperation::add(group &&g) {
-            cooperation_groups.emplace(g.name_entry_point(), std::move(g));
+            cooperation_groups.emplace(g.name(), std::move(g));
             return *this;
         }
 
@@ -47,17 +47,6 @@ namespace actor_zeta {
             }
         }
 
-        cooperation &cooperation::set_exeutor(const std::string &name_group, abstract_coordinator *e) {
-            cooperation_groups[name_group].set_exeutor_all(e);
-            return *this;
-        }
-
-        cooperation &cooperation::set_exeutor_all(abstract_coordinator *e) {
-            for (auto &i:cooperation_groups) {
-                i.second.set_exeutor_all(e);
-            }
-            return *this;
-        }
 
         cooperation &cooperation::add_sharet_address(actor::actor_address address) {
             for (auto &i:cooperation_groups) {
@@ -68,7 +57,10 @@ namespace actor_zeta {
 
         void cooperation::async_send(const std::string &name, messaging::message &&message) {
             cooperation_groups[name].async_send(std::move(message));
+        }
 
+        actor_zeta::actor::actor_address cooperation::get(const std::string & name) const {
+            return actor_zeta::actor::actor_address(cooperation_groups.at(name).address_entry_point());
         }
     }
 }

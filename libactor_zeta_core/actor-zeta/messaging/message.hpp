@@ -18,7 +18,7 @@ namespace actor_zeta {
             message &operator=(const message &) = delete;
 
             message(message &&other) {
-                    std::swap(data, other.data);
+                std::swap(data, other.data);
             }
 
             message &operator=(message &&other) {
@@ -34,16 +34,16 @@ namespace actor_zeta {
             //template<typename ValueType> ValueType * any_cast(any *);
 
             template<typename T>
-            message(const std::string &type, const T &t):
-                    data(new message_data(type, new contaner<T>(t), message_priorities::normal, false)) {}
+            message(const std::string &type, const T &t)
+                    :data(new message_data(type, new contaner<T>(t), message_priorities::normal, false)) {}
 
             template<typename T>
-            message(const std::string &type, const T &t, const actor::actor_address &aa):
-                    data(new message_data(type, new contaner<T>(t), message_priorities::normal, true, aa)) {}
+            message(const std::string &type, const T &t, const actor::actor_address &aa)
+                    :data(new message_data(type, new contaner<T>(t), message_priorities::normal, true, aa)) {}
 
             template<typename T>
-            message(const std::string &type, const T &t, message_priorities p):
-                    data(new message_data(type, new contaner<T>(t), p, false)) {}
+            message(const std::string &type, const T &t, message_priorities p)
+                    :data(new message_data(type, new contaner<T>(t), p, false)) {}
 
             template<typename T>
             message(const std::string &type, const T &t, message_priorities p, const actor::actor_address &aa)

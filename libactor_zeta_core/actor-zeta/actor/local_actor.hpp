@@ -2,33 +2,44 @@
 #define LOCAL_ACTOR_HPP
 
 #include <memory>
+
 #include "actor-zeta/messaging/blocking_mail_queue.hpp"
 #include "abstract_actor.hpp"
-#include "actor-zeta/standard_handlers/sync_contacts.hpp"
-#include "actor.hpp"
 #include "actor-zeta/behavior/behavior.hpp"
 #include "actor-zeta/forwards.hpp"
 #include "actor-zeta/executor/executable.hpp"
+#include "actor-zeta/contacts/book_contacts.hpp"
 
 namespace actor_zeta {
     namespace actor {
-        class local_actor : public executable, public abstract_actor {
+        class local_actor : public executor::executable, public abstract_actor {
         public:
             using mailbox_type=messaging::blocking_mail_queue<messaging::message>;
 
-            local_actor(const std::string &, abstract_coordinator *);
-
-            bool async_send(messaging::message &&) override;
-
-            bool async_send(messaging::message &&, executor_service *) override;
-
-            void launch();
+                                                             //hide
+            virtual void launch(executor::execution_device *, bool);
 
             virtual ~local_actor() {}
 
+            bool async_send(messaging::message &&) override;
+
+            bool async_send(messaging::message &&, executor::execution_device *) override;
+
+            inline void device(executor::execution_device *e) {
+                executor_ = e;
+            }
+
+            inline executor::execution_device *device() const {
+                return executor_;
+            }
+
+            void attach(behavior::interface_action *) override final;
+
         protected:
+            local_actor(environment::environment &, const std::string &);
 
             virtual void initialize();
+            virtual bool finalize();
 
             void attach_to_scheduler() override;
 
@@ -36,15 +47,16 @@ namespace actor_zeta {
 
             messaging::message next_message();
 
-            void exect_event(messaging::message &&);
+            void shedule(executor::execution_device *e);
 
-            void shedule(executor_service *e);
+            virtual executor::executable::executable_result
+            run(executor::execution_device *, size_t max_throughput) override;
 
-            executable::state run(size_t max_throughput) override;
-
-            behavior::behavior life;
             contacts::book_contacts contacts;
             mailbox_type mailbox;
+            behavior::behavior life;
+        private:
+            executor::execution_device *executor_;
         };
     }
 }

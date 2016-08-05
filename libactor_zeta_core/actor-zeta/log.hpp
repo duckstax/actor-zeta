@@ -10,6 +10,7 @@
 #include "forwards.hpp"
 
 namespace actor_zeta {
+
     std::string getdata();
 
     namespace level_debug {
@@ -22,87 +23,40 @@ namespace actor_zeta {
 
     const std::string new_string = "\n";
 
-    struct log_data {
-        std::string level;
-        std::string msg;
-        std::string date;
+    inline const std::string info(const std::string &msg) {
+        std::string result;
+        return result.append(level_debug::info).append(getdata()).append(msg).append(new_string);
+    }
 
-        log_data(std::string level, std::string msg, std::string date) : level(level), msg(msg), date(date) {}
+    inline const std::string debug(const std::string &msg) {
+        std::string result;
+        return result.append(level_debug::debug).append(getdata()).append(msg).append(new_string);
+    }
 
-        log_data() {}
+    inline const std::string warning(const std::string &msg) {
+        std::string result;
+        return result.append(level_debug::warning).append(getdata()).append(msg).append(new_string);
+    }
 
-        std::string get() {
-            return level + date + msg + new_string;
-        }
+    inline const std::string error(const std::string &msg) {
+        std::string result;
+        return result.append(level_debug::error).append(getdata()).append(msg).append(new_string);
+    }
 
-        log_data &Info() {
-            log_data::level = level_debug::info;
-            return *this;
-        }
-
-        log_data &Debug() {
-            log_data::level = level_debug::debug;
-            return *this;
-        }
-
-        log_data &Warning() {
-            log_data::level = level_debug::warning;
-            return *this;
-        }
-
-        log_data &Error() {
-            log_data::level = level_debug::error;
-            return *this;
-        }
-
-        log_data &Critical() {
-            log_data::level = level_debug::critical;
-            return *this;
-        }
-
-        log_data &Msg(const std::string msg) {
-            log_data::msg = msg;
-            return *this;
-        }
-
-        log_data &Date() {
-            log_data::date = getdata();
-            return *this;
-        }
-    };
-
+    inline const std::string critical(const std::string &msg) {
+        std::string result;
+        return result.append(level_debug::critical).append(getdata()).append(msg).append(new_string);
+    }
 
     class log final : public actor::local_actor {
     private:
-
         std::ofstream log_path;
-
-        class logger_handler final : public behavior::abstract_action {
-        private:
-            std::ofstream &log;
-        public:
-            logger_handler(std::ofstream &log);
-
-            const std::string name() const ;
-
-            void operator()(messaging::message &&msg);
-        };
     public:
 
-        log(const std::string path, abstract_coordinator *e);
-
-        log(const std::string path);
+        log(environment::environment &,const std::string path);
 
         ~log();
     };
-
-    inline actor::actor make_log(const std::string &path, actor_zeta::abstract_coordinator *e) {
-        return actor::actor(new log(path, e));
-    }
-
-    inline actor::actor make_log(const std::string &path) {
-        return actor::actor(new log(path));
-    }
 }
 
 #endif

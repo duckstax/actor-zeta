@@ -17,8 +17,8 @@ namespace actor_zeta {
             return entry_point;
         }
 
-        actor::actor_address group::address_entry_point() {
-            return unique_actors[entry_point].address();
+        actor::actor_address group::address_entry_point() const {
+            return actor::actor_address(unique_actors.at(entry_point).address());
         }
 
         void group::sync(std::initializer_list<std::string> list_names) {
@@ -52,24 +52,6 @@ namespace actor_zeta {
             return *this;
         }
 
-        group &group::add(actor::abstract_actor *aa) {
-            unique_actors.emplace(aa->type(), actor::actor(aa));
-            return *this;
-        };
-
-        group &group::set_exeutor(const std::string &name_actor, abstract_coordinator *e) {
-            unique_actors[name_actor]->attach(e);
-            return *this;
-        }
-
-
-        group &group::set_exeutor_all(abstract_coordinator *e) {
-            for (auto &i:unique_actors) {
-                i.second->attach(e);
-            }
-            return *this;
-        }
-
         group &group::add(actor::actor &&a) {
             unique_actors.emplace(a.type(), std::move(a));
             return *this;
@@ -82,22 +64,8 @@ namespace actor_zeta {
 
         }
 
-        group &group::add(const std::string &root_name, actor::abstract_actor *aa) {
-            actor_zeta::actor::actor_address address = aa->adddres();
-            unique_actors.emplace(aa->type(), actor::actor(aa));
-            unique_actors[root_name]->async_send(
-                    messaging::make_message(
-                            std::string("sync_contacts"),
-                            address
-                    )
-            );
-            return *this;
-        }
-
-        group::group(actor::abstract_actor *aa) {
-            std::string entry_address = aa->type();
-            unique_actors.emplace(aa->type(), actor::actor(aa));
-            entry_point = entry_address;
+        const std::string &group::name() const {
+            return name_;
         }
     }
 }

@@ -20,35 +20,53 @@ namespace actor_zeta {
 
             group &operator=(group &&) = default;
 
-            group(actor::abstract_actor *);
+            template<class T>
+            group(const std::string &name, T *ptr):name_(name) {
+                std::string entry_address = ptr->type();
+                unique_actors.emplace(ptr->type(), actor::actor(ptr));
+                entry_point = entry_address;
+            }
 
-            ~group() {};
+            ~group() = default;
 
             std::string name_entry_point() const;
 
             group &add(actor::actor &&);
 
-            group &add(actor::abstract_actor *);
+            template<class T>
+            group &add(T *ptr) {
+                unique_actors.emplace(ptr->type(), actor::actor(ptr));
+                return *this;
+            };
 
-            group &add(const std::string &, actor::abstract_actor *);
-
+            template <class T>
+            group &add(const std::string &root_name, T * ptr){
+                actor_zeta::actor::actor_address address = ptr->address();
+                unique_actors.emplace(ptr->type(), actor::actor(ptr));
+                unique_actors[root_name]->async_send(
+                        messaging::make_message(
+                                std::string("sync_contacts"),
+                                address
+                        )
+                );
+                return *this;
+            }
             group &add_shared_address(actor::actor_address);
 
             void sync(std::initializer_list<std::string>);
 
             void sync();
 
-            actor::actor_address address_entry_point();
+            actor::actor_address address_entry_point() const;
 
             void async_send(messaging::message &&);
 
             void async_send_all(messaging::message &&);
 
-            group &set_exeutor(const std::string &, abstract_coordinator *);
-
-            group &set_exeutor_all(abstract_coordinator *);
+            const std::string &name() const;
 
         private:
+            const std::string name_;
             std::unordered_map<std::string, actor::actor> unique_actors;
             std::string entry_point;
         };

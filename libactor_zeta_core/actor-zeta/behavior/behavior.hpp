@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+
 #include "actor-zeta/forwards.hpp"
 #include "action.hpp"
 
@@ -23,7 +24,7 @@ namespace actor_zeta {
 
             ~behavior() = default;
 
-            void insert(abstract_action *aa);
+            void insert(interface_action *aa);
 
             void run(messaging::message &&);
 

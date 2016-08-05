@@ -7,11 +7,11 @@ namespace actor_zeta {
         actor::~actor() {}
 
         actor_address actor::address() const noexcept {
-            return heart->adddres();
+            return heart->address();
         };
 
         bool actor::is_remote() const noexcept {
-            return heart->is_remote();
+            return heart->remote();
         }
 
         std::string actor::type() const {

@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "abstract_action.hpp"
+#include "interface_action.hpp"
 
 namespace actor_zeta {
     namespace behavior {
@@ -21,14 +21,14 @@ namespace actor_zeta {
 
             ~action() = default;
 
-            action(abstract_action *aa) : action_impl_ptr(aa) {}
+            action(interface_action *aa) : action_impl_ptr(aa) {}
 
             void operator()(messaging::message &&msg) {
                 action_impl_ptr->operator()(std::move(msg));
             }
 
         private:
-            std::unique_ptr<abstract_action> action_impl_ptr;
+            std::unique_ptr<interface_action> action_impl_ptr;
         };
     }
 }

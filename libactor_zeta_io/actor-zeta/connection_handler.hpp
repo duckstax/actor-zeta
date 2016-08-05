@@ -6,14 +6,14 @@
 namespace actor_zeta {
     namespace network {
 
-        struct abstract_read_handler {
-            virtual  ~ abstract_read_handler() = default;
+        struct interface_read_handler {
+            virtual  ~interface_read_handler() = default;
 
             virtual void run(const char *buff, ssize_t len) = 0;
         };
 
-        struct abstract_write_handler {
-            virtual ~abstract_write_handler() = default;
+        struct interface_write_handler {
+            virtual ~interface_write_handler() = default;
 
             virtual void run(const std::string &) = 0;
 
@@ -34,7 +34,7 @@ namespace actor_zeta {
 
             ~write_handler() = default;
 
-            explicit write_handler(abstract_write_handler *ptr) : abstract_write_handler_ptr(ptr) { }
+            explicit write_handler(interface_write_handler *ptr) : abstract_write_handler_ptr(ptr) {}
 
             void operator()(const std::string &buff) {
                 abstract_write_handler_ptr->run(buff);
@@ -45,7 +45,7 @@ namespace actor_zeta {
             }
 
         private:
-            std::shared_ptr<abstract_write_handler> abstract_write_handler_ptr;
+            std::shared_ptr<interface_write_handler> abstract_write_handler_ptr;
         };
 
         class read_handler {
@@ -62,14 +62,14 @@ namespace actor_zeta {
 
             ~read_handler() = default;
 
-            explicit read_handler(abstract_read_handler *ptr) : abstract_read_handler_ptr(ptr) { }
+            explicit read_handler(interface_read_handler *ptr) : abstract_read_handler_ptr(ptr) {}
 
             void operator()(const char *buff, ssize_t len) {
                 abstract_read_handler_ptr->run(buff, len);
             }
 
         private:
-            std::shared_ptr<abstract_read_handler> abstract_read_handler_ptr;
+            std::shared_ptr<interface_read_handler> abstract_read_handler_ptr;
         };
     }
 }

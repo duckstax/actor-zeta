@@ -7,10 +7,14 @@ namespace actor_zeta {
         class message;
     }
 
-    namespace actor{
+    namespace actor {
         class abstract_actor;
         class actor;
         class actor_address;
+    }
+
+    namespace behavior{
+        class interface_action;
     }
 
     namespace contacts {
@@ -21,15 +25,16 @@ namespace actor_zeta {
     namespace environment {
         class group;
         class cooperation;
+        class environment;
     }
 
-    struct abstract_coordinator;
-
-    template<class Policy>
-    class coordinator;
-
-    struct executor_service;
-    struct executable;
+    namespace executor {
+        struct abstract_coordinator;
+        template<class Policy>
+        class coordinator;
+        struct execution_device;
+        struct executable;
+    }
 }
 
 #endif // FORWARDS_HPP

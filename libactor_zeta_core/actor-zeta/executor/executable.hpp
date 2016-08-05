@@ -4,21 +4,23 @@
 #include "actor-zeta/forwards.hpp"
 
 namespace actor_zeta {
-    struct executable {
-        enum state {
-            resume,
-            waiting,
-            done,
-            shutdown
+    namespace executor {
+        struct executable {
+            enum class executable_result {
+                resume,
+                awaiting,
+                done,
+                shutdown
+            };
+
+            virtual ~executable() = default;
+
+            virtual void attach_to_scheduler() = 0;
+
+            virtual void detach_from_scheduler() = 0;
+
+            virtual executable_result run(executor::execution_device *,size_t max_throughput) = 0;
         };
-
-        virtual ~executable() { }
-
-        virtual void attach_to_scheduler() = 0;
-
-        virtual void detach_from_scheduler() = 0;
-
-        virtual state run(size_t max_throughput) = 0;
-    };
+    }
 }
 #endif //EXECUTABLE_HPP

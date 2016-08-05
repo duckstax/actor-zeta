@@ -3,45 +3,39 @@
 
 namespace actor_zeta {
     namespace actor {
-        abstract_actor::abstract_actor(const std::string &type, abstract_coordinator *e) : actor_type(type),
-                                                                                           _executor(e) {}
+        abstract_actor::abstract_actor(environment::environment &env, const std::string &type)
+                : type_(type), env(env) {}
 
         std::string abstract_actor::type() const {
-            return actor_type;
+            return type_;
         }
 
-        abstract_actor::~abstract_actor() {
-            if (_executor != nullptr) {
-                _executor = nullptr;
-            }
-        }
-
-        bool abstract_actor::is_remote() const noexcept {
-            return remote;
+        bool abstract_actor::remote() const noexcept {
+            return remote_;
         };
 
-        actor_address abstract_actor::adddres() const noexcept {
+        actor_address abstract_actor::address() const noexcept {
             return actor_address{const_cast<abstract_actor *>(this)};
         }
 
-        void abstract_actor::is_remote(bool r) noexcept {
-            remote = r;
+        void abstract_actor::remote(bool remote) noexcept {
+            this->remote_ = remote;
         };
 
-        bool abstract_actor::is_blocked() const noexcept {
-            return blocked;
+        bool abstract_actor::blocked() const noexcept {
+            return blocked_;
         }
 
-        void abstract_actor::is_blocked(bool blocked) noexcept {
-            abstract_actor::blocked = blocked;
+        void abstract_actor::blocked(bool blocked) noexcept {
+            this->blocked_ = blocked;
         }
 
-        bool abstract_actor::is_master() const noexcept {
-            return master;
+        bool abstract_actor::master() const noexcept {
+            return master_;
         }
 
-        void abstract_actor::is_master(bool master) noexcept {
-            abstract_actor::master = master;
+        void abstract_actor::master(bool master) noexcept {
+            this->master_ = master;
         }
     }
 }

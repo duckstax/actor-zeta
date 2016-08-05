@@ -6,8 +6,7 @@
 
 namespace actor_zeta {
     namespace network {
-        class multiplexer {
-        public:
+        struct multiplexer {
             virtual int run() = 0;
 
             virtual ~multiplexer() { };

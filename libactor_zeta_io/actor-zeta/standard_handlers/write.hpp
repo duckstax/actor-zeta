@@ -4,14 +4,16 @@
 #include <map>
 #include <iostream>
 
+#include "actor-zeta/messaging/message.hpp"
+
 namespace actor_zeta {
     namespace network {
-        class write final : public behavior::abstract_action {
+        class write final : public behavior::interface_action {
         public:
-            write(std::map<std::string, write_handler> &actions) : actions(actions) {}
+            write(std::unordered_map<std::string, write_handler> &actions) : actions(actions),name_("write") {}
 
-            void operator()(messaging::message &&msg) override {
-                     //name/blob data
+            void operator()(messaging::message &&msg) override final {
+                //name/blob data
                 auto element = msg.get<std::pair<std::string, std::string>>();
                 auto it = actions.find(element.first);
                 if (it != actions.end()) {
@@ -23,11 +25,12 @@ namespace actor_zeta {
                 }
             }
 
-            const std::string name() const {
-                return std::string("write");
+            const std::string& name() const final {
+                return name_;
             };
         private:
-            std::map<std::string, write_handler> &actions;
+            std::unordered_map<std::string, write_handler> &actions;
+            std::string name_;
         };
     }
 }
