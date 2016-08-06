@@ -6,7 +6,7 @@ namespace actor_zeta {
         abstract_actor::abstract_actor(environment::environment &env, const std::string &type)
                 : type_(type), env(env) {}
 
-        std::string abstract_actor::type() const {
+        const std::string& abstract_actor::type() const {
             return type_;
         }
 

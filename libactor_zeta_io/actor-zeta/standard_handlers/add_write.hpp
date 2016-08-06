@@ -17,7 +17,7 @@ namespace actor_zeta {
                 actions.emplace(element.id(), std::move(element));
             }
 
-            const std::string& name() const override final{
+            const std::string& name() const override final {
                 return name_;
             };
 

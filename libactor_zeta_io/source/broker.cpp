@@ -1,6 +1,7 @@
 #include "actor-zeta/broker.hpp"
 #include "actor-zeta/standard_handlers/write.hpp"
 #include "actor-zeta/standard_handlers/add_write.hpp"
+#include "actor-zeta/standard_handlers/remove_write.hpp"
 
 namespace actor_zeta {
     namespace network {
@@ -13,6 +14,7 @@ namespace actor_zeta {
             local_actor::initialize();
             attach(new write(actions));
             attach(new add_write(actions));
+            attach(new remove_write(actions));
         }
 
     }

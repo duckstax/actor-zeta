@@ -19,7 +19,7 @@ namespace actor_zeta {
                                                              //hide
             virtual void launch(executor::execution_device *, bool);
 
-            virtual ~local_actor() {}
+            virtual ~local_actor();
 
             bool async_send(messaging::message &&) override;
 
@@ -33,12 +33,13 @@ namespace actor_zeta {
                 return executor_;
             }
 
-            void attach(behavior::interface_action *) override final;
+            void attach(behavior::interface_action *);
 
         protected:
             local_actor(environment::environment &, const std::string &);
 
             virtual void initialize();
+
             virtual bool finalize();
 
             void attach_to_scheduler() override;

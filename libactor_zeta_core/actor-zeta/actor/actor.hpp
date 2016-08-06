@@ -54,7 +54,7 @@ namespace actor_zeta {
                 return static_cast<bool>(heart);
             }
 
-            std::string type() const;
+            const std::string& type() const;
 
             inline bool operator!() const noexcept {
                 return !heart;

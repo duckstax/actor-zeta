@@ -95,7 +95,11 @@ namespace actor_zeta {
         }
 
         bool local_actor::finalize() {
-            return false;
+            return true;
+        }
+
+        local_actor::~local_actor()  {
+            finalize();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace actor_zeta {
 
             ~blocking_mail_queue() { }
 
-            bool put(T &&m) override {
+            bool put(T &&m) override final {
                 bool status;
                 {
                     lock_guard lock(mutex);
@@ -43,7 +43,7 @@ namespace actor_zeta {
                 return std::forward<T>(tmp);
             }
 
-            std::vector<T> getAll() override {
+            std::vector<T> getAll() override final {
                 std::vector<T> tmp;
                 {
                     unique_lock lock(mutex);
@@ -57,11 +57,11 @@ namespace actor_zeta {
                 return tmp;
             }
 
-            size_t size() override {
+            size_t size() override final {
                 return size_;
             }
 
-            bool empty() override {
+            bool empty() override final {
                 return size_ != 0;
             }
 

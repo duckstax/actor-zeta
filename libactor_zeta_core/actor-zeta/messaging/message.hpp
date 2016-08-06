@@ -143,7 +143,7 @@ namespace actor_zeta {
 
         template<typename V>
         inline actor_zeta::messaging::message
-        make_message(actor::actor_address address, const std::string &command, const V &v) {
+        make_message(const std::string &command, const V &v,const actor::actor_address& address) {
             return actor_zeta::messaging::message(command, v, address);
         }
     }

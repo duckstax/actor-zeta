@@ -14,7 +14,7 @@ namespace actor_zeta {
             return heart->remote();
         }
 
-        std::string actor::type() const {
+        const std::string& actor::type() const {
             return heart->type();
         }
 

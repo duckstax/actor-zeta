@@ -16,7 +16,7 @@ namespace actor_zeta {
             virtual ~broker() = default;
 
         protected:
-            void initialize();
+            void initialize() override  final;
 
             std::unordered_map<std::string, write_handler> actions;
         };

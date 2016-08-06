@@ -21,9 +21,9 @@ namespace actor_zeta {
             group &operator=(group &&) = default;
 
             template<class T>
-            group(const std::string &name, T *ptr):name_(name) {
-                std::string entry_address = ptr->type();
-                unique_actors.emplace(ptr->type(), actor::actor(ptr));
+            group(const std::string &name, T* actor):name_(name) {
+                std::string entry_address = actor->type();
+                unique_actors.emplace(actor->type(), actor);
                 entry_point = entry_address;
             }
 
@@ -34,15 +34,15 @@ namespace actor_zeta {
             group &add(actor::actor &&);
 
             template<class T>
-            group &add(T *ptr) {
-                unique_actors.emplace(ptr->type(), actor::actor(ptr));
+            group &add(T* actor) {
+                unique_actors.emplace(actor->type(), actor);
                 return *this;
             };
 
             template <class T>
-            group &add(const std::string &root_name, T * ptr){
-                actor_zeta::actor::actor_address address = ptr->address();
-                unique_actors.emplace(ptr->type(), actor::actor(ptr));
+            group &add(const std::string &root_name, T * actor){
+                actor_zeta::actor::actor_address address = actor->address();
+                unique_actors.emplace(actor->type(), actor);
                 unique_actors[root_name]->async_send(
                         messaging::make_message(
                                 std::string("sync_contacts"),

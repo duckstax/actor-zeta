@@ -3,7 +3,8 @@
 
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
+
 #include "actor-zeta/forwards.hpp"
 #include "group_contacts.hpp"
 
@@ -13,13 +14,17 @@ namespace actor_zeta {
         public:
             book_contacts() = default;
 
-            void put(std::initializer_list<actor::actor_address> visiting_cards);
+            book_contacts(book_contacts &&) = default;
 
-            void put(const std::vector<actor::actor_address> &visiting_cards);
+            book_contacts &operator=(book_contacts &&)= default;
 
-            void put(const actor::actor_address &vc);
+            void put(const actor::actor_address &);
 
-            actor::actor_address &get(const std::string &name);
+            const actor::actor_address& get(const std::string &);
+
+            void put_in_group(const std::string&, const actor::actor_address &);
+
+            const actor::actor_address& get_group(const std::string&);
 
             /*
             * debug method
@@ -27,8 +32,8 @@ namespace actor_zeta {
             void all_view();
 
         private:
-            std::map<std::string, actor::actor_address> contacts;
-            std::map<std::string, group_contacts> groups;
+            std::unordered_map<std::string, actor::actor_address> contacts;
+            std::unordered_map<std::string, group_contacts> groups;
         };
     }
 }

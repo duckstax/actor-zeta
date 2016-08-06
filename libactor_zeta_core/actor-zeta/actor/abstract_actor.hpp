@@ -1,7 +1,6 @@
 #ifndef ABSTRACT_ACTOR_HPP
 #define ABSTRACT_ACTOR_HPP
 
-
 #include <mutex>
 #include <condition_variable>
 #include <string>
@@ -14,9 +13,7 @@ namespace actor_zeta {
     namespace actor {
         class abstract_actor : public ref_counted {
         public:
-            std::string type() const;
-
-            virtual void attach(actor_zeta::behavior::interface_action *) = 0;
+            const std::string& type() const;
 
             virtual bool async_send(messaging::message &&) = 0;
 
