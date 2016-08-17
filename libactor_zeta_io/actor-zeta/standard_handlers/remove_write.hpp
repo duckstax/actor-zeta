@@ -13,8 +13,8 @@ namespace actor_zeta {
         public:
             remove_write(std::unordered_map<std::string, write_handler> &actions) : actions(actions),name_("remove_write") {}
 
-            void operator()(messaging::message &&msg) override final {
-                std::string key = msg.get<std::string>();
+            void operator()(messaging::message *msg) override final {
+                std::string key = msg->get<std::string>();
                 actions.erase(key);
             }
 

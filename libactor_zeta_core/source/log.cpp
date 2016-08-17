@@ -12,8 +12,8 @@ namespace actor_zeta {
             return t;
         }
 
-        void operator()(messaging::message &&msg) override final {
-            std::string str_log = msg.get<std::string>();
+        void operator()(messaging::message *msg) override final {
+            std::string str_log = msg->get<std::string>();
             log << str_log;
             log.flush();
             std::cout << str_log;
@@ -38,7 +38,7 @@ namespace actor_zeta {
         return d;
     }
 
-    log::log(environment::environment &env, const std::string path) : local_actor(env,"log") {
+    log::log(environment::environment &env, const std::string path) : scheduled_actor(env,"log") {
         attach(new logger_handler(log_path));
         log_path.open(path, std::ios_base::app);
     }

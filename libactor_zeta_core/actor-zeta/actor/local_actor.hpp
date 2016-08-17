@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "actor-zeta/messaging/blocking_mail_queue.hpp"
+#include "actor-zeta/messaging/message.hpp"
 #include "abstract_actor.hpp"
 #include "actor-zeta/behavior/behavior.hpp"
 #include "actor-zeta/forwards.hpp"
@@ -12,51 +13,44 @@
 
 namespace actor_zeta {
     namespace actor {
-        class local_actor : public executor::executable, public abstract_actor {
+        class local_actor : public abstract_actor {
         public:
             using mailbox_type=messaging::blocking_mail_queue<messaging::message>;
-
-                                                             //hide
-            virtual void launch(executor::execution_device *, bool);
+                                                            //hide
+            virtual void launch(executor::execution_device*, bool) = 0;
 
             virtual ~local_actor();
 
-            bool async_send(messaging::message &&) override;
-
-            bool async_send(messaging::message &&, executor::execution_device *) override;
-
-            inline void device(executor::execution_device *e) {
+        protected:
+            inline void device(executor::execution_device* e) {
                 executor_ = e;
             }
 
-            inline executor::execution_device *device() const {
+            inline executor::execution_device* device() const {
                 return executor_;
             }
 
             void attach(behavior::interface_action *);
 
-        protected:
             local_actor(environment::environment &, const std::string &);
 
             virtual void initialize();
 
-            virtual bool finalize();
+// message processing -----------------------------------------------------
+            messaging::message* next_message();
 
-            void attach_to_scheduler() override;
+            bool has_next_message();
 
-            void detach_from_scheduler() override;
+            inline mailbox_type &mailbox() {
+                return mailbox_;
+            }
 
-            messaging::message next_message();
-
-            void shedule(executor::execution_device *e);
-
-            virtual executor::executable::executable_result
-            run(executor::execution_device *, size_t max_throughput) override;
-
+            //void push_to_cache(messaging::message *);
+// ----------------------------------------------------- message processing
             contacts::book_contacts contacts;
-            mailbox_type mailbox;
             behavior::behavior life;
         private:
+            mailbox_type mailbox_;
             executor::execution_device *executor_;
         };
     }

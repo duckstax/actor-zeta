@@ -11,7 +11,7 @@ namespace actor_zeta {
     public:
         skip() : name_("skip") {}
 
-        void operator()(messaging::message &&msg) override final {}
+        void operator()(messaging::message *msg) override final {}
 
         const std::string &name() const override final {
             return name_;// TODO: "skip" -> "" ?

@@ -6,8 +6,8 @@
 
 namespace actor_zeta {
     namespace environment {
-        void cooperation::async_send(messaging::message &&msg) {
-            cooperation_groups[entry_point].async_send(std::move(msg));
+        void cooperation::async_send(messaging::message * msg) {
+            cooperation_groups[entry_point].async_send(msg);
         }
 
         void cooperation::sync(std::initializer_list<std::string> list_names) {
@@ -36,27 +36,25 @@ namespace actor_zeta {
             }
         }
 
-        cooperation &cooperation::add(group &&g) {
+        void cooperation::add(group &&g) {
             cooperation_groups.emplace(g.name(), std::move(g));
-            return *this;
         }
 
-        void cooperation::async_send_all(messaging::message &&doc) {
+        void cooperation::async_send_all(messaging::message *doc) {
             for (auto &i:cooperation_groups) {
-                i.second.async_send_all(std::move(doc));
+                i.second.async_send_all(doc);
             }
         }
 
 
-        cooperation &cooperation::add_sharet_address(actor::actor_address address) {
+        void cooperation::add_sharet_address(actor::actor_address address) {
             for (auto &i:cooperation_groups) {
                 i.second.add_shared_address(address);
             }
-            return *this;
         }
 
-        void cooperation::async_send(const std::string &name, messaging::message &&message) {
-            cooperation_groups[name].async_send(std::move(message));
+        void cooperation::async_send(const std::string &name, messaging::message *message) {
+            cooperation_groups[name].async_send(message);
         }
 
         actor_zeta::actor::actor_address cooperation::get(const std::string & name) const {

@@ -7,10 +7,10 @@
 
 namespace actor_zeta {
     namespace behavior {
-        void behavior::run(messaging::message &&d) {
-            auto it = behavioral_reactions.find(d.type());
+        void behavior::run(messaging::message *d) {
+            auto it = behavioral_reactions.find(d->type());
             if(it!=behavioral_reactions.end()) {
-                it->second(std::move(d));
+                it->second(d);
             }
         }
 
@@ -21,7 +21,7 @@ namespace actor_zeta {
         }
 
         void behavior::insert(interface_action *aa) {
-            behavioral_reactions.emplace(aa->name(), std::move(action(aa)));
+            behavioral_reactions.emplace(aa->name(), aa);
         }
     }
 }

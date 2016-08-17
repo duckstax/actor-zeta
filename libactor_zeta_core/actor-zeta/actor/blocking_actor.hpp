@@ -8,12 +8,12 @@
 
 namespace actor_zeta {
     namespace actor {
-        class blocking_actor : public local_actor {
+        class blocking_actor : public local_actor , executor::executable {
         public:
             blocking_actor(environment::environment &, const std::string &);
             virtual void act();
-            virtual executor::executable::executable_result run(executor::execution_device *, size_t) override;
-            virtual void launch(executor::execution_device *, bool) override ;
+            executor::executable::executable_result run(executor::execution_device *, size_t) override final;
+            void launch(executor::execution_device *,bool) override final ;
             virtual ~blocking_actor(){}
 
         private:

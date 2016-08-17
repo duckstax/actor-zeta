@@ -25,7 +25,7 @@ namespace actor_zeta {
 
             ~cooperation() = default;
 
-            cooperation &add(group &&);
+            void add(group &&);
 
             actor_zeta::actor::actor_address get(const std::string &) const;
 
@@ -34,13 +34,13 @@ namespace actor_zeta {
 
             void sync();
 
-            void async_send(messaging::message &&);
+            void async_send(messaging::message *);
 
-            void async_send(const std::string &, messaging::message &&);
+            void async_send(const std::string &, messaging::message *);
 
-            void async_send_all(messaging::message &&);
+            void async_send_all(messaging::message *);
 
-            cooperation &add_sharet_address(actor::actor_address);
+            void add_sharet_address(actor::actor_address);
 
         private:
             std::string entry_point;

@@ -3,7 +3,7 @@
 
 namespace actor_zeta {
     namespace messaging {
-        enum class message_priorities : uint64_t {
+        enum class message_priorities {
             low = 0,
             normal,
             high

@@ -38,9 +38,9 @@ namespace actor_zeta {
 
         void blocking_actor::act() {
             for (;;) {
-                if (mailbox.empty()) {
-                    auto msg = std::move(next_message());
-                    life.run(std::move(msg));
+                if (mailbox().empty()) {
+                    auto msg = next_message();
+                    life.run(msg);
                 }
                 else {
                     break;

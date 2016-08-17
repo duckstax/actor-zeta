@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "actor-zeta/actor/local_actor.hpp"
+#include <actor-zeta/actor/scheduled_actor.hpp>
 #include "actor-zeta/messaging/message.hpp"
 #include "forwards.hpp"
 
@@ -48,7 +48,7 @@ namespace actor_zeta {
         return result.append(level_debug::critical).append(getdata()).append(msg).append(new_string);
     }
 
-    class log final : public actor::local_actor {
+    class log final : public actor::scheduled_actor {
     private:
         std::ofstream log_path;
     public:

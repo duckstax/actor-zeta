@@ -12,9 +12,9 @@ namespace actor_zeta {
         public:
             write(std::unordered_map<std::string, write_handler> &actions) : actions(actions),name_("write") {}
 
-            void operator()(messaging::message &&msg) override final {
+            void operator()(messaging::message *msg) override final {
                 //name/blob data
-                auto element = msg.get<std::pair<std::string, std::string>>();
+                auto element = msg->get<std::pair<std::string, std::string>>();
                 auto it = actions.find(element.first);
                 if (it != actions.end()) {
                     auto wh = *(it);

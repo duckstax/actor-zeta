@@ -26,12 +26,7 @@ namespace actor_zeta {
             }
 
             void start() {
-                auto this_worker = this;
-                this_thread_ = std::thread{
-                        [this_worker] {
-                            this_worker->run();
-                        }
-                };
+                this_thread_ = std::thread(&worker::run,this);
             }
 
             worker(const worker &) = delete;

@@ -2,6 +2,7 @@
 #define ACTION_HPP
 
 #include <memory>
+#include "actor-zeta/messaging/message.hpp"
 
 #include "interface_action.hpp"
 
@@ -23,8 +24,8 @@ namespace actor_zeta {
 
             action(interface_action *aa) : action_impl_ptr(aa) {}
 
-            void operator()(messaging::message &&msg) {
-                action_impl_ptr->operator()(std::move(msg));
+            void operator()(messaging::message *msg) {
+                action_impl_ptr->operator()(msg);
             }
 
         private:

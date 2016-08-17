@@ -12,8 +12,8 @@ namespace actor_zeta {
     public:
         sync_contacts(contacts::book_contacts &bc) : bc(bc),name_("sync_contacts") {}
 
-        void operator()(messaging::message &&msg) override final {
-            bc.put(msg.get<actor::actor_address>());
+        void operator()(messaging::message *msg) override final {
+            bc.put(msg->get<actor::actor_address>());
         }
 
         const std::string& name() const override final {

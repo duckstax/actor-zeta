@@ -12,8 +12,8 @@ namespace actor_zeta {
         public:
             add_write(std::unordered_map<std::string, write_handler> &actions) : actions(actions),name_("add_write") {}
 
-            void operator()(messaging::message &&msg) override final {
-                write_handler element = msg.get<write_handler>();
+            void operator()(messaging::message *msg) override final {
+                write_handler element = msg->get<write_handler>();
                 actions.emplace(element.id(), std::move(element));
             }
 

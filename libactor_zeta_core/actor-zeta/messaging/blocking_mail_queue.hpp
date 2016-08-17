@@ -7,27 +7,30 @@
 #include <memory>
 #include <atomic>
 
-#include "mail_box.hpp"
-
 namespace actor_zeta {
     namespace messaging {
         template<typename T>
-        class blocking_mail_queue final : public mail_box<T> {
+        class blocking_mail_queue {
         public:
+            using pointer = T *;
+            using const_pointer = const T *;
+            using reference = T &;
+            using const_reference = const T &;
+
             using unique_lock = std::unique_lock<std::mutex>;
             using lock_guard=std::lock_guard<std::mutex>;
 
-            blocking_mail_queue() : size_(0) { };
+            blocking_mail_queue() : size_(0) {};
 
-            ~blocking_mail_queue() { }
+            ~blocking_mail_queue() {}
 
-            bool put(T &&m) override final {
+            bool put(pointer m) {
                 bool status;
                 {
                     lock_guard lock(mutex);
                     //if (mail_queue.empty())
                     //    cv.notify_one();
-                    mail_queue.emplace_back(std::forward<T>(m));
+                    mail_queue.push_back(m);
                     status = true;
                 }
                 ++size_;
@@ -35,40 +38,31 @@ namespace actor_zeta {
                 return status;
             }
 
-            T get() override {
-                unique_lock lock(mutex);
-                T tmp = std::forward<T>(mail_queue.front());
-                mail_queue.pop_front();
-                --size_;
-                return std::forward<T>(tmp);
-            }
-
-            std::vector<T> getAll() override final {
-                std::vector<T> tmp;
+            pointer get() {
+                pointer tmp = nullptr;
                 {
                     unique_lock lock(mutex);
-                    for (auto &&i:mail_queue) {
-                        tmp.emplace_back(std::forward<T>(i));
+                    if (!empty()) {
+                        tmp = mail_queue.front();
+                        mail_queue.pop_front();
+                        --size_;
                     }
-                    mail_queue.clear();
                 }
-                cv.notify_one();
-                size_ = 0;
                 return tmp;
             }
 
-            size_t size() override final {
+            size_t size() {
                 return size_;
             }
 
-            bool empty() override final {
-                return size_ != 0;
+            bool empty() {
+                return size_ == 0;
             }
 
         private:
             mutable std::mutex mutex;
             std::condition_variable cv;
-            std::list<T> mail_queue;
+            std::list<pointer> mail_queue;
             std::atomic<size_t> size_;
         };
     }

@@ -14,19 +14,19 @@ namespace actor_zeta {
         public:
             behavior() = default;
 
-            behavior(behavior &&) = default;
-
             behavior(const behavior &) = delete;
 
-            behavior &operator=(behavior &&) = default;
-
             behavior &operator=(const behavior &) = delete;
+
+            behavior(behavior &&) = default;
+
+            behavior &operator=(behavior &&) = default;
 
             ~behavior() = default;
 
             void insert(interface_action *aa);
 
-            void run(messaging::message &&);
+            void run(messaging::message *);
 
             //debug method
             void all_name_view();

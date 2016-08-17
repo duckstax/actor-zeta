@@ -12,6 +12,7 @@ set(HEADER_FILES
         actor-zeta/actor/actor_address.hpp
         actor-zeta/actor/blocking_actor.hpp
         actor-zeta/actor/local_actor.hpp
+        actor-zeta/actor/scheduled_actor.hpp
 
         actor-zeta/behavior/interface_action.hpp
         actor-zeta/behavior/action.hpp
@@ -31,13 +32,13 @@ set(HEADER_FILES
         actor-zeta/executor/worker.hpp
 
         actor-zeta/messaging/blocking_mail_queue.hpp
-        actor-zeta/messaging/mail_box.hpp
         actor-zeta/messaging/message.hpp
         actor-zeta/messaging/message_priorities.hpp
 
         actor-zeta/standard_handlers/sync_contacts.hpp
         actor-zeta/standard_handlers/skip.hpp
 
+        actor-zeta/any.hpp
         actor-zeta/environment.hpp
         actor-zeta/forwards.hpp
         actor-zeta/intrusive_ptr.hpp
@@ -63,6 +64,6 @@ set(SOURCE_FILES
         source/log.cpp
         source/ref_counted.cpp
         source/contacts/group_contacts.cpp
-)
+        source/actor/scheduled_actor.cpp)
 
 add_library(${PROJECT} OBJECT ${SOURCE_FILES} ${HEADER_FILES})
