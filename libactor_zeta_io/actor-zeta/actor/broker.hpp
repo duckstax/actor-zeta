@@ -4,21 +4,20 @@
 #include <unordered_map>
 
 #include "actor-zeta/actor/scheduled_actor.hpp"
-#include "multiplexer.hpp"
-#include "actor-zeta/connection_handler.hpp"
+#include "actor-zeta/network/multiplexer.hpp"
 
 namespace actor_zeta {
     namespace network {
         class broker : public actor_zeta::actor::scheduled_actor {
         public:
-            broker(environment::environment &, const std::string &);
+            broker(environment::environment &, const std::string &, shared_multiplexer_ptr);
 
             virtual ~broker() = default;
 
         protected:
             void initialize() override;
-            //string->(host:port)
-            std::unordered_map<std::string, write_handler> actions;
+
+            std::shared_ptr<multiplexer> multiplexer_;
         };
     }
 }

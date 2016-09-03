@@ -3,33 +3,29 @@
 
 #include <map>
 #include <iostream>
-
+#include <actor-zeta/network/connection_identifying.hpp>
 #include "actor-zeta/messaging/message.hpp"
 
 namespace actor_zeta {
     namespace network {
         class write final : public behavior::interface_action {
         public:
-            write(std::unordered_map<std::string, write_handler> &actions) : actions(actions),name_("write") {}
+            write(std::shared_ptr<multiplexer> multiplexer_) : multiplexer_(std::move(multiplexer_)), name_("write") {
+
+            }
 
             void operator()(messaging::message *msg) override final {
                 //name/blob data
-                auto element = msg->get<std::pair<std::string, std::string>>();
-                auto it = actions.find(element.first);
-                if (it != actions.end()) {
-                    auto wh = *(it);
-                    wh.second(element.second);
-                }
-                else {
-                    std::cerr << "Error Not Method" << std::endl;
-                }
+                auto element = msg->get<std::pair<connection_identifying, std::string>>();
+                multiplexer_->write(element.first, element.second);
             }
 
-            const std::string& name() const final {
+            const std::string &name() const final {
                 return name_;
             };
+
         private:
-            std::unordered_map<std::string, write_handler> &actions;
+            actor_zeta::network::shared_multiplexer_ptr multiplexer_;
             std::string name_;
         };
     }

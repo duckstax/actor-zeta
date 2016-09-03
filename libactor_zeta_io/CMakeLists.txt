@@ -7,17 +7,18 @@ project(${PROJECT} CXX)
 include_directories(.)
 
 set(HEADER_FILES
-        actor-zeta/standard_handlers/add_write.hpp
-        actor-zeta/standard_handlers/remove_write.hpp
+        actor-zeta/actor/broker.hpp
+
+        actor-zeta/network/multiplexer.hpp
+        actor-zeta/network/connection_identifying.hpp
+
         actor-zeta/standard_handlers/write.hpp
-        actor-zeta/broker.hpp
-        actor-zeta/connection_handler.hpp
+
         actor-zeta/forwards.hpp
-        actor-zeta/multiplexer.hpp
 )
 
 set(SOURCE_FILES
         source/broker.cpp
-)
+        source/connection_identifying.cpp)
 
 add_library(${PROJECT} OBJECT ${SOURCE_FILES} ${HEADER_FILES} )
