@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 #include "actor-zeta/forwards.hpp"
+#include "actor-zeta/actor/actor_address.hpp"
 #include "group_contacts.hpp"
 
 namespace actor_zeta {

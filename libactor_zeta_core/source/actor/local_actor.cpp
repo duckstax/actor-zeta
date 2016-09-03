@@ -21,7 +21,7 @@ namespace actor_zeta {
             attach(new actor_zeta::skip());
         }
 
-        messaging::message* local_actor::next_message() {
+        messaging::message *local_actor::next_message() {
             return mailbox().get();
         }
 
@@ -34,11 +34,56 @@ namespace actor_zeta {
         }
 
         bool local_actor::has_next_message() {
-            return mailbox().empty();
+            messaging::message *msg_ptr = mailbox().get();
+            return push_to_cache(msg_ptr);
         }
 
-        //void local_actor::push_to_cache(messaging::message *element) {
-            //TODO реализовать
-        //}
+        bool local_actor::push_to_cache(messaging::message *msg_ptr) {
+            if (msg_ptr != nullptr) {
+                switch (msg_ptr->get_priorities()) {
+
+                    case messaging::message_priorities::low: {
+                        mailbox().low_priority_cache().push_back(msg_ptr);
+                        return true;
+                    }
+
+                    case messaging::message_priorities::normal: {
+                        mailbox().normal_priority_cache().push_back(msg_ptr);
+                        return true;
+                    }
+
+                    case messaging::message_priorities::high: {
+                        mailbox().high_priority_cache().push_back(msg_ptr);
+                        return true;
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+
+        messaging::message *local_actor::pop_to_cache() {
+            messaging::message *msg_ptr = nullptr;
+            if (!mailbox().high_priority_cache().empty()) {
+                msg_ptr = mailbox().high_priority_cache().front();
+                mailbox().high_priority_cache().pop_front();
+                return msg_ptr;
+            }
+
+            if (!mailbox().normal_priority_cache().empty()) {
+                msg_ptr = mailbox().normal_priority_cache().front();
+                mailbox().normal_priority_cache().pop_front();
+                return msg_ptr;
+            }
+
+            if (!mailbox().low_priority_cache().empty()) {
+                msg_ptr = mailbox().low_priority_cache().front();
+                mailbox().low_priority_cache().pop_front();
+                return msg_ptr;
+            }
+            return msg_ptr;
+        }
+
+
     }
 }

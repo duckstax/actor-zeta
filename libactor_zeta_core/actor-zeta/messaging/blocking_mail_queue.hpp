@@ -9,6 +9,12 @@
 
 namespace actor_zeta {
     namespace messaging {
+        enum class enqueue_result {
+                    success,
+                    unblocked_reader,
+                    queue_closed
+        };
+
         template<typename T>
         class blocking_mail_queue {
         public:
@@ -17,53 +23,79 @@ namespace actor_zeta {
             using reference = T &;
             using const_reference = const T &;
 
+            using cache_type = std::list<pointer>;
+
+            using queue_base_type = std::list<pointer>;
+
             using unique_lock = std::unique_lock<std::mutex>;
-            using lock_guard=std::lock_guard<std::mutex>;
+            using lock_guard = std::lock_guard<std::mutex>;
 
-            blocking_mail_queue() : size_(0) {};
+            blocking_mail_queue(const blocking_mail_queue &) = delete;
 
-            ~blocking_mail_queue() {}
+            blocking_mail_queue &operator=(const blocking_mail_queue &)= delete;
 
-            bool put(pointer m) {
-                bool status;
+            blocking_mail_queue(blocking_mail_queue &&) = default;
+
+            blocking_mail_queue &operator=(blocking_mail_queue &&)= default;
+
+            blocking_mail_queue() = default;
+
+            ~blocking_mail_queue() = default;
+
+            enqueue_result put(pointer m) {
+                enqueue_result status;
                 {
                     lock_guard lock(mutex);
-                    //if (mail_queue.empty())
-                    //    cv.notify_one();
-                    mail_queue.push_back(m);
-                    status = true;
+                        mail_queue.push_back(m);
+                        status = enqueue_result::success;
                 }
-                ++size_;
                 cv.notify_one();
                 return status;
             }
 
+
+            void sync() {
+                lock_guard lock(mutex);
+                local_queue.splice(local_queue.begin(), mail_queue);
+            }
+
             pointer get() {
-                pointer tmp = nullptr;
-                {
-                    unique_lock lock(mutex);
-                    if (!empty()) {
-                        tmp = mail_queue.front();
-                        mail_queue.pop_front();
-                        --size_;
-                    }
+                if (local_queue.empty()) {
+                    sync();
                 }
+
+                pointer tmp = nullptr;
+
+                if (!local_queue.empty()) {
+                    tmp = local_queue.front();
+                    local_queue.pop_front();
+                }
+
                 return tmp;
             }
 
-            size_t size() {
-                return size_;
+            cache_type &low_priority_cache() {
+                return low_priority_cache_;
             }
 
-            bool empty() {
-                return size_ == 0;
+            cache_type &normal_priority_cache() {
+                return normal_priority_cache_;
+            }
+
+            cache_type &high_priority_cache() {
+                return high_priority_cache_;
             }
 
         private:
             mutable std::mutex mutex;
             std::condition_variable cv;
-            std::list<pointer> mail_queue;
-            std::atomic<size_t> size_;
+
+            bool close;
+            queue_base_type mail_queue;
+            queue_base_type local_queue;
+            cache_type low_priority_cache_;
+            cache_type normal_priority_cache_;
+            cache_type high_priority_cache_;
         };
     }
 }

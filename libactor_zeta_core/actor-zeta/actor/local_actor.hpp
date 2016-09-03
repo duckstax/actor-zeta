@@ -37,6 +37,7 @@ namespace actor_zeta {
             virtual void initialize();
 
 // message processing -----------------------------------------------------
+
             messaging::message* next_message();
 
             bool has_next_message();
@@ -45,7 +46,10 @@ namespace actor_zeta {
                 return mailbox_;
             }
 
-            //void push_to_cache(messaging::message *);
+            bool push_to_cache(messaging::message *);
+
+            messaging::message* pop_to_cache();
+
 // ----------------------------------------------------- message processing
             contacts::book_contacts contacts;
             behavior::behavior life;

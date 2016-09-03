@@ -12,7 +12,6 @@ namespace actor_zeta {
             if (e) {
                 device(e);
             }
-
             if (blocked()) {
                 auto self = this;
                 self->act();
@@ -38,18 +37,17 @@ namespace actor_zeta {
 
         void blocking_actor::act() {
             for (;;) {
-                if (mailbox().empty()) {
-                    auto msg = next_message();
-                    life.run(msg);
-                }
-                else {
-                    break;
+                messaging::message *msg_ptr = next_message();
+                if (msg_ptr != nullptr) {
+                    life.run(msg_ptr);
+                } else {
+                    return;
                 }
             }
         }
 
         blocking_actor::blocking_actor(environment::environment &env, const std::string &type)
-                : local_actor(env,type) {
+                : local_actor(env, type) {
             blocked(true);
         }
     }

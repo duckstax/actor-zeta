@@ -48,7 +48,7 @@ namespace actor_zeta {
                 return address;
             };
 
-            const bool const is_callback() const {
+            const bool is_callback() const {
                 return callback;
             }
 

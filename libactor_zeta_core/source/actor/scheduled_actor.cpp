@@ -13,24 +13,42 @@ namespace actor_zeta {
             }
 
             //---------------------------------------------------------------------------
+
             {
-                for (size_t handled_msgs = 0; handled_msgs < max_throughput;) {
-                    if (!has_next_message()) {
-                        messaging::message *ptr = next_message();
-                        life.run(ptr);
+                messaging::message *msg_ptr = nullptr;
+                for (size_t handled_msgs = 0; handled_msgs < max_throughput; ) {
+                    msg_ptr = pop_to_cache();
+                    if (msg_ptr != nullptr) {
+                        life.run(msg_ptr);
                         ++handled_msgs;
-                        delete ptr;
+                        delete msg_ptr;
+                        continue;
+                    }
+                    msg_ptr = next_message();
+                    if (msg_ptr != nullptr) {
+                        life.run(msg_ptr);
+                        ++handled_msgs;
+                        delete msg_ptr;
                     } else {
                         return executable_result::awaiting;
                     }
-
                 }
             }
+
+            //---------------------------------------------------------------------------
+
+            messaging::message *msg_ptr = next_message();
+            while (msg_ptr != nullptr) {
+                push_to_cache(msg_ptr);
+                msg_ptr = next_message();
+            }
+
             //---------------------------------------------------------------------------
 
             if (has_next_message()) {
                 return executable_result::awaiting;
             }
+
             return executable_result::resume;
         }
 
