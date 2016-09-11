@@ -12,7 +12,7 @@ namespace actor_zeta {
 
         class connection_identifying {
         public:
-            connection_identifying() = default;
+            connection_identifying() = delete;
 
             connection_identifying(const connection_identifying &) = default;
 
