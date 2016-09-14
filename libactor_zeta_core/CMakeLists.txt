@@ -42,7 +42,6 @@ set(HEADER_FILES
         actor-zeta/environment.hpp
         actor-zeta/forwards.hpp
         actor-zeta/intrusive_ptr.hpp
-        actor-zeta/log.hpp
         actor-zeta/ref_counted.hpp
 )
 
@@ -61,7 +60,6 @@ set(SOURCE_FILES
         source/environment/group.cpp
 
         source/environment.cpp
-        source/log.cpp
         source/ref_counted.cpp
         source/contacts/group_contacts.cpp
         source/actor/scheduled_actor.cpp)
