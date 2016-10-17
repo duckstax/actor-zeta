@@ -30,9 +30,7 @@ namespace actor_zeta {
 
             const int &port() const;
 
-            bool operator==(const connection_identifying& ci) const {
-                return (type_connect_ == ci.type_connect_ && ip_ == ci.ip_ && port_ == ci.port_);
-            }
+            bool operator==(const connection_identifying& ci) const;
 
         private:
             const type_connect type_connect_;

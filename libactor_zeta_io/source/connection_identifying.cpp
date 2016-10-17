@@ -19,6 +19,10 @@ namespace actor_zeta {
         const int &connection_identifying::port() const {
             return port_;
         }
+
+        bool connection_identifying::operator==(const connection_identifying &ci) const {
+            return (type_connect_ == ci.type_connect_ && ip_ == ci.ip_ && port_ == ci.port_);
+        }
     }
 }
 

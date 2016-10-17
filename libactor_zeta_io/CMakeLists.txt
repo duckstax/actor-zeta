@@ -18,7 +18,9 @@ set(HEADER_FILES
 )
 
 set(SOURCE_FILES
+        source/standard_handlers/write.cpp
         source/broker.cpp
-        source/connection_identifying.cpp)
+        source/connection_identifying.cpp
+)
 
 add_library(${PROJECT} OBJECT ${SOURCE_FILES} ${HEADER_FILES} )
