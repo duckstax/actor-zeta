@@ -20,7 +20,7 @@ namespace actor_zeta {
             }
         }
 
-        void behavior::insert(interface_action *aa) {
+        void behavior::insert(abstract_action *aa) {
             behavioral_reactions.emplace(aa->name(), aa);
         }
     }

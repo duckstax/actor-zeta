@@ -24,7 +24,7 @@ namespace actor_zeta {
 
             ~behavior() = default;
 
-            void insert(interface_action *aa);
+            void insert(abstract_action *aa);
 
             void run(messaging::message *);
 

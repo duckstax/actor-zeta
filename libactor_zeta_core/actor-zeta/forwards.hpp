@@ -13,8 +13,8 @@ namespace actor_zeta {
         class actor_address;
     }
 
-    namespace behavior{
-        class interface_action;
+    namespace behavior {
+        class abstract_action;
     }
 
     namespace contacts {
