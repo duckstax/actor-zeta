@@ -1,6 +1,8 @@
 #ifndef MULTIPLEXER_HPP
 #define MULTIPLEXER_HPP
 
+#include <memory>
+
 #include "actor-zeta/actor/actor_address.hpp"
 #include "actor-zeta/network/connection_identifying.hpp"
 
