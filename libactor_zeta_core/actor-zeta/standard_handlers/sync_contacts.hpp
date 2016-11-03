@@ -8,23 +8,15 @@
 
 namespace actor_zeta {
 
-    class sync_contacts  final : public behavior::interface_action {
+    class sync_contacts final : public behavior::abstract_action {
     public:
-        sync_contacts(contacts::book_contacts &bc) : bc(bc),name_("sync_contacts") {}
+        sync_contacts(contacts::book_contacts &);
 
-        void operator()(messaging::message *msg) override final {
-            bc.put(msg->get<actor::actor_address>());
-        }
-
-        const std::string& name() const override final {
-            return name_;
-        };
+        void operator()(messaging::message *msg) override final;
 
     private:
         contacts::book_contacts &bc;
-        std::string name_;
     };
 }
-
 
 #endif //SYNC_CONTACTS_HPP

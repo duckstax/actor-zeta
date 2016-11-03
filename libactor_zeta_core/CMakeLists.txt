@@ -14,7 +14,7 @@ set(HEADER_FILES
         actor-zeta/actor/local_actor.hpp
         actor-zeta/actor/scheduled_actor.hpp
 
-        actor-zeta/behavior/interface_action.hpp
+        actor-zeta/behavior/abstract_action.hpp
         actor-zeta/behavior/action.hpp
         actor-zeta/behavior/behavior.hpp
         actor-zeta/contacts/book_contacts.hpp
@@ -60,6 +60,8 @@ set(SOURCE_FILES
         source/environment/group.cpp
 
         source/environment.cpp
+        source/standard_handlers/skip.cpp
+        source/standard_handlers/sync_contacts.cpp
         source/ref_counted.cpp
         source/contacts/group_contacts.cpp
         source/actor/scheduled_actor.cpp)

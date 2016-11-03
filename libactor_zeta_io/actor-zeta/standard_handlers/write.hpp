@@ -2,21 +2,18 @@
 #define WRITE_HPP
 
 #include "actor-zeta/network/multiplexer.hpp"
-#include "actor-zeta/behavior/interface_action.hpp"
+#include "actor-zeta/behavior/abstract_action.hpp"
 
 namespace actor_zeta {
     namespace network {
-        class write final : public behavior::interface_action {
+        class write final : public behavior::abstract_action {
         public:
-            write(std::shared_ptr<multiplexer> multiplexer_);
+            write(std::shared_ptr<multiplexer>);
 
             void operator()(messaging::message *msg) override final;
 
-            const std::string &name() const final;
-
         private:
             actor_zeta::network::shared_multiplexer_ptr multiplexer_;
-            std::string name_;
         };
     }
 }

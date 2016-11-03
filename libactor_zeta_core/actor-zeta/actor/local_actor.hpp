@@ -30,7 +30,7 @@ namespace actor_zeta {
                 return executor_;
             }
 
-            void attach(behavior::interface_action *);
+            void attach(behavior::abstract_action *);
 
             local_actor(environment::environment &, const std::string &);
 

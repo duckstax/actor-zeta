@@ -25,7 +25,7 @@ namespace actor_zeta {
             return mailbox().get();
         }
 
-        void local_actor::attach(actor_zeta::behavior::interface_action *ptr_aa) {
+        void local_actor::attach(actor_zeta::behavior::abstract_action *ptr_aa) {
             life.insert(ptr_aa);
         }
 
