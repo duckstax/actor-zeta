@@ -7,6 +7,8 @@
 #include "actor-zeta/forwards.hpp"
 #include "actor-zeta/actor/actor.hpp"
 
+// TODO:  groupt(*) <- abstract_group
+
 namespace actor_zeta {
     namespace environment {
         class group {

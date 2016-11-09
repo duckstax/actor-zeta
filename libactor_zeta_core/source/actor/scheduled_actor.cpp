@@ -2,6 +2,9 @@
 #include "actor-zeta/executor/abstract_coordinator.hpp"
 #include "actor-zeta/executor/execution_device.hpp"
 #include "actor-zeta/environment.hpp"
+#include "actor-zeta/behavior/abstract_action.hpp"
+#include "actor-zeta/behavior/request.hpp"
+#include "actor-zeta/behavior/response.hpp"
 
 namespace actor_zeta {
     namespace actor {
@@ -16,18 +19,34 @@ namespace actor_zeta {
 
             {
                 messaging::message *msg_ptr = nullptr;
-                for (size_t handled_msgs = 0; handled_msgs < max_throughput; ) {
+                for (size_t handled_msgs = 0; handled_msgs < max_throughput;) {
                     msg_ptr = pop_to_cache();
                     if (msg_ptr != nullptr) {
-                        life.run(msg_ptr);
+                        auto request = new behavior::request(contacts, msg_ptr);
+                        auto response = life.run(request);
+                        if (response != nullptr) {
+                            response->receiver()->address()->async_send(response->message());
+                        }
                         ++handled_msgs;
+                        delete request;
+                        if (response != nullptr) {
+                            delete response;
+                        }
                         delete msg_ptr;
                         continue;
                     }
                     msg_ptr = next_message();
                     if (msg_ptr != nullptr) {
-                        life.run(msg_ptr);
+                        auto request = new behavior::request(contacts, msg_ptr);
+                        auto response = life.run(request);
+                        if (response != nullptr) {
+                            response->receiver()->address()->async_send(response->message());
+                        }
                         ++handled_msgs;
+                        delete request;
+                        if (response != nullptr) {
+                            delete response;
+                        }
                         delete msg_ptr;
                     } else {
                         return executable_result::awaiting;

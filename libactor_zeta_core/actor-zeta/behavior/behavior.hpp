@@ -26,7 +26,7 @@ namespace actor_zeta {
 
             void insert(abstract_action *aa);
 
-            void run(messaging::message *);
+            response *run(request *);
 
             //debug method
             void all_name_view();

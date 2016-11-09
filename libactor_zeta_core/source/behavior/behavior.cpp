@@ -1,17 +1,17 @@
 #include <initializer_list>
 #include "iostream"
 #include "actor-zeta/behavior/behavior.hpp"
-#include "actor-zeta/contacts/book_contacts.hpp"
-#include "actor-zeta/messaging/message.hpp"
-#include "actor-zeta/behavior/action.hpp"
+#include "actor-zeta/behavior/request.hpp"
+#include "actor-zeta/behavior/response.hpp"
 
 namespace actor_zeta {
     namespace behavior {
-        void behavior::run(messaging::message *d) {
-            auto it = behavioral_reactions.find(d->type());
-            if(it!=behavioral_reactions.end()) {
-                it->second(d);
+        response *behavior::run(request *d) {
+            auto it = behavioral_reactions.find(d->message()->type());
+            if (it != behavioral_reactions.end()) {
+                return it->second(d);
             }
+            return nullptr;//TODO : SKIP !!!
         }
 
         void behavior::all_name_view() {

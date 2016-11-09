@@ -8,12 +8,12 @@ namespace actor_zeta {
     namespace network {
         class write final : public behavior::abstract_action {
         public:
-            write(std::shared_ptr<multiplexer>);
+            write(shared_multiplexer_ptr);
 
-            void operator()(messaging::message *msg) override final;
+            behavior::response *operator()(behavior::request *) override final;
 
         private:
-            actor_zeta::network::shared_multiplexer_ptr multiplexer_;
+            shared_multiplexer_ptr multiplexer_;
         };
     }
 }

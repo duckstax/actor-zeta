@@ -15,6 +15,8 @@ namespace actor_zeta {
 
     namespace behavior {
         class abstract_action;
+        class response;
+        class request;
     }
 
     namespace contacts {
@@ -29,7 +31,7 @@ namespace actor_zeta {
     }
 
     namespace executor {
-        struct abstract_coordinator;
+        class abstract_coordinator;
         template<class Policy>
         class coordinator;
         struct execution_device;

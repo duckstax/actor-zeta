@@ -4,6 +4,8 @@
 #include "actor-zeta/environment/group.hpp"
 #include "actor-zeta/environment/cooperation.hpp"
 
+// TODO:  environment -> abstract_environment
+
 namespace actor_zeta {
     namespace environment {
 

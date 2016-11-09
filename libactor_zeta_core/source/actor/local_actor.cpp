@@ -17,7 +17,7 @@ namespace actor_zeta {
         }
 
         void local_actor::initialize() {
-            attach(new actor_zeta::sync_contacts(contacts));
+            attach(new actor_zeta::sync_contacts());
             attach(new actor_zeta::skip());
         }
 

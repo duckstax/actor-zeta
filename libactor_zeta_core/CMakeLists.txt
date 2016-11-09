@@ -17,6 +17,9 @@ set(HEADER_FILES
         actor-zeta/behavior/abstract_action.hpp
         actor-zeta/behavior/action.hpp
         actor-zeta/behavior/behavior.hpp
+        actor-zeta/behavior/request.hpp
+        actor-zeta/behavior/response.hpp
+
         actor-zeta/contacts/book_contacts.hpp
         actor-zeta/contacts/group_contacts.hpp
 
@@ -51,19 +54,22 @@ set(SOURCE_FILES
         source/actor/actor_address.cpp
         source/actor/blocking_actor.cpp
         source/actor/local_actor.cpp
+        source/actor/scheduled_actor.cpp
 
         source/behavior/behavior.cpp
+        source/behavior/action.cpp
 
         source/contacts/book_contacts.cpp
+        source/contacts/group_contacts.cpp
 
         source/environment/cooperation.cpp
         source/environment/group.cpp
 
-        source/environment.cpp
         source/standard_handlers/skip.cpp
         source/standard_handlers/sync_contacts.cpp
+
+        source/environment.cpp
         source/ref_counted.cpp
-        source/contacts/group_contacts.cpp
-        source/actor/scheduled_actor.cpp)
+)
 
 add_library(${PROJECT} OBJECT ${SOURCE_FILES} ${HEADER_FILES})

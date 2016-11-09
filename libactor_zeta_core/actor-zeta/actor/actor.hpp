@@ -21,13 +21,13 @@ namespace actor_zeta {
             actor &operator=(actor &&a) = default;
 
             template<class T>
-            actor(intrusive_ptr<T> ptr) : heart(std::move(ptr)) {}
+            actor(intrusive_ptr <T> ptr) : heart(std::move(ptr)) {}
 
             template<class T>
             actor(T *ptr) : heart(ptr) {}
 
             template<class T>
-            actor &operator=(intrusive_ptr<T> ptr) {
+            actor &operator=(intrusive_ptr <T> ptr) {
                 actor tmp{std::move(ptr)};
                 swap(tmp);
                 return *this;
@@ -48,13 +48,11 @@ namespace actor_zeta {
                 return heart.get();
             }
 
-            bool is_remote() const noexcept;
-
             inline explicit operator bool() const noexcept {
                 return static_cast<bool>(heart);
             }
 
-            const std::string& type() const;
+            const std::string &type() const;
 
             inline bool operator!() const noexcept {
                 return !heart;
@@ -64,7 +62,7 @@ namespace actor_zeta {
 
             void swap(actor &) noexcept;
 
-            intrusive_ptr<abstract_actor> heart;
+            intrusive_ptr <abstract_actor> heart;
         };
     }
 

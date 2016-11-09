@@ -10,12 +10,10 @@ namespace actor_zeta {
 
     class sync_contacts final : public behavior::abstract_action {
     public:
-        sync_contacts(contacts::book_contacts &);
+        sync_contacts();
 
-        void operator()(messaging::message *msg) override final;
+        behavior::response *operator()(behavior::request *) override final;
 
-    private:
-        contacts::book_contacts &bc;
     };
 }
 

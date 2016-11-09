@@ -20,8 +20,6 @@ namespace actor_zeta {
             executor::executable::executable_result run(executor::execution_device *, size_t max_throughput) override final;
 
         protected:
-            bool finalize() {}
-
             scheduled_actor(environment::environment &, const std::string &);
 
             void attach_to_scheduler() override final;

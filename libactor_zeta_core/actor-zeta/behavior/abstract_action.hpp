@@ -2,7 +2,6 @@
 #define ABSTRACT_ACTION_HPP
 
 #include <string>
-
 #include "actor-zeta/forwards.hpp"
 
 namespace actor_zeta {
@@ -13,7 +12,7 @@ namespace actor_zeta {
         public:
             abstract_action(const std::string &name_) : name_(name_) {}
 
-            virtual void operator()(messaging::message *) = 0;
+            virtual response *operator()(request *) = 0;
 
             const std::string &name() const {
                 return name_;

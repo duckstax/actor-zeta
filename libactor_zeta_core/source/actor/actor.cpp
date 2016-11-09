@@ -10,10 +10,6 @@ namespace actor_zeta {
             return heart->address();
         };
 
-        bool actor::is_remote() const noexcept {
-            return heart->remote();
-        }
-
         const std::string& actor::type() const {
             return heart->type();
         }

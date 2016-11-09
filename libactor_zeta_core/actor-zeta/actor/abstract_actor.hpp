@@ -16,23 +16,11 @@ namespace actor_zeta {
 
             virtual bool async_send(messaging::message *, executor::execution_device *) = 0;
 
-            virtual ~abstract_actor() {};
+            virtual ~abstract_actor() {}
 
             actor_address address() const noexcept;
 
-            bool remote() const noexcept;
-
-            void remote(bool) noexcept;
-
-            bool blocked() const noexcept;
-
-            void blocked(bool)noexcept;
-
-            bool master() const noexcept;
-
-            void master(bool)noexcept;
-
-            environment::environment &env()const;
+            environment::environment &env() const;
 
         protected:
             abstract_actor(environment::environment &, const std::string &);
@@ -45,9 +33,7 @@ namespace actor_zeta {
             abstract_actor &operator=(const abstract_actor &) = delete;
 
             const std::string type_;
-            bool remote_;
-            bool blocked_;
-            bool master_;
+
             environment::environment &env_;
         };
     }

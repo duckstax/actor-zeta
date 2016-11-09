@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include "actor-zeta/messaging/message.hpp"
 #include "abstract_action.hpp"
 
 namespace actor_zeta {
@@ -22,11 +21,9 @@ namespace actor_zeta {
 
             ~action() = default;
 
-            action(abstract_action *aa) : action_impl_ptr(aa) {}
+            action(abstract_action *aa);
 
-            void operator()(messaging::message *msg) {
-                action_impl_ptr->operator()(msg);
-            }
+            response * operator()(request * request_);
 
         private:
             std::unique_ptr<abstract_action> action_impl_ptr;

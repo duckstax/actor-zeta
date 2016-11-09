@@ -28,8 +28,6 @@ namespace actor_zeta {
                 return ptr_.get();
             }
 
-            bool is_remote() const noexcept;
-
             inline explicit operator bool() const noexcept {
                 return static_cast<bool>(ptr_);
             }

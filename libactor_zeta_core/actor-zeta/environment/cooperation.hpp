@@ -8,6 +8,8 @@
 #include "actor-zeta/messaging/message.hpp"
 #include "group.hpp"
 
+// TODO:  cooperation(*) <- abstract_cooperation
+
 namespace actor_zeta {
     namespace environment {
 
