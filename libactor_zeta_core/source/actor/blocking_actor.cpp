@@ -53,7 +53,7 @@ namespace actor_zeta {
             }
         }
 
-        blocking_actor::blocking_actor(environment::environment &env, const std::string &type)
+        blocking_actor::blocking_actor(environment::environment *env, const std::string &type)
                 : local_actor(env, type) {}
     }
 }

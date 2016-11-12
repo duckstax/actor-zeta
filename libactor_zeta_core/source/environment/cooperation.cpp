@@ -47,7 +47,7 @@ namespace actor_zeta {
         }
 
 
-        void cooperation::add_sharet_address(actor::actor_address address) {
+        void cooperation::add_shared_address(actor::actor_address address) {
             for (auto &i:cooperation_groups) {
                 i.second.add_shared_address(address);
             }

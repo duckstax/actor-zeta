@@ -11,7 +11,7 @@
 namespace actor_zeta {
 
     namespace actor {
-        local_actor::local_actor(environment::environment &env, const std::string &type)
+        local_actor::local_actor(environment::environment *env, const std::string &type)
                 : abstract_actor(env, type) {
             initialize();
         }

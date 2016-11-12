@@ -81,7 +81,7 @@ namespace actor_zeta {
                 device(e);
                 device()->put_execute_latest(this);
             } else {
-                env().manager_execution_device().submit(this);
+                env()->manager_execution_device().submit(this);
             }
             return true;
         }
@@ -95,7 +95,7 @@ namespace actor_zeta {
             deref();
         }
 
-        scheduled_actor::scheduled_actor(environment::environment &env, const std::string &name)
+        scheduled_actor::scheduled_actor(environment::environment *env, const std::string &name)
                 : local_actor(env, name) {
             local_actor::initialize();
         }

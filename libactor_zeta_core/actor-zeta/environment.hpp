@@ -23,6 +23,8 @@ namespace actor_zeta {
 
             ~environment() = default;
 
+            virtual int start();
+
             environment(executor::abstract_coordinator *);
 
             executor::abstract_coordinator& manager_execution_device();
@@ -31,6 +33,7 @@ namespace actor_zeta {
 
         private:
             cooperation cooperation_;
+        protected:
             executor::abstract_coordinator* coordinator_;
         };
     }

@@ -32,7 +32,7 @@ namespace actor_zeta {
 
             void attach(behavior::abstract_action *);
 
-            local_actor(environment::environment &, const std::string &);
+            local_actor(environment::environment *, const std::string &);
 
             virtual void initialize();
 

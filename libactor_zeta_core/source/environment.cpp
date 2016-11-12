@@ -1,4 +1,5 @@
 #include "actor-zeta/environment.hpp"
+#include "actor-zeta/executor/abstract_coordinator.hpp"
 
 namespace actor_zeta {
     namespace environment {
@@ -13,6 +14,9 @@ namespace actor_zeta {
         cooperation &environment::manager_group() {
             return cooperation_;
         }
+
+        int environment::start() {
+            manager_execution_device().start();
+        }
     }
 }
-

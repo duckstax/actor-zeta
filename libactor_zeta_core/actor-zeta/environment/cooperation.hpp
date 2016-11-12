@@ -42,7 +42,7 @@ namespace actor_zeta {
 
             void async_send_all(messaging::message *);
 
-            void add_sharet_address(actor::actor_address);
+            void add_shared_address(actor::actor_address);
 
         private:
             std::string entry_point;
