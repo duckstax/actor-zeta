@@ -1,6 +1,4 @@
 #include "actor-zeta/actor/broker.hpp"
-#include "actor-zeta/standard_handlers/write.hpp"
-
 
 namespace actor_zeta {
     namespace network {
@@ -12,7 +10,6 @@ namespace actor_zeta {
 
         void broker::initialize() {
             actor::local_actor::initialize();
-            attach(new write(multiplexer_));
         }
     }
 }

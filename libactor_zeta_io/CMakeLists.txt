@@ -11,17 +11,11 @@ set(HEADER_FILES
 
         actor-zeta/network/multiplexer.hpp
         actor-zeta/network/connection_identifying.hpp
-
-        actor-zeta/standard_handlers/write.hpp
-
         actor-zeta/forwards.hpp
 )
 
 set(SOURCE_FILES
         source/network/connection_identifying.cpp
-
-        source/standard_handlers/write.cpp
-        
         source/broker.cpp
 )
 
