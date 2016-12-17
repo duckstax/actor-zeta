@@ -21,7 +21,7 @@ namespace actor_zeta {
 
             environment &operator=(environment &&) = default;
 
-            ~environment() = default;
+            virtual ~environment() = default;
 
             virtual int start();
 

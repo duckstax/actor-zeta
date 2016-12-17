@@ -17,6 +17,7 @@ namespace actor_zeta {
 
         int environment::start() {
             manager_execution_device().start();
+            return 0;
         }
     }
 }
