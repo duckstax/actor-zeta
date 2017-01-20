@@ -7,13 +7,13 @@
 
 namespace actor_zeta {
     namespace environment {
-        void group::async_send(messaging::message *msg) {
-            unique_actors[entry_point]->async_send(msg);
+        void group::send(messaging::message *msg) {
+            unique_actors[entry_point]->send(msg);
         }
 
-        void group::async_send_all(messaging::message *msg) {
+        void group::send_all(messaging::message *msg) {
             for (auto &i:unique_actors)
-                i.second->async_send(msg);
+                i.second->send(msg);
         }
 
         std::string group::name_entry_point() const {
@@ -35,9 +35,9 @@ namespace actor_zeta {
                 if (j == tmp.end()) {
                     return;
                 }
-                unique_actors[*(j)]->async_send(
+                unique_actors[*(j)]->send(
                         messaging::make_message(
-                                std::string("sync_contacts"),
+                                "sync_contacts",
                                 unique_actors[*(i)].address()
                         )
                 );
@@ -46,9 +46,9 @@ namespace actor_zeta {
 
         void group::add_shared_address(actor::actor_address address) {
             for (auto &i:unique_actors)
-                i.second->async_send(
+                i.second->send(
                         messaging::make_message(
-                                std::string("sync_contacts"),
+                                "sync_contacts",
                                 address
                         )
                 );
@@ -71,10 +71,10 @@ namespace actor_zeta {
 
         void group::add(const std::string &root_name, actor::abstract_actor *actor) {
             actor_zeta::actor::actor_address address = actor->address();
-            unique_actors.emplace(actor->type(), actor);
-            unique_actors[root_name]->async_send(
+            unique_actors.emplace(actor->type(), actor::actor(actor));
+            unique_actors[root_name]->send(
                     messaging::make_message(
-                            std::string("sync_contacts"),
+                            "sync_contacts",
                             address
                     )
             );
@@ -82,12 +82,12 @@ namespace actor_zeta {
         }
 
         void group::add(actor::abstract_actor *actor)  {
-            unique_actors.emplace(actor->type(), actor);
+            unique_actors.emplace(actor->type(), actor::actor(actor));
         }
 
         group::group(const std::string &name, actor::abstract_actor *actor) :name_(name) {
             std::string entry_address = actor->type();
-            unique_actors.emplace(actor->type(), actor);
+            unique_actors.emplace(actor->type(),actor::actor(actor));
             entry_point = entry_address;
         }
     }

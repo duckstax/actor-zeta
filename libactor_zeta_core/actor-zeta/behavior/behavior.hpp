@@ -3,10 +3,10 @@
 
 #include <unordered_map>
 #include <vector>
-#include <string>
 
 #include "actor-zeta/forwards.hpp"
 #include "action.hpp"
+#include "type_action.hpp"
 
 namespace actor_zeta {
     namespace behavior {
@@ -27,12 +27,8 @@ namespace actor_zeta {
             void insert(abstract_action *aa);
 
             response *run(request *);
-
-            //debug method
-            void all_name_view();
-
         private:
-            std::unordered_map<std::string, action> behavioral_reactions;
+            std::unordered_map<type_action, action> behavioral_reactions;
         };
     }
 }

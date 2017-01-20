@@ -21,9 +21,9 @@ namespace actor_zeta {
 
             ~action() = default;
 
-            action(abstract_action *aa);
+            explicit action(abstract_action *);
 
-            response * operator()(request * request_);
+            response *operator()(request *);
 
         private:
             std::unique_ptr<abstract_action> action_impl_ptr;

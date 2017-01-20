@@ -40,7 +40,7 @@ namespace actor_zeta {
                     auto request = new behavior::request(contacts, msg_ptr);
                     auto response = life.run(request);
                     if (response != nullptr) {
-                        response->receiver()->address()->async_send(response->message());
+                        response->receiver()->address()->send(response->message());
                     }
                     delete request;
                     if (response != nullptr) {

@@ -25,7 +25,7 @@ namespace actor_zeta {
                         auto request = new behavior::request(contacts, msg_ptr);
                         auto response = life.run(request);
                         if (response != nullptr) {
-                            response->receiver()->address()->async_send(response->message());
+                            response->receiver()->address()->send(response->message());
                         }
                         ++handled_msgs;
                         delete request;
@@ -40,7 +40,7 @@ namespace actor_zeta {
                         auto request = new behavior::request(contacts, msg_ptr);
                         auto response = life.run(request);
                         if (response != nullptr) {
-                            response->receiver()->address()->async_send(response->message());
+                            response->receiver()->address()->send(response->message());
                         }
                         ++handled_msgs;
                         delete request;
@@ -71,7 +71,7 @@ namespace actor_zeta {
             return executable_result::resume;
         }
 
-        bool scheduled_actor::async_send(messaging::message *mep, executor::execution_device *e) {
+        bool scheduled_actor::send(messaging::message *mep, executor::execution_device *e) {
             if (e) {
                 device(e); //TODO переписать обработка
             }
@@ -115,8 +115,8 @@ namespace actor_zeta {
             }
         }
 
-        bool scheduled_actor::async_send(messaging::message *msg) {
-            return async_send(msg, nullptr);
+        bool scheduled_actor::send(messaging::message *msg) {
+            return send(msg, nullptr);
         }
     }
 }

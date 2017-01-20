@@ -21,10 +21,10 @@ namespace actor_zeta {
             actor &operator=(actor &&a) = default;
 
             template<class T>
-            actor(intrusive_ptr <T> ptr) : heart(std::move(ptr)) {}
+            explicit  actor(intrusive_ptr <T> ptr) : heart(std::move(ptr)) {}
 
             template<class T>
-            actor(T *ptr) : heart(ptr) {}
+            explicit actor(T *ptr) : heart(ptr) {}
 
             template<class T>
             actor &operator=(intrusive_ptr <T> ptr) {

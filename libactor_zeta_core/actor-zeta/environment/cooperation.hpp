@@ -38,9 +38,9 @@ namespace actor_zeta {
 
             void async_send(messaging::message *);
 
-            void async_send(const std::string &, messaging::message *);
+            void send(const std::string &, messaging::message *);
 
-            void async_send_all(messaging::message *);
+            void send_all(messaging::message *);
 
             void add_shared_address(actor::actor_address);
 

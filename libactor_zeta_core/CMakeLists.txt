@@ -19,6 +19,7 @@ set(HEADER_FILES
         actor-zeta/behavior/behavior.hpp
         actor-zeta/behavior/request.hpp
         actor-zeta/behavior/response.hpp
+        actor-zeta/behavior/type_action.hpp
 
         actor-zeta/contacts/book_contacts.hpp
         actor-zeta/contacts/group_contacts.hpp
@@ -36,12 +37,13 @@ set(HEADER_FILES
 
         actor-zeta/messaging/blocking_mail_queue.hpp
         actor-zeta/messaging/message.hpp
-        actor-zeta/messaging/message_priorities.hpp
+        actor-zeta/messaging/message_body.hpp
+        actor-zeta/messaging/message_header.hpp
+        actor-zeta/messaging/message_priority.hpp
 
         actor-zeta/standard_handlers/sync_contacts.hpp
         actor-zeta/standard_handlers/skip.hpp
 
-        actor-zeta/any.hpp
         actor-zeta/environment.hpp
         actor-zeta/forwards.hpp
         actor-zeta/intrusive_ptr.hpp
@@ -58,12 +60,16 @@ set(SOURCE_FILES
 
         source/behavior/behavior.cpp
         source/behavior/action.cpp
+        source/behavior/type_action.cpp
 
         source/contacts/book_contacts.cpp
         source/contacts/group_contacts.cpp
 
         source/environment/cooperation.cpp
         source/environment/group.cpp
+
+        source/messaging/message.cpp
+        source/messaging/message_header.cpp
 
         source/standard_handlers/skip.cpp
         source/standard_handlers/sync_contacts.cpp

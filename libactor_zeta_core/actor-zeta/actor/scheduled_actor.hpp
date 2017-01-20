@@ -11,9 +11,9 @@ namespace actor_zeta {
 
         class scheduled_actor : public local_actor, public executor::executable {
         public:
-            bool async_send(messaging::message *) override final;
+            bool send(messaging::message *) override final;
 
-            bool async_send(messaging::message *, executor::execution_device *) override final;
+            bool send(messaging::message *, executor::execution_device *) override final;
 
             void launch(executor::execution_device *, bool) override final;
 

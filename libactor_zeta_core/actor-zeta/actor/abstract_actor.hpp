@@ -12,9 +12,9 @@ namespace actor_zeta {
         public:
             const std::string &type() const;
 
-            virtual bool async_send(messaging::message *) = 0;
+            virtual bool send(messaging::message *) = 0;
 
-            virtual bool async_send(messaging::message *, executor::execution_device *) = 0;
+            virtual bool send(messaging::message *, executor::execution_device *) = 0;
 
             virtual ~abstract_actor() {}
 

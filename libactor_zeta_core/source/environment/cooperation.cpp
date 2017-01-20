@@ -7,7 +7,7 @@
 namespace actor_zeta {
     namespace environment {
         void cooperation::async_send(messaging::message * msg) {
-            cooperation_groups[entry_point].async_send(msg);
+            cooperation_groups[entry_point].send(msg);
         }
 
         void cooperation::sync(std::initializer_list<std::string> list_names) {
@@ -21,9 +21,9 @@ namespace actor_zeta {
                 if (j == tmp.end()) {
                     return;
                 }
-                cooperation_groups[*(j)].async_send(
+                cooperation_groups[*(j)].send(
                         messaging::make_message(
-                                std::string("sync_contacts"),
+                                "sync_contacts",
                                 cooperation_groups[*(i)].address_entry_point()
                         )
                 );
@@ -40,9 +40,9 @@ namespace actor_zeta {
             cooperation_groups.emplace(g.name(), std::move(g));
         }
 
-        void cooperation::async_send_all(messaging::message *doc) {
+        void cooperation::send_all(messaging::message *doc) {
             for (auto &i:cooperation_groups) {
-                i.second.async_send_all(doc);
+                i.second.send_all(doc);
             }
         }
 
@@ -53,8 +53,8 @@ namespace actor_zeta {
             }
         }
 
-        void cooperation::async_send(const std::string &name, messaging::message *message) {
-            cooperation_groups[name].async_send(message);
+        void cooperation::send(const std::string &name, messaging::message *message) {
+            cooperation_groups[name].send(message);
         }
 
         actor_zeta::actor::actor_address cooperation::get(const std::string & name) const {

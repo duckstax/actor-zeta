@@ -11,17 +11,11 @@ namespace actor_zeta {
             if (it != behavioral_reactions.end()) {
                 return it->second(d);
             }
-            return nullptr;//TODO : SKIP !!!
-        }
-
-        void behavior::all_name_view() {
-            for (auto &i: behavioral_reactions) {
-                std::cout << i.first << std::endl;
-            }
+            return behavioral_reactions.at("skip")(d);
         }
 
         void behavior::insert(abstract_action *aa) {
-            behavioral_reactions.emplace(aa->name(), aa);
+            behavioral_reactions.emplace(aa->name(),std::move(action(aa)));
         }
     }
 }

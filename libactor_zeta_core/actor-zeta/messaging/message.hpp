@@ -2,77 +2,93 @@
 #define MESSAGE_HPP
 
 #include <memory>
-
-#include "actor-zeta/actor/actor_address.hpp"
-#include "message_priorities.hpp"
-#include "actor-zeta/any.hpp"
+#include "message_header.hpp"
+#include "message_body.hpp"
 
 namespace actor_zeta {
     namespace messaging {
         class message {
         public:
-            message() = default;
+            message() = delete;
 
-            message(const message &) = default;
+            message(const message &) = delete;
 
-            message &operator=(const message &) = default;
+            message &operator=(const message &) = delete;
+
+            message(message &&) = default;
+
+            message &operator=(message &&) = default;
 
             ~message() = default;
 
-            template<typename T>
-            message(const std::string &type, const T &t)
-                    : type_(type), content(t), prioritie(message_priorities::normal), callback(false) {}
+            template<std::size_t N, typename T>
+            message(const char(&aStr)[N], const T &t)
+                    : header_(aStr), body_(t) {}
+
+            template<std::size_t N, typename T>
+            message(const char(&aStr)[N], const T &t, actor::actor_address aa)
+                    : header_(aStr, aa), body_(t) {}
+
+            template<std::size_t N, typename T>
+            message(const char(&aStr)[N], const T &t, message_priority p)
+                    :header_(aStr, p), body_(t) {}
+
+            template<std::size_t N, typename T>
+            message(const char(&aStr)[N], const T &t, message_priority p, actor::actor_address aa)
+                    : header_(aStr, p, aa), body_(t) {}
 
             template<typename T>
-            message(const std::string &type, const T &t, actor::actor_address aa)
-                    : type_(type), content(t), prioritie(message_priorities::normal), callback(false), address(aa) {}
+            message(const char *str, std::size_t len, const T &t)
+                    : header_(str, len), body_(t) {}
 
             template<typename T>
-            message(const std::string &type, const T &t, message_priorities p)
-                    : type_(type), content(t), prioritie(p), callback(false) {}
+            message(const char *str, std::size_t len, const T &t, actor::actor_address aa)
+                    : header_(str, len, aa), body_(t) {}
 
             template<typename T>
-            message(const std::string &type, const T &t, message_priorities p, actor::actor_address aa)
-                    : type_(type), content(t), prioritie(p), callback(true), address(aa) {}
-
-            message_priorities get_priorities() const {
-                return prioritie;
-            }
-
-            const std::string &type() const {
-                return type_;
-            }
-
-            actor::actor_address return_address() const {
-                return address;
-            };
-
-            bool is_callback() const {
-                return callback;
-            }
+            message(const char *str, std::size_t len, const T &t, message_priority p)
+                    :header_(str, len, p), body_(t) {}
 
             template<typename T>
-            T get() {
-                return any_cast<T>(content);
+            message(const char *str, std::size_t len, const T &t, message_priority p, actor::actor_address aa)
+                    :header_(str, len, p, aa), body_(t) {}
+
+            message_priority priority() const;
+
+            auto type() const noexcept -> const behavior::type_action &;
+
+            actor::actor_address return_address() const;
+
+            bool is_callback() const;
+
+            template<typename T>
+            auto get() -> T {
+                return body_.get<T>();
             }
 
         private:
-            any content;
-            bool callback;
-            std::string type_;
-            actor::actor_address address;
-            message_priorities prioritie;
-
+            message_body body_;
+            message_header header_;
         };
 
-        template<typename T>
-        inline message *make_message(const std::string &command, T data) {
-            return new message(command, data);
+        template<std::size_t N, typename T>
+        inline message *make_message(const char(&aStr)[N], T data) {
+            return new message(aStr, data);
         }
 
         template<typename T>
-        inline message *make_message(const std::string &command, T data, actor::actor_address address) {
-            return new message(command, data, address);
+        inline message *make_message(const std::string &type, T data) {
+            return new message(type.c_str(), type.length(), data);
+        }
+
+        template<typename T>
+        inline message *make_message(const std::string &type, T data, actor::actor_address address) {
+            return new message(type.c_str(), type.length(), data, address);
+        }
+
+        template<std::size_t N, typename T>
+        inline message *make_message(const char(&aStr)[N], T data, actor::actor_address address) {
+            return new message(aStr, data, address);
         }
     }
 }

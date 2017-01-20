@@ -6,7 +6,7 @@
 #include "actor-zeta/environment.hpp"
 #include "actor-zeta/messaging/message.hpp"
 #include "actor-zeta/actor/actor_address.hpp"
-#include "actor-zeta/messaging/message_priorities.hpp"
+#include "actor-zeta/messaging/message_priority.hpp"
 
 namespace actor_zeta {
 
@@ -40,19 +40,19 @@ namespace actor_zeta {
 
         bool local_actor::push_to_cache(messaging::message *msg_ptr) {
             if (msg_ptr != nullptr) {
-                switch (msg_ptr->get_priorities()) {
+                switch (msg_ptr->priority()) {
 
-                    case messaging::message_priorities::low: {
+                    case messaging::message_priority::low: {
                         mailbox().low_priority_cache().push_back(msg_ptr);
                         return true;
                     }
 
-                    case messaging::message_priorities::normal: {
+                    case messaging::message_priority::normal: {
                         mailbox().normal_priority_cache().push_back(msg_ptr);
                         return true;
                     }
 
-                    case messaging::message_priorities::high: {
+                    case messaging::message_priority::high: {
                         mailbox().high_priority_cache().push_back(msg_ptr);
                         return true;
                     }

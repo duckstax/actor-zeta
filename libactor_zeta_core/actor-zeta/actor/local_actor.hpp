@@ -15,7 +15,7 @@ namespace actor_zeta {
     namespace actor {
         class local_actor : public abstract_actor {
         public:
-            using mailbox_type=messaging::blocking_mail_queue<messaging::message>;
+            using mailbox_type = messaging::blocking_mail_queue<messaging::message>;
                                                             //hide
             virtual void launch(executor::execution_device*, bool) = 0;
 

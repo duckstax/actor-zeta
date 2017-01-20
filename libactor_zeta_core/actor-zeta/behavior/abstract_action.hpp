@@ -1,20 +1,21 @@
 #ifndef ABSTRACT_ACTION_HPP
 #define ABSTRACT_ACTION_HPP
 
-#include <string>
 #include "actor-zeta/forwards.hpp"
+#include "type_action.hpp"
 
 namespace actor_zeta {
     namespace behavior {
         class abstract_action {
         private:
-            std::string name_;
+            const type_action name_;
         public:
-            abstract_action(const std::string &name_) : name_(name_) {}
+            template<std::size_t N>
+            abstract_action(const char(&aStr)[N]) : name_(aStr) {}
 
-            virtual response *operator()(request *) = 0;
+            virtual response * operator()(request *) = 0;
 
-            const std::string &name() const {
+            auto name() const -> const type_action & {
                 return name_;
             }
 

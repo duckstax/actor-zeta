@@ -43,9 +43,9 @@ namespace actor_zeta {
 
             actor::actor_address address_entry_point() const;
 
-            void async_send(messaging::message *);
+            void send(messaging::message *);
 
-            void async_send_all(messaging::message *);
+            void send_all(messaging::message *);
 
             const std::string &name() const;
 
