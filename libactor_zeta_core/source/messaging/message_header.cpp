@@ -1,4 +1,3 @@
-#include <MacTypes.h>
 #include "actor-zeta/messaging/message_header.hpp"
 
 namespace actor_zeta {
