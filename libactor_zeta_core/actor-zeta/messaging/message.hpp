@@ -66,7 +66,13 @@ namespace actor_zeta {
                 return body_.get<T>();
             }
 
+            auto clone() const -> message * {
+                return new message(body_, header_);
+            }
+
         private:
+            message(const message_body &body_, const message_header &header_) : body_(body_), header_(header_) {}
+
             message_body body_;
             message_header header_;
         };

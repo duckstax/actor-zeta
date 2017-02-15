@@ -12,9 +12,9 @@ namespace actor_zeta {
             ///TODO: sender
             message_header() = delete;
 
-            message_header(const message_header &) = delete;
+            message_header(const message_header &) = default;
 
-            message_header &operator=(const message_header &) = delete;
+            message_header &operator=(const message_header &) = default;
 
             message_header(message_header &&) = default;
 
@@ -23,7 +23,7 @@ namespace actor_zeta {
             ~message_header() = default;
 
             template<std::size_t N>
-            message_header(const char(&aStr)[N])
+            explicit message_header(const char(&aStr)[N])
                     : type_(aStr), prioritie(message_priority::normal), callback(false) {}
 
             template<std::size_t N>
@@ -59,7 +59,6 @@ namespace actor_zeta {
             behavior::type_action type_;
             actor::actor_address address;
             message_priority prioritie;
-
         };
     }
 }

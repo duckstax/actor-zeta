@@ -7,12 +7,12 @@
 
 #include "actor-zeta/messaging/message.hpp"
 #include "group.hpp"
+#include "shared_group.hpp"
 
 // TODO:  cooperation(*) <- abstract_cooperation
 
 namespace actor_zeta {
     namespace environment {
-
         class cooperation {
         public:
             cooperation() = default;
@@ -31,28 +31,24 @@ namespace actor_zeta {
 
             actor_zeta::actor::actor_address get(const std::string &) const;
 
-            //pipeline
-            void sync(std::initializer_list<std::string>);
+            void send(messaging::message *);
 
-            void sync();
-
-            void async_send(messaging::message *);
-
-            void send(const std::string &, messaging::message *);
+            void send_current(const std::string &, messaging::message *);
 
             void send_all(messaging::message *);
 
-            void add_shared_address(actor::actor_address);
+            void add_shared(actor::abstract_actor *);
 
         private:
             std::string entry_point;
             std::unordered_map<std::string, group> cooperation_groups;
+            shared_group shared_group_;
         };
 
 
         template<class V>
         inline void send(actor_zeta::environment::cooperation &c, std::string commanda, V value) {
-            c.async_send(std::move(messaging::make_message(commanda, value)));
+            c.send(std::move(messaging::make_message(commanda, value)));
         }
     }
 }

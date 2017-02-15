@@ -26,6 +26,7 @@ set(HEADER_FILES
 
         actor-zeta/environment/cooperation.hpp
         actor-zeta/environment/group.hpp
+        actor-zeta/environment/shared_group.hpp
 
         actor-zeta/executor/policy/work_sharing.hpp
         actor-zeta/executor/abstract_coordinator.hpp
@@ -67,6 +68,7 @@ set(SOURCE_FILES
 
         source/environment/cooperation.cpp
         source/environment/group.cpp
+        source/environment/shared_group.cpp
 
         source/messaging/message.cpp
         source/messaging/message_header.cpp

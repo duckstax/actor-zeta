@@ -6,59 +6,38 @@
 
 namespace actor_zeta {
     namespace environment {
-        void cooperation::async_send(messaging::message * msg) {
+        void cooperation::send(messaging::message *msg) {
             cooperation_groups[entry_point].send(msg);
-        }
-
-        void cooperation::sync(std::initializer_list<std::string> list_names) {
-            entry_point = *(list_names.begin());
-            std::vector<std::string> tmp(list_names);
-            std::reverse(tmp.begin(), tmp.end());
-
-            for (auto i = tmp.begin(); i != tmp.end(); ++i) {
-                auto j = i;
-                ++j;
-                if (j == tmp.end()) {
-                    return;
-                }
-                cooperation_groups[*(j)].send(
-                        messaging::make_message(
-                                "sync_contacts",
-                                cooperation_groups[*(i)].address_entry_point()
-                        )
-                );
-            }
-        }
-
-        void cooperation::sync() {
-            if (cooperation_groups.size() == 1) {
-                entry_point = cooperation_groups.begin()->first;
-            }
         }
 
         void cooperation::add(group &&g) {
             cooperation_groups.emplace(g.name(), std::move(g));
         }
 
-        void cooperation::send_all(messaging::message *doc) {
+        void cooperation::send_all(messaging::message *msg) {
+            std::unique_ptr<messaging::message>unique_ptr_msg(msg);
             for (auto &i:cooperation_groups) {
-                i.second.send_all(doc);
+                i.second.send_all(unique_ptr_msg->clone());
             }
         }
 
-
-        void cooperation::add_shared_address(actor::actor_address address) {
-            for (auto &i:cooperation_groups) {
-                i.second.add_shared_address(address);
-            }
+        void cooperation::add_shared(actor::abstract_actor* actor) {
+            actor::actor_address address=actor->address();
+            shared_group_.add(actor);
+            send_all(
+                    messaging::make_message(
+                            "sync_contacts",
+                            address
+                    )
+            );
         }
 
-        void cooperation::send(const std::string &name, messaging::message *message) {
+        void cooperation::send_current(const std::string &name, messaging::message *message) {
             cooperation_groups[name].send(message);
         }
 
         actor_zeta::actor::actor_address cooperation::get(const std::string & name) const {
-            return actor_zeta::actor::actor_address(cooperation_groups.at(name).address_entry_point());
+            return actor_zeta::actor::actor_address(cooperation_groups.at(name).entry_point());
         }
     }
 }
