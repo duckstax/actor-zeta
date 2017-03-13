@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/sdukshis/actor-zeta.svg?branch=master)](https://travis-ci.org/sdukshis/actor-zeta)
+[![Build Status](https://travis-ci.org/smart-cloud/actor-zeta.svg?branch=master)](https://travis-ci.org/smart-cloud/actor-zeta)
 
 actor-zeta
 ========================
