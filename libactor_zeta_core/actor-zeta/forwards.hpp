@@ -19,9 +19,13 @@ namespace actor_zeta {
         class request;
     }
 
+    namespace channel {
+        class abstract_channel;
+        class channel;
+    }
+
     namespace contacts {
         class book_contacts;
-        class group_contacts;
     }
 
     namespace environment {

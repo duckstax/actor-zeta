@@ -7,7 +7,7 @@
 
 namespace actor_zeta {
     namespace messaging {
-        class message_header {
+        class message_header final {
         public:
             ///TODO: sender
             message_header() = delete;

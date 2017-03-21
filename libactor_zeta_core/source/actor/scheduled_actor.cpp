@@ -1,3 +1,4 @@
+#include <iostream>
 #include "actor-zeta/actor/scheduled_actor.hpp"
 #include "actor-zeta/executor/abstract_coordinator.hpp"
 #include "actor-zeta/executor/execution_device.hpp"
@@ -25,7 +26,13 @@ namespace actor_zeta {
                         auto request = new behavior::request(contacts, msg_ptr);
                         auto response = life.run(request);
                         if (response != nullptr) {
-                            response->receiver()->address()->send(response->message());
+                            if (response->receiver()->address()) {
+                                response->receiver()->address()->send(response->message());
+                            } else {
+                                std::cerr << " WARNING " << std::endl;
+                                std::cerr << " WRONG ADDRESS " << std::endl;
+                                std::cerr << " WARNING " << std::endl;
+                            }
                         }
                         ++handled_msgs;
                         delete request;
@@ -40,7 +47,13 @@ namespace actor_zeta {
                         auto request = new behavior::request(contacts, msg_ptr);
                         auto response = life.run(request);
                         if (response != nullptr) {
-                            response->receiver()->address()->send(response->message());
+                            if (response->receiver()->address()) {
+                                response->receiver()->address()->send(response->message());
+                            } else {
+                                std::cerr << " WARNING " << std::endl;
+                                std::cerr << " WRONG ADDRESS " << std::endl;
+                                std::cerr << " WARNING " << std::endl;
+                            }
                         }
                         ++handled_msgs;
                         delete request;
@@ -72,12 +85,12 @@ namespace actor_zeta {
         }
 
         bool scheduled_actor::send(messaging::message *mep, executor::execution_device *e) {
-            if (e) {
+            if (e != nullptr) {
                 device(e); //TODO переписать обработка
             }
             mailbox().put(mep);
 
-            if (e) {
+            if (e != nullptr) {
                 device(e);
                 device()->put_execute_latest(this);
             } else {
@@ -101,7 +114,7 @@ namespace actor_zeta {
         }
 
         void scheduled_actor::launch(executor::execution_device *e, bool hide) {
-            if (e) {
+            if (e != nullptr) {
                 device(e);
             }
 

@@ -8,7 +8,7 @@
 
 namespace actor_zeta {
     namespace actor {
-        class actor_address {
+        class actor_address final {
         public:
             actor_address() = default;
 

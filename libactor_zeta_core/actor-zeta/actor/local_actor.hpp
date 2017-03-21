@@ -51,6 +51,7 @@ namespace actor_zeta {
             messaging::message* pop_to_cache();
 
 // ----------------------------------------------------- message processing
+        protected:
             contacts::book_contacts contacts;
             behavior::behavior life;
         private:

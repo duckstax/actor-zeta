@@ -7,6 +7,7 @@
 #include "actor-zeta/messaging/message.hpp"
 #include "actor-zeta/actor/actor_address.hpp"
 #include "actor-zeta/messaging/message_priority.hpp"
+#include "actor-zeta/standard_handlers/add_channel.hpp"
 
 namespace actor_zeta {
 
@@ -17,15 +18,16 @@ namespace actor_zeta {
         }
 
         void local_actor::initialize() {
-            attach(new actor_zeta::sync_contacts());
-            attach(new actor_zeta::skip());
+            attach(new sync_contacts());
+            attach(new skip());
+            attach(new add_channel());
         }
 
         messaging::message *local_actor::next_message() {
             return mailbox().get();
         }
 
-        void local_actor::attach(actor_zeta::behavior::abstract_action *ptr_aa) {
+        void local_actor::attach(behavior::abstract_action *ptr_aa) {
             life.insert(ptr_aa);
         }
 
@@ -83,7 +85,5 @@ namespace actor_zeta {
             }
             return msg_ptr;
         }
-
-
     }
 }

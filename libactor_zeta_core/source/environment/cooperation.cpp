@@ -1,43 +1,28 @@
-#include "actor-zeta/behavior/behavior.hpp"
 #include "actor-zeta/environment/cooperation.hpp"
-#include "actor-zeta/environment/group.hpp"
-#include "actor-zeta/actor/local_actor.hpp"
-#include <algorithm>
 
 namespace actor_zeta {
     namespace environment {
-        void cooperation::send(messaging::message *msg) {
-            cooperation_groups[entry_point].send(msg);
+
+        auto cooperation::created_group(actor::abstract_actor *t) -> group & {
+            auto name = t->type();
+            auto it = groups.emplace(name, group(new abstract_group(storage_space_, t)));
+            return it.first->second;
         }
 
-        void cooperation::add(group &&g) {
-            cooperation_groups.emplace(g.name(), std::move(g));
+        auto cooperation::create_link(group &g1, group &g2) -> void {
+            g1->join(g2);
         }
 
-        void cooperation::send_all(messaging::message *msg) {
-            std::unique_ptr<messaging::message>unique_ptr_msg(msg);
-            for (auto &i:cooperation_groups) {
-                i.second.send_all(unique_ptr_msg->clone());
-            }
+        auto cooperation::created_entry_group(actor::abstract_actor *t) -> group & {
+            auto &group = created_group(t);
+            input_entry_point.push_back(group->id());
+            return group;
         }
 
-        void cooperation::add_shared(actor::abstract_actor* actor) {
-            actor::actor_address address=actor->address();
-            shared_group_.add(actor);
-            send_all(
-                    messaging::make_message(
-                            "sync_contacts",
-                            address
-                    )
-            );
-        }
-
-        void cooperation::send_current(const std::string &name, messaging::message *message) {
-            cooperation_groups[name].send(message);
-        }
-
-        actor_zeta::actor::actor_address cooperation::get(const std::string & name) const {
-            return actor_zeta::actor::actor_address(cooperation_groups.at(name).entry_point());
+        auto cooperation::created_end_group(actor::abstract_actor *t) -> group & {
+            auto &group = created_group(t);
+            output_end_point.push_back(group->id());
+            return group;
         }
     }
 }

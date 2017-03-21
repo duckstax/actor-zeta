@@ -21,12 +21,17 @@ set(HEADER_FILES
         actor-zeta/behavior/response.hpp
         actor-zeta/behavior/type_action.hpp
 
-        actor-zeta/contacts/book_contacts.hpp
-        actor-zeta/contacts/group_contacts.hpp
+        actor-zeta/channel/abstract_channel.hpp
+        actor-zeta/channel/channel.hpp
 
+        actor-zeta/contacts/book_contacts.hpp
+
+        actor-zeta/environment/abstract_group.hpp
+        actor-zeta/environment/adjacency_list.hpp
         actor-zeta/environment/cooperation.hpp
         actor-zeta/environment/group.hpp
-        actor-zeta/environment/shared_group.hpp
+        actor-zeta/environment/storage_space.hpp
+        source/environment/storage_space.cpp
 
         actor-zeta/executor/policy/work_sharing.hpp
         actor-zeta/executor/abstract_coordinator.hpp
@@ -42,6 +47,7 @@ set(HEADER_FILES
         actor-zeta/messaging/message_header.hpp
         actor-zeta/messaging/message_priority.hpp
 
+        actor-zeta/standard_handlers/add_channel.hpp
         actor-zeta/standard_handlers/sync_contacts.hpp
         actor-zeta/standard_handlers/skip.hpp
 
@@ -62,17 +68,19 @@ set(SOURCE_FILES
         source/behavior/behavior.cpp
         source/behavior/action.cpp
         source/behavior/type_action.cpp
+        source/channel/channel.cpp
 
         source/contacts/book_contacts.cpp
-        source/contacts/group_contacts.cpp
 
+        source/environment/abstract_group.cpp
         source/environment/cooperation.cpp
         source/environment/group.cpp
-        source/environment/shared_group.cpp
+        source/environment/storage_space.cpp
 
         source/messaging/message.cpp
         source/messaging/message_header.cpp
 
+        source/standard_handlers/add_channel.cpp
         source/standard_handlers/skip.cpp
         source/standard_handlers/sync_contacts.cpp
 

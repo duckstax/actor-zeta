@@ -20,5 +20,7 @@ namespace actor_zeta {
         auto message::type() const -> const behavior::type_action & {
             return header_.type();
         }
+
+        message::message(const message_body &body_, const message_header &header_) : body_(body_), header_(header_) {}
     }
 }

@@ -16,7 +16,7 @@ namespace actor_zeta {
         };
 
         template<typename T>
-        class blocking_mail_queue {
+        class blocking_mail_queue final {
         public:
             using pointer = T *;
             using const_pointer = const T *;

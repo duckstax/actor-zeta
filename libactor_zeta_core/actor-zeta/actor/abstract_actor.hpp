@@ -20,9 +20,9 @@ namespace actor_zeta {
 
             actor_address address() const noexcept;
 
+        protected:
             environment::environment *env() const;
 
-        protected:
             abstract_actor(environment::environment *, const std::string &);
 
         private:

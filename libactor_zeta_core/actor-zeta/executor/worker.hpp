@@ -12,7 +12,7 @@
 namespace actor_zeta {
     namespace executor {
         template<class Policy>
-        class worker : public execution_device {
+        class worker final : public execution_device {
         public:
             using job_ptr = executable *;
             using coordinator_ptr = coordinator<Policy> *;

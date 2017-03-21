@@ -5,7 +5,7 @@
 
 namespace actor_zeta {
     namespace behavior {
-        class type_action {
+        class type_action final {
         private:
             std::string body_;
             std::size_t hash_;

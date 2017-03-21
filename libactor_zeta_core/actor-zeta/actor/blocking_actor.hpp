@@ -8,7 +8,7 @@
 
 namespace actor_zeta {
     namespace actor {
-        class blocking_actor : public local_actor , executor::executable {
+        class blocking_actor  : public local_actor , executor::executable {
         public:
             blocking_actor(environment::environment *, const std::string &);
             virtual void act();
