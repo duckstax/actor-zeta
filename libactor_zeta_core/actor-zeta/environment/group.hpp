@@ -1,59 +1,60 @@
 #ifndef GROUP_HPP
 #define GROUP_HPP
 
-#include "actor-zeta/intrusive_ptr.hpp"
-#include "abstract_group.hpp"
+#include <unordered_map>
+#include <string>
 
+#include "actor-zeta/forwards.hpp"
+#include "actor-zeta/actor/actor.hpp"
+#include "shared_group.hpp"
+
+// TODO:  groupt(*) <- abstract_group
 namespace actor_zeta {
     namespace environment {
-        class group final {
+///
+/// @brief A group combinator for actors
+///
+        class group {
         public:
-            group() = delete;
+            group() = default;
 
-            group(const group &) = default;
-
-            group &operator=(const group &)= default;
+            group(const group &) = delete;
 
             group(group &&) = default;
 
-            group &operator=(group &&)= default;
+            group &operator=(const group &) = delete;
+
+            group &operator=(group &&) = default;
+
+            group(const std::string &name, actor::abstract_actor* actor);
 
             ~group() = default;
 
-            template<class T>
-            explicit group(intrusive_ptr<T> ptr) : group_(std::move(ptr)) {}
+            void add(actor::actor &&);
 
-            template<class T>
-            explicit group(T *ptr) : group_(ptr) {}
+            void add(actor::abstract_actor*);
 
-            template<class T>
-            group &operator=(intrusive_ptr<T> ptr) {
-                group tmp{std::move(ptr)};
-                swap(tmp);
-                return *this;
-            }
+            void add(const std::string &, actor::abstract_actor *);
 
-            template<class T>
-            group &operator=(T *ptr) {
-                group tmp{ptr};
-                swap(tmp);
-                return *this;
-            }
+            void add_shared(actor::abstract_actor*);
 
-            auto operator->() noexcept -> abstract_group *;
+            actor::actor_address entry_point() const;
 
-            auto channel() -> channel::channel;
+            void send(messaging::message *);
 
-            explicit operator bool() const noexcept;
+            void send_current(const std::string&, messaging::message *);
 
-            bool operator!() const noexcept;
+            void send_all(messaging::message *);
+
+            const std::string &name() const;
 
         private:
-
-            void swap(group &g) noexcept;
-
-            intrusive_ptr<abstract_group> group_;
+            const std::string name_;
+            std::unordered_map<std::string, actor::actor> unique_actors;
+            shared_group shared_group_;
+            std::string name_entry_point;
         };
+
     }
 }
 #endif //GROUP_HPP

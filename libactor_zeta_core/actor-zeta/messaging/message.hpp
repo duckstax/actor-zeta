@@ -7,7 +7,10 @@
 
 namespace actor_zeta {
     namespace messaging {
-        class message final {
+///
+/// @brief Class to represent messages 
+///
+        class message {
         public:
             message() = delete;
 
@@ -71,7 +74,7 @@ namespace actor_zeta {
             }
 
         private:
-            message(const message_body &body_, const message_header &header_);
+            message(const message_body &body_, const message_header &header_) : body_(body_), header_(header_) {}
 
             message_body body_;
             message_header header_;

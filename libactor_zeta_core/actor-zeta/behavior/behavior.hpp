@@ -7,10 +7,12 @@
 #include "actor-zeta/forwards.hpp"
 #include "action.hpp"
 #include "type_action.hpp"
-
 namespace actor_zeta {
     namespace behavior {
-        class behavior final {
+///
+/// @brief Class for lyfecycle determination
+///
+        class behavior {
         public:
             behavior() = default;
 

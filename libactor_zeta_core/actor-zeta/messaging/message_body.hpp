@@ -9,7 +9,10 @@
 
 namespace actor_zeta {
     namespace messaging {
-        class message_body final {
+///
+/// @brief A message value container
+///
+        class message_body {
         public:
             constexpr message_body() noexcept: content(nullptr) {}
 
