@@ -1,0 +1,8 @@
+<map id="actor_zeta::actor::blocking_actor" name="actor_zeta::actor::blocking_actor">
+<area shape="rect" id="node2" href="$classactor__zeta_1_1actor_1_1local__actor.html" title="Class for location dependant type actor. " alt="" coords="464,71,592,112"/>
+<area shape="rect" id="node3" href="$classactor__zeta_1_1actor_1_1abstract__actor.html" title="abstract concept of an actor " alt="" coords="220,5,348,47"/>
+<area shape="rect" id="node4" href="$classactor__zeta_1_1ref__counted.html" title="This class represents reference counter. " alt="" coords="5,13,164,39"/>
+<area shape="rect" id="node5" href="$classactor__zeta_1_1behavior_1_1behavior.html" title="Class for lyfecycle determination. " alt="" coords="215,71,353,112"/>
+<area shape="rect" id="node6" href="$classactor__zeta_1_1contacts_1_1book__contacts.html" title="Navigation map for actor &amp; groups. " alt="" coords="213,136,355,177"/>
+<area shape="rect" id="node7" href="$structactor__zeta_1_1executor_1_1executable.html" title="actor_zeta::executor\l::executable" alt="" coords="457,136,599,177"/>
+</map>

@@ -1,0 +1,115 @@
+\hypertarget{classactor__zeta_1_1actor_1_1abstract__actor}{}\section{actor\+\_\+zeta\+:\+:actor\+:\+:abstract\+\_\+actor Class Reference}
+\label{classactor__zeta_1_1actor_1_1abstract__actor}\index{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}}
+
+
+abstract concept of an actor  
+
+
+
+
+{\ttfamily \#include $<$abstract\+\_\+actor.\+hpp$>$}
+
+
+
+Inheritance diagram for actor\+\_\+zeta\+:\+:actor\+:\+:abstract\+\_\+actor\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=293pt]{classactor__zeta_1_1actor_1_1abstract__actor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for actor\+\_\+zeta\+:\+:actor\+:\+:abstract\+\_\+actor\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{classactor__zeta_1_1actor_1_1abstract__actor__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::string \& \hyperlink{classactor__zeta_1_1actor_1_1abstract__actor_abebf7096ab054eb2be64151f589d70d7}{type} () const
+\item 
+virtual bool \hyperlink{classactor__zeta_1_1actor_1_1abstract__actor_a9316a5088e53255d74ade831e1fcfb47}{send} (\hyperlink{classactor__zeta_1_1messaging_1_1message}{messaging\+::message} $\ast$)=0
+\item 
+virtual bool \hyperlink{classactor__zeta_1_1actor_1_1abstract__actor_a929d99bea25095035695bad6e6516575}{send} (\hyperlink{classactor__zeta_1_1messaging_1_1message}{messaging\+::message} $\ast$, \hyperlink{structactor__zeta_1_1executor_1_1execution__device}{executor\+::execution\+\_\+device} $\ast$)=0
+\item 
+virtual \hyperlink{classactor__zeta_1_1actor_1_1abstract__actor_a12ab33a0d9267d3cf76bf3b2d5879c10}{$\sim$abstract\+\_\+actor} ()
+\item 
+\hyperlink{classactor__zeta_1_1actor_1_1actor__address}{actor\+\_\+address} \hyperlink{classactor__zeta_1_1actor_1_1abstract__actor_ae6b1f90ca34706d86d39b77c9cdd5a6f}{address} () const noexcept
+\item 
+\hyperlink{classactor__zeta_1_1environment_1_1environment}{environment\+::environment} $\ast$ \hyperlink{classactor__zeta_1_1actor_1_1abstract__actor_a4486fb3a9d042b2ec94aa1843db278d1}{env} () const
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classactor__zeta_1_1actor_1_1abstract__actor_a65e0e2a223dc06413795f84747bd06b7}{abstract\+\_\+actor} (\hyperlink{classactor__zeta_1_1environment_1_1environment}{environment\+::environment} $\ast$, const std\+::string \&)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+abstract concept of an actor 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1abstract__actor_a12ab33a0d9267d3cf76bf3b2d5879c10}\label{classactor__zeta_1_1actor_1_1abstract__actor_a12ab33a0d9267d3cf76bf3b2d5879c10}} 
+\index{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}!````~abstract\+\_\+actor@{$\sim$abstract\+\_\+actor}}
+\index{````~abstract\+\_\+actor@{$\sim$abstract\+\_\+actor}!actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}}
+\subsubsection{\texorpdfstring{$\sim$abstract\+\_\+actor()}{~abstract\_actor()}}
+{\footnotesize\ttfamily virtual actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor\+::$\sim$abstract\+\_\+actor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1abstract__actor_a65e0e2a223dc06413795f84747bd06b7}\label{classactor__zeta_1_1actor_1_1abstract__actor_a65e0e2a223dc06413795f84747bd06b7}} 
+\index{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}!abstract\+\_\+actor@{abstract\+\_\+actor}}
+\index{abstract\+\_\+actor@{abstract\+\_\+actor}!actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}}
+\subsubsection{\texorpdfstring{abstract\+\_\+actor()}{abstract\_actor()}}
+{\footnotesize\ttfamily actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor\+::abstract\+\_\+actor (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1environment_1_1environment}{environment\+::environment} $\ast$}]{env,  }\item[{const std\+::string \&}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1abstract__actor_ae6b1f90ca34706d86d39b77c9cdd5a6f}\label{classactor__zeta_1_1actor_1_1abstract__actor_ae6b1f90ca34706d86d39b77c9cdd5a6f}} 
+\index{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}!address@{address}}
+\index{address@{address}!actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}}
+\subsubsection{\texorpdfstring{address()}{address()}}
+{\footnotesize\ttfamily \hyperlink{classactor__zeta_1_1actor_1_1actor__address}{actor\+\_\+address} actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor\+::address (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1abstract__actor_a4486fb3a9d042b2ec94aa1843db278d1}\label{classactor__zeta_1_1actor_1_1abstract__actor_a4486fb3a9d042b2ec94aa1843db278d1}} 
+\index{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}!env@{env}}
+\index{env@{env}!actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}}
+\subsubsection{\texorpdfstring{env()}{env()}}
+{\footnotesize\ttfamily \hyperlink{classactor__zeta_1_1environment_1_1environment}{environment\+::environment} $\ast$ actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor\+::env (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1abstract__actor_a9316a5088e53255d74ade831e1fcfb47}\label{classactor__zeta_1_1actor_1_1abstract__actor_a9316a5088e53255d74ade831e1fcfb47}} 
+\index{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}!send@{send}}
+\index{send@{send}!actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}}
+\subsubsection{\texorpdfstring{send()}{send()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily virtual bool actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor\+::send (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1messaging_1_1message}{messaging\+::message} $\ast$}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \hyperlink{classactor__zeta_1_1actor_1_1scheduled__actor_acdd757f48a5233a9914209aaf7a2b5ed}{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}.
+
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1abstract__actor_a929d99bea25095035695bad6e6516575}\label{classactor__zeta_1_1actor_1_1abstract__actor_a929d99bea25095035695bad6e6516575}} 
+\index{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}!send@{send}}
+\index{send@{send}!actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}}
+\subsubsection{\texorpdfstring{send()}{send()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily virtual bool actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor\+::send (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1messaging_1_1message}{messaging\+::message} $\ast$}]{,  }\item[{\hyperlink{structactor__zeta_1_1executor_1_1execution__device}{executor\+::execution\+\_\+device} $\ast$}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \hyperlink{classactor__zeta_1_1actor_1_1scheduled__actor_a223d20f327713fa65968f909aacb0a32}{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}.
+
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1abstract__actor_abebf7096ab054eb2be64151f589d70d7}\label{classactor__zeta_1_1actor_1_1abstract__actor_abebf7096ab054eb2be64151f589d70d7}} 
+\index{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}!type@{type}}
+\index{type@{type}!actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor@{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}}
+\subsubsection{\texorpdfstring{type()}{type()}}
+{\footnotesize\ttfamily const std\+::string \& actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor\+::type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{abstract__actor_8hpp}{abstract\+\_\+actor.\+hpp}\item 
+\hyperlink{abstract__actor_8cpp}{abstract\+\_\+actor.\+cpp}\end{DoxyCompactItemize}

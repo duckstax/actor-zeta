@@ -1,0 +1,131 @@
+\hypertarget{classactor__zeta_1_1actor_1_1scheduled__actor}{}\section{actor\+\_\+zeta\+:\+:actor\+:\+:scheduled\+\_\+actor Class Reference}
+\label{classactor__zeta_1_1actor_1_1scheduled__actor}\index{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}}
+
+
+Represents scheduling type of actor.  
+
+
+
+
+{\ttfamily \#include $<$scheduled\+\_\+actor.\+hpp$>$}
+
+
+
+Inheritance diagram for actor\+\_\+zeta\+:\+:actor\+:\+:scheduled\+\_\+actor\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=311pt]{classactor__zeta_1_1actor_1_1scheduled__actor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for actor\+\_\+zeta\+:\+:actor\+:\+:scheduled\+\_\+actor\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classactor__zeta_1_1actor_1_1scheduled__actor__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{classactor__zeta_1_1actor_1_1scheduled__actor_acdd757f48a5233a9914209aaf7a2b5ed}{send} (\hyperlink{classactor__zeta_1_1messaging_1_1message}{messaging\+::message} $\ast$) override final
+\item 
+bool \hyperlink{classactor__zeta_1_1actor_1_1scheduled__actor_a223d20f327713fa65968f909aacb0a32}{send} (\hyperlink{classactor__zeta_1_1messaging_1_1message}{messaging\+::message} $\ast$, \hyperlink{structactor__zeta_1_1executor_1_1execution__device}{executor\+::execution\+\_\+device} $\ast$) override final
+\item 
+void \hyperlink{classactor__zeta_1_1actor_1_1scheduled__actor_a15dcbee3ab1540c7ed675846cbf10726}{launch} (\hyperlink{structactor__zeta_1_1executor_1_1execution__device}{executor\+::execution\+\_\+device} $\ast$, bool) override final
+\item 
+\hyperlink{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4}{executor\+::executable\+::executable\+\_\+result} \hyperlink{classactor__zeta_1_1actor_1_1scheduled__actor_a9031c2f3ff6c8c62698b53fa92e56274}{run} (\hyperlink{structactor__zeta_1_1executor_1_1execution__device}{executor\+::execution\+\_\+device} $\ast$, size\+\_\+t max\+\_\+throughput) override final
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classactor__zeta_1_1actor_1_1scheduled__actor_a67ec95fe272be22dd146da79d067feaa}{scheduled\+\_\+actor} (\hyperlink{classactor__zeta_1_1environment_1_1environment}{environment\+::environment} $\ast$, const std\+::string \&)
+\item 
+void \hyperlink{classactor__zeta_1_1actor_1_1scheduled__actor_a760f7fedcd61cae392c435a13bcab50c}{attach\+\_\+to\+\_\+scheduler} () override final
+\item 
+void \hyperlink{classactor__zeta_1_1actor_1_1scheduled__actor_aaf6582fc27718071ff7c9d516b8f0cf6}{detach\+\_\+from\+\_\+scheduler} () override final
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Represents scheduling type of actor. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1scheduled__actor_a67ec95fe272be22dd146da79d067feaa}\label{classactor__zeta_1_1actor_1_1scheduled__actor_a67ec95fe272be22dd146da79d067feaa}} 
+\index{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}!scheduled\+\_\+actor@{scheduled\+\_\+actor}}
+\index{scheduled\+\_\+actor@{scheduled\+\_\+actor}!actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}}
+\subsubsection{\texorpdfstring{scheduled\+\_\+actor()}{scheduled\_actor()}}
+{\footnotesize\ttfamily actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor\+::scheduled\+\_\+actor (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1environment_1_1environment}{environment\+::environment} $\ast$}]{env,  }\item[{const std\+::string \&}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1scheduled__actor_a760f7fedcd61cae392c435a13bcab50c}\label{classactor__zeta_1_1actor_1_1scheduled__actor_a760f7fedcd61cae392c435a13bcab50c}} 
+\index{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}!attach\+\_\+to\+\_\+scheduler@{attach\+\_\+to\+\_\+scheduler}}
+\index{attach\+\_\+to\+\_\+scheduler@{attach\+\_\+to\+\_\+scheduler}!actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}}
+\subsubsection{\texorpdfstring{attach\+\_\+to\+\_\+scheduler()}{attach\_to\_scheduler()}}
+{\footnotesize\ttfamily void actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor\+::attach\+\_\+to\+\_\+scheduler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \hyperlink{structactor__zeta_1_1executor_1_1executable_a35557044e3f8d17504a66628aeea1cee}{actor\+\_\+zeta\+::executor\+::executable}.
+
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1scheduled__actor_aaf6582fc27718071ff7c9d516b8f0cf6}\label{classactor__zeta_1_1actor_1_1scheduled__actor_aaf6582fc27718071ff7c9d516b8f0cf6}} 
+\index{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}!detach\+\_\+from\+\_\+scheduler@{detach\+\_\+from\+\_\+scheduler}}
+\index{detach\+\_\+from\+\_\+scheduler@{detach\+\_\+from\+\_\+scheduler}!actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}}
+\subsubsection{\texorpdfstring{detach\+\_\+from\+\_\+scheduler()}{detach\_from\_scheduler()}}
+{\footnotesize\ttfamily void actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor\+::detach\+\_\+from\+\_\+scheduler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \hyperlink{structactor__zeta_1_1executor_1_1executable_a2fe91b45b919fc6f3fce21e64d2c1f91}{actor\+\_\+zeta\+::executor\+::executable}.
+
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1scheduled__actor_a15dcbee3ab1540c7ed675846cbf10726}\label{classactor__zeta_1_1actor_1_1scheduled__actor_a15dcbee3ab1540c7ed675846cbf10726}} 
+\index{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}!launch@{launch}}
+\index{launch@{launch}!actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}}
+\subsubsection{\texorpdfstring{launch()}{launch()}}
+{\footnotesize\ttfamily void actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor\+::launch (\begin{DoxyParamCaption}\item[{\hyperlink{structactor__zeta_1_1executor_1_1execution__device}{executor\+::execution\+\_\+device} $\ast$}]{e,  }\item[{bool}]{hide }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \hyperlink{classactor__zeta_1_1actor_1_1local__actor_acfba412b813aee3250c589bee232f3cd}{actor\+\_\+zeta\+::actor\+::local\+\_\+actor}.
+
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1scheduled__actor_a9031c2f3ff6c8c62698b53fa92e56274}\label{classactor__zeta_1_1actor_1_1scheduled__actor_a9031c2f3ff6c8c62698b53fa92e56274}} 
+\index{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}!run@{run}}
+\index{run@{run}!actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}}
+\subsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \hyperlink{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4}{executor\+::executable\+::executable\+\_\+result} actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor\+::run (\begin{DoxyParamCaption}\item[{\hyperlink{structactor__zeta_1_1executor_1_1execution__device}{executor\+::execution\+\_\+device} $\ast$}]{e,  }\item[{size\+\_\+t}]{max\+\_\+throughput }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \hyperlink{structactor__zeta_1_1executor_1_1executable_a61d6cbce8b124e1e5ef80f8befea2a89}{actor\+\_\+zeta\+::executor\+::executable}.
+
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1scheduled__actor_acdd757f48a5233a9914209aaf7a2b5ed}\label{classactor__zeta_1_1actor_1_1scheduled__actor_acdd757f48a5233a9914209aaf7a2b5ed}} 
+\index{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}!send@{send}}
+\index{send@{send}!actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}}
+\subsubsection{\texorpdfstring{send()}{send()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor\+::send (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1messaging_1_1message}{messaging\+::message} $\ast$}]{msg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \hyperlink{classactor__zeta_1_1actor_1_1abstract__actor_a9316a5088e53255d74ade831e1fcfb47}{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}.
+
+\mbox{\Hypertarget{classactor__zeta_1_1actor_1_1scheduled__actor_a223d20f327713fa65968f909aacb0a32}\label{classactor__zeta_1_1actor_1_1scheduled__actor_a223d20f327713fa65968f909aacb0a32}} 
+\index{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}!send@{send}}
+\index{send@{send}!actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor@{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}}
+\subsubsection{\texorpdfstring{send()}{send()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor\+::send (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1messaging_1_1message}{messaging\+::message} $\ast$}]{mep,  }\item[{\hyperlink{structactor__zeta_1_1executor_1_1execution__device}{executor\+::execution\+\_\+device} $\ast$}]{e }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [final]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \hyperlink{classactor__zeta_1_1actor_1_1abstract__actor_a929d99bea25095035695bad6e6516575}{actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{scheduled__actor_8hpp}{scheduled\+\_\+actor.\+hpp}\item 
+\hyperlink{scheduled__actor_8cpp}{scheduled\+\_\+actor.\+cpp}\end{DoxyCompactItemize}

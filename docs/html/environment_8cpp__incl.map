@@ -1,0 +1,18 @@
+<map id="environment.cpp" name="environment.cpp">
+<area shape="rect" id="node2" href="$environment_8hpp.html" title="actor&#45;zeta/environment.hpp" alt="" coords="983,87,1161,114"/>
+<area shape="rect" id="node28" href="$abstract__coordinator_8hpp.html" title="actor&#45;zeta/executor\l/abstract_coordinator.hpp" alt="" coords="1185,80,1353,121"/>
+<area shape="rect" id="node3" href="$group_8hpp.html" title="actor&#45;zeta/environment\l/group.hpp" alt="" coords="1041,259,1194,300"/>
+<area shape="rect" id="node26" href="$cooperation_8hpp.html" title="actor&#45;zeta/environment\l/cooperation.hpp" alt="" coords="861,169,1014,211"/>
+<area shape="rect" id="node7" href="$actor_8hpp.html" title="actor&#45;zeta/actor/actor.hpp" alt="" coords="933,594,1104,621"/>
+<area shape="rect" id="node13" href="$shared__group_8hpp.html" title="shared_group.hpp" alt="" coords="828,348,953,375"/>
+<area shape="rect" id="node8" href="$intrusive__ptr_8hpp.html" title="actor&#45;zeta/intrusive\l_ptr.hpp" alt="" coords="659,676,789,717"/>
+<area shape="rect" id="node10" href="$ref__counted_8hpp.html" title="ref_counted.hpp" alt="" coords="697,765,812,792"/>
+<area shape="rect" id="node14" href="$abstract__actor_8hpp.html" title="actor&#45;zeta/actor/abstract\l_actor.hpp" alt="" coords="814,676,978,717"/>
+<area shape="rect" id="node15" href="$message_8hpp.html" title="actor&#45;zeta/messaging\l/message.hpp" alt="" coords="649,423,796,464"/>
+<area shape="rect" id="node17" href="$message__header_8hpp.html" title="message_header.hpp" alt="" coords="650,512,795,539"/>
+<area shape="rect" id="node21" href="$message__body_8hpp.html" title="message_body.hpp" alt="" coords="237,512,371,539"/>
+<area shape="rect" id="node18" href="$actor__address_8hpp.html" title="actor&#45;zeta/actor/actor\l_address.hpp" alt="" coords="712,587,859,628"/>
+<area shape="rect" id="node19" href="$type__action_8hpp.html" title="actor&#45;zeta/behavior\l/type_action.hpp" alt="" coords="504,676,635,717"/>
+<area shape="rect" id="node20" href="$message__priority_8hpp.html" title="message_priority.hpp" alt="" coords="491,594,637,621"/>
+<area shape="rect" id="node30" href="$time__unit_8hpp.html" title="time_unit.hpp" alt="" coords="1131,177,1231,203"/>
+</map>

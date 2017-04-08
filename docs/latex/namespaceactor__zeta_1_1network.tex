@@ -1,0 +1,63 @@
+\hypertarget{namespaceactor__zeta_1_1network}{}\section{actor\+\_\+zeta\+:\+:network Namespace Reference}
+\label{namespaceactor__zeta_1_1network}\index{actor\+\_\+zeta\+::network@{actor\+\_\+zeta\+::network}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classactor__zeta_1_1network_1_1broker}{broker}
+\begin{DoxyCompactList}\small\item\em A broker for messaging. \end{DoxyCompactList}\item 
+class \hyperlink{classactor__zeta_1_1network_1_1connection__identifying}{connection\+\_\+identifying}
+\begin{DoxyCompactList}\small\item\em Implementation of connection functionality. \end{DoxyCompactList}\item 
+struct \hyperlink{structactor__zeta_1_1network_1_1multiplexer}{multiplexer}
+\begin{DoxyCompactList}\small\item\em Multiplexing utility class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{namespaceactor__zeta_1_1network_aca954f31343c8d2d513bebe30f6f87b4}{unique\+\_\+multiplexer\+\_\+ptr} = std\+::unique\+\_\+ptr$<$ \hyperlink{structactor__zeta_1_1network_1_1multiplexer}{multiplexer} $>$
+\item 
+using \hyperlink{namespaceactor__zeta_1_1network_a504802c43f97832081066e4c7aeb5f24}{shared\+\_\+multiplexer\+\_\+ptr} = std\+::shared\+\_\+ptr$<$ \hyperlink{structactor__zeta_1_1network_1_1multiplexer}{multiplexer} $>$
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{namespaceactor__zeta_1_1network_a4046d5cb8c42554d5787ef4f0d5e3094}{type\+\_\+connect} \+: int \{ \hyperlink{namespaceactor__zeta_1_1network_a4046d5cb8c42554d5787ef4f0d5e3094ae20bb202b1d5537b1415e3263a37ed78}{type\+\_\+connect\+::tcp}, 
+\hyperlink{namespaceactor__zeta_1_1network_a4046d5cb8c42554d5787ef4f0d5e3094a84864c1fe095359bc9c5ac068e24e781}{type\+\_\+connect\+::udp}
+ \}\begin{DoxyCompactList}\small\item\em A strongly typed enum class representing connection type. \end{DoxyCompactList}
+\end{DoxyCompactItemize}
+
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{namespaceactor__zeta_1_1network_a504802c43f97832081066e4c7aeb5f24}\label{namespaceactor__zeta_1_1network_a504802c43f97832081066e4c7aeb5f24}} 
+\index{actor\+\_\+zeta\+::network@{actor\+\_\+zeta\+::network}!shared\+\_\+multiplexer\+\_\+ptr@{shared\+\_\+multiplexer\+\_\+ptr}}
+\index{shared\+\_\+multiplexer\+\_\+ptr@{shared\+\_\+multiplexer\+\_\+ptr}!actor\+\_\+zeta\+::network@{actor\+\_\+zeta\+::network}}
+\subsubsection{\texorpdfstring{shared\+\_\+multiplexer\+\_\+ptr}{shared\_multiplexer\_ptr}}
+{\footnotesize\ttfamily using \hyperlink{namespaceactor__zeta_1_1network_a504802c43f97832081066e4c7aeb5f24}{actor\+\_\+zeta\+::network\+::shared\+\_\+multiplexer\+\_\+ptr} = typedef std\+::shared\+\_\+ptr$<$\hyperlink{structactor__zeta_1_1network_1_1multiplexer}{multiplexer}$>$}
+
+\mbox{\Hypertarget{namespaceactor__zeta_1_1network_aca954f31343c8d2d513bebe30f6f87b4}\label{namespaceactor__zeta_1_1network_aca954f31343c8d2d513bebe30f6f87b4}} 
+\index{actor\+\_\+zeta\+::network@{actor\+\_\+zeta\+::network}!unique\+\_\+multiplexer\+\_\+ptr@{unique\+\_\+multiplexer\+\_\+ptr}}
+\index{unique\+\_\+multiplexer\+\_\+ptr@{unique\+\_\+multiplexer\+\_\+ptr}!actor\+\_\+zeta\+::network@{actor\+\_\+zeta\+::network}}
+\subsubsection{\texorpdfstring{unique\+\_\+multiplexer\+\_\+ptr}{unique\_multiplexer\_ptr}}
+{\footnotesize\ttfamily using \hyperlink{namespaceactor__zeta_1_1network_aca954f31343c8d2d513bebe30f6f87b4}{actor\+\_\+zeta\+::network\+::unique\+\_\+multiplexer\+\_\+ptr} = typedef std\+::unique\+\_\+ptr$<$\hyperlink{structactor__zeta_1_1network_1_1multiplexer}{multiplexer}$>$}
+
+
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespaceactor__zeta_1_1network_a4046d5cb8c42554d5787ef4f0d5e3094}\label{namespaceactor__zeta_1_1network_a4046d5cb8c42554d5787ef4f0d5e3094}} 
+\index{actor\+\_\+zeta\+::network@{actor\+\_\+zeta\+::network}!type\+\_\+connect@{type\+\_\+connect}}
+\index{type\+\_\+connect@{type\+\_\+connect}!actor\+\_\+zeta\+::network@{actor\+\_\+zeta\+::network}}
+\subsubsection{\texorpdfstring{type\+\_\+connect}{type\_connect}}
+{\footnotesize\ttfamily enum \hyperlink{namespaceactor__zeta_1_1network_a4046d5cb8c42554d5787ef4f0d5e3094}{actor\+\_\+zeta\+::network\+::type\+\_\+connect} \+: int\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+A strongly typed enum class representing connection type. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{tcp@{tcp}!actor\+\_\+zeta\+::network@{actor\+\_\+zeta\+::network}}\index{actor\+\_\+zeta\+::network@{actor\+\_\+zeta\+::network}!tcp@{tcp}}}\mbox{\Hypertarget{namespaceactor__zeta_1_1network_a4046d5cb8c42554d5787ef4f0d5e3094ae20bb202b1d5537b1415e3263a37ed78}\label{namespaceactor__zeta_1_1network_a4046d5cb8c42554d5787ef4f0d5e3094ae20bb202b1d5537b1415e3263a37ed78}} 
+tcp&is coded as std\+::int of value 0 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{udp@{udp}!actor\+\_\+zeta\+::network@{actor\+\_\+zeta\+::network}}\index{actor\+\_\+zeta\+::network@{actor\+\_\+zeta\+::network}!udp@{udp}}}\mbox{\Hypertarget{namespaceactor__zeta_1_1network_a4046d5cb8c42554d5787ef4f0d5e3094a84864c1fe095359bc9c5ac068e24e781}\label{namespaceactor__zeta_1_1network_a4046d5cb8c42554d5787ef4f0d5e3094a84864c1fe095359bc9c5ac068e24e781}} 
+udp&is coded as std\+::int of value 1 \\
+\hline
+
+\end{DoxyEnumFields}

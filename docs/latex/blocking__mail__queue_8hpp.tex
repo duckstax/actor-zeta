@@ -1,0 +1,41 @@
+\hypertarget{blocking__mail__queue_8hpp}{}\section{blocking\+\_\+mail\+\_\+queue.\+hpp File Reference}
+\label{blocking__mail__queue_8hpp}\index{blocking\+\_\+mail\+\_\+queue.\+hpp@{blocking\+\_\+mail\+\_\+queue.\+hpp}}
+{\ttfamily \#include $<$mutex$>$}\newline
+{\ttfamily \#include $<$condition\+\_\+variable$>$}\newline
+{\ttfamily \#include $<$list$>$}\newline
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$atomic$>$}\newline
+Include dependency graph for blocking\+\_\+mail\+\_\+queue.\+hpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{blocking__mail__queue_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{blocking__mail__queue_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue$<$ T $>$}
+\begin{DoxyCompactList}\small\item\em A mailbox class for message queue. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespaceactor__zeta}{actor\+\_\+zeta}
+\item 
+ \hyperlink{namespaceactor__zeta_1_1messaging}{actor\+\_\+zeta\+::messaging}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1}{actor\+\_\+zeta\+::messaging\+::enqueue\+\_\+result} \{ \hyperlink{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1a260ca9dd8a4577fc00b7bd5810298076}{actor\+\_\+zeta\+::messaging\+::enqueue\+\_\+result\+::success}, 
+\hyperlink{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1a8505d92f1a08d64e80ebffbde6749069}{actor\+\_\+zeta\+::messaging\+::enqueue\+\_\+result\+::unblocked\+\_\+reader}, 
+\hyperlink{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1a1f494a6c8d9d6b854fcae46e258d9b85}{actor\+\_\+zeta\+::messaging\+::enqueue\+\_\+result\+::queue\+\_\+closed}
+ \}\begin{DoxyCompactList}\small\item\em A strongly typed enum class representing enqueue result. \end{DoxyCompactList}
+\end{DoxyCompactItemize}

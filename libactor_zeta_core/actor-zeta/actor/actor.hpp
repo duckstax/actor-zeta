@@ -5,10 +5,13 @@
 #include "actor-zeta/intrusive_ptr.hpp"
 #include "actor-zeta/forwards.hpp"
 
-//smart actor
 namespace actor_zeta {
     namespace actor {
-        class actor final {
+///
+/// @brief Basic actor implementation
+///
+//smart actor
+        class actor {
         public:
             actor() = default;
 
@@ -65,6 +68,5 @@ namespace actor_zeta {
             intrusive_ptr <abstract_actor> heart;
         };
     }
-
 }
 #endif

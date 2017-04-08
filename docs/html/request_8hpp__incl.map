@@ -1,0 +1,13 @@
+<map id="request.hpp" name="request.hpp">
+<area shape="rect" id="node2" href="$book__contacts_8hpp.html" title="actor&#45;zeta/contacts\l/book_contacts.hpp" alt="" coords="297,169,433,211"/>
+<area shape="rect" id="node15" href="$message_8hpp.html" title="actor&#45;zeta/messaging\l/message.hpp" alt="" coords="497,80,644,121"/>
+<area shape="rect" id="node7" href="$actor__address_8hpp.html" title="actor&#45;zeta/actor/actor\l_address.hpp" alt="" coords="453,259,600,300"/>
+<area shape="rect" id="node14" href="$group__contacts_8hpp.html" title="group_contacts.hpp" alt="" coords="5,266,141,293"/>
+<area shape="rect" id="node8" href="$intrusive__ptr_8hpp.html" title="actor&#45;zeta/intrusive\l_ptr.hpp" alt="" coords="812,348,943,389"/>
+<area shape="rect" id="node13" href="$abstract__actor_8hpp.html" title="abstract_actor.hpp" alt="" coords="505,355,634,382"/>
+<area shape="rect" id="node10" href="$ref__counted_8hpp.html" title="ref_counted.hpp" alt="" coords="743,437,857,464"/>
+<area shape="rect" id="node17" href="$message__header_8hpp.html" title="message_header.hpp" alt="" coords="565,177,710,203"/>
+<area shape="rect" id="node20" href="$message__body_8hpp.html" title="message_body.hpp" alt="" coords="927,177,1062,203"/>
+<area shape="rect" id="node18" href="$type__action_8hpp.html" title="actor&#45;zeta/behavior\l/type_action.hpp" alt="" coords="657,348,788,389"/>
+<area shape="rect" id="node19" href="$message__priority_8hpp.html" title="message_priority.hpp" alt="" coords="675,266,821,293"/>
+</map>

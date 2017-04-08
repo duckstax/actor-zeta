@@ -1,0 +1,7 @@
+<map id="actor_zeta::actor::abstract_actor" name="actor_zeta::actor::abstract_actor">
+<area shape="rect" id="node3" href="$classactor__zeta_1_1actor_1_1local__actor.html" title="Class for location dependant type actor. " alt="" coords="81,169,209,211"/>
+<area shape="rect" id="node2" href="$classactor__zeta_1_1ref__counted.html" title="This class represents reference counter. " alt="" coords="66,5,225,32"/>
+<area shape="rect" id="node4" href="$classactor__zeta_1_1actor_1_1blocking__actor.html" title="Represents actor type with blocking mode. " alt="" coords="5,259,133,300"/>
+<area shape="rect" id="node5" href="$classactor__zeta_1_1actor_1_1scheduled__actor.html" title="Represents scheduling type of actor. " alt="" coords="157,259,285,300"/>
+<area shape="rect" id="node6" href="$classactor__zeta_1_1network_1_1broker.html" title="A broker for messaging. " alt="" coords="153,348,289,389"/>
+</map>

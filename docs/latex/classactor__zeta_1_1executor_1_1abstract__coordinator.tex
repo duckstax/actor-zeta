@@ -1,0 +1,89 @@
+\hypertarget{classactor__zeta_1_1executor_1_1abstract__coordinator}{}\section{actor\+\_\+zeta\+:\+:executor\+:\+:abstract\+\_\+coordinator Class Reference}
+\label{classactor__zeta_1_1executor_1_1abstract__coordinator}\index{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator@{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}}
+
+
+abstract concept of an coordination approach  
+
+
+
+
+{\ttfamily \#include $<$abstract\+\_\+coordinator.\+hpp$>$}
+
+
+
+Inheritance diagram for actor\+\_\+zeta\+:\+:executor\+:\+:abstract\+\_\+coordinator\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=196pt]{classactor__zeta_1_1executor_1_1abstract__coordinator__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{classactor__zeta_1_1executor_1_1abstract__coordinator_a4e9c6ebc0d950993e051a6f512539dfa}{submit} (\hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$)=0
+\item 
+virtual void \hyperlink{classactor__zeta_1_1executor_1_1abstract__coordinator_abbbe1a84649a3ae2cfcb60c7728b2944}{start} ()=0
+\item 
+virtual \hyperlink{classactor__zeta_1_1executor_1_1abstract__coordinator_a3168a7bb00a6499f2ec0ab33e7682fd1}{$\sim$abstract\+\_\+coordinator} ()=default
+\item 
+\hyperlink{classactor__zeta_1_1executor_1_1abstract__coordinator_a52f408cbdd6b33f33a02eb3b288c9247}{abstract\+\_\+coordinator} (size\+\_\+t num\+\_\+worker\+\_\+threads, size\+\_\+t max\+\_\+throughput\+\_\+param)
+\item 
+size\+\_\+t \hyperlink{classactor__zeta_1_1executor_1_1abstract__coordinator_aeb428a4c165e5d01ff7e7c93d9404d11}{max\+\_\+throughput} () const
+\item 
+size\+\_\+t \hyperlink{classactor__zeta_1_1executor_1_1abstract__coordinator_a50c97e6b0508fe609e0ca62a7da3ee96}{num\+\_\+workers} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+abstract concept of an coordination approach 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1abstract__coordinator_a3168a7bb00a6499f2ec0ab33e7682fd1}\label{classactor__zeta_1_1executor_1_1abstract__coordinator_a3168a7bb00a6499f2ec0ab33e7682fd1}} 
+\index{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator@{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}!````~abstract\+\_\+coordinator@{$\sim$abstract\+\_\+coordinator}}
+\index{````~abstract\+\_\+coordinator@{$\sim$abstract\+\_\+coordinator}!actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator@{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}}
+\subsubsection{\texorpdfstring{$\sim$abstract\+\_\+coordinator()}{~abstract\_coordinator()}}
+{\footnotesize\ttfamily virtual actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator\+::$\sim$abstract\+\_\+coordinator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1abstract__coordinator_a52f408cbdd6b33f33a02eb3b288c9247}\label{classactor__zeta_1_1executor_1_1abstract__coordinator_a52f408cbdd6b33f33a02eb3b288c9247}} 
+\index{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator@{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}!abstract\+\_\+coordinator@{abstract\+\_\+coordinator}}
+\index{abstract\+\_\+coordinator@{abstract\+\_\+coordinator}!actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator@{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}}
+\subsubsection{\texorpdfstring{abstract\+\_\+coordinator()}{abstract\_coordinator()}}
+{\footnotesize\ttfamily actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator\+::abstract\+\_\+coordinator (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{num\+\_\+worker\+\_\+threads,  }\item[{size\+\_\+t}]{max\+\_\+throughput\+\_\+param }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1abstract__coordinator_aeb428a4c165e5d01ff7e7c93d9404d11}\label{classactor__zeta_1_1executor_1_1abstract__coordinator_aeb428a4c165e5d01ff7e7c93d9404d11}} 
+\index{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator@{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}!max\+\_\+throughput@{max\+\_\+throughput}}
+\index{max\+\_\+throughput@{max\+\_\+throughput}!actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator@{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}}
+\subsubsection{\texorpdfstring{max\+\_\+throughput()}{max\_throughput()}}
+{\footnotesize\ttfamily size\+\_\+t actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator\+::max\+\_\+throughput (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1abstract__coordinator_a50c97e6b0508fe609e0ca62a7da3ee96}\label{classactor__zeta_1_1executor_1_1abstract__coordinator_a50c97e6b0508fe609e0ca62a7da3ee96}} 
+\index{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator@{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}!num\+\_\+workers@{num\+\_\+workers}}
+\index{num\+\_\+workers@{num\+\_\+workers}!actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator@{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}}
+\subsubsection{\texorpdfstring{num\+\_\+workers()}{num\_workers()}}
+{\footnotesize\ttfamily size\+\_\+t actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator\+::num\+\_\+workers (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1abstract__coordinator_abbbe1a84649a3ae2cfcb60c7728b2944}\label{classactor__zeta_1_1executor_1_1abstract__coordinator_abbbe1a84649a3ae2cfcb60c7728b2944}} 
+\index{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator@{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}!start@{start}}
+\index{start@{start}!actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator@{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}}
+\subsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily virtual void actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator\+::start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \hyperlink{classactor__zeta_1_1executor_1_1coordinator_a1b73b7ddd6b48ba3e15b6f710cb21808}{actor\+\_\+zeta\+::executor\+::coordinator$<$ Policy $>$}.
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1abstract__coordinator_a4e9c6ebc0d950993e051a6f512539dfa}\label{classactor__zeta_1_1executor_1_1abstract__coordinator_a4e9c6ebc0d950993e051a6f512539dfa}} 
+\index{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator@{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}!submit@{submit}}
+\index{submit@{submit}!actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator@{actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}}
+\subsubsection{\texorpdfstring{submit()}{submit()}}
+{\footnotesize\ttfamily virtual void actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator\+::submit (\begin{DoxyParamCaption}\item[{\hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{abstract__coordinator_8hpp}{abstract\+\_\+coordinator.\+hpp}\end{DoxyCompactItemize}

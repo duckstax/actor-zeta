@@ -4,10 +4,12 @@
 #include <memory>
 
 #include "abstract_action.hpp"
-
 namespace actor_zeta {
     namespace behavior {
-        class action final {
+///
+/// @brief Basic action implementation
+///
+        class action {
         public:
             action() = default;
 

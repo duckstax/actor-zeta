@@ -1,0 +1,116 @@
+\hypertarget{classactor__zeta_1_1ref__counted}{}\section{actor\+\_\+zeta\+:\+:ref\+\_\+counted Class Reference}
+\label{classactor__zeta_1_1ref__counted}\index{actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}}
+
+
+This class represents reference counter.  
+
+
+
+
+{\ttfamily \#include $<$ref\+\_\+counted.\+hpp$>$}
+
+
+
+Inheritance diagram for actor\+\_\+zeta\+:\+:ref\+\_\+counted\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=293pt]{classactor__zeta_1_1ref__counted__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classactor__zeta_1_1ref__counted_a4e0a85b3b0695a1dc75a393a1b2d7b2e}{$\sim$ref\+\_\+counted} ()
+\item 
+\hyperlink{classactor__zeta_1_1ref__counted_a8ed09fe39540b2071a9053e812488f0a}{ref\+\_\+counted} ()
+\item 
+\hyperlink{classactor__zeta_1_1ref__counted_a1832dc33726eac41487e8979e1c2414c}{ref\+\_\+counted} (const \hyperlink{classactor__zeta_1_1ref__counted}{ref\+\_\+counted} \&)
+\item 
+\hyperlink{classactor__zeta_1_1ref__counted}{ref\+\_\+counted} \& \hyperlink{classactor__zeta_1_1ref__counted_a80302bec44f29ad126c1a04df4a5ce7f}{operator=} (const \hyperlink{classactor__zeta_1_1ref__counted}{ref\+\_\+counted} \&)
+\item 
+void \hyperlink{classactor__zeta_1_1ref__counted_a46d576dc69eabe39d4c2add161146c23}{ref} () noexcept
+\item 
+void \hyperlink{classactor__zeta_1_1ref__counted_a3eb2cea75b11216397ac62fbe2101b86}{deref} () noexcept
+\item 
+bool \hyperlink{classactor__zeta_1_1ref__counted_aa24a0ed9e05d6efc06f8acf879ada836}{unique} () const noexcept
+\item 
+size\+\_\+t \hyperlink{classactor__zeta_1_1ref__counted_a7fc9ccc71d03d20b3178f45a1ae57713}{get\+\_\+reference\+\_\+count} () const noexcept
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::atomic$<$ size\+\_\+t $>$ \hyperlink{classactor__zeta_1_1ref__counted_a0af281a31b61d3834cf1a79a81f871a8}{rc\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class represents reference counter. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1ref__counted_a4e0a85b3b0695a1dc75a393a1b2d7b2e}\label{classactor__zeta_1_1ref__counted_a4e0a85b3b0695a1dc75a393a1b2d7b2e}} 
+\index{actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}!````~ref\+\_\+counted@{$\sim$ref\+\_\+counted}}
+\index{````~ref\+\_\+counted@{$\sim$ref\+\_\+counted}!actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}}
+\subsubsection{\texorpdfstring{$\sim$ref\+\_\+counted()}{~ref\_counted()}}
+{\footnotesize\ttfamily actor\+\_\+zeta\+::ref\+\_\+counted\+::$\sim$ref\+\_\+counted (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classactor__zeta_1_1ref__counted_a8ed09fe39540b2071a9053e812488f0a}\label{classactor__zeta_1_1ref__counted_a8ed09fe39540b2071a9053e812488f0a}} 
+\index{actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}!ref\+\_\+counted@{ref\+\_\+counted}}
+\index{ref\+\_\+counted@{ref\+\_\+counted}!actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}}
+\subsubsection{\texorpdfstring{ref\+\_\+counted()}{ref\_counted()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily actor\+\_\+zeta\+::ref\+\_\+counted\+::ref\+\_\+counted (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classactor__zeta_1_1ref__counted_a1832dc33726eac41487e8979e1c2414c}\label{classactor__zeta_1_1ref__counted_a1832dc33726eac41487e8979e1c2414c}} 
+\index{actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}!ref\+\_\+counted@{ref\+\_\+counted}}
+\index{ref\+\_\+counted@{ref\+\_\+counted}!actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}}
+\subsubsection{\texorpdfstring{ref\+\_\+counted()}{ref\_counted()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily actor\+\_\+zeta\+::ref\+\_\+counted\+::ref\+\_\+counted (\begin{DoxyParamCaption}\item[{const \hyperlink{classactor__zeta_1_1ref__counted}{ref\+\_\+counted} \&}]{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1ref__counted_a3eb2cea75b11216397ac62fbe2101b86}\label{classactor__zeta_1_1ref__counted_a3eb2cea75b11216397ac62fbe2101b86}} 
+\index{actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}!deref@{deref}}
+\index{deref@{deref}!actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}}
+\subsubsection{\texorpdfstring{deref()}{deref()}}
+{\footnotesize\ttfamily void actor\+\_\+zeta\+::ref\+\_\+counted\+::deref (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1ref__counted_a7fc9ccc71d03d20b3178f45a1ae57713}\label{classactor__zeta_1_1ref__counted_a7fc9ccc71d03d20b3178f45a1ae57713}} 
+\index{actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}!get\+\_\+reference\+\_\+count@{get\+\_\+reference\+\_\+count}}
+\index{get\+\_\+reference\+\_\+count@{get\+\_\+reference\+\_\+count}!actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}}
+\subsubsection{\texorpdfstring{get\+\_\+reference\+\_\+count()}{get\_reference\_count()}}
+{\footnotesize\ttfamily size\+\_\+t actor\+\_\+zeta\+::ref\+\_\+counted\+::get\+\_\+reference\+\_\+count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1ref__counted_a80302bec44f29ad126c1a04df4a5ce7f}\label{classactor__zeta_1_1ref__counted_a80302bec44f29ad126c1a04df4a5ce7f}} 
+\index{actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}!operator=@{operator=}}
+\index{operator=@{operator=}!actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}}
+\subsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \hyperlink{classactor__zeta_1_1ref__counted}{ref\+\_\+counted} \& actor\+\_\+zeta\+::ref\+\_\+counted\+::operator= (\begin{DoxyParamCaption}\item[{const \hyperlink{classactor__zeta_1_1ref__counted}{ref\+\_\+counted} \&}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classactor__zeta_1_1ref__counted_a46d576dc69eabe39d4c2add161146c23}\label{classactor__zeta_1_1ref__counted_a46d576dc69eabe39d4c2add161146c23}} 
+\index{actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}!ref@{ref}}
+\index{ref@{ref}!actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}}
+\subsubsection{\texorpdfstring{ref()}{ref()}}
+{\footnotesize\ttfamily void actor\+\_\+zeta\+::ref\+\_\+counted\+::ref (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1ref__counted_aa24a0ed9e05d6efc06f8acf879ada836}\label{classactor__zeta_1_1ref__counted_aa24a0ed9e05d6efc06f8acf879ada836}} 
+\index{actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}!unique@{unique}}
+\index{unique@{unique}!actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}}
+\subsubsection{\texorpdfstring{unique()}{unique()}}
+{\footnotesize\ttfamily bool actor\+\_\+zeta\+::ref\+\_\+counted\+::unique (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1ref__counted_a0af281a31b61d3834cf1a79a81f871a8}\label{classactor__zeta_1_1ref__counted_a0af281a31b61d3834cf1a79a81f871a8}} 
+\index{actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}!rc\+\_\+@{rc\+\_\+}}
+\index{rc\+\_\+@{rc\+\_\+}!actor\+\_\+zeta\+::ref\+\_\+counted@{actor\+\_\+zeta\+::ref\+\_\+counted}}
+\subsubsection{\texorpdfstring{rc\+\_\+}{rc\_}}
+{\footnotesize\ttfamily std\+::atomic$<$size\+\_\+t$>$ actor\+\_\+zeta\+::ref\+\_\+counted\+::rc\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ref__counted_8hpp}{ref\+\_\+counted.\+hpp}\item 
+\hyperlink{ref__counted_8cpp}{ref\+\_\+counted.\+cpp}\end{DoxyCompactItemize}

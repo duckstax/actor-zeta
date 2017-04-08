@@ -1,0 +1,224 @@
+\hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{}\section{actor\+\_\+zeta\+:\+:messaging\+:\+:blocking\+\_\+mail\+\_\+queue$<$ T $>$ Class Template Reference}
+\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue}\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue$<$ T $>$@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue$<$ T $>$}}
+
+
+A mailbox class for message queue.  
+
+
+
+
+{\ttfamily \#include $<$blocking\+\_\+mail\+\_\+queue.\+hpp$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a64432628c6a91d330431fc3299021045}{pointer} = T $\ast$
+\item 
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a2615c2611ffdb978624dd2eccc75fe57}{const\+\_\+pointer} = const T $\ast$
+\item 
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a838522d611616b1bd7c46da5fe6895fb}{reference} = T \&
+\item 
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a6a883fe6a6e606317f85156f957f84fd}{const\+\_\+reference} = const T \&
+\item 
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a20156eef06b0a688ceeb663097a90862}{cache\+\_\+type} = std\+::list$<$ \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a64432628c6a91d330431fc3299021045}{pointer} $>$
+\item 
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a3d270721dd7c3e166e39578cc6b761ce}{queue\+\_\+base\+\_\+type} = std\+::list$<$ \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a64432628c6a91d330431fc3299021045}{pointer} $>$
+\item 
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a61d0417725665aba520dc0a51f1ec37a}{unique\+\_\+lock} = std\+::unique\+\_\+lock$<$ std\+::mutex $>$
+\item 
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_aa98535adfab3ed0daf9f615f6f8edaaa}{lock\+\_\+guard} = std\+::lock\+\_\+guard$<$ std\+::mutex $>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a27b186a6995c984fda250ffaa8cdf207}{blocking\+\_\+mail\+\_\+queue} (const \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue} \&)=delete
+\item 
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue} \& \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a595342b1b167fd4a889b6d3f2b533d7e}{operator=} (const \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue} \&)=delete
+\item 
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a22fa153dcd1965874060e33bc88d61c0}{blocking\+\_\+mail\+\_\+queue} (\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue} \&\&)=default
+\item 
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue} \& \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_ae5041536a45ba1a1fa68a1ac91c407d5}{operator=} (\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue} \&\&)=default
+\item 
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a0f37b3d45de05f79501f46bcb93fc92f}{blocking\+\_\+mail\+\_\+queue} ()=default
+\item 
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a60c3eee1e67c1fd16b0898933d352cb3}{$\sim$blocking\+\_\+mail\+\_\+queue} ()=default
+\item 
+\hyperlink{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1}{enqueue\+\_\+result} \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a738f8b8948ace649ab23b5fb312bf3da}{put} (\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a64432628c6a91d330431fc3299021045}{pointer} m)
+\item 
+void \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a26fa1043b83e6956362282989cb18f3d}{sync} ()
+\item 
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a64432628c6a91d330431fc3299021045}{pointer} \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_ab5d259cfddb68ab54eb7402c61e980b8}{get} ()
+\item 
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a20156eef06b0a688ceeb663097a90862}{cache\+\_\+type} \& \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a0840f187c44e717bb1078cdd38f2aaf7}{low\+\_\+priority\+\_\+cache} ()
+\item 
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a20156eef06b0a688ceeb663097a90862}{cache\+\_\+type} \& \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_abd039cc803849fd87da17a18171a0440}{normal\+\_\+priority\+\_\+cache} ()
+\item 
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a20156eef06b0a688ceeb663097a90862}{cache\+\_\+type} \& \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_ad68ddf70deb082f37a154186c75f82bd}{high\+\_\+priority\+\_\+cache} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue$<$ T $>$}
+
+A mailbox class for message queue. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+\end{DoxyTemplParams}
+
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a20156eef06b0a688ceeb663097a90862}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a20156eef06b0a688ceeb663097a90862}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!cache\+\_\+type@{cache\+\_\+type}}
+\index{cache\+\_\+type@{cache\+\_\+type}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{cache\+\_\+type}{cache\_type}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a20156eef06b0a688ceeb663097a90862}{cache\+\_\+type} =  std\+::list$<$\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a64432628c6a91d330431fc3299021045}{pointer}$>$}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a2615c2611ffdb978624dd2eccc75fe57}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a2615c2611ffdb978624dd2eccc75fe57}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!const\+\_\+pointer@{const\+\_\+pointer}}
+\index{const\+\_\+pointer@{const\+\_\+pointer}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{const\+\_\+pointer}{const\_pointer}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a2615c2611ffdb978624dd2eccc75fe57}{const\+\_\+pointer} =  const T $\ast$}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a6a883fe6a6e606317f85156f957f84fd}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a6a883fe6a6e606317f85156f957f84fd}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!const\+\_\+reference@{const\+\_\+reference}}
+\index{const\+\_\+reference@{const\+\_\+reference}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{const\+\_\+reference}{const\_reference}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a6a883fe6a6e606317f85156f957f84fd}{const\+\_\+reference} =  const T \&}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_aa98535adfab3ed0daf9f615f6f8edaaa}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_aa98535adfab3ed0daf9f615f6f8edaaa}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!lock\+\_\+guard@{lock\+\_\+guard}}
+\index{lock\+\_\+guard@{lock\+\_\+guard}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{lock\+\_\+guard}{lock\_guard}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_aa98535adfab3ed0daf9f615f6f8edaaa}{lock\+\_\+guard} =  std\+::lock\+\_\+guard$<$std\+::mutex$>$}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a64432628c6a91d330431fc3299021045}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a64432628c6a91d330431fc3299021045}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!pointer@{pointer}}
+\index{pointer@{pointer}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{pointer}{pointer}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a64432628c6a91d330431fc3299021045}{pointer} =  T $\ast$}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a3d270721dd7c3e166e39578cc6b761ce}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a3d270721dd7c3e166e39578cc6b761ce}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!queue\+\_\+base\+\_\+type@{queue\+\_\+base\+\_\+type}}
+\index{queue\+\_\+base\+\_\+type@{queue\+\_\+base\+\_\+type}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{queue\+\_\+base\+\_\+type}{queue\_base\_type}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a3d270721dd7c3e166e39578cc6b761ce}{queue\+\_\+base\+\_\+type} =  std\+::list$<$\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a64432628c6a91d330431fc3299021045}{pointer}$>$}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a838522d611616b1bd7c46da5fe6895fb}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a838522d611616b1bd7c46da5fe6895fb}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!reference@{reference}}
+\index{reference@{reference}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{reference}{reference}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a838522d611616b1bd7c46da5fe6895fb}{reference} =  T \&}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a61d0417725665aba520dc0a51f1ec37a}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a61d0417725665aba520dc0a51f1ec37a}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!unique\+\_\+lock@{unique\+\_\+lock}}
+\index{unique\+\_\+lock@{unique\+\_\+lock}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{unique\+\_\+lock}{unique\_lock}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+using \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a61d0417725665aba520dc0a51f1ec37a}{unique\+\_\+lock} =  std\+::unique\+\_\+lock$<$std\+::mutex$>$}
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a27b186a6995c984fda250ffaa8cdf207}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a27b186a6995c984fda250ffaa8cdf207}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!blocking\+\_\+mail\+\_\+queue@{blocking\+\_\+mail\+\_\+queue}}
+\index{blocking\+\_\+mail\+\_\+queue@{blocking\+\_\+mail\+\_\+queue}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{blocking\+\_\+mail\+\_\+queue()}{blocking\_mail\_queue()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue} (\begin{DoxyParamCaption}\item[{const \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue}$<$ T $>$ \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a22fa153dcd1965874060e33bc88d61c0}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a22fa153dcd1965874060e33bc88d61c0}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!blocking\+\_\+mail\+\_\+queue@{blocking\+\_\+mail\+\_\+queue}}
+\index{blocking\+\_\+mail\+\_\+queue@{blocking\+\_\+mail\+\_\+queue}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{blocking\+\_\+mail\+\_\+queue()}{blocking\_mail\_queue()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue} (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue}$<$ T $>$ \&\&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a0f37b3d45de05f79501f46bcb93fc92f}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a0f37b3d45de05f79501f46bcb93fc92f}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!blocking\+\_\+mail\+\_\+queue@{blocking\+\_\+mail\+\_\+queue}}
+\index{blocking\+\_\+mail\+\_\+queue@{blocking\+\_\+mail\+\_\+queue}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{blocking\+\_\+mail\+\_\+queue()}{blocking\_mail\_queue()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a60c3eee1e67c1fd16b0898933d352cb3}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a60c3eee1e67c1fd16b0898933d352cb3}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!````~blocking\+\_\+mail\+\_\+queue@{$\sim$blocking\+\_\+mail\+\_\+queue}}
+\index{````~blocking\+\_\+mail\+\_\+queue@{$\sim$blocking\+\_\+mail\+\_\+queue}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{$\sim$blocking\+\_\+mail\+\_\+queue()}{~blocking\_mail\_queue()}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::$\sim$\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_ab5d259cfddb68ab54eb7402c61e980b8}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_ab5d259cfddb68ab54eb7402c61e980b8}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!get@{get}}
+\index{get@{get}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a64432628c6a91d330431fc3299021045}{pointer} \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::get (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_ad68ddf70deb082f37a154186c75f82bd}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_ad68ddf70deb082f37a154186c75f82bd}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!high\+\_\+priority\+\_\+cache@{high\+\_\+priority\+\_\+cache}}
+\index{high\+\_\+priority\+\_\+cache@{high\+\_\+priority\+\_\+cache}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{high\+\_\+priority\+\_\+cache()}{high\_priority\_cache()}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a20156eef06b0a688ceeb663097a90862}{cache\+\_\+type}\& \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::high\+\_\+priority\+\_\+cache (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a0840f187c44e717bb1078cdd38f2aaf7}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a0840f187c44e717bb1078cdd38f2aaf7}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!low\+\_\+priority\+\_\+cache@{low\+\_\+priority\+\_\+cache}}
+\index{low\+\_\+priority\+\_\+cache@{low\+\_\+priority\+\_\+cache}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{low\+\_\+priority\+\_\+cache()}{low\_priority\_cache()}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a20156eef06b0a688ceeb663097a90862}{cache\+\_\+type}\& \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::low\+\_\+priority\+\_\+cache (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_abd039cc803849fd87da17a18171a0440}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_abd039cc803849fd87da17a18171a0440}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!normal\+\_\+priority\+\_\+cache@{normal\+\_\+priority\+\_\+cache}}
+\index{normal\+\_\+priority\+\_\+cache@{normal\+\_\+priority\+\_\+cache}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{normal\+\_\+priority\+\_\+cache()}{normal\_priority\_cache()}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a20156eef06b0a688ceeb663097a90862}{cache\+\_\+type}\& \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::normal\+\_\+priority\+\_\+cache (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a595342b1b167fd4a889b6d3f2b533d7e}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a595342b1b167fd4a889b6d3f2b533d7e}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!operator=@{operator=}}
+\index{operator=@{operator=}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue}\& \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::operator= (\begin{DoxyParamCaption}\item[{const \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue}$<$ T $>$ \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_ae5041536a45ba1a1fa68a1ac91c407d5}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_ae5041536a45ba1a1fa68a1ac91c407d5}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!operator=@{operator=}}
+\index{operator=@{operator=}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue}\& \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::operator= (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue}$<$ T $>$ \&\&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a738f8b8948ace649ab23b5fb312bf3da}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a738f8b8948ace649ab23b5fb312bf3da}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!put@{put}}
+\index{put@{put}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{put()}{put()}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+\hyperlink{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1}{enqueue\+\_\+result} \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::put (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a64432628c6a91d330431fc3299021045}{pointer}}]{m }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a26fa1043b83e6956362282989cb18f3d}\label{classactor__zeta_1_1messaging_1_1blocking__mail__queue_a26fa1043b83e6956362282989cb18f3d}} 
+\index{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}!sync@{sync}}
+\index{sync@{sync}!actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue@{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}}
+\subsubsection{\texorpdfstring{sync()}{sync()}}
+{\footnotesize\ttfamily template$<$typename T$>$ \\
+void \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}$<$ T $>$\+::sync (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{blocking__mail__queue_8hpp}{blocking\+\_\+mail\+\_\+queue.\+hpp}\end{DoxyCompactItemize}

@@ -1,0 +1,179 @@
+\hypertarget{classactor__zeta_1_1executor_1_1worker}{}\section{actor\+\_\+zeta\+:\+:executor\+:\+:worker$<$ Policy $>$ Class Template Reference}
+\label{classactor__zeta_1_1executor_1_1worker}\index{actor\+\_\+zeta\+::executor\+::worker$<$ Policy $>$@{actor\+\_\+zeta\+::executor\+::worker$<$ Policy $>$}}
+
+
+A simple worker module class.  
+
+
+
+
+{\ttfamily \#include $<$worker.\+hpp$>$}
+
+
+
+Inheritance diagram for actor\+\_\+zeta\+:\+:executor\+:\+:worker$<$ Policy $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=186pt]{classactor__zeta_1_1executor_1_1worker__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for actor\+\_\+zeta\+:\+:executor\+:\+:worker$<$ Policy $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=186pt]{classactor__zeta_1_1executor_1_1worker__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{classactor__zeta_1_1executor_1_1worker_a74e3d9df71ad0b0df8d0c5403f8e642a}{job\+\_\+ptr} = \hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$
+\item 
+using \hyperlink{classactor__zeta_1_1executor_1_1worker_a0f64bbb63577325b5217ccee17a28738}{coordinator\+\_\+ptr} = \hyperlink{classactor__zeta_1_1executor_1_1coordinator}{coordinator}$<$ Policy $>$ $\ast$
+\item 
+using \hyperlink{classactor__zeta_1_1executor_1_1worker_ad8f39b0132441963ede8c1e8435aebb2}{policy\+\_\+data} = typename Policy\+::worker\+\_\+data
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classactor__zeta_1_1executor_1_1worker_a674d91050c8ae364156501f9abb7ecd3}{worker} (size\+\_\+t worker\+\_\+id, \hyperlink{classactor__zeta_1_1executor_1_1worker_a0f64bbb63577325b5217ccee17a28738}{coordinator\+\_\+ptr} worker\+\_\+parent, size\+\_\+t throughput)
+\item 
+void \hyperlink{classactor__zeta_1_1executor_1_1worker_a257ad22771ecbf3a9dbb1b2e86106893}{start} ()
+\item 
+\hyperlink{classactor__zeta_1_1executor_1_1worker_a67c327dc2d357864799117c8358a736e}{worker} (const \hyperlink{classactor__zeta_1_1executor_1_1worker}{worker} \&)=delete
+\item 
+\hyperlink{classactor__zeta_1_1executor_1_1worker}{worker} \& \hyperlink{classactor__zeta_1_1executor_1_1worker_a5ee4aa24cacffc8f620ea0094b4dbada}{operator=} (const \hyperlink{classactor__zeta_1_1executor_1_1worker}{worker} \&)=delete
+\item 
+void \hyperlink{classactor__zeta_1_1executor_1_1worker_acd3696b6425009eee551db3bb34b800f}{external\+\_\+enqueue} (\hyperlink{classactor__zeta_1_1executor_1_1worker_a74e3d9df71ad0b0df8d0c5403f8e642a}{job\+\_\+ptr} job)
+\item 
+void \hyperlink{classactor__zeta_1_1executor_1_1worker_a64480cdfc253eddf75ff0798928163c6}{put\+\_\+execute\+\_\+latest} (\hyperlink{classactor__zeta_1_1executor_1_1worker_a74e3d9df71ad0b0df8d0c5403f8e642a}{job\+\_\+ptr} job) override
+\item 
+\hyperlink{classactor__zeta_1_1executor_1_1worker_a0f64bbb63577325b5217ccee17a28738}{coordinator\+\_\+ptr} \hyperlink{classactor__zeta_1_1executor_1_1worker_aa3f0840f8fa873ff6300e72cbf753cfd}{parent} ()
+\item 
+size\+\_\+t \hyperlink{classactor__zeta_1_1executor_1_1worker_a0d3f8ce9e97f2fb78e6e0b213b620eb8}{id} () const
+\item 
+\hyperlink{classactor__zeta_1_1executor_1_1worker_ad8f39b0132441963ede8c1e8435aebb2}{policy\+\_\+data} \& \hyperlink{classactor__zeta_1_1executor_1_1worker_a2b687c0dde52737dd2c4701117d6abb1}{data} ()
+\item 
+size\+\_\+t \hyperlink{classactor__zeta_1_1executor_1_1worker_a1bfce28f14af95a760912ebc12112305}{max\+\_\+throughput} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class Policy$>$\newline
+class actor\+\_\+zeta\+::executor\+::worker$<$ Policy $>$}
+
+A simple worker module class. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Policy} & \\
+\hline
+\end{DoxyTemplParams}
+
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1worker_a0f64bbb63577325b5217ccee17a28738}\label{classactor__zeta_1_1executor_1_1worker_a0f64bbb63577325b5217ccee17a28738}} 
+\index{actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}!coordinator\+\_\+ptr@{coordinator\+\_\+ptr}}
+\index{coordinator\+\_\+ptr@{coordinator\+\_\+ptr}!actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}}
+\subsubsection{\texorpdfstring{coordinator\+\_\+ptr}{coordinator\_ptr}}
+{\footnotesize\ttfamily template$<$class Policy $>$ \\
+using \hyperlink{classactor__zeta_1_1executor_1_1worker}{actor\+\_\+zeta\+::executor\+::worker}$<$ Policy $>$\+::\hyperlink{classactor__zeta_1_1executor_1_1worker_a0f64bbb63577325b5217ccee17a28738}{coordinator\+\_\+ptr} =  \hyperlink{classactor__zeta_1_1executor_1_1coordinator}{coordinator}$<$Policy$>$ $\ast$}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1worker_a74e3d9df71ad0b0df8d0c5403f8e642a}\label{classactor__zeta_1_1executor_1_1worker_a74e3d9df71ad0b0df8d0c5403f8e642a}} 
+\index{actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}!job\+\_\+ptr@{job\+\_\+ptr}}
+\index{job\+\_\+ptr@{job\+\_\+ptr}!actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}}
+\subsubsection{\texorpdfstring{job\+\_\+ptr}{job\_ptr}}
+{\footnotesize\ttfamily template$<$class Policy $>$ \\
+using \hyperlink{classactor__zeta_1_1executor_1_1worker}{actor\+\_\+zeta\+::executor\+::worker}$<$ Policy $>$\+::\hyperlink{classactor__zeta_1_1executor_1_1worker_a74e3d9df71ad0b0df8d0c5403f8e642a}{job\+\_\+ptr} =  \hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1worker_ad8f39b0132441963ede8c1e8435aebb2}\label{classactor__zeta_1_1executor_1_1worker_ad8f39b0132441963ede8c1e8435aebb2}} 
+\index{actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}!policy\+\_\+data@{policy\+\_\+data}}
+\index{policy\+\_\+data@{policy\+\_\+data}!actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}}
+\subsubsection{\texorpdfstring{policy\+\_\+data}{policy\_data}}
+{\footnotesize\ttfamily template$<$class Policy $>$ \\
+using \hyperlink{classactor__zeta_1_1executor_1_1worker}{actor\+\_\+zeta\+::executor\+::worker}$<$ Policy $>$\+::\hyperlink{classactor__zeta_1_1executor_1_1worker_ad8f39b0132441963ede8c1e8435aebb2}{policy\+\_\+data} =  typename Policy\+::worker\+\_\+data}
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1worker_a674d91050c8ae364156501f9abb7ecd3}\label{classactor__zeta_1_1executor_1_1worker_a674d91050c8ae364156501f9abb7ecd3}} 
+\index{actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}!worker@{worker}}
+\index{worker@{worker}!actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}}
+\subsubsection{\texorpdfstring{worker()}{worker()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class Policy $>$ \\
+\hyperlink{classactor__zeta_1_1executor_1_1worker}{actor\+\_\+zeta\+::executor\+::worker}$<$ Policy $>$\+::\hyperlink{classactor__zeta_1_1executor_1_1worker}{worker} (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{worker\+\_\+id,  }\item[{\hyperlink{classactor__zeta_1_1executor_1_1worker_a0f64bbb63577325b5217ccee17a28738}{coordinator\+\_\+ptr}}]{worker\+\_\+parent,  }\item[{size\+\_\+t}]{throughput }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1worker_a67c327dc2d357864799117c8358a736e}\label{classactor__zeta_1_1executor_1_1worker_a67c327dc2d357864799117c8358a736e}} 
+\index{actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}!worker@{worker}}
+\index{worker@{worker}!actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}}
+\subsubsection{\texorpdfstring{worker()}{worker()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class Policy $>$ \\
+\hyperlink{classactor__zeta_1_1executor_1_1worker}{actor\+\_\+zeta\+::executor\+::worker}$<$ Policy $>$\+::\hyperlink{classactor__zeta_1_1executor_1_1worker}{worker} (\begin{DoxyParamCaption}\item[{const \hyperlink{classactor__zeta_1_1executor_1_1worker}{worker}$<$ Policy $>$ \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1worker_a2b687c0dde52737dd2c4701117d6abb1}\label{classactor__zeta_1_1executor_1_1worker_a2b687c0dde52737dd2c4701117d6abb1}} 
+\index{actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}!data@{data}}
+\index{data@{data}!actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}}
+\subsubsection{\texorpdfstring{data()}{data()}}
+{\footnotesize\ttfamily template$<$class Policy $>$ \\
+\hyperlink{classactor__zeta_1_1executor_1_1worker_ad8f39b0132441963ede8c1e8435aebb2}{policy\+\_\+data}\& \hyperlink{classactor__zeta_1_1executor_1_1worker}{actor\+\_\+zeta\+::executor\+::worker}$<$ Policy $>$\+::data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1worker_acd3696b6425009eee551db3bb34b800f}\label{classactor__zeta_1_1executor_1_1worker_acd3696b6425009eee551db3bb34b800f}} 
+\index{actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}!external\+\_\+enqueue@{external\+\_\+enqueue}}
+\index{external\+\_\+enqueue@{external\+\_\+enqueue}!actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}}
+\subsubsection{\texorpdfstring{external\+\_\+enqueue()}{external\_enqueue()}}
+{\footnotesize\ttfamily template$<$class Policy $>$ \\
+void \hyperlink{classactor__zeta_1_1executor_1_1worker}{actor\+\_\+zeta\+::executor\+::worker}$<$ Policy $>$\+::external\+\_\+enqueue (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1executor_1_1worker_a74e3d9df71ad0b0df8d0c5403f8e642a}{job\+\_\+ptr}}]{job }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1worker_a0d3f8ce9e97f2fb78e6e0b213b620eb8}\label{classactor__zeta_1_1executor_1_1worker_a0d3f8ce9e97f2fb78e6e0b213b620eb8}} 
+\index{actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}!id@{id}}
+\index{id@{id}!actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}}
+\subsubsection{\texorpdfstring{id()}{id()}}
+{\footnotesize\ttfamily template$<$class Policy $>$ \\
+size\+\_\+t \hyperlink{classactor__zeta_1_1executor_1_1worker}{actor\+\_\+zeta\+::executor\+::worker}$<$ Policy $>$\+::id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1worker_a1bfce28f14af95a760912ebc12112305}\label{classactor__zeta_1_1executor_1_1worker_a1bfce28f14af95a760912ebc12112305}} 
+\index{actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}!max\+\_\+throughput@{max\+\_\+throughput}}
+\index{max\+\_\+throughput@{max\+\_\+throughput}!actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}}
+\subsubsection{\texorpdfstring{max\+\_\+throughput()}{max\_throughput()}}
+{\footnotesize\ttfamily template$<$class Policy $>$ \\
+size\+\_\+t \hyperlink{classactor__zeta_1_1executor_1_1worker}{actor\+\_\+zeta\+::executor\+::worker}$<$ Policy $>$\+::max\+\_\+throughput (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1worker_a5ee4aa24cacffc8f620ea0094b4dbada}\label{classactor__zeta_1_1executor_1_1worker_a5ee4aa24cacffc8f620ea0094b4dbada}} 
+\index{actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}!operator=@{operator=}}
+\index{operator=@{operator=}!actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}}
+\subsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily template$<$class Policy $>$ \\
+\hyperlink{classactor__zeta_1_1executor_1_1worker}{worker}\& \hyperlink{classactor__zeta_1_1executor_1_1worker}{actor\+\_\+zeta\+::executor\+::worker}$<$ Policy $>$\+::operator= (\begin{DoxyParamCaption}\item[{const \hyperlink{classactor__zeta_1_1executor_1_1worker}{worker}$<$ Policy $>$ \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1worker_aa3f0840f8fa873ff6300e72cbf753cfd}\label{classactor__zeta_1_1executor_1_1worker_aa3f0840f8fa873ff6300e72cbf753cfd}} 
+\index{actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}!parent@{parent}}
+\index{parent@{parent}!actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}}
+\subsubsection{\texorpdfstring{parent()}{parent()}}
+{\footnotesize\ttfamily template$<$class Policy $>$ \\
+\hyperlink{classactor__zeta_1_1executor_1_1worker_a0f64bbb63577325b5217ccee17a28738}{coordinator\+\_\+ptr} \hyperlink{classactor__zeta_1_1executor_1_1worker}{actor\+\_\+zeta\+::executor\+::worker}$<$ Policy $>$\+::parent (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1worker_a64480cdfc253eddf75ff0798928163c6}\label{classactor__zeta_1_1executor_1_1worker_a64480cdfc253eddf75ff0798928163c6}} 
+\index{actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}!put\+\_\+execute\+\_\+latest@{put\+\_\+execute\+\_\+latest}}
+\index{put\+\_\+execute\+\_\+latest@{put\+\_\+execute\+\_\+latest}!actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}}
+\subsubsection{\texorpdfstring{put\+\_\+execute\+\_\+latest()}{put\_execute\_latest()}}
+{\footnotesize\ttfamily template$<$class Policy $>$ \\
+void \hyperlink{classactor__zeta_1_1executor_1_1worker}{actor\+\_\+zeta\+::executor\+::worker}$<$ Policy $>$\+::put\+\_\+execute\+\_\+latest (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1executor_1_1worker_a74e3d9df71ad0b0df8d0c5403f8e642a}{job\+\_\+ptr}}]{job }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1worker_a257ad22771ecbf3a9dbb1b2e86106893}\label{classactor__zeta_1_1executor_1_1worker_a257ad22771ecbf3a9dbb1b2e86106893}} 
+\index{actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}!start@{start}}
+\index{start@{start}!actor\+\_\+zeta\+::executor\+::worker@{actor\+\_\+zeta\+::executor\+::worker}}
+\subsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily template$<$class Policy $>$ \\
+void \hyperlink{classactor__zeta_1_1executor_1_1worker}{actor\+\_\+zeta\+::executor\+::worker}$<$ Policy $>$\+::start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{worker_8hpp}{worker.\+hpp}\end{DoxyCompactItemize}

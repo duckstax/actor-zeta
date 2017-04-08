@@ -5,10 +5,11 @@
 #include "actor-zeta/environment/cooperation.hpp"
 
 // TODO:  environment -> abstract_environment
-
 namespace actor_zeta {
     namespace environment {
-
+///
+/// @brief An actors workplace platform 
+///
         class environment {
         public:
             environment() = delete;

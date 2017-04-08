@@ -5,11 +5,17 @@
 
 namespace actor_zeta {
     namespace network {
+///
+/// @enum type_connect
+/// @brief A strongly typed enum class representing connection type
+///
         enum class type_connect : int {
-            tcp,
-            udp,
+            tcp,    ///< is coded as std::int of value 0
+            udp,    ///< is coded as std::int of value 1
         };
-
+///
+/// @brief Implementation of connection functionality
+///
         class connection_identifying {
         public:
             connection_identifying() = delete;
@@ -40,7 +46,6 @@ namespace actor_zeta {
 
     }
 }
-
 
 namespace std {
     std::string to_string(actor_zeta::network::type_connect);

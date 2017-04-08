@@ -1,0 +1,2774 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Cygwin) (preloaded format=pdflatex 2017.4.8)  8 APR 2017 22:20
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**refman
+(./refman.tex
+LaTeX2e <2016/03/31>
+Babel <3.9r> and hyphenation patterns for 3 language(s) loaded.
+(/usr/share/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/share/texmf-dist/tex/latex/base/bk10.clo
+File: bk10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texmf-dist/tex/latex/base/fixltx2e.sty
+Package: fixltx2e 2015/06/22 v2.0b fixes to LaTeX (obsolete)
+
+
+Package fixltx2e Warning: fixltx2e is not required with releases after 2015
+(fixltx2e)                All fixes are now in the LaTeX kernel.
+(fixltx2e)                See the latexrelease package for details.
+
+) (/usr/share/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count88
+\calc@Bcount=\count89
+\calc@Adimen=\dimen103
+\calc@Bdimen=\dimen104
+\calc@Askip=\skip43
+\calc@Bskip=\skip44
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count90
+\calc@Cskip=\skip45
+) (./doxygen.sty
+Package: doxygen 
+
+(/usr/share/texmf-dist/tex/latex/base/alltt.sty
+Package: alltt 1997/06/16 v2.0g defines alltt environment
+)
+(/usr/share/texmf-dist/tex/latex/tools/array.sty
+Package: array 2014/10/28 v2.4c Tabular extension package (FMi)
+\col@sep=\dimen105
+\extrarowheight=\dimen106
+\NC@list=\toks14
+\extratabsurround=\skip46
+\backup@length=\skip47
+)
+(/usr/share/texmf-dist/tex/latex/base/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count91
+\float@exts=\toks15
+\float@box=\box26
+\@float@everytoks=\toks16
+\@floatcapt=\box27
+)
+(/usr/share/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+(/usr/share/texmf-dist/tex/latex/tools/verbatim.sty
+Package: verbatim 2014/10/28 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks17
+\verbatim@line=\toks18
+\verbatim@in@stream=\read1
+)
+(/usr/share/texmf-dist/tex/latex/base/xcolor.sty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+(/usr/share/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+
+(/usr/share/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+(/usr/share/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count92
+)
+(/usr/share/texmf-dist/tex/latex/colortbl/colortbl.sty
+Package: colortbl 2012/02/13 v1.0a Color table columns (DPC)
+\everycr=\toks19
+\minrowclearance=\skip48
+)
+\rownum=\count93
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+)
+(/usr/share/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
+\LTleft=\skip49
+\LTright=\skip50
+\LTpre=\skip51
+\LTpost=\skip52
+\LTchunksize=\count94
+\LTcapwidth=\dimen107
+\LT@head=\box28
+\LT@firsthead=\box29
+\LT@foot=\box30
+\LT@lastfoot=\box31
+\LT@cols=\count95
+\LT@rows=\count96
+\c@LT@tables=\count97
+\c@LT@chunks=\count98
+\LT@p@ftn=\toks20
+)
+(/usr/share/texmf-dist/tex/latex/base/tabu.sty
+Package: tabu 2011/02/26 v2.8 - flexible LaTeX tabulars (FC)
+
+(/usr/share/texmf-dist/tex/latex/base/varwidth.sty
+Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
+\@vwid@box=\box32
+\sift@deathcycles=\count99
+\@vwid@loff=\dimen108
+\@vwid@roff=\dimen109
+)
+\c@taburow=\count100
+\tabu@nbcols=\count101
+\tabu@cnt=\count102
+\tabu@Xcol=\count103
+\tabu@alloc=\count104
+\tabu@nested=\count105
+\tabu@target=\dimen110
+\tabu@spreadtarget=\dimen111
+\tabu@naturalX=\dimen112
+\tabucolX=\dimen113
+\tabu@Xsum=\dimen114
+\extrarowdepth=\dimen115
+\abovetabulinesep=\dimen116
+\belowtabulinesep=\dimen117
+\tabustrutrule=\dimen118
+\tabu@thebody=\toks21
+\tabu@footnotes=\toks22
+\tabu@box=\box33
+\tabu@arstrutbox=\box34
+\tabu@hleads=\box35
+\tabu@vleads=\box36
+\tabu@cellskip=\skip53
+)
+(/usr/share/texmf-dist/tex/latex/tools/tabularx.sty
+Package: tabularx 2016/02/03 v2.11 `tabularx' package (DPC)
+\TX@col@width=\dimen119
+\TX@old@table=\dimen120
+\TX@old@col=\dimen121
+\TX@target=\dimen122
+\TX@delta=\dimen123
+\TX@cols=\count106
+\TX@ftn=\toks23
+)
+(/usr/share/texmf-dist/tex/latex/base/multirow.sty
+Package: multirow 2016/11/25 v2.2 Span multiple rows of a table
+\multirow@colwidth=\skip54
+\multirow@cntb=\count107
+\multirow@dima=\skip55
+\bigstrutjot=\dimen124
+)
+\xrefbox=\box37
+\xreflength=\skip56
+)
+(/usr/share/texmf-dist/tex/latex/base/adjustbox.sty
+Package: adjustbox 2012/05/21 v1.0 Adjusting TeX boxes (trim, clip, ...)
+
+(/usr/share/texmf-dist/tex/latex/base/xkeyval.sty
+Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
+
+(/usr/share/texmf-dist/tex/latex/base/xkeyval.tex
+(/usr/share/texmf-dist/tex/latex/base/xkvutils.tex
+\XKV@toks=\toks24
+\XKV@tempa@toks=\toks25
+
+(/usr/share/texmf-dist/tex/latex/base/keyval.tex))
+\XKV@depth=\count108
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+(/usr/share/texmf-dist/tex/latex/base/adjcalc.sty
+Package: adjcalc 2012/05/16 v1.1 Provides advanced setlength with multiple back
+-ends (calc, etex, pgfmath)
+)
+(/usr/share/texmf-dist/tex/latex/base/trimclip.sty
+Package: trimclip 2012/05/16 v1.0 Trim and clip general TeX material
+
+(/usr/share/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2016/05/09 v1.0r Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/share/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/01/02 v1.10 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 96.
+)
+\Gin@req@height=\dimen125
+\Gin@req@width=\dimen126
+)
+(/usr/share/texmf-dist/tex/latex/base/collectbox.sty
+Package: collectbox 2012/05/17 v0.4b Collect macro arguments as boxes
+\collectedbox=\box38
+)
+\tc@llx=\dimen127
+\tc@lly=\dimen128
+\tc@urx=\dimen129
+\tc@ury=\dimen130
+Package trimclip Info: Using driver 'tc-pdftex.def'.
+
+(/usr/share/texmf-dist/tex/latex/base/tc-pdftex.def
+File: tc-pdftex.def 2012/05/13 v1.0 Clipping driver for pdftex
+))
+\adjbox@Width=\dimen131
+\adjbox@Height=\dimen132
+\adjbox@Depth=\dimen133
+\adjbox@Totalheight=\dimen134
+)
+(/usr/share/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2015/03/17 v1.2c Input encoding file
+\inpenc@prehook=\toks26
+\inpenc@posthook=\toks27
+
+(/usr/share/texmf-dist/tex/latex/base/utf8.def
+File: utf8.def 2016/02/28 v1.1s UTF-8 support for inputenc
+Now handling font encoding OML ...
+... no UTF-8 mapping file for font encoding OML
+Now handling font encoding T1 ...
+... processing UTF-8 mapping file for font encoding T1
+
+(/usr/share/texmf-dist/tex/latex/base/t1enc.dfu
+File: t1enc.dfu 2016/02/28 v1.1s UTF-8 support for inputenc
+   defining Unicode char U+00A0 (decimal 160)
+   defining Unicode char U+00A1 (decimal 161)
+   defining Unicode char U+00A3 (decimal 163)
+   defining Unicode char U+00AB (decimal 171)
+   defining Unicode char U+00AD (decimal 173)
+   defining Unicode char U+00BB (decimal 187)
+   defining Unicode char U+00BF (decimal 191)
+   defining Unicode char U+00C0 (decimal 192)
+   defining Unicode char U+00C1 (decimal 193)
+   defining Unicode char U+00C2 (decimal 194)
+   defining Unicode char U+00C3 (decimal 195)
+   defining Unicode char U+00C4 (decimal 196)
+   defining Unicode char U+00C5 (decimal 197)
+   defining Unicode char U+00C6 (decimal 198)
+   defining Unicode char U+00C7 (decimal 199)
+   defining Unicode char U+00C8 (decimal 200)
+   defining Unicode char U+00C9 (decimal 201)
+   defining Unicode char U+00CA (decimal 202)
+   defining Unicode char U+00CB (decimal 203)
+   defining Unicode char U+00CC (decimal 204)
+   defining Unicode char U+00CD (decimal 205)
+   defining Unicode char U+00CE (decimal 206)
+   defining Unicode char U+00CF (decimal 207)
+   defining Unicode char U+00D0 (decimal 208)
+   defining Unicode char U+00D1 (decimal 209)
+   defining Unicode char U+00D2 (decimal 210)
+   defining Unicode char U+00D3 (decimal 211)
+   defining Unicode char U+00D4 (decimal 212)
+   defining Unicode char U+00D5 (decimal 213)
+   defining Unicode char U+00D6 (decimal 214)
+   defining Unicode char U+00D8 (decimal 216)
+   defining Unicode char U+00D9 (decimal 217)
+   defining Unicode char U+00DA (decimal 218)
+   defining Unicode char U+00DB (decimal 219)
+   defining Unicode char U+00DC (decimal 220)
+   defining Unicode char U+00DD (decimal 221)
+   defining Unicode char U+00DE (decimal 222)
+   defining Unicode char U+00DF (decimal 223)
+   defining Unicode char U+00E0 (decimal 224)
+   defining Unicode char U+00E1 (decimal 225)
+   defining Unicode char U+00E2 (decimal 226)
+   defining Unicode char U+00E3 (decimal 227)
+   defining Unicode char U+00E4 (decimal 228)
+   defining Unicode char U+00E5 (decimal 229)
+   defining Unicode char U+00E6 (decimal 230)
+   defining Unicode char U+00E7 (decimal 231)
+   defining Unicode char U+00E8 (decimal 232)
+   defining Unicode char U+00E9 (decimal 233)
+   defining Unicode char U+00EA (decimal 234)
+   defining Unicode char U+00EB (decimal 235)
+   defining Unicode char U+00EC (decimal 236)
+   defining Unicode char U+00ED (decimal 237)
+   defining Unicode char U+00EE (decimal 238)
+   defining Unicode char U+00EF (decimal 239)
+   defining Unicode char U+00F0 (decimal 240)
+   defining Unicode char U+00F1 (decimal 241)
+   defining Unicode char U+00F2 (decimal 242)
+   defining Unicode char U+00F3 (decimal 243)
+   defining Unicode char U+00F4 (decimal 244)
+   defining Unicode char U+00F5 (decimal 245)
+   defining Unicode char U+00F6 (decimal 246)
+   defining Unicode char U+00F8 (decimal 248)
+   defining Unicode char U+00F9 (decimal 249)
+   defining Unicode char U+00FA (decimal 250)
+   defining Unicode char U+00FB (decimal 251)
+   defining Unicode char U+00FC (decimal 252)
+   defining Unicode char U+00FD (decimal 253)
+   defining Unicode char U+00FE (decimal 254)
+   defining Unicode char U+00FF (decimal 255)
+   defining Unicode char U+0100 (decimal 256)
+   defining Unicode char U+0101 (decimal 257)
+   defining Unicode char U+0102 (decimal 258)
+   defining Unicode char U+0103 (decimal 259)
+   defining Unicode char U+0104 (decimal 260)
+   defining Unicode char U+0105 (decimal 261)
+   defining Unicode char U+0106 (decimal 262)
+   defining Unicode char U+0107 (decimal 263)
+   defining Unicode char U+0108 (decimal 264)
+   defining Unicode char U+0109 (decimal 265)
+   defining Unicode char U+010A (decimal 266)
+   defining Unicode char U+010B (decimal 267)
+   defining Unicode char U+010C (decimal 268)
+   defining Unicode char U+010D (decimal 269)
+   defining Unicode char U+010E (decimal 270)
+   defining Unicode char U+010F (decimal 271)
+   defining Unicode char U+0110 (decimal 272)
+   defining Unicode char U+0111 (decimal 273)
+   defining Unicode char U+0112 (decimal 274)
+   defining Unicode char U+0113 (decimal 275)
+   defining Unicode char U+0114 (decimal 276)
+   defining Unicode char U+0115 (decimal 277)
+   defining Unicode char U+0116 (decimal 278)
+   defining Unicode char U+0117 (decimal 279)
+   defining Unicode char U+0118 (decimal 280)
+   defining Unicode char U+0119 (decimal 281)
+   defining Unicode char U+011A (decimal 282)
+   defining Unicode char U+011B (decimal 283)
+   defining Unicode char U+011C (decimal 284)
+   defining Unicode char U+011D (decimal 285)
+   defining Unicode char U+011E (decimal 286)
+   defining Unicode char U+011F (decimal 287)
+   defining Unicode char U+0120 (decimal 288)
+   defining Unicode char U+0121 (decimal 289)
+   defining Unicode char U+0122 (decimal 290)
+   defining Unicode char U+0123 (decimal 291)
+   defining Unicode char U+0124 (decimal 292)
+   defining Unicode char U+0125 (decimal 293)
+   defining Unicode char U+0128 (decimal 296)
+   defining Unicode char U+0129 (decimal 297)
+   defining Unicode char U+012A (decimal 298)
+   defining Unicode char U+012B (decimal 299)
+   defining Unicode char U+012C (decimal 300)
+   defining Unicode char U+012D (decimal 301)
+   defining Unicode char U+012E (decimal 302)
+   defining Unicode char U+012F (decimal 303)
+   defining Unicode char U+0130 (decimal 304)
+   defining Unicode char U+0131 (decimal 305)
+   defining Unicode char U+0132 (decimal 306)
+   defining Unicode char U+0133 (decimal 307)
+   defining Unicode char U+0134 (decimal 308)
+   defining Unicode char U+0135 (decimal 309)
+   defining Unicode char U+0136 (decimal 310)
+   defining Unicode char U+0137 (decimal 311)
+   defining Unicode char U+0139 (decimal 313)
+   defining Unicode char U+013A (decimal 314)
+   defining Unicode char U+013B (decimal 315)
+   defining Unicode char U+013C (decimal 316)
+   defining Unicode char U+013D (decimal 317)
+   defining Unicode char U+013E (decimal 318)
+   defining Unicode char U+0141 (decimal 321)
+   defining Unicode char U+0142 (decimal 322)
+   defining Unicode char U+0143 (decimal 323)
+   defining Unicode char U+0144 (decimal 324)
+   defining Unicode char U+0145 (decimal 325)
+   defining Unicode char U+0146 (decimal 326)
+   defining Unicode char U+0147 (decimal 327)
+   defining Unicode char U+0148 (decimal 328)
+   defining Unicode char U+014A (decimal 330)
+   defining Unicode char U+014B (decimal 331)
+   defining Unicode char U+014C (decimal 332)
+   defining Unicode char U+014D (decimal 333)
+   defining Unicode char U+014E (decimal 334)
+   defining Unicode char U+014F (decimal 335)
+   defining Unicode char U+0150 (decimal 336)
+   defining Unicode char U+0151 (decimal 337)
+   defining Unicode char U+0152 (decimal 338)
+   defining Unicode char U+0153 (decimal 339)
+   defining Unicode char U+0154 (decimal 340)
+   defining Unicode char U+0155 (decimal 341)
+   defining Unicode char U+0156 (decimal 342)
+   defining Unicode char U+0157 (decimal 343)
+   defining Unicode char U+0158 (decimal 344)
+   defining Unicode char U+0159 (decimal 345)
+   defining Unicode char U+015A (decimal 346)
+   defining Unicode char U+015B (decimal 347)
+   defining Unicode char U+015C (decimal 348)
+   defining Unicode char U+015D (decimal 349)
+   defining Unicode char U+015E (decimal 350)
+   defining Unicode char U+015F (decimal 351)
+   defining Unicode char U+0160 (decimal 352)
+   defining Unicode char U+0161 (decimal 353)
+   defining Unicode char U+0162 (decimal 354)
+   defining Unicode char U+0163 (decimal 355)
+   defining Unicode char U+0164 (decimal 356)
+   defining Unicode char U+0165 (decimal 357)
+   defining Unicode char U+0168 (decimal 360)
+   defining Unicode char U+0169 (decimal 361)
+   defining Unicode char U+016A (decimal 362)
+   defining Unicode char U+016B (decimal 363)
+   defining Unicode char U+016C (decimal 364)
+   defining Unicode char U+016D (decimal 365)
+   defining Unicode char U+016E (decimal 366)
+   defining Unicode char U+016F (decimal 367)
+   defining Unicode char U+0170 (decimal 368)
+   defining Unicode char U+0171 (decimal 369)
+   defining Unicode char U+0172 (decimal 370)
+   defining Unicode char U+0173 (decimal 371)
+   defining Unicode char U+0174 (decimal 372)
+   defining Unicode char U+0175 (decimal 373)
+   defining Unicode char U+0176 (decimal 374)
+   defining Unicode char U+0177 (decimal 375)
+   defining Unicode char U+0178 (decimal 376)
+   defining Unicode char U+0179 (decimal 377)
+   defining Unicode char U+017A (decimal 378)
+   defining Unicode char U+017B (decimal 379)
+   defining Unicode char U+017C (decimal 380)
+   defining Unicode char U+017D (decimal 381)
+   defining Unicode char U+017E (decimal 382)
+   defining Unicode char U+01CD (decimal 461)
+   defining Unicode char U+01CE (decimal 462)
+   defining Unicode char U+01CF (decimal 463)
+   defining Unicode char U+01D0 (decimal 464)
+   defining Unicode char U+01D1 (decimal 465)
+   defining Unicode char U+01D2 (decimal 466)
+   defining Unicode char U+01D3 (decimal 467)
+   defining Unicode char U+01D4 (decimal 468)
+   defining Unicode char U+01E2 (decimal 482)
+   defining Unicode char U+01E3 (decimal 483)
+   defining Unicode char U+01E6 (decimal 486)
+   defining Unicode char U+01E7 (decimal 487)
+   defining Unicode char U+01E8 (decimal 488)
+   defining Unicode char U+01E9 (decimal 489)
+   defining Unicode char U+01EA (decimal 490)
+   defining Unicode char U+01EB (decimal 491)
+   defining Unicode char U+01F0 (decimal 496)
+   defining Unicode char U+01F4 (decimal 500)
+   defining Unicode char U+01F5 (decimal 501)
+   defining Unicode char U+0218 (decimal 536)
+   defining Unicode char U+0219 (decimal 537)
+   defining Unicode char U+021A (decimal 538)
+   defining Unicode char U+021B (decimal 539)
+   defining Unicode char U+1E02 (decimal 7682)
+   defining Unicode char U+1E03 (decimal 7683)
+   defining Unicode char U+200C (decimal 8204)
+   defining Unicode char U+2010 (decimal 8208)
+   defining Unicode char U+2011 (decimal 8209)
+   defining Unicode char U+2012 (decimal 8210)
+   defining Unicode char U+2013 (decimal 8211)
+   defining Unicode char U+2014 (decimal 8212)
+   defining Unicode char U+2015 (decimal 8213)
+   defining Unicode char U+2018 (decimal 8216)
+   defining Unicode char U+2019 (decimal 8217)
+   defining Unicode char U+201A (decimal 8218)
+   defining Unicode char U+201C (decimal 8220)
+   defining Unicode char U+201D (decimal 8221)
+   defining Unicode char U+201E (decimal 8222)
+   defining Unicode char U+2030 (decimal 8240)
+   defining Unicode char U+2031 (decimal 8241)
+   defining Unicode char U+2039 (decimal 8249)
+   defining Unicode char U+203A (decimal 8250)
+   defining Unicode char U+2423 (decimal 9251)
+)
+Now handling font encoding OT1 ...
+... processing UTF-8 mapping file for font encoding OT1
+
+(/usr/share/texmf-dist/tex/latex/base/ot1enc.dfu
+File: ot1enc.dfu 2016/02/28 v1.1s UTF-8 support for inputenc
+   defining Unicode char U+00A0 (decimal 160)
+   defining Unicode char U+00A1 (decimal 161)
+   defining Unicode char U+00A3 (decimal 163)
+   defining Unicode char U+00AD (decimal 173)
+   defining Unicode char U+00B8 (decimal 184)
+   defining Unicode char U+00BF (decimal 191)
+   defining Unicode char U+00C5 (decimal 197)
+   defining Unicode char U+00C6 (decimal 198)
+   defining Unicode char U+00D8 (decimal 216)
+   defining Unicode char U+00DF (decimal 223)
+   defining Unicode char U+00E6 (decimal 230)
+   defining Unicode char U+00EC (decimal 236)
+   defining Unicode char U+00ED (decimal 237)
+   defining Unicode char U+00EE (decimal 238)
+   defining Unicode char U+00EF (decimal 239)
+   defining Unicode char U+00F8 (decimal 248)
+   defining Unicode char U+0131 (decimal 305)
+   defining Unicode char U+0141 (decimal 321)
+   defining Unicode char U+0142 (decimal 322)
+   defining Unicode char U+0152 (decimal 338)
+   defining Unicode char U+0153 (decimal 339)
+   defining Unicode char U+0174 (decimal 372)
+   defining Unicode char U+0175 (decimal 373)
+   defining Unicode char U+0176 (decimal 374)
+   defining Unicode char U+0177 (decimal 375)
+   defining Unicode char U+0218 (decimal 536)
+   defining Unicode char U+0219 (decimal 537)
+   defining Unicode char U+021A (decimal 538)
+   defining Unicode char U+021B (decimal 539)
+   defining Unicode char U+2013 (decimal 8211)
+   defining Unicode char U+2014 (decimal 8212)
+   defining Unicode char U+2018 (decimal 8216)
+   defining Unicode char U+2019 (decimal 8217)
+   defining Unicode char U+201C (decimal 8220)
+   defining Unicode char U+201D (decimal 8221)
+)
+Now handling font encoding OMS ...
+... processing UTF-8 mapping file for font encoding OMS
+
+(/usr/share/texmf-dist/tex/latex/base/omsenc.dfu
+File: omsenc.dfu 2016/02/28 v1.1s UTF-8 support for inputenc
+   defining Unicode char U+00A7 (decimal 167)
+   defining Unicode char U+00B6 (decimal 182)
+   defining Unicode char U+00B7 (decimal 183)
+   defining Unicode char U+2020 (decimal 8224)
+   defining Unicode char U+2021 (decimal 8225)
+   defining Unicode char U+2022 (decimal 8226)
+)
+Now handling font encoding OMX ...
+... no UTF-8 mapping file for font encoding OMX
+Now handling font encoding U ...
+... no UTF-8 mapping file for font encoding U
+   defining Unicode char U+00A9 (decimal 169)
+   defining Unicode char U+00AA (decimal 170)
+   defining Unicode char U+00AE (decimal 174)
+   defining Unicode char U+00BA (decimal 186)
+   defining Unicode char U+02C6 (decimal 710)
+   defining Unicode char U+02DC (decimal 732)
+   defining Unicode char U+200C (decimal 8204)
+   defining Unicode char U+2026 (decimal 8230)
+   defining Unicode char U+2122 (decimal 8482)
+   defining Unicode char U+2423 (decimal 9251)
+))
+(/usr/share/texmf-dist/tex/latex/base/makeidx.sty
+Package: makeidx 2014/09/29 v1.0m Standard LaTeX package
+)
+(/usr/share/texmf-dist/tex/latex/tools/multicol.sty
+Package: multicol 2016/04/07 v1.8p multicolumn formatting (FMi)
+\c@tracingmulticols=\count109
+\mult@box=\box39
+\multicol@leftmargin=\dimen135
+\c@unbalance=\count110
+\c@collectmore=\count111
+\doublecol@number=\count112
+\multicoltolerance=\count113
+\multicolpretolerance=\count114
+\full@width=\dimen136
+\page@free=\dimen137
+\premulticols=\dimen138
+\postmulticols=\dimen139
+\multicolsep=\skip57
+\multicolbaselineskip=\skip58
+\partial@page=\box40
+\last@line=\box41
+\maxbalancingoverflow=\dimen140
+\mult@rightbox=\box42
+\mult@grightbox=\box43
+\mult@gfirstbox=\box44
+\mult@firstbox=\box45
+\@tempa=\box46
+\@tempa=\box47
+\@tempa=\box48
+\@tempa=\box49
+\@tempa=\box50
+\@tempa=\box51
+\@tempa=\box52
+\@tempa=\box53
+\@tempa=\box54
+\@tempa=\box55
+\@tempa=\box56
+\@tempa=\box57
+\@tempa=\box58
+\@tempa=\box59
+\@tempa=\box60
+\@tempa=\box61
+\@tempa=\box62
+\c@columnbadness=\count115
+\c@finalcolumnbadness=\count116
+\last@try=\dimen141
+\multicolovershoot=\dimen142
+\multicolundershoot=\dimen143
+\mult@nat@firstbox=\box63
+\colbreak@box=\box64
+\mc@col@check@num=\count117
+)
+(/usr/share/texmf-dist/tex/latex/base/textcomp.sty
+Package: textcomp 2005/09/27 v1.99g Standard LaTeX package
+Package textcomp Info: Sub-encoding information:
+(textcomp)               5 = only ISO-Adobe without \textcurrency
+(textcomp)               4 = 5 + \texteuro
+(textcomp)               3 = 4 + \textohm
+(textcomp)               2 = 3 + \textestimated + \textcurrency
+(textcomp)               1 = TS1 - \textcircled - \t
+(textcomp)               0 = TS1 (full)
+(textcomp)             Font families with sub-encoding setting implement
+(textcomp)             only a restricted character set as indicated.
+(textcomp)             Family '?' is the default used for unknown fonts.
+(textcomp)             See the documentation for details.
+Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 79.
+
+(/usr/share/texmf-dist/tex/latex/base/ts1enc.def
+File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
+Now handling font encoding TS1 ...
+... processing UTF-8 mapping file for font encoding TS1
+
+(/usr/share/texmf-dist/tex/latex/base/ts1enc.dfu
+File: ts1enc.dfu 2016/02/28 v1.1s UTF-8 support for inputenc
+   defining Unicode char U+00A2 (decimal 162)
+   defining Unicode char U+00A3 (decimal 163)
+   defining Unicode char U+00A4 (decimal 164)
+   defining Unicode char U+00A5 (decimal 165)
+   defining Unicode char U+00A6 (decimal 166)
+   defining Unicode char U+00A7 (decimal 167)
+   defining Unicode char U+00A8 (decimal 168)
+   defining Unicode char U+00A9 (decimal 169)
+   defining Unicode char U+00AA (decimal 170)
+   defining Unicode char U+00AC (decimal 172)
+   defining Unicode char U+00AE (decimal 174)
+   defining Unicode char U+00AF (decimal 175)
+   defining Unicode char U+00B0 (decimal 176)
+   defining Unicode char U+00B1 (decimal 177)
+   defining Unicode char U+00B2 (decimal 178)
+   defining Unicode char U+00B3 (decimal 179)
+   defining Unicode char U+00B4 (decimal 180)
+   defining Unicode char U+00B5 (decimal 181)
+   defining Unicode char U+00B6 (decimal 182)
+   defining Unicode char U+00B7 (decimal 183)
+   defining Unicode char U+00B9 (decimal 185)
+   defining Unicode char U+00BA (decimal 186)
+   defining Unicode char U+00BC (decimal 188)
+   defining Unicode char U+00BD (decimal 189)
+   defining Unicode char U+00BE (decimal 190)
+   defining Unicode char U+00D7 (decimal 215)
+   defining Unicode char U+00F7 (decimal 247)
+   defining Unicode char U+0192 (decimal 402)
+   defining Unicode char U+02C7 (decimal 711)
+   defining Unicode char U+02D8 (decimal 728)
+   defining Unicode char U+02DD (decimal 733)
+   defining Unicode char U+0E3F (decimal 3647)
+   defining Unicode char U+2016 (decimal 8214)
+   defining Unicode char U+2020 (decimal 8224)
+   defining Unicode char U+2021 (decimal 8225)
+   defining Unicode char U+2022 (decimal 8226)
+   defining Unicode char U+2030 (decimal 8240)
+   defining Unicode char U+2031 (decimal 8241)
+   defining Unicode char U+203B (decimal 8251)
+   defining Unicode char U+203D (decimal 8253)
+   defining Unicode char U+2044 (decimal 8260)
+   defining Unicode char U+204E (decimal 8270)
+   defining Unicode char U+2052 (decimal 8274)
+   defining Unicode char U+20A1 (decimal 8353)
+   defining Unicode char U+20A4 (decimal 8356)
+   defining Unicode char U+20A6 (decimal 8358)
+   defining Unicode char U+20A9 (decimal 8361)
+   defining Unicode char U+20AB (decimal 8363)
+   defining Unicode char U+20AC (decimal 8364)
+   defining Unicode char U+20B1 (decimal 8369)
+   defining Unicode char U+2103 (decimal 8451)
+   defining Unicode char U+2116 (decimal 8470)
+   defining Unicode char U+2117 (decimal 8471)
+   defining Unicode char U+211E (decimal 8478)
+   defining Unicode char U+2120 (decimal 8480)
+   defining Unicode char U+2122 (decimal 8482)
+   defining Unicode char U+2126 (decimal 8486)
+   defining Unicode char U+2127 (decimal 8487)
+   defining Unicode char U+212E (decimal 8494)
+   defining Unicode char U+2190 (decimal 8592)
+   defining Unicode char U+2191 (decimal 8593)
+   defining Unicode char U+2192 (decimal 8594)
+   defining Unicode char U+2193 (decimal 8595)
+   defining Unicode char U+2329 (decimal 9001)
+   defining Unicode char U+232A (decimal 9002)
+   defining Unicode char U+2422 (decimal 9250)
+   defining Unicode char U+25E6 (decimal 9702)
+   defining Unicode char U+25EF (decimal 9711)
+   defining Unicode char U+266A (decimal 9834)
+))
+LaTeX Info: Redefining \oldstylenums on input line 334.
+Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 349.
+Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 350.
+Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 351.
+Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 352.
+Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 353.
+Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 354.
+Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 355.
+Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 356.
+Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 357.
+Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 358.
+Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 359.
+Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 360.
+Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 361.
+Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 362.
+Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 363.
+Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 364.
+Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 365.
+Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 366.
+Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 367.
+Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 368.
+Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 369.
+Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 370.
+Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 371.
+Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 372.
+
+Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 373.
+Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 374.
+Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 375.
+Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 376.
+Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 377.
+Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 378.
+Package textcomp Info: Setting lmr sub-encoding to TS1/0 on input line 379.
+Package textcomp Info: Setting lmdh sub-encoding to TS1/0 on input line 380.
+Package textcomp Info: Setting lmss sub-encoding to TS1/0 on input line 381.
+Package textcomp Info: Setting lmssq sub-encoding to TS1/0 on input line 382.
+Package textcomp Info: Setting lmvtt sub-encoding to TS1/0 on input line 383.
+Package textcomp Info: Setting lmtt sub-encoding to TS1/0 on input line 384.
+Package textcomp Info: Setting qhv sub-encoding to TS1/0 on input line 385.
+Package textcomp Info: Setting qag sub-encoding to TS1/0 on input line 386.
+Package textcomp Info: Setting qbk sub-encoding to TS1/0 on input line 387.
+Package textcomp Info: Setting qcr sub-encoding to TS1/0 on input line 388.
+Package textcomp Info: Setting qcs sub-encoding to TS1/0 on input line 389.
+Package textcomp Info: Setting qpl sub-encoding to TS1/0 on input line 390.
+Package textcomp Info: Setting qtm sub-encoding to TS1/0 on input line 391.
+Package textcomp Info: Setting qzc sub-encoding to TS1/0 on input line 392.
+Package textcomp Info: Setting qhvc sub-encoding to TS1/0 on input line 393.
+Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 394.
+Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 395.
+Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 396.
+Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 397.
+Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 398.
+Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 399.
+Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 400.
+Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 401.
+Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 402.
+Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 403.
+Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 404.
+Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 405.
+Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 406.
+Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 407.
+Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
+Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
+)
+(/usr/share/texmf-dist/tex/latex/base/wasysym.sty
+Package: wasysym 2003/10/30 v2.0 Wasy-2 symbol support package
+\symwasy=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `wasy' in version `bold'
+(Font)                  U/wasy/m/n --> U/wasy/b/n on input line 90.
+)
+(/usr/share/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+
+(/usr/share/texmf-dist/tex/latex/base/t1enc.def
+File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
+))
+(/usr/share/texmf-dist/tex/latex/psnfss/helvet.sty
+Package: helvet 2005/04/12 PSNFSS-v9.2a (WaS) 
+)
+(/usr/share/texmf-dist/tex/latex/psnfss/courier.sty
+Package: courier 2005/04/12 PSNFSS-v9.2a (WaS) 
+)
+(/usr/share/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/share/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks28
+\symAMSa=\mathgroup5
+\symAMSb=\mathgroup6
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(/usr/share/texmf-dist/tex/latex/base/sectsty.sty
+Package: sectsty 2002/02/25 v2.0.2 Commands to change all sectional heading sty
+les
+)
+(/usr/share/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2010/09/12 v5.6 Page Geometry
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2016/05/14 v3.1 Provides the ifpdf switch
+)
+(/usr/share/texmf-dist/tex/generic/oberdiek/ifvtex.sty
+Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+(/usr/share/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count118
+\Gm@cntv=\count119
+\c@Gm@tempcnt=\count120
+\Gm@bindingoffset=\dimen144
+\Gm@wd@mp=\dimen145
+\Gm@odd@mp=\dimen146
+\Gm@even@mp=\dimen147
+\Gm@layoutwidth=\dimen148
+\Gm@layoutheight=\dimen149
+\Gm@layouthoffset=\dimen150
+\Gm@layoutvoffset=\dimen151
+\Gm@dimlist=\toks29
+)
+(/usr/share/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+\fancy@headwidth=\skip59
+\f@ncyO@elh=\skip60
+\f@ncyO@erh=\skip61
+\f@ncyO@olh=\skip62
+\f@ncyO@orh=\skip63
+\f@ncyO@elf=\skip64
+\f@ncyO@erf=\skip65
+\f@ncyO@olf=\skip66
+\f@ncyO@orf=\skip67
+)
+(/usr/share/texmf-dist/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip68
+\bibsep=\skip69
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count121
+)
+(/usr/share/texmf-dist/tex/latex/base/tocloft.sty
+Package: tocloft 2013/05/02 v2.3f parameterised ToC, etc., typesetting
+Package tocloft Info: The document has chapter divisions on input line 44.
+\cftparskip=\skip70
+\cftbeforetoctitleskip=\skip71
+\cftaftertoctitleskip=\skip72
+\cftbeforepartskip=\skip73
+\cftpartnumwidth=\skip74
+\cftpartindent=\skip75
+\cftbeforechapskip=\skip76
+\cftchapindent=\skip77
+\cftchapnumwidth=\skip78
+\cftbeforesecskip=\skip79
+\cftsecindent=\skip80
+\cftsecnumwidth=\skip81
+\cftbeforesubsecskip=\skip82
+\cftsubsecindent=\skip83
+\cftsubsecnumwidth=\skip84
+\cftbeforesubsubsecskip=\skip85
+\cftsubsubsecindent=\skip86
+\cftsubsubsecnumwidth=\skip87
+\cftbeforeparaskip=\skip88
+\cftparaindent=\skip89
+\cftparanumwidth=\skip90
+\cftbeforesubparaskip=\skip91
+\cftsubparaindent=\skip92
+\cftsubparanumwidth=\skip93
+\cftbeforeloftitleskip=\skip94
+\cftafterloftitleskip=\skip95
+\cftbeforefigskip=\skip96
+\cftfigindent=\skip97
+\cftfignumwidth=\skip98
+\c@lofdepth=\count122
+\c@lotdepth=\count123
+\cftbeforelottitleskip=\skip99
+\cftafterlottitleskip=\skip100
+\cftbeforetabskip=\skip101
+\cfttabindent=\skip102
+\cfttabnumwidth=\skip103
+)
+\@indexfile=\write3
+\openout3 = `refman.idx'.
+
+
+Writing index file refman.idx
+(/usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2016/05/05 v6.83n Hypertext links for LaTeX
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
+
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
+Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
+Package hobsub Info: Skipping package `infwarerr' (already loaded).
+Package hobsub Info: Skipping package `ltxcmds' (already loaded).
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+Package hobsub Info: Skipping package `ifvtex' (already loaded).
+Package: intcalc 2016/05/16 v1.2 Expandable calculations with integers (HO)
+Package hobsub Info: Skipping package `ifpdf' (already loaded).
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+Package: pdftexcmds 2016/05/10 v0.21 Utility functions of pdfTeX for LuaTeX (HO
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+Package: pdfescape 2016/05/16 v1.14 Implements pdfTeX's escape features (HO)
+Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO
+)
+Package: bitset 2016/05/16 v1.2 Handle bit-vector datatype (HO)
+Package: uniquecounter 2016/05/16 v1.3 Provide unlimited unique counter (HO)
+)
+Package hobsub Info: Skipping package `hobsub' (already loaded).
+Package: letltxmacro 2016/05/16 v1.5 Let assignment for LaTeX macros (HO)
+Package: hopatch 2016/05/16 v1.3 Wrapper for package hooks (HO)
+Package: xcolor-patch 2016/05/16 xcolor patch
+Package: atveryend 2016/05/16 v1.9 Hooks at the very end of document (HO)
+Package atveryend Info: \enddocument detected (standard20110627).
+Package: atbegshi 2016/05/16 v1.17 At begin shipout hook (HO)
+Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
+Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
+)
+(/usr/share/texmf-dist/tex/latex/oberdiek/auxhook.sty
+Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
+)
+(/usr/share/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+)
+\@linkdim=\dimen152
+\Hy@linkcounter=\count124
+\Hy@pagecounter=\count125
+
+(/usr/share/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2016/05/05 v6.83n Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+)
+\Hy@SavedSpaceFactor=\count126
+
+(/usr/share/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
+)
+Package hyperref Info: Hyper figures OFF on input line 4446.
+Package hyperref Info: Link nesting OFF on input line 4451.
+Package hyperref Info: Hyper index ON on input line 4454.
+Package hyperref Info: Plain pages OFF on input line 4461.
+Package hyperref Info: Backreferencing ON on input line 4464.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4691.
+
+(/usr/share/texmf-dist/tex/latex/hyperref/backref.sty
+Package: backref 2012/07/25 v1.38 Bibliographical back referencing
+
+(/usr/share/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+82.
+))
+\c@Hy@tempcnt=\count127
+
+(/usr/share/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip10
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 5044.
+\XeTeXLinkMargin=\dimen153
+\Fld@menulength=\count128
+\Field@Width=\dimen154
+\Fld@charsize=\dimen155
+Package hyperref Info: Hyper figures OFF on input line 6298.
+Package hyperref Info: Link nesting OFF on input line 6303.
+Package hyperref Info: Hyper index ON on input line 6306.
+Package hyperref Info: backreferencing ON on input line 6311.
+Package hyperref Info: Link coloring OFF on input line 6318.
+Package hyperref Info: Link coloring with OCG OFF on input line 6323.
+Package hyperref Info: PDF/A mode OFF on input line 6328.
+LaTeX Info: Redefining \ref on input line 6368.
+LaTeX Info: Redefining \pageref on input line 6372.
+\Hy@abspage=\count129
+\c@Item=\count130
+\c@Hfootnote=\count131
+)
+
+Package hyperref Message: Driver: hpdftex.
+
+(/usr/share/texmf-dist/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2016/05/05 v6.83n Hyperref driver for pdfTeX
+\Fld@listcount=\count132
+\c@bookmark@seq@number=\count133
+\Hy@SectionHShift=\skip104
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 105.
+Package hyperref Info: Option `unicode' set `true' on input line 105.
+
+(/usr/share/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2016/05/05 v6.83n Hyperref: PDF Unicode definition (HO)
+Now handling font encoding PU ...
+... no UTF-8 mapping file for font encoding PU
+)
+(/usr/share/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
+
+(/usr/share/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2016/02/04 v1.7-139 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 67.
+\captionmargin=\dimen156
+\captionmargin@=\dimen157
+\captionwidth=\dimen158
+\caption@tempdima=\dimen159
+\caption@indent=\dimen160
+\caption@parindent=\dimen161
+\caption@hangindent=\dimen162
+)
+\c@ContinuedFloat=\count134
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+Package caption Info: longtable package is loaded.
+
+(/usr/share/texmf-dist/tex/latex/caption/ltcaption.sty
+Package: ltcaption 2013/06/09 v1.4-94 longtable captions (AR)
+)) (./refman.aux)
+\openout1 = `refman.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 117.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 117.
+
+
+(/usr/share/texmf-dist/tex/latex/base/ts1cmr.fd
+File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 117.
+LaTeX Font Info:    ... okay on input line 117.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 117.
+
+(/usr/share/texmf-dist/tex/latex/psnfss/t1phv.fd
+File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
+)
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 8.99994pt on input line 117.
+
+(/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count135
+\scratchdimen=\dimen163
+\scratchbox=\box65
+\nofMPsegments=\count136
+\nofMParguments=\count137
+\everyMPshowfont=\toks30
+\MPscratchCnt=\count138
+\MPscratchDim=\dimen164
+\MPnumerator=\count139
+\makeMPintoPDFobject=\count140
+\everyMPtoPDFconversion=\toks31
+) (/usr/share/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+(/usr/share/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+)
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+
+(/usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(71.13188pt, 455.24411pt, 71.13188pt)
+* v-part:(T,H,B)=(71.13188pt, 702.78308pt, 71.13188pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=455.24411pt
+* \textheight=702.78308pt
+* \oddsidemargin=-1.1381pt
+* \evensidemargin=-1.1381pt
+* \topmargin=-31.2056pt
+* \headheight=12.0pt
+* \headsep=18.06749pt
+* \topskip=10.0pt
+* \footskip=25.29494pt
+* \marginparwidth=125.0pt
+* \marginparsep=7.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+\AtBeginShipoutBox=\box66
+Package backref Info: ** backref set up for natbib ** on input line 117.
+Package hyperref Info: Link coloring ON on input line 117.
+(/usr/share/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
+)
+\c@section@level=\count141
+)
+LaTeX Info: Redefining \ref on input line 117.
+LaTeX Info: Redefining \pageref on input line 117.
+LaTeX Info: Redefining \nameref on input line 117.
+ (./refman.out) (./refman.out)
+\@outlinefile=\write4
+\openout4 = `refman.out'.
+
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+Package hyperref Info: Option `pageanchor' set `false' on input line 123.
+Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 123.
+
+Package hyperref Info: Option `unicode' set `true' on input line 123.
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 12.9599pt on input line 128.
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 10.79993pt on input line 130.
+ [1
+
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2
+
+]
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 22.39185pt on input line 135.
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <24.88> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 135.
+LaTeX Font Info:    Font shape `T1/phv/b/n' will be
+(Font)              scaled to size 22.39185pt on input line 135.
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
+(Font)              scaled to size 22.39185pt on input line 135.
+
+(./refman.toc
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 1.
+LaTeX Font Info:    Font shape `T1/phv/b/n' will be
+(Font)              scaled to size 8.99994pt on input line 1.
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <7> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 1.
+LaTeX Font Info:    Font shape `T1/phv/b/n' will be
+(Font)              scaled to size 6.29996pt on input line 1.
+LaTeX Font Info:    Try loading font information for U+wasy on input line 1.
+ (/usr/share/texmf-dist/tex/latex/wasysym/uwasy.fd
+File: uwasy.fd 2003/10/30 v2.0 Wasy-2 symbol font definitions
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 1.
+
+(/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 1.
+
+(/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 6.29996pt on input line 12.
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 7.19995pt on input line 19.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 19.
+
+(/usr/share/texmf-dist/tex/latex/psnfss/t1pcr.fd
+File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
+) [1
+
+] [2] [3] [4] [5] [6]
+[7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20])
+\tf@toc=\write5
+\openout5 = `refman.toc'.
+
+ [21]
+[22
+
+]
+Package hyperref Info: Option `pageanchor' set `true' on input line 138.
+
+Chapter 1.
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 18.66588pt on input line 141.
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <20.74> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 141.
+LaTeX Font Info:    Font shape `T1/phv/b/n' will be
+(Font)              scaled to size 18.66588pt on input line 141.
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
+(Font)              scaled to size 18.66588pt on input line 141.
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
+(Font)              scaled to size 6.29996pt on input line 141.
+(./index.tex
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 1.
+LaTeX Font Info:    Font shape `T1/phv/b/n' will be
+(Font)              scaled to size 12.9599pt on input line 1.
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
+(Font)              scaled to size 12.9599pt on input line 1.
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 3.
+LaTeX Font Info:    Font shape `T1/phv/b/n' will be
+(Font)              scaled to size 10.79993pt on input line 3.
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
+(Font)              scaled to size 10.79993pt on input line 3.
+LaTeX Font Info:    Font shape `T1/phv/m/it' in size <10> not available
+(Font)              Font shape `T1/phv/m/sl' tried instead on input line 7.
+LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
+(Font)              scaled to size 8.99994pt on input line 7.
+LaTeX Font Info:    Font shape `T1/phv/m/it' in size <7> not available
+(Font)              Font shape `T1/phv/m/sl' tried instead on input line 7.
+LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
+(Font)              scaled to size 6.29996pt on input line 7.
+) [1
+
+] [2
+
+]
+Chapter 2.
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 143.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\sim' on input line 143.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 143.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 143.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\sim' on input line 143.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 143.
+
+(./md__cygdrive_d_Kuznya_.tex
+LaTeX Font Info:    Try loading font information for TS1+phv on input line 1.
+ (/usr/share/texmf-dist/tex/latex/psnfss/ts1phv.fd
+File: ts1phv.fd 2001/06/04 scalable font definitions for TS1/phv.
+)
+LaTeX Font Info:    Font shape `TS1/phv/m/n' will be
+(Font)              scaled to size 8.99994pt on input line 1.
+) [3] [4
+
+]
+Chapter 3.
+(./namespaces.tex) [5] [6
+
+]
+Chapter 4.
+(./hierarchy.tex [7]) [8]
+Chapter 5.
+(./annotated.tex [9
+
+]) [10]
+Chapter 6.
+(./files.tex [11
+
+]) [12]
+Chapter 7.
+(./namespaceactor__zeta.tex
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 8.09995pt on input line 24.
+LaTeX Font Info:    Font shape `T1/phv/m/it' in size <9> not available
+(Font)              Font shape `T1/phv/m/sl' tried instead on input line 24.
+LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
+(Font)              scaled to size 8.09995pt on input line 24.
+ [13
+
+]
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
+(Font)              scaled to size 8.99994pt on input line 68.
+LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <8> not available
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 70.
+ [14]
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
+(Font)              scaled to size 7.19995pt on input line 101.
+
+
+LaTeX Font Warning: Font shape `T1/pcr/bc/n' undefined
+(Font)              using `T1/pcr/m/n' instead on input line 101.
+
+[15]) (./namespaceactor__zeta_1_1actor.tex
+LaTeX Font Info:    Font shape `TS1/phv/m/it' in size <9> not available
+(Font)              Font shape `TS1/phv/m/sl' tried instead on input line 11.
+LaTeX Font Info:    Font shape `TS1/phv/m/sl' will be
+(Font)              scaled to size 8.09995pt on input line 11.
+)
+(./namespaceactor__zeta_1_1behavior.tex [16]
+LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <7> not available
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 30.
+)
+(./namespaceactor__zeta_1_1contacts.tex)
+(./namespaceactor__zeta_1_1environment.tex [17])
+(./namespaceactor__zeta_1_1executor.tex)
+(./namespaceactor__zeta_1_1messaging.tex [18]
+Underfull \hbox (badness 760) in paragraph at lines 17--20
+[]\T1/phv/m/n/10 enum [][]enqueue[]_[]result[][] { [][]enqueue[]_[]result[]::su
+ccess[][], [][]enqueue[]_[]result[]::unblocked[]_[]reader[][], [][]enqueue[]_[]
+result[]
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [19])
+(./namespaceactor__zeta_1_1network.tex [20] [21]) [22]
+Chapter 8.
+(./classactor__zeta_1_1behavior_1_1abstract__action.tex
+<classactor__zeta_1_1behavior_1_1abstract__action__inherit__graph.pdf, id=3922,
+ 317.185pt x 167.62625pt>
+File: classactor__zeta_1_1behavior_1_1abstract__action__inherit__graph.pdf Grap
+hic file (type pdf)
+
+<use classactor__zeta_1_1behavior_1_1abstract__action__inherit__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1behavior_1_1abstract__action__inhe
+rit__graph.pdf used on input line 18.
+(pdftex.def)             Requested size: 316.0pt x 167.01451pt.
+
+[23
+
+ <./classactor__zeta_1_1behavior_1_1abstract__action__inherit__graph.pdf>])
+(./classactor__zeta_1_1actor_1_1abstract__actor.tex
+<classactor__zeta_1_1actor_1_1abstract__actor__inherit__graph.pdf, id=3954, 294
+.09875pt x 369.38pt>
+File: classactor__zeta_1_1actor_1_1abstract__actor__inherit__graph.pdf Graphic 
+file (type pdf)
+
+<use classactor__zeta_1_1actor_1_1abstract__actor__inherit__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1actor_1_1abstract__actor__inherit_
+_graph.pdf used on input line 18.
+(pdftex.def)             Requested size: 293.0pt x 368.00383pt.
+ [24]
+<classactor__zeta_1_1actor_1_1abstract__actor__coll__graph.pdf, id=3961, 199.74
+625pt x 167.62625pt>
+File: classactor__zeta_1_1actor_1_1abstract__actor__coll__graph.pdf Graphic fil
+e (type pdf)
+
+<use classactor__zeta_1_1actor_1_1abstract__actor__coll__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1actor_1_1abstract__actor__coll__gr
+aph.pdf used on input line 27.
+(pdftex.def)             Requested size: 199.0pt x 167.0094pt.
+ [25 <./classactor__zeta_1_1actor_1_1abstract__actor__inherit__graph.pdf> <./cl
+assactor__zeta_1_1actor_1_1abstract__actor__coll__graph.pdf
+
+pdfTeX warning: pdflatex (file ./classactor__zeta_1_1actor_1_1abstract__actor__
+coll__graph.pdf): PDF inclusion: multiple pdfs with page group included in a si
+ngle page
+>] [26]) (./classactor__zeta_1_1executor_1_1abstract__coordinator.tex
+<classactor__zeta_1_1executor_1_1abstract__coordinator__inherit__graph.pdf, id=
+4022, 196.735pt x 178.6675pt>
+File: classactor__zeta_1_1executor_1_1abstract__coordinator__inherit__graph.pdf
+ Graphic file (type pdf)
+
+<use classactor__zeta_1_1executor_1_1abstract__coordinator__inherit__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1executor_1_1abstract__coordinator_
+_inherit__graph.pdf used on input line 18.
+(pdftex.def)             Requested size: 196.0pt x 177.99911pt.
+[27 <./classactor__zeta_1_1executor_1_1abstract__coordinator__inherit__graph.pd
+f>]
+Underfull \hbox (badness 10000) in paragraph at lines 46--47
+\T1/pcr/bc/n/8 virtual actor[]_[]zeta[]::executor[]::abstract[]_[]coordinator[]
+::$\OMS/cmsy/m/n/8 ^^X$\T1/pcr/bc/n/8 abstract[]_[]coordinator ( ) [virtual],
+ []
+
+[28]) (./classactor__zeta_1_1behavior_1_1action.tex [29])
+(./classactor__zeta_1_1actor_1_1actor.tex [30] [31] [32] [33])
+(./classactor__zeta_1_1actor_1_1actor__address.tex [34] [35])
+(./classactor__zeta_1_1behavior_1_1behavior.tex [36] [37])
+(./classactor__zeta_1_1actor_1_1blocking__actor.tex
+<classactor__zeta_1_1actor_1_1blocking__actor__inherit__graph.pdf, id=4271, 312
+.16624pt x 302.12875pt>
+File: classactor__zeta_1_1actor_1_1blocking__actor__inherit__graph.pdf Graphic 
+file (type pdf)
+
+<use classactor__zeta_1_1actor_1_1blocking__actor__inherit__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1actor_1_1blocking__actor__inherit_
+_graph.pdf used on input line 18.
+(pdftex.def)             Requested size: 311.0pt x 301.00774pt.
+
+<classactor__zeta_1_1actor_1_1blocking__actor__coll__graph.pdf, id=4272, 660.46
+75pt x 209.78375pt>
+File: classactor__zeta_1_1actor_1_1blocking__actor__coll__graph.pdf Graphic fil
+e (type pdf)
+
+<use classactor__zeta_1_1actor_1_1blocking__actor__coll__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1actor_1_1blocking__actor__coll__gr
+aph.pdf used on input line 27.
+(pdftex.def)             Requested size: 350.0pt x 111.17204pt.
+ [38 <./classactor__zeta_1_1actor_1_1blocking__actor__inherit__graph.pdf>] [39 
+<./classactor__zeta_1_1actor_1_1blocking__actor__coll__graph.pdf>])
+(./classactor__zeta_1_1messaging_1_1blocking__mail__queue.tex
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+[40]
+Underfull \hbox (badness 10000) in paragraph at lines 99--101
+\T1/pcr/bc/n/8 using [][]actor[]_[]zeta[]::messaging[]::blocking[]_[]mail[]_[]q
+ueue[][]$\OML/cmm/m/it/8 <$ \T1/pcr/bc/n/8 T $\OML/cmm/m/it/8 >$[]\T1/pcr/bc/n/
+8 ::[][]lock[]_[]guard[][] = std[]::lock[]_[]guard$\OML/cmm/m/it/8 <$\T1/pcr/bc
+/n/8 std[]
+ []
+
+[41]
+Underfull \hbox (badness 10000) in paragraph at lines 127--129
+\T1/pcr/bc/n/8 using [][]actor[]_[]zeta[]::messaging[]::blocking[]_[]mail[]_[]q
+ueue[][]$\OML/cmm/m/it/8 <$ \T1/pcr/bc/n/8 T $\OML/cmm/m/it/8 >$[]\T1/pcr/bc/n/
+8 ::[][]unique[]_[]lock[][] = std[]::unique[]_[]lock$\OML/cmm/m/it/8 <$\T1/pcr/
+bc/n/8 std[]
+ []
+
+[42] [43]) (./classactor__zeta_1_1contacts_1_1book__contacts.tex [44] [45])
+(./classactor__zeta_1_1network_1_1broker.tex
+<classactor__zeta_1_1network_1_1broker__inherit__graph.pdf, id=4492, 312.16624p
+t x 369.38pt>
+File: classactor__zeta_1_1network_1_1broker__inherit__graph.pdf Graphic file (t
+ype pdf)
+ <use classactor__zeta_1_1network_1_1broker__inherit__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1network_1_1broker__inherit__graph.
+pdf used on input line 18.
+(pdftex.def)             Requested size: 311.0pt x 368.00946pt.
+
+[46]
+<classactor__zeta_1_1network_1_1broker__coll__graph.pdf, id=4497, 799.98875pt x
+ 209.78375pt>
+File: classactor__zeta_1_1network_1_1broker__coll__graph.pdf Graphic file (type
+ pdf)
+ <use classactor__zeta_1_1network_1_1broker__coll__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1network_1_1broker__coll__graph.pdf
+ used on input line 27.
+(pdftex.def)             Requested size: 350.0pt x 91.78336pt.
+
+[47 <./classactor__zeta_1_1network_1_1broker__inherit__graph.pdf> <./classactor
+__zeta_1_1network_1_1broker__coll__graph.pdf
+
+pdfTeX warning: pdflatex (file ./classactor__zeta_1_1network_1_1broker__coll__g
+raph.pdf): PDF inclusion: multiple pdfs with page group included in a single pa
+ge
+>]) (./classactor__zeta_1_1network_1_1connection__identifying.tex [48] [49]
+[50]) (./classactor__zeta_1_1environment_1_1cooperation.tex [51] [52])
+(./classactor__zeta_1_1executor_1_1coordinator.tex
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+<classactor__zeta_1_1executor_1_1coordinator__inherit__graph.pdf, id=4654, 196.
+735pt x 178.6675pt>
+File: classactor__zeta_1_1executor_1_1coordinator__inherit__graph.pdf Graphic f
+ile (type pdf)
+
+<use classactor__zeta_1_1executor_1_1coordinator__inherit__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1executor_1_1coordinator__inherit__
+graph.pdf used on input line 18.
+(pdftex.def)             Requested size: 196.0pt x 177.99911pt.
+ [53]
+<classactor__zeta_1_1executor_1_1coordinator__coll__graph.pdf, id=4659, 196.735
+pt x 178.6675pt>
+File: classactor__zeta_1_1executor_1_1coordinator__coll__graph.pdf Graphic file
+ (type pdf)
+
+<use classactor__zeta_1_1executor_1_1coordinator__coll__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1executor_1_1coordinator__coll__gra
+ph.pdf used on input line 27.
+(pdftex.def)             Requested size: 196.0pt x 177.99911pt.
+ [54 <./classactor__zeta_1_1executor_1_1coordinator__inherit__graph.pdf> <./cla
+ssactor__zeta_1_1executor_1_1coordinator__coll__graph.pdf
+
+pdfTeX warning: pdflatex (file ./classactor__zeta_1_1executor_1_1coordinator__c
+oll__graph.pdf): PDF inclusion: multiple pdfs with page group included in a sin
+gle page
+>] [55])
+(./structactor__zeta_1_1executor_1_1work__sharing_1_1coordinator__data.tex
+[56]) (./classactor__zeta_1_1environment_1_1environment.tex
+<classactor__zeta_1_1environment_1_1environment__coll__graph.pdf, id=4745, 200.
+75pt x 189.70876pt>
+File: classactor__zeta_1_1environment_1_1environment__coll__graph.pdf Graphic f
+ile (type pdf)
+
+<use classactor__zeta_1_1environment_1_1environment__coll__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1environment_1_1environment__coll__
+graph.pdf used on input line 18.
+(pdftex.def)             Requested size: 200.0pt x 189.01355pt.
+ [57]
+[58 <./classactor__zeta_1_1environment_1_1environment__coll__graph.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 92--93
+[][]\T1/pcr/bc/n/8 executor[]::abstract[]_[]coordinator[][] & actor[]_[]zeta[]:
+:environment[]::environment[]::manager[]_[]execution[]_[]
+ []
+
+[59]) (./structactor__zeta_1_1executor_1_1executable.tex
+<structactor__zeta_1_1executor_1_1executable__inherit__graph.pdf, id=4819, 294.
+09875pt x 245.91875pt>
+File: structactor__zeta_1_1executor_1_1executable__inherit__graph.pdf Graphic f
+ile (type pdf)
+
+<use structactor__zeta_1_1executor_1_1executable__inherit__graph.pdf>
+Package pdftex.def Info: structactor__zeta_1_1executor_1_1executable__inherit__
+graph.pdf used on input line 13.
+(pdftex.def)             Requested size: 293.0pt x 245.00253pt.
+ [60]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [61 <./structactor__zeta_1_1executor_1_1executable__inherit__graph.pdf>])
+(./structactor__zeta_1_1executor_1_1execution__device.tex
+<structactor__zeta_1_1executor_1_1execution__device__inherit__graph.pdf, id=486
+8, 186.6975pt x 178.6675pt>
+File: structactor__zeta_1_1executor_1_1execution__device__inherit__graph.pdf Gr
+aphic file (type pdf)
+
+<use structactor__zeta_1_1executor_1_1execution__device__inherit__graph.pdf>
+Package pdftex.def Info: structactor__zeta_1_1executor_1_1execution__device__in
+herit__graph.pdf used on input line 18.
+(pdftex.def)             Requested size: 186.0pt x 178.0073pt.
+
+[62] [63 <./structactor__zeta_1_1executor_1_1execution__device__inherit__graph.
+pdf>]) (./classactor__zeta_1_1environment_1_1group.tex [64] [65] [66])
+(./classactor__zeta_1_1contacts_1_1group__contacts.tex [67]
+Underfull \hbox (badness 10000) in paragraph at lines 58--59
+\T1/pcr/bc/n/8 const std[]::vector$\OML/cmm/m/it/8 <$ [][]\T1/pcr/bc/n/8 actor[
+]_[]zeta[]::actor[]::actor[]_[]address[][] $\OML/cmm/m/it/8 >$ \T1/pcr/bc/n/8 &
+ actor[]_[]zeta[]::contacts[]::group[]_[]contacts[]
+ []
+
+[68]) (./classactor__zeta_1_1intrusive__ptr.tex
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+[69] [70] [71] [72]) (./classactor__zeta_1_1actor_1_1local__actor.tex
+<classactor__zeta_1_1actor_1_1local__actor__inherit__graph.pdf, id=5152, 294.09
+875pt x 369.38pt>
+File: classactor__zeta_1_1actor_1_1local__actor__inherit__graph.pdf Graphic fil
+e (type pdf)
+
+<use classactor__zeta_1_1actor_1_1local__actor__inherit__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1actor_1_1local__actor__inherit__gr
+aph.pdf used on input line 18.
+(pdftex.def)             Requested size: 293.0pt x 368.00383pt.
+ [73]
+<classactor__zeta_1_1actor_1_1local__actor__coll__graph.pdf, id=5158, 516.93124
+pt x 209.78375pt>
+File: classactor__zeta_1_1actor_1_1local__actor__coll__graph.pdf Graphic file (
+type pdf)
+
+<use classactor__zeta_1_1actor_1_1local__actor__coll__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1actor_1_1local__actor__coll__graph
+.pdf used on input line 27.
+(pdftex.def)             Requested size: 350.0pt x 142.04285pt.
+ [74 <./classactor__zeta_1_1actor_1_1local__actor__inherit__graph.pdf> <./class
+actor__zeta_1_1actor_1_1local__actor__coll__graph.pdf
+
+pdfTeX warning: pdflatex (file ./classactor__zeta_1_1actor_1_1local__actor__col
+l__graph.pdf): PDF inclusion: multiple pdfs with page group included in a singl
+e page
+>] [75]
+Overfull \hbox (18.34215pt too wide) in paragraph at lines 118--119
+[][]\T1/pcr/bc/n/8 executor[]::execution[]_[]device[][]$\OMS/cmsy/m/n/8 ^^C$ \T
+1/pcr/bc/n/8 actor[]_[]zeta[]::actor[]::local[]_[]actor[]::device ( ) const [in
+line], [protected] 
+ []
+
+[76]) (./classactor__zeta_1_1messaging_1_1message.tex [77] [78] [79] [80]
+[81]) (./classactor__zeta_1_1messaging_1_1message__body.tex [82] [83])
+(./classactor__zeta_1_1messaging_1_1message__header.tex [84] [85] [86] [87]
+Underfull \hbox (badness 10000) in paragraph at lines 174--175
+\T1/pcr/bc/n/8 auto actor[]_[]zeta[]::messaging[]::message[]_[]header[]::type (
+ ) const -$\OML/cmm/m/it/8 >$ \T1/pcr/bc/n/8 const [][]behavior[]::type[]_[]act
+ion[][] &
+ []
+
+) (./structactor__zeta_1_1network_1_1multiplexer.tex [88] [89])
+(./classactor__zeta_1_1ref__counted.tex
+<classactor__zeta_1_1ref__counted__inherit__graph.pdf, id=5532, 294.09875pt x 3
+69.38pt>
+File: classactor__zeta_1_1ref__counted__inherit__graph.pdf Graphic file (type p
+df)
+ <use classactor__zeta_1_1ref__counted__inherit__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1ref__counted__inherit__graph.pdf u
+sed on input line 18.
+(pdftex.def)             Requested size: 293.0pt x 368.00383pt.
+ [90]
+[91 <./classactor__zeta_1_1ref__counted__inherit__graph.pdf>] [92])
+(./classactor__zeta_1_1behavior_1_1request.tex [93] [94])
+(./classactor__zeta_1_1behavior_1_1response.tex [95] [96])
+(./classactor__zeta_1_1actor_1_1scheduled__actor.tex
+<classactor__zeta_1_1actor_1_1scheduled__actor__inherit__graph.pdf, id=5681, 31
+2.16624pt x 369.38pt>
+File: classactor__zeta_1_1actor_1_1scheduled__actor__inherit__graph.pdf Graphic
+ file (type pdf)
+
+<use classactor__zeta_1_1actor_1_1scheduled__actor__inherit__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1actor_1_1scheduled__actor__inherit
+__graph.pdf used on input line 18.
+(pdftex.def)             Requested size: 311.0pt x 368.00946pt.
+
+Underfull \vbox (badness 1132) has occurred while \output is active []
+
+ [97]
+<classactor__zeta_1_1actor_1_1scheduled__actor__coll__graph.pdf, id=5687, 660.4
+675pt x 209.78375pt>
+File: classactor__zeta_1_1actor_1_1scheduled__actor__coll__graph.pdf Graphic fi
+le (type pdf)
+
+<use classactor__zeta_1_1actor_1_1scheduled__actor__coll__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1actor_1_1scheduled__actor__coll__g
+raph.pdf used on input line 27.
+(pdftex.def)             Requested size: 350.0pt x 111.17204pt.
+ [98 <./classactor__zeta_1_1actor_1_1scheduled__actor__inherit__graph.pdf> <./c
+lassactor__zeta_1_1actor_1_1scheduled__actor__coll__graph.pdf
+
+pdfTeX warning: pdflatex (file ./classactor__zeta_1_1actor_1_1scheduled__actor_
+_coll__graph.pdf): PDF inclusion: multiple pdfs with page group included in a s
+ingle page
+>]
+Overfull \hbox (18.89209pt too wide) in paragraph at lines 70--71
+\T1/pcr/bc/n/8 void actor[]_[]zeta[]::actor[]::scheduled[]_[]actor[]::attach[]_
+[]to[]_[]scheduler ( ) [final], [override], [protected],
+ []
+
+
+Overfull \hbox (28.4921pt too wide) in paragraph at lines 80--81
+\T1/pcr/bc/n/8 void actor[]_[]zeta[]::actor[]::scheduled[]_[]actor[]::detach[]_
+[]from[]_[]scheduler ( ) [final], [override], [protected],
+ []
+
+[99]) (./classactor__zeta_1_1environment_1_1shared__group.tex [100] [101])
+(./classactor__zeta_1_1skip.tex
+<classactor__zeta_1_1skip__inherit__graph.pdf, id=5794, 184.69pt x 167.62625pt>
+File: classactor__zeta_1_1skip__inherit__graph.pdf Graphic file (type pdf)
+<use classactor__zeta_1_1skip__inherit__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1skip__inherit__graph.pdf used on i
+nput line 18.
+(pdftex.def)             Requested size: 184.0pt x 167.00172pt.
+ [102]
+<classactor__zeta_1_1skip__coll__graph.pdf, id=5800, 184.69pt x 167.62625pt>
+File: classactor__zeta_1_1skip__coll__graph.pdf Graphic file (type pdf)
+
+<use classactor__zeta_1_1skip__coll__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1skip__coll__graph.pdf used on inpu
+t line 27.
+(pdftex.def)             Requested size: 184.0pt x 167.00172pt.
+ [103 <./classactor__zeta_1_1skip__inherit__graph.pdf> <./classactor__zeta_1_1s
+kip__coll__graph.pdf
+
+pdfTeX warning: pdflatex (file ./classactor__zeta_1_1skip__coll__graph.pdf): PD
+F inclusion: multiple pdfs with page group included in a single page
+>]) (./classactor__zeta_1_1sync__contacts.tex
+<classactor__zeta_1_1sync__contacts__inherit__graph.pdf, id=5834, 212.795pt x 1
+67.62625pt>
+File: classactor__zeta_1_1sync__contacts__inherit__graph.pdf Graphic file (type
+ pdf)
+ <use classactor__zeta_1_1sync__contacts__inherit__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1sync__contacts__inherit__graph.pdf
+ used on input line 18.
+(pdftex.def)             Requested size: 212.0pt x 167.0094pt.
+
+<classactor__zeta_1_1sync__contacts__coll__graph.pdf, id=5835, 212.795pt x 167.
+62625pt>
+File: classactor__zeta_1_1sync__contacts__coll__graph.pdf Graphic file (type pd
+f)
+ <use classactor__zeta_1_1sync__contacts__coll__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1sync__contacts__coll__graph.pdf us
+ed on input line 27.
+(pdftex.def)             Requested size: 212.0pt x 167.0094pt.
+ [104 <./classactor__zeta_1_1sync__contacts__inherit__graph.pdf>])
+(./classactor__zeta_1_1behavior_1_1type__action.tex [105 <./classactor__zeta_1_
+1sync__contacts__coll__graph.pdf>] [106] [107])
+(./classactor__zeta_1_1executor_1_1work__sharing.tex [108] [109] [110])
+(./classactor__zeta_1_1executor_1_1worker.tex
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1.
+
+
+<classactor__zeta_1_1executor_1_1worker__inherit__graph.pdf, id=5974, 186.6975p
+t x 178.6675pt>
+File: classactor__zeta_1_1executor_1_1worker__inherit__graph.pdf Graphic file (
+type pdf)
+
+<use classactor__zeta_1_1executor_1_1worker__inherit__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1executor_1_1worker__inherit__graph
+.pdf used on input line 18.
+(pdftex.def)             Requested size: 186.0pt x 178.0073pt.
+
+<classactor__zeta_1_1executor_1_1worker__coll__graph.pdf, id=5975, 186.6975pt x
+ 178.6675pt>
+File: classactor__zeta_1_1executor_1_1worker__coll__graph.pdf Graphic file (typ
+e pdf)
+ <use classactor__zeta_1_1executor_1_1worker__coll__graph.pdf>
+Package pdftex.def Info: classactor__zeta_1_1executor_1_1worker__coll__graph.pd
+f used on input line 27.
+(pdftex.def)             Requested size: 186.0pt x 178.0073pt.
+
+[111 <./classactor__zeta_1_1executor_1_1worker__inherit__graph.pdf> <./classact
+or__zeta_1_1executor_1_1worker__coll__graph.pdf
+
+pdfTeX warning: pdflatex (file ./classactor__zeta_1_1executor_1_1worker__coll__
+graph.pdf): PDF inclusion: multiple pdfs with page group included in a single p
+age
+>] [112] [113])
+(./structactor__zeta_1_1executor_1_1work__sharing_1_1worker__data.tex [114])
+[115] [116
+
+]
+Chapter 9.
+(./abstract__action_8hpp.tex
+<abstract__action_8hpp__incl.pdf, id=6095, 303.1325pt x 212.795pt>
+File: abstract__action_8hpp__incl.pdf Graphic file (type pdf)
+
+<use abstract__action_8hpp__incl.pdf>
+Package pdftex.def Info: abstract__action_8hpp__incl.pdf used on input line 9.
+(pdftex.def)             Requested size: 302.0pt x 212.0022pt.
+
+<abstract__action_8hpp__dep__incl.pdf, id=6096, 732.7375pt x 437.635pt>
+File: abstract__action_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use abstract__action_8hpp__dep__incl.pdf>
+Package pdftex.def Info: abstract__action_8hpp__dep__incl.pdf used on input lin
+e 16.
+(pdftex.def)             Requested size: 350.0pt x 209.04071pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [117 <./abstract__action_8hpp__incl.pdf>]) (./abstract__actor_8cpp.tex
+<abstract__actor_8cpp__incl.pdf, id=6113, 466.74374pt x 347.2975pt>
+File: abstract__actor_8cpp__incl.pdf Graphic file (type pdf)
+
+<use abstract__actor_8cpp__incl.pdf>
+Package pdftex.def Info: abstract__actor_8cpp__incl.pdf used on input line 9.
+(pdftex.def)             Requested size: 350.0pt x 260.44067pt.
+
+Underfull \vbox (badness 2119) has occurred while \output is active []
+
+ [118 <./abstract__action_8hpp__dep__incl.pdf>]) (./abstract__actor_8hpp.tex
+<abstract__actor_8hpp__incl.pdf, id=6131, 408.52625pt x 212.795pt>
+File: abstract__actor_8hpp__incl.pdf Graphic file (type pdf)
+
+<use abstract__actor_8hpp__incl.pdf>
+Package pdftex.def Info: abstract__actor_8hpp__incl.pdf used on input line 10.
+(pdftex.def)             Requested size: 350.0pt x 182.31825pt.
+
+<abstract__actor_8hpp__dep__incl.pdf, id=6132, 1481.535pt x 550.055pt>
+File: abstract__actor_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use abstract__actor_8hpp__dep__incl.pdf>
+Package pdftex.def Info: abstract__actor_8hpp__dep__incl.pdf used on input line
+ 17.
+(pdftex.def)             Requested size: 350.0pt x 129.94278pt.
+ [119 <./abstract__actor_8cpp__incl.pdf> <./abstract__actor_8hpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./abstract__actor_8hpp__incl.pdf): PDF inclusion
+: multiple pdfs with page group included in a single page
+>]) (./abstract__coordinator_8hpp.tex
+<abstract__coordinator_8hpp__incl.pdf, id=6158, 354.32375pt x 156.585pt>
+File: abstract__coordinator_8hpp__incl.pdf Graphic file (type pdf)
+
+<use abstract__coordinator_8hpp__incl.pdf>
+Package pdftex.def Info: abstract__coordinator_8hpp__incl.pdf used on input lin
+e 10.
+(pdftex.def)             Requested size: 350.0pt x 154.67795pt.
+
+<abstract__coordinator_8hpp__dep__incl.pdf, id=6159, 394.47375pt x 156.585pt>
+File: abstract__coordinator_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use abstract__coordinator_8hpp__dep__incl.pdf>
+Package pdftex.def Info: abstract__coordinator_8hpp__dep__incl.pdf used on inpu
+t line 17.
+(pdftex.def)             Requested size: 350.0pt x 138.93251pt.
+ [120 <./abstract__actor_8hpp__dep__incl.pdf> <./abstract__coordinator_8hpp__in
+cl.pdf
+
+pdfTeX warning: pdflatex (file ./abstract__coordinator_8hpp__incl.pdf): PDF inc
+lusion: multiple pdfs with page group included in a single page
+>]) (./action_8cpp.tex
+<action_8cpp__incl.pdf, id=6187, 1091.07625pt x 549.05125pt>
+File: action_8cpp__incl.pdf Graphic file (type pdf)
+
+<use action_8cpp__incl.pdf>
+Package pdftex.def Info: action_8cpp__incl.pdf used on input line 10.
+(pdftex.def)             Requested size: 350.0pt x 176.12726pt.
+) (./action_8hpp.tex
+<action_8hpp__incl.pdf, id=6190, 305.14pt x 269.005pt>
+File: action_8hpp__incl.pdf Graphic file (type pdf)
+
+<use action_8hpp__incl.pdf>
+Package pdftex.def Info: action_8hpp__incl.pdf used on input line 9.
+(pdftex.def)             Requested size: 304.0pt x 268.01099pt.
+ [121 <./abstract__coordinator_8hpp__dep__incl.pdf> <./action_8cpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./action_8cpp__incl.pdf): PDF inclusion: multipl
+e pdfs with page group included in a single page
+>] <action_8hpp__dep__incl.pdf, id=6216, 703.62875pt x 381.425pt>
+File: action_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use action_8hpp__dep__incl.pdf>
+Package pdftex.def Info: action_8hpp__dep__incl.pdf used on input line 16.
+(pdftex.def)             Requested size: 350.0pt x 189.72842pt.
+ [122 <./action_8hpp__incl.pdf> <./action_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./action_8hpp__dep__incl.pdf): PDF inclusion: mu
+ltiple pdfs with page group included in a single page
+>]) (./actor_8cpp.tex <actor_8cpp__incl.pdf, id=6242, 451.6875pt x 347.2975pt>
+File: actor_8cpp__incl.pdf Graphic file (type pdf)
+
+<use actor_8cpp__incl.pdf>
+Package pdftex.def Info: actor_8cpp__incl.pdf used on input line 10.
+(pdftex.def)             Requested size: 350.0pt x 269.12628pt.
+) (./actor_8hpp.tex
+<actor_8hpp__incl.pdf, id=6245, 374.39874pt x 280.04625pt>
+File: actor_8hpp__incl.pdf Graphic file (type pdf)
+
+<use actor_8hpp__incl.pdf>
+Package pdftex.def Info: actor_8hpp__incl.pdf used on input line 10.
+(pdftex.def)             Requested size: 350.0pt x 261.81198pt.
+ [123 <./actor_8cpp__incl.pdf>]
+<actor_8hpp__dep__incl.pdf, id=6261, 393.47pt x 381.425pt>
+File: actor_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use actor_8hpp__dep__incl.pdf>
+Package pdftex.def Info: actor_8hpp__dep__incl.pdf used on input line 17.
+(pdftex.def)             Requested size: 350.0pt x 339.28093pt.
+ [124 <./actor_8hpp__incl.pdf> <./actor_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./actor_8hpp__dep__incl.pdf): PDF inclusion: mul
+tiple pdfs with page group included in a single page
+>]) (./actor__address_8cpp.tex
+<actor__address_8cpp__incl.pdf, id=6286, 421.575pt x 347.2975pt>
+File: actor__address_8cpp__incl.pdf Graphic file (type pdf)
+
+<use actor__address_8cpp__incl.pdf>
+Package pdftex.def Info: actor__address_8cpp__incl.pdf used on input line 8.
+(pdftex.def)             Requested size: 350.0pt x 288.33633pt.
+) (./actor__address_8hpp.tex
+<actor__address_8hpp__incl.pdf, id=6289, 421.575pt x 280.04625pt>
+File: actor__address_8hpp__incl.pdf Graphic file (type pdf)
+
+<use actor__address_8hpp__incl.pdf>
+Package pdftex.def Info: actor__address_8hpp__incl.pdf used on input line 10.
+(pdftex.def)             Requested size: 350.0pt x 232.50241pt.
+ [125 <./actor__address_8cpp__incl.pdf>]
+<actor__address_8hpp__dep__incl.pdf, id=6307, 1444.39626pt x 493.845pt>
+File: actor__address_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use actor__address_8hpp__dep__incl.pdf>
+Package pdftex.def Info: actor__address_8hpp__dep__incl.pdf used on input line 
+17.
+(pdftex.def)             Requested size: 350.0pt x 119.66307pt.
+) (./behavior_8cpp.tex
+<behavior_8cpp__incl.pdf, id=6311, 1296.845pt x 549.05125pt>
+File: behavior_8cpp__incl.pdf Graphic file (type pdf)
+
+<use behavior_8cpp__incl.pdf>
+Package pdftex.def Info: behavior_8cpp__incl.pdf used on input line 12.
+(pdftex.def)             Requested size: 350.0pt x 148.17879pt.
+ [126 <./actor__address_8hpp__incl.pdf> <./actor__address_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./actor__address_8hpp__dep__incl.pdf): PDF inclu
+sion: multiple pdfs with page group included in a single page
+>]) (./behavior_8hpp.tex
+<behavior_8hpp__incl.pdf, id=6337, 483.8075pt x 325.215pt>
+File: behavior_8hpp__incl.pdf Graphic file (type pdf)
+
+<use behavior_8hpp__incl.pdf>
+Package pdftex.def Info: behavior_8hpp__incl.pdf used on input line 12.
+(pdftex.def)             Requested size: 350.0pt x 235.28108pt.
+
+Underfull \vbox (badness 4832) has occurred while \output is active []
+
+ [127 <./behavior_8cpp__incl.pdf>]
+<behavior_8hpp__dep__incl.pdf, id=6353, 703.62875pt x 325.215pt>
+File: behavior_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use behavior_8hpp__dep__incl.pdf>
+Package pdftex.def Info: behavior_8hpp__dep__incl.pdf used on input line 19.
+(pdftex.def)             Requested size: 350.0pt x 161.76845pt.
+) (./blocking__actor_8cpp.tex
+<blocking__actor_8cpp__incl.pdf, id=6357, 1728.4575pt x 605.26125pt>
+File: blocking__actor_8cpp__incl.pdf Graphic file (type pdf)
+
+<use blocking__actor_8cpp__incl.pdf>
+Package pdftex.def Info: blocking__actor_8cpp__incl.pdf used on input line 13.
+(pdftex.def)             Requested size: 350.0pt x 122.55548pt.
+ [128 <./behavior_8hpp__incl.pdf> <./behavior_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./behavior_8hpp__dep__incl.pdf): PDF inclusion: 
+multiple pdfs with page group included in a single page
+>]) (./blocking__actor_8hpp.tex
+<blocking__actor_8hpp__incl.pdf, id=6383, 1598.97375pt x 538.01pt>
+File: blocking__actor_8hpp__incl.pdf Graphic file (type pdf)
+
+<use blocking__actor_8hpp__incl.pdf>
+Package pdftex.def Info: blocking__actor_8hpp__incl.pdf used on input line 10.
+(pdftex.def)             Requested size: 350.0pt x 117.76328pt.
+
+<blocking__actor_8hpp__dep__incl.pdf, id=6384, 178.6675pt x 156.585pt>
+File: blocking__actor_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use blocking__actor_8hpp__dep__incl.pdf>
+Package pdftex.def Info: blocking__actor_8hpp__dep__incl.pdf used on input line
+ 17.
+(pdftex.def)             Requested size: 178.0pt x 156.00879pt.
+ [129 <./blocking__actor_8cpp__incl.pdf> <./blocking__actor_8hpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./blocking__actor_8hpp__incl.pdf): PDF inclusion
+: multiple pdfs with page group included in a single page
+>]) (./blocking__mail__queue_8hpp.tex
+<blocking__mail__queue_8hpp__incl.pdf, id=6410, 417.56pt x 156.585pt>
+File: blocking__mail__queue_8hpp__incl.pdf Graphic file (type pdf)
+
+<use blocking__mail__queue_8hpp__incl.pdf>
+Package pdftex.def Info: blocking__mail__queue_8hpp__incl.pdf used on input lin
+e 12.
+(pdftex.def)             Requested size: 350.0pt x 131.25812pt.
+
+<blocking__mail__queue_8hpp__dep__incl.pdf, id=6411, 585.18625pt x 325.215pt>
+File: blocking__mail__queue_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use blocking__mail__queue_8hpp__dep__incl.pdf>
+Package pdftex.def Info: blocking__mail__queue_8hpp__dep__incl.pdf used on inpu
+t line 19.
+(pdftex.def)             Requested size: 350.0pt x 194.52013pt.
+ [130 <./blocking__actor_8hpp__dep__incl.pdf> <./blocking__mail__queue_8hpp__in
+cl.pdf
+
+pdfTeX warning: pdflatex (file ./blocking__mail__queue_8hpp__incl.pdf): PDF inc
+lusion: multiple pdfs with page group included in a single page
+>]
+Underfull \hbox (badness 10000) in paragraph at lines 37--40
+\T1/phv/m/n/10 _[]zeta[]::messaging[]::enqueue[]_[]result[]::unblocked[]_[]read
+er[][], [][]actor[]_[]zeta[]::messaging[]::enqueue[]_[]result[]::queue[]_[]
+ []
+
+) (./book__contacts_8cpp.tex
+<book__contacts_8cpp__incl.pdf, id=6443, 567.11874pt x 414.54875pt>
+File: book__contacts_8cpp__incl.pdf Graphic file (type pdf)
+
+<use book__contacts_8cpp__incl.pdf>
+Package pdftex.def Info: book__contacts_8cpp__incl.pdf used on input line 11.
+(pdftex.def)             Requested size: 350.0pt x 255.84735pt.
+ [131 <./blocking__mail__queue_8hpp__dep__incl.pdf>]) (./book__contacts_8hpp.te
+x
+<book__contacts_8hpp__incl.pdf, id=6464, 621.32124pt x 347.2975pt>
+File: book__contacts_8hpp__incl.pdf Graphic file (type pdf)
+
+<use book__contacts_8hpp__incl.pdf>
+Package pdftex.def Info: book__contacts_8hpp__incl.pdf used on input line 13.
+(pdftex.def)             Requested size: 350.0pt x 195.63522pt.
+
+Underfull \vbox (badness 4739) has occurred while \output is active []
+
+ [132 <./book__contacts_8cpp__incl.pdf>]
+<book__contacts_8hpp__dep__incl.pdf, id=6479, 1021.8175pt x 325.215pt>
+File: book__contacts_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use book__contacts_8hpp__dep__incl.pdf>
+Package pdftex.def Info: book__contacts_8hpp__dep__incl.pdf used on input line 
+20.
+(pdftex.def)             Requested size: 350.0pt x 111.39043pt.
+) (./broker_8cpp.tex
+<broker_8cpp__incl.pdf, id=6483, 1856.9375pt x 672.5125pt>
+File: broker_8cpp__incl.pdf Graphic file (type pdf)
+
+<use broker_8cpp__incl.pdf>
+Package pdftex.def Info: broker_8cpp__incl.pdf used on input line 8.
+(pdftex.def)             Requested size: 350.0pt x 126.75253pt.
+ [133 <./book__contacts_8hpp__incl.pdf> <./book__contacts_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./book__contacts_8hpp__dep__incl.pdf): PDF inclu
+sion: multiple pdfs with page group included in a single page
+>]) (./broker_8hpp.tex
+<broker_8hpp__incl.pdf, id=6510, 1856.9375pt x 616.3025pt>
+File: broker_8hpp__incl.pdf Graphic file (type pdf)
+
+<use broker_8hpp__incl.pdf>
+Package pdftex.def Info: broker_8hpp__incl.pdf used on input line 10.
+(pdftex.def)             Requested size: 350.0pt x 116.15828pt.
+
+<broker_8hpp__dep__incl.pdf, id=6511, 142.5325pt x 156.585pt>
+File: broker_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use broker_8hpp__dep__incl.pdf>
+Package pdftex.def Info: broker_8hpp__dep__incl.pdf used on input line 17.
+(pdftex.def)             Requested size: 142.0pt x 155.99922pt.
+ [134 <./broker_8cpp__incl.pdf> <./broker_8hpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./broker_8hpp__incl.pdf): PDF inclusion: multipl
+e pdfs with page group included in a single page
+> <./broker_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./broker_8hpp__dep__incl.pdf): PDF inclusion: mu
+ltiple pdfs with page group included in a single page
+>]) (./connection__identifying_8cpp.tex
+<connection__identifying_8cpp__incl.pdf, id=6546, 214.8025pt x 223.83624pt>
+File: connection__identifying_8cpp__incl.pdf Graphic file (type pdf)
+
+<use connection__identifying_8cpp__incl.pdf>
+Package pdftex.def Info: connection__identifying_8cpp__incl.pdf used on input l
+ine 8.
+(pdftex.def)             Requested size: 214.0pt x 223.00232pt.
+)
+(./connection__identifying_8hpp.tex
+<connection__identifying_8hpp__incl.pdf, id=6549, 211.79124pt x 156.585pt>
+File: connection__identifying_8hpp__incl.pdf Graphic file (type pdf)
+
+<use connection__identifying_8hpp__incl.pdf>
+Package pdftex.def Info: connection__identifying_8hpp__incl.pdf used on input l
+ine 8.
+(pdftex.def)             Requested size: 211.0pt x 156.0064pt.
+ [135 <./connection__identifying_8cpp__incl.pdf>]
+<connection__identifying_8hpp__dep__incl.pdf, id=6566, 312.16624pt x 269.005pt>
+File: connection__identifying_8hpp__dep__incl.pdf Graphic file (type pdf)
+<use connection__identifying_8hpp__dep__incl.pdf>
+Package pdftex.def Info: connection__identifying_8hpp__dep__incl.pdf used on in
+put line 15.
+(pdftex.def)             Requested size: 311.0pt x 268.00688pt.
+
+Underfull \hbox (badness 2790) in paragraph at lines 33--35
+[]\T1/phv/m/n/10 enum [][]actor[]_[]zeta[]::network[]::type[]_[]connect[][] []:
+ int { [][]actor[]_[]zeta[]::network[]::type[]_[]connect[]::tcp[][], [][]actor[
+]_[]zeta[]
+ []
+
+[136 <./connection__identifying_8hpp__incl.pdf> <./connection__identifying_8hpp
+__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./connection__identifying_8hpp__dep__incl.pdf): 
+PDF inclusion: multiple pdfs with page group included in a single page
+>]) (./cooperation_8cpp.tex
+<cooperation_8cpp__incl.pdf, id=6596, 1914.15125pt x 672.5125pt>
+File: cooperation_8cpp__incl.pdf Graphic file (type pdf)
+
+<use cooperation_8cpp__incl.pdf>
+Package pdftex.def Info: cooperation_8cpp__incl.pdf used on input line 12.
+(pdftex.def)             Requested size: 350.0pt x 122.96596pt.
+) (./cooperation_8hpp.tex
+<cooperation_8hpp__incl.pdf, id=6599, 1023.825pt x 583.17876pt>
+File: cooperation_8hpp__incl.pdf Graphic file (type pdf)
+
+<use cooperation_8hpp__incl.pdf>
+Package pdftex.def Info: cooperation_8hpp__incl.pdf used on input line 13.
+(pdftex.def)             Requested size: 350.0pt x 199.36378pt.
+ [137 <./cooperation_8cpp__incl.pdf>]
+<cooperation_8hpp__dep__incl.pdf, id=6616, 392.46625pt x 212.795pt>
+File: cooperation_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use cooperation_8hpp__dep__incl.pdf>
+Package pdftex.def Info: cooperation_8hpp__dep__incl.pdf used on input line 20.
+
+(pdftex.def)             Requested size: 350.0pt x 189.78307pt.
+
+Underfull \hbox (badness 1163) in paragraph at lines 38--39
+\T1/phv/m/n/10 void [][]actor[]_[]zeta[]::environment[]::send[][] ([][]actor[]_
+[]zeta[]::environment[]::cooperation[][] &c, std[]::string com-manda, V
+ []
+
+) (./coordinator_8hpp.tex
+<coordinator_8hpp__incl.pdf, id=6622, 695.59875pt x 269.005pt>
+File: coordinator_8hpp__incl.pdf Graphic file (type pdf)
+
+<use coordinator_8hpp__incl.pdf>
+Package pdftex.def Info: coordinator_8hpp__incl.pdf used on input line 11.
+(pdftex.def)             Requested size: 350.0pt x 135.35182pt.
+ [138 <./cooperation_8hpp__incl.pdf> <./cooperation_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./cooperation_8hpp__dep__incl.pdf): PDF inclusio
+n: multiple pdfs with page group included in a single page
+>]) (./description_8h.tex) (./environment_8cpp.tex
+<environment_8cpp__incl.pdf, id=6649, 1104.125pt x 728.7225pt>
+File: environment_8cpp__incl.pdf Graphic file (type pdf)
+
+<use environment_8cpp__incl.pdf>
+Package pdftex.def Info: environment_8cpp__incl.pdf used on input line 9.
+(pdftex.def)             Requested size: 350.0pt x 231.00543pt.
+ [139 <./coordinator_8hpp__incl.pdf>])
+(./environment_8hpp.tex
+<environment_8hpp__incl.pdf, id=6670, 960.58875pt x 661.47125pt>
+File: environment_8hpp__incl.pdf Graphic file (type pdf)
+
+<use environment_8hpp__incl.pdf>
+Package pdftex.def Info: environment_8hpp__incl.pdf used on input line 9.
+(pdftex.def)             Requested size: 350.0pt x 241.01613pt.
+
+<environment_8hpp__dep__incl.pdf, id=6671, 392.46625pt x 156.585pt>
+File: environment_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use environment_8hpp__dep__incl.pdf>
+Package pdftex.def Info: environment_8hpp__dep__incl.pdf used on input line 16.
+
+(pdftex.def)             Requested size: 350.0pt x 139.65169pt.
+ [140 <./environment_8cpp__incl.pdf> <./environment_8hpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./environment_8hpp__incl.pdf): PDF inclusion: mu
+ltiple pdfs with page group included in a single page
+>]) (./executable_8hpp.tex
+<executable_8hpp__incl.pdf, id=6697, 198.7425pt x 156.585pt>
+File: executable_8hpp__incl.pdf Graphic file (type pdf)
+
+<use executable_8hpp__incl.pdf>
+Package pdftex.def Info: executable_8hpp__incl.pdf used on input line 8.
+(pdftex.def)             Requested size: 198.0pt x 156.004pt.
+
+<executable_8hpp__dep__incl.pdf, id=6698, 686.565pt x 325.215pt>
+File: executable_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use executable_8hpp__dep__incl.pdf>
+Package pdftex.def Info: executable_8hpp__dep__incl.pdf used on input line 15.
+(pdftex.def)             Requested size: 350.0pt x 165.78798pt.
+ [141 <./environment_8hpp__dep__incl.pdf> <./executable_8hpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./executable_8hpp__incl.pdf): PDF inclusion: mul
+tiple pdfs with page group included in a single page
+>]) (./execution__device_8hpp.tex
+<execution__device_8hpp__incl.pdf, id=6725, 292.09125pt x 156.585pt>
+File: execution__device_8hpp__incl.pdf Graphic file (type pdf)
+
+<use execution__device_8hpp__incl.pdf>
+Package pdftex.def Info: execution__device_8hpp__incl.pdf used on input line 9.
+
+(pdftex.def)             Requested size: 291.0pt x 156.01357pt.
+
+<execution__device_8hpp__dep__incl.pdf, id=6726, 573.14125pt x 269.005pt>
+File: execution__device_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use execution__device_8hpp__dep__incl.pdf>
+Package pdftex.def Info: execution__device_8hpp__dep__incl.pdf used on input li
+ne 16.
+(pdftex.def)             Requested size: 350.0pt x 164.2734pt.
+ [142 <./executable_8hpp__dep__incl.pdf> <./execution__device_8hpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./execution__device_8hpp__incl.pdf): PDF inclusi
+on: multiple pdfs with page group included in a single page
+>]) (./libactor__zeta__core_2actor-zeta_2forwards_8hpp.tex)
+(./libactor__zeta__io_2actor-zeta_2forwards_8hpp.tex
+<libactor__zeta__io_2actor-zeta_2forwards_8hpp__incl.pdf, id=6762, 196.735pt x 
+156.585pt>
+File: libactor__zeta__io_2actor-zeta_2forwards_8hpp__incl.pdf Graphic file (typ
+e pdf)
+ <use libactor__zeta__io_2actor-zeta_2forwards_8hpp__incl.pdf>
+Package pdftex.def Info: libactor__zeta__io_2actor-zeta_2forwards_8hpp__incl.pd
+f used on input line 9.
+(pdftex.def)             Requested size: 196.0pt x 155.99922pt.
+
+[143 <./execution__device_8hpp__dep__incl.pdf>]
+<libactor__zeta__io_2actor-zeta_2forwards_8hpp__dep__incl.pdf, id=6781, 2083.78
+5pt x 606.265pt>
+File: libactor__zeta__io_2actor-zeta_2forwards_8hpp__dep__incl.pdf Graphic file
+ (type pdf)
+
+<use libactor__zeta__io_2actor-zeta_2forwards_8hpp__dep__incl.pdf>
+Package pdftex.def Info: libactor__zeta__io_2actor-zeta_2forwards_8hpp__dep__in
+cl.pdf used on input line 16.
+(pdftex.def)             Requested size: 350.0pt x 101.82407pt.
+)
+(./group_8cpp.tex <group_8cpp__incl.pdf, id=6784, 1821.80624pt x 616.3025pt>
+File: group_8cpp__incl.pdf Graphic file (type pdf)
+
+<use group_8cpp__incl.pdf>
+Package pdftex.def Info: group_8cpp__incl.pdf used on input line 14.
+(pdftex.def)             Requested size: 350.0pt x 118.39644pt.
+ [144 <./libactor__zeta__io_2actor-zeta_2forwards_8hpp__incl.pdf> <./libactor__
+zeta__io_2actor-zeta_2forwards_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./libactor__zeta__io_2actor-zeta_2forwards_8hpp_
+_dep__incl.pdf): PDF inclusion: multiple pdfs with page group included in a sin
+gle page
+>]) (./group_8hpp.tex <group_8hpp__incl.pdf, id=6809, 935.495pt x 526.96875pt>
+File: group_8hpp__incl.pdf Graphic file (type pdf)
+
+<use group_8hpp__incl.pdf>
+Package pdftex.def Info: group_8hpp__incl.pdf used on input line 12.
+(pdftex.def)             Requested size: 350.0pt x 197.15445pt.
+
+<group_8hpp__dep__incl.pdf, id=6810, 454.69875pt x 269.005pt>
+File: group_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use group_8hpp__dep__incl.pdf>
+Package pdftex.def Info: group_8hpp__dep__incl.pdf used on input line 19.
+(pdftex.def)             Requested size: 350.0pt x 207.0647pt.
+ [145 <./group_8cpp__incl.pdf> <./group_8hpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./group_8hpp__incl.pdf): PDF inclusion: multiple
+ pdfs with page group included in a single page
+>]) (./group__contacts_8cpp.tex
+<group__contacts_8cpp__incl.pdf, id=6837, 449.68pt x 347.2975pt>
+File: group__contacts_8cpp__incl.pdf Graphic file (type pdf)
+
+<use group__contacts_8cpp__incl.pdf>
+Package pdftex.def Info: group__contacts_8cpp__incl.pdf used on input line 9.
+(pdftex.def)             Requested size: 350.0pt x 270.32393pt.
+
+Underfull \vbox (badness 2181) has occurred while \output is active []
+
+ [146 <./group_8hpp__dep__incl.pdf>]) (./group__contacts_8hpp.tex
+<group__contacts_8hpp__incl.pdf, id=6855, 258.9675pt x 156.585pt>
+File: group__contacts_8hpp__incl.pdf Graphic file (type pdf)
+
+<use group__contacts_8hpp__incl.pdf>
+Package pdftex.def Info: group__contacts_8hpp__incl.pdf used on input line 9.
+(pdftex.def)             Requested size: 258.0pt x 156.01595pt.
+
+<group__contacts_8hpp__dep__incl.pdf, id=6856, 1021.8175pt x 381.425pt>
+File: group__contacts_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use group__contacts_8hpp__dep__incl.pdf>
+Package pdftex.def Info: group__contacts_8hpp__dep__incl.pdf used on input line
+ 16.
+(pdftex.def)             Requested size: 350.0pt x 130.64308pt.
+ [147 <./group__contacts_8cpp__incl.pdf> <./group__contacts_8hpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./group__contacts_8hpp__incl.pdf): PDF inclusion
+: multiple pdfs with page group included in a single page
+>]) (./intrusive__ptr_8hpp.tex
+<intrusive__ptr_8hpp__incl.pdf, id=6882, 237.88875pt x 212.795pt>
+File: intrusive__ptr_8hpp__incl.pdf Graphic file (type pdf)
+
+<use intrusive__ptr_8hpp__incl.pdf>
+Package pdftex.def Info: intrusive__ptr_8hpp__incl.pdf used on input line 9.
+(pdftex.def)             Requested size: 237.0pt x 212.00868pt.
+
+<intrusive__ptr_8hpp__dep__incl.pdf, id=6883, 1557.82pt x 550.055pt>
+File: intrusive__ptr_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use intrusive__ptr_8hpp__dep__incl.pdf>
+Package pdftex.def Info: intrusive__ptr_8hpp__dep__incl.pdf used on input line 
+16.
+(pdftex.def)             Requested size: 350.0pt x 123.58076pt.
+ [148 <./group__contacts_8hpp__dep__incl.pdf> <./intrusive__ptr_8hpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./intrusive__ptr_8hpp__incl.pdf): PDF inclusion:
+ multiple pdfs with page group included in a single page
+>]) (./local__actor_8cpp.tex
+<local__actor_8cpp__incl.pdf, id=6922, 2076.75874pt x 750.805pt>
+File: local__actor_8cpp__incl.pdf Graphic file (type pdf)
+
+<use local__actor_8cpp__incl.pdf>
+Package pdftex.def Info: local__actor_8cpp__incl.pdf used on input line 16.
+(pdftex.def)             Requested size: 350.0pt x 126.5239pt.
+ [149 <./intrusive__ptr_8hpp__dep__incl.pdf>]) (./local__actor_8hpp.tex
+<local__actor_8hpp__incl.pdf, id=6941, 1769.61125pt x 481.8pt>
+File: local__actor_8hpp__incl.pdf Graphic file (type pdf)
+
+<use local__actor_8hpp__incl.pdf>
+Package pdftex.def Info: local__actor_8hpp__incl.pdf used on input line 15.
+(pdftex.def)             Requested size: 350.0pt x 95.2923pt.
+
+<local__actor_8hpp__dep__incl.pdf, id=6942, 585.18625pt x 269.005pt>
+File: local__actor_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use local__actor_8hpp__dep__incl.pdf>
+Package pdftex.def Info: local__actor_8hpp__dep__incl.pdf used on input line 22
+.
+(pdftex.def)             Requested size: 350.0pt x 160.89935pt.
+ [150 <./local__actor_8cpp__incl.pdf> <./local__actor_8hpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./local__actor_8hpp__incl.pdf): PDF inclusion: m
+ultiple pdfs with page group included in a single page
+>]) (./message_8cpp.tex
+<message_8cpp__incl.pdf, id=6968, 693.59125pt x 470.75874pt>
+File: message_8cpp__incl.pdf Graphic file (type pdf)
+
+<use message_8cpp__incl.pdf>
+Package pdftex.def Info: message_8cpp__incl.pdf used on input line 8.
+(pdftex.def)             Requested size: 350.0pt x 237.56248pt.
+ [151 <./local__actor_8hpp__dep__incl.pdf> <./message_8cpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./message_8cpp__incl.pdf): PDF inclusion: multip
+le pdfs with page group included in a single page
+>]) (./message_8hpp.tex
+<message_8hpp__incl.pdf, id=6995, 693.59125pt x 403.5075pt>
+File: message_8hpp__incl.pdf Graphic file (type pdf)
+
+<use message_8hpp__incl.pdf>
+Package pdftex.def Info: message_8hpp__incl.pdf used on input line 10.
+(pdftex.def)             Requested size: 350.0pt x 203.62498pt.
+
+<message_8hpp__dep__incl.pdf, id=6996, 1215.54124pt x 381.425pt>
+File: message_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use message_8hpp__dep__incl.pdf>
+Package pdftex.def Info: message_8hpp__dep__incl.pdf used on input line 17.
+(pdftex.def)             Requested size: 350.0pt x 109.82469pt.
+ [152 <./message_8hpp__incl.pdf> <./message_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./message_8hpp__dep__incl.pdf): PDF inclusion: m
+ultiple pdfs with page group included in a single page
+>]) (./message__body_8hpp.tex
+<message__body_8hpp__incl.pdf, id=7029, 419.5675pt x 156.585pt>
+File: message__body_8hpp__incl.pdf Graphic file (type pdf)
+
+<use message__body_8hpp__incl.pdf>
+Package pdftex.def Info: message__body_8hpp__incl.pdf used on input line 12.
+(pdftex.def)             Requested size: 350.0pt x 130.62256pt.
+
+<message__body_8hpp__dep__incl.pdf, id=7030, 1215.54124pt x 437.635pt>
+File: message__body_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use message__body_8hpp__dep__incl.pdf>
+Package pdftex.def Info: message__body_8hpp__dep__incl.pdf used on input line 1
+9.
+(pdftex.def)             Requested size: 350.0pt x 126.0094pt.
+ [153 <./message__body_8hpp__incl.pdf> <./message__body_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./message__body_8hpp__dep__incl.pdf): PDF inclus
+ion: multiple pdfs with page group included in a single page
+>]) (./message__header_8cpp.tex
+<message__header_8cpp__incl.pdf, id=7062, 519.9425pt x 414.54875pt>
+File: message__header_8cpp__incl.pdf Graphic file (type pdf)
+
+<use message__header_8cpp__incl.pdf>
+Package pdftex.def Info: message__header_8cpp__incl.pdf used on input line 8.
+(pdftex.def)             Requested size: 350.0pt x 279.05559pt.
+) (./message__header_8hpp.tex
+<message__header_8hpp__incl.pdf, id=7065, 519.9425pt x 347.2975pt>
+File: message__header_8hpp__incl.pdf Graphic file (type pdf)
+
+<use message__header_8hpp__incl.pdf>
+Package pdftex.def Info: message__header_8hpp__incl.pdf used on input line 10.
+(pdftex.def)             Requested size: 350.0pt x 233.78506pt.
+ [154 <./message__header_8cpp__incl.pdf>]
+<message__header_8hpp__dep__incl.pdf, id=7082, 1215.54124pt x 437.635pt>
+File: message__header_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use message__header_8hpp__dep__incl.pdf>
+Package pdftex.def Info: message__header_8hpp__dep__incl.pdf used on input line
+ 17.
+(pdftex.def)             Requested size: 350.0pt x 126.0094pt.
+) (./message__priority_8hpp.tex
+[155 <./message__header_8hpp__incl.pdf> <./message__header_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./message__header_8hpp__dep__incl.pdf): PDF incl
+usion: multiple pdfs with page group included in a single page
+>] <message__priority_8hpp__dep__incl.pdf, id=7109, 1110.1475pt x 493.845pt>
+File: message__priority_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use message__priority_8hpp__dep__incl.pdf>
+Package pdftex.def Info: message__priority_8hpp__dep__incl.pdf used on input li
+ne 7.
+(pdftex.def)             Requested size: 350.0pt x 155.69763pt.
+) (./multiplexer_8hpp.tex
+<multiplexer_8hpp__incl.pdf, id=7116, 484.81125pt x 347.2975pt>
+File: multiplexer_8hpp__incl.pdf Graphic file (type pdf)
+
+<use multiplexer_8hpp__incl.pdf>
+Package pdftex.def Info: multiplexer_8hpp__incl.pdf used on input line 10.
+(pdftex.def)             Requested size: 350.0pt x 250.73761pt.
+ [156 <./message__priority_8hpp__dep__incl.pdf>] <multiplexer_8hpp__dep__incl.p
+df, id=7134, 162.6075pt x 212.795pt>
+File: multiplexer_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use multiplexer_8hpp__dep__incl.pdf>
+Package pdftex.def Info: multiplexer_8hpp__dep__incl.pdf used on input line 17.
+
+(pdftex.def)             Requested size: 162.0pt x 212.01518pt.
+ [157 <./multiplexer_8hpp__incl.pdf> <./multiplexer_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./multiplexer_8hpp__dep__incl.pdf): PDF inclusio
+n: multiple pdfs with page group included in a single page
+>]) (./libactor__zeta__core_2test_2README_8md.tex)
+(./libactor__zeta__io_2test_2README_8md.tex) (./README_8md.tex)
+(./ref__counted_8cpp.tex
+<ref__counted_8cpp__incl.pdf, id=7164, 212.795pt x 212.795pt>
+File: ref__counted_8cpp__incl.pdf Graphic file (type pdf)
+
+<use ref__counted_8cpp__incl.pdf>
+Package pdftex.def Info: ref__counted_8cpp__incl.pdf used on input line 8.
+(pdftex.def)             Requested size: 212.0pt x 212.01193pt.
+) (./ref__counted_8hpp.tex
+<ref__counted_8hpp__incl.pdf, id=7166, 192.72pt x 156.585pt>
+File: ref__counted_8hpp__incl.pdf Graphic file (type pdf)
+
+<use ref__counted_8hpp__incl.pdf>
+Package pdftex.def Info: ref__counted_8hpp__incl.pdf used on input line 9.
+(pdftex.def)             Requested size: 192.0pt x 155.99922pt.
+ [158 <./ref__counted_8cpp__incl.pdf>]
+<ref__counted_8hpp__dep__incl.pdf, id=7185, 1533.73pt x 606.265pt>
+File: ref__counted_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use ref__counted_8hpp__dep__incl.pdf>
+Package pdftex.def Info: ref__counted_8hpp__dep__incl.pdf used on input line 16
+.
+(pdftex.def)             Requested size: 350.0pt x 138.3464pt.
+) (./request_8hpp.tex
+<request_8hpp__incl.pdf, id=7190, 1031.855pt x 481.8pt>
+File: request_8hpp__incl.pdf Graphic file (type pdf)
+
+<use request_8hpp__incl.pdf>
+Package pdftex.def Info: request_8hpp__incl.pdf used on input line 9.
+(pdftex.def)             Requested size: 350.0pt x 163.42018pt.
+ [159 <./ref__counted_8hpp__incl.pdf> <./ref__counted_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./ref__counted_8hpp__dep__incl.pdf): PDF inclusi
+on: multiple pdfs with page group included in a single page
+>] <request_8hpp__dep__incl.pdf, id=7215, 660.4675pt x 156.585pt>
+File: request_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use request_8hpp__dep__incl.pdf>
+Package pdftex.def Info: request_8hpp__dep__incl.pdf used on input line 16.
+(pdftex.def)             Requested size: 350.0pt x 82.98009pt.
+) (./response_8hpp.tex
+<response_8hpp__incl.pdf, id=7219, 739.76375pt x 470.75874pt>
+File: response_8hpp__incl.pdf Graphic file (type pdf)
+
+<use response_8hpp__incl.pdf>
+Package pdftex.def Info: response_8hpp__incl.pdf used on input line 9.
+(pdftex.def)             Requested size: 350.0pt x 222.72919pt.
+ [160 <./request_8hpp__incl.pdf> <./request_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./request_8hpp__dep__incl.pdf): PDF inclusion: m
+ultiple pdfs with page group included in a single page
+>] <response_8hpp__dep__incl.pdf, id=7244, 660.4675pt x 156.585pt>
+File: response_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use response_8hpp__dep__incl.pdf>
+Package pdftex.def Info: response_8hpp__dep__incl.pdf used on input line 16.
+(pdftex.def)             Requested size: 350.0pt x 82.98009pt.
+
+Underfull \hbox (badness 896) in paragraph at lines 34--35
+[]\T1/phv/m/n/10 response $\OMS/cmsy/m/n/10 ^^C$ [][]\T1/phv/m/n/10 actor[]_[]z
+eta[]::behavior[]::make[]_[]response[][] (actor[]::actor[]_[]address receiver[]
+_[], messaging[]::message
+ []
+
+) (./scheduled__actor_8cpp.tex
+<scheduled__actor_8cpp__incl.pdf, id=7249, 2111.89pt x 739.76375pt>
+File: scheduled__actor_8cpp__incl.pdf Graphic file (type pdf)
+
+<use scheduled__actor_8cpp__incl.pdf>
+Package pdftex.def Info: scheduled__actor_8cpp__incl.pdf used on input line 14.
+
+(pdftex.def)             Requested size: 350.0pt x 122.59756pt.
+ [161 <./response_8hpp__incl.pdf> <./response_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./response_8hpp__dep__incl.pdf): PDF inclusion: 
+multiple pdfs with page group included in a single page
+>]) (./scheduled__actor_8hpp.tex
+<scheduled__actor_8hpp__incl.pdf, id=7276, 1908.12875pt x 549.05125pt>
+File: scheduled__actor_8hpp__incl.pdf Graphic file (type pdf)
+
+<use scheduled__actor_8hpp__incl.pdf>
+Package pdftex.def Info: scheduled__actor_8hpp__incl.pdf used on input line 11.
+
+(pdftex.def)             Requested size: 350.0pt x 100.70996pt.
+
+<scheduled__actor_8hpp__dep__incl.pdf, id=7277, 266.9975pt x 212.795pt>
+File: scheduled__actor_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use scheduled__actor_8hpp__dep__incl.pdf>
+Package pdftex.def Info: scheduled__actor_8hpp__dep__incl.pdf used on input lin
+e 18.
+(pdftex.def)             Requested size: 266.0pt x 212.02167pt.
+ [162 <./scheduled__actor_8cpp__incl.pdf> <./scheduled__actor_8hpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./scheduled__actor_8hpp__incl.pdf): PDF inclusio
+n: multiple pdfs with page group included in a single page
+>]) (./shared__group_8cpp.tex
+<shared__group_8cpp__incl.pdf, id=7303, 872.25874pt x 538.01pt>
+File: shared__group_8cpp__incl.pdf Graphic file (type pdf)
+
+<use shared__group_8cpp__incl.pdf>
+Package pdftex.def Info: shared__group_8cpp__incl.pdf used on input line 8.
+(pdftex.def)             Requested size: 350.0pt x 215.88156pt.
+ [163 <./scheduled__actor_8hpp__dep__incl.pdf> <./shared__group_8cpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./shared__group_8cpp__incl.pdf): PDF inclusion: 
+multiple pdfs with page group included in a single page
+>]) (./shared__group_8hpp.tex
+<shared__group_8hpp__incl.pdf, id=7330, 871.255pt x 470.75874pt>
+File: shared__group_8hpp__incl.pdf Graphic file (type pdf)
+
+<use shared__group_8hpp__incl.pdf>
+Package pdftex.def Info: shared__group_8hpp__incl.pdf used on input line 11.
+(pdftex.def)             Requested size: 350.0pt x 189.11186pt.
+
+<shared__group_8hpp__dep__incl.pdf, id=7331, 435.6275pt x 325.215pt>
+File: shared__group_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use shared__group_8hpp__dep__incl.pdf>
+Package pdftex.def Info: shared__group_8hpp__dep__incl.pdf used on input line 1
+8.
+(pdftex.def)             Requested size: 350.0pt x 261.28888pt.
+ [164 <./shared__group_8hpp__incl.pdf> <./shared__group_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./shared__group_8hpp__dep__incl.pdf): PDF inclus
+ion: multiple pdfs with page group included in a single page
+>]) (./skip_8cpp.tex
+<skip_8cpp__incl.pdf, id=7357, 1175.39125pt x 549.05125pt>
+File: skip_8cpp__incl.pdf Graphic file (type pdf)
+
+<use skip_8cpp__incl.pdf>
+Package pdftex.def Info: skip_8cpp__incl.pdf used on input line 11.
+(pdftex.def)             Requested size: 350.0pt x 163.49348pt.
+) (./skip_8hpp.tex
+<skip_8hpp__incl.pdf, id=7359, 322.20375pt x 280.04625pt>
+File: skip_8hpp__incl.pdf Graphic file (type pdf)
+
+<use skip_8hpp__incl.pdf>
+Package pdftex.def Info: skip_8hpp__incl.pdf used on input line 9.
+(pdftex.def)             Requested size: 321.0pt x 279.01143pt.
+ [165 <./skip_8cpp__incl.pdf>]
+<skip_8hpp__dep__incl.pdf, id=7377, 233.87375pt x 156.585pt>
+File: skip_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use skip_8hpp__dep__incl.pdf>
+Package pdftex.def Info: skip_8hpp__dep__incl.pdf used on input line 16.
+(pdftex.def)             Requested size: 233.0pt x 156.00879pt.
+) (./sync__contacts_8cpp.tex
+<sync__contacts_8cpp__incl.pdf, id=7380, 1188.44pt x 538.01pt>
+File: sync__contacts_8cpp__incl.pdf Graphic file (type pdf)
+
+<use sync__contacts_8cpp__incl.pdf>
+Package pdftex.def Info: sync__contacts_8cpp__incl.pdf used on input line 10.
+(pdftex.def)             Requested size: 350.0pt x 158.44887pt.
+ [166 <./skip_8hpp__incl.pdf> <./skip_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./skip_8hpp__dep__incl.pdf): PDF inclusion: mult
+iple pdfs with page group included in a single page
+>]) (./sync__contacts_8hpp.tex
+<sync__contacts_8hpp__incl.pdf, id=7405, 1308.89pt x 481.8pt>
+File: sync__contacts_8hpp__incl.pdf Graphic file (type pdf)
+
+<use sync__contacts_8hpp__incl.pdf>
+Package pdftex.def Info: sync__contacts_8hpp__incl.pdf used on input line 11.
+(pdftex.def)             Requested size: 350.0pt x 128.8306pt.
+
+<sync__contacts_8hpp__dep__incl.pdf, id=7406, 280.04625pt x 156.585pt>
+File: sync__contacts_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use sync__contacts_8hpp__dep__incl.pdf>
+Package pdftex.def Info: sync__contacts_8hpp__dep__incl.pdf used on input line 
+18.
+(pdftex.def)             Requested size: 279.0pt x 156.0064pt.
+ [167 <./sync__contacts_8cpp__incl.pdf> <./sync__contacts_8hpp__incl.pdf
+
+pdfTeX warning: pdflatex (file ./sync__contacts_8hpp__incl.pdf): PDF inclusion:
+ multiple pdfs with page group included in a single page
+>]) (./time__unit_8hpp.tex
+<time__unit_8hpp__dep__incl.pdf, id=7431, 664.4825pt x 325.215pt>
+File: time__unit_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use time__unit_8hpp__dep__incl.pdf>
+Package pdftex.def Info: time__unit_8hpp__dep__incl.pdf used on input line 7.
+(pdftex.def)             Requested size: 350.0pt x 171.30118pt.
+ [168 <./sync__contacts_8hpp__dep__incl.pdf> <./time__unit_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./time__unit_8hpp__dep__incl.pdf): PDF inclusion
+: multiple pdfs with page group included in a single page
+>]) (./type__action_8cpp.tex
+<type__action_8cpp__incl.pdf, id=7465, 178.6675pt x 223.83624pt>
+File: type__action_8cpp__incl.pdf Graphic file (type pdf)
+
+<use type__action_8cpp__incl.pdf>
+Package pdftex.def Info: type__action_8cpp__incl.pdf used on input line 8.
+(pdftex.def)             Requested size: 178.0pt x 223.01256pt.
+) (./type__action_8hpp.tex
+<type__action_8hpp__incl.pdf, id=7468, 166.6225pt x 156.585pt>
+File: type__action_8hpp__incl.pdf Graphic file (type pdf)
+
+<use type__action_8hpp__incl.pdf>
+Package pdftex.def Info: type__action_8hpp__incl.pdf used on input line 8.
+(pdftex.def)             Requested size: 166.0pt x 156.01117pt.
+ [169 <./type__action_8cpp__incl.pdf>]
+<type__action_8hpp__dep__incl.pdf, id=7486, 1312.905pt x 550.055pt>
+File: type__action_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use type__action_8hpp__dep__incl.pdf>
+Package pdftex.def Info: type__action_8hpp__dep__incl.pdf used on input line 15
+.
+(pdftex.def)             Requested size: 350.0pt x 146.63676pt.
+) (./work__sharing_8hpp.tex
+<work__sharing_8hpp__incl.pdf, id=7490, 485.815pt x 156.585pt>
+File: work__sharing_8hpp__incl.pdf Graphic file (type pdf)
+
+<use work__sharing_8hpp__incl.pdf>
+Package pdftex.def Info: work__sharing_8hpp__incl.pdf used on input line 12.
+(pdftex.def)             Requested size: 350.0pt x 112.808pt.
+ [170 <./type__action_8hpp__incl.pdf> <./type__action_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./type__action_8hpp__dep__incl.pdf): PDF inclusi
+on: multiple pdfs with page group included in a single page
+>]) (./worker_8hpp.tex
+<worker_8hpp__incl.pdf, id=7519, 518.93875pt x 212.795pt>
+File: worker_8hpp__incl.pdf Graphic file (type pdf)
+
+<use worker_8hpp__incl.pdf>
+Package pdftex.def Info: worker_8hpp__incl.pdf used on input line 13.
+(pdftex.def)             Requested size: 350.0pt x 143.5265pt.
+ [171 <./work__sharing_8hpp__incl.pdf>]
+<worker_8hpp__dep__incl.pdf, id=7535, 163.61125pt x 156.585pt>
+File: worker_8hpp__dep__incl.pdf Graphic file (type pdf)
+
+<use worker_8hpp__dep__incl.pdf>
+Package pdftex.def Info: worker_8hpp__dep__incl.pdf used on input line 20.
+(pdftex.def)             Requested size: 163.0pt x 155.99922pt.
+) [172 <./worker_8hpp__incl.pdf> <./worker_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./worker_8hpp__dep__incl.pdf): PDF inclusion: mu
+ltiple pdfs with page group included in a single page
+>] (./refman.ind [173
+
+
+
+] [174]
+Underfull \hbox (badness 10000) in paragraph at lines 311--313
+[]\T1/phv/m/n/10 actor[]_[]zeta[]::executor[]::work[]_[]sharing[]::coordinator[
+]_[]data,
+ []
+
+[175]
+Underfull \hbox (badness 2582) in paragraph at lines 484--486
+[]| \T1/phv/m/n/10 actor[]_[]zeta[]::messaging[]::blocking[]_[]mail[]_[]queue, 
+[][]42[][],
+ []
+
+[176]
+Underfull \hbox (badness 10000) in paragraph at lines 543--545
+[]| \T1/phv/m/n/10 actor[]_[]zeta[]::executor[]::work[]_[]sharing[]::coordinato
+r[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 548--550
+[]| \T1/phv/m/n/10 actor[]_[]zeta[]::executor[]::work[]_[]sharing[]::coordinato
+r[]
+ []
+
+[177]
+Underfull \hbox (badness 10000) in paragraph at lines 719--721
+[]| \T1/phv/m/n/10 actor[]_[]zeta[]::executor[]::work[]_[]sharing[]::coordinato
+r[]
+ []
+
+[178]
+Underfull \hbox (badness 10000) in paragraph at lines 910--912
+[]| \T1/phv/m/n/10 actor[]_[]zeta[]::executor[]::work[]_[]sharing[]::coordinato
+r[]
+ []
+
+[179]
+Underfull \hbox (badness 10000) in paragraph at lines 1083--1085
+[]| \T1/phv/m/n/10 actor[]_[]zeta[]::executor[]::work[]_[]sharing[]::worker[]_[
+]data,
+ []
+
+[180])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 278.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 278.
+ (./refman.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 278.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 278.
+Package rerunfilecheck Info: File `refman.out' has not changed.
+(rerunfilecheck)             Checksum: 27F6CAB299943236B7CA28F9CCF60878;140697.
+
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 278.
+ ) 
+Here is how much of TeX's memory you used:
+ 18415 strings out of 494946
+ 335314 string characters out of 6181447
+ 357789 words of memory out of 5000000
+ 19479 multiletter control sequences out of 15000+600000
+ 75896 words of font info for 115 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 53i,16n,92p,2668b,672s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr
+/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/urw/courier/uc
+rr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/share
+/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texmf-dist/fonts/ty
+pe1/urw/helvetic/uhvb8ac.pfb></usr/share/texmf-dist/fonts/type1/urw/helvetic/uh
+vr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb>
+Output written on refman.pdf (204 pages, 2287205 bytes).
+PDF statistics:
+ 8671 PDF objects out of 8907 (max. 8388607)
+ 8017 compressed objects within 81 object streams
+ 1632 named destinations out of 1728 (max. 500000)
+ 5615 words of extra memory for PDF output out of 10000 (max. 10000000)
+
