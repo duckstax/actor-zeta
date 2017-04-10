@@ -4,6 +4,9 @@
 #include <vector>
 #include <algorithm>
 
+///
+/// @brief
+///
 class node final {
 public:
     using vertex_id=std::size_t;
@@ -89,7 +92,10 @@ private:
     list_vertices list_vertex;
 };
 
-
+///
+/// @brief
+/// @tparam Node
+///
 template<class Node>
 class stored_vertex final {
 public:
@@ -169,6 +175,9 @@ private:
     std::vector<Node> ddd;
 };
 
+///
+/// @brief
+///
 template<template<class> class Store, class Node=node>
 class adjacency_list final {
 public:

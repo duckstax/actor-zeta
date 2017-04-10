@@ -8,6 +8,9 @@
 //smart actor
 namespace actor_zeta {
     namespace actor {
+///
+/// @brief Basic actor implementation
+///
         class actor final {
         public:
             actor() = default;

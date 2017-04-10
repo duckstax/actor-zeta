@@ -10,6 +10,9 @@
 
 namespace actor_zeta {
     namespace behavior {
+///
+/// @brief Class for lyfecycle determination
+///
         class behavior final {
         public:
             behavior() = default;

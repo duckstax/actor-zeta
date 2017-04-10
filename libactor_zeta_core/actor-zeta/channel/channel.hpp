@@ -6,6 +6,9 @@
 
 namespace actor_zeta {
     namespace channel {
+///
+/// @brief 
+///
         class channel final {
         public:
 

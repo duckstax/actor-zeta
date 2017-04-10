@@ -10,7 +10,9 @@
 
 namespace actor_zeta {
     namespace executor {
-
+///
+/// @brief Stands for work sharing approach
+///
         class work_sharing {
         private:
             template<class WorkerOrCoordinator>
@@ -22,7 +24,9 @@ namespace actor_zeta {
             using queue_type = std::list<executable *>;
 
             ~work_sharing() {}
-
+///
+/// @brief This structure is used as coordinator data keeper
+///
             struct coordinator_data {
                 inline explicit coordinator_data(executor::abstract_coordinator *) {
                 }
@@ -31,7 +35,9 @@ namespace actor_zeta {
                 std::mutex lock;
                 std::condition_variable cv;
             };
-
+///
+/// @brief This structure is used as worker data keeper
+///
             struct worker_data {
                 inline explicit worker_data(executor::abstract_coordinator *) {
                 }

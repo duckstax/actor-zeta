@@ -13,6 +13,9 @@
 
 namespace actor_zeta {
     namespace actor {
+///
+/// @brief Class for location dependant type actor
+///
         class local_actor : public abstract_actor {
         public:
             using mailbox_type = messaging::blocking_mail_queue<messaging::message>;

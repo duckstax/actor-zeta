@@ -7,6 +7,10 @@
 #include "ref_counted.hpp"
 
 namespace actor_zeta {
+///
+/// @brief This class represents smart pointers
+/// @tparam T
+///
     template<class T>
     class intrusive_ptr {
     public:
