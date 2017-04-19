@@ -2,8 +2,6 @@
 #define ABSTRACT_COORDINATOR_HPP
 
 #include <thread>
-
-#include "time_unit.hpp"
 #include "actor-zeta/forwards.hpp"
 
 namespace actor_zeta {
@@ -16,7 +14,7 @@ namespace actor_zeta {
 
             virtual ~abstract_coordinator() = default;
 
-            explicit abstract_coordinator(size_t num_worker_threads, size_t max_throughput_param)
+            abstract_coordinator(std::size_t num_worker_threads, std::size_t max_throughput_param)
                     : max_throughput_(max_throughput_param),
                       num_workers_(((0 == num_worker_threads) ? std::thread::hardware_concurrency() * 2 - 1 : num_worker_threads)) {
             };
@@ -30,9 +28,8 @@ namespace actor_zeta {
             }
 
         private:
-            size_t max_throughput_;
-
-            size_t num_workers_;
+            std::size_t max_throughput_;
+            std::size_t num_workers_;
         };
     }
 }

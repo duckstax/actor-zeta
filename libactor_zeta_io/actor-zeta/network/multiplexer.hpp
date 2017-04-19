@@ -13,16 +13,13 @@ namespace actor_zeta {
 
             virtual ~multiplexer() = default;
 
-            virtual void new_tcp_listener(const std::string &host, uint16_t port) = 0;
+            virtual void new_tcp_listener(const std::string &host, uint16_t port, const actor::actor_address &) = 0;
 
-            virtual void new_tcp_connection(const std::string &host, uint16_t port) = 0;
+            virtual void new_tcp_connection(const std::string &host, uint16_t port, const actor::actor_address &) = 0;
 
             virtual void close(const connection_identifying &) = 0;
 
             virtual void write(const connection_identifying &, const std::string &) = 0;
-
-            virtual void registration_broker_address(const actor::actor_address &) = 0;
-
         };
 
         using unique_multiplexer_ptr = std::unique_ptr<multiplexer>;
