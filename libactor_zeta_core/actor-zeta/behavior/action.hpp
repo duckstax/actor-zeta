@@ -7,6 +7,9 @@
 
 namespace actor_zeta {
     namespace behavior {
+///
+/// @brief Basic action implementation
+///
         class action final {
         public:
             action() = default;

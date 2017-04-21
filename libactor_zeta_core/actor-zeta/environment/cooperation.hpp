@@ -8,6 +8,9 @@
 
 namespace actor_zeta {
     namespace environment {
+///
+/// @brief A logic combiner for groups
+///
         class cooperation final {
         public:
             cooperation() = default;

@@ -8,6 +8,9 @@
 
 namespace actor_zeta {
     namespace actor {
+///
+/// @brief This represents an actor's address container
+///
         class actor_address final {
         public:
             actor_address() = default;

@@ -6,6 +6,9 @@
 #include "actor-zeta/behavior/abstract_action.hpp"
 
 namespace actor_zeta {
+///
+/// @brief A class used for skipping action
+///
     class skip final : public behavior::abstract_action {
     public:
         skip();

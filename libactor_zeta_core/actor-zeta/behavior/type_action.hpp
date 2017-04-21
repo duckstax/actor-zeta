@@ -5,6 +5,9 @@
 
 namespace actor_zeta {
     namespace behavior {
+///
+/// @brief Type of commands used for lyfecycle 
+///
         class type_action final {
         private:
             std::string body_;

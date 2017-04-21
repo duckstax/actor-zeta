@@ -8,6 +8,9 @@
 
 namespace actor_zeta {
     namespace actor {
+///
+/// @brief Represents actor type with blocking mode
+///
         class blocking_actor  : public local_actor , executor::executable {
         public:
             blocking_actor(environment::environment *, const std::string &);

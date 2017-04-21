@@ -6,6 +6,9 @@
 
 namespace actor_zeta {
     namespace behavior {
+///
+/// @brief This is a response container for messaging
+///
         class response {
         private:
             actor::actor_address receiver_;
