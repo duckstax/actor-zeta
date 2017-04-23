@@ -1,0 +1,84 @@
+\hypertarget{structactor__zeta_1_1network_1_1multiplexer}{}\section{actor\+\_\+zeta\+:\+:network\+:\+:multiplexer Struct Reference}
+\label{structactor__zeta_1_1network_1_1multiplexer}\index{actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}}
+
+
+Multiplexing utility class.  
+
+
+
+
+{\ttfamily \#include $<$multiplexer.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual int \hyperlink{structactor__zeta_1_1network_1_1multiplexer_a5147eb14922a4023242b3d37d689cd74}{run} ()=0
+\item 
+virtual \hyperlink{structactor__zeta_1_1network_1_1multiplexer_a1dd1d5a78b60a3b33fcb54a6228da2d7}{$\sim$multiplexer} ()=default
+\item 
+virtual void \hyperlink{structactor__zeta_1_1network_1_1multiplexer_aa01fa4cd80644ed363e5eafa054af12d}{new\+\_\+tcp\+\_\+listener} (const std\+::string \&host, uint16\+\_\+t port)=0
+\item 
+virtual void \hyperlink{structactor__zeta_1_1network_1_1multiplexer_aaec037d10b2233714cb03b2b3925a4e6}{new\+\_\+tcp\+\_\+connection} (const std\+::string \&host, uint16\+\_\+t port)=0
+\item 
+virtual void \hyperlink{structactor__zeta_1_1network_1_1multiplexer_a083a55987b89b74917babec426e886b6}{close} (const \hyperlink{classactor__zeta_1_1network_1_1connection__identifying}{connection\+\_\+identifying} \&)=0
+\item 
+virtual void \hyperlink{structactor__zeta_1_1network_1_1multiplexer_afc9b254fa12ef53119889c5002714f36}{write} (const \hyperlink{classactor__zeta_1_1network_1_1connection__identifying}{connection\+\_\+identifying} \&, const std\+::string \&)=0
+\item 
+virtual void \hyperlink{structactor__zeta_1_1network_1_1multiplexer_a3f750bb1b6aaea28af84f4a40c1953ce}{registration\+\_\+broker\+\_\+address} (const \hyperlink{classactor__zeta_1_1actor_1_1actor__address}{actor\+::actor\+\_\+address} \&)=0
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Multiplexing utility class. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structactor__zeta_1_1network_1_1multiplexer_a1dd1d5a78b60a3b33fcb54a6228da2d7}\label{structactor__zeta_1_1network_1_1multiplexer_a1dd1d5a78b60a3b33fcb54a6228da2d7}} 
+\index{actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}!````~multiplexer@{$\sim$multiplexer}}
+\index{````~multiplexer@{$\sim$multiplexer}!actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}}
+\subsubsection{\texorpdfstring{$\sim$multiplexer()}{~multiplexer()}}
+{\footnotesize\ttfamily virtual actor\+\_\+zeta\+::network\+::multiplexer\+::$\sim$multiplexer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{structactor__zeta_1_1network_1_1multiplexer_a083a55987b89b74917babec426e886b6}\label{structactor__zeta_1_1network_1_1multiplexer_a083a55987b89b74917babec426e886b6}} 
+\index{actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}!close@{close}}
+\index{close@{close}!actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}}
+\subsubsection{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily virtual void actor\+\_\+zeta\+::network\+::multiplexer\+::close (\begin{DoxyParamCaption}\item[{const \hyperlink{classactor__zeta_1_1network_1_1connection__identifying}{connection\+\_\+identifying} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\mbox{\Hypertarget{structactor__zeta_1_1network_1_1multiplexer_aaec037d10b2233714cb03b2b3925a4e6}\label{structactor__zeta_1_1network_1_1multiplexer_aaec037d10b2233714cb03b2b3925a4e6}} 
+\index{actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}!new\+\_\+tcp\+\_\+connection@{new\+\_\+tcp\+\_\+connection}}
+\index{new\+\_\+tcp\+\_\+connection@{new\+\_\+tcp\+\_\+connection}!actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}}
+\subsubsection{\texorpdfstring{new\+\_\+tcp\+\_\+connection()}{new\_tcp\_connection()}}
+{\footnotesize\ttfamily virtual void actor\+\_\+zeta\+::network\+::multiplexer\+::new\+\_\+tcp\+\_\+connection (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{host,  }\item[{uint16\+\_\+t}]{port }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\mbox{\Hypertarget{structactor__zeta_1_1network_1_1multiplexer_aa01fa4cd80644ed363e5eafa054af12d}\label{structactor__zeta_1_1network_1_1multiplexer_aa01fa4cd80644ed363e5eafa054af12d}} 
+\index{actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}!new\+\_\+tcp\+\_\+listener@{new\+\_\+tcp\+\_\+listener}}
+\index{new\+\_\+tcp\+\_\+listener@{new\+\_\+tcp\+\_\+listener}!actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}}
+\subsubsection{\texorpdfstring{new\+\_\+tcp\+\_\+listener()}{new\_tcp\_listener()}}
+{\footnotesize\ttfamily virtual void actor\+\_\+zeta\+::network\+::multiplexer\+::new\+\_\+tcp\+\_\+listener (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{host,  }\item[{uint16\+\_\+t}]{port }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\mbox{\Hypertarget{structactor__zeta_1_1network_1_1multiplexer_a3f750bb1b6aaea28af84f4a40c1953ce}\label{structactor__zeta_1_1network_1_1multiplexer_a3f750bb1b6aaea28af84f4a40c1953ce}} 
+\index{actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}!registration\+\_\+broker\+\_\+address@{registration\+\_\+broker\+\_\+address}}
+\index{registration\+\_\+broker\+\_\+address@{registration\+\_\+broker\+\_\+address}!actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}}
+\subsubsection{\texorpdfstring{registration\+\_\+broker\+\_\+address()}{registration\_broker\_address()}}
+{\footnotesize\ttfamily virtual void actor\+\_\+zeta\+::network\+::multiplexer\+::registration\+\_\+broker\+\_\+address (\begin{DoxyParamCaption}\item[{const \hyperlink{classactor__zeta_1_1actor_1_1actor__address}{actor\+::actor\+\_\+address} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\mbox{\Hypertarget{structactor__zeta_1_1network_1_1multiplexer_a5147eb14922a4023242b3d37d689cd74}\label{structactor__zeta_1_1network_1_1multiplexer_a5147eb14922a4023242b3d37d689cd74}} 
+\index{actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}!run@{run}}
+\index{run@{run}!actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}}
+\subsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily virtual int actor\+\_\+zeta\+::network\+::multiplexer\+::run (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\mbox{\Hypertarget{structactor__zeta_1_1network_1_1multiplexer_afc9b254fa12ef53119889c5002714f36}\label{structactor__zeta_1_1network_1_1multiplexer_afc9b254fa12ef53119889c5002714f36}} 
+\index{actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}!write@{write}}
+\index{write@{write}!actor\+\_\+zeta\+::network\+::multiplexer@{actor\+\_\+zeta\+::network\+::multiplexer}}
+\subsubsection{\texorpdfstring{write()}{write()}}
+{\footnotesize\ttfamily virtual void actor\+\_\+zeta\+::network\+::multiplexer\+::write (\begin{DoxyParamCaption}\item[{const \hyperlink{classactor__zeta_1_1network_1_1connection__identifying}{connection\+\_\+identifying} \&}]{,  }\item[{const std\+::string \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{multiplexer_8hpp}{multiplexer.\+hpp}\end{DoxyCompactItemize}

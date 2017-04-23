@@ -1,0 +1,34 @@
+<map id="type_action.hpp" name="type_action.hpp">
+<area shape="rect" id="node2" href="$abstract__action_8hpp.html" title="abstract_action.hpp" alt="" coords="215,155,351,181"/>
+<area shape="rect" id="node4" href="$behavior_8hpp.html" title="behavior.hpp" alt="" coords="555,304,648,331"/>
+<area shape="rect" id="node21" href="$message__header_8hpp.html" title="message_header.hpp" alt="" coords="677,80,822,107"/>
+<area shape="rect" id="node33" href="$type__action_8cpp.html" title="type_action.cpp" alt="" coords="847,80,961,107"/>
+<area shape="rect" id="node3" href="$action_8hpp.html" title="action.hpp" alt="" coords="332,229,415,256"/>
+<area shape="rect" id="node9" href="$scheduled__actor_8cpp.html" title="scheduled_actor.cpp" alt="" coords="556,528,697,555"/>
+<area shape="rect" id="node19" href="$skip_8hpp.html" title="skip.hpp" alt="" coords="94,379,165,405"/>
+<area shape="rect" id="node18" href="$action_8cpp.html" title="action.cpp" alt="" coords="291,453,373,480"/>
+<area shape="rect" id="node5" href="$local__actor_8hpp.html" title="local_actor.hpp" alt="" coords="995,379,1104,405"/>
+<area shape="rect" id="node13" href="$cooperation_8cpp.html" title="cooperation.cpp" alt="" coords="1245,453,1360,480"/>
+<area shape="rect" id="node15" href="$sync__contacts_8hpp.html" title="sync_contacts.hpp" alt="" coords="617,379,749,405"/>
+<area shape="rect" id="node17" href="$behavior_8cpp.html" title="behavior.cpp" alt="" coords="397,453,491,480"/>
+<area shape="rect" id="node6" href="$blocking__actor_8hpp.html" title="blocking_actor.hpp" alt="" coords="824,453,955,480"/>
+<area shape="rect" id="node8" href="$scheduled__actor_8hpp.html" title="scheduled_actor.hpp" alt="" coords="979,453,1120,480"/>
+<area shape="rect" id="node12" href="$local__actor_8cpp.html" title="local_actor.cpp" alt="" coords="1153,528,1263,555"/>
+<area shape="rect" id="node14" href="$group_8cpp.html" title="group.cpp" alt="" coords="1385,453,1463,480"/>
+<area shape="rect" id="node7" href="$blocking__actor_8cpp.html" title="blocking_actor.cpp" alt="" coords="721,528,852,555"/>
+<area shape="rect" id="node10" href="$broker_8hpp.html" title="broker.hpp" alt="" coords="1008,528,1091,555"/>
+<area shape="rect" id="node11" href="$broker_8cpp.html" title="broker.cpp" alt="" coords="1008,603,1091,629"/>
+<area shape="rect" id="node16" href="$sync__contacts_8cpp.html" title="sync_contacts.cpp" alt="" coords="515,453,647,480"/>
+<area shape="rect" id="node20" href="$skip_8cpp.html" title="skip.cpp" alt="" coords="94,453,165,480"/>
+<area shape="rect" id="node22" href="$message_8hpp.html" title="message.hpp" alt="" coords="737,155,837,181"/>
+<area shape="rect" id="node32" href="$message__header_8cpp.html" title="message_header.cpp" alt="" coords="861,155,1006,181"/>
+<area shape="rect" id="node23" href="$request_8hpp.html" title="request.hpp" alt="" coords="501,379,592,405"/>
+<area shape="rect" id="node24" href="$response_8hpp.html" title="response.hpp" alt="" coords="235,379,335,405"/>
+<area shape="rect" id="node25" href="$cooperation_8hpp.html" title="cooperation.hpp" alt="" coords="1221,379,1336,405"/>
+<area shape="rect" id="node28" href="$shared__group_8hpp.html" title="shared_group.hpp" alt="" coords="1167,229,1292,256"/>
+<area shape="rect" id="node31" href="$message_8cpp.html" title="message.cpp" alt="" coords="875,229,975,256"/>
+<area shape="rect" id="node26" href="$environment_8hpp.html" title="environment.hpp" alt="" coords="1487,453,1603,480"/>
+<area shape="rect" id="node27" href="$environment_8cpp.html" title="environment.cpp" alt="" coords="1487,528,1603,555"/>
+<area shape="rect" id="node29" href="$group_8hpp.html" title="group.hpp" alt="" coords="1334,304,1413,331"/>
+<area shape="rect" id="node30" href="$shared__group_8cpp.html" title="shared_group.cpp" alt="" coords="1116,304,1241,331"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="message_header.hpp" name="message_header.hpp">
+<area shape="rect" id="node2" href="$actor__address_8hpp.html" title="actor&#45;zeta/actor/actor\l_address.hpp" alt="" coords="176,80,323,121"/>
+<area shape="rect" id="node11" href="$type__action_8hpp.html" title="actor&#45;zeta/behavior\l/type_action.hpp" alt="" coords="365,169,496,211"/>
+<area shape="rect" id="node12" href="$message__priority_8hpp.html" title="message_priority.hpp" alt="" coords="445,87,590,114"/>
+<area shape="rect" id="node3" href="$intrusive__ptr_8hpp.html" title="actor&#45;zeta/intrusive\l_ptr.hpp" alt="" coords="7,169,137,211"/>
+<area shape="rect" id="node8" href="$abstract__actor_8hpp.html" title="abstract_actor.hpp" alt="" coords="161,177,290,203"/>
+<area shape="rect" id="node5" href="$ref__counted_8hpp.html" title="ref_counted.hpp" alt="" coords="83,259,197,285"/>
+</map>

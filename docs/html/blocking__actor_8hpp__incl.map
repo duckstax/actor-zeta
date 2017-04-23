@@ -1,0 +1,19 @@
+<map id="blocking_actor.hpp" name="blocking_actor.hpp">
+<area shape="rect" id="node4" href="$local__actor_8hpp.html" title="local_actor.hpp" alt="" coords="927,80,1036,107"/>
+<area shape="rect" id="node6" href="$blocking__mail__queue_8hpp.html" title="actor&#45;zeta/messaging\l/blocking_mail_queue.hpp" alt="" coords="1625,155,1797,196"/>
+<area shape="rect" id="node10" href="$message_8hpp.html" title="actor&#45;zeta/messaging\l/message.hpp" alt="" coords="1184,155,1331,196"/>
+<area shape="rect" id="node17" href="$abstract__actor_8hpp.html" title="abstract_actor.hpp" alt="" coords="963,430,1093,457"/>
+<area shape="rect" id="node26" href="$behavior_8hpp.html" title="actor&#45;zeta/behavior\l/behavior.hpp" alt="" coords="467,155,597,196"/>
+<area shape="rect" id="node31" href="$executable_8hpp.html" title="actor&#45;zeta/executor\l/executable.hpp" alt="" coords="166,155,301,196"/>
+<area shape="rect" id="node32" href="$book__contacts_8hpp.html" title="actor&#45;zeta/contacts\l/book_contacts.hpp" alt="" coords="533,244,669,285"/>
+<area shape="rect" id="node11" href="$message__header_8hpp.html" title="message_header.hpp" alt="" coords="1041,251,1186,278"/>
+<area shape="rect" id="node21" href="$message__body_8hpp.html" title="message_body.hpp" alt="" coords="1339,251,1474,278"/>
+<area shape="rect" id="node12" href="$actor__address_8hpp.html" title="actor&#45;zeta/actor/actor\l_address.hpp" alt="" coords="955,333,1101,375"/>
+<area shape="rect" id="node19" href="$type__action_8hpp.html" title="actor&#45;zeta/behavior\l/type_action.hpp" alt="" coords="747,423,877,464"/>
+<area shape="rect" id="node20" href="$message__priority_8hpp.html" title="message_priority.hpp" alt="" coords="1126,341,1271,367"/>
+<area shape="rect" id="node13" href="$intrusive__ptr_8hpp.html" title="actor&#45;zeta/intrusive\l_ptr.hpp" alt="" coords="1233,423,1364,464"/>
+<area shape="rect" id="node15" href="$ref__counted_8hpp.html" title="ref_counted.hpp" alt="" coords="1241,512,1356,539"/>
+<area shape="rect" id="node29" href="$action_8hpp.html" title="action.hpp" alt="" coords="771,251,853,278"/>
+<area shape="rect" id="node30" href="$abstract__action_8hpp.html" title="abstract_action.hpp" alt="" coords="744,341,880,367"/>
+<area shape="rect" id="node33" href="$group__contacts_8hpp.html" title="group_contacts.hpp" alt="" coords="432,341,568,367"/>
+</map>

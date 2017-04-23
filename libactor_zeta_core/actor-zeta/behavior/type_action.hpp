@@ -5,7 +5,10 @@
 
 namespace actor_zeta {
     namespace behavior {
-        class type_action final {
+///
+/// @brief Type of commands used for lyfecycle 
+///
+        class type_action {
         private:
             std::string body_;
             std::size_t hash_;
@@ -49,4 +52,5 @@ namespace std {
         }
     };
 }
+
 #endif //TOKEN_HPP

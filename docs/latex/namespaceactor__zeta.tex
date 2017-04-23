@@ -1,0 +1,160 @@
+\hypertarget{namespaceactor__zeta}{}\section{actor\+\_\+zeta Namespace Reference}
+\label{namespaceactor__zeta}\index{actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespaceactor__zeta_1_1actor}{actor}
+\item 
+ \hyperlink{namespaceactor__zeta_1_1behavior}{behavior}
+\item 
+ \hyperlink{namespaceactor__zeta_1_1contacts}{contacts}
+\item 
+ \hyperlink{namespaceactor__zeta_1_1environment}{environment}
+\item 
+ \hyperlink{namespaceactor__zeta_1_1executor}{executor}
+\item 
+ \hyperlink{namespaceactor__zeta_1_1messaging}{messaging}
+\item 
+ \hyperlink{namespaceactor__zeta_1_1network}{network}
+\end{DoxyCompactItemize}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}
+\begin{DoxyCompactList}\small\item\em This class represents smart pointers. \end{DoxyCompactList}\item 
+class \hyperlink{classactor__zeta_1_1ref__counted}{ref\+\_\+counted}
+\begin{DoxyCompactList}\small\item\em This class represents reference counter. \end{DoxyCompactList}\item 
+class \hyperlink{classactor__zeta_1_1skip}{skip}
+\begin{DoxyCompactList}\small\item\em A class used for skipping action. \end{DoxyCompactList}\item 
+class \hyperlink{classactor__zeta_1_1sync__contacts}{sync\+\_\+contacts}
+\begin{DoxyCompactList}\small\item\em A class used for contact operations synchronization. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class T , class U $>$ }\\bool \hyperlink{namespaceactor__zeta_ac598ab23cb84372ba91500b5d4747ee0}{operator==} (\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&a, \hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ U $>$ const \&b) noexcept
+\item 
+{\footnotesize template$<$class T , class U $>$ }\\bool \hyperlink{namespaceactor__zeta_a0decf099760afba5650bca66df6d27fa}{operator!=} (\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&a, \hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ U $>$ const \&b) noexcept
+\item 
+{\footnotesize template$<$class T $>$ }\\bool \hyperlink{namespaceactor__zeta_aab7f2c9b316e469055c2b954f2f19114}{operator==} (\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&a, T $\ast$b) noexcept
+\item 
+{\footnotesize template$<$class T $>$ }\\bool \hyperlink{namespaceactor__zeta_a37a83c975b21ae711afbc79899f65ce5}{operator!=} (\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&a, T $\ast$b) noexcept
+\item 
+{\footnotesize template$<$class T $>$ }\\bool \hyperlink{namespaceactor__zeta_a5af0f10ae3a42503cbb7abd442fd640e}{operator==} (T $\ast$a, \hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&b) noexcept
+\item 
+{\footnotesize template$<$class T $>$ }\\bool \hyperlink{namespaceactor__zeta_a77e38cafe133e9e6ddecab74c92ee0d7}{operator!=} (T $\ast$a, \hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&b) noexcept
+\item 
+{\footnotesize template$<$class T , class U $>$ }\\bool \hyperlink{namespaceactor__zeta_ad575198e737479f03575c22928499605}{operator$<$} (\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&a, \hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ U $>$ const \&b) noexcept
+\item 
+{\footnotesize template$<$class T $>$ }\\void \hyperlink{namespaceactor__zeta_ad670f36d3b7ef3abb5c18b6c297c63d0}{swap} (\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ \&a, \hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ \&b) noexcept
+\item 
+{\footnotesize template$<$class T $>$ }\\T $\ast$ \hyperlink{namespaceactor__zeta_a52fbdab9c41eaeb960819e652c5b6d50}{get\+\_\+pointer} (\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&p) noexcept
+\item 
+{\footnotesize template$<$class T , class U $>$ }\\\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ \hyperlink{namespaceactor__zeta_a5e6e79b539107476ce1278f21f91c94d}{static\+\_\+pointer\+\_\+cast} (\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ U $>$ const \&r) noexcept
+\item 
+{\footnotesize template$<$class T , class U $>$ }\\\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ \hyperlink{namespaceactor__zeta_ad46de81799adbc03fb5a89a5b5129703}{const\+\_\+pointer\+\_\+cast} (\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ U $>$ const \&r) noexcept
+\item 
+{\footnotesize template$<$class T , class U $>$ }\\\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ \hyperlink{namespaceactor__zeta_aa7fcd42040b14e3cb112d92f38564e9c}{dynamic\+\_\+pointer\+\_\+cast} (\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ U $>$ const \&r) noexcept
+\item 
+void \hyperlink{namespaceactor__zeta_ae83a48a1257a4f720333741d003478d0}{intrusive\+\_\+ptr\+\_\+add\+\_\+ref} (\hyperlink{classactor__zeta_1_1ref__counted}{ref\+\_\+counted} $\ast$p)
+\item 
+void \hyperlink{namespaceactor__zeta_a9ccb791d78dcd1a7a89f2e879fb738f0}{intrusive\+\_\+ptr\+\_\+release} (\hyperlink{classactor__zeta_1_1ref__counted}{ref\+\_\+counted} $\ast$p)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespaceactor__zeta_ad46de81799adbc03fb5a89a5b5129703}\label{namespaceactor__zeta_ad46de81799adbc03fb5a89a5b5129703}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!const\+\_\+pointer\+\_\+cast@{const\+\_\+pointer\+\_\+cast}}
+\index{const\+\_\+pointer\+\_\+cast@{const\+\_\+pointer\+\_\+cast}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{const\+\_\+pointer\+\_\+cast()}{const\_pointer\_cast()}}
+{\footnotesize\ttfamily template$<$class T , class U $>$ \\
+\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$T$>$ actor\+\_\+zeta\+::const\+\_\+pointer\+\_\+cast (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ U $>$ const \&}]{r }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_aa7fcd42040b14e3cb112d92f38564e9c}\label{namespaceactor__zeta_aa7fcd42040b14e3cb112d92f38564e9c}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!dynamic\+\_\+pointer\+\_\+cast@{dynamic\+\_\+pointer\+\_\+cast}}
+\index{dynamic\+\_\+pointer\+\_\+cast@{dynamic\+\_\+pointer\+\_\+cast}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{dynamic\+\_\+pointer\+\_\+cast()}{dynamic\_pointer\_cast()}}
+{\footnotesize\ttfamily template$<$class T , class U $>$ \\
+\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$T$>$ actor\+\_\+zeta\+::dynamic\+\_\+pointer\+\_\+cast (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ U $>$ const \&}]{r }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_a52fbdab9c41eaeb960819e652c5b6d50}\label{namespaceactor__zeta_a52fbdab9c41eaeb960819e652c5b6d50}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!get\+\_\+pointer@{get\+\_\+pointer}}
+\index{get\+\_\+pointer@{get\+\_\+pointer}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{get\+\_\+pointer()}{get\_pointer()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+T$\ast$ actor\+\_\+zeta\+::get\+\_\+pointer (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&}]{p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_ae83a48a1257a4f720333741d003478d0}\label{namespaceactor__zeta_ae83a48a1257a4f720333741d003478d0}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!intrusive\+\_\+ptr\+\_\+add\+\_\+ref@{intrusive\+\_\+ptr\+\_\+add\+\_\+ref}}
+\index{intrusive\+\_\+ptr\+\_\+add\+\_\+ref@{intrusive\+\_\+ptr\+\_\+add\+\_\+ref}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{intrusive\+\_\+ptr\+\_\+add\+\_\+ref()}{intrusive\_ptr\_add\_ref()}}
+{\footnotesize\ttfamily void actor\+\_\+zeta\+::intrusive\+\_\+ptr\+\_\+add\+\_\+ref (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1ref__counted}{ref\+\_\+counted} $\ast$}]{p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_a9ccb791d78dcd1a7a89f2e879fb738f0}\label{namespaceactor__zeta_a9ccb791d78dcd1a7a89f2e879fb738f0}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!intrusive\+\_\+ptr\+\_\+release@{intrusive\+\_\+ptr\+\_\+release}}
+\index{intrusive\+\_\+ptr\+\_\+release@{intrusive\+\_\+ptr\+\_\+release}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{intrusive\+\_\+ptr\+\_\+release()}{intrusive\_ptr\_release()}}
+{\footnotesize\ttfamily void actor\+\_\+zeta\+::intrusive\+\_\+ptr\+\_\+release (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1ref__counted}{ref\+\_\+counted} $\ast$}]{p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_a0decf099760afba5650bca66df6d27fa}\label{namespaceactor__zeta_a0decf099760afba5650bca66df6d27fa}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{operator"!=()}{operator!=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$class T , class U $>$ \\
+bool actor\+\_\+zeta\+::operator!= (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&}]{a,  }\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ U $>$ const \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_a37a83c975b21ae711afbc79899f65ce5}\label{namespaceactor__zeta_a37a83c975b21ae711afbc79899f65ce5}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{operator"!=()}{operator!=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+bool actor\+\_\+zeta\+::operator!= (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&}]{a,  }\item[{T $\ast$}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_a77e38cafe133e9e6ddecab74c92ee0d7}\label{namespaceactor__zeta_a77e38cafe133e9e6ddecab74c92ee0d7}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{operator"!=()}{operator!=()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+bool actor\+\_\+zeta\+::operator!= (\begin{DoxyParamCaption}\item[{T $\ast$}]{a,  }\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_ad575198e737479f03575c22928499605}\label{namespaceactor__zeta_ad575198e737479f03575c22928499605}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!operator$<$@{operator$<$}}
+\index{operator$<$@{operator$<$}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{operator$<$()}{operator<()}}
+{\footnotesize\ttfamily template$<$class T , class U $>$ \\
+bool actor\+\_\+zeta\+::operator$<$ (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&}]{a,  }\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ U $>$ const \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_ac598ab23cb84372ba91500b5d4747ee0}\label{namespaceactor__zeta_ac598ab23cb84372ba91500b5d4747ee0}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!operator==@{operator==}}
+\index{operator==@{operator==}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$class T , class U $>$ \\
+bool actor\+\_\+zeta\+::operator== (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&}]{a,  }\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ U $>$ const \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_aab7f2c9b316e469055c2b954f2f19114}\label{namespaceactor__zeta_aab7f2c9b316e469055c2b954f2f19114}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!operator==@{operator==}}
+\index{operator==@{operator==}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+bool actor\+\_\+zeta\+::operator== (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&}]{a,  }\item[{T $\ast$}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_a5af0f10ae3a42503cbb7abd442fd640e}\label{namespaceactor__zeta_a5af0f10ae3a42503cbb7abd442fd640e}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!operator==@{operator==}}
+\index{operator==@{operator==}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+bool actor\+\_\+zeta\+::operator== (\begin{DoxyParamCaption}\item[{T $\ast$}]{a,  }\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ const \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_a5e6e79b539107476ce1278f21f91c94d}\label{namespaceactor__zeta_a5e6e79b539107476ce1278f21f91c94d}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!static\+\_\+pointer\+\_\+cast@{static\+\_\+pointer\+\_\+cast}}
+\index{static\+\_\+pointer\+\_\+cast@{static\+\_\+pointer\+\_\+cast}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{static\+\_\+pointer\+\_\+cast()}{static\_pointer\_cast()}}
+{\footnotesize\ttfamily template$<$class T , class U $>$ \\
+\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$T$>$ actor\+\_\+zeta\+::static\+\_\+pointer\+\_\+cast (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ U $>$ const \&}]{r }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_ad670f36d3b7ef3abb5c18b6c297c63d0}\label{namespaceactor__zeta_ad670f36d3b7ef3abb5c18b6c297c63d0}} 
+\index{actor\+\_\+zeta@{actor\+\_\+zeta}!swap@{swap}}
+\index{swap@{swap}!actor\+\_\+zeta@{actor\+\_\+zeta}}
+\subsubsection{\texorpdfstring{swap()}{swap()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void actor\+\_\+zeta\+::swap (\begin{DoxyParamCaption}\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ \&}]{a,  }\item[{\hyperlink{classactor__zeta_1_1intrusive__ptr}{intrusive\+\_\+ptr}$<$ T $>$ \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+

@@ -1,0 +1,4 @@
+<map id="actor_zeta::behavior::abstract_action" name="actor_zeta::behavior::abstract_action">
+<area shape="rect" id="node2" href="$classactor__zeta_1_1skip.html" title="A class used for skipping action. " alt="" coords="5,95,120,121"/>
+<area shape="rect" id="node3" href="$classactor__zeta_1_1sync__contacts.html" title="A class used for contact operations synchronization. " alt="" coords="144,95,320,121"/>
+</map>

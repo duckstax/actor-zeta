@@ -3,9 +3,11 @@
 
 #include <thread>
 #include "actor-zeta/forwards.hpp"
-
 namespace actor_zeta {
     namespace executor {
+///
+/// @brief abstract concept of an coordination approach
+///
         class abstract_coordinator {
         public:
             virtual void submit(executable *) = 0;

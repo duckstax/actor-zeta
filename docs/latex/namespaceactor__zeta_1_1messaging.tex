@@ -1,0 +1,115 @@
+\hypertarget{namespaceactor__zeta_1_1messaging}{}\section{actor\+\_\+zeta\+:\+:messaging Namespace Reference}
+\label{namespaceactor__zeta_1_1messaging}\index{actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classactor__zeta_1_1messaging_1_1blocking__mail__queue}{blocking\+\_\+mail\+\_\+queue}
+\begin{DoxyCompactList}\small\item\em A mailbox class for message queue. \end{DoxyCompactList}\item 
+class \hyperlink{classactor__zeta_1_1messaging_1_1message}{message}
+\begin{DoxyCompactList}\small\item\em Class to represent messages. \end{DoxyCompactList}\item 
+class \hyperlink{classactor__zeta_1_1messaging_1_1message__body}{message\+\_\+body}
+\begin{DoxyCompactList}\small\item\em A message value container. \end{DoxyCompactList}\item 
+class \hyperlink{classactor__zeta_1_1messaging_1_1message__header}{message\+\_\+header}
+\begin{DoxyCompactList}\small\item\em A message description. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1}{enqueue\+\_\+result} \{ \hyperlink{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1a260ca9dd8a4577fc00b7bd5810298076}{enqueue\+\_\+result\+::success}, 
+\hyperlink{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1a8505d92f1a08d64e80ebffbde6749069}{enqueue\+\_\+result\+::unblocked\+\_\+reader}, 
+\hyperlink{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1a1f494a6c8d9d6b854fcae46e258d9b85}{enqueue\+\_\+result\+::queue\+\_\+closed}
+ \}\begin{DoxyCompactList}\small\item\em A strongly typed enum class representing enqueue result. \end{DoxyCompactList}
+\item 
+enum \hyperlink{namespaceactor__zeta_1_1messaging_a1b4c4b3ab625eb033c15da4fbe9c4a89}{message\+\_\+priority} \+: int \{ \hyperlink{namespaceactor__zeta_1_1messaging_a1b4c4b3ab625eb033c15da4fbe9c4a89a53cced8d281a1a0ace3cb6594daaa4f7}{message\+\_\+priority\+::low} = 0, 
+\hyperlink{namespaceactor__zeta_1_1messaging_a1b4c4b3ab625eb033c15da4fbe9c4a89afea087517c26fadd409bd4b9dc642555}{message\+\_\+priority\+::normal}, 
+\hyperlink{namespaceactor__zeta_1_1messaging_a1b4c4b3ab625eb033c15da4fbe9c4a89a8d966b2253a917086c8604959e152243}{message\+\_\+priority\+::high}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$std\+::size\+\_\+t N, typename T $>$ }\\\hyperlink{classactor__zeta_1_1messaging_1_1message}{message} $\ast$ \hyperlink{namespaceactor__zeta_1_1messaging_a9e63d189e59df07f1d3523c4916f9b47}{make\+\_\+message} (const char(\&a\+Str)\mbox{[}N\mbox{]}, T data)
+\item 
+{\footnotesize template$<$typename T $>$ }\\\hyperlink{classactor__zeta_1_1messaging_1_1message}{message} $\ast$ \hyperlink{namespaceactor__zeta_1_1messaging_a21ea28d14db328e347552fa3943410bf}{make\+\_\+message} (const std\+::string \&type, T data)
+\item 
+{\footnotesize template$<$typename T $>$ }\\\hyperlink{classactor__zeta_1_1messaging_1_1message}{message} $\ast$ \hyperlink{namespaceactor__zeta_1_1messaging_a81fe08e3ae76ca8eec5eb6f59f3912ba}{make\+\_\+message} (const std\+::string \&type, T data, \hyperlink{classactor__zeta_1_1actor_1_1actor__address}{actor\+::actor\+\_\+address} address)
+\item 
+{\footnotesize template$<$std\+::size\+\_\+t N, typename T $>$ }\\\hyperlink{classactor__zeta_1_1messaging_1_1message}{message} $\ast$ \hyperlink{namespaceactor__zeta_1_1messaging_acbb0a86110c3f12f5250dfc8f3df4861}{make\+\_\+message} (const char(\&a\+Str)\mbox{[}N\mbox{]}, T data, \hyperlink{classactor__zeta_1_1actor_1_1actor__address}{actor\+::actor\+\_\+address} address)
+\end{DoxyCompactItemize}
+
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1}\label{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1}} 
+\index{actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}!enqueue\+\_\+result@{enqueue\+\_\+result}}
+\index{enqueue\+\_\+result@{enqueue\+\_\+result}!actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}}
+\subsubsection{\texorpdfstring{enqueue\+\_\+result}{enqueue\_result}}
+{\footnotesize\ttfamily enum \hyperlink{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1}{actor\+\_\+zeta\+::messaging\+::enqueue\+\_\+result}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+A strongly typed enum class representing enqueue result. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{success@{success}!actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}}\index{actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}!success@{success}}}\mbox{\Hypertarget{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1a260ca9dd8a4577fc00b7bd5810298076}\label{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1a260ca9dd8a4577fc00b7bd5810298076}} 
+success&is coded as std\+::int of value 0 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{unblocked\+\_\+reader@{unblocked\+\_\+reader}!actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}}\index{actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}!unblocked\+\_\+reader@{unblocked\+\_\+reader}}}\mbox{\Hypertarget{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1a8505d92f1a08d64e80ebffbde6749069}\label{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1a8505d92f1a08d64e80ebffbde6749069}} 
+unblocked\+\_\+reader&is coded as std\+::int of value 1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{queue\+\_\+closed@{queue\+\_\+closed}!actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}}\index{actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}!queue\+\_\+closed@{queue\+\_\+closed}}}\mbox{\Hypertarget{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1a1f494a6c8d9d6b854fcae46e258d9b85}\label{namespaceactor__zeta_1_1messaging_ac2c5f2f473c5a97d779ec63a78d498a1a1f494a6c8d9d6b854fcae46e258d9b85}} 
+queue\+\_\+closed&is coded as std\+::int of value 2 \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{namespaceactor__zeta_1_1messaging_a1b4c4b3ab625eb033c15da4fbe9c4a89}\label{namespaceactor__zeta_1_1messaging_a1b4c4b3ab625eb033c15da4fbe9c4a89}} 
+\index{actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}!message\+\_\+priority@{message\+\_\+priority}}
+\index{message\+\_\+priority@{message\+\_\+priority}!actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}}
+\subsubsection{\texorpdfstring{message\+\_\+priority}{message\_priority}}
+{\footnotesize\ttfamily enum \hyperlink{namespaceactor__zeta_1_1messaging_a1b4c4b3ab625eb033c15da4fbe9c4a89}{actor\+\_\+zeta\+::messaging\+::message\+\_\+priority} \+: int\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{low@{low}!actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}}\index{actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}!low@{low}}}\mbox{\Hypertarget{namespaceactor__zeta_1_1messaging_a1b4c4b3ab625eb033c15da4fbe9c4a89a53cced8d281a1a0ace3cb6594daaa4f7}\label{namespaceactor__zeta_1_1messaging_a1b4c4b3ab625eb033c15da4fbe9c4a89a53cced8d281a1a0ace3cb6594daaa4f7}} 
+low&is coded as std\+::int of value 0 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{normal@{normal}!actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}}\index{actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}!normal@{normal}}}\mbox{\Hypertarget{namespaceactor__zeta_1_1messaging_a1b4c4b3ab625eb033c15da4fbe9c4a89afea087517c26fadd409bd4b9dc642555}\label{namespaceactor__zeta_1_1messaging_a1b4c4b3ab625eb033c15da4fbe9c4a89afea087517c26fadd409bd4b9dc642555}} 
+normal&is coded as std\+::int of value 1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{high@{high}!actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}}\index{actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}!high@{high}}}\mbox{\Hypertarget{namespaceactor__zeta_1_1messaging_a1b4c4b3ab625eb033c15da4fbe9c4a89a8d966b2253a917086c8604959e152243}\label{namespaceactor__zeta_1_1messaging_a1b4c4b3ab625eb033c15da4fbe9c4a89a8d966b2253a917086c8604959e152243}} 
+high&is coded as std\+::int of value 2 \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespaceactor__zeta_1_1messaging_a9e63d189e59df07f1d3523c4916f9b47}\label{namespaceactor__zeta_1_1messaging_a9e63d189e59df07f1d3523c4916f9b47}} 
+\index{actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}!make\+\_\+message@{make\+\_\+message}}
+\index{make\+\_\+message@{make\+\_\+message}!actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}}
+\subsubsection{\texorpdfstring{make\+\_\+message()}{make\_message()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily template$<$std\+::size\+\_\+t N, typename T $>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1message}{message}$\ast$ actor\+\_\+zeta\+::messaging\+::make\+\_\+message (\begin{DoxyParamCaption}\item[{const char(\&)}]{a\+Str\mbox{[}\+N\mbox{]},  }\item[{T}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_1_1messaging_a21ea28d14db328e347552fa3943410bf}\label{namespaceactor__zeta_1_1messaging_a21ea28d14db328e347552fa3943410bf}} 
+\index{actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}!make\+\_\+message@{make\+\_\+message}}
+\index{make\+\_\+message@{make\+\_\+message}!actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}}
+\subsubsection{\texorpdfstring{make\+\_\+message()}{make\_message()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1message}{message}$\ast$ actor\+\_\+zeta\+::messaging\+::make\+\_\+message (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{type,  }\item[{T}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_1_1messaging_a81fe08e3ae76ca8eec5eb6f59f3912ba}\label{namespaceactor__zeta_1_1messaging_a81fe08e3ae76ca8eec5eb6f59f3912ba}} 
+\index{actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}!make\+\_\+message@{make\+\_\+message}}
+\index{make\+\_\+message@{make\+\_\+message}!actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}}
+\subsubsection{\texorpdfstring{make\+\_\+message()}{make\_message()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1message}{message}$\ast$ actor\+\_\+zeta\+::messaging\+::make\+\_\+message (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{type,  }\item[{T}]{data,  }\item[{\hyperlink{classactor__zeta_1_1actor_1_1actor__address}{actor\+::actor\+\_\+address}}]{address }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{namespaceactor__zeta_1_1messaging_acbb0a86110c3f12f5250dfc8f3df4861}\label{namespaceactor__zeta_1_1messaging_acbb0a86110c3f12f5250dfc8f3df4861}} 
+\index{actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}!make\+\_\+message@{make\+\_\+message}}
+\index{make\+\_\+message@{make\+\_\+message}!actor\+\_\+zeta\+::messaging@{actor\+\_\+zeta\+::messaging}}
+\subsubsection{\texorpdfstring{make\+\_\+message()}{make\_message()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily template$<$std\+::size\+\_\+t N, typename T $>$ \\
+\hyperlink{classactor__zeta_1_1messaging_1_1message}{message}$\ast$ actor\+\_\+zeta\+::messaging\+::make\+\_\+message (\begin{DoxyParamCaption}\item[{const char(\&)}]{a\+Str\mbox{[}\+N\mbox{]},  }\item[{T}]{data,  }\item[{\hyperlink{classactor__zeta_1_1actor_1_1actor__address}{actor\+::actor\+\_\+address}}]{address }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+

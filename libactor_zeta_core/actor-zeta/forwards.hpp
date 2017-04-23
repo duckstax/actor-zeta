@@ -8,37 +8,48 @@ namespace actor_zeta {
     }
 
     namespace actor {
+
         class abstract_actor;
+
         class actor;
+        
         class actor_address;
     }
 
     namespace behavior {
+
         class abstract_action;
+
         class response;
+
         class request;
     }
 
-    namespace channel {
-        class abstract_channel;
-        class channel;
-    }
-
     namespace contacts {
+
         class book_contacts;
+
+        class group_contacts;
     }
 
     namespace environment {
+
         class group;
+
         class cooperation;
+
         class environment;
     }
 
     namespace executor {
+
         class abstract_coordinator;
+
         template<class Policy>
         class coordinator;
+
         struct execution_device;
+
         struct executable;
     }
 }

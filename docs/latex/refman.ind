@@ -1,0 +1,1092 @@
+\begin{theindex}
+
+  \item {$\sim$abstract\+\_\+action}
+    \subitem {actor\+\_\+zeta\+::behavior\+::abstract\+\_\+action}, 
+		\hyperpage{24}
+  \item {$\sim$abstract\+\_\+actor}
+    \subitem {actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}, 
+		\hyperpage{26}
+  \item {$\sim$abstract\+\_\+coordinator}
+    \subitem {actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}, 
+		\hyperpage{28}
+  \item {$\sim$action}
+    \subitem {actor\+\_\+zeta\+::behavior\+::action}, \hyperpage{30}
+  \item {$\sim$actor}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor}, \hyperpage{32}
+  \item {$\sim$actor\+\_\+address}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor\+\_\+address}, 
+		\hyperpage{35}
+  \item {$\sim$behavior}
+    \subitem {actor\+\_\+zeta\+::behavior\+::behavior}, \hyperpage{37}
+  \item {$\sim$blocking\+\_\+actor}
+    \subitem {actor\+\_\+zeta\+::actor\+::blocking\+\_\+actor}, 
+		\hyperpage{39}
+  \item {$\sim$blocking\+\_\+mail\+\_\+queue}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{43}
+  \item {$\sim$broker}
+    \subitem {actor\+\_\+zeta\+::network\+::broker}, \hyperpage{48}
+  \item {$\sim$cooperation}
+    \subitem {actor\+\_\+zeta\+::environment\+::cooperation}, 
+		\hyperpage{52}
+  \item {$\sim$environment}
+    \subitem {actor\+\_\+zeta\+::environment\+::environment}, 
+		\hyperpage{59}
+  \item {$\sim$executable}
+    \subitem {actor\+\_\+zeta\+::executor\+::executable}, 
+		\hyperpage{62}
+  \item {$\sim$execution\+\_\+device}
+    \subitem {actor\+\_\+zeta\+::executor\+::execution\+\_\+device}, 
+		\hyperpage{64}
+  \item {$\sim$group}
+    \subitem {actor\+\_\+zeta\+::environment\+::group}, \hyperpage{66}
+  \item {$\sim$intrusive\+\_\+ptr}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{71}
+  \item {$\sim$local\+\_\+actor}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{75}
+  \item {$\sim$message}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message}, \hyperpage{79}
+  \item {$\sim$message\+\_\+body}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+body}, 
+		\hyperpage{83}
+  \item {$\sim$message\+\_\+header}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+header}, 
+		\hyperpage{86}
+  \item {$\sim$multiplexer}
+    \subitem {actor\+\_\+zeta\+::network\+::multiplexer}, 
+		\hyperpage{89}
+  \item {$\sim$ref\+\_\+counted}
+    \subitem {actor\+\_\+zeta\+::ref\+\_\+counted}, \hyperpage{92}
+  \item {$\sim$request}
+    \subitem {actor\+\_\+zeta\+::behavior\+::request}, \hyperpage{94}
+  \item {$\sim$response}
+    \subitem {actor\+\_\+zeta\+::behavior\+::response}, \hyperpage{96}
+  \item {$\sim$shared\+\_\+group}
+    \subitem {actor\+\_\+zeta\+::environment\+::shared\+\_\+group}, 
+		\hyperpage{101}
+  \item {$\sim$type\+\_\+action}
+    \subitem {actor\+\_\+zeta\+::behavior\+::type\+\_\+action}, 
+		\hyperpage{106}
+  \item {$\sim$work\+\_\+sharing}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}, 
+		\hyperpage{109}
+
+  \indexspace
+
+  \item {abstract\+\_\+action}
+    \subitem {actor\+\_\+zeta\+::behavior\+::abstract\+\_\+action}, 
+		\hyperpage{24}
+  \item {abstract\+\_\+action.\+hpp}, \hyperpage{117}
+  \item {abstract\+\_\+actor}
+    \subitem {actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}, 
+		\hyperpage{26}
+  \item {abstract\+\_\+actor.\+cpp}, \hyperpage{118}
+  \item {abstract\+\_\+actor.\+hpp}, \hyperpage{119}
+  \item {abstract\+\_\+coordinator}
+    \subitem {actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}, 
+		\hyperpage{28}
+  \item {abstract\+\_\+coordinator.\+hpp}, \hyperpage{120}
+  \item {act}
+    \subitem {actor\+\_\+zeta\+::actor\+::blocking\+\_\+actor}, 
+		\hyperpage{39}
+  \item {action}
+    \subitem {actor\+\_\+zeta\+::behavior\+::action}, 
+		\hyperpage{29, 30}
+  \item {action.\+cpp}, \hyperpage{121}
+  \item {action.\+hpp}, \hyperpage{122}
+  \item {actor}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor}, \hyperpage{31, 32}
+  \item {actor.\+cpp}, \hyperpage{123}
+  \item {actor.\+hpp}, \hyperpage{123}
+  \item {actor\+\_\+address}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor\+\_\+address}, 
+		\hyperpage{34, 35}
+  \item {actor\+\_\+address.\+cpp}, \hyperpage{125}
+  \item {actor\+\_\+address.\+hpp}, \hyperpage{126}
+  \item {actor\+\_\+zeta}, \hyperpage{13}
+    \subitem {const\+\_\+pointer\+\_\+cast}, \hyperpage{14}
+    \subitem {dynamic\+\_\+pointer\+\_\+cast}, \hyperpage{14}
+    \subitem {get\+\_\+pointer}, \hyperpage{14}
+    \subitem {intrusive\+\_\+ptr\+\_\+add\+\_\+ref}, \hyperpage{14}
+    \subitem {intrusive\+\_\+ptr\+\_\+release}, \hyperpage{14}
+    \subitem {operator!=}, \hyperpage{15}
+    \subitem {operator$<$}, \hyperpage{15}
+    \subitem {operator==}, \hyperpage{15, 16}
+    \subitem {static\+\_\+pointer\+\_\+cast}, \hyperpage{16}
+    \subitem {swap}, \hyperpage{16}
+  \item {actor\+\_\+zeta\+::actor}, \hyperpage{16}
+  \item {actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}, 
+		\hyperpage{25}
+    \subitem {$\sim$abstract\+\_\+actor}, \hyperpage{26}
+    \subitem {abstract\+\_\+actor}, \hyperpage{26}
+    \subitem {address}, \hyperpage{26}
+    \subitem {env}, \hyperpage{26}
+    \subitem {send}, \hyperpage{27}
+    \subitem {type}, \hyperpage{27}
+  \item {actor\+\_\+zeta\+::actor\+::actor}, \hyperpage{31}
+    \subitem {$\sim$actor}, \hyperpage{32}
+    \subitem {actor}, \hyperpage{31, 32}
+    \subitem {address}, \hyperpage{32}
+    \subitem {operator bool}, \hyperpage{33}
+    \subitem {operator!}, \hyperpage{33}
+    \subitem {operator-\/$>$}, \hyperpage{33}
+    \subitem {operator=}, \hyperpage{33}
+    \subitem {type}, \hyperpage{34}
+  \item {actor\+\_\+zeta\+::actor\+::actor\+\_\+address}, 
+		\hyperpage{34}
+    \subitem {$\sim$actor\+\_\+address}, \hyperpage{35}
+    \subitem {actor\+\_\+address}, \hyperpage{34, 35}
+    \subitem {operator bool}, \hyperpage{35}
+    \subitem {operator!}, \hyperpage{35}
+    \subitem {operator-\/$>$}, \hyperpage{35}
+    \subitem {operator=}, \hyperpage{36}
+  \item {actor\+\_\+zeta\+::actor\+::blocking\+\_\+actor}, 
+		\hyperpage{38}
+    \subitem {$\sim$blocking\+\_\+actor}, \hyperpage{39}
+    \subitem {act}, \hyperpage{39}
+    \subitem {blocking\+\_\+actor}, \hyperpage{39}
+    \subitem {launch}, \hyperpage{40}
+    \subitem {run}, \hyperpage{40}
+  \item {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, \hyperpage{73}
+    \subitem {$\sim$local\+\_\+actor}, \hyperpage{75}
+    \subitem {attach}, \hyperpage{76}
+    \subitem {contacts}, \hyperpage{77}
+    \subitem {device}, \hyperpage{76}
+    \subitem {has\+\_\+next\+\_\+message}, \hyperpage{76}
+    \subitem {initialize}, \hyperpage{76}
+    \subitem {launch}, \hyperpage{76}
+    \subitem {life}, \hyperpage{77}
+    \subitem {local\+\_\+actor}, \hyperpage{75}
+    \subitem {mailbox}, \hyperpage{77}
+    \subitem {mailbox\+\_\+type}, \hyperpage{75}
+    \subitem {next\+\_\+message}, \hyperpage{77}
+    \subitem {pop\+\_\+to\+\_\+cache}, \hyperpage{77}
+    \subitem {push\+\_\+to\+\_\+cache}, \hyperpage{77}
+  \item {actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}, 
+		\hyperpage{97}
+    \subitem {attach\+\_\+to\+\_\+scheduler}, \hyperpage{99}
+    \subitem {detach\+\_\+from\+\_\+scheduler}, \hyperpage{99}
+    \subitem {launch}, \hyperpage{99}
+    \subitem {run}, \hyperpage{100}
+    \subitem {scheduled\+\_\+actor}, \hyperpage{99}
+    \subitem {send}, \hyperpage{100}
+  \item {actor\+\_\+zeta\+::behavior}, \hyperpage{17}
+    \subitem {make\+\_\+response}, \hyperpage{17}
+  \item {actor\+\_\+zeta\+::behavior\+::abstract\+\_\+action}, 
+		\hyperpage{23}
+    \subitem {$\sim$abstract\+\_\+action}, \hyperpage{24}
+    \subitem {abstract\+\_\+action}, \hyperpage{24}
+    \subitem {name}, \hyperpage{24}
+    \subitem {operator()}, \hyperpage{24}
+  \item {actor\+\_\+zeta\+::behavior\+::action}, \hyperpage{29}
+    \subitem {$\sim$action}, \hyperpage{30}
+    \subitem {action}, \hyperpage{29, 30}
+    \subitem {operator()}, \hyperpage{30}
+    \subitem {operator=}, \hyperpage{30}
+  \item {actor\+\_\+zeta\+::behavior\+::behavior}, \hyperpage{36}
+    \subitem {$\sim$behavior}, \hyperpage{37}
+    \subitem {behavior}, \hyperpage{37}
+    \subitem {insert}, \hyperpage{37}
+    \subitem {operator=}, \hyperpage{37}
+    \subitem {run}, \hyperpage{38}
+  \item {actor\+\_\+zeta\+::behavior\+::request}, \hyperpage{93}
+    \subitem {$\sim$request}, \hyperpage{94}
+    \subitem {contacts}, \hyperpage{94}
+    \subitem {message}, \hyperpage{94}
+    \subitem {operator=}, \hyperpage{95}
+    \subitem {request}, \hyperpage{94}
+  \item {actor\+\_\+zeta\+::behavior\+::response}, \hyperpage{95}
+    \subitem {$\sim$response}, \hyperpage{96}
+    \subitem {message}, \hyperpage{96}
+    \subitem {operator=}, \hyperpage{96, 97}
+    \subitem {receiver}, \hyperpage{97}
+    \subitem {response}, \hyperpage{96}
+  \item {actor\+\_\+zeta\+::behavior\+::type\+\_\+action}, 
+		\hyperpage{106}
+    \subitem {$\sim$type\+\_\+action}, \hyperpage{106}
+    \subitem {hash}, \hyperpage{107}
+    \subitem {operator=}, \hyperpage{107}
+    \subitem {operator==}, \hyperpage{108}
+    \subitem {to\+\_\+string}, \hyperpage{108}
+    \subitem {type\+\_\+action}, \hyperpage{106, 107}
+  \item {actor\+\_\+zeta\+::contacts}, \hyperpage{17}
+  \item {actor\+\_\+zeta\+::contacts\+::book\+\_\+contacts}, 
+		\hyperpage{45}
+    \subitem {all\+\_\+view}, \hyperpage{45}
+    \subitem {book\+\_\+contacts}, \hyperpage{45}
+    \subitem {get}, \hyperpage{45}
+    \subitem {get\+\_\+group}, \hyperpage{46}
+    \subitem {operator=}, \hyperpage{46}
+    \subitem {put}, \hyperpage{46}
+    \subitem {put\+\_\+in\+\_\+group}, \hyperpage{46}
+  \item {actor\+\_\+zeta\+::contacts\+::group\+\_\+contacts}, 
+		\hyperpage{68}
+    \subitem {get}, \hyperpage{68}
+    \subitem {get\+\_\+all}, \hyperpage{68}
+    \subitem {group\+\_\+contacts}, \hyperpage{68}
+    \subitem {operator=}, \hyperpage{69}
+    \subitem {put}, \hyperpage{69}
+  \item {actor\+\_\+zeta\+::environment}, \hyperpage{18}
+    \subitem {send}, \hyperpage{18}
+  \item {actor\+\_\+zeta\+::environment\+::cooperation}, \hyperpage{51}
+    \subitem {$\sim$cooperation}, \hyperpage{52}
+    \subitem {add}, \hyperpage{52}
+    \subitem {add\+\_\+shared}, \hyperpage{52}
+    \subitem {cooperation}, \hyperpage{52}
+    \subitem {get}, \hyperpage{52}
+    \subitem {operator=}, \hyperpage{53}
+    \subitem {send}, \hyperpage{53}
+    \subitem {send\+\_\+all}, \hyperpage{53}
+    \subitem {send\+\_\+current}, \hyperpage{53}
+  \item {actor\+\_\+zeta\+::environment\+::environment}, \hyperpage{58}
+    \subitem {$\sim$environment}, \hyperpage{59}
+    \subitem {coordinator\+\_\+}, \hyperpage{60}
+    \subitem {environment}, \hyperpage{58, 59}
+    \subitem {manager\+\_\+execution\+\_\+device}, \hyperpage{59}
+    \subitem {manager\+\_\+group}, \hyperpage{59}
+    \subitem {operator=}, \hyperpage{59, 60}
+    \subitem {start}, \hyperpage{60}
+  \item {actor\+\_\+zeta\+::environment\+::group}, \hyperpage{64}
+    \subitem {$\sim$group}, \hyperpage{66}
+    \subitem {add}, \hyperpage{66}
+    \subitem {add\+\_\+shared}, \hyperpage{66}
+    \subitem {entry\+\_\+point}, \hyperpage{66}
+    \subitem {group}, \hyperpage{65}
+    \subitem {name}, \hyperpage{67}
+    \subitem {operator=}, \hyperpage{67}
+    \subitem {send}, \hyperpage{67}
+    \subitem {send\+\_\+all}, \hyperpage{67}
+    \subitem {send\+\_\+current}, \hyperpage{67}
+  \item {actor\+\_\+zeta\+::environment\+::shared\+\_\+group}, 
+		\hyperpage{100}
+    \subitem {$\sim$shared\+\_\+group}, \hyperpage{101}
+    \subitem {add}, \hyperpage{102}
+    \subitem {operator=}, \hyperpage{102}
+    \subitem {send\+\_\+all}, \hyperpage{102}
+    \subitem {send\+\_\+current}, \hyperpage{102}
+    \subitem {shared\+\_\+group}, \hyperpage{101}
+  \item {actor\+\_\+zeta\+::executor}, \hyperpage{18}
+  \item {actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}, 
+		\hyperpage{27}
+    \subitem {$\sim$abstract\+\_\+coordinator}, \hyperpage{28}
+    \subitem {abstract\+\_\+coordinator}, \hyperpage{28}
+    \subitem {max\+\_\+throughput}, \hyperpage{28}
+    \subitem {num\+\_\+workers}, \hyperpage{28}
+    \subitem {start}, \hyperpage{28}
+    \subitem {submit}, \hyperpage{29}
+  \item {actor\+\_\+zeta\+::executor\+::coordinator}
+    \subitem {coordinator}, \hyperpage{55}
+    \subitem {data}, \hyperpage{56}
+    \subitem {job\+\_\+ptr}, \hyperpage{55}
+    \subitem {policy\+\_\+data}, \hyperpage{55}
+    \subitem {start}, \hyperpage{56}
+    \subitem {submit}, \hyperpage{56}
+    \subitem {worker\+\_\+by\+\_\+id}, \hyperpage{56}
+    \subitem {worker\+\_\+type}, \hyperpage{55}
+  \item {actor\+\_\+zeta\+::executor\+::coordinator$<$ Policy $>$}, 
+		\hyperpage{54}
+  \item {actor\+\_\+zeta\+::executor\+::executable}, \hyperpage{60}
+    \subitem {$\sim$executable}, \hyperpage{62}
+    \subitem {attach\+\_\+to\+\_\+scheduler}, \hyperpage{62}
+    \subitem {detach\+\_\+from\+\_\+scheduler}, \hyperpage{62}
+    \subitem {executable\+\_\+result}, \hyperpage{61}
+    \subitem {run}, \hyperpage{62}
+  \item {actor\+\_\+zeta\+::executor\+::execution\+\_\+device}, 
+		\hyperpage{63}
+    \subitem {$\sim$execution\+\_\+device}, \hyperpage{64}
+    \subitem {execution\+\_\+device}, \hyperpage{63, 64}
+    \subitem {put\+\_\+execute\+\_\+latest}, \hyperpage{64}
+  \item {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}, 
+		\hyperpage{108}
+    \subitem {$\sim$work\+\_\+sharing}, \hyperpage{109}
+    \subitem {central\+\_\+enqueue}, \hyperpage{109}
+    \subitem {dequeue}, \hyperpage{110}
+    \subitem {enqueue}, \hyperpage{110}
+    \subitem {external\+\_\+enqueue}, \hyperpage{110}
+    \subitem {foreach\+\_\+central\+\_\+resumable}, \hyperpage{110}
+    \subitem {internal\+\_\+enqueue}, \hyperpage{110}
+    \subitem {queue\+\_\+type}, \hyperpage{109}
+    \subitem {resume\+\_\+job\+\_\+later}, \hyperpage{110}
+  \item {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::coordinator\+\_\+data}, 
+		\hyperpage{56}
+    \subitem {coordinator\+\_\+data}, \hyperpage{57}
+    \subitem {cv}, \hyperpage{57}
+    \subitem {lock}, \hyperpage{57}
+    \subitem {queue}, \hyperpage{57}
+  \item {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::worker\+\_\+data}, 
+		\hyperpage{115}
+    \subitem {worker\+\_\+data}, \hyperpage{115}
+  \item {actor\+\_\+zeta\+::executor\+::worker}
+    \subitem {coordinator\+\_\+ptr}, \hyperpage{112}
+    \subitem {data}, \hyperpage{113}
+    \subitem {external\+\_\+enqueue}, \hyperpage{113}
+    \subitem {id}, \hyperpage{113}
+    \subitem {job\+\_\+ptr}, \hyperpage{112}
+    \subitem {max\+\_\+throughput}, \hyperpage{114}
+    \subitem {operator=}, \hyperpage{114}
+    \subitem {parent}, \hyperpage{114}
+    \subitem {policy\+\_\+data}, \hyperpage{112}
+    \subitem {put\+\_\+execute\+\_\+latest}, \hyperpage{114}
+    \subitem {start}, \hyperpage{114}
+    \subitem {worker}, \hyperpage{113}
+  \item {actor\+\_\+zeta\+::executor\+::worker$<$ Policy $>$}, 
+		\hyperpage{111}
+  \item {actor\+\_\+zeta\+::intrusive\+\_\+ptr}
+    \subitem {$\sim$intrusive\+\_\+ptr}, \hyperpage{71}
+    \subitem {detach}, \hyperpage{71}
+    \subitem {downcast}, \hyperpage{71}
+    \subitem {get}, \hyperpage{71}
+    \subitem {intrusive\+\_\+ptr}, \hyperpage{70, 71}
+    \subitem {operator bool}, \hyperpage{72}
+    \subitem {operator!}, \hyperpage{72}
+    \subitem {operator$\ast$}, \hyperpage{72}
+    \subitem {operator-\/$>$}, \hyperpage{72}
+    \subitem {operator=}, \hyperpage{72}
+    \subitem {pointer}, \hyperpage{70}
+    \subitem {reference}, \hyperpage{70}
+    \subitem {release}, \hyperpage{72}
+    \subitem {reset}, \hyperpage{73}
+    \subitem {swap}, \hyperpage{73}
+    \subitem {upcast}, \hyperpage{73}
+  \item {actor\+\_\+zeta\+::intrusive\+\_\+ptr$<$ T $>$}, 
+		\hyperpage{69}
+  \item {actor\+\_\+zeta\+::messaging}, \hyperpage{19}
+    \subitem {enqueue\+\_\+result}, \hyperpage{19}
+    \subitem {make\+\_\+message}, \hyperpage{20}
+    \subitem {message\+\_\+priority}, \hyperpage{20}
+  \item {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}
+    \subitem {$\sim$blocking\+\_\+mail\+\_\+queue}, \hyperpage{43}
+    \subitem {blocking\+\_\+mail\+\_\+queue}, \hyperpage{42, 43}
+    \subitem {cache\+\_\+type}, \hyperpage{41}
+    \subitem {const\+\_\+pointer}, \hyperpage{41}
+    \subitem {const\+\_\+reference}, \hyperpage{41}
+    \subitem {get}, \hyperpage{43}
+    \subitem {high\+\_\+priority\+\_\+cache}, \hyperpage{43}
+    \subitem {lock\+\_\+guard}, \hyperpage{42}
+    \subitem {low\+\_\+priority\+\_\+cache}, \hyperpage{43}
+    \subitem {normal\+\_\+priority\+\_\+cache}, \hyperpage{44}
+    \subitem {operator=}, \hyperpage{44}
+    \subitem {pointer}, \hyperpage{42}
+    \subitem {put}, \hyperpage{44}
+    \subitem {queue\+\_\+base\+\_\+type}, \hyperpage{42}
+    \subitem {reference}, \hyperpage{42}
+    \subitem {sync}, \hyperpage{44}
+    \subitem {unique\+\_\+lock}, \hyperpage{42}
+  \item {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue$<$ T $>$}, 
+		\hyperpage{40}
+  \item {actor\+\_\+zeta\+::messaging\+::message}, \hyperpage{78}
+    \subitem {$\sim$message}, \hyperpage{79}
+    \subitem {clone}, \hyperpage{81}
+    \subitem {get}, \hyperpage{81}
+    \subitem {is\+\_\+callback}, \hyperpage{81}
+    \subitem {message}, \hyperpage{79, 80}
+    \subitem {operator=}, \hyperpage{81}
+    \subitem {priority}, \hyperpage{81}
+    \subitem {return\+\_\+address}, \hyperpage{82}
+    \subitem {type}, \hyperpage{82}
+  \item {actor\+\_\+zeta\+::messaging\+::message\+\_\+body}, 
+		\hyperpage{82}
+    \subitem {$\sim$message\+\_\+body}, \hyperpage{83}
+    \subitem {clear}, \hyperpage{84}
+    \subitem {empty}, \hyperpage{84}
+    \subitem {get}, \hyperpage{84}
+    \subitem {message\+\_\+body}, \hyperpage{83}
+    \subitem {operator=}, \hyperpage{84}
+    \subitem {swap}, \hyperpage{84}
+  \item {actor\+\_\+zeta\+::messaging\+::message\+\_\+header}, 
+		\hyperpage{85}
+    \subitem {$\sim$message\+\_\+header}, \hyperpage{86}
+    \subitem {is\+\_\+callback}, \hyperpage{88}
+    \subitem {message\+\_\+header}, \hyperpage{85--87}
+    \subitem {operator=}, \hyperpage{88}
+    \subitem {priorities}, \hyperpage{88}
+    \subitem {return\+\_\+address}, \hyperpage{88}
+    \subitem {type}, \hyperpage{88}
+  \item {actor\+\_\+zeta\+::network}, \hyperpage{21}
+    \subitem {shared\+\_\+multiplexer\+\_\+ptr}, \hyperpage{21}
+    \subitem {type\+\_\+connect}, \hyperpage{21}
+    \subitem {unique\+\_\+multiplexer\+\_\+ptr}, \hyperpage{21}
+  \item {actor\+\_\+zeta\+::network\+::broker}, \hyperpage{47}
+    \subitem {$\sim$broker}, \hyperpage{48}
+    \subitem {broker}, \hyperpage{48}
+    \subitem {initialize}, \hyperpage{48}
+    \subitem {multiplexer\+\_\+}, \hyperpage{48}
+  \item {actor\+\_\+zeta\+::network\+::connection\+\_\+identifying}, 
+		\hyperpage{49}
+    \subitem {connection\+\_\+identifying}, \hyperpage{49, 50}
+    \subitem {ip}, \hyperpage{50}
+    \subitem {operator=}, \hyperpage{50}
+    \subitem {operator==}, \hyperpage{50}
+    \subitem {port}, \hyperpage{51}
+    \subitem {to\+\_\+string}, \hyperpage{51}
+  \item {actor\+\_\+zeta\+::network\+::multiplexer}, \hyperpage{89}
+    \subitem {$\sim$multiplexer}, \hyperpage{89}
+    \subitem {close}, \hyperpage{89}
+    \subitem {new\+\_\+tcp\+\_\+connection}, \hyperpage{89}
+    \subitem {new\+\_\+tcp\+\_\+listener}, \hyperpage{89}
+    \subitem {registration\+\_\+broker\+\_\+address}, \hyperpage{90}
+    \subitem {run}, \hyperpage{90}
+    \subitem {write}, \hyperpage{90}
+  \item {actor\+\_\+zeta\+::ref\+\_\+counted}, \hyperpage{90}
+    \subitem {$\sim$ref\+\_\+counted}, \hyperpage{92}
+    \subitem {deref}, \hyperpage{92}
+    \subitem {get\+\_\+reference\+\_\+count}, \hyperpage{92}
+    \subitem {operator=}, \hyperpage{92}
+    \subitem {rc\+\_\+}, \hyperpage{93}
+    \subitem {ref}, \hyperpage{92}
+    \subitem {ref\+\_\+counted}, \hyperpage{92}
+    \subitem {unique}, \hyperpage{93}
+  \item {actor\+\_\+zeta\+::skip}, \hyperpage{103}
+    \subitem {operator()}, \hyperpage{104}
+    \subitem {skip}, \hyperpage{104}
+  \item {actor\+\_\+zeta\+::sync\+\_\+contacts}, \hyperpage{104}
+    \subitem {operator()}, \hyperpage{105}
+    \subitem {sync\+\_\+contacts}, \hyperpage{105}
+  \item {add}
+    \subitem {actor\+\_\+zeta\+::environment\+::cooperation}, 
+		\hyperpage{52}
+    \subitem {actor\+\_\+zeta\+::environment\+::group}, \hyperpage{66}
+    \subitem {actor\+\_\+zeta\+::environment\+::shared\+\_\+group}, 
+		\hyperpage{102}
+  \item {add\+\_\+shared}
+    \subitem {actor\+\_\+zeta\+::environment\+::cooperation}, 
+		\hyperpage{52}
+    \subitem {actor\+\_\+zeta\+::environment\+::group}, \hyperpage{66}
+  \item {address}
+    \subitem {actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}, 
+		\hyperpage{26}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor}, \hyperpage{32}
+  \item {all\+\_\+view}
+    \subitem {actor\+\_\+zeta\+::contacts\+::book\+\_\+contacts}, 
+		\hyperpage{45}
+  \item {attach}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{76}
+  \item {attach\+\_\+to\+\_\+scheduler}
+    \subitem {actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}, 
+		\hyperpage{99}
+    \subitem {actor\+\_\+zeta\+::executor\+::executable}, 
+		\hyperpage{62}
+
+  \indexspace
+
+  \item {behavior}
+    \subitem {actor\+\_\+zeta\+::behavior\+::behavior}, \hyperpage{37}
+  \item {behavior.\+cpp}, \hyperpage{127}
+  \item {behavior.\+hpp}, \hyperpage{127}
+  \item {blocking\+\_\+actor}
+    \subitem {actor\+\_\+zeta\+::actor\+::blocking\+\_\+actor}, 
+		\hyperpage{39}
+  \item {blocking\+\_\+actor.\+cpp}, \hyperpage{129}
+  \item {blocking\+\_\+actor.\+hpp}, \hyperpage{129}
+  \item {blocking\+\_\+mail\+\_\+queue}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{42, 43}
+  \item {blocking\+\_\+mail\+\_\+queue.\+hpp}, \hyperpage{130}
+  \item {book\+\_\+contacts}
+    \subitem {actor\+\_\+zeta\+::contacts\+::book\+\_\+contacts}, 
+		\hyperpage{45}
+  \item {book\+\_\+contacts.\+cpp}, \hyperpage{131}
+  \item {book\+\_\+contacts.\+hpp}, \hyperpage{132}
+  \item {broker}
+    \subitem {actor\+\_\+zeta\+::network\+::broker}, \hyperpage{48}
+  \item {broker.\+cpp}, \hyperpage{133}
+  \item {broker.\+hpp}, \hyperpage{134}
+
+  \indexspace
+
+  \item {cache\+\_\+type}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{41}
+  \item {central\+\_\+enqueue}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}, 
+		\hyperpage{109}
+  \item {clear}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+body}, 
+		\hyperpage{84}
+  \item {clone}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message}, \hyperpage{81}
+  \item {close}
+    \subitem {actor\+\_\+zeta\+::network\+::multiplexer}, 
+		\hyperpage{89}
+  \item {connection\+\_\+identifying}
+    \subitem {actor\+\_\+zeta\+::network\+::connection\+\_\+identifying}, 
+		\hyperpage{49, 50}
+  \item {connection\+\_\+identifying.\+cpp}, \hyperpage{135}
+  \item {connection\+\_\+identifying.\+hpp}, \hyperpage{136}
+  \item {const\+\_\+pointer}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{41}
+  \item {const\+\_\+pointer\+\_\+cast}
+    \subitem {actor\+\_\+zeta}, \hyperpage{14}
+  \item {const\+\_\+reference}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{41}
+  \item {contacts}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{77}
+    \subitem {actor\+\_\+zeta\+::behavior\+::request}, \hyperpage{94}
+  \item {cooperation}
+    \subitem {actor\+\_\+zeta\+::environment\+::cooperation}, 
+		\hyperpage{52}
+  \item {cooperation.\+cpp}, \hyperpage{137}
+  \item {cooperation.\+hpp}, \hyperpage{137}
+  \item {coordinator}
+    \subitem {actor\+\_\+zeta\+::executor\+::coordinator}, 
+		\hyperpage{55}
+  \item {coordinator.\+hpp}, \hyperpage{139}
+  \item {coordinator\+\_\+}
+    \subitem {actor\+\_\+zeta\+::environment\+::environment}, 
+		\hyperpage{60}
+  \item {coordinator\+\_\+data}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::coordinator\+\_\+data}, 
+		\hyperpage{57}
+  \item {coordinator\+\_\+ptr}
+    \subitem {actor\+\_\+zeta\+::executor\+::worker}, \hyperpage{112}
+  \item {cv}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::coordinator\+\_\+data}, 
+		\hyperpage{57}
+
+  \indexspace
+
+  \item {data}
+    \subitem {actor\+\_\+zeta\+::executor\+::coordinator}, 
+		\hyperpage{56}
+    \subitem {actor\+\_\+zeta\+::executor\+::worker}, \hyperpage{113}
+  \item {dequeue}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}, 
+		\hyperpage{110}
+  \item {deref}
+    \subitem {actor\+\_\+zeta\+::ref\+\_\+counted}, \hyperpage{92}
+  \item {description.\+h}, \hyperpage{139}
+  \item {detach}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{71}
+  \item {detach\+\_\+from\+\_\+scheduler}
+    \subitem {actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}, 
+		\hyperpage{99}
+    \subitem {actor\+\_\+zeta\+::executor\+::executable}, 
+		\hyperpage{62}
+  \item {device}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{76}
+  \item {downcast}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{71}
+  \item {dynamic\+\_\+pointer\+\_\+cast}
+    \subitem {actor\+\_\+zeta}, \hyperpage{14}
+
+  \indexspace
+
+  \item {empty}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+body}, 
+		\hyperpage{84}
+  \item {enqueue}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}, 
+		\hyperpage{110}
+  \item {enqueue\+\_\+result}
+    \subitem {actor\+\_\+zeta\+::messaging}, \hyperpage{19}
+  \item {entry\+\_\+point}
+    \subitem {actor\+\_\+zeta\+::environment\+::group}, \hyperpage{66}
+  \item {env}
+    \subitem {actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}, 
+		\hyperpage{26}
+  \item {environment}
+    \subitem {actor\+\_\+zeta\+::environment\+::environment}, 
+		\hyperpage{58, 59}
+  \item {environment.\+cpp}, \hyperpage{139}
+  \item {environment.\+hpp}, \hyperpage{140}
+  \item {executable.\+hpp}, \hyperpage{141}
+  \item {executable\+\_\+result}
+    \subitem {actor\+\_\+zeta\+::executor\+::executable}, 
+		\hyperpage{61}
+  \item {execution\+\_\+device}
+    \subitem {actor\+\_\+zeta\+::executor\+::execution\+\_\+device}, 
+		\hyperpage{63, 64}
+  \item {execution\+\_\+device.\+hpp}, \hyperpage{142}
+  \item {external\+\_\+enqueue}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}, 
+		\hyperpage{110}
+    \subitem {actor\+\_\+zeta\+::executor\+::worker}, \hyperpage{113}
+
+  \indexspace
+
+  \item {foreach\+\_\+central\+\_\+resumable}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}, 
+		\hyperpage{110}
+  \item {forwards.\+hpp}, \hyperpage{143, 144}
+
+  \indexspace
+
+  \item {get}
+    \subitem {actor\+\_\+zeta\+::contacts\+::book\+\_\+contacts}, 
+		\hyperpage{45}
+    \subitem {actor\+\_\+zeta\+::contacts\+::group\+\_\+contacts}, 
+		\hyperpage{68}
+    \subitem {actor\+\_\+zeta\+::environment\+::cooperation}, 
+		\hyperpage{52}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{71}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{43}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message}, \hyperpage{81}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+body}, 
+		\hyperpage{84}
+  \item {get\+\_\+all}
+    \subitem {actor\+\_\+zeta\+::contacts\+::group\+\_\+contacts}, 
+		\hyperpage{68}
+  \item {get\+\_\+group}
+    \subitem {actor\+\_\+zeta\+::contacts\+::book\+\_\+contacts}, 
+		\hyperpage{46}
+  \item {get\+\_\+pointer}
+    \subitem {actor\+\_\+zeta}, \hyperpage{14}
+  \item {get\+\_\+reference\+\_\+count}
+    \subitem {actor\+\_\+zeta\+::ref\+\_\+counted}, \hyperpage{92}
+  \item {group}
+    \subitem {actor\+\_\+zeta\+::environment\+::group}, \hyperpage{65}
+  \item {group.\+cpp}, \hyperpage{144}
+  \item {group.\+hpp}, \hyperpage{145}
+  \item {group\+\_\+contacts}
+    \subitem {actor\+\_\+zeta\+::contacts\+::group\+\_\+contacts}, 
+		\hyperpage{68}
+  \item {group\+\_\+contacts.\+cpp}, \hyperpage{146}
+  \item {group\+\_\+contacts.\+hpp}, \hyperpage{147}
+
+  \indexspace
+
+  \item {has\+\_\+next\+\_\+message}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{76}
+  \item {hash}
+    \subitem {actor\+\_\+zeta\+::behavior\+::type\+\_\+action}, 
+		\hyperpage{107}
+  \item {high\+\_\+priority\+\_\+cache}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{43}
+
+  \indexspace
+
+  \item {id}
+    \subitem {actor\+\_\+zeta\+::executor\+::worker}, \hyperpage{113}
+  \item {initialize}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{76}
+    \subitem {actor\+\_\+zeta\+::network\+::broker}, \hyperpage{48}
+  \item {insert}
+    \subitem {actor\+\_\+zeta\+::behavior\+::behavior}, \hyperpage{37}
+  \item {internal\+\_\+enqueue}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}, 
+		\hyperpage{110}
+  \item {intrusive\+\_\+ptr}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, 
+		\hyperpage{70, 71}
+  \item {intrusive\+\_\+ptr.\+hpp}, \hyperpage{148}
+  \item {intrusive\+\_\+ptr\+\_\+add\+\_\+ref}
+    \subitem {actor\+\_\+zeta}, \hyperpage{14}
+  \item {intrusive\+\_\+ptr\+\_\+release}
+    \subitem {actor\+\_\+zeta}, \hyperpage{14}
+  \item {ip}
+    \subitem {actor\+\_\+zeta\+::network\+::connection\+\_\+identifying}, 
+		\hyperpage{50}
+  \item {is\+\_\+callback}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message}, \hyperpage{81}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+header}, 
+		\hyperpage{88}
+
+  \indexspace
+
+  \item {job\+\_\+ptr}
+    \subitem {actor\+\_\+zeta\+::executor\+::coordinator}, 
+		\hyperpage{55}
+    \subitem {actor\+\_\+zeta\+::executor\+::worker}, \hyperpage{112}
+
+  \indexspace
+
+  \item {launch}
+    \subitem {actor\+\_\+zeta\+::actor\+::blocking\+\_\+actor}, 
+		\hyperpage{40}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{76}
+    \subitem {actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}, 
+		\hyperpage{99}
+  \item {life}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{77}
+  \item {local\+\_\+actor}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{75}
+  \item {local\+\_\+actor.\+cpp}, \hyperpage{150}
+  \item {local\+\_\+actor.\+hpp}, \hyperpage{150}
+  \item {lock}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::coordinator\+\_\+data}, 
+		\hyperpage{57}
+  \item {lock\+\_\+guard}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{42}
+  \item {low\+\_\+priority\+\_\+cache}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{43}
+
+  \indexspace
+
+  \item {mailbox}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{77}
+  \item {mailbox\+\_\+type}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{75}
+  \item {make\+\_\+message}
+    \subitem {actor\+\_\+zeta\+::messaging}, \hyperpage{20}
+  \item {make\+\_\+response}
+    \subitem {actor\+\_\+zeta\+::behavior}, \hyperpage{17}
+  \item {manager\+\_\+execution\+\_\+device}
+    \subitem {actor\+\_\+zeta\+::environment\+::environment}, 
+		\hyperpage{59}
+  \item {manager\+\_\+group}
+    \subitem {actor\+\_\+zeta\+::environment\+::environment}, 
+		\hyperpage{59}
+  \item {max\+\_\+throughput}
+    \subitem {actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}, 
+		\hyperpage{28}
+    \subitem {actor\+\_\+zeta\+::executor\+::worker}, \hyperpage{114}
+  \item {message}
+    \subitem {actor\+\_\+zeta\+::behavior\+::request}, \hyperpage{94}
+    \subitem {actor\+\_\+zeta\+::behavior\+::response}, \hyperpage{96}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message}, 
+		\hyperpage{79, 80}
+  \item {message.\+cpp}, \hyperpage{151}
+  \item {message.\+hpp}, \hyperpage{152}
+  \item {message\+\_\+body}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+body}, 
+		\hyperpage{83}
+  \item {message\+\_\+body.\+hpp}, \hyperpage{153}
+    \subitem {swap}, \hyperpage{154}
+  \item {message\+\_\+header}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+header}, 
+		\hyperpage{85--87}
+  \item {message\+\_\+header.\+cpp}, \hyperpage{154}
+  \item {message\+\_\+header.\+hpp}, \hyperpage{155}
+  \item {message\+\_\+priority}
+    \subitem {actor\+\_\+zeta\+::messaging}, \hyperpage{20}
+  \item {message\+\_\+priority.\+hpp}, \hyperpage{156}
+  \item {multiplexer.\+hpp}, \hyperpage{156}
+  \item {multiplexer\+\_\+}
+    \subitem {actor\+\_\+zeta\+::network\+::broker}, \hyperpage{48}
+
+  \indexspace
+
+  \item {name}
+    \subitem {actor\+\_\+zeta\+::behavior\+::abstract\+\_\+action}, 
+		\hyperpage{24}
+    \subitem {actor\+\_\+zeta\+::environment\+::group}, \hyperpage{67}
+  \item {new\+\_\+tcp\+\_\+connection}
+    \subitem {actor\+\_\+zeta\+::network\+::multiplexer}, 
+		\hyperpage{89}
+  \item {new\+\_\+tcp\+\_\+listener}
+    \subitem {actor\+\_\+zeta\+::network\+::multiplexer}, 
+		\hyperpage{89}
+  \item {next\+\_\+message}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{77}
+  \item {normal\+\_\+priority\+\_\+cache}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{44}
+  \item {num\+\_\+workers}
+    \subitem {actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}, 
+		\hyperpage{28}
+
+  \indexspace
+
+  \item {operator bool}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor}, \hyperpage{33}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor\+\_\+address}, 
+		\hyperpage{35}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{72}
+  \item {operator!}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor}, \hyperpage{33}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor\+\_\+address}, 
+		\hyperpage{35}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{72}
+  \item {operator!=}
+    \subitem {actor\+\_\+zeta}, \hyperpage{15}
+  \item {operator$<$}
+    \subitem {actor\+\_\+zeta}, \hyperpage{15}
+  \item {operator$\ast$}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{72}
+  \item {operator()}
+    \subitem {actor\+\_\+zeta\+::behavior\+::abstract\+\_\+action}, 
+		\hyperpage{24}
+    \subitem {actor\+\_\+zeta\+::behavior\+::action}, \hyperpage{30}
+    \subitem {actor\+\_\+zeta\+::skip}, \hyperpage{104}
+    \subitem {actor\+\_\+zeta\+::sync\+\_\+contacts}, \hyperpage{105}
+  \item {operator-\/$>$}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor}, \hyperpage{33}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor\+\_\+address}, 
+		\hyperpage{35}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{72}
+  \item {operator=}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor}, \hyperpage{33}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor\+\_\+address}, 
+		\hyperpage{36}
+    \subitem {actor\+\_\+zeta\+::behavior\+::action}, \hyperpage{30}
+    \subitem {actor\+\_\+zeta\+::behavior\+::behavior}, \hyperpage{37}
+    \subitem {actor\+\_\+zeta\+::behavior\+::request}, \hyperpage{95}
+    \subitem {actor\+\_\+zeta\+::behavior\+::response}, 
+		\hyperpage{96, 97}
+    \subitem {actor\+\_\+zeta\+::behavior\+::type\+\_\+action}, 
+		\hyperpage{107}
+    \subitem {actor\+\_\+zeta\+::contacts\+::book\+\_\+contacts}, 
+		\hyperpage{46}
+    \subitem {actor\+\_\+zeta\+::contacts\+::group\+\_\+contacts}, 
+		\hyperpage{69}
+    \subitem {actor\+\_\+zeta\+::environment\+::cooperation}, 
+		\hyperpage{53}
+    \subitem {actor\+\_\+zeta\+::environment\+::environment}, 
+		\hyperpage{59, 60}
+    \subitem {actor\+\_\+zeta\+::environment\+::group}, \hyperpage{67}
+    \subitem {actor\+\_\+zeta\+::environment\+::shared\+\_\+group}, 
+		\hyperpage{102}
+    \subitem {actor\+\_\+zeta\+::executor\+::worker}, \hyperpage{114}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{72}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{44}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message}, \hyperpage{81}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+body}, 
+		\hyperpage{84}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+header}, 
+		\hyperpage{88}
+    \subitem {actor\+\_\+zeta\+::network\+::connection\+\_\+identifying}, 
+		\hyperpage{50}
+    \subitem {actor\+\_\+zeta\+::ref\+\_\+counted}, \hyperpage{92}
+  \item {operator==}
+    \subitem {actor\+\_\+zeta}, \hyperpage{15, 16}
+    \subitem {actor\+\_\+zeta\+::behavior\+::type\+\_\+action}, 
+		\hyperpage{108}
+    \subitem {actor\+\_\+zeta\+::network\+::connection\+\_\+identifying}, 
+		\hyperpage{50}
+
+  \indexspace
+
+  \item {parent}
+    \subitem {actor\+\_\+zeta\+::executor\+::worker}, \hyperpage{114}
+  \item {pointer}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{70}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{42}
+  \item {policy\+\_\+data}
+    \subitem {actor\+\_\+zeta\+::executor\+::coordinator}, 
+		\hyperpage{55}
+    \subitem {actor\+\_\+zeta\+::executor\+::worker}, \hyperpage{112}
+  \item {pop\+\_\+to\+\_\+cache}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{77}
+  \item {port}
+    \subitem {actor\+\_\+zeta\+::network\+::connection\+\_\+identifying}, 
+		\hyperpage{51}
+  \item {priorities}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+header}, 
+		\hyperpage{88}
+  \item {priority}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message}, \hyperpage{81}
+  \item {push\+\_\+to\+\_\+cache}
+    \subitem {actor\+\_\+zeta\+::actor\+::local\+\_\+actor}, 
+		\hyperpage{77}
+  \item {put}
+    \subitem {actor\+\_\+zeta\+::contacts\+::book\+\_\+contacts}, 
+		\hyperpage{46}
+    \subitem {actor\+\_\+zeta\+::contacts\+::group\+\_\+contacts}, 
+		\hyperpage{69}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{44}
+  \item {put\+\_\+execute\+\_\+latest}
+    \subitem {actor\+\_\+zeta\+::executor\+::execution\+\_\+device}, 
+		\hyperpage{64}
+    \subitem {actor\+\_\+zeta\+::executor\+::worker}, \hyperpage{114}
+  \item {put\+\_\+in\+\_\+group}
+    \subitem {actor\+\_\+zeta\+::contacts\+::book\+\_\+contacts}, 
+		\hyperpage{46}
+
+  \indexspace
+
+  \item {queue}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::coordinator\+\_\+data}, 
+		\hyperpage{57}
+  \item {queue\+\_\+base\+\_\+type}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{42}
+  \item {queue\+\_\+type}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}, 
+		\hyperpage{109}
+
+  \indexspace
+
+  \item {R\+E\+A\+D\+M\+E.\+md}, \hyperpage{158}
+  \item {rc\+\_\+}
+    \subitem {actor\+\_\+zeta\+::ref\+\_\+counted}, \hyperpage{93}
+  \item {receiver}
+    \subitem {actor\+\_\+zeta\+::behavior\+::response}, \hyperpage{97}
+  \item {ref}
+    \subitem {actor\+\_\+zeta\+::ref\+\_\+counted}, \hyperpage{92}
+  \item {ref\+\_\+counted}
+    \subitem {actor\+\_\+zeta\+::ref\+\_\+counted}, \hyperpage{92}
+  \item {ref\+\_\+counted.\+cpp}, \hyperpage{158}
+  \item {ref\+\_\+counted.\+hpp}, \hyperpage{159}
+  \item {reference}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{70}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{42}
+  \item {registration\+\_\+broker\+\_\+address}
+    \subitem {actor\+\_\+zeta\+::network\+::multiplexer}, 
+		\hyperpage{90}
+  \item {release}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{72}
+  \item {request}
+    \subitem {actor\+\_\+zeta\+::behavior\+::request}, \hyperpage{94}
+  \item {request.\+hpp}, \hyperpage{160}
+  \item {reset}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{73}
+  \item {response}
+    \subitem {actor\+\_\+zeta\+::behavior\+::response}, \hyperpage{96}
+  \item {response.\+hpp}, \hyperpage{160}
+  \item {resume\+\_\+job\+\_\+later}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}, 
+		\hyperpage{110}
+  \item {return\+\_\+address}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message}, \hyperpage{82}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+header}, 
+		\hyperpage{88}
+  \item {run}
+    \subitem {actor\+\_\+zeta\+::actor\+::blocking\+\_\+actor}, 
+		\hyperpage{40}
+    \subitem {actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}, 
+		\hyperpage{100}
+    \subitem {actor\+\_\+zeta\+::behavior\+::behavior}, \hyperpage{38}
+    \subitem {actor\+\_\+zeta\+::executor\+::executable}, 
+		\hyperpage{62}
+    \subitem {actor\+\_\+zeta\+::network\+::multiplexer}, 
+		\hyperpage{90}
+
+  \indexspace
+
+  \item {scheduled\+\_\+actor}
+    \subitem {actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}, 
+		\hyperpage{99}
+  \item {scheduled\+\_\+actor.\+cpp}, \hyperpage{162}
+  \item {scheduled\+\_\+actor.\+hpp}, \hyperpage{162}
+  \item {send}
+    \subitem {actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}, 
+		\hyperpage{27}
+    \subitem {actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}, 
+		\hyperpage{100}
+    \subitem {actor\+\_\+zeta\+::environment}, \hyperpage{18}
+    \subitem {actor\+\_\+zeta\+::environment\+::cooperation}, 
+		\hyperpage{53}
+    \subitem {actor\+\_\+zeta\+::environment\+::group}, \hyperpage{67}
+  \item {send\+\_\+all}
+    \subitem {actor\+\_\+zeta\+::environment\+::cooperation}, 
+		\hyperpage{53}
+    \subitem {actor\+\_\+zeta\+::environment\+::group}, \hyperpage{67}
+    \subitem {actor\+\_\+zeta\+::environment\+::shared\+\_\+group}, 
+		\hyperpage{102}
+  \item {send\+\_\+current}
+    \subitem {actor\+\_\+zeta\+::environment\+::cooperation}, 
+		\hyperpage{53}
+    \subitem {actor\+\_\+zeta\+::environment\+::group}, \hyperpage{67}
+    \subitem {actor\+\_\+zeta\+::environment\+::shared\+\_\+group}, 
+		\hyperpage{102}
+  \item {shared\+\_\+group}
+    \subitem {actor\+\_\+zeta\+::environment\+::shared\+\_\+group}, 
+		\hyperpage{101}
+  \item {shared\+\_\+group.\+cpp}, \hyperpage{163}
+  \item {shared\+\_\+group.\+hpp}, \hyperpage{164}
+  \item {shared\+\_\+multiplexer\+\_\+ptr}
+    \subitem {actor\+\_\+zeta\+::network}, \hyperpage{21}
+  \item {skip}
+    \subitem {actor\+\_\+zeta\+::skip}, \hyperpage{104}
+  \item {skip.\+cpp}, \hyperpage{165}
+  \item {skip.\+hpp}, \hyperpage{165}
+  \item {start}
+    \subitem {actor\+\_\+zeta\+::environment\+::environment}, 
+		\hyperpage{60}
+    \subitem {actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}, 
+		\hyperpage{28}
+    \subitem {actor\+\_\+zeta\+::executor\+::coordinator}, 
+		\hyperpage{56}
+    \subitem {actor\+\_\+zeta\+::executor\+::worker}, \hyperpage{114}
+  \item {static\+\_\+pointer\+\_\+cast}
+    \subitem {actor\+\_\+zeta}, \hyperpage{16}
+  \item {submit}
+    \subitem {actor\+\_\+zeta\+::executor\+::abstract\+\_\+coordinator}, 
+		\hyperpage{29}
+    \subitem {actor\+\_\+zeta\+::executor\+::coordinator}, 
+		\hyperpage{56}
+  \item {swap}
+    \subitem {actor\+\_\+zeta}, \hyperpage{16}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{73}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+body}, 
+		\hyperpage{84}
+    \subitem {message\+\_\+body.\+hpp}, \hyperpage{154}
+  \item {sync}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{44}
+  \item {sync\+\_\+contacts}
+    \subitem {actor\+\_\+zeta\+::sync\+\_\+contacts}, \hyperpage{105}
+  \item {sync\+\_\+contacts.\+cpp}, \hyperpage{167}
+  \item {sync\+\_\+contacts.\+hpp}, \hyperpage{167}
+
+  \indexspace
+
+  \item {time\+\_\+unit}
+    \subitem {time\+\_\+unit.\+hpp}, \hyperpage{169}
+  \item {time\+\_\+unit.\+hpp}, \hyperpage{168}
+    \subitem {time\+\_\+unit}, \hyperpage{169}
+  \item {to\+\_\+string}
+    \subitem {actor\+\_\+zeta\+::behavior\+::type\+\_\+action}, 
+		\hyperpage{108}
+    \subitem {actor\+\_\+zeta\+::network\+::connection\+\_\+identifying}, 
+		\hyperpage{51}
+  \item {type}
+    \subitem {actor\+\_\+zeta\+::actor\+::abstract\+\_\+actor}, 
+		\hyperpage{27}
+    \subitem {actor\+\_\+zeta\+::actor\+::actor}, \hyperpage{34}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message}, \hyperpage{82}
+    \subitem {actor\+\_\+zeta\+::messaging\+::message\+\_\+header}, 
+		\hyperpage{88}
+  \item {type\+\_\+action}
+    \subitem {actor\+\_\+zeta\+::behavior\+::type\+\_\+action}, 
+		\hyperpage{106, 107}
+  \item {type\+\_\+action.\+cpp}, \hyperpage{169}
+  \item {type\+\_\+action.\+hpp}, \hyperpage{170}
+  \item {type\+\_\+connect}
+    \subitem {actor\+\_\+zeta\+::network}, \hyperpage{21}
+
+  \indexspace
+
+  \item {unique}
+    \subitem {actor\+\_\+zeta\+::ref\+\_\+counted}, \hyperpage{93}
+  \item {unique\+\_\+lock}
+    \subitem {actor\+\_\+zeta\+::messaging\+::blocking\+\_\+mail\+\_\+queue}, 
+		\hyperpage{42}
+  \item {unique\+\_\+multiplexer\+\_\+ptr}
+    \subitem {actor\+\_\+zeta\+::network}, \hyperpage{21}
+  \item {upcast}
+    \subitem {actor\+\_\+zeta\+::intrusive\+\_\+ptr}, \hyperpage{73}
+
+  \indexspace
+
+  \item {work\+\_\+sharing.\+hpp}, \hyperpage{171}
+  \item {worker}
+    \subitem {actor\+\_\+zeta\+::executor\+::worker}, \hyperpage{113}
+  \item {worker.\+hpp}, \hyperpage{171}
+  \item {worker\+\_\+by\+\_\+id}
+    \subitem {actor\+\_\+zeta\+::executor\+::coordinator}, 
+		\hyperpage{56}
+  \item {worker\+\_\+data}
+    \subitem {actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::worker\+\_\+data}, 
+		\hyperpage{115}
+  \item {worker\+\_\+type}
+    \subitem {actor\+\_\+zeta\+::executor\+::coordinator}, 
+		\hyperpage{55}
+  \item {write}
+    \subitem {actor\+\_\+zeta\+::network\+::multiplexer}, 
+		\hyperpage{90}
+
+\end{theindex}

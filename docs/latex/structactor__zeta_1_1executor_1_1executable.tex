@@ -1,0 +1,109 @@
+\hypertarget{structactor__zeta_1_1executor_1_1executable}{}\section{actor\+\_\+zeta\+:\+:executor\+:\+:executable Struct Reference}
+\label{structactor__zeta_1_1executor_1_1executable}\index{actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}}
+
+
+{\ttfamily \#include $<$executable.\+hpp$>$}
+
+
+
+Inheritance diagram for actor\+\_\+zeta\+:\+:executor\+:\+:executable\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=293pt]{structactor__zeta_1_1executor_1_1executable__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4}{executable\+\_\+result} \{ \hyperlink{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4a69f2afc2390cec954f7c208b07212d39}{executable\+\_\+result\+::resume}, 
+\hyperlink{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4a3ef2b55c41ed0d65d1e18c3ed461b5a7}{executable\+\_\+result\+::awaiting}, 
+\hyperlink{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4a6b2ded51d81a4403d8a4bd25fa1e57ee}{executable\+\_\+result\+::done}, 
+\hyperlink{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4a5924f03a95ee6f7277e5bdd1e81b8fdc}{executable\+\_\+result\+::shutdown}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual \hyperlink{structactor__zeta_1_1executor_1_1executable_a12fbe24c0d826dbeae7ee3f9cae4ccf5}{$\sim$executable} ()=default
+\item 
+virtual void \hyperlink{structactor__zeta_1_1executor_1_1executable_a35557044e3f8d17504a66628aeea1cee}{attach\+\_\+to\+\_\+scheduler} ()=0
+\item 
+virtual void \hyperlink{structactor__zeta_1_1executor_1_1executable_a2fe91b45b919fc6f3fce21e64d2c1f91}{detach\+\_\+from\+\_\+scheduler} ()=0
+\item 
+virtual \hyperlink{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4}{executable\+\_\+result} \hyperlink{structactor__zeta_1_1executor_1_1executable_a61d6cbce8b124e1e5ef80f8befea2a89}{run} (\hyperlink{structactor__zeta_1_1executor_1_1execution__device}{executor\+::execution\+\_\+device} $\ast$, size\+\_\+t max\+\_\+throughput)=0
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4}\label{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4}} 
+\index{actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}!executable\+\_\+result@{executable\+\_\+result}}
+\index{executable\+\_\+result@{executable\+\_\+result}!actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}}
+\subsubsection{\texorpdfstring{executable\+\_\+result}{executable\_result}}
+{\footnotesize\ttfamily enum \hyperlink{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4}{actor\+\_\+zeta\+::executor\+::executable\+::executable\+\_\+result}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{resume@{resume}!actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}}\index{actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}!resume@{resume}}}\mbox{\Hypertarget{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4a69f2afc2390cec954f7c208b07212d39}\label{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4a69f2afc2390cec954f7c208b07212d39}} 
+resume&is coded as std\+::int of value 0 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{awaiting@{awaiting}!actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}}\index{actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}!awaiting@{awaiting}}}\mbox{\Hypertarget{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4a3ef2b55c41ed0d65d1e18c3ed461b5a7}\label{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4a3ef2b55c41ed0d65d1e18c3ed461b5a7}} 
+awaiting&is coded as std\+::int of value 1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{done@{done}!actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}}\index{actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}!done@{done}}}\mbox{\Hypertarget{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4a6b2ded51d81a4403d8a4bd25fa1e57ee}\label{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4a6b2ded51d81a4403d8a4bd25fa1e57ee}} 
+done&is coded as std\+::int of value 2 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{shutdown@{shutdown}!actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}}\index{actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}!shutdown@{shutdown}}}\mbox{\Hypertarget{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4a5924f03a95ee6f7277e5bdd1e81b8fdc}\label{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4a5924f03a95ee6f7277e5bdd1e81b8fdc}} 
+shutdown&is coded as std\+::int of value 3 \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structactor__zeta_1_1executor_1_1executable_a12fbe24c0d826dbeae7ee3f9cae4ccf5}\label{structactor__zeta_1_1executor_1_1executable_a12fbe24c0d826dbeae7ee3f9cae4ccf5}} 
+\index{actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}!````~executable@{$\sim$executable}}
+\index{````~executable@{$\sim$executable}!actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}}
+\subsubsection{\texorpdfstring{$\sim$executable()}{~executable()}}
+{\footnotesize\ttfamily virtual actor\+\_\+zeta\+::executor\+::executable\+::$\sim$executable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{structactor__zeta_1_1executor_1_1executable_a35557044e3f8d17504a66628aeea1cee}\label{structactor__zeta_1_1executor_1_1executable_a35557044e3f8d17504a66628aeea1cee}} 
+\index{actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}!attach\+\_\+to\+\_\+scheduler@{attach\+\_\+to\+\_\+scheduler}}
+\index{attach\+\_\+to\+\_\+scheduler@{attach\+\_\+to\+\_\+scheduler}!actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}}
+\subsubsection{\texorpdfstring{attach\+\_\+to\+\_\+scheduler()}{attach\_to\_scheduler()}}
+{\footnotesize\ttfamily virtual void actor\+\_\+zeta\+::executor\+::executable\+::attach\+\_\+to\+\_\+scheduler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \hyperlink{classactor__zeta_1_1actor_1_1scheduled__actor_a760f7fedcd61cae392c435a13bcab50c}{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}.
+
+\mbox{\Hypertarget{structactor__zeta_1_1executor_1_1executable_a2fe91b45b919fc6f3fce21e64d2c1f91}\label{structactor__zeta_1_1executor_1_1executable_a2fe91b45b919fc6f3fce21e64d2c1f91}} 
+\index{actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}!detach\+\_\+from\+\_\+scheduler@{detach\+\_\+from\+\_\+scheduler}}
+\index{detach\+\_\+from\+\_\+scheduler@{detach\+\_\+from\+\_\+scheduler}!actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}}
+\subsubsection{\texorpdfstring{detach\+\_\+from\+\_\+scheduler()}{detach\_from\_scheduler()}}
+{\footnotesize\ttfamily virtual void actor\+\_\+zeta\+::executor\+::executable\+::detach\+\_\+from\+\_\+scheduler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \hyperlink{classactor__zeta_1_1actor_1_1scheduled__actor_aaf6582fc27718071ff7c9d516b8f0cf6}{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}.
+
+\mbox{\Hypertarget{structactor__zeta_1_1executor_1_1executable_a61d6cbce8b124e1e5ef80f8befea2a89}\label{structactor__zeta_1_1executor_1_1executable_a61d6cbce8b124e1e5ef80f8befea2a89}} 
+\index{actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}!run@{run}}
+\index{run@{run}!actor\+\_\+zeta\+::executor\+::executable@{actor\+\_\+zeta\+::executor\+::executable}}
+\subsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily virtual \hyperlink{structactor__zeta_1_1executor_1_1executable_aef06c63be7b22b021ade4b83ed4f3cc4}{executable\+\_\+result} actor\+\_\+zeta\+::executor\+::executable\+::run (\begin{DoxyParamCaption}\item[{\hyperlink{structactor__zeta_1_1executor_1_1execution__device}{executor\+::execution\+\_\+device} $\ast$}]{,  }\item[{size\+\_\+t}]{max\+\_\+throughput }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \hyperlink{classactor__zeta_1_1actor_1_1scheduled__actor_a9031c2f3ff6c8c62698b53fa92e56274}{actor\+\_\+zeta\+::actor\+::scheduled\+\_\+actor}, and \hyperlink{classactor__zeta_1_1actor_1_1blocking__actor_af92ae4139344b002f8014433f64f8e56}{actor\+\_\+zeta\+::actor\+::blocking\+\_\+actor}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{executable_8hpp}{executable.\+hpp}\end{DoxyCompactItemize}

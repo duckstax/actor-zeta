@@ -1,0 +1,120 @@
+\hypertarget{classactor__zeta_1_1executor_1_1work__sharing}{}\section{actor\+\_\+zeta\+:\+:executor\+:\+:work\+\_\+sharing Class Reference}
+\label{classactor__zeta_1_1executor_1_1work__sharing}\index{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}}
+
+
+Stands for work sharing approach.  
+
+
+
+
+{\ttfamily \#include $<$work\+\_\+sharing.\+hpp$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structactor__zeta_1_1executor_1_1work__sharing_1_1coordinator__data}{coordinator\+\_\+data}
+\begin{DoxyCompactList}\small\item\em This structure is used as coordinator data keeper. \end{DoxyCompactList}\item 
+struct \hyperlink{structactor__zeta_1_1executor_1_1work__sharing_1_1worker__data}{worker\+\_\+data}
+\begin{DoxyCompactList}\small\item\em This structure is used as worker data keeper. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{classactor__zeta_1_1executor_1_1work__sharing_a4ed160584612bb4abf7e23ace3590801}{queue\+\_\+type} = std\+::list$<$ \hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$ $>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classactor__zeta_1_1executor_1_1work__sharing_a9cdcd201ba45a67964c5f38c31ec7014}{$\sim$work\+\_\+sharing} ()
+\item 
+{\footnotesize template$<$class Coordinator $>$ }\\void \hyperlink{classactor__zeta_1_1executor_1_1work__sharing_a8b35723bd97f41af9a2a0b0e41a12134}{enqueue} (Coordinator $\ast$self, \hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$job)
+\item 
+{\footnotesize template$<$class Coordinator $>$ }\\void \hyperlink{classactor__zeta_1_1executor_1_1work__sharing_a6c9cc365c9d02574ac626d093eb4a221}{central\+\_\+enqueue} (Coordinator $\ast$self, \hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$job)
+\item 
+{\footnotesize template$<$class Worker $>$ }\\void \hyperlink{classactor__zeta_1_1executor_1_1work__sharing_a594aa82538f4ecdd9613cfdf07851c02}{external\+\_\+enqueue} (Worker $\ast$self, \hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$job)
+\item 
+{\footnotesize template$<$class Worker $>$ }\\void \hyperlink{classactor__zeta_1_1executor_1_1work__sharing_a033f2d355e87c707d6467b8c0c85e925}{internal\+\_\+enqueue} (Worker $\ast$self, \hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$job)
+\item 
+{\footnotesize template$<$class Worker $>$ }\\void \hyperlink{classactor__zeta_1_1executor_1_1work__sharing_a74e9c2f71b9a8365e0f0712d625f2279}{resume\+\_\+job\+\_\+later} (Worker $\ast$self, \hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$job)
+\item 
+{\footnotesize template$<$class Worker $>$ }\\\hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$ \hyperlink{classactor__zeta_1_1executor_1_1work__sharing_ad889ed60c2d52beef083d3854e87e40b}{dequeue} (Worker $\ast$self)
+\item 
+{\footnotesize template$<$class Coordinator , class Unary\+Function $>$ }\\void \hyperlink{classactor__zeta_1_1executor_1_1work__sharing_a65e0a47d49b1fcd434b09c39210b143c}{foreach\+\_\+central\+\_\+resumable} (Coordinator $\ast$self, Unary\+Function f)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Stands for work sharing approach. 
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1work__sharing_a4ed160584612bb4abf7e23ace3590801}\label{classactor__zeta_1_1executor_1_1work__sharing_a4ed160584612bb4abf7e23ace3590801}} 
+\index{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}!queue\+\_\+type@{queue\+\_\+type}}
+\index{queue\+\_\+type@{queue\+\_\+type}!actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}}
+\subsubsection{\texorpdfstring{queue\+\_\+type}{queue\_type}}
+{\footnotesize\ttfamily using \hyperlink{classactor__zeta_1_1executor_1_1work__sharing_a4ed160584612bb4abf7e23ace3590801}{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::queue\+\_\+type} =  std\+::list$<$\hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$$>$}
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1work__sharing_a9cdcd201ba45a67964c5f38c31ec7014}\label{classactor__zeta_1_1executor_1_1work__sharing_a9cdcd201ba45a67964c5f38c31ec7014}} 
+\index{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}!````~work\+\_\+sharing@{$\sim$work\+\_\+sharing}}
+\index{````~work\+\_\+sharing@{$\sim$work\+\_\+sharing}!actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}}
+\subsubsection{\texorpdfstring{$\sim$work\+\_\+sharing()}{~work\_sharing()}}
+{\footnotesize\ttfamily actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::$\sim$work\+\_\+sharing (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1work__sharing_a6c9cc365c9d02574ac626d093eb4a221}\label{classactor__zeta_1_1executor_1_1work__sharing_a6c9cc365c9d02574ac626d093eb4a221}} 
+\index{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}!central\+\_\+enqueue@{central\+\_\+enqueue}}
+\index{central\+\_\+enqueue@{central\+\_\+enqueue}!actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}}
+\subsubsection{\texorpdfstring{central\+\_\+enqueue()}{central\_enqueue()}}
+{\footnotesize\ttfamily template$<$class Coordinator $>$ \\
+void actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::central\+\_\+enqueue (\begin{DoxyParamCaption}\item[{Coordinator $\ast$}]{self,  }\item[{\hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$}]{job }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1work__sharing_ad889ed60c2d52beef083d3854e87e40b}\label{classactor__zeta_1_1executor_1_1work__sharing_ad889ed60c2d52beef083d3854e87e40b}} 
+\index{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}!dequeue@{dequeue}}
+\index{dequeue@{dequeue}!actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}}
+\subsubsection{\texorpdfstring{dequeue()}{dequeue()}}
+{\footnotesize\ttfamily template$<$class Worker $>$ \\
+\hyperlink{structactor__zeta_1_1executor_1_1executable}{executable}$\ast$ actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::dequeue (\begin{DoxyParamCaption}\item[{Worker $\ast$}]{self }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1work__sharing_a8b35723bd97f41af9a2a0b0e41a12134}\label{classactor__zeta_1_1executor_1_1work__sharing_a8b35723bd97f41af9a2a0b0e41a12134}} 
+\index{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}!enqueue@{enqueue}}
+\index{enqueue@{enqueue}!actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}}
+\subsubsection{\texorpdfstring{enqueue()}{enqueue()}}
+{\footnotesize\ttfamily template$<$class Coordinator $>$ \\
+void actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::enqueue (\begin{DoxyParamCaption}\item[{Coordinator $\ast$}]{self,  }\item[{\hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$}]{job }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1work__sharing_a594aa82538f4ecdd9613cfdf07851c02}\label{classactor__zeta_1_1executor_1_1work__sharing_a594aa82538f4ecdd9613cfdf07851c02}} 
+\index{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}!external\+\_\+enqueue@{external\+\_\+enqueue}}
+\index{external\+\_\+enqueue@{external\+\_\+enqueue}!actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}}
+\subsubsection{\texorpdfstring{external\+\_\+enqueue()}{external\_enqueue()}}
+{\footnotesize\ttfamily template$<$class Worker $>$ \\
+void actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::external\+\_\+enqueue (\begin{DoxyParamCaption}\item[{Worker $\ast$}]{self,  }\item[{\hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$}]{job }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1work__sharing_a65e0a47d49b1fcd434b09c39210b143c}\label{classactor__zeta_1_1executor_1_1work__sharing_a65e0a47d49b1fcd434b09c39210b143c}} 
+\index{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}!foreach\+\_\+central\+\_\+resumable@{foreach\+\_\+central\+\_\+resumable}}
+\index{foreach\+\_\+central\+\_\+resumable@{foreach\+\_\+central\+\_\+resumable}!actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}}
+\subsubsection{\texorpdfstring{foreach\+\_\+central\+\_\+resumable()}{foreach\_central\_resumable()}}
+{\footnotesize\ttfamily template$<$class Coordinator , class Unary\+Function $>$ \\
+void actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::foreach\+\_\+central\+\_\+resumable (\begin{DoxyParamCaption}\item[{Coordinator $\ast$}]{self,  }\item[{Unary\+Function}]{f }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1work__sharing_a033f2d355e87c707d6467b8c0c85e925}\label{classactor__zeta_1_1executor_1_1work__sharing_a033f2d355e87c707d6467b8c0c85e925}} 
+\index{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}!internal\+\_\+enqueue@{internal\+\_\+enqueue}}
+\index{internal\+\_\+enqueue@{internal\+\_\+enqueue}!actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}}
+\subsubsection{\texorpdfstring{internal\+\_\+enqueue()}{internal\_enqueue()}}
+{\footnotesize\ttfamily template$<$class Worker $>$ \\
+void actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::internal\+\_\+enqueue (\begin{DoxyParamCaption}\item[{Worker $\ast$}]{self,  }\item[{\hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$}]{job }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classactor__zeta_1_1executor_1_1work__sharing_a74e9c2f71b9a8365e0f0712d625f2279}\label{classactor__zeta_1_1executor_1_1work__sharing_a74e9c2f71b9a8365e0f0712d625f2279}} 
+\index{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}!resume\+\_\+job\+\_\+later@{resume\+\_\+job\+\_\+later}}
+\index{resume\+\_\+job\+\_\+later@{resume\+\_\+job\+\_\+later}!actor\+\_\+zeta\+::executor\+::work\+\_\+sharing@{actor\+\_\+zeta\+::executor\+::work\+\_\+sharing}}
+\subsubsection{\texorpdfstring{resume\+\_\+job\+\_\+later()}{resume\_job\_later()}}
+{\footnotesize\ttfamily template$<$class Worker $>$ \\
+void actor\+\_\+zeta\+::executor\+::work\+\_\+sharing\+::resume\+\_\+job\+\_\+later (\begin{DoxyParamCaption}\item[{Worker $\ast$}]{self,  }\item[{\hyperlink{structactor__zeta_1_1executor_1_1executable}{executable} $\ast$}]{job }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{work__sharing_8hpp}{work\+\_\+sharing.\+hpp}\end{DoxyCompactItemize}

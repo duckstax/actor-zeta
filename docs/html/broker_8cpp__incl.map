@@ -1,0 +1,25 @@
+<map id="broker.cpp" name="broker.cpp">
+<area shape="rect" id="node2" href="$broker_8hpp.html" title="actor&#45;zeta/actor/broker.hpp" alt="" coords="1290,80,1468,107"/>
+<area shape="rect" id="node4" href="$scheduled__actor_8hpp.html" title="actor&#45;zeta/actor/scheduled\l_actor.hpp" alt="" coords="1668,155,1844,196"/>
+<area shape="rect" id="node38" href="$multiplexer_8hpp.html" title="actor&#45;zeta/network\l/multiplexer.hpp" alt="" coords="756,423,885,464"/>
+<area shape="rect" id="node5" href="$execution__device_8hpp.html" title="actor&#45;zeta/executor\l/execution_device.hpp" alt="" coords="2214,244,2365,285"/>
+<area shape="rect" id="node8" href="$local__actor_8hpp.html" title="actor&#45;zeta/actor/local\l_actor.hpp" alt="" coords="1684,244,1828,285"/>
+<area shape="rect" id="node22" href="$abstract__actor_8hpp.html" title="abstract_actor.hpp" alt="" coords="852,609,981,635"/>
+<area shape="rect" id="node6" href="$time__unit_8hpp.html" title="time_unit.hpp" alt="" coords="2265,341,2365,367"/>
+<area shape="rect" id="node10" href="$blocking__mail__queue_8hpp.html" title="actor&#45;zeta/messaging\l/blocking_mail_queue.hpp" alt="" coords="1820,423,1992,464"/>
+<area shape="rect" id="node15" href="$message_8hpp.html" title="actor&#45;zeta/messaging\l/message.hpp" alt="" coords="924,333,1071,375"/>
+<area shape="rect" id="node31" href="$behavior_8hpp.html" title="actor&#45;zeta/behavior\l/behavior.hpp" alt="" coords="1496,333,1627,375"/>
+<area shape="rect" id="node35" href="$executable_8hpp.html" title="actor&#45;zeta/executor\l/executable.hpp" alt="" coords="1953,601,2088,643"/>
+<area shape="rect" id="node36" href="$book__contacts_8hpp.html" title="actor&#45;zeta/contacts\l/book_contacts.hpp" alt="" coords="1116,333,1252,375"/>
+<area shape="rect" id="node16" href="$message__header_8hpp.html" title="message_header.hpp" alt="" coords="586,430,732,457"/>
+<area shape="rect" id="node26" href="$message__body_8hpp.html" title="message_body.hpp" alt="" coords="258,430,393,457"/>
+<area shape="rect" id="node17" href="$actor__address_8hpp.html" title="actor&#45;zeta/actor/actor\l_address.hpp" alt="" coords="835,512,982,553"/>
+<area shape="rect" id="node24" href="$type__action_8hpp.html" title="actor&#45;zeta/behavior\l/type_action.hpp" alt="" coords="1056,601,1187,643"/>
+<area shape="rect" id="node25" href="$message__priority_8hpp.html" title="message_priority.hpp" alt="" coords="614,519,760,546"/>
+<area shape="rect" id="node18" href="$intrusive__ptr_8hpp.html" title="actor&#45;zeta/intrusive\l_ptr.hpp" alt="" coords="494,601,624,643"/>
+<area shape="rect" id="node20" href="$ref__counted_8hpp.html" title="ref_counted.hpp" alt="" coords="852,691,967,717"/>
+<area shape="rect" id="node33" href="$action_8hpp.html" title="action.hpp" alt="" coords="1560,430,1643,457"/>
+<area shape="rect" id="node34" href="$abstract__action_8hpp.html" title="abstract_action.hpp" alt="" coords="1507,519,1643,546"/>
+<area shape="rect" id="node37" href="$group__contacts_8hpp.html" title="group_contacts.hpp" alt="" coords="1011,430,1147,457"/>
+<area shape="rect" id="node39" href="$connection__identifying_8hpp.html" title="actor&#45;zeta/network\l/connection_identifying.hpp" alt="" coords="648,601,827,643"/>
+</map>

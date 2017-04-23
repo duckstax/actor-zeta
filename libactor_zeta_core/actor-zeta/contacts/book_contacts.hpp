@@ -5,39 +5,39 @@
 #include <vector>
 #include <unordered_map>
 
+#include "actor-zeta/forwards.hpp"
 #include "actor-zeta/actor/actor_address.hpp"
-#include "actor-zeta/channel/channel.hpp"
+#include "group_contacts.hpp"
 
 namespace actor_zeta {
     namespace contacts {
-        class book_contacts final {
+///
+/// @brief Navigation map for actor & groups
+///
+        class book_contacts {
         public:
             book_contacts() = default;
-
-            book_contacts(const book_contacts &) = delete;
-
-            book_contacts &operator=(const book_contacts &)= delete;
 
             book_contacts(book_contacts &&) = default;
 
             book_contacts &operator=(book_contacts &&)= default;
 
-            auto address(const actor::actor_address &) -> void;
+            void put(const actor::actor_address &);
 
-            auto address(const std::string &) -> const actor::actor_address &;
+            const actor::actor_address& get(const std::string &);
 
-            auto channel(channel::channel) -> void;
+            void put_in_group(const std::string&, const actor::actor_address &);
 
-            auto channel(const std::string &) -> channel::channel;
+            const actor::actor_address& get_group(const std::string&);
 
             /*
             * debug method
             */
-            auto all_view_address() -> void;
+            void all_view();
 
         private:
             std::unordered_map<std::string, actor::actor_address> contacts;
-            std::unordered_map<std::string, channel::channel> channels;
+            std::unordered_map<std::string, group_contacts> groups;
         };
     }
 }
