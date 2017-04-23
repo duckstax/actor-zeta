@@ -3,9 +3,11 @@
 
 #include <memory>
 #include <cstdint>
-
 namespace actor_zeta {
     namespace network {
+///
+/// @brief multiplexer
+///
         class multiplexer;
     }
 }

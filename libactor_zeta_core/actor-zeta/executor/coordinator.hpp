@@ -9,6 +9,10 @@
 
 namespace actor_zeta {
     namespace executor {
+///
+/// @brief Provides ruler for environment
+/// @tparam Policy
+///
         template<class Policy>
         class coordinator final : public abstract_coordinator {
         public:

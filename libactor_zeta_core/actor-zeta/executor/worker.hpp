@@ -11,8 +11,12 @@
 
 namespace actor_zeta {
     namespace executor {
+///
+/// @brief A simple worker module class
+/// @tparam Policy
+///
         template<class Policy>
-        class worker final : public execution_device {
+        class worker : public execution_device {
         public:
             using job_ptr = executable *;
             using coordinator_ptr = coordinator<Policy> *;

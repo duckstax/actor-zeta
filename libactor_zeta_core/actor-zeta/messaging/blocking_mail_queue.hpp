@@ -9,14 +9,21 @@
 
 namespace actor_zeta {
     namespace messaging {
+///
+/// @enum enqueue_result
+/// @brief A strongly typed enum class representing enqueue result
+///
         enum class enqueue_result {
-                    success,
-                    unblocked_reader,
-                    queue_closed
+                    success,            ///< is coded as std::int of value 0
+                    unblocked_reader,   ///< is coded as std::int of value 1
+                    queue_closed        ///< is coded as std::int of value 2
         };
-
+///
+/// @brief A mailbox class for message queue
+/// @tparam T
+///
         template<typename T>
-        class blocking_mail_queue final {
+        class blocking_mail_queue {
         public:
             using pointer = T *;
             using const_pointer = const T *;

@@ -5,12 +5,19 @@
 
 namespace actor_zeta {
     namespace executor {
+///
+/// @brief
+///
         struct executable {
+///
+/// @enum 
+/// @brief is a strongly typed enum class representing execution's result
+///
             enum class executable_result {
-                resume,
-                awaiting,
-                done,
-                shutdown
+                resume,     ///< is coded as std::int of value 0
+                awaiting,   ///< is coded as std::int of value 1
+                done,       ///< is coded as std::int of value 2
+                shutdown    ///< is coded as std::int of value 3
             };
 
             virtual ~executable() = default;

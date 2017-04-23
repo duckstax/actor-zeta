@@ -6,6 +6,9 @@
 
 namespace actor_zeta {
     namespace behavior {
+///
+/// @brief This is a request container for messaging
+///
         class request {
         private:
             contacts::book_contacts &contacts_;

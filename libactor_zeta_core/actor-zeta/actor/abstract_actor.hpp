@@ -8,6 +8,9 @@
 
 namespace actor_zeta {
     namespace actor {
+///
+/// @brief abstract concept of an actor
+///
         class abstract_actor : public ref_counted {
         public:
             const std::string &type() const;
@@ -20,9 +23,9 @@ namespace actor_zeta {
 
             actor_address address() const noexcept;
 
-        protected:
             environment::environment *env() const;
 
+        protected:
             abstract_actor(environment::environment *, const std::string &);
 
         private:
