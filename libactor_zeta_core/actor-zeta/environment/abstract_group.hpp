@@ -9,7 +9,7 @@
 namespace actor_zeta {
     namespace environment {
 ///
-/// @brief abstract concept of a group approach
+/// @brief
 ///
         //TODO: not correctly name abstract_group -> local_group ->(*)group
         class abstract_group : public channel::abstract_channel {

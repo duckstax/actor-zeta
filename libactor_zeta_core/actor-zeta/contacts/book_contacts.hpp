@@ -11,7 +11,7 @@
 namespace actor_zeta {
     namespace contacts {
 ///
-/// @brief Navigation map for actor & groups
+/// @brief
 ///
         class book_contacts final {
         public:

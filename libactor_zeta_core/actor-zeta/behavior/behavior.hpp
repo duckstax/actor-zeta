@@ -11,7 +11,7 @@
 namespace actor_zeta {
     namespace behavior {
 ///
-/// @brief An actor's dispatcher
+/// @brief
 ///
         class behavior final {
         public:

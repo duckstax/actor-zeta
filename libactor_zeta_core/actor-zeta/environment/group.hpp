@@ -7,7 +7,7 @@
 namespace actor_zeta {
     namespace environment {
 ///
-/// @brief A group combinator for actors
+/// @brief
 ///
         class group final {
         public:

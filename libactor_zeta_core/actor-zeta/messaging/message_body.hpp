@@ -10,7 +10,7 @@
 namespace actor_zeta {
     namespace messaging {
 ///
-/// @brief A message value container
+/// @brief
 ///
         class message_body final {
         public:

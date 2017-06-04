@@ -7,7 +7,7 @@
 namespace actor_zeta {
     namespace channel {
 ///
-/// @brief abstract concept of a channel
+/// @brief
 ///
         struct abstract_channel : public ref_counted {
             virtual bool send(messaging::message *) = 0;

@@ -10,7 +10,7 @@
 namespace actor_zeta {
     namespace executor {
 ///
-/// @brief Provides ruler for environment
+/// @brief
 /// @tparam Policy
 ///
         template<class Policy>

@@ -9,7 +9,7 @@
 namespace actor_zeta {
     namespace executor {
 ///
-/// @brief abstract concept of an coordination approach
+/// @brief
 ///
         class abstract_coordinator {
         public:

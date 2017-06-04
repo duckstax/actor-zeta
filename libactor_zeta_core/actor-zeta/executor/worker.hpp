@@ -12,7 +12,7 @@
 namespace actor_zeta {
     namespace executor {
 ///
-/// @brief A simple worker module class
+/// @brief
 /// @tparam Policy
 ///
         template<class Policy>

@@ -11,7 +11,7 @@ namespace actor_zeta {
         struct executable {
 ///
 /// @enum 
-/// @brief is a strongly typed enum class representing execution's result
+/// @brief
 ///
             enum class executable_result {
                 resume,     ///< is coded as std::int of value 0

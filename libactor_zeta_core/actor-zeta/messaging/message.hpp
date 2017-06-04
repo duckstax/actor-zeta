@@ -8,7 +8,7 @@
 namespace actor_zeta {
     namespace messaging {
 ///
-/// @brief Class to represent messages 
+/// @brief
 ///        
         class message final {
         public:

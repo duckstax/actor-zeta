@@ -11,7 +11,7 @@
 namespace actor_zeta {
     namespace executor {
 ///
-/// @brief Stands for work sharing approach
+/// @brief
 ///
         class work_sharing {
         private:
@@ -25,7 +25,7 @@ namespace actor_zeta {
 
             ~work_sharing() {}
 ///
-/// @brief This structure is used as coordinator data keeper
+/// @brief
 ///
             struct coordinator_data {
                 inline explicit coordinator_data(executor::abstract_coordinator *) {
@@ -36,7 +36,7 @@ namespace actor_zeta {
                 std::condition_variable cv;
             };
 ///
-/// @brief This structure is used as worker data keeper
+/// @brief
 ///
             struct worker_data {
                 inline explicit worker_data(executor::abstract_coordinator *) {

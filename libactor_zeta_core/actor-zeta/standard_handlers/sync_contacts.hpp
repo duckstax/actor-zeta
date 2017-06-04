@@ -8,7 +8,7 @@
 
 namespace actor_zeta {
 ///
-/// @brief A class used for contact operations synchronization
+/// @brief
 ///
     class sync_contacts final : public behavior::abstract_action {
     public:

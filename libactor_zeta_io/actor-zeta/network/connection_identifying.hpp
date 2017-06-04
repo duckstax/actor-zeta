@@ -7,14 +7,14 @@ namespace actor_zeta {
     namespace network {
 ///
 /// @enum type_connect
-/// @brief A strongly typed enum class representing connection type
+/// @brief
 ///
         enum class type_connect : int {
-            tcp,    ///< is coded as std::int of value 0
-            udp,    ///< is coded as std::int of value 1
+            tcp,
+            udp
         };
 ///
-/// @brief Implementation of connection functionality
+/// @brief
 ///
         class connection_identifying {
         public:

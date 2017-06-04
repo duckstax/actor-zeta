@@ -9,7 +9,7 @@
 namespace actor_zeta {
     namespace network {
 ///
-/// @brief Multiplexing utility class
+/// @brief
 ///
         struct multiplexer {
             virtual int run() = 0;

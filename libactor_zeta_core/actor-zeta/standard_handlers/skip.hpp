@@ -7,7 +7,7 @@
 
 namespace actor_zeta {
 ///
-/// @brief A class used for skipping action
+/// @brief
 ///
     class skip final : public behavior::abstract_action {
     public:

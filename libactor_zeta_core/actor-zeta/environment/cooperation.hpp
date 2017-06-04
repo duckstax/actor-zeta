@@ -9,7 +9,7 @@
 namespace actor_zeta {
     namespace environment {
 ///
-/// @brief A logic combiner for groups
+/// @brief
 ///
         class cooperation final {
         public:

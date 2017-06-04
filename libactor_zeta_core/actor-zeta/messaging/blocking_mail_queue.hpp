@@ -11,7 +11,7 @@ namespace actor_zeta {
     namespace messaging {
 ///
 /// @enum enqueue_result
-/// @brief A strongly typed enum class representing enqueue result
+/// @brief
 ///
         enum class enqueue_result {
                     success,            ///< is coded as std::int of value 0
@@ -19,7 +19,7 @@ namespace actor_zeta {
                     queue_closed        ///< is coded as std::int of value 2
         };
 ///
-/// @brief A mailbox class for message queue
+/// @brief
 /// @tparam T
 ///
         template<typename T>

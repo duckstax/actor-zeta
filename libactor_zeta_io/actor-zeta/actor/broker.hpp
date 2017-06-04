@@ -9,7 +9,7 @@
 namespace actor_zeta {
     namespace network {
 ///
-/// @brief A broker for messaging
+/// @brief
 ///
         class broker : public actor_zeta::actor::scheduled_actor {
         public:
