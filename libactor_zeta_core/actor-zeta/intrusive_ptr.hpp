@@ -8,7 +8,7 @@
 
 namespace actor_zeta {
 ///
-/// @brief This class represents smart pointers
+/// @brief Represents intrusive pointer
 /// @tparam T
 ///
     template<class T>

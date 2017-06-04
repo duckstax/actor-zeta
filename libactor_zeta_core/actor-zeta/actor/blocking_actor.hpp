@@ -9,7 +9,7 @@
 namespace actor_zeta {
     namespace actor {
 ///
-/// @brief Represents actor type with blocking mode
+/// @brief Specialization of actor with blocking mode
 ///
         class blocking_actor  : public local_actor , executor::executable {
         public:

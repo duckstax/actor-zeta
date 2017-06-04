@@ -11,7 +11,7 @@
 namespace actor_zeta {
     namespace behavior {
 ///
-/// @brief Class for lyfecycle determination
+/// @brief An actor's dispatcher
 ///
         class behavior final {
         public:

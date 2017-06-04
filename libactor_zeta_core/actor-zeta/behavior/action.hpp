@@ -8,7 +8,7 @@
 namespace actor_zeta {
     namespace behavior {
 ///
-/// @brief Basic action implementation
+/// @brief An action's entity container
 ///
         class action final {
         public:

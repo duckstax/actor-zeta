@@ -14,7 +14,7 @@
 namespace actor_zeta {
     namespace actor {
 ///
-/// @brief Class for location dependant type actor
+/// @brief A generic actor with communications and dispatcher
 ///
         class local_actor : public abstract_actor {
         public:

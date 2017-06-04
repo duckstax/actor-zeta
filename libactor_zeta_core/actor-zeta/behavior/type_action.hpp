@@ -6,7 +6,7 @@
 namespace actor_zeta {
     namespace behavior {
 ///
-/// @brief Type of commands used for lyfecycle 
+/// @brief Identifier of commands in lifecycle
 ///
         class type_action final {
         private:

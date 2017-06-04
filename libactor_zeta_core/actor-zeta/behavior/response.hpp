@@ -7,7 +7,7 @@
 namespace actor_zeta {
     namespace behavior {
 ///
-/// @brief This is a response container for messaging
+/// @brief Represents input message entity
 ///
         class response {
         private:

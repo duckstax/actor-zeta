@@ -9,7 +9,7 @@
 namespace actor_zeta {
     namespace actor {
 ///
-/// @brief Basic actor implementation
+/// @brief An actor's entity container
 ///
         class actor final {
         public:

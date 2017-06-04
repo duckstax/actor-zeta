@@ -9,7 +9,7 @@
 namespace actor_zeta {
     namespace actor {
 ///
-/// @brief This represents an actor's address container
+/// @brief A compact location expressor
 ///
         class actor_address final {
         public:

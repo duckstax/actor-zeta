@@ -7,7 +7,7 @@
 namespace actor_zeta {
     namespace behavior {
 ///
-/// @brief abstract concept of an action
+/// @brief Abstract concept of an action
 ///
         class abstract_action {
         private:

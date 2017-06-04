@@ -9,7 +9,7 @@
 namespace actor_zeta {
     namespace actor {
 ///
-/// @brief abstract concept of an actor
+/// @brief Abstract concept of an actor
 ///
         class abstract_actor : public ref_counted {
         public:
