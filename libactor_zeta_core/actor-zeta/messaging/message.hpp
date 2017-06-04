@@ -7,6 +7,9 @@
 
 namespace actor_zeta {
     namespace messaging {
+///
+/// @brief
+///        
         class message final {
         public:
             message() = delete;

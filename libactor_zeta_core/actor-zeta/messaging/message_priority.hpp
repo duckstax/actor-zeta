@@ -3,6 +3,9 @@
 
 namespace actor_zeta {
     namespace messaging {
+///
+/// @enum
+///
         enum class message_priority : int {
             low = 0,
             normal,

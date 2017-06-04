@@ -6,6 +6,9 @@
 
 namespace actor_zeta {
     namespace executor {
+///
+/// @brief
+///
     struct execution_device {
         execution_device() = default;
 

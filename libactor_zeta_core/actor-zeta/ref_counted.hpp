@@ -6,8 +6,9 @@
 
 
 namespace actor_zeta {
-
-
+///
+/// @brief This class represents reference counter
+///
     class ref_counted {
     public:
         ~ref_counted();

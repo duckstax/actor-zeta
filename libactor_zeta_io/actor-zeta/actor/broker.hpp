@@ -8,6 +8,9 @@
 
 namespace actor_zeta {
     namespace network {
+///
+/// @brief
+///
         class broker : public actor_zeta::actor::scheduled_actor {
         public:
             broker(environment::environment *, const std::string &, shared_multiplexer_ptr);

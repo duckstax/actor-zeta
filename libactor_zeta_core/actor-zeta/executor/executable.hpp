@@ -5,7 +5,14 @@
 
 namespace actor_zeta {
     namespace executor {
+///
+/// @brief
+///
         struct executable {
+///
+/// @enum 
+/// @brief
+///
             enum class executable_result {
                 resume,
                 awaiting,

@@ -8,6 +8,9 @@
 
 namespace actor_zeta {
     namespace actor {
+///
+/// @brief Abstract concept of an actor
+///
         class abstract_actor : public ref_counted {
         public:
             const std::string &type() const;

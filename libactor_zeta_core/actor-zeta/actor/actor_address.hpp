@@ -8,6 +8,9 @@
 
 namespace actor_zeta {
     namespace actor {
+///
+/// @brief A compact location expressor
+///
         class actor_address final {
         public:
             actor_address() = default;

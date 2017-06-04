@@ -7,6 +7,10 @@
 #include "ref_counted.hpp"
 
 namespace actor_zeta {
+///
+/// @brief Represents intrusive pointer
+/// @tparam T
+///
     template<class T>
     class intrusive_ptr {
     public:

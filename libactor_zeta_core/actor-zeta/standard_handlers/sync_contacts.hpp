@@ -7,7 +7,9 @@
 #include "actor-zeta/actor/actor_address.hpp"
 
 namespace actor_zeta {
-
+///
+/// @brief
+///
     class sync_contacts final : public behavior::abstract_action {
     public:
         sync_contacts();

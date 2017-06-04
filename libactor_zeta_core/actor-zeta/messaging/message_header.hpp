@@ -7,6 +7,9 @@
 
 namespace actor_zeta {
     namespace messaging {
+///
+/// @brief
+///
         class message_header final {
         public:
             ///TODO: sender

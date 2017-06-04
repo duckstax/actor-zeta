@@ -5,11 +5,17 @@
 
 namespace actor_zeta {
     namespace network {
+///
+/// @enum type_connect
+/// @brief
+///
         enum class type_connect : int {
             tcp,
-            udp,
+            udp
         };
-
+///
+/// @brief
+///
         class connection_identifying {
         public:
             connection_identifying() = delete;

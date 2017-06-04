@@ -9,12 +9,19 @@
 
 namespace actor_zeta {
     namespace messaging {
+///
+/// @enum enqueue_result
+/// @brief
+///
         enum class enqueue_result {
                     success,
                     unblocked_reader,
                     queue_closed
         };
-
+///
+/// @brief
+/// @tparam T
+///
         template<typename T>
         class blocking_mail_queue final {
         public:

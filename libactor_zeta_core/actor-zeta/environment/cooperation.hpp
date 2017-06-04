@@ -8,6 +8,9 @@
 
 namespace actor_zeta {
     namespace environment {
+///
+/// @brief
+///
         class cooperation final {
         public:
             cooperation() = default;

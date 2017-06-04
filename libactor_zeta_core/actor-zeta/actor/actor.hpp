@@ -8,6 +8,9 @@
 //smart actor
 namespace actor_zeta {
     namespace actor {
+///
+/// @brief An actor's entity container
+///
         class actor final {
         public:
             actor() = default;

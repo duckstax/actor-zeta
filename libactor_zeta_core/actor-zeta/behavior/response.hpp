@@ -6,6 +6,9 @@
 
 namespace actor_zeta {
     namespace behavior {
+///
+/// @brief Represents input message entity
+///
         class response {
         private:
             actor::actor_address receiver_;

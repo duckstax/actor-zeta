@@ -6,6 +6,9 @@
 
 namespace actor_zeta {
     namespace network {
+///
+/// @brief
+///
         class multiplexer;
     }
 }

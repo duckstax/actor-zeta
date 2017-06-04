@@ -6,6 +6,9 @@
 
 namespace actor_zeta {
     namespace behavior {
+///
+/// @brief Represents output message entity
+///
         class request {
         private:
             contacts::book_contacts &contacts_;

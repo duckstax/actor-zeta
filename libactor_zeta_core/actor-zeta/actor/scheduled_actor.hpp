@@ -8,7 +8,9 @@
 
 namespace actor_zeta {
     namespace actor {
-
+///
+/// @brief Specialization of actor with scheduling functionality
+///
         class scheduled_actor : public local_actor, public executor::executable {
         public:
             bool send(messaging::message *) override final;

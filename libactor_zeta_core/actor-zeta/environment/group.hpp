@@ -6,6 +6,9 @@
 
 namespace actor_zeta {
     namespace environment {
+///
+/// @brief
+///
         class group final {
         public:
             group() = delete;

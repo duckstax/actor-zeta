@@ -10,6 +10,9 @@ namespace actor_zeta {
         using id_t=std::size_t;
         using layer = std::vector<id_t>;
 
+///
+/// @brief
+///
         class storage_space final {
         public:
             storage_space();

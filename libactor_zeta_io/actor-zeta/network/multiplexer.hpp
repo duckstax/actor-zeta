@@ -8,6 +8,9 @@
 
 namespace actor_zeta {
     namespace network {
+///
+/// @brief
+///
         struct multiplexer {
             virtual int run() = 0;
 

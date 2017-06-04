@@ -10,6 +10,9 @@
 
 namespace actor_zeta {
     namespace behavior {
+///
+/// @brief
+///
         class behavior final {
         public:
             behavior() = default;

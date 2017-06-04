@@ -5,6 +5,9 @@
 
 namespace actor_zeta {
     namespace behavior {
+///
+/// @brief Identifier for action
+///
         class type_action final {
         private:
             std::string body_;

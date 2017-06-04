@@ -10,6 +10,9 @@
 
 namespace actor_zeta {
     namespace contacts {
+///
+/// @brief
+///
         class book_contacts final {
         public:
             book_contacts() = default;
