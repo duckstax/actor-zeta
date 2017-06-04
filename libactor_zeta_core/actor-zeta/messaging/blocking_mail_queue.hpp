@@ -14,9 +14,9 @@ namespace actor_zeta {
 /// @brief
 ///
         enum class enqueue_result {
-                    success,            ///< is coded as std::int of value 0
-                    unblocked_reader,   ///< is coded as std::int of value 1
-                    queue_closed        ///< is coded as std::int of value 2
+                    success,
+                    unblocked_reader,
+                    queue_closed
         };
 ///
 /// @brief

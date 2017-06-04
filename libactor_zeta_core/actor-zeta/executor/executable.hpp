@@ -14,10 +14,10 @@ namespace actor_zeta {
 /// @brief
 ///
             enum class executable_result {
-                resume,     ///< is coded as std::int of value 0
-                awaiting,   ///< is coded as std::int of value 1
-                done,       ///< is coded as std::int of value 2
-                shutdown    ///< is coded as std::int of value 3
+                resume,
+                awaiting,
+                done,
+                shutdown
             };
 
             virtual ~executable() = default;
