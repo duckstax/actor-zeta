@@ -10,32 +10,31 @@ namespace actor_zeta {
 /// @brief Represents output message entity
 ///
         class request {
-        private:
-            contacts::book_contacts &contacts_;
-            messaging::message *msg;
         public:
 
             request() = default;
 
-            request(const request &) = default;
+            request(const request &) = delete;
 
-            request &operator=(const request &) = default;
+            request &operator=(const request &) = delete;
 
-            request(request &&) = default;
+            request(request &&);
 
-            request &operator=(request &&) = default;
+            request &operator=(request &&);
 
-            ~request() = default;
+            ~request();
 
-            request(contacts::book_contacts &contacts_, messaging::message *msg) : msg(msg), contacts_(contacts_) {}
+            request(contacts::book_contacts &, messaging::message&&);
 
-            messaging::message *message() {
-                return msg;
-            };
+            messaging::message message();
 
-            contacts::book_contacts &contacts() {
-                return contacts_;
-            }
+            contacts::book_contacts &contacts();
+
+            operator bool();
+
+        private:
+            struct impl;
+            std::unique_ptr<impl>pimpl;
         };
     }
 }

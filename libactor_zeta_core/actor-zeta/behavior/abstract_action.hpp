@@ -16,7 +16,7 @@ namespace actor_zeta {
             template<std::size_t N>
             abstract_action(const char(&aStr)[N]) : name_(aStr) {}
 
-            virtual response * operator()(request *) = 0;
+            virtual response operator()(request &&) = 0;
 
             auto name() const -> const type_action & {
                 return name_;

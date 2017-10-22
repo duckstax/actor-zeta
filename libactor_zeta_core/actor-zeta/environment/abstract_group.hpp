@@ -42,7 +42,7 @@ namespace actor_zeta {
 
             auto channel() -> channel::channel;
 
-            auto send(messaging::message *msg) -> bool override final;
+            auto send(messaging::message &&msg) -> bool override final;
 
         private:
             std::size_t cursor;

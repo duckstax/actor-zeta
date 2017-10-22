@@ -83,7 +83,6 @@ namespace actor_zeta {
                 holder(const ValueType &value) : held(value) {
                 }
 
-
                 holder(ValueType &&value) : held(std::move(value)) {
                 }
 

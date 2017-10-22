@@ -12,8 +12,8 @@
 namespace actor_zeta {
 
     namespace actor {
-        local_actor::local_actor(environment::environment *env, const std::string &type)
-                : abstract_actor(env, type) {
+        local_actor::local_actor(environment::environment *env,mailbox_type* mail_ptr,behavior::abstract_behavior*behavior_ptr, const std::string &type)
+                :mailbox_(mail_ptr),life(behavior_ptr), abstract_actor(env, type) {
             initialize();
         }
 
@@ -23,12 +23,12 @@ namespace actor_zeta {
             attach(new add_channel());
         }
 
-        messaging::message *local_actor::next_message() {
+        messaging::message local_actor::next_message() {
             return mailbox().get();
         }
 
         void local_actor::attach(behavior::abstract_action *ptr_aa) {
-            life.insert(ptr_aa);
+            life->insert(ptr_aa);
         }
 
         local_actor::~local_actor() {
@@ -36,54 +36,20 @@ namespace actor_zeta {
         }
 
         bool local_actor::has_next_message() {
-            messaging::message *msg_ptr = mailbox().get();
-            return push_to_cache(msg_ptr);
+            messaging::message msg_ptr = mailbox().get();
+            return push_to_cache(std::move(msg_ptr));
         }
 
-        bool local_actor::push_to_cache(messaging::message *msg_ptr) {
-            if (msg_ptr != nullptr) {
-                switch (msg_ptr->priority()) {
-
-                    case messaging::message_priority::low: {
-                        mailbox().low_priority_cache().push_back(msg_ptr);
-                        return true;
-                    }
-
-                    case messaging::message_priority::normal: {
-                        mailbox().normal_priority_cache().push_back(msg_ptr);
-                        return true;
-                    }
-
-                    case messaging::message_priority::high: {
-                        mailbox().high_priority_cache().push_back(msg_ptr);
-                        return true;
-                    }
-                }
-            } else {
-                return false;
-            }
+        bool local_actor::push_to_cache(messaging::message &&msg_ptr) {
+            return mailbox().push_to_cache(std::move(msg_ptr));
         }
 
-        messaging::message *local_actor::pop_to_cache() {
-            messaging::message *msg_ptr = nullptr;
-            if (!mailbox().high_priority_cache().empty()) {
-                msg_ptr = mailbox().high_priority_cache().front();
-                mailbox().high_priority_cache().pop_front();
-                return msg_ptr;
-            }
+        messaging::message local_actor::pop_to_cache() {
+            return mailbox().pop_to_cache();
+        }
 
-            if (!mailbox().normal_priority_cache().empty()) {
-                msg_ptr = mailbox().normal_priority_cache().front();
-                mailbox().normal_priority_cache().pop_front();
-                return msg_ptr;
-            }
-
-            if (!mailbox().low_priority_cache().empty()) {
-                msg_ptr = mailbox().low_priority_cache().front();
-                mailbox().low_priority_cache().pop_front();
-                return msg_ptr;
-            }
-            return msg_ptr;
+        local_actor::mailbox_type &local_actor::mailbox() {
+            return *mailbox_;
         }
     }
 }

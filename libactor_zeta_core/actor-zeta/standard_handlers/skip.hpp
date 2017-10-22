@@ -13,7 +13,7 @@ namespace actor_zeta {
     public:
         skip();
 
-        behavior::response *operator()(behavior::request *) override final;
+        behavior::response operator()(behavior::request &&) override final;
     };
 }
 #endif //SKIP_HPP

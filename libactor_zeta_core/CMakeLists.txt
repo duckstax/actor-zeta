@@ -10,11 +10,13 @@ set(HEADER_FILES
         actor-zeta/actor/abstract_actor.hpp
         actor-zeta/actor/actor.hpp
         actor-zeta/actor/actor_address.hpp
+        actor-zeta/actor/basic_actor.hpp
         actor-zeta/actor/blocking_actor.hpp
         actor-zeta/actor/local_actor.hpp
         actor-zeta/actor/scheduled_actor.hpp
 
         actor-zeta/behavior/abstract_action.hpp
+        actor-zeta/behavior/abstract_behavior.hpp
         actor-zeta/behavior/action.hpp
         actor-zeta/behavior/behavior.hpp
         actor-zeta/behavior/request.hpp
@@ -42,6 +44,7 @@ set(HEADER_FILES
         actor-zeta/executor/worker.hpp
 
         actor-zeta/messaging/blocking_mail_queue.hpp
+        actor-zeta/messaging/mail_box.hpp
         actor-zeta/messaging/message.hpp
         actor-zeta/messaging/message_body.hpp
         actor-zeta/messaging/message_header.hpp
@@ -65,8 +68,10 @@ set(SOURCE_FILES
         source/actor/local_actor.cpp
         source/actor/scheduled_actor.cpp
 
-        source/behavior/behavior.cpp
         source/behavior/action.cpp
+        source/behavior/behavior.cpp
+        source/behavior/request.cpp
+        source/behavior/response.cpp
         source/behavior/type_action.cpp
         source/channel/channel.cpp
 

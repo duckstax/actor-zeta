@@ -12,8 +12,7 @@ namespace actor_zeta {
 ///
         class message_header final {
         public:
-            ///TODO: sender
-            message_header() = delete;
+            message_header() = default;
 
             message_header(const message_header &) = default;
 
@@ -25,42 +24,28 @@ namespace actor_zeta {
 
             ~message_header() = default;
 
-            template<std::size_t N>
-            explicit message_header(const char(&aStr)[N])
-                    : type_(aStr), prioritie(message_priority::normal), callback(false) {}
+            message_header(actor::actor_address sender_, const std::string& name);
 
-            template<std::size_t N>
-            message_header(const char(&aStr)[N], actor::actor_address aa)
-                    : type_(aStr), prioritie(message_priority::normal), callback(true), address(aa) {}
+            message_header(actor::actor_address sender_, const std::string& name, actor::actor_address recipient_);
 
-            template<std::size_t N>
-            message_header(const char(&aStr)[N], message_priority p)
-                    :type_(aStr), prioritie(p), callback(false) {}
+            message_header(actor::actor_address sender_, const std::string& name, message_priority p);
 
-            template<std::size_t N>
-            message_header(const char(&aStr)[N], message_priority p, actor::actor_address aa)
-                    : type_(aStr), prioritie(p), callback(true), address(aa) {}
+            message_header(actor::actor_address sender_, const std::string& name, message_priority p, actor::actor_address recipient_);
 
-            message_header(const char *str, std::size_t len);
-
-            message_header(const char *str, std::size_t len, actor::actor_address aa);
-
-            message_header(const char *str, std::size_t len, message_priority p);
-
-            message_header(const char *str, std::size_t len, message_priority p, actor::actor_address aa);
-
-            message_priority priorities() const;
+            auto  priorities() const -> message_priority;
 
             auto type() const noexcept -> const behavior::type_action &;
 
-            actor::actor_address return_address() const;
+            auto recipient() const -> actor::actor_address ;
 
-            bool is_callback() const;
+            auto sender() const -> actor::actor_address ;
+
+            auto is_callback() const -> bool;
 
         private:
-            bool callback;
             behavior::type_action type_;
-            actor::actor_address address;
+            actor::actor_address sender_;
+            actor::actor_address recipient_;
             message_priority prioritie;
         };
     }

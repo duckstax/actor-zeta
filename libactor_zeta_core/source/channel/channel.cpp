@@ -17,6 +17,7 @@ namespace actor_zeta {
         }
 
         void channel::swap(channel &other) {
+            using std::swap;
             channel_.swap(other.channel_);
         }
     }

@@ -10,35 +10,34 @@ namespace actor_zeta {
 /// @brief Represents input message entity
 ///
         class response {
-        private:
-            actor::actor_address receiver_;
-            messaging::message *msg;
         public:
-            response() = default;
+            response();
 
-            response(const response &) = default;
+            response(const response &) = delete;
 
-            response &operator=(const response &) = default;
+            response &operator=(const response &) = delete;
 
-            response(response &&) = default;
+            response(response &&);
 
-            response &operator=(response &&) = default;
+            response &operator=(response &&);
 
-            ~response() = default;
+            ~response();
 
-            response(actor::actor_address receiver_, messaging::message *msg) : receiver_(receiver_), msg(msg) {}
+            response(actor::actor_address receiver_, messaging::message &&msg);
 
-            messaging::message *message() {
-                return msg;
-            };
+            messaging::message message();
 
-            actor::actor_address receiver() const {
-                return receiver_;
-            }
+            actor::actor_address receiver() const;
+
+            operator bool();
+
+        private:
+            struct impl;
+            std::unique_ptr<impl> pimpl;
         };
 
-        inline response * make_response(actor::actor_address receiver_, messaging::message *msg){
-            return new response(receiver_, msg);
+        inline response make_response(actor::actor_address receiver_, messaging::message&& msg){
+            return response(receiver_, std::move(msg));
         }
     }
 }

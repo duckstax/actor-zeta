@@ -14,7 +14,7 @@ namespace actor_zeta {
     public:
         sync_contacts();
 
-        behavior::response *operator()(behavior::request *) override final;
+        behavior::response operator()(behavior::request &&) override final;
 
     };
 }

@@ -4,6 +4,8 @@
 #include <unordered_map>
 
 #include "actor-zeta/actor/scheduled_actor.hpp"
+#include "actor-zeta/actor/basic_actor.hpp"
+#include "actor-zeta/behavior/behavior.hpp"
 #include "actor-zeta/network/multiplexer.hpp"
 
 namespace actor_zeta {
@@ -11,9 +13,13 @@ namespace actor_zeta {
 ///
 /// @brief
 ///
-        class broker : public actor_zeta::actor::scheduled_actor {
+        class broker : public actor::basic_actor<actor::scheduled_actor,messaging::blocking_mail_queue,behavior::behavior> {
         public:
-            broker(environment::environment *, const std::string &, shared_multiplexer_ptr);
+            broker(environment::environment * env, const std::string & name, shared_multiplexer_ptr ptr)
+                    : actor::basic_actor<actor::scheduled_actor,messaging::blocking_mail_queue,behavior::behavior>(env, name),
+                      multiplexer_(std::move(ptr)) {
+                initialize();
+            }
 
             virtual ~broker() = default;
 

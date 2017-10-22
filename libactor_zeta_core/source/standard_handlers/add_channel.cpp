@@ -8,17 +8,23 @@
 
 namespace actor_zeta {
 
+    void error(const std::string &name) {
+        std::cerr << "WARNING" << std::endl;
+        std::cerr << "Not initialization channel type:" << name << std::endl;
+        std::cerr << "WARNING" << std::endl;
+    }
+
     add_channel::add_channel() : abstract_action("add_channel") {}
 
-    behavior::response *add_channel::operator()(behavior::request *request) {
-        auto channel_ = request->message()->get<channel::channel>();
+    behavior::response add_channel::operator()(behavior::request &&request) {
+        auto channel_ = request.message().get<channel::channel>();
         if (channel_) {
-            request->contacts().channel(channel_);
+            request.contacts().channel(channel_);
         } else {
-            std::cerr << "WARNING" << std::endl;
-            std::cerr << "Not initialization channel type:" << channel_->type() << std::endl;
-            std::cerr << "WARNING" << std::endl;
+            error(channel_->type());
         }
-        return nullptr;
+
+        return behavior::response();
+
     }
 }

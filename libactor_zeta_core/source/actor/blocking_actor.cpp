@@ -8,52 +8,37 @@
 namespace actor_zeta {
     namespace actor {
 
-        executor::executable::executable_result
+        executor::executable_result
         blocking_actor::run(executor::execution_device *e, size_t max_throughput) {
-            if (e) {
-                device(e);
-            }
-
+            device(e);
             auto self = this;
-            self->act();
-            return executor::executable::executable_result::done;
+            for (;;) {
+                messaging::message msg_ptr = next_message();
+                if (msg_ptr) {
+                    behavior::request request(contacts, std::move(msg_ptr));
+                    auto response = life->run(std::move(request));
+                    if (response) {
+                        response.receiver()->address()->send(std::move(response.message()));
+                    }
+                } else {
+                    return executor::executable_result::done;
+                }
+            }
+            return executor::executable_result::done;
         }
 
         void blocking_actor::launch(executor::execution_device *e, bool hide) {
-            if (e) {
-                device(e);
-            }
-
+            device(e);
             if (hide) {//TODO:???
                 device(e);
                 device()->put_execute_latest(this);
             } else {
                 auto self = this;
-                self->act();
+                this->run(e,std::numeric_limits<std::size_t>::max());
             }
         }
 
-        void blocking_actor::act() {
-            for (;;) {
-                messaging::message *msg_ptr = next_message();
-                if (msg_ptr != nullptr) {
-                    auto request = new behavior::request(contacts, msg_ptr);
-                    auto response = life.run(request);
-                    if (response != nullptr) {
-                        response->receiver()->address()->send(response->message());
-                    }
-                    delete request;
-                    if (response != nullptr) {
-                        delete response;
-                    }
-                    delete msg_ptr;
-                } else {
-                    return;
-                }
-            }
-        }
-
-        blocking_actor::blocking_actor(environment::environment *env, const std::string &type)
-                : local_actor(env, type) {}
+        blocking_actor::blocking_actor(environment::environment *env,mailbox_type* mail,behavior::abstract_behavior* behavior_ptr, const std::string &type)
+                : local_actor(env,mail,behavior_ptr, type) {}
     }
 }

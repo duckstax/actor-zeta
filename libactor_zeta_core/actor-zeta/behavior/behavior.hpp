@@ -7,13 +7,15 @@
 #include "actor-zeta/forwards.hpp"
 #include "action.hpp"
 #include "type_action.hpp"
+#include "actor-zeta/behavior/abstract_behavior.hpp"
 
 namespace actor_zeta {
     namespace behavior {
 ///
 /// @brief
 ///
-        class behavior final {
+
+        class behavior final : public abstract_behavior {
         public:
             behavior() = default;
 
@@ -21,15 +23,16 @@ namespace actor_zeta {
 
             behavior &operator=(const behavior &) = delete;
 
-            behavior(behavior &&) = default;
+            behavior(behavior &&) = delete;
 
-            behavior &operator=(behavior &&) = default;
+            behavior &operator=(behavior &&) = delete;
 
             ~behavior() = default;
 
-            void insert(abstract_action *aa);
+            bool insert(abstract_action *aa) override ;
 
-            response *run(request *);
+            response run(request &&) override ;
+
         private:
             std::unordered_map<type_action, action> behavioral_reactions;
         };

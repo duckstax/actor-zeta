@@ -11,7 +11,7 @@ namespace actor_zeta {
     public:
         add_channel();
 
-        behavior::response *operator()(behavior::request *) override final;
+        behavior::response operator()(behavior::request &&) override final;
 
     };
 }

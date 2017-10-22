@@ -3,10 +3,10 @@
 
 #include <memory>
 
-#include "actor-zeta/messaging/blocking_mail_queue.hpp"
+#include "actor-zeta/messaging/mail_box.hpp"
 #include "actor-zeta/messaging/message.hpp"
 #include "abstract_actor.hpp"
-#include "actor-zeta/behavior/behavior.hpp"
+#include "actor-zeta/behavior/abstract_behavior.hpp"
 #include "actor-zeta/forwards.hpp"
 #include "actor-zeta/executor/executable.hpp"
 #include "actor-zeta/contacts/book_contacts.hpp"
@@ -18,7 +18,7 @@ namespace actor_zeta {
 ///
         class local_actor : public abstract_actor {
         public:
-            using mailbox_type = messaging::blocking_mail_queue<messaging::message>;
+            using mailbox_type = messaging::mail_box;
                                                             //hide
             virtual void launch(executor::execution_device*, bool) = 0;
 
@@ -26,7 +26,9 @@ namespace actor_zeta {
 
         protected:
             inline void device(executor::execution_device* e) {
-                executor_ = e;
+                if (e!= nullptr) {
+                    executor_ = e;
+                }
             }
 
             inline executor::execution_device* device() const {
@@ -35,30 +37,28 @@ namespace actor_zeta {
 
             void attach(behavior::abstract_action *);
 
-            local_actor(environment::environment *, const std::string &);
+            local_actor(environment::environment *,mailbox_type*, behavior::abstract_behavior *, const std::string &);
 
             virtual void initialize();
 
 // message processing -----------------------------------------------------
 
-            messaging::message* next_message();
+            messaging::message next_message();
 
             bool has_next_message();
 
-            inline mailbox_type &mailbox() {
-                return mailbox_;
-            }
+            mailbox_type &mailbox();
 
-            bool push_to_cache(messaging::message *);
+            bool push_to_cache(messaging::message&&);
 
-            messaging::message* pop_to_cache();
+            messaging::message pop_to_cache();
 
 // ----------------------------------------------------- message processing
         protected:
             contacts::book_contacts contacts;
-            behavior::behavior life;
+            std::unique_ptr<behavior::abstract_behavior>life;
         private:
-            mailbox_type mailbox_;
+            std::unique_ptr<mailbox_type> mailbox_;
             executor::execution_device *executor_;
         };
     }

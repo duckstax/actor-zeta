@@ -20,9 +20,12 @@ namespace actor_zeta {
             if (!shared_point.empty()) {
                 for (auto &i:shared_point) {
                     t->send(
-                            messaging::make_message(
-                                    "sync_contacts",
-                                    storage_space_.get(i)
+                            std::move(
+                                    messaging::make_message(
+                                            t->address(),
+                                            "sync_contacts",
+                                            storage_space_.get(i)
+                                    )
                             )
                     );
                 }
@@ -36,16 +39,22 @@ namespace actor_zeta {
             auto id = storage_space_.add(t);
             shared_point.push_back(id);
             storage_space_.get(entry_point_)->send(
-                    messaging::make_message(
-                            "sync_contacts",
-                            address
+                    std::move(
+                            messaging::make_message(
+                                    t->address(),
+                                    "sync_contacts",
+                                    actor::actor_address(address)
+                            )
                     )
             );
             for (auto &i:storage_space_.current_layer(entry_point_)) {
                 i->send(
-                        messaging::make_message(
-                                "sync_contacts",
-                                address
+                        std::move(
+                                messaging::make_message(
+                                        t->address(),
+                                        "sync_contacts",
+                                        actor::actor_address(address)
+                                )
                         )
                 );
             }
@@ -53,17 +62,23 @@ namespace actor_zeta {
 
         void abstract_group::join(group &g) {
             entry_point()->send(
-                    messaging::make_message(
-                            "sync_contacts",
-                            g->entry_point()
+                    std::move(
+                            messaging::make_message(
+                                    g->entry_point(),
+                                    "sync_contacts",
+                                    g->entry_point()
+                            )
                     )
             );
             if (!storage_space_.current_layer(entry_point_).empty()) {
                 for (auto &i:storage_space_.current_layer(entry_point_)) {
                     i->send(
-                            messaging::make_message(
-                                    "sync_contacts",
-                                    g->entry_point()
+                            std::move(
+                                    messaging::make_message(
+                                            g->entry_point(),
+                                            "sync_contacts",
+                                            g->entry_point()
+                                    )
                             )
                     );
                 }
@@ -72,7 +87,7 @@ namespace actor_zeta {
 
         abstract_group::abstract_group(storage_space ss, actor::abstract_actor *t)
                 : storage_space_(ss), type_(t->type()), cursor(0) {
-            t->send(messaging::make_message("add_channel", channel()));
+            t->send(std::move(std::move(messaging::make_message(t->address(),"add_channel", channel()))));
             entry_point_ = ss.add(t);
         }
 
@@ -80,10 +95,10 @@ namespace actor_zeta {
             return channel::channel{static_cast<channel::abstract_channel *>(this)};
         }
 
-        auto abstract_group::send(messaging::message *msg) -> bool {
+        auto abstract_group::send(messaging::message&& msg) -> bool {
             auto tmp_address = storage_space_.current_layer(entry_point_);
             if (!tmp_address.empty()) {
-                tmp_address[cursor]->send(msg);
+                tmp_address[cursor]->send(std::move(msg));
                 ++cursor;
                 if (cursor >= tmp_address.size()) {
                     cursor = 0;

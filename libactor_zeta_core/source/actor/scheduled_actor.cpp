@@ -10,85 +10,73 @@
 namespace actor_zeta {
     namespace actor {
 
-        executor::executable::executable_result
-        scheduled_actor::run(executor::execution_device *e, size_t max_throughput) {
-            if (e) {
-                device(e); //TODO переписать обработка
-            }
+        void error(){
+            std::cerr << " WARNING " << std::endl;
+            std::cerr << " WRONG ADDRESS " << std::endl;
+            std::cerr << " WARNING " << std::endl;
+        }
 
+        executor::executable_result scheduled_actor::run(executor::execution_device *e, size_t max_throughput) {
+            device(e);
             //---------------------------------------------------------------------------
 
             {
-                messaging::message *msg_ptr = nullptr;
+                messaging::message msg_ptr;
                 for (size_t handled_msgs = 0; handled_msgs < max_throughput;) {
                     msg_ptr = pop_to_cache();
-                    if (msg_ptr != nullptr) {
-                        auto request = new behavior::request(contacts, msg_ptr);
-                        auto response = life.run(request);
-                        if (response != nullptr) {
-                            if (response->receiver()->address()) {
-                                response->receiver()->address()->send(response->message());
+                    if (msg_ptr) {
+                        behavior::request request(contacts, std::move(msg_ptr));
+                        auto response = life->run(std::move(request));
+                        if (response ) {
+                            if (response.receiver()->address()) {
+                                response.receiver()->address()->send(std::move(response.message()));
                             } else {
-                                std::cerr << " WARNING " << std::endl;
-                                std::cerr << " WRONG ADDRESS " << std::endl;
-                                std::cerr << " WARNING " << std::endl;
+                                error();
                             }
                         }
                         ++handled_msgs;
-                        delete request;
-                        if (response != nullptr) {
-                            delete response;
-                        }
-                        delete msg_ptr;
                         continue;
                     }
+
                     msg_ptr = next_message();
-                    if (msg_ptr != nullptr) {
-                        auto request = new behavior::request(contacts, msg_ptr);
-                        auto response = life.run(request);
-                        if (response != nullptr) {
-                            if (response->receiver()->address()) {
-                                response->receiver()->address()->send(response->message());
+                    if (msg_ptr) {
+                        auto request = behavior::request(contacts, std::move(msg_ptr));
+                        auto response = life->run(std::move(request));
+                        if (response ) {
+                            if (response.receiver()->address()) {
+                                response.receiver()->address()->send(std::move(response.message()));
                             } else {
-                                std::cerr << " WARNING " << std::endl;
-                                std::cerr << " WRONG ADDRESS " << std::endl;
-                                std::cerr << " WARNING " << std::endl;
+                                error();
                             }
                         }
                         ++handled_msgs;
-                        delete request;
-                        if (response != nullptr) {
-                            delete response;
-                        }
-                        delete msg_ptr;
+
                     } else {
-                        return executable_result::awaiting;
+                        return executor::executable_result::awaiting;
                     }
                 }
             }
 
             //---------------------------------------------------------------------------
 
-            messaging::message *msg_ptr = next_message();
-            while (msg_ptr != nullptr) {
-                push_to_cache(msg_ptr);
+            messaging::message msg_ptr = next_message();
+            while (msg_ptr) {
+                push_to_cache(std::move(msg_ptr));
                 msg_ptr = next_message();
             }
 
             //---------------------------------------------------------------------------
 
             if (has_next_message()) {
-                return executable_result::awaiting;
+                return executor::executable_result::awaiting;
             }
 
-            return executable_result::resume;
+            return executor::executable_result::resume;
         }
 
-        bool scheduled_actor::send(messaging::message *mep, executor::execution_device *e) {
-            if (e != nullptr) {
-                device(e); //TODO переписать обработка
-            }
-            mailbox().put(mep);
+        bool scheduled_actor::send(messaging::message && mep, executor::execution_device *e) {
+            device(e);
+            mailbox().put(std::move(mep));
 
             if (e != nullptr) {
                 device(e);
@@ -108,8 +96,8 @@ namespace actor_zeta {
             deref();
         }
 
-        scheduled_actor::scheduled_actor(environment::environment *env, const std::string &name)
-                : local_actor(env, name) {
+        scheduled_actor::scheduled_actor(environment::environment *env,mailbox_type* mail_ptr,behavior::abstract_behavior*behavior_ptr, const std::string &name)
+                : local_actor(env,mail_ptr,behavior_ptr, name) {
             local_actor::initialize();
         }
 
@@ -123,13 +111,17 @@ namespace actor_zeta {
                 device()->put_execute_latest(this);
             } else {
                 auto max_throughput = std::numeric_limits<size_t>::max();
-                while (run(device(), max_throughput) != executor::executable::executable_result::awaiting) {
+                while (run(device(), max_throughput) != executor::executable_result::awaiting) {
                 }
             }
         }
 
-        bool scheduled_actor::send(messaging::message *msg) {
-            return send(msg, nullptr);
+        bool scheduled_actor::send(messaging::message&&msg) {
+            return send(std::move(msg), nullptr);
+        }
+
+        scheduled_actor::~scheduled_actor(){
+
         }
     }
 }

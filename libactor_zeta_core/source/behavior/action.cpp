@@ -8,8 +8,8 @@ namespace actor_zeta {
 
         action::action(abstract_action *aa) : action_impl_ptr(aa) {}
 
-        response *action::operator()(request *request_){
-            return action_impl_ptr->operator()(request_);
+        response action::operator()(request &&request_){
+            return action_impl_ptr->operator()(std::move(request_));
         }
     }
 }

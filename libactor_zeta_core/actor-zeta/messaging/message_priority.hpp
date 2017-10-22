@@ -6,7 +6,7 @@ namespace actor_zeta {
 ///
 /// @enum
 ///
-        enum class message_priority : int {
+        enum class message_priority : uint8_t {
             low = 0,
             normal,
             high

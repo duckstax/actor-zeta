@@ -6,12 +6,16 @@
 
 namespace actor_zeta {
 
+    void error(const std::string& _error_){
+        std::cerr << "WARNING" << std::endl;
+        std::cerr << _error_ << std::endl;
+        std::cerr << "WARNING" << std::endl;
+    }
+
     skip::skip() : abstract_action("skip") {}// TODO: "skip" -> "" ?
 
-    behavior::response *skip::operator()(behavior::request *r) {
-        std::cerr << "WARNING" << std::endl;
-        std::cerr << r->message()->type().to_string() << std::endl;
-        std::cerr << "WARNING" << std::endl;
-        return nullptr;
+    behavior::response skip::operator()(behavior::request &&r) {
+        error(r.message().type().to_string());
+        return behavior::response();
     }
 }

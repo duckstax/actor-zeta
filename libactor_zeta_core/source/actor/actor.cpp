@@ -15,6 +15,7 @@ namespace actor_zeta {
         }
 
         void actor::swap(actor &other) noexcept {
+            using std::swap;
             heart.swap(other.heart);
         }
     }

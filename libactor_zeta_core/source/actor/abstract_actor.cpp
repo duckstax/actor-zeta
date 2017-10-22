@@ -4,10 +4,10 @@
 namespace actor_zeta {
     namespace actor {
         abstract_actor::abstract_actor(environment::environment *env, const std::string &type)
-                : type_(type), env_(env) {}
+                : name_(type), env_(env) {}
 
         const std::string& abstract_actor::type() const {
-            return type_;
+            return name_;
         }
 
         actor_address abstract_actor::address() const noexcept {

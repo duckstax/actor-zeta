@@ -15,9 +15,9 @@ namespace actor_zeta {
         public:
             const std::string &type() const;
 
-            virtual bool send(messaging::message *) = 0;
+            virtual bool send(messaging::message&&) = 0;
 
-            virtual bool send(messaging::message *, executor::execution_device *) = 0;
+            virtual bool send(messaging::message&&, executor::execution_device *) = 0;
 
             virtual ~abstract_actor() {}
 
@@ -35,7 +35,7 @@ namespace actor_zeta {
 
             abstract_actor &operator=(const abstract_actor &) = delete;
 
-            const std::string type_;
+            const std::string name_;
 
             environment::environment *env_;
         };

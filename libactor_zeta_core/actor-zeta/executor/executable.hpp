@@ -8,17 +8,20 @@ namespace actor_zeta {
 ///
 /// @brief
 ///
-        struct executable {
+
 ///
-/// @enum 
+/// @enum
 /// @brief
 ///
-            enum class executable_result {
-                resume,
-                awaiting,
-                done,
-                shutdown
-            };
+        enum class executable_result {
+            resume,
+            awaiting,
+            done,
+            shutdown
+        };
+
+        struct executable {
+
 
             virtual ~executable() = default;
 

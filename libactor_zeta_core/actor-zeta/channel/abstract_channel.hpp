@@ -10,7 +10,7 @@ namespace actor_zeta {
 /// @brief
 ///
         struct abstract_channel : public ref_counted {
-            virtual bool send(messaging::message *) = 0;
+            virtual bool send(messaging::message &&) = 0;
             virtual const std::string& type() const =0;
         };
     }
