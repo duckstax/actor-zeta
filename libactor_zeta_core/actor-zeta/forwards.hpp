@@ -32,6 +32,7 @@ namespace actor_zeta {
         class group;
         class cooperation;
         class environment;
+        class abstract_environment;
     }
 
     namespace executor {

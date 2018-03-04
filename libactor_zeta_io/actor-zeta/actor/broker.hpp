@@ -2,7 +2,7 @@
 #define BROKER_HPP
 
 #include <unordered_map>
-
+#include <actor-zeta/messaging/blocking_mail_queue.hpp>
 #include "actor-zeta/actor/scheduled_actor.hpp"
 #include "actor-zeta/actor/basic_actor.hpp"
 #include "actor-zeta/behavior/behavior.hpp"
@@ -13,10 +13,12 @@ namespace actor_zeta {
 ///
 /// @brief
 ///
-        class broker : public actor::basic_actor<actor::scheduled_actor,messaging::blocking_mail_queue,behavior::behavior> {
+        using basic_scheduled_actor = actor::basic_actor<messaging::blocking_mail_queue,behavior::behavior>;
+
+        class broker : public basic_scheduled_actor  {
         public:
-            broker(environment::environment * env, const std::string & name, shared_multiplexer_ptr ptr)
-                    : actor::basic_actor<actor::scheduled_actor,messaging::blocking_mail_queue,behavior::behavior>(env, name),
+            broker(environment::abstract_environment * env, const std::string & name, shared_multiplexer_ptr ptr)
+                    : basic_scheduled_actor(env, name),
                       multiplexer_(std::move(ptr)) {
                 initialize();
             }

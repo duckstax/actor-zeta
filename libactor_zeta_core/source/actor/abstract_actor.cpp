@@ -3,8 +3,11 @@
 
 namespace actor_zeta {
     namespace actor {
-        abstract_actor::abstract_actor(environment::environment *env, const std::string &type)
-                : name_(type), env_(env) {}
+        abstract_actor::abstract_actor(environment::abstract_environment *env, const std::string &type)
+                : name_(type),
+                  env_(env) {
+
+        }
 
         const std::string& abstract_actor::type() const {
             return name_;
@@ -14,7 +17,7 @@ namespace actor_zeta {
             return actor_address{const_cast<abstract_actor *>(this)};
         }
 
-        environment::environment *abstract_actor::env() const {
+        environment::environment & abstract_actor::env() {
             return env_;
         }
     }

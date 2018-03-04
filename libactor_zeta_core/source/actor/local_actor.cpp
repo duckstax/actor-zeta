@@ -3,7 +3,7 @@
 #include "actor-zeta/standard_handlers/skip.hpp"
 #include "actor-zeta/standard_handlers/sync_contacts.hpp"
 #include "actor-zeta/executor/execution_device.hpp"
-#include "actor-zeta/environment.hpp"
+#include "actor-zeta/environment/environment.hpp"
 #include "actor-zeta/messaging/message.hpp"
 #include "actor-zeta/actor/actor_address.hpp"
 #include "actor-zeta/messaging/message_priority.hpp"
@@ -12,7 +12,7 @@
 namespace actor_zeta {
 
     namespace actor {
-        local_actor::local_actor(environment::environment *env,mailbox_type* mail_ptr,behavior::abstract_behavior*behavior_ptr, const std::string &type)
+        local_actor::local_actor(environment::abstract_environment *env,mailbox_type* mail_ptr,behavior::abstract_behavior*behavior_ptr, const std::string &type)
                 :mailbox_(mail_ptr),life(behavior_ptr), abstract_actor(env, type) {
             initialize();
         }
@@ -50,6 +50,16 @@ namespace actor_zeta {
 
         local_actor::mailbox_type &local_actor::mailbox() {
             return *mailbox_;
+        }
+
+        executor::execution_device *local_actor::device() const {
+            return executor_;
+        }
+
+        void local_actor::device(executor::execution_device *e) {
+            if (e!= nullptr) {
+                executor_ = e;
+            }
         }
     }
 }

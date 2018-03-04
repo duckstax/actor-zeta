@@ -2,7 +2,7 @@
 #define ABSTRACT_ACTOR_HPP
 
 #include <string>
-
+#include <actor-zeta/environment/environment.hpp>
 #include "actor-zeta/ref_counted.hpp"
 #include "actor-zeta/forwards.hpp"
 
@@ -24,9 +24,9 @@ namespace actor_zeta {
             actor_address address() const noexcept;
 
         protected:
-            environment::environment *env() const;
+            environment::environment& env() ;
 
-            abstract_actor(environment::environment *, const std::string &);
+            abstract_actor(environment::abstract_environment *, const std::string &);
 
         private:
             abstract_actor() = delete;
@@ -37,7 +37,7 @@ namespace actor_zeta {
 
             const std::string name_;
 
-            environment::environment *env_;
+            environment::environment env_;
         };
     }
 }

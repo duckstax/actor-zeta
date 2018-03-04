@@ -11,7 +11,7 @@ namespace actor_zeta {
 ///
 /// @brief An actor's entity container
 ///
-        class actor final {
+        class actor {
         public:
             actor() = default;
 

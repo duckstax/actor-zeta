@@ -2,7 +2,7 @@
 #include "actor-zeta/actor/scheduled_actor.hpp"
 #include "actor-zeta/executor/abstract_coordinator.hpp"
 #include "actor-zeta/executor/execution_device.hpp"
-#include "actor-zeta/environment.hpp"
+#include "actor-zeta/environment/environment.hpp"
 #include "actor-zeta/behavior/abstract_action.hpp"
 #include "actor-zeta/behavior/request.hpp"
 #include "actor-zeta/behavior/response.hpp"
@@ -96,18 +96,15 @@ namespace actor_zeta {
             deref();
         }
 
-        scheduled_actor::scheduled_actor(environment::environment *env,mailbox_type* mail_ptr,behavior::abstract_behavior*behavior_ptr, const std::string &name)
+        scheduled_actor::scheduled_actor(environment::abstract_environment *env,mailbox_type* mail_ptr,behavior::abstract_behavior*behavior_ptr, const std::string &name)
                 : local_actor(env,mail_ptr,behavior_ptr, name) {
             local_actor::initialize();
         }
 
         void scheduled_actor::launch(executor::execution_device *e, bool hide) {
-            if (e != nullptr) {
-                device(e);
-            }
+            device(e);
 
             if (hide) {//TODO:???
-                device(e);
                 device()->put_execute_latest(this);
             } else {
                 auto max_throughput = std::numeric_limits<size_t>::max();

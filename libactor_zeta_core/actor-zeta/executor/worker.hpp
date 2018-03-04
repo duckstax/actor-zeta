@@ -68,19 +68,19 @@ namespace actor_zeta {
                     auto job = policy_.dequeue(this);
                     auto res = job->run(this, max_throughput_);
                     switch (res) {
-                        case executable::executable_result::resume: {
+                        case executor::executable_result::resume: {
                             policy_.resume_job_later(this, job);
                             break;
                         }
-                        case executable::executable_result::done: {
+                        case executor::executable_result::done: {
                             //intrusive_ptr_release(job); //TODO : ?
                             break;
                         }
-                        case executable::executable_result::awaiting: {
+                        case executor::executable_result::awaiting: {
                             //intrusive_ptr_release(job); //TODO : ?
                             break;
                         }
-                        case executable::executable_result::shutdown: {
+                        case executor::executable_result::shutdown: {
                             return;
                         }
                     }

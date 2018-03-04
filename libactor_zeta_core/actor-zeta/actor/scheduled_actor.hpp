@@ -25,7 +25,7 @@ namespace actor_zeta {
             virtual ~scheduled_actor();
 
         protected:
-            scheduled_actor(environment::environment *,mailbox_type*,behavior::abstract_behavior*, const std::string &);
+            scheduled_actor(environment::abstract_environment *,mailbox_type*,behavior::abstract_behavior*, const std::string &);
 
             void attach_to_scheduler() override final;
 

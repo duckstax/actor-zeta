@@ -6,7 +6,7 @@ project(${PROJECT} CXX)
 
 include_directories(.)
 
-set(HEADER_FILES
+list(APPEND HEADER_FILES
         actor-zeta/actor/broker.hpp
 
         actor-zeta/network/multiplexer.hpp
@@ -14,7 +14,7 @@ set(HEADER_FILES
         actor-zeta/forwards.hpp
 )
 
-set(SOURCE_FILES
+list(APPEND SOURCE_FILES
         source/network/connection_identifying.cpp
         source/broker.cpp
 )

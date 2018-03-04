@@ -20,6 +20,7 @@ namespace actor_zeta {
         }
 
         void group::swap(group &g) {
+            using std::swap;
             group_.swap(g.group_);
         }
     }

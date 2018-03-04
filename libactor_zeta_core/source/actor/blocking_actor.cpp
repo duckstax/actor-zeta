@@ -38,7 +38,7 @@ namespace actor_zeta {
             }
         }
 
-        blocking_actor::blocking_actor(environment::environment *env,mailbox_type* mail,behavior::abstract_behavior* behavior_ptr, const std::string &type)
+        blocking_actor::blocking_actor(environment::abstract_environment *env,mailbox_type* mail,behavior::abstract_behavior* behavior_ptr, const std::string &type)
                 : local_actor(env,mail,behavior_ptr, type) {}
     }
 }

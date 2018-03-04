@@ -11,7 +11,7 @@ namespace actor_zeta {
 ///
 /// @brief
 ///
-        //TODO: not correctly name abstract_group -> local_group ->(*)group
+        //TODO: not correctly name abstract_group -> local_group ->group(*)
         class abstract_group : public channel::abstract_channel {
         public:
             abstract_group() = delete;

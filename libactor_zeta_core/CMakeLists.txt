@@ -6,7 +6,7 @@ project(${PROJECT} CXX)
 
 include_directories(.)
 
-set(HEADER_FILES
+list(APPEND HEADER_FILES
         actor-zeta/actor/abstract_actor.hpp
         actor-zeta/actor/actor.hpp
         actor-zeta/actor/actor_address.hpp
@@ -28,9 +28,11 @@ set(HEADER_FILES
 
         actor-zeta/contacts/book_contacts.hpp
 
+        actor-zeta/environment/abstract_environment.hpp
         actor-zeta/environment/abstract_group.hpp
         actor-zeta/environment/adjacency_list.hpp
         actor-zeta/environment/cooperation.hpp
+        actor-zeta/environment/environment.hpp
         actor-zeta/environment/group.hpp
         actor-zeta/environment/storage_space.hpp
         source/environment/storage_space.cpp
@@ -54,13 +56,12 @@ set(HEADER_FILES
         actor-zeta/standard_handlers/sync_contacts.hpp
         actor-zeta/standard_handlers/skip.hpp
 
-        actor-zeta/environment.hpp
         actor-zeta/forwards.hpp
         actor-zeta/intrusive_ptr.hpp
         actor-zeta/ref_counted.hpp
 )
 
-set(SOURCE_FILES
+list(APPEND SOURCE_FILES
         source/actor/abstract_actor.cpp
         source/actor/actor.cpp
         source/actor/actor_address.cpp
@@ -77,8 +78,10 @@ set(SOURCE_FILES
 
         source/contacts/book_contacts.cpp
 
+        source/environment/abstract_environment.cpp
         source/environment/abstract_group.cpp
         source/environment/cooperation.cpp
+        source/environment/environment.cpp
         source/environment/group.cpp
         source/environment/storage_space.cpp
 
@@ -89,7 +92,6 @@ set(SOURCE_FILES
         source/standard_handlers/skip.cpp
         source/standard_handlers/sync_contacts.cpp
 
-        source/environment.cpp
         source/ref_counted.cpp
 )
 

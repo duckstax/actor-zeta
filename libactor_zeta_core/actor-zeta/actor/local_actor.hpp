@@ -25,19 +25,13 @@ namespace actor_zeta {
             virtual ~local_actor();
 
         protected:
-            inline void device(executor::execution_device* e) {
-                if (e!= nullptr) {
-                    executor_ = e;
-                }
-            }
+            void device(executor::execution_device* e);
 
-            inline executor::execution_device* device() const {
-                return executor_;
-            }
+            executor::execution_device* device() const;
 
             void attach(behavior::abstract_action *);
 
-            local_actor(environment::environment *,mailbox_type*, behavior::abstract_behavior *, const std::string &);
+            local_actor(environment::abstract_environment *,mailbox_type*, behavior::abstract_behavior *, const std::string &);
 
             virtual void initialize();
 
