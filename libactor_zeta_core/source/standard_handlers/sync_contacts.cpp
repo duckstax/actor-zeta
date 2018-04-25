@@ -1,8 +1,7 @@
 #include <iostream>
-#include "actor-zeta/standard_handlers/sync_contacts.hpp"
-#include "actor-zeta/behavior/request.hpp"
-#include "actor-zeta/behavior/response.hpp"
-#include "actor-zeta/actor/actor_address.hpp"
+#include <actor-zeta/standard_handlers/sync_contacts.hpp>
+#include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/behavior/context.hpp>
 
 namespace actor_zeta {
 
@@ -14,15 +13,13 @@ namespace actor_zeta {
 
     sync_contacts::sync_contacts() :  abstract_action("sync_contacts") {}
 
-    behavior::response sync_contacts::operator()(behavior::request && request) {
-        auto address = request.message().get<actor::actor_address>();
+    void sync_contacts::invoke(behavior::context & context_) {
+        auto address = context_.state().message().get<actor::actor_address>();
 
         if(address){
-            request.contacts().address(address);
+            context_->address(address);
         } else {
-            error(address->type());
+            error(address->name());
         }
-
-        return behavior::response();
     }
 }

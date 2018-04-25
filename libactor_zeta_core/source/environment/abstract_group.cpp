@@ -4,10 +4,6 @@
 
 namespace actor_zeta {
     namespace environment {
-        auto abstract_group::type() const -> const std::string & {
-            return type_;
-        }
-
         auto abstract_group::id() const -> id_t {
             return entry_point_;
         }
@@ -20,13 +16,11 @@ namespace actor_zeta {
             if (!shared_point.empty()) {
                 for (auto &i:shared_point) {
                     t->send(
-                            std::move(
                                     messaging::make_message(
                                             t->address(),
                                             "sync_contacts",
                                             storage_space_.get(i)
                                     )
-                            )
                     );
                 }
             }
@@ -39,56 +33,51 @@ namespace actor_zeta {
             auto id = storage_space_.add(t);
             shared_point.push_back(id);
             storage_space_.get(entry_point_)->send(
-                    std::move(
                             messaging::make_message(
                                     t->address(),
                                     "sync_contacts",
                                     actor::actor_address(address)
                             )
-                    )
             );
             for (auto &i:storage_space_.current_layer(entry_point_)) {
                 i->send(
-                        std::move(
                                 messaging::make_message(
                                         t->address(),
                                         "sync_contacts",
                                         actor::actor_address(address)
                                 )
-                        )
                 );
             }
         }
 
         void abstract_group::join(group &g) {
             entry_point()->send(
-                    std::move(
                             messaging::make_message(
                                     g->entry_point(),
                                     "sync_contacts",
                                     g->entry_point()
                             )
-                    )
             );
             if (!storage_space_.current_layer(entry_point_).empty()) {
                 for (auto &i:storage_space_.current_layer(entry_point_)) {
                     i->send(
-                            std::move(
                                     messaging::make_message(
                                             g->entry_point(),
                                             "sync_contacts",
                                             g->entry_point()
                                     )
-                            )
                     );
                 }
             }
         }
 
         abstract_group::abstract_group(storage_space ss, actor::abstract_actor *t)
-                : storage_space_(ss), type_(t->type()), cursor(0) {
-            t->send(std::move(std::move(messaging::make_message(t->address(),"add_channel", channel()))));
+                :
+                cursor(0),
+                storage_space_(ss) {
+            t->send(messaging::make_message(t->address(),"add_channel", channel()));
             entry_point_ = ss.add(t);
+            type_.type = abstract::channel;
         }
 
         auto abstract_group::channel() -> channel::channel {
@@ -102,6 +91,17 @@ namespace actor_zeta {
                 ++cursor;
                 if (cursor >= tmp_address.size()) {
                     cursor = 0;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        auto abstract_group::broadcast(messaging::message &&msg) -> bool {
+            auto tmp_address = storage_space_.current_layer(entry_point_);
+            if (!tmp_address.empty()) {
+                for(auto& i : tmp_address){
+                    i->send(msg.clone());
                 }
                 return true;
             }

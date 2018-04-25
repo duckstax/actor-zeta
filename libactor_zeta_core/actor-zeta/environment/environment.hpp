@@ -4,13 +4,12 @@
 #include <actor-zeta/environment/abstract_environment.hpp>
 #include <memory>
 
-namespace actor_zeta {
-    namespace environment {
+namespace actor_zeta { namespace environment {
 ///
 /// @brief An actors workplace platform 
 ///
 
-        class environment {
+        class environment final {
         public:
             environment() = delete;
 
@@ -22,10 +21,9 @@ namespace actor_zeta {
 
             environment &operator=(environment &&)= default;
 
-            virtual ~environment();
+            ~environment();
 
-            template<class T>
-            explicit environment(T *ptr) : environment_(ptr) {}
+            environment(abstract_environment *ptr);
 
             template<class T>
             environment &operator=(T *ptr) {
@@ -49,7 +47,7 @@ namespace actor_zeta {
 
 
 
-    }
-}
+    } /// environment
+} /// actor_zeta
 
 #endif //ENVIRONMENT_HPP

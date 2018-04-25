@@ -27,7 +27,7 @@ namespace actor_zeta {
 
             auto add(actor::abstract_actor *object) -> id_t {
                 id_t id = inc();
-                body.emplace(id, std::move(actor::actor(object)));
+                body.emplace(id, actor::actor(object));
                 return id;
             }
 

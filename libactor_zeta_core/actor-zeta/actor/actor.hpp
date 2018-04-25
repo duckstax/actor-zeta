@@ -2,8 +2,8 @@
 #define ACTOR_HPP
 
 #include <string>
-#include "actor-zeta/intrusive_ptr.hpp"
-#include "actor-zeta/forwards.hpp"
+#include <actor-zeta/intrusive_ptr.hpp>
+#include <actor-zeta/forwards.hpp>
 
 //smart actor
 namespace actor_zeta {
@@ -55,7 +55,7 @@ namespace actor_zeta {
                 return static_cast<bool>(heart);
             }
 
-            const std::string &type() const;
+            const std::string &name() const;
 
             inline bool operator!() const noexcept {
                 return !heart;

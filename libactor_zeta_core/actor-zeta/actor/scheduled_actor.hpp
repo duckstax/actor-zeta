@@ -12,7 +12,9 @@ namespace actor_zeta {
 ///
 /// @brief Specialization of actor with scheduling functionality
 ///
-        class scheduled_actor : public local_actor, public executor::executable {
+        class scheduled_actor :
+                public local_actor,
+                public executor::executable {
         public:
             bool send(messaging::message&&) override final;
 
@@ -22,7 +24,7 @@ namespace actor_zeta {
 
             executor::executable_result run(executor::execution_device *, size_t max_throughput) override final;
 
-            virtual ~scheduled_actor();
+            virtual ~scheduled_actor() override ;
 
         protected:
             scheduled_actor(environment::abstract_environment *,mailbox_type*,behavior::abstract_behavior*, const std::string &);

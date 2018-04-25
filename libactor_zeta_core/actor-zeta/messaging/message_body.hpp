@@ -34,6 +34,7 @@ namespace actor_zeta {
             }
 
             message_body &swap(message_body &rhs) noexcept {
+                using std::swap;
                 std::swap(content, rhs.content);
                 return *this;
             }
@@ -71,13 +72,13 @@ namespace actor_zeta {
         private:
 
             struct placeholder {
-                virtual ~placeholder() {}
+                virtual ~placeholder() = default;
 
                 virtual placeholder *clone() const = 0;
             };
 
             template<typename ValueType>
-            struct holder : public placeholder {
+            struct holder final : placeholder {
 
 
                 holder(const ValueType &value) : held(value) {
@@ -86,15 +87,16 @@ namespace actor_zeta {
                 holder(ValueType &&value) : held(std::move(value)) {
                 }
 
-                virtual placeholder *clone() const {
+                placeholder *clone() const override  {
                     return new holder(held);
                 }
 
                 ValueType held;
 
+                ~holder() override  = default;
+
                 holder &operator=(const holder &) = delete;
             };
-
         private:
             placeholder *content;
         };

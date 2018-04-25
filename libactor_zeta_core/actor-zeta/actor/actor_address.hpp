@@ -2,9 +2,9 @@
 #define ACTOR_ADDRESS_HPP
 
 
-#include "actor-zeta/intrusive_ptr.hpp"
-#include "abstract_actor.hpp"
-#include "actor-zeta/forwards.hpp"
+#include <actor-zeta/intrusive_ptr.hpp>
+#include <actor-zeta/actor/abstract_actor.hpp>
+#include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta {
     namespace actor {
@@ -23,7 +23,7 @@ namespace actor_zeta {
 
             actor_address &operator=(const actor_address &) = default;
 
-            explicit actor_address(abstract_actor *aa) : ptr_(aa) {};
+            explicit actor_address(abstract_actor *aa);
 
             ~actor_address();
 

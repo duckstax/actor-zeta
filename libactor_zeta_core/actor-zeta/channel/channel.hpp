@@ -4,8 +4,8 @@
 #include "actor-zeta/intrusive_ptr.hpp"
 #include "actor-zeta/channel/abstract_channel.hpp"
 
-namespace actor_zeta {
-    namespace channel {
+namespace actor_zeta { namespace channel {
+
 ///
 /// @brief 
 ///

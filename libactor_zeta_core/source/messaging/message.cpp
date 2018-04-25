@@ -42,8 +42,8 @@ namespace actor_zeta {
             return pimpl->header_.priorities();
         }
 
-        auto message::type() const -> const behavior::type_action & {
-            return pimpl->header_.type();
+        auto message::command() const -> const behavior::type_action & {
+            return pimpl->header_.command();
         }
 
         auto message::clone() const -> message {

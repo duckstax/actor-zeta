@@ -2,10 +2,10 @@
 #include "actor-zeta/actor/broker.hpp"
 
 namespace actor_zeta {
-    namespace network {
+    namespace actor {
 
         void broker::initialize() {
-            actor::local_actor::initialize();
+            local_actor::initialize();
         }
     }
 }

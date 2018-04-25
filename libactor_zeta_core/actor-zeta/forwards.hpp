@@ -15,24 +15,22 @@ namespace actor_zeta {
 
     namespace behavior {
         class abstract_action;
-        class response;
-        class request;
+        class context;
+        struct context_t;
+        //class hsfm;
+        class fsm;
     }
 
     namespace channel {
-        class abstract_channel;
+        struct abstract_channel;
         class channel;
-    }
-
-    namespace contacts {
-        class book_contacts;
     }
 
     namespace environment {
         class group;
         class cooperation;
         class environment;
-        class abstract_environment;
+        struct abstract_environment;
     }
 
     namespace executor {

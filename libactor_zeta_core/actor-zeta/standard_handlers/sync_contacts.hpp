@@ -1,10 +1,7 @@
 #ifndef SYNC_CONTACTS_HPP
 #define SYNC_CONTACTS_HPP
 
-#include "actor-zeta/behavior/behavior.hpp"
-#include "actor-zeta/messaging/message.hpp"
-#include "actor-zeta/contacts/book_contacts.hpp"
-#include "actor-zeta/actor/actor_address.hpp"
+#include "actor-zeta/behavior/abstract_action.hpp"
 
 namespace actor_zeta {
 ///
@@ -14,7 +11,7 @@ namespace actor_zeta {
     public:
         sync_contacts();
 
-        behavior::response operator()(behavior::request &&) override final;
+        void invoke(behavior::context &) override final;
 
     };
 }

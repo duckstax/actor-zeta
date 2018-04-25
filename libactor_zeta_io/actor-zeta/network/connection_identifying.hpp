@@ -9,7 +9,7 @@ namespace actor_zeta {
 /// @enum type_connect
 /// @brief
 ///
-        enum class type_connect : int {
+        enum class type_connect : uint8_t {
             tcp,
             udp
         };

@@ -2,17 +2,18 @@
 #define MESSAGE_HPP
 
 #include <memory>
+
 #include <actor-zeta/behavior/type_action.hpp>
-#include "actor-zeta/actor/actor_address.hpp"
-#include "message_body.hpp"
-#include "message_priority.hpp"
-#include "message_header.hpp"
+#include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/messaging/message_body.hpp>
+#include <actor-zeta/messaging/message_priority.hpp>
+#include <actor-zeta/messaging/message_header.hpp>
 
 namespace actor_zeta {
     namespace messaging {
 ///
 /// @brief
-///        
+///
         class message final {
         public:
             message();
@@ -37,7 +38,7 @@ namespace actor_zeta {
 
             auto priority() const -> message_priority;
 
-            auto type() const noexcept -> const behavior::type_action &;
+            auto command() const noexcept -> const behavior::type_action &;
 
             auto recipient() const -> actor::actor_address ;
 

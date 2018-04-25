@@ -1,17 +1,32 @@
 #ifndef ABSTRACT_CHANNEL_HPP
 #define ABSTRACT_CHANNEL_HPP
 
-#include "actor-zeta/messaging/message.hpp"
+#include <string>
+#include <actor-zeta/forwards.hpp>
 #include "actor-zeta/ref_counted.hpp"
+#include "../metadata.hpp"
 
-namespace actor_zeta {
-    namespace channel {
+namespace actor_zeta { namespace channel {
 ///
 /// @brief
 ///
+
+
         struct abstract_channel : public ref_counted {
-            virtual bool send(messaging::message &&) = 0;
-            virtual const std::string& type() const =0;
+            virtual ~abstract_channel();
+
+            virtual auto send(messaging::message &&)  -> bool      = 0;
+
+            virtual auto broadcast(messaging::message &&) -> bool  = 0;
+
+            auto type() const -> abstract ;
+
+            auto name() const -> const std::string &;
+
+            auto locating() const -> locations;
+
+        protected:
+            metadata type_;
         };
     }
 }
