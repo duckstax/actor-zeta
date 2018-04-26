@@ -42,6 +42,11 @@ namespace actor_zeta {
         private:
             intrusive_ptr<abstract_actor> ptr_;
         };
+
+        inline void send(actor_address& address, messaging::message&& msg){
+            address->send(std::move(msg));
+        }
+
     }
 }
 #endif //ACTOR_ADDRESS_HPP

@@ -36,17 +36,13 @@ namespace actor_zeta { namespace actor {
 
         protected:
 
-            void send_channel(messaging::message &&) const;
-
-            void broadcast_channel(messaging::message &&) const;
-
             void address(actor_address);
 
             void channel(channel::channel);
 
-            auto address(const std::string&)-> actor_address;
+            auto address(const std::string&)-> actor_address&;
 
-            auto channel(const std::string&)->channel::channel;
+            auto channel(const std::string&)->channel::channel&;
 
             void device(executor::execution_device* e);
 

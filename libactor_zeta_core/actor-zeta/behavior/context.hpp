@@ -12,19 +12,13 @@ namespace actor_zeta { namespace behavior {
 
     virtual ~context_t() = default;
 
-    virtual void send_channel(messaging::message &&) const                           = 0;
+    virtual void address(actor::actor_address)                        = 0;
 
-    virtual void broadcast_channel(messaging::message &&) const                      = 0;
+    virtual auto address(const std::string&) -> actor::actor_address& = 0;
 
-    virtual bool send(messaging::message &&)                                         = 0;
+    virtual void channel(channel::channel)                            = 0;
 
-    virtual void address(actor::actor_address)                                       = 0;
-
-    virtual actor::actor_address address(const std::string&)                         = 0;
-
-    virtual void channel(channel::channel)                                           = 0;
-
-    virtual channel::channel channel(const std::string&)                             = 0;
+    virtual auto channel(const std::string&) -> channel::channel&     = 0;
 
   };
   

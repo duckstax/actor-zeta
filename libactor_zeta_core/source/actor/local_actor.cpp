@@ -48,10 +48,6 @@ namespace actor_zeta {
             return mailbox().get();
         }
 
-        void local_actor::send_channel(messaging::message && msg) const {
-            channels.at(msg.recipient()->name())->send(std::move(msg));
-        }
-
         void local_actor::attach(behavior::abstract_action *ptr_aa) {
             life->insert(ptr_aa);
         }
@@ -100,15 +96,11 @@ namespace actor_zeta {
             channels.emplace(channel_->name(),channel_);
         }
 
-        void local_actor::broadcast_channel(messaging::message &&msg) const {
-            channels.at(msg.recipient()->name())->broadcast(std::move(msg));
-        }
-
-        actor_address local_actor::address(const std::string &name) {
+        auto local_actor::address(const std::string &name) -> actor_address& {
             return contacts.at(name);
         }
 
-        channel::channel local_actor::channel(const std::string &name) {
+        auto local_actor::channel(const std::string &name) -> channel::channel& {
             return channels.at(name);
         }
 

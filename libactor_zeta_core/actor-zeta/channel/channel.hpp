@@ -1,8 +1,8 @@
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
 
-#include "actor-zeta/intrusive_ptr.hpp"
-#include "actor-zeta/channel/abstract_channel.hpp"
+#include <actor-zeta/intrusive_ptr.hpp>
+#include <actor-zeta/channel/abstract_channel.hpp>
 
 namespace actor_zeta { namespace channel {
 
@@ -26,6 +26,15 @@ namespace actor_zeta { namespace channel {
 
             intrusive_ptr<abstract_channel> channel_;
         };
+
+        inline void send(channel& current_channel,messaging::message&&msg){
+            current_channel->send(std::move(msg));
+        }
+
+        inline void broadcast(channel& current_channel,messaging::message&&msg){
+            current_channel->broadcast(std::move(msg));
+        }
+
     }
 }
 #endif //CHANNEL_HPP
