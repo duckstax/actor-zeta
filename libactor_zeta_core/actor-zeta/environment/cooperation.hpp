@@ -2,8 +2,8 @@
 #define COOPERATION_HPP
 
 #include <unordered_map>
-#include "actor-zeta/messaging/message.hpp"
-#include "group.hpp"
+#include <actor-zeta/messaging/message.hpp>
+#include <actor-zeta/environment/group.hpp>
 
 
 namespace actor_zeta {

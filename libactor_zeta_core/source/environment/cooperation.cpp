@@ -1,10 +1,10 @@
-#include "actor-zeta/environment/cooperation.hpp"
+#include <actor-zeta/environment/cooperation.hpp>
 
 namespace actor_zeta {
     namespace environment {
 
         auto cooperation::created_group(actor::abstract_actor *t) -> group & {
-            auto name = t->type();
+            auto name = t->name();
             auto it = groups.emplace(name, group(new abstract_group(storage_space_, t)));
             return it.first->second;
         }

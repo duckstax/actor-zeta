@@ -6,8 +6,8 @@
 #include "actor-zeta/channel/channel.hpp"
 
 
-namespace actor_zeta {
-    namespace environment {
+namespace actor_zeta { namespace environment {
+
 ///
 /// @brief
 ///
@@ -28,8 +28,6 @@ namespace actor_zeta {
 
             abstract_group(storage_space, actor::abstract_actor *);
 
-            auto type() const -> const std::string & override final;
-
             auto id() const -> id_t;
 
             auto entry_point() -> actor::actor_address;
@@ -44,10 +42,11 @@ namespace actor_zeta {
 
             auto send(messaging::message &&msg) -> bool override final;
 
+            auto broadcast(messaging::message &&msg) -> bool override final;
+
         private:
             std::size_t cursor;
             storage_space storage_space_;
-            std::string type_;
             id_t entry_point_;
             layer shared_point;
         };

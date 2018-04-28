@@ -1,8 +1,8 @@
 #include <initializer_list>
-#include "iostream"
-#include "actor-zeta/behavior/behavior.hpp"
-#include "actor-zeta/behavior/request.hpp"
-#include "actor-zeta/behavior/response.hpp"
+#include <iostream>
+#include <actor-zeta/behavior/fsm.hpp>
+#include <actor-zeta/behavior/abstract_action.hpp>
+#include <memory>
 
 namespace actor_zeta {
     namespace behavior {
@@ -13,21 +13,24 @@ namespace actor_zeta {
             std::cerr << "Duplicate" << std::endl;
         }
 
-        response behavior::run(request &&d) {
-            auto it = behavioral_reactions.find(d.message().type());
+
+        void behavior_fsm::run(context &d) {
+            auto it = behavioral_reactions.find(d.state().message().command());
             if (it != behavioral_reactions.end()) {
-                return it->second(std::move(d));
+                return it->second->invoke(d);
             }
-            return behavioral_reactions.at("skip")(std::move(d));
+            return behavioral_reactions.at("skip")->invoke(d);
         }
 
-        bool behavior::insert(abstract_action *aa) {
-            auto it = behavioral_reactions.emplace(aa->name(), std::move(action(aa)));
+        bool behavior_fsm::insert(abstract_action *aa) {
+            auto it = behavioral_reactions.emplace(aa->name(), std::unique_ptr<abstract_action>(aa));
             bool add = it.second;
             if (!add) {
                 error(aa->name().to_string());
             }
             return add;
         }
+
+
     }
 }

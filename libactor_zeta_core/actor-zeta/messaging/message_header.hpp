@@ -1,9 +1,9 @@
 #ifndef MESSAGING_MESSAGE_HEADER_HPP
 #define MESSAGING_MESSAGE_HEADER_HPP
 
-#include "actor-zeta/actor/actor_address.hpp"
 #include "actor-zeta/behavior/type_action.hpp"
 #include "message_priority.hpp"
+#include "actor-zeta/actor/actor_address.hpp"
 
 namespace actor_zeta {
     namespace messaging {
@@ -34,7 +34,7 @@ namespace actor_zeta {
 
             auto  priorities() const -> message_priority;
 
-            auto type() const noexcept -> const behavior::type_action &;
+            auto command() const noexcept -> const behavior::type_action &;
 
             auto recipient() const -> actor::actor_address ;
 
@@ -43,9 +43,9 @@ namespace actor_zeta {
             auto is_callback() const -> bool;
 
         private:
-            behavior::type_action type_;
             actor::actor_address sender_;
             actor::actor_address recipient_;
+            behavior::type_action command_;
             message_priority prioritie;
         };
     }

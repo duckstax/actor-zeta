@@ -1,32 +1,38 @@
 #ifndef ABSTRACT_ACTOR_HPP
 #define ABSTRACT_ACTOR_HPP
 
-#include <string>
+#include <actor-zeta/channel/abstract_channel.hpp>
 #include <actor-zeta/environment/environment.hpp>
-#include "actor-zeta/ref_counted.hpp"
-#include "actor-zeta/forwards.hpp"
+#include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta {
     namespace actor {
 ///
 /// @brief Abstract concept of an actor
 ///
-        class abstract_actor : public ref_counted {
-        public:
-            const std::string &type() const;
 
+        class abstract_actor : public ref_counted {
+        public:           
             virtual bool send(messaging::message&&) = 0;
 
             virtual bool send(messaging::message&&, executor::execution_device *) = 0;
 
-            virtual ~abstract_actor() {}
+            virtual ~abstract_actor();
 
             actor_address address() const noexcept;
 
+            auto type() const -> abstract;
+
+            auto name() const -> const std::string &;
+
+            auto locating() const -> locations;
+
         protected:
-            environment::environment& env() ;
+            auto env() -> environment::environment& ;
 
             abstract_actor(environment::abstract_environment *, const std::string &);
+
+            metadata type_;
 
         private:
             abstract_actor() = delete;
@@ -35,10 +41,9 @@ namespace actor_zeta {
 
             abstract_actor &operator=(const abstract_actor &) = delete;
 
-            const std::string name_;
-
             environment::environment env_;
         };
     }
 }
+
 #endif //ABSTRACT_ACTOR_HPP

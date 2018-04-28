@@ -4,8 +4,6 @@
 #include "actor-zeta/executor/execution_device.hpp"
 #include "actor-zeta/environment/environment.hpp"
 #include "actor-zeta/behavior/abstract_action.hpp"
-#include "actor-zeta/behavior/request.hpp"
-#include "actor-zeta/behavior/response.hpp"
 
 namespace actor_zeta {
     namespace actor {
@@ -25,30 +23,17 @@ namespace actor_zeta {
                 for (size_t handled_msgs = 0; handled_msgs < max_throughput;) {
                     msg_ptr = pop_to_cache();
                     if (msg_ptr) {
-                        behavior::request request(contacts, std::move(msg_ptr));
-                        auto response = life->run(std::move(request));
-                        if (response ) {
-                            if (response.receiver()->address()) {
-                                response.receiver()->address()->send(std::move(response.message()));
-                            } else {
-                                error();
-                            }
-                        }
+                        behavior::context context_(this,std::move(msg_ptr));
+                        life->run(context_);/** context processing */
+
                         ++handled_msgs;
                         continue;
                     }
 
                     msg_ptr = next_message();
                     if (msg_ptr) {
-                        auto request = behavior::request(contacts, std::move(msg_ptr));
-                        auto response = life->run(std::move(request));
-                        if (response ) {
-                            if (response.receiver()->address()) {
-                                response.receiver()->address()->send(std::move(response.message()));
-                            } else {
-                                error();
-                            }
-                        }
+                        behavior::context context_(this, std::move(msg_ptr));
+                        life->run(context_);
                         ++handled_msgs;
 
                     } else {
@@ -96,8 +81,8 @@ namespace actor_zeta {
             deref();
         }
 
-        scheduled_actor::scheduled_actor(environment::abstract_environment *env,mailbox_type* mail_ptr,behavior::abstract_behavior*behavior_ptr, const std::string &name)
-                : local_actor(env,mail_ptr,behavior_ptr, name) {
+        scheduled_actor::scheduled_actor(environment::abstract_environment *env,mailbox_type* mail_ptr,behavior::abstract_behavior*behavior_ptr, const std::string &name):
+                local_actor(env,mail_ptr,behavior_ptr, name) {
             local_actor::initialize();
         }
 

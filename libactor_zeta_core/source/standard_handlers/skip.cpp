@@ -1,8 +1,6 @@
 #include "actor-zeta/standard_handlers/skip.hpp"
 
 #include <iostream>
-#include "actor-zeta/behavior/request.hpp"
-#include "actor-zeta/behavior/response.hpp"
 
 namespace actor_zeta {
 
@@ -14,8 +12,8 @@ namespace actor_zeta {
 
     skip::skip() : abstract_action("skip") {}// TODO: "skip" -> "" ?
 
-    behavior::response skip::operator()(behavior::request &&r) {
-        error(r.message().type().to_string());
-        return behavior::response();
+    void skip::invoke(behavior::context &r) {
+        error(r.state().message().command().to_string());
+
     }
 }

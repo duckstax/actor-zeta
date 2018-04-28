@@ -10,8 +10,8 @@ namespace actor_zeta {
             return heart->address();
         };
 
-        const std::string& actor::type() const {
-            return heart->type();
+        const std::string& actor::name() const {
+            return heart->name();
         }
 
         void actor::swap(actor &other) noexcept {

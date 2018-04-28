@@ -129,8 +129,7 @@ namespace actor_zeta {
 
             mutable std::mutex mutex;
             std::condition_variable cv;
-
-            bool close;
+            
             queue_base_type mail_queue;
             queue_base_type local_queue;
             cache_type low_priority_cache_;

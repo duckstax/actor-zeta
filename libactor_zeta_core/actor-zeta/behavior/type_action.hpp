@@ -3,15 +3,11 @@
 
 #include <string>
 
-namespace actor_zeta {
-    namespace behavior {
+namespace actor_zeta { namespace behavior {
 ///
 /// @brief Identifier for action
 ///
         class type_action final {
-        private:
-            std::string body_;
-            std::size_t hash_;
         public:
             type_action() = delete;
 
@@ -40,6 +36,9 @@ namespace actor_zeta {
             auto hash() const noexcept -> std::size_t;
 
             auto to_string() const -> const std::string&;
+        private:
+            std::string body_;
+            std::size_t hash_;
         };
     }
 }

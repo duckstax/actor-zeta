@@ -2,8 +2,7 @@
 
 #include <actor-zeta/forwards.hpp>
 
-namespace actor_zeta {
-    namespace environment {
+namespace actor_zeta { namespace environment {
         struct abstract_environment {
 
             virtual int                              start()                    = 0;

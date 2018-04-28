@@ -3,8 +3,9 @@
 
 #include <actor-zeta/actor/scheduled_actor.hpp>
 #include <actor-zeta/actor/actor.hpp>
-namespace actor_zeta {
-    namespace actor {
+#include <actor-zeta/behavior/fsm.hpp>
+
+namespace actor_zeta { namespace actor {
 
         template<
                 typename MailBox,
@@ -24,6 +25,7 @@ namespace actor_zeta {
 
         };
 
+        using basic_scheduled_actor = basic_actor<messaging::blocking_mail_queue,behavior::behavior_fsm>;
 
         template<
                 typename MailBox,

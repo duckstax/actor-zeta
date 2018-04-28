@@ -28,6 +28,8 @@ namespace actor_zeta {
             }
         }
 
+        environment::environment(abstract_environment *ptr) : environment_(ptr) {}
+
 
     }
 }

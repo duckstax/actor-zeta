@@ -17,16 +17,13 @@ list(APPEND HEADER_FILES
 
         actor-zeta/behavior/abstract_action.hpp
         actor-zeta/behavior/abstract_behavior.hpp
-        actor-zeta/behavior/action.hpp
-        actor-zeta/behavior/behavior.hpp
-        actor-zeta/behavior/request.hpp
-        actor-zeta/behavior/response.hpp
+        actor-zeta/behavior/fsm.hpp
+        actor-zeta/behavior/context.hpp
         actor-zeta/behavior/type_action.hpp
+        actor-zeta/behavior/state.hpp
 
         actor-zeta/channel/abstract_channel.hpp
         actor-zeta/channel/channel.hpp
-
-        actor-zeta/contacts/book_contacts.hpp
 
         actor-zeta/environment/abstract_environment.hpp
         actor-zeta/environment/abstract_group.hpp
@@ -35,7 +32,6 @@ list(APPEND HEADER_FILES
         actor-zeta/environment/environment.hpp
         actor-zeta/environment/group.hpp
         actor-zeta/environment/storage_space.hpp
-        source/environment/storage_space.cpp
 
         actor-zeta/executor/policy/work_sharing.hpp
         actor-zeta/executor/abstract_coordinator.hpp
@@ -58,6 +54,7 @@ list(APPEND HEADER_FILES
 
         actor-zeta/forwards.hpp
         actor-zeta/intrusive_ptr.hpp
+        actor-zeta/metadata.hpp
         actor-zeta/ref_counted.hpp
 )
 
@@ -69,16 +66,17 @@ list(APPEND SOURCE_FILES
         source/actor/local_actor.cpp
         source/actor/scheduled_actor.cpp
 
-        source/behavior/action.cpp
-        source/behavior/behavior.cpp
-        source/behavior/request.cpp
-        source/behavior/response.cpp
+        source/behavior/fsm.cpp
+        source/behavior/context.cpp
+        source/behavior/state.cpp
         source/behavior/type_action.cpp
+        source/behavior/abstract_action.cpp
+
+        source/channel/abstract_channel.cpp
         source/channel/channel.cpp
 
-        source/contacts/book_contacts.cpp
-
         source/environment/abstract_environment.cpp
+        source/environment/storage_space.cpp
         source/environment/abstract_group.cpp
         source/environment/cooperation.cpp
         source/environment/environment.cpp
@@ -91,7 +89,6 @@ list(APPEND SOURCE_FILES
         source/standard_handlers/add_channel.cpp
         source/standard_handlers/skip.cpp
         source/standard_handlers/sync_contacts.cpp
-
         source/ref_counted.cpp
 )
 

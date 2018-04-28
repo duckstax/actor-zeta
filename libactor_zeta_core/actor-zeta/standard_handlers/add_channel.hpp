@@ -1,7 +1,8 @@
 #ifndef ADD_CHANNEL_HPP
 #define ADD_CHANNEL_HPP
 
-#include "actor-zeta/behavior/abstract_action.hpp"
+#include <actor-zeta/behavior/context.hpp>
+#include <actor-zeta/behavior/abstract_action.hpp>
 
 namespace actor_zeta {
 ///
@@ -11,7 +12,7 @@ namespace actor_zeta {
     public:
         add_channel();
 
-        behavior::response operator()(behavior::request &&) override final;
+        void invoke(behavior::context &) override final;
 
     };
 }
