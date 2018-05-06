@@ -2,24 +2,12 @@
 
 namespace actor_zeta { namespace behavior {
 
-        state_t &context::state() const {
-            return *current_state.get();
-        }
-
-        state_t *context::get_state() {
-            return current_state.release();
-        }
-
         context::~context() {
             if( ptr.get() != nullptr ){
                 auto* tmp_1 =  ptr.release();
                 tmp_1 = nullptr;
             }
 
-            if( current_state.get() != nullptr ){
-                auto* tmp_2 =  current_state.release();
-                tmp_2 = nullptr;
-            }
         }
 
         auto context::operator->() noexcept -> context_t * {
@@ -40,8 +28,16 @@ namespace actor_zeta { namespace behavior {
 
         context::context(context_t *ptr, messaging::message &&msg) :
                 ptr(ptr),
-                current_state(new state_t(std::move(msg))) {
+                msg(std::move(msg)) {
 
+        }
+
+        messaging::message& context::message() {
+            return msg; /// TODO hack
+        }
+
+        const messaging::message &context::message() const {
+            return msg;
         }
     } /// behavior
 } /// actor_zeta

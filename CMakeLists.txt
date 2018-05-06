@@ -24,4 +24,5 @@ add_subdirectory(libactor_zeta_core)
 add_subdirectory(libactor_zeta_io)
 add_library(${PROJECT} $<TARGET_OBJECTS:actor-zeta-libactor_zeta_core> $<TARGET_OBJECTS:actor-zeta-libactor_zeta_io>)
 
+add_subdirectory(examples)
 

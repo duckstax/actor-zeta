@@ -1,16 +1,15 @@
 #ifndef BASIC_ACTOR_HPP
 #define BASIC_ACTOR_HPP
 
-#include <actor-zeta/actor/scheduled_actor.hpp>
+#include <actor-zeta/actor/async_actor.hpp>
 #include <actor-zeta/actor/actor.hpp>
-#include <actor-zeta/behavior/fsm.hpp>
+#include <actor-zeta/messaging/blocking_mail_queue.hpp>
 
 namespace actor_zeta { namespace actor {
 
         template<
                 typename MailBox,
-                typename Behavior,
-                typename Actor = scheduled_actor
+                typename Actor = async_actor
         >
         class basic_actor : public Actor {
         public:
@@ -19,21 +18,20 @@ namespace actor_zeta { namespace actor {
                     environment::abstract_environment *ptr,
                     const std::string &name
             )
-                    : Actor(ptr, new MailBox, new Behavior, name) {
+                    : Actor(ptr, new MailBox, name) {
 
             }
 
         };
 
-        using basic_scheduled_actor = basic_actor<messaging::blocking_mail_queue,behavior::behavior_fsm>;
+        using basic_async_actor = basic_actor<messaging::blocking_mail_queue>;
 
         template<
                 typename MailBox,
-                typename Behavior,
-                typename Actor = scheduled_actor
+                typename Actor = async_actor
         >
         actor make_actor(environment::abstract_environment *ptr, const std::string &name) {
-            return new basic_actor<MailBox,Behavior,Actor>(ptr,name);
+            return new basic_actor<MailBox,Actor>(ptr,name);
         };
     }
 }

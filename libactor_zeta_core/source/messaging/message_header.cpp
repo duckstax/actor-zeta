@@ -11,10 +11,6 @@ namespace actor_zeta {
             return recipient_;
         }
 
-        bool message_header::is_callback() const {
-            return bool(recipient_);
-        }
-
         message_priority message_header::priorities() const {
             return prioritie;
         }

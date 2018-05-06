@@ -1,8 +1,7 @@
 #ifndef MESSAGE_PRIORITIES_HPP
 #define MESSAGE_PRIORITIES_HPP
 
-namespace actor_zeta {
-    namespace messaging {
+namespace actor_zeta { namespace messaging {
 ///
 /// @enum
 ///
@@ -11,6 +10,11 @@ namespace actor_zeta {
             normal,
             high
         };
+
+        auto to_string(message_priority) -> std::string;
+
+        auto from_string(const std::string& ) -> message_priority;
+
     }
 }
 

@@ -33,10 +33,6 @@ namespace actor_zeta {
 
         };
 
-        bool message::is_callback() const {
-            return pimpl->header_.is_callback();
-        }
-
         message_priority message::priority() const {
 
             return pimpl->header_.priorities();
@@ -51,7 +47,7 @@ namespace actor_zeta {
         }
 
         message::operator bool() {
-            return !pimpl;
+            return bool(pimpl);
         }
 
         auto message::get_body() -> message_body & {

@@ -1,12 +1,13 @@
 #ifndef ABSTRACT_ACTOR_HPP
 #define ABSTRACT_ACTOR_HPP
 
+#include <set>
+
 #include <actor-zeta/channel/abstract_channel.hpp>
 #include <actor-zeta/environment/environment.hpp>
 #include <actor-zeta/forwards.hpp>
 
-namespace actor_zeta {
-    namespace actor {
+namespace actor_zeta { namespace actor {
 ///
 /// @brief Abstract concept of an actor
 ///
@@ -26,6 +27,8 @@ namespace actor_zeta {
             auto name() const -> const std::string &;
 
             auto locating() const -> locations;
+
+            virtual auto message_types() const -> std::set<std::string> ;
 
         protected:
             auto env() -> environment::environment& ;

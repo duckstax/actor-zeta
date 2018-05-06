@@ -13,16 +13,15 @@ namespace actor_zeta {
 /// @enum
 /// @brief
 ///
-        enum class executable_result {
+        enum class executable_result : uint8_t {
             resume,
             awaiting,
             done,
             shutdown
         };
 
+
         struct executable {
-
-
             virtual ~executable() = default;
 
             virtual void attach_to_scheduler() = 0;

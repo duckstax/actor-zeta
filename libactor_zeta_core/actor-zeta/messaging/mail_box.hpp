@@ -1,7 +1,7 @@
 #ifndef MAIL_BOX_HPP
 #define MAIL_BOX_HPP
 
-#include "actor-zeta/messaging/message.hpp"
+#include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta {
     namespace messaging {

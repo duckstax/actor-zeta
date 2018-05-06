@@ -9,7 +9,7 @@ namespace actor_zeta {
             return it.first->second;
         }
 
-        auto cooperation::create_link(group &g1, group &g2) -> void {
+        auto link(group &g1, group &g2) -> void {
             g1->join(g2);
         }
 

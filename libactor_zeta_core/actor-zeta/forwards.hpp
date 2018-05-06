@@ -14,29 +14,28 @@ namespace actor_zeta {
     }
 
     namespace behavior {
-        class abstract_action;
-        class context;
+        class  abstract_action;
+        class  context;
         struct context_t;
-        //class hsfm;
-        class fsm;
+        class  fsm;
     }
 
     namespace channel {
         struct abstract_channel;
-        class channel;
+        class  channel;
     }
 
     namespace environment {
-        class group;
-        class cooperation;
-        class environment;
+        class  group;
+        class  cooperation;
+        class  environment;
         struct abstract_environment;
     }
 
     namespace executor {
         class abstract_coordinator;
         template<class Policy>
-        class coordinator;
+        class  coordinator;
         struct execution_device;
         struct executable;
     }

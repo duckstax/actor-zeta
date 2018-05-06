@@ -31,14 +31,15 @@ namespace actor_zeta {
 
             auto created_end_group(actor::abstract_actor *t) -> group &;
 
-            auto create_link(group &g1, group &g2) -> void;
-
         private:
             std::unordered_map<std::string, group> groups;
             storage_space storage_space_;
             layer input_entry_point;
             layer output_end_point;
         };
+
+        auto link(group &g1, group &g2) -> void;
+
     }
 }
 #endif

@@ -6,12 +6,11 @@
 #include <actor-zeta/forwards.hpp>
 
 //smart actor
-namespace actor_zeta {
-    namespace actor {
+namespace actor_zeta { namespace actor {
 ///
 /// @brief An actor's entity container
 ///
-        class actor {
+        class actor final {
         public:
             actor() = default;
 

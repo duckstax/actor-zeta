@@ -8,7 +8,7 @@
 
 namespace actor_zeta {
     namespace environment {
-        using registry =adjacency_list<stored_vertex, node>;
+        using registry = adjacency_list<stored_vertex, node>;
 
         class storage final {
         public:

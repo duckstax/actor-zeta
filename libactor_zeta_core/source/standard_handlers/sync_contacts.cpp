@@ -5,7 +5,7 @@
 
 namespace actor_zeta {
 
-    void error(const std::string& __error__){
+    inline void error(const std::string& __error__){
         std::cerr << "WARNING" << std::endl;
         std::cerr << "Not initialization actor_address type:" << __error__ << std::endl;
         std::cerr << "WARNING" << std::endl;
@@ -14,7 +14,7 @@ namespace actor_zeta {
     sync_contacts::sync_contacts() :  abstract_action("sync_contacts") {}
 
     void sync_contacts::invoke(behavior::context & context_) {
-        auto address = context_.state().message().get<actor::actor_address>();
+        auto address = context_.message().get<actor::actor_address>();
 
         if(address){
             context_->address(address);

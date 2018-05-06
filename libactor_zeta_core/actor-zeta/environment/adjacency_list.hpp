@@ -9,10 +9,10 @@
 ///
 class node final {
 public:
-    using vertex_id=std::size_t;
-    using list_vertices=std::vector<vertex_id>;
-    using iterator=list_vertices::iterator;
-    using const_iterator=list_vertices::const_iterator;
+    using vertex_id      = std::size_t;
+    using list_vertices  = std::vector<vertex_id>;
+    using iterator       = list_vertices::iterator;
+    using const_iterator = list_vertices::const_iterator;
 
     struct cmp {
         bool operator()(node p, vertex_id s) const { return p.id() < s; }

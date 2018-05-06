@@ -15,7 +15,7 @@ namespace actor_zeta {
     add_channel::add_channel() : abstract_action("add_channel") {}
 
     void add_channel::invoke(behavior::context &request) {
-        auto channel_ = request.state().message().get<channel::channel>();
+        auto channel_ = request.message().get<channel::channel>();
         if (channel_) {
             request->channel(channel_);
         } else {

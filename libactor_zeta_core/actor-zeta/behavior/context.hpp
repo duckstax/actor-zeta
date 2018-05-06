@@ -3,7 +3,6 @@
 
 #include <stack>
 #include <actor-zeta/messaging/message.hpp>
-#include <actor-zeta/behavior/state.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
 
 namespace actor_zeta { namespace behavior {
@@ -16,7 +15,7 @@ namespace actor_zeta { namespace behavior {
 
     virtual auto address(const std::string&) -> actor::actor_address& = 0;
 
-    virtual void channel(channel::channel)                            = 0;
+    virtual auto channel(channel::channel) -> void                    = 0;
 
     virtual auto channel(const std::string&) -> channel::channel&     = 0;
 
@@ -32,9 +31,9 @@ namespace actor_zeta { namespace behavior {
 
     ~context();
 
-    state_t& state() const;
+    messaging::message& message();
 
-    state_t* get_state();
+    const messaging::message& message() const;
 
     auto operator ->() noexcept -> context_t*;
 
@@ -46,7 +45,7 @@ namespace actor_zeta { namespace behavior {
 
   private:
     std::unique_ptr<context_t> ptr;
-    std::unique_ptr<state_t> current_state;
+    messaging::message msg;
   };
 
 

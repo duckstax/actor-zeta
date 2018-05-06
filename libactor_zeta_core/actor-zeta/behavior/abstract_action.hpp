@@ -1,9 +1,10 @@
 #ifndef ABSTRACT_ACTION_HPP
 #define ABSTRACT_ACTION_HPP
 
+#include <functional>
+
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/behavior/type_action.hpp>
-#include <actor-zeta/behavior/state.hpp>
 
 namespace actor_zeta { namespace behavior {
 ///
@@ -22,6 +23,33 @@ namespace actor_zeta { namespace behavior {
 
         private:
             const type_action name_;
+        };
+
+        class helper final : public abstract_action {
+        public:
+            ~helper() = default;
+
+            template<
+                    std::size_t N,
+                    typename F
+            >
+            helper(const char(&aStr)[N],F f):
+                    abstract_action(aStr),
+                    helper_(f) {
+
+            }
+
+            void invoke(context& ctx) {
+                helper_(ctx);
+            }
+        private:
+            std::function<void(context&)> helper_;
+
+        };
+
+        template<std::size_t N,typename F>
+        auto make_handler(const char(&aStr)[N],F&&f) -> abstract_action* {
+            return new helper(aStr,f);
         };
 
     } /// namespace behavior

@@ -40,8 +40,6 @@ namespace actor_zeta {
 
             auto sender() const -> actor::actor_address ;
 
-            auto is_callback() const -> bool;
-
         private:
             actor::actor_address sender_;
             actor::actor_address recipient_;

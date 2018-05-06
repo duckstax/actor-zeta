@@ -71,8 +71,7 @@ namespace actor_zeta {
             }
         }
 
-        abstract_group::abstract_group(storage_space ss, actor::abstract_actor *t)
-                :
+        abstract_group::abstract_group(storage_space ss, actor::abstract_actor *t) :
                 cursor(0),
                 storage_space_(ss) {
             t->send(messaging::make_message(t->address(),"add_channel", channel()));

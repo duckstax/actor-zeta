@@ -6,8 +6,7 @@
 #include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/forwards.hpp>
 
-namespace actor_zeta {
-    namespace actor {
+namespace actor_zeta { namespace actor {
 ///
 /// @brief A compact location expressor
 ///

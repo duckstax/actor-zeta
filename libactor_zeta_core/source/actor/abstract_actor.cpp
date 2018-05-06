@@ -34,6 +34,10 @@ namespace actor_zeta {
             return type_.location;
         }
 
+        auto abstract_actor::message_types() const -> std::set<std::string> {
+            return std::set<std::string>();
+        }
+
 
     }
 }

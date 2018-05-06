@@ -17,13 +17,9 @@ namespace actor_zeta {
     namespace actor {
         local_actor::local_actor(
                 environment::abstract_environment *env,
-                mailbox_type* mail_ptr,
-                behavior::abstract_behavior*behavior_ptr,
                 const std::string &type
         ) :
-                abstract_actor(env, type),
-                life(behavior_ptr),
-                mailbox_(mail_ptr){
+                abstract_actor(env, type){
 
             initialize();
             startup();
@@ -44,12 +40,8 @@ namespace actor_zeta {
 
         }
 
-        messaging::message local_actor::next_message() {
-            return mailbox().get();
-        }
-
         void local_actor::attach(behavior::abstract_action *ptr_aa) {
-            life->insert(ptr_aa);
+            reactions_.add(ptr_aa);
         }
 
         auto local_actor::all_view_address() const -> void  {
@@ -61,22 +53,6 @@ namespace actor_zeta {
 
         }
 
-        bool local_actor::has_next_message() {
-            messaging::message msg_ptr = mailbox().get();
-            return push_to_cache(std::move(msg_ptr));
-        }
-
-        bool local_actor::push_to_cache(messaging::message &&msg_ptr) {
-            return mailbox().push_to_cache(std::move(msg_ptr));
-        }
-
-        messaging::message local_actor::pop_to_cache() {
-            return mailbox().pop_to_cache();
-        }
-
-        local_actor::mailbox_type &local_actor::mailbox() {
-            return *mailbox_;
-        }
 
         executor::execution_device *local_actor::device() const {
             return executor_;
@@ -102,6 +78,16 @@ namespace actor_zeta {
 
         auto local_actor::channel(const std::string &name) -> channel::channel& {
             return channels.at(name);
+        }
+
+        std::set<std::string> local_actor::message_types() const {
+            std::set<std::string> types;
+
+            for(auto&i: reactions_) {
+                types.emplace(i.first.to_string());
+            }
+
+            return types;
         }
 
     }

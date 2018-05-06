@@ -11,7 +11,6 @@ namespace actor_zeta { namespace channel {
 /// @brief
 ///
 
-
         struct abstract_channel : public ref_counted {
             virtual ~abstract_channel();
 

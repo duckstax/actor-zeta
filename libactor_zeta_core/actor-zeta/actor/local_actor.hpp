@@ -4,15 +4,13 @@
 #include <memory>
 #include <unordered_map>
 
-#include <actor-zeta/messaging/mail_box.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/actor/abstract_actor.hpp>
-#include <actor-zeta/behavior/abstract_behavior.hpp>
 #include <actor-zeta/forwards.hpp>
-#include <actor-zeta/executor/executable.hpp>
 #include <actor-zeta/behavior/context.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
 #include <actor-zeta/channel/channel.hpp>
+#include <actor-zeta/behavior/reactions.hpp>
 
 namespace actor_zeta { namespace actor {
 
@@ -23,7 +21,6 @@ namespace actor_zeta { namespace actor {
                 public abstract_actor ,
                 public behavior::context_t {
         public:
-            using mailbox_type = messaging::mail_box;
                                                             //hide
             virtual void launch(executor::execution_device*, bool) = 0;
 
@@ -32,17 +29,19 @@ namespace actor_zeta { namespace actor {
             */
             auto all_view_address() const -> void;
 
+            auto message_types() const -> std::set<std::string> final;
+
             virtual ~local_actor();
 
         protected:
 
-            void address(actor_address);
+            void address(actor_address) final;
 
-            void channel(channel::channel);
+            void channel(channel::channel) final;
 
-            auto address(const std::string&)-> actor_address&;
+            auto address(const std::string&)-> actor_address& final;
 
-            auto channel(const std::string&)->channel::channel&;
+            auto channel(const std::string&)->channel::channel& final;
 
             void device(executor::execution_device* e);
 
@@ -50,33 +49,19 @@ namespace actor_zeta { namespace actor {
 
             void attach(behavior::abstract_action *);
 
-            local_actor(environment::abstract_environment *,mailbox_type*, behavior::abstract_behavior *, const std::string &);
+            local_actor(environment::abstract_environment *,  const std::string &);
 
             virtual void initialize();
 
-            virtual void startup(); /// virtual constructor
+            virtual auto startup() -> void; /// virtual constructor
 
-            virtual void shutdown(); /// virtual deconstructor
+            virtual auto shutdown() -> void; /// virtual deconstructor
 
-// message processing -----------------------------------------------------
-
-            messaging::message next_message();
-
-            bool has_next_message();
-
-            mailbox_type &mailbox();
-
-            bool push_to_cache(messaging::message&&);
-
-            messaging::message pop_to_cache();
-
-// ----------------------------------------------------- message processing
         protected:
-            std::unique_ptr<behavior::abstract_behavior>life;
+            behavior::reactions reactions_;
             std::unordered_map<std::string, actor_address> contacts;
             std::unordered_map<std::string, channel::channel> channels;
-        private:           
-            std::unique_ptr<mailbox_type> mailbox_;
+        private:
             executor::execution_device *executor_;
         };
     }

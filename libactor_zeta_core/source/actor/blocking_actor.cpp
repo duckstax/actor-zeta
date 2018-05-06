@@ -8,17 +8,20 @@ namespace actor_zeta {
 
         executor::executable_result
         blocking_actor::run(executor::execution_device *e, size_t max_throughput) {
+
             device(e);
             for (;;) {
+
                 messaging::message msg_ptr = next_message();
                 if (msg_ptr) {
                     behavior::context context_(this, std::move(msg_ptr));
-                    life->run(context_);
+                    reactions_.execute(context_);
                 } else {
                     return executor::executable_result::done;
                 }
             }
             return executor::executable_result::done;
+
         }
 
         void blocking_actor::launch(executor::execution_device *e, bool hide) {
@@ -31,9 +34,21 @@ namespace actor_zeta {
             }
         }
 
-        blocking_actor::blocking_actor(environment::abstract_environment *env,mailbox_type* mail,behavior::abstract_behavior* behavior_ptr, const std::string &type)
-                : local_actor(env,mail,behavior_ptr, type) {}
+        blocking_actor::blocking_actor(environment::abstract_environment *env,mailbox_type* mail, const std::string &type)
+                : local_actor(env, type),
+                  mailbox_(mail) {
+
+        }
+
+        messaging::message blocking_actor::next_message() {
+            return mailbox().get();
+        }
 
         blocking_actor::~blocking_actor() {}
+
+        blocking_actor::mailbox_type &blocking_actor::mailbox() {
+            return *mailbox_;
+        }
+
     }
 }

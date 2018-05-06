@@ -13,14 +13,12 @@ list(APPEND HEADER_FILES
         actor-zeta/actor/basic_actor.hpp
         actor-zeta/actor/blocking_actor.hpp
         actor-zeta/actor/local_actor.hpp
-        actor-zeta/actor/scheduled_actor.hpp
+        actor-zeta/actor/async_actor.hpp
 
         actor-zeta/behavior/abstract_action.hpp
-        actor-zeta/behavior/abstract_behavior.hpp
-        actor-zeta/behavior/fsm.hpp
+        actor-zeta/behavior/reactions.hpp
         actor-zeta/behavior/context.hpp
         actor-zeta/behavior/type_action.hpp
-        actor-zeta/behavior/state.hpp
 
         actor-zeta/channel/abstract_channel.hpp
         actor-zeta/channel/channel.hpp
@@ -64,11 +62,10 @@ list(APPEND SOURCE_FILES
         source/actor/actor_address.cpp
         source/actor/blocking_actor.cpp
         source/actor/local_actor.cpp
-        source/actor/scheduled_actor.cpp
+        source/actor/async_actor.cpp
 
-        source/behavior/fsm.cpp
+        source/behavior/reactions.cpp
         source/behavior/context.cpp
-        source/behavior/state.cpp
         source/behavior/type_action.cpp
         source/behavior/abstract_action.cpp
 
@@ -85,6 +82,7 @@ list(APPEND SOURCE_FILES
 
         source/messaging/message.cpp
         source/messaging/message_header.cpp
+        source/messaging/blocking_mail_queue.cpp
 
         source/standard_handlers/add_channel.cpp
         source/standard_handlers/skip.cpp
