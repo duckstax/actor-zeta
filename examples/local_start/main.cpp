@@ -18,12 +18,13 @@ using actor_zeta::actor::basic_async_actor;
 
 class storage_t final : public basic_async_actor {
 public:
-    storage_t(abstract_environment *ptr) : basic_async_actor(ptr, "storage") {
+    storage_t(abstract_environment *ptr): basic_async_actor(ptr,"storage"){
         attach(
                 make_handler(
                         "update",
-                        [this](context &ctx) -> void {
+                        [this]( context& ctx ) -> void {
 
+                        std::cerr<<"update"<<std::endl;
 
                         }
                 )
@@ -34,6 +35,8 @@ public:
                         "find",
                         [this]( context& ctx ) -> void {
 
+                        std::cerr<<"find"<<std::endl;
+
                         }
                 )
         );
@@ -43,38 +46,56 @@ public:
                         "remove",
                         [this]( context& ctx ) -> void {
 
+                        std::cerr<<"remove"<<std::endl;
+
                         }
                 )
         );
-    }
 
+
+
+    }
 
     ~storage_t() override = default;
 
 
 private:
-    std::unordered_map<std::string, std::string> storage_;
 
 };
 
 
+
 int main() {
 
-    auto *storage_tmp = new storage_t(nullptr);
+    auto* storage_tmp = new storage_t(nullptr);
 
     actor_zeta::actor::actor storage(storage_tmp);
 
-    assert(std::string("storage") == storage->name());
+    storage->send(
+        make_message(
+                actor_zeta::actor::actor_address(),
+                "update",
+                std::string("payload")
+        )
+    );
 
-    auto tmp = storage->message_types();
+    storage->send(
+            make_message(
+                    actor_zeta::actor::actor_address(),
+                    "find",
+                    std::string("payload")
+            )
+    );
 
-    std::set<std::string> control = {"add_channel", "skip", "sync_contacts", "update", "remove", "find"};
+    storage->send(
+            make_message(
+                    actor_zeta::actor::actor_address(),
+                    "remove",
+                    std::string("payload")
+            )
+    );
 
-    std::set<std::string> diff;
-
-    std::set_difference(tmp.begin(), tmp.end(), control.begin(), control.end(), std::inserter(diff, diff.begin()));
-
-    assert(diff.empty());
+    storage_tmp->launch(nullptr, false);
 
     return 0;
 }
