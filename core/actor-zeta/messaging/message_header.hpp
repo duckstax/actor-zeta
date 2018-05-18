@@ -26,23 +26,16 @@ namespace actor_zeta {
 
             message_header(actor::actor_address sender_, const std::string& name);
 
-            message_header(actor::actor_address sender_, const std::string& name, actor::actor_address recipient_);
-
             message_header(actor::actor_address sender_, const std::string& name, message_priority p);
-
-            message_header(actor::actor_address sender_, const std::string& name, message_priority p, actor::actor_address recipient_);
 
             auto  priorities() const -> message_priority;
 
             auto command() const noexcept -> const behavior::type_action &;
 
-            auto recipient() const -> actor::actor_address ;
-
             auto sender() const -> actor::actor_address ;
 
         private:
             actor::actor_address sender_;
-            actor::actor_address recipient_;
             behavior::type_action command_;
             message_priority prioritie;
         };

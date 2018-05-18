@@ -30,21 +30,13 @@ namespace actor_zeta {
 
             message(actor::actor_address /*sender*/, const std::string& /*name*/, message_body &&/*body*/);
 
-            message(actor::actor_address /*sender*/, const std::string& /*name*/, message_body &&/*body*/, actor::actor_address /*address*/);
-
             message(actor::actor_address /*sender*/, const std::string& /*name*/, message_body &&/*body*/, message_priority /*priority*/);
-
-            message(actor::actor_address /*sender*/, const std::string& /*name*/, message_body &&/*body*/, message_priority /*priority*/, actor::actor_address /*address*/);
 
             auto priority() const -> message_priority;
 
             auto command() const noexcept -> const behavior::type_action &;
 
-            auto recipient() const -> actor::actor_address ;
-
             auto sender() const -> actor::actor_address ;
-
-            auto is_callback() const -> bool;
 
             template<typename T>
             auto get() -> T {
@@ -70,10 +62,6 @@ namespace actor_zeta {
             return message(sender_,name, std::forward<T>(data));
         }
 
-        template <typename T>
-        inline auto make_message(actor::actor_address sender_,const std::string &name, T &&data, actor::actor_address address) -> message {
-            return message(sender_,name, std::forward<T>(data), address);
-        }
     }
 }
 #endif
