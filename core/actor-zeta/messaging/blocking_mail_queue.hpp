@@ -34,11 +34,7 @@ namespace actor_zeta { namespace messaging {
 
         private:
 
-            cache_type &low_priority_cache();
-
-            cache_type &normal_priority_cache();
-
-            cache_type &high_priority_cache();
+            cache_type &cache();
 
             void sync();
 
@@ -47,9 +43,7 @@ namespace actor_zeta { namespace messaging {
             
             queue_base_type mail_queue;
             queue_base_type local_queue;
-            cache_type low_priority_cache_;
-            cache_type normal_priority_cache_;
-            cache_type high_priority_cache_;
+            cache_type cache_;
         };
     }
 }

@@ -8,7 +8,6 @@
 #include <actor-zeta/environment/environment.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
-#include <actor-zeta/messaging/message_priority.hpp>
 #include <actor-zeta/standard_handlers/add_channel.hpp>
 #include <actor-zeta/channel/channel.hpp>
 

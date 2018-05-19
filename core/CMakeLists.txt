@@ -42,9 +42,8 @@ list(APPEND HEADER_FILES
         actor-zeta/messaging/blocking_mail_queue.hpp
         actor-zeta/messaging/mail_box.hpp
         actor-zeta/messaging/message.hpp
-        actor-zeta/messaging/message_body.hpp
+        actor-zeta/messaging/any.hpp
         actor-zeta/messaging/message_header.hpp
-        actor-zeta/messaging/message_priority.hpp
 
         actor-zeta/standard_handlers/add_channel.hpp
         actor-zeta/standard_handlers/sync_contacts.hpp

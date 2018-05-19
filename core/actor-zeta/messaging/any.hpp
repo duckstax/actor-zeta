@@ -12,47 +12,47 @@ namespace actor_zeta {
 ///
 /// @brief
 ///
-        class message_body final {
+        class any final {
         public:
-            constexpr message_body() noexcept: content(nullptr) {}
+            constexpr any() noexcept: content(nullptr) {}
 
             template<typename ValueType>
-            message_body(const ValueType &value): content(new holder<ValueType>(value)) {}
+            any(const ValueType &value): content(new holder<ValueType>(value)) {}
 
-            message_body(const message_body &other) : content(other.content ? other.content->clone() : nullptr) {}
+            any(const any &other) : content(other.content ? other.content->clone() : nullptr) {}
 
-            message_body(message_body &&other) noexcept : content(other.content) {
+            any(any &&other) noexcept : content(other.content) {
                 other.content = nullptr;
             }
 
             template<typename ValueType>
-            message_body(ValueType &&value) : content(new holder<ValueType>(std::forward<ValueType>(value))) {}
+            any(ValueType &&value) : content(new holder<ValueType>(std::forward<ValueType>(value))) {}
 
 
-            ~message_body() noexcept {
+            ~any() noexcept {
                 delete content;
             }
 
-            message_body &swap(message_body &rhs) noexcept {
+            any &swap(any &rhs) noexcept {
                 using std::swap;
                 std::swap(content, rhs.content);
                 return *this;
             }
 
-            message_body &operator=(const message_body &rhs) {
-                message_body(rhs).swap(*this);
+            any &operator=(const any &rhs) {
+                any(rhs).swap(*this);
                 return *this;
             }
 
-            message_body &operator=(message_body &&rhs)noexcept {
+            any &operator=(any &&rhs)noexcept {
                 rhs.swap(*this);
-                message_body().swap(rhs);
+                any().swap(rhs);
                 return *this;
             }
 
             template<class ValueType>
-            message_body &operator=(ValueType &&rhs) {
-                message_body(std::forward<ValueType>(rhs)).swap(*this);
+            any &operator=(ValueType &&rhs) {
+                any(std::forward<ValueType>(rhs)).swap(*this);
                 return *this;
             }
 
@@ -61,7 +61,7 @@ namespace actor_zeta {
             }
 
             void clear() noexcept {
-                message_body().swap(*this);
+                any().swap(*this);
             }
 
             template<typename T>
@@ -104,7 +104,7 @@ namespace actor_zeta {
     }
 }
 
-inline void swap(actor_zeta::messaging::message_body &lhs, actor_zeta::messaging::message_body &rhs)noexcept {
+inline void swap(actor_zeta::messaging::any &lhs, actor_zeta::messaging::any &rhs)noexcept {
     lhs.swap(rhs);
 }
 

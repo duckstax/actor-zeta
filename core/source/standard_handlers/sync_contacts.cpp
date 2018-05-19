@@ -14,7 +14,7 @@ namespace actor_zeta {
     sync_contacts::sync_contacts() :  abstract_action("sync_contacts") {}
 
     void sync_contacts::invoke(behavior::context & context_) {
-        auto address = context_.message().get<actor::actor_address>();
+        auto address = context_.message().body<actor::actor_address>();
 
         if(address){
             context_->address(address);

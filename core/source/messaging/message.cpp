@@ -14,26 +14,17 @@ namespace actor_zeta {
             impl &operator=(const impl &t) = delete;
             ~impl() = default;
 
-            impl(actor::actor_address sender_,const std::string& name, message_body &&body)
+            impl(actor::actor_address sender_,const std::string& name, any &&body)
                     :header_(std::move(sender_),name),body_(std::move(body)) {}
 
-            impl(actor::actor_address sender_,const std::string& name, message_body &&body, message_priority priority)
-                    :header_(std::move(sender_),name,priority),body_(std::move(body)) {}
-
-
-            impl(message_header header, const message_body &body)
+            impl(message_header header, const any &body)
                     :header_(std::move(header)),body_(body) {}
 
             message_header header_;
-            message_body   body_;
+            any   body_;
 
         };
-
-        message_priority message::priority() const {
-
-            return pimpl->header_.priorities();
-        }
-
+        
         auto message::command() const -> const behavior::type_action & {
             return pimpl->header_.command();
         }
@@ -46,17 +37,14 @@ namespace actor_zeta {
             return bool(pimpl);
         }
 
-        auto message::get_body() -> message_body & {
+        auto message::get_body() -> any & {
             return pimpl->body_;
         }
 
-        message::message(actor::actor_address sender_,const std::string& name, message_body &&body)
+        message::message(actor::actor_address sender_,const std::string& name, any &&body)
                 :pimpl(new impl(std::move(sender_),name,std::move(body))) {}
 
-        message::message(actor::actor_address sender_,const std::string& name, message_body &&body, message_priority priority)
-                :pimpl(new impl(std::move(sender_),name,std::move(body),priority)) {}
-
-        message::message(const message_header &header, const message_body &body):pimpl(new impl(header,body)) {}
+        message::message(const message_header &header, const any &body):pimpl(new impl(header,body)) {}
 
 
         auto message::sender() const -> actor::actor_address {

@@ -33,23 +33,8 @@ namespace actor_zeta { namespace messaging {
 
         bool blocking_mail_queue::push_to_cache(messaging::message &&msg_ptr) {
             if (msg_ptr) {
-                switch (msg_ptr.priority()) {
-
-                    case messaging::message_priority::low: {
-                        low_priority_cache().push_back(std::move(msg_ptr));
-                        return true;
-                    }
-
-                    case messaging::message_priority::normal: {
-                        normal_priority_cache().push_back(std::move(msg_ptr));
-                        return true;
-                    }
-
-                    case messaging::message_priority::high: {
-                        high_priority_cache().push_back(std::move(msg_ptr));
-                        return true;
-                    }
-                }
+                cache().push_back(std::move(msg_ptr));
+                return true;
             } else {
                 return false;
             }
@@ -57,37 +42,18 @@ namespace actor_zeta { namespace messaging {
 
         messaging::message blocking_mail_queue::pop_to_cache() {
             messaging::message msg_ptr;
-            if (!high_priority_cache().empty()) {
-                msg_ptr = std::move(high_priority_cache().front());
-                high_priority_cache().pop_front();
-                return msg_ptr;
-            }
-
-            if (!normal_priority_cache().empty()) {
-                msg_ptr =std::move( normal_priority_cache().front());
-                normal_priority_cache().pop_front();
-                return msg_ptr;
-            }
-
-            if (!low_priority_cache().empty()) {
-                msg_ptr = std::move(low_priority_cache().front());
-                low_priority_cache().pop_front();
+            if (!cache().empty()) {
+                msg_ptr = std::move(cache().front());
+                cache().pop_front();
                 return msg_ptr;
             }
             return msg_ptr;
         }
 
-        blocking_mail_queue::cache_type &blocking_mail_queue::low_priority_cache() {
-            return low_priority_cache_;
+        blocking_mail_queue::cache_type &blocking_mail_queue::cache() {
+            return cache_;
         }
 
-        blocking_mail_queue::cache_type &blocking_mail_queue::normal_priority_cache() {
-            return normal_priority_cache_;
-        }
-
-        blocking_mail_queue::cache_type &blocking_mail_queue::high_priority_cache() {
-            return high_priority_cache_;
-        }
 
         void blocking_mail_queue::sync() {
             lock_guard lock(mutex);

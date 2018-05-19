@@ -5,8 +5,7 @@
 
 #include <actor-zeta/behavior/type_action.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
-#include <actor-zeta/messaging/message_body.hpp>
-#include <actor-zeta/messaging/message_priority.hpp>
+#include <actor-zeta/messaging/any.hpp>
 #include <actor-zeta/messaging/message_header.hpp>
 
 namespace actor_zeta {
@@ -28,18 +27,14 @@ namespace actor_zeta {
 
             ~message();
 
-            message(actor::actor_address /*sender*/, const std::string& /*name*/, message_body &&/*body*/);
-
-            message(actor::actor_address /*sender*/, const std::string& /*name*/, message_body &&/*body*/, message_priority /*priority*/);
-
-            auto priority() const -> message_priority;
+            message(actor::actor_address /*sender*/, const std::string& /*name*/, any &&/*body*/);
 
             auto command() const noexcept -> const behavior::type_action &;
 
             auto sender() const -> actor::actor_address ;
 
             template<typename T>
-            auto get() -> T {
+            auto body() -> T {
                 return get_body().get<T>();
             }
 
@@ -48,9 +43,9 @@ namespace actor_zeta {
             operator bool();
 
         private:
-            message(const message_header &header, const message_body &body);
+            message(const message_header &header, const any &body);
 
-            auto get_body() -> message_body &;
+            auto get_body() -> any &;
 
             struct impl;
 
