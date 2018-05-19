@@ -5,8 +5,7 @@
 
 #include <actor-zeta/behavior/type_action.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
-#include <actor-zeta/messaging/message_body.hpp>
-#include <actor-zeta/messaging/message_priority.hpp>
+#include <actor-zeta/messaging/any.hpp>
 #include <actor-zeta/messaging/message_header.hpp>
 
 namespace actor_zeta {
@@ -28,26 +27,14 @@ namespace actor_zeta {
 
             ~message();
 
-            message(actor::actor_address /*sender*/, const std::string& /*name*/, message_body &&/*body*/);
-
-            message(actor::actor_address /*sender*/, const std::string& /*name*/, message_body &&/*body*/, actor::actor_address /*address*/);
-
-            message(actor::actor_address /*sender*/, const std::string& /*name*/, message_body &&/*body*/, message_priority /*priority*/);
-
-            message(actor::actor_address /*sender*/, const std::string& /*name*/, message_body &&/*body*/, message_priority /*priority*/, actor::actor_address /*address*/);
-
-            auto priority() const -> message_priority;
+            message(actor::actor_address /*sender*/, const std::string& /*name*/, any &&/*body*/);
 
             auto command() const noexcept -> const behavior::type_action &;
 
-            auto recipient() const -> actor::actor_address ;
-
             auto sender() const -> actor::actor_address ;
 
-            auto is_callback() const -> bool;
-
             template<typename T>
-            auto get() -> T {
+            auto body() -> T {
                 return get_body().get<T>();
             }
 
@@ -56,9 +43,9 @@ namespace actor_zeta {
             operator bool();
 
         private:
-            message(const message_header &header, const message_body &body);
+            message(const message_header &header, const any &body);
 
-            auto get_body() -> message_body &;
+            auto get_body() -> any &;
 
             struct impl;
 
@@ -70,10 +57,6 @@ namespace actor_zeta {
             return message(sender_,name, std::forward<T>(data));
         }
 
-        template <typename T>
-        inline auto make_message(actor::actor_address sender_,const std::string &name, T &&data, actor::actor_address address) -> message {
-            return message(sender_,name, std::forward<T>(data), address);
-        }
     }
 }
 #endif

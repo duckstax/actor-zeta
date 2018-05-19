@@ -51,7 +51,7 @@ public:
                 make_handler(
                         "update",
                         [this,self]( context& ctx ) -> void {
-                            auto tmp = ctx.message().get<query_t>();
+                            auto tmp = ctx.message().body<query_t>();
                             auto status = update(tmp.parameter[0],tmp.parameter[1]);
                             assert(in("1qaz"));
                             assert(find("1qaz")=="7");
@@ -138,7 +138,7 @@ public:
                 make_handler(
                         "read",
                         [this,self](context& ctx) -> void {
-                            auto query_raw = ctx.message().get<query_raw_t>();
+                            auto query_raw = ctx.message().body<query_raw_t>();
                             auto raw = query_raw.raw;
                             std::vector<buffer> parsed_raw_request;
                             std::string delimiter(".");
@@ -172,7 +172,7 @@ public:
                 make_handler(
                         "write",
                         [this](context& ctx) -> void {
-                            auto response = ctx.message().get<response_t>();
+                            auto response = ctx.message().body<response_t>();
                             multiplexer_->write(response.id,response.r_);
                         }
                 )
@@ -182,7 +182,7 @@ public:
                 make_handler(
                         "close",
                         [this](context& ctx) -> void {
-                            auto response = ctx.message().get<response_t>();
+                            auto response = ctx.message().body<response_t>();
                             multiplexer_->close(response.id);
                         }
                 )
