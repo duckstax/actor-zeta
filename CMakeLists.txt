@@ -13,14 +13,15 @@ option(EXAMPLES "Enable building examples" ON)
 message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
 
-add_compile_options(
-        -std=c++11
-        -v
-        -fno-rtti
-        -fno-exceptions
-)
+add_compile_options(-std=c++11)
 
-IF(NOT APPLE)
+if(NOT WIN32)
+  add_compile_options(-v
+                      -fno-rtti
+                      -fno-exceptions)
+endif()
+
+IF(NOT APPLE AND NOT WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -pthread ")
 ENDIF()
 
