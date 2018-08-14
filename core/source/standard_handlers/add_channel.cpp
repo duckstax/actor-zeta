@@ -6,7 +6,7 @@
 
 namespace actor_zeta {
 
-    void error(const std::string &name) {
+    inline void error(const std::string &name) {
         std::cerr << "WARNING" << std::endl;
         std::cerr << "Not initialization channel type:" << name << std::endl;
         std::cerr << "WARNING" << std::endl;

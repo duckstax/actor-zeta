@@ -17,8 +17,10 @@ This project is in a very early / experimental stage.
 
 * GCC >= 4.8
 * Clang >= 3.3
+* MVC++ >= 2015
 
 ## Supported Operating Systems
 
 * Linux
 * Mac OS X
+* Windows

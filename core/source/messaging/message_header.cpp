@@ -4,7 +4,7 @@
 namespace actor_zeta {
     namespace messaging {
 
-        auto message_header::command() const -> const behavior::type_action & {
+        auto message_header::command() const noexcept -> const behavior::type_action & {
             return command_;
         }
 

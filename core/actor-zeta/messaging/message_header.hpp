@@ -17,9 +17,9 @@ namespace actor_zeta {
 
             message_header &operator=(const message_header &) = default;
 
-            message_header(message_header &&) noexcept = default;
+            message_header(message_header &&) = default;
 
-            message_header &operator=(message_header &&) noexcept = default;
+            message_header &operator=(message_header &&) = default;
 
             ~message_header() = default;
 
