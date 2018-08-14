@@ -17,13 +17,13 @@ namespace actor_zeta {
         public:
             message();
 
-            message(const message &) = delete;
+            message(const message &) noexcept = delete;
 
-            message &operator=(const message &) = delete;
+            message &operator=(const message &) noexcept = delete;
 
-            message(message &&) noexcept ;
+            message(message &&) noexcept;
 
-            message &operator=(message &&) noexcept ;
+            message &operator=(message &&) noexcept;
 
             ~message();
 
