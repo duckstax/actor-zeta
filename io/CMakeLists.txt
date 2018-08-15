@@ -1,44 +1,28 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(PROJECT actor-zeta-io)
-
-project(${PROJECT} CXX)
-
 include_directories(.)
 
-list(APPEND HEADER_FILES
-        actor-zeta/actor/broker.hpp
+set(PREFIX "${CMAKE_CURRENT_SOURCE_DIR}")
 
-        actor-zeta/environment/network_environment.hpp
+set(HEADERS "${HEADERS}"
+        ${PREFIX}/actor-zeta/actor/broker.hpp
 
-        actor-zeta/network/multiplexer.hpp
-        actor-zeta/network/connection_identifying.hpp
-        actor-zeta/network/fake_multiplexer.hpp
-        actor-zeta/forwards.hpp
+        ${PREFIX}/actor-zeta/environment/network_environment.hpp
+
+        ${PREFIX}/actor-zeta/network/multiplexer.hpp
+        ${PREFIX}/actor-zeta/network/connection_identifying.hpp
+        ${PREFIX}/actor-zeta/network/fake_multiplexer.hpp
+        ${PREFIX}/actor-zeta/forwards.hpp
+
+        PARENT_SCOPE
 )
 
-list(APPEND SOURCE_FILES
-        source/network/connection_identifying.cpp
-        source/network/fake_multiplexer.cpp
-        source/broker.cpp
+set(SOURCES "${SOURCES}"
+        ${PREFIX}/source/network/connection_identifying.cpp
+        ${PREFIX}/source/network/fake_multiplexer.cpp
+        ${PREFIX}/source/broker.cpp
+
+        PARENT_SCOPE
 )
 
-add_library(
-        ${PROJECT}
-        ${SOURCE_FILES}
-        ${HEADER_FILES}
-)
-
-target_link_libraries(
-        ${PROJECT}
-        PUBLIC
-        actor-zeta-core
-)
-
-set_target_properties( ${PROJECT} PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/io)
-
-target_include_directories(
-        ${PROJECT}
-        PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/header
-)
+set(IMPORT_LOCATIONS "${IMPORT_LOCATIONS}" ${CMAKE_CURRENT_SOURCE_DIR}/io PARENT_SCOPE)

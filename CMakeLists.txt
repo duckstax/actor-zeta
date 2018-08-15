@@ -56,6 +56,9 @@ if(CMAKE_GENERATOR STREQUAL Xcode)
     configure_file(.clang-tidy .clang-tidy COPYONLY)
 endif()
 
+set(HEADERS "")
+set(SOURCES "")
+set(IMPORT_LOCATIONS "")
 
 include_directories(
         core
@@ -74,6 +77,9 @@ add_subdirectory(core)
 if(IO)
     add_subdirectory(io)
 endif()
+
+add_library(${PROJECT} STATIC ${HEADERS} ${SOURCES})
+set_target_properties(${PROJECT} PROPERTIES IMPORTED_LOCATION "${IMPORT_LOCATIONS}")
 
 if(EXAMPLES)
     add_subdirectory(examples)

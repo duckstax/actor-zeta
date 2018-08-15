@@ -1,105 +1,94 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(PROJECT actor-zeta-core)
-
-project(${PROJECT} CXX)
-
 include_directories(.)
 
-list(APPEND HEADER_FILES
-        actor-zeta/actor/abstract_actor.hpp
-        actor-zeta/actor/actor.hpp
-        actor-zeta/actor/actor_address.hpp
-        actor-zeta/actor/basic_actor.hpp
-        actor-zeta/actor/blocking_actor.hpp
-        actor-zeta/actor/local_actor.hpp
-        actor-zeta/actor/async_actor.hpp
+set(PREFIX "${CMAKE_CURRENT_SOURCE_DIR}")
 
-        actor-zeta/behavior/abstract_action.hpp
-        actor-zeta/behavior/reactions.hpp
-        actor-zeta/behavior/context.hpp
-        actor-zeta/behavior/type_action.hpp
+set(HEADERS ${HEADERS}
+        ${PREFIX}/actor-zeta/actor/abstract_actor.hpp
+        ${PREFIX}/actor-zeta/actor/actor.hpp
+        ${PREFIX}/actor-zeta/actor/actor_address.hpp
+        ${PREFIX}/actor-zeta/actor/basic_actor.hpp
+        ${PREFIX}/actor-zeta/actor/blocking_actor.hpp
+        ${PREFIX}/actor-zeta/actor/local_actor.hpp
+        ${PREFIX}/actor-zeta/actor/async_actor.hpp
 
-        actor-zeta/channel/abstract_channel.hpp
-        actor-zeta/channel/channel.hpp
+        ${PREFIX}/actor-zeta/behavior/abstract_action.hpp
+        ${PREFIX}/actor-zeta/behavior/reactions.hpp
+        ${PREFIX}/actor-zeta/behavior/context.hpp
+        ${PREFIX}/actor-zeta/behavior/type_action.hpp
 
-        actor-zeta/environment/abstract_environment.hpp
-        actor-zeta/environment/abstract_group.hpp
-        actor-zeta/environment/adjacency_list.hpp
-        actor-zeta/environment/cooperation.hpp
-        actor-zeta/environment/environment.hpp
-        actor-zeta/environment/group.hpp
-        actor-zeta/environment/storage_space.hpp
+        ${PREFIX}/actor-zeta/channel/abstract_channel.hpp
+        ${PREFIX}/actor-zeta/channel/channel.hpp
 
-        actor-zeta/executor/policy/work_sharing.hpp
-        actor-zeta/executor/abstract_coordinator.hpp
-        actor-zeta/executor/coordinator.hpp
-        actor-zeta/executor/executable.hpp
-        actor-zeta/executor/execution_device.hpp
-        actor-zeta/executor/time_unit.hpp
-        actor-zeta/executor/worker.hpp
+        ${PREFIX}/actor-zeta/environment/abstract_environment.hpp
+        ${PREFIX}/actor-zeta/environment/abstract_group.hpp
+        ${PREFIX}/actor-zeta/environment/adjacency_list.hpp
+        ${PREFIX}/actor-zeta/environment/cooperation.hpp
+        ${PREFIX}/actor-zeta/environment/environment.hpp
+        ${PREFIX}/actor-zeta/environment/group.hpp
+        ${PREFIX}/actor-zeta/environment/storage_space.hpp
 
-        actor-zeta/messaging/blocking_mail_queue.hpp
-        actor-zeta/messaging/mail_box.hpp
-        actor-zeta/messaging/message.hpp
-        actor-zeta/messaging/any.hpp
-        actor-zeta/messaging/message_header.hpp
+        ${PREFIX}/actor-zeta/executor/policy/work_sharing.hpp
+        ${PREFIX}/actor-zeta/executor/abstract_coordinator.hpp
+        ${PREFIX}/actor-zeta/executor/coordinator.hpp
+        ${PREFIX}/actor-zeta/executor/executable.hpp
+        ${PREFIX}/actor-zeta/executor/execution_device.hpp
+        ${PREFIX}/actor-zeta/executor/time_unit.hpp
+        ${PREFIX}/actor-zeta/executor/worker.hpp
 
-        actor-zeta/standard_handlers/add_channel.hpp
-        actor-zeta/standard_handlers/sync_contacts.hpp
-        actor-zeta/standard_handlers/skip.hpp
+        ${PREFIX}/actor-zeta/messaging/blocking_mail_queue.hpp
+        ${PREFIX}/actor-zeta/messaging/mail_box.hpp
+        ${PREFIX}/actor-zeta/messaging/message.hpp
+        ${PREFIX}/actor-zeta/messaging/any.hpp
+        ${PREFIX}/actor-zeta/messaging/message_header.hpp
 
-        actor-zeta/forwards.hpp
-        actor-zeta/intrusive_ptr.hpp
-        actor-zeta/metadata.hpp
-        actor-zeta/ref_counted.hpp
+        ${PREFIX}/actor-zeta/standard_handlers/add_channel.hpp
+        ${PREFIX}/actor-zeta/standard_handlers/sync_contacts.hpp
+        ${PREFIX}/actor-zeta/standard_handlers/skip.hpp
+
+        ${PREFIX}/actor-zeta/forwards.hpp
+        ${PREFIX}/actor-zeta/intrusive_ptr.hpp
+        ${PREFIX}/actor-zeta/metadata.hpp
+        ${PREFIX}/actor-zeta/ref_counted.hpp
+
+        PARENT_SCOPE
 )
 
-list(APPEND SOURCE_FILES
-        source/actor/abstract_actor.cpp
-        source/actor/actor.cpp
-        source/actor/actor_address.cpp
-        source/actor/blocking_actor.cpp
-        source/actor/local_actor.cpp
-        source/actor/async_actor.cpp
+set(SOURCES "${SOURCES}"
+        ${PREFIX}/source/actor/abstract_actor.cpp
+        ${PREFIX}/source/actor/actor.cpp
+        ${PREFIX}/source/actor/actor_address.cpp
+        ${PREFIX}/source/actor/blocking_actor.cpp
+        ${PREFIX}/source/actor/local_actor.cpp
+        ${PREFIX}/source/actor/async_actor.cpp
 
-        source/behavior/reactions.cpp
-        source/behavior/context.cpp
-        source/behavior/type_action.cpp
-        source/behavior/abstract_action.cpp
+        ${PREFIX}/source/behavior/reactions.cpp
+        ${PREFIX}/source/behavior/context.cpp
+        ${PREFIX}/source/behavior/type_action.cpp
+        ${PREFIX}/source/behavior/abstract_action.cpp
 
-        source/channel/abstract_channel.cpp
-        source/channel/channel.cpp
+        ${PREFIX}/source/channel/abstract_channel.cpp
+        ${PREFIX}/source/channel/channel.cpp
 
-        source/environment/abstract_environment.cpp
-        source/environment/storage_space.cpp
-        source/environment/abstract_group.cpp
-        source/environment/cooperation.cpp
-        source/environment/environment.cpp
-        source/environment/group.cpp
-        source/environment/storage_space.cpp
+        ${PREFIX}/source/environment/abstract_environment.cpp
+        ${PREFIX}/source/environment/storage_space.cpp
+        ${PREFIX}/source/environment/abstract_group.cpp
+        ${PREFIX}/source/environment/cooperation.cpp
+        ${PREFIX}/source/environment/environment.cpp
+        ${PREFIX}/source/environment/group.cpp
+        ${PREFIX}/source/environment/storage_space.cpp
 
-        source/messaging/message.cpp
-        source/messaging/message_header.cpp
-        source/messaging/blocking_mail_queue.cpp
+        ${PREFIX}/source/messaging/message.cpp
+        ${PREFIX}/source/messaging/message_header.cpp
+        ${PREFIX}/source/messaging/blocking_mail_queue.cpp
 
-        source/standard_handlers/add_channel.cpp
-        source/standard_handlers/skip.cpp
-        source/standard_handlers/sync_contacts.cpp
-        source/ref_counted.cpp
+        ${PREFIX}/source/standard_handlers/add_channel.cpp
+        ${PREFIX}/source/standard_handlers/skip.cpp
+        ${PREFIX}/source/standard_handlers/sync_contacts.cpp
+        ${PREFIX}/source/ref_counted.cpp
+
+        PARENT_SCOPE
 )
 
-add_library(
-        ${PROJECT}
-        ${SOURCE_FILES}
-        ${HEADER_FILES}
-)
-
-
-set_target_properties( ${PROJECT} PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/core)
-
-target_include_directories(
-        ${PROJECT}
-        PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/header
-)
+set(IMPORT_LOCATIONS "${IMPORT_LOCATIONS}" ${CMAKE_CURRENT_SOURCE_DIR}/io PARENT_SCOPE)
