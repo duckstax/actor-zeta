@@ -25,7 +25,7 @@ namespace actor_zeta {
 
         };
         
-        auto message::command() const -> const behavior::type_action & {
+        auto message::command() const noexcept -> const behavior::type_action & {
             return pimpl->header_.command();
         }
 
@@ -55,8 +55,8 @@ namespace actor_zeta {
 
         message::message() = default;
 
-        message::message(message &&other) = default;
+        message::message(message &&other) noexcept = default;
 
-        message &message::operator=(message &&)  = default;
+        message &message::operator=(message &&) noexcept = default;
     }
 }

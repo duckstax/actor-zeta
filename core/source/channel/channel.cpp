@@ -4,19 +4,19 @@ namespace actor_zeta {
 
         channel::channel(abstract_channel *ac) : channel_(ac) {}
 
-        abstract_channel *channel::operator->() const {
+        abstract_channel *channel::operator->() const noexcept {
             return channel_.get();
         }
 
-        channel::operator bool() const {
+        channel::operator bool() const noexcept {
             return static_cast<bool>(channel_);
         }
 
-        bool channel::operator!() const {
+        bool channel::operator!() const noexcept {
             return !channel_;
         }
 
-        void channel::swap(channel &other) {
+        void channel::swap(channel &other) noexcept {
             using std::swap;
             channel_.swap(other.channel_);
         }

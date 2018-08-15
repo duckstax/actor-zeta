@@ -8,7 +8,7 @@
 namespace actor_zeta {
     namespace behavior {
 
-        void error(const std::string &_error_) {
+        inline void error(const std::string &_error_) {
             std::cerr << "Duplicate" << std::endl;
             std::cerr << "Handler: " << _error_ << std::endl;
             std::cerr << "Duplicate" << std::endl;
