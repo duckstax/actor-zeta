@@ -4,19 +4,19 @@
 namespace actor_zeta {
     namespace environment {
 
-        auto environment::operator->() -> abstract_environment * {
+        auto environment::operator->() noexcept -> abstract_environment * {
             return environment_.get();
         }
 
-        environment::operator bool() const {
+        environment::operator bool() const noexcept {
             return static_cast<bool>(environment_);
         }
 
-        bool environment::operator!() const {
+        bool environment::operator!() const noexcept {
             return !environment_;
         }
 
-        void environment::swap(environment &env) {
+        void environment::swap(environment &env) noexcept {
             using std::swap;
             environment_.swap(env.environment_);
         }

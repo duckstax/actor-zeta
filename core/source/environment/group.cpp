@@ -3,7 +3,7 @@
 
 namespace actor_zeta {
     namespace environment {
-        auto group::operator->() -> abstract_group * {
+        auto group::operator->() noexcept -> abstract_group * {
             return group_.get();
         }
 
@@ -11,15 +11,15 @@ namespace actor_zeta {
             return group_->channel();
         }
 
-        group::operator bool() const {
+        group::operator bool() const noexcept {
             return static_cast<bool>(group_);
         }
 
-        bool group::operator!() const {
+        bool group::operator!() const noexcept {
             return !group_;
         }
 
-        void group::swap(group &g) {
+        void group::swap(group &g) noexcept {
             using std::swap;
             group_.swap(g.group_);
         }

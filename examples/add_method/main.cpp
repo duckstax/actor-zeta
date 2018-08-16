@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <iterator>
 
 #include <actor-zeta/actor/actor.hpp>
 #include <actor-zeta/messaging/message.hpp>

@@ -34,6 +34,7 @@ namespace actor_zeta { namespace environment {
             int start() override final {
                 coordinator_->start();
                 multiplexer_->start();
+                return 0;
             }
 
             executor::abstract_coordinator &manager_execution_device() override final {

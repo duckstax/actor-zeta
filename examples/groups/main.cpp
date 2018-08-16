@@ -23,7 +23,7 @@ class dummy_environmentl final : public abstract_environment {
 public:
 
     int start() override {
-
+      return 0;
     }
 
     actor_zeta::executor::abstract_coordinator &manager_execution_device() override {
