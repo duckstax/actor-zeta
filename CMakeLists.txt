@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(PROJECT actor-zeta)
-
-project(${PROJECT} CXX)
+project(actor-zeta CXX)
 
 option(CMake_RUN_CLANG_TIDY "Run clang-tidy with the compiler." ON)
 
@@ -78,8 +76,8 @@ if(IO)
     add_subdirectory(io)
 endif()
 
-add_library(${PROJECT} STATIC ${HEADERS} ${SOURCES})
-set_target_properties(${PROJECT} PROPERTIES IMPORTED_LOCATION "${IMPORT_LOCATIONS}")
+add_library(${PROJECT_NAME} STATIC ${HEADERS} ${SOURCES})
+set_target_properties(${PROJECT_NAME} PROPERTIES IMPORTED_LOCATION "${IMPORT_LOCATIONS}")
 
 if(EXAMPLES)
     add_subdirectory(examples)
