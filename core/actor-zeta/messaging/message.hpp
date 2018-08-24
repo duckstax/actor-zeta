@@ -1,5 +1,4 @@
-#ifndef MESSAGE_HPP
-#define MESSAGE_HPP
+#pragma once
 
 #include <memory>
 
@@ -59,4 +58,3 @@ namespace actor_zeta {
 
     }
 }
-#endif

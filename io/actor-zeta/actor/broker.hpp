@@ -1,5 +1,4 @@
-#ifndef BROKER_HPP
-#define BROKER_HPP
+#pragma once
 
 #include <memory>
 #include "actor-zeta/actor/basic_actor.hpp"
@@ -27,4 +26,3 @@ namespace actor_zeta {
         };
     }
 }
-#endif //ABSTRACT_BROKER_HPP

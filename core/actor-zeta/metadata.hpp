@@ -1,5 +1,4 @@
-#ifndef ACTOR_ZETA_METADATA_HPP
-#define ACTOR_ZETA_METADATA_HPP
+#pragma once
 
 #include <string>
 
@@ -26,5 +25,3 @@ namespace actor_zeta {
         };
 
 } /// actor_zeta
-
-#endif //ACTOR_ZETA_METADATA_HPP

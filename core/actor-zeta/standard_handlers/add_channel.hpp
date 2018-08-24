@@ -1,5 +1,4 @@
-#ifndef ADD_CHANNEL_HPP
-#define ADD_CHANNEL_HPP
+#pragma once
 
 #include <actor-zeta/behavior/context.hpp>
 #include <actor-zeta/behavior/abstract_action.hpp>
@@ -16,4 +15,3 @@ namespace actor_zeta {
 
     };
 }
-#endif //ADD_CHANNEL_HPP

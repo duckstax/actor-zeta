@@ -1,5 +1,4 @@
-#ifndef BLOCKING_MAIL_QUEUE_HPP
-#define BLOCKING_MAIL_QUEUE_HPP
+#pragma once
 
 #include <mutex>
 #include <condition_variable>
@@ -47,4 +46,3 @@ namespace actor_zeta { namespace messaging {
         };
     }
 }
-#endif

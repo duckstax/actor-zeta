@@ -1,5 +1,4 @@
-#ifndef ABSTRACT_ACTION_HPP
-#define ABSTRACT_ACTION_HPP
+#pragma once
 
 #include <functional>
 
@@ -54,4 +53,3 @@ namespace actor_zeta { namespace behavior {
 
     } /// namespace behavior
 } /// namespace actor_zeta
-#endif

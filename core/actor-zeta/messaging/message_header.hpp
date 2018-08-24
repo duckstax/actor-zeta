@@ -1,5 +1,4 @@
-#ifndef MESSAGING_MESSAGE_HEADER_HPP
-#define MESSAGING_MESSAGE_HEADER_HPP
+#pragma once
 
 #include <actor-zeta/behavior/type_action.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
@@ -35,4 +34,3 @@ namespace actor_zeta {
         };
     }
 }
-#endif //MESSAGE_HEADER_HPP

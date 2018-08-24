@@ -1,5 +1,4 @@
-#ifndef ENVIRONMENT_HPP
-#define ENVIRONMENT_HPP
+#pragma once
 
 #include <actor-zeta/environment/abstract_environment.hpp>
 #include <memory>
@@ -49,5 +48,3 @@ namespace actor_zeta { namespace environment {
 
     } /// environment
 } /// actor_zeta
-
-#endif //ENVIRONMENT_HPP

@@ -1,5 +1,4 @@
-#ifndef REF_COUNTED_HPP
-#define REF_COUNTED_HPP
+#pragma once
 
 #include <atomic>
 #include <cstddef>
@@ -47,5 +46,3 @@ namespace actor_zeta {
     }
 
 }
-
-#endif // REF_COUNTED_HPP

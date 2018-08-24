@@ -1,5 +1,4 @@
-#ifndef CONTEXT_HPP
-#define CONTEXT_HPP
+#pragma once
 
 #include <stack>
 #include <actor-zeta/messaging/message.hpp>
@@ -52,5 +51,3 @@ namespace actor_zeta { namespace behavior {
 
 } // namespace behavior
 } // namespace actor_zeta
-
-#endif //CONTEXT_HPP

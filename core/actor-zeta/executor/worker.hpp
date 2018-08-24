@@ -1,5 +1,4 @@
-#ifndef WORKER_HPP
-#define WORKER_HPP
+#pragma once
 
 #include <thread>
 #include <atomic>
@@ -96,5 +95,3 @@ namespace actor_zeta {
         };
     }
 }
-
-#endif //WORKER_HPP

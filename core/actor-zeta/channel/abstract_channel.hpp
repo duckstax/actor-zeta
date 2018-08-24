@@ -1,5 +1,4 @@
-#ifndef ABSTRACT_CHANNEL_HPP
-#define ABSTRACT_CHANNEL_HPP
+#pragma once
 
 #include <string>
 #include <actor-zeta/forwards.hpp>
@@ -29,4 +28,3 @@ namespace actor_zeta { namespace channel {
         };
     }
 }
-#endif //ABSTRACT_CHANNEL_HPP

@@ -1,5 +1,4 @@
-#ifndef EXECUTABLE_HPP
-#define EXECUTABLE_HPP
+#pragma once
 
 #include "actor-zeta/forwards.hpp"
 
@@ -32,4 +31,3 @@ namespace actor_zeta {
         };
     }
 }
-#endif //EXECUTABLE_HPP

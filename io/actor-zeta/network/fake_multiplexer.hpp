@@ -1,5 +1,4 @@
-#ifndef ACTOR_ZETA_TEST_MULTIPLEXER_HPP
-#define ACTOR_ZETA_TEST_MULTIPLEXER_HPP
+#pragma once
 
 #include <deque>
 #include <queue>
@@ -177,5 +176,3 @@ namespace actor_zeta { namespace network {
 
     }
 }
-
-#endif //ACTOR_ZETA_TEST_MULTIPLEXER_HPP

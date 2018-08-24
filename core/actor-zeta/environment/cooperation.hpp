@@ -1,5 +1,4 @@
-#ifndef COOPERATION_HPP
-#define COOPERATION_HPP
+#pragma once
 
 #include <unordered_map>
 #include <actor-zeta/messaging/message.hpp>
@@ -42,4 +41,3 @@ namespace actor_zeta {
 
     }
 }
-#endif

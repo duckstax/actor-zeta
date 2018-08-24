@@ -1,5 +1,4 @@
-#ifndef SCHEDULED_ACTOR_HPP
-#define SCHEDULED_ACTOR_HPP
+#pragma once
 
 #include <actor-zeta/messaging/mail_box.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
@@ -56,4 +55,3 @@ namespace actor_zeta { namespace actor {
         };
     }
 }
-#endif //SCHEDULED_ACTOR_HPP

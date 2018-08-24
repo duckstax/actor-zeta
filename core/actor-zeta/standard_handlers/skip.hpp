@@ -1,5 +1,4 @@
-#ifndef SKIP_HPP
-#define SKIP_HPP
+#pragma once
 
 #include <string>
 #include <actor-zeta/behavior/context.hpp>
@@ -16,4 +15,3 @@ namespace actor_zeta {
         void invoke(behavior::context &) override final;
     };
 }
-#endif //SKIP_HPP

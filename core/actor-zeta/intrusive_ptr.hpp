@@ -1,5 +1,5 @@
-#ifndef INTRUSIVE_PTR_HPP
-#define INTRUSIVE_PTR_HPP
+#pragma once
+
 //C++ 11 intrusive_ptr
 //frindle api for boost
 
@@ -172,4 +172,3 @@ namespace actor_zeta {
         return r.template downcast<T>();
     }
 }
-#endif //INTRUSIVE_PTR_HPP

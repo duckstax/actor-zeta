@@ -1,5 +1,4 @@
-#ifndef BASIC_ACTOR_HPP
-#define BASIC_ACTOR_HPP
+#pragma once
 
 #include <actor-zeta/actor/async_actor.hpp>
 #include <actor-zeta/actor/actor.hpp>
@@ -35,4 +34,3 @@ namespace actor_zeta { namespace actor {
         };
     }
 }
-#endif

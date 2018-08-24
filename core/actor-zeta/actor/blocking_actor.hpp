@@ -1,5 +1,4 @@
-#ifndef BLOCKING_ACTOR_HPP
-#define BLOCKING_ACTOR_HPP
+#pragma once
 
 #include <mutex>
 #include <condition_variable>
@@ -34,4 +33,3 @@ namespace actor_zeta { namespace actor {
         };
     }
 }
-#endif //BLOCKING_ACTOR_HPP

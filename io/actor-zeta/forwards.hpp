@@ -1,5 +1,4 @@
-#ifndef FORWARDS_HPP
-#define FORWARDS_HPP
+#pragma once
 
 #include <memory>
 #include <cstdint>
@@ -12,5 +11,3 @@ namespace actor_zeta {
         class multiplexer;
     }
 }
-
-#endif // FORWARDS_HPP

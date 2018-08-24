@@ -1,5 +1,4 @@
-#ifndef ACTOR_ZETA_NETWORK_ENVIRONMENT_HP
-#define ACTOR_ZETA_NETWORK_ENVIRONMENT_HP
+#pragma once
 
 #include <actor-zeta/environment/abstract_environment.hpp>
 #include <actor-zeta/environment/cooperation.hpp>
@@ -54,4 +53,3 @@ namespace actor_zeta { namespace environment {
 
     }
 }
-#endif //ACTOR_ZETA_NETWORK_ENVIRONMENT_HP
