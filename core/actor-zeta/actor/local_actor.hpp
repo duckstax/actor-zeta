@@ -1,5 +1,4 @@
-#ifndef LOCAL_ACTOR_HPP
-#define LOCAL_ACTOR_HPP
+#pragma once
 
 #include <memory>
 #include <unordered_map>
@@ -63,4 +62,3 @@ namespace actor_zeta { namespace actor {
         };
     }
 }
-#endif //LOCAL_ACTOR_HPP

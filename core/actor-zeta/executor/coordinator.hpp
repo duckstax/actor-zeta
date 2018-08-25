@@ -1,5 +1,4 @@
-#ifndef COORDINATOR_HPP
-#define COORDINATOR_HPP
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -55,4 +54,3 @@ namespace actor_zeta {
         };
     }
 }
-#endif //COORDINATOR_HPP

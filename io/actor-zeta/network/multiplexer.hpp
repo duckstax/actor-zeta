@@ -1,5 +1,4 @@
-#ifndef MULTIPLEXER_HPP
-#define MULTIPLEXER_HPP
+#pragma once
 
 #include <memory>
 
@@ -33,4 +32,3 @@ namespace actor_zeta { namespace network {
         using unique_multiplexer_ptr = std::unique_ptr<multiplexer>;
     }
 }
-#endif //MULTIPLEXER_HPP

@@ -1,5 +1,4 @@
-#ifndef FORWARDS_HPP
-#define FORWARDS_HPP
+#pragma once
 
 namespace actor_zeta {
 
@@ -40,5 +39,3 @@ namespace actor_zeta {
         struct executable;
     }
 }
-
-#endif // FORWARDS_HPP

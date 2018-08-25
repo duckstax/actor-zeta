@@ -1,6 +1,4 @@
-#ifndef ACTOR_ADDRESS_HPP
-#define ACTOR_ADDRESS_HPP
-
+#pragma once
 
 #include <actor-zeta/intrusive_ptr.hpp>
 #include <actor-zeta/actor/abstract_actor.hpp>
@@ -48,4 +46,3 @@ namespace actor_zeta { namespace actor {
 
     }
 }
-#endif //ACTOR_ADDRESS_HPP

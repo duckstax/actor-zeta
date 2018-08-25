@@ -1,5 +1,4 @@
-#ifndef EXECUTOR_SERVICE_TIME_UNIT_HPP
-#define EXECUTOR_SERVICE_TIME_UNIT_HPP
+#pragma once
 
 ///
 /// @enum time_unit
@@ -10,4 +9,3 @@ enum class time_unit {
     second,
     minute 
 };
-#endif //EXECUTOR_SERVICE_TIME_UNIT_HPP

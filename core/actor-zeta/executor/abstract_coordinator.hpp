@@ -1,5 +1,4 @@
-#ifndef ABSTRACT_COORDINATOR_HPP
-#define ABSTRACT_COORDINATOR_HPP
+#pragma once
 
 #include <thread>
 #include "actor-zeta/forwards.hpp"
@@ -36,5 +35,3 @@ namespace actor_zeta {
         };
     }
 }
-
-#endif // ABSTRACT_COORDINATOR_HPP

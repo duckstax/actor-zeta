@@ -1,5 +1,4 @@
-#ifndef ABSTRACT_GROUP_HPP
-#define ABSTRACT_GROUP_HPP
+#pragma once
 
 #include "storage_space.hpp"
 #include "actor-zeta/channel/abstract_channel.hpp"
@@ -52,4 +51,3 @@ namespace actor_zeta { namespace environment {
         };
     }
 }
-#endif //ABSTRACT_GROUP_HPP

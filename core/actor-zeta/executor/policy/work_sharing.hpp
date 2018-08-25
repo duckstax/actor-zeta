@@ -1,5 +1,4 @@
-#ifndef WORK_SHARING_HPP
-#define WORK_SHARING_HPP
+#pragma once
 
 #include <list>
 #include <mutex>
@@ -100,5 +99,3 @@ namespace actor_zeta { namespace executor {
         };
     }
 }
-
-#endif // WORK_SHARING_HPP

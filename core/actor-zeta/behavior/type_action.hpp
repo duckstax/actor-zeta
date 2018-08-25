@@ -1,5 +1,4 @@
-#ifndef TOKEN_HPP
-#define TOKEN_HPP
+#pragma once
 
 #include <string>
 
@@ -51,4 +50,3 @@ namespace std {
         }
     };
 }
-#endif //TOKEN_HPP

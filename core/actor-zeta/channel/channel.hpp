@@ -1,5 +1,4 @@
-#ifndef CHANNEL_HPP
-#define CHANNEL_HPP
+#pragma once
 
 #include <actor-zeta/intrusive_ptr.hpp>
 #include <actor-zeta/channel/abstract_channel.hpp>
@@ -37,4 +36,3 @@ namespace actor_zeta { namespace channel {
 
     }
 }
-#endif //CHANNEL_HPP

@@ -1,5 +1,4 @@
-#ifndef BEHAVIOR_HPP
-#define BEHAVIOR_HPP
+#pragma once
 
 #include <memory>
 #include <unordered_map>
@@ -53,5 +52,3 @@ namespace actor_zeta { namespace behavior {
 
     } /// namespace behavior
 } /// namespace actor_zeta
-
-#endif //BEHAVIOR_HPP

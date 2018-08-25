@@ -1,5 +1,4 @@
-#ifndef ADJACENCY_LIST_HPP
-#define ADJACENCY_LIST_HPP
+#pragma once
 
 #include <vector>
 #include <algorithm>
@@ -217,5 +216,3 @@ public:
 private:
     Store<Node> graph_;
 };
-
-#endif

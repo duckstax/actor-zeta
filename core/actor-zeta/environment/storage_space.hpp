@@ -1,5 +1,4 @@
-#ifndef STORAGE_SPACE_HPP
-#define STORAGE_SPACE_HPP
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -42,6 +41,3 @@ namespace actor_zeta {
         };
     }
 }
-
-
-#endif //STORAGE_SPACE_HPP

@@ -1,5 +1,4 @@
-#ifndef GROUP_HPP
-#define GROUP_HPP
+#pragma once
 
 #include "actor-zeta/intrusive_ptr.hpp"
 #include "abstract_group.hpp"
@@ -59,4 +58,3 @@ namespace actor_zeta {
         };
     }
 }
-#endif //GROUP_HPP

@@ -1,5 +1,4 @@
-#ifndef SYNC_CONTACTS_HPP
-#define SYNC_CONTACTS_HPP
+#pragma once
 
 #include "actor-zeta/behavior/abstract_action.hpp"
 
@@ -15,5 +14,3 @@ namespace actor_zeta {
 
     };
 }
-
-#endif //SYNC_CONTACTS_HPP

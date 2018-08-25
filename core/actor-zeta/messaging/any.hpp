@@ -1,5 +1,4 @@
-#ifndef MESSAGE_BODY_HPP
-#define MESSAGE_BODY_HPP
+#pragma once
 
 #include <new>
 #include <utility>
@@ -107,6 +106,3 @@ namespace actor_zeta {
 inline void swap(actor_zeta::messaging::any &lhs, actor_zeta::messaging::any &rhs)noexcept {
     lhs.swap(rhs);
 }
-
-
-#endif //MESSAGE_BODY_HPP

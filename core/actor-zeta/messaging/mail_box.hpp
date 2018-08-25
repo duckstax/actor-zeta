@@ -1,5 +1,4 @@
-#ifndef MAIL_BOX_HPP
-#define MAIL_BOX_HPP
+#pragma once
 
 #include <actor-zeta/forwards.hpp>
 
@@ -32,4 +31,3 @@ namespace actor_zeta {
         };
     }
 }
-#endif //PROJECT_MAIL_BOX_HPP

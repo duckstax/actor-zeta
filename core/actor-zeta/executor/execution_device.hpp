@@ -1,5 +1,4 @@
-#ifndef EXECUTOR_SERVICE_HPP
-#define EXECUTOR_SERVICE_HPP
+#pragma once
 
 #include "time_unit.hpp"
 #include "actor-zeta/forwards.hpp"
@@ -30,4 +29,3 @@ namespace actor_zeta {
 
     };
 }}
-#endif //EXECUTOR_SERVICE_HPP

@@ -1,5 +1,4 @@
-#ifndef ABSTRACT_ACTOR_HPP
-#define ABSTRACT_ACTOR_HPP
+#pragma once
 
 #include <set>
 
@@ -48,5 +47,3 @@ namespace actor_zeta { namespace actor {
         };
     }
 }
-
-#endif //ABSTRACT_ACTOR_HPP

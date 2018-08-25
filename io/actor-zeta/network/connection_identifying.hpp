@@ -1,5 +1,4 @@
-#ifndef CONNECTION_HANDLE_HPP
-#define CONNECTION_HANDLE_HPP
+#pragma once
 
 #include <string>
 
@@ -61,4 +60,3 @@ namespace std {
     };
 
 }
-#endif //CONNECTION_HANDLE_HPP
