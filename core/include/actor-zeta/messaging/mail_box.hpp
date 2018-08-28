@@ -1,10 +1,10 @@
 #ifndef MAIL_BOX_HPP
 #define MAIL_BOX_HPP
 
+#include <actor-zeta/forwards.hpp>
+
 namespace actor_zeta {
     namespace messaging {
-
-        class message;
 
 ///
 /// @enum enqueue_result
