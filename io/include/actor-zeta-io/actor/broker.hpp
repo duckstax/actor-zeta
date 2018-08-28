@@ -3,7 +3,7 @@
 
 #include <memory>
 #include "actor-zeta/actor/basic_actor.hpp"
-#include "actor-zeta/network/multiplexer.hpp"
+#include <actor-zeta-io/network/multiplexer.hpp>
 
 namespace actor_zeta {
     namespace actor {

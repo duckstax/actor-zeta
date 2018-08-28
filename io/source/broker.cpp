@@ -1,5 +1,5 @@
 #include <actor-zeta/messaging/blocking_mail_queue.hpp>
-#include "actor-zeta/actor/broker.hpp"
+#include <actor-zeta-io/actor/broker.hpp>
 
 namespace actor_zeta { namespace actor {
 

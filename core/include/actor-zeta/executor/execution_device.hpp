@@ -2,7 +2,7 @@
 #define EXECUTOR_SERVICE_HPP
 
 #include "time_unit.hpp"
-#include "actor-zeta/forwards.hpp"
+#include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta {
     namespace executor {

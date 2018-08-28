@@ -3,7 +3,7 @@
 
 #include <actor-zeta/environment/abstract_environment.hpp>
 #include <actor-zeta/environment/cooperation.hpp>
-#include <actor-zeta/network/multiplexer.hpp>
+#include <actor-zeta-io/network/multiplexer.hpp>
 #include <memory>
 
 namespace actor_zeta { namespace environment {

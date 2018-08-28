@@ -9,9 +9,9 @@
 #include <actor-zeta/actor/basic_actor.hpp>
 #include <actor-zeta/environment/abstract_environment.hpp>
 #include <actor-zeta/executor/abstract_coordinator.hpp>
-#include <actor-zeta/network/fake_multiplexer.hpp>
-#include <actor-zeta/actor/broker.hpp>
-#include <actor-zeta/environment/network_environment.hpp>
+#include <actor-zeta-io/network/fake_multiplexer.hpp>
+#include <actor-zeta-io/actor/broker.hpp>
+#include <actor-zeta-io/environment/network_environment.hpp>
 #include <actor-zeta/executor/coordinator.hpp>
 #include <actor-zeta/executor/policy/work_sharing.hpp>
 

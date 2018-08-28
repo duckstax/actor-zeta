@@ -7,7 +7,7 @@
 #include <list>
 #include <cassert>
 
-#include <actor-zeta/network/multiplexer.hpp>
+#include <actor-zeta-io/network/multiplexer.hpp>
 #include <unordered_map>
 #include <utility>
 #include <atomic>

@@ -1,14 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
-
-project(actor-zeta CXX)
+project(actor-zeta-distribution)
 
 option(CMake_RUN_CLANG_TIDY "Run clang-tidy with the compiler." ON)
-
 option(IO "Enable building actor-zeta-io" ON)
-
 option(EXAMPLES "Enable building examples" ON)
 
-message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
 add_compile_options(-std=c++11)
 
@@ -25,7 +22,6 @@ if(CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
 endif(CCACHE_FOUND)
-
 
 if(CMAKE_GENERATOR STREQUAL Xcode)
     if(CMake_RUN_CLANG_TIDY)
@@ -52,21 +48,11 @@ if(CMAKE_GENERATOR STREQUAL Xcode)
     configure_file(.clang-tidy .clang-tidy COPYONLY)
 endif()
 
-# declare global cmake variables
-set(HEADERS "")
-set(SOURCES "")
-set(IMPORT_LOCATIONS "")
-
-include_directories(core)
 add_subdirectory(core)
 
 if(IO)
-    include_directories(io)
     add_subdirectory(io)
 endif()
-
-add_library(${PROJECT_NAME} STATIC ${HEADERS} ${SOURCES})
-set_target_properties(${PROJECT_NAME} PROPERTIES IMPORTED_LOCATION "${IMPORT_LOCATIONS}")
 
 if(EXAMPLES)
     add_subdirectory(examples)

@@ -1,4 +1,4 @@
-#include <actor-zeta/network/fake_multiplexer.hpp>
+#include <actor-zeta-io/network/fake_multiplexer.hpp>
 #include <iostream>
 #include <cassert>
 #include <actor-zeta/messaging/message.hpp>
