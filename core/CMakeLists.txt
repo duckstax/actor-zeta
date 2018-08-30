@@ -53,6 +53,7 @@ list(APPEND HEADER_FILES
         actor-zeta/intrusive_ptr.hpp
         actor-zeta/metadata.hpp
         actor-zeta/ref_counted.hpp
+		actor-zeta/flat_map.hpp		
 )
 
 list(APPEND SOURCE_FILES
