@@ -70,9 +70,62 @@ void test_insert() {
   }
 }
 
+void test_emplace() {
+  { //test if we can emplace elements
+    flat_map<int, std::string> fmap;
+    fmap.emplace( 0, "0" );
+    std::unordered_map<int, std::string> map;
+    map.emplace( 0, "0" );
+    
+    assert(fmap.size() == 1);
+    assert(map.size() == 1);
+  }
+}
+
+void test_swap() {
+  { //test if contents swapped
+    flat_map<int, std::string> fmap;
+    
+    fmap.emplace( 0, "0" );
+    fmap.emplace( 1, "1" );
+    fmap.emplace( 2, "2" );
+    fmap.emplace( 3, "3" );
+    
+    flat_map<int, std::string> fmap_2;
+    fmap_2.emplace( 4, "4" );
+    fmap_2.emplace( 5, "5" );
+    fmap_2.emplace( 6, "7" );
+    
+    fmap_2.swap( fmap );
+    
+    assert( fmap.size() == 3 );
+    assert( fmap_2.size() == 4 );
+  }
+}
+
+void test_at() {
+  {
+    flat_map<int, std::string> fmap;
+    fmap.emplace( 0, "0" );
+
+    const std::string val = fmap.at( 0 );
+    assert( val == "0" );
+  }
+  {
+    std::unordered_map<int, std::string> map;
+    map.emplace( 0, "0" );
+
+    const std::string val = map.at( 0 );
+    assert( val == "0" );
+  }
+}
+
 int main() {
   test_ctors();
   test_insert();
+  test_emplace();
+  test_swap();
+  test_at();
 
   return 0;
 }

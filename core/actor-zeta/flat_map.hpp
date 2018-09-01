@@ -91,7 +91,7 @@ public:
   }
 
   void shrink_to_fit() {
-
+    cache_.shrink_to_fit();
   }
 
   vector_type& container() noexcept {
@@ -107,7 +107,7 @@ public:
   }
 
   void swap(flat_map& other) {
-
+    cache_.swap( other.cache_ );
   }
 
   std::pair<iterator, bool> insert(value_type x) {
@@ -131,12 +131,11 @@ public:
     cache_.insert(first, last);
   }
 
-#if 0
   template <class... Ts>
   std::pair<iterator, bool> emplace(Ts&&... xs) {
-    return cache_.emplace(std::move(xs) ...);
+    cache_.emplace( cache_.end(), std::forward<Ts>(xs)... );
+    return std::pair<iterator, bool>(  );
   }
-#endif //0
 
   template <class... Ts>
   iterator emplace_hint(const_iterator hint, Ts&&... xs) {
@@ -157,22 +156,25 @@ public:
 
   template <class K>
   mapped_type& at(const K& key) {
-
+    for(auto& it : cache_)
+      if(it.first == key)
+        return it.second;
+    throw std::runtime_error("Out of range");
   }
 
   template <class K>
   const mapped_type& at(const K& key) const {
-
+    for(auto& it : cache_)
+      if(it.first == key)
+        return it.second;
+    throw std::runtime_error("Out of range");
   }
 
   mapped_type& operator[](const key_type& key) {
-    for(auto& it : cache_) {
-      if(it.first == key) {
+    for(auto& it : cache_)
+      if(it.first == key)
         return it.first;
-      }
-    }
     return cache_.end()->second;
-    //return cache_;
   }
 
   template <class K>
@@ -194,7 +196,6 @@ public:
       }
     }
     return count;
-    //return std::count(cache_.begin(), cache_.end(), key);
   }
 
 private:
