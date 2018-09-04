@@ -65,8 +65,13 @@ void test_insert() {
     flat_map<int, std::string> fmap;
     std::unordered_map<int, std::string> map;
     
-    assert(map.insert( {0, "0"} ).second == fmap.insert( {0, "0"} ).second); //true
-    assert(map.insert( {0, "0"} ).second == fmap.insert( {0, "0"} ).second); //false
+    const bool ins1 = map.insert( {0, "0"} ).second;
+    const bool ins2 = map.insert( {0, "0"} ).second;
+    const bool fins1 = fmap.insert( {0, "0"} ).second;
+    const bool fins2 = fmap.insert( {0, "0"} ).second;
+
+    assert(ins1 == fins1 && ins1 == true);
+    assert(ins2 == fins2 && ins2 == false);
   }
 }
 
@@ -79,6 +84,24 @@ void test_emplace() {
     
     assert(fmap.size() == 1);
     assert(map.size() == 1);
+  }
+  { //test if we can emplace elements
+
+    std::unordered_map<int, std::string> map;
+    auto &it_1 = map.emplace( 0, "0" );
+    auto &it_2 = map.emplace( 0, "0" );
+    
+    assert(it_1.second == true && it_1.first->first == 0 && it_1.first->second == "0");
+    assert(it_2.second == false && it_2.first->first == 0 && it_2.first->second == "0");
+
+    flat_map<int, std::string> fmap;
+    auto &it1 = fmap.emplace( 0, "0" );
+    auto &it2 = fmap.emplace( 0, "0" );
+
+    assert(it1.second == true && it1.first->first == 0 && it1.first->second == "0");
+    assert(it2.second == false && it2.first->first == 0 && it2.first->second == "0");
+
+    assert(true);
   }
 }
 
@@ -121,6 +144,22 @@ void test_at() {
 }
 
 int main() {
+
+#if 0
+  std::vector<std::pair<int, std::string>> vec;
+  std::vector<std::pair<int, std::string>>::iterator emplaced = vec.emplace( vec.end(), 0, "0" );
+
+  for(std::vector<std::pair<int, std::string>>::iterator it = vec.begin(); it != vec.end(); ++it) {
+    if( emplaced->first == it->first ) {
+
+    }
+  }
+#endif //0
+
+
+
+
+
   test_ctors();
   test_insert();
   test_emplace();

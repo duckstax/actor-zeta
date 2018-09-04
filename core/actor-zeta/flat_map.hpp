@@ -29,6 +29,10 @@ public:
 
   flat_map() = default;
 
+  flat_map(const vector_type& r) {
+    cache_ = r;
+  }
+
   flat_map(std::initializer_list<value_type> l) {
     cache_.insert(cache_.end(), l);
   }
@@ -118,28 +122,36 @@ public:
   }
 
   iterator insert(iterator hint, value_type x) {
-    assert(false);
+    throw std::exception("not implemented");
     return cache_.insert(hint, x);
   }
 
   iterator insert(const_iterator hint, value_type x) {
+    throw std::exception("not implemented");
     return cache_.insert(hint, x);
   }
 
   template <class InputIterator>
   void insert(InputIterator first, InputIterator last) {
+    throw std::exception("not implemented");
     cache_.insert(first, last);
   }
 
   template <class... Ts>
   std::pair<iterator, bool> emplace(Ts&&... xs) {
-    cache_.emplace( cache_.end(), std::forward<Ts>(xs)... );
-    return std::pair<iterator, bool>(  );
+    const iterator &emplaced = cache_.emplace(cache_.end(), std::forward<Ts>(xs)...);
+    for(iterator it = cache_.begin(); it != cache_.end(); ++it)
+      if(it->first == emplaced->first && it != emplaced) {
+        cache_.erase(emplaced);
+        return std::pair<iterator, bool>(it, false);
+      }
+    return std::pair<iterator, bool>(emplaced, true); //DOESN'T WORK (emplaces, but returns heap garbarge as return value of this method &)
+                                                      //WHY ???
   }
 
   template <class... Ts>
   iterator emplace_hint(const_iterator hint, Ts&&... xs) {
-
+    throw std::exception("not implemented");
   }
 
   iterator erase(const_iterator i) {
@@ -151,7 +163,10 @@ public:
   }
 
   size_type erase(const key_type& x) {
-
+    for(auto& it : cache_)
+      if(it.first == x)
+        cache_.erase(it);
+    return cache_.size();
   }
 
   template <class K>
@@ -159,7 +174,7 @@ public:
     for(auto& it : cache_)
       if(it.first == key)
         return it.second;
-    throw std::runtime_error("Out of range");
+    throw std::out_of_range("Can't find any value with the key");
   }
 
   template <class K>
@@ -167,7 +182,7 @@ public:
     for(auto& it : cache_)
       if(it.first == key)
         return it.second;
-    throw std::runtime_error("Out of range");
+    throw std::out_of_range("Can't find any value with the key");
   }
 
   mapped_type& operator[](const key_type& key) {
@@ -179,22 +194,20 @@ public:
 
   template <class K>
   iterator find(const K& key) {
-
+    throw std::exception("not implemented");
   }
 
   template <class K>
   const_iterator find(const K& key) const {
-
+    throw std::exception("not implemented");
   }
 
   template <class K>
   size_type count(const K& key) const {
     size_type count = 0;
-    for(auto& it : cache_) {
-      if(it.first == key) {
+    for(auto& it : cache_)
+      if(it.first == key)
         ++count;
-      }
-    }
     return count;
   }
 
