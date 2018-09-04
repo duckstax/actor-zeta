@@ -215,3 +215,38 @@ private:
   vector_type cache_;
 
 };
+
+template <class K, class T, class A>
+bool operator==(const flat_map<K, T, A>& xs, const flat_map<K, T, A>& ys) {
+#if 0
+  if(xs.size() != ys.size())
+    return false;
+  auto &it_1 = xs.begin();
+  auto &it_2 = ys.begin();
+  for(; it_1 != xs.end() || it_2 != ys.end(); ++it_1, ++it_2) {
+    if(it_1 != it_2)
+      return false;
+  }
+  return true;
+#endif //0
+  throw std::exception("not implemented"); //WHAT KIND OF COMPARE SHOULD WE USE?
+  return false;
+}
+
+template <class K, class T, class A>
+bool operator!=(const flat_map<K, T, A>& xs, const flat_map<K, T, A>& ys) {
+  throw std::exception("not implemented"); //WHAT KIND OF COMPARE SHOULD WE USE?
+  return false;
+}
+
+template <class K, class T, class A>
+bool operator<(const flat_map<K, T, A>& xs, const flat_map<K, T, A>& ys) {
+  throw std::exception("not implemented"); //WHAT KIND OF COMPARE SHOULD WE USE?
+  return false;
+}
+
+template <class K, class T, class A>
+bool operator>=(const flat_map<K, T, A>& xs, const flat_map<K, T, A>& ys) {
+  throw std::exception("not implemented"); //WHAT KIND OF COMPARE SHOULD WE USE?
+  return false;
+}

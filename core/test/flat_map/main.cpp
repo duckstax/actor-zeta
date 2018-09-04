@@ -76,6 +76,7 @@ void test_insert() {
 }
 
 void test_emplace() {
+#if 1 // DOESN'T WORK
   { //test if we can emplace elements
     flat_map<int, std::string> fmap;
     fmap.emplace( 0, "0" );
@@ -103,6 +104,7 @@ void test_emplace() {
 
     assert(true);
   }
+#endif //0
 }
 
 void test_swap() {
@@ -143,28 +145,28 @@ void test_at() {
   }
 }
 
-int main() {
+void test_compare_ops() {
+  {
+    flat_map<int, std::string> fmap1          { {0, "0"}, {1, "1"} };
+    flat_map<int, std::string> fmap2          { {0, "0"}, {1, "1"} };
 
-#if 0
-  std::vector<std::pair<int, std::string>> vec;
-  std::vector<std::pair<int, std::string>>::iterator emplaced = vec.emplace( vec.end(), 0, "0" );
-
-  for(std::vector<std::pair<int, std::string>>::iterator it = vec.begin(); it != vec.end(); ++it) {
-    if( emplaced->first == it->first ) {
-
-    }
+    assert(fmap1 == fmap2);
   }
-#endif //0
+  {
+    //flat_map<int, std::string> fmap1          { {1, "0"}, {0, "1"} };
+    //flat_map<int, std::string> fmap2          { {0, "0"}, {1, "1"} };
+    //
+    //assert(fmap1 != fmap2);
+  }
+}
 
-
-
-
-
+int main() {
   test_ctors();
   test_insert();
   test_emplace();
   test_swap();
   test_at();
+  test_compare_ops();
 
   return 0;
 }
