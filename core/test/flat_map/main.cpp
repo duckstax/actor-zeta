@@ -5,6 +5,9 @@
 #include <unordered_map>
 #include <cassert>
 
+#include <iostream>
+#include <string>
+
 void test_ctors() {
   {
     //test sizes
@@ -76,7 +79,6 @@ void test_insert() {
 }
 
 void test_emplace() {
-#if 1 // DOESN'T WORK
   { //test if we can emplace elements
     flat_map<int, std::string> fmap;
     fmap.emplace( 0, "0" );
@@ -95,16 +97,17 @@ void test_emplace() {
     assert(it_1.second == true && it_1.first->first == 0 && it_1.first->second == "0");
     assert(it_2.second == false && it_2.first->first == 0 && it_2.first->second == "0");
 
-    flat_map<int, std::string> fmap;
-    auto &it1 = fmap.emplace( 0, "0" );
-    auto &it2 = fmap.emplace( 0, "0" );
+    {
+      flat_map<int, std::string> fmap;
+      auto &it1 = fmap.emplace( 0, "0" );
 
-    assert(it1.second == true && it1.first->first == 0 && it1.first->second == "0");
-    assert(it2.second == false && it2.first->first == 0 && it2.first->second == "0");
+      assert(it1.second == true && it1.first->first == 0 && it1.first->second == "0");
 
-    assert(true);
+      auto &it2 = fmap.emplace( 0, "0" );
+
+      assert(it2.second == false && it2.first->first == 0 && it2.first->second == "0");
+    }
   }
-#endif //0
 }
 
 void test_swap() {
@@ -146,18 +149,33 @@ void test_at() {
 }
 
 void test_compare_ops() {
-  {
-    flat_map<int, std::string> fmap1          { {0, "0"}, {1, "1"} };
-    flat_map<int, std::string> fmap2          { {0, "0"}, {1, "1"} };
+  //not implemented yet
+}
 
-    assert(fmap1 == fmap2);
+void test_insert_with_hint() {
+  {
+    //insert with iter hint
+    flat_map<int, std::string> fmap;
+    fmap.insert( fmap.begin(), std::pair<int, std::string>( 0, "0" ) );
+    assert( fmap.size() == 1 );
+    assert( fmap.begin()->first == 0 && fmap.begin()->second == "0" );
   }
   {
-    //flat_map<int, std::string> fmap1          { {1, "0"}, {0, "1"} };
-    //flat_map<int, std::string> fmap2          { {0, "0"}, {1, "1"} };
-    //
-    //assert(fmap1 != fmap2);
+    //insert with const iter hint
+    flat_map<int, std::string> fmap;
+    fmap.insert( fmap.cbegin(), std::pair<int, std::string>( 0, "0" ) );
+    assert( fmap.size() == 1 );
+    assert( fmap.begin()->first == 0 && fmap.begin()->second == "0" );
   }
+}
+
+void test_insert_input_iterator() {
+  flat_map<int, std::string> fmap { { 0, "0" }, { 1, "1" } };
+  flat_map<int, std::string> fmap2;
+  
+  fmap2.insert( fmap.begin(), fmap.end() );
+  assert( fmap2.size() == fmap.size() );
+  assert( fmap2[0] == "0" && fmap2[1] == "1" );
 }
 
 int main() {
@@ -167,6 +185,8 @@ int main() {
   test_swap();
   test_at();
   test_compare_ops();
+  test_insert_with_hint();
+  test_insert_input_iterator();
 
   return 0;
 }

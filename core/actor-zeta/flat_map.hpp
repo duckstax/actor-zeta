@@ -1,5 +1,7 @@
 #pragma once
 
+//todo: doxygen
+
 #include <vector>
 #include <algorithm>
 #include <map>
@@ -34,7 +36,7 @@ public:
   }
 
   flat_map(std::initializer_list<value_type> l) {
-    cache_.insert(cache_.end(), l);
+    cache_ = { l };
   }
 
   template <class InputIterator>
@@ -122,19 +124,17 @@ public:
   }
 
   iterator insert(iterator hint, value_type x) {
-    throw std::exception("not implemented");
-    return cache_.insert(hint, x);
+    return cache_.insert(cache_.end(), x); //should be optimized with the hint
   }
 
   iterator insert(const_iterator hint, value_type x) {
-    throw std::exception("not implemented");
-    return cache_.insert(hint, x);
+    return cache_.insert(cache_.end(), x); //should be optimized with the hint
   }
 
   template <class InputIterator>
   void insert(InputIterator first, InputIterator last) {
-    throw std::exception("not implemented");
-    cache_.insert(first, last);
+    for(auto it = first; it != last; ++it)
+      cache_.insert( cache_.end(), *it );
   }
 
   template <class... Ts>
@@ -145,13 +145,12 @@ public:
         cache_.erase(emplaced);
         return std::pair<iterator, bool>(it, false);
       }
-    return std::pair<iterator, bool>(emplaced, true); //DOESN'T WORK (emplaces, but returns heap garbarge as return value of this method &)
-                                                      //WHY ???
+    return std::pair<iterator, bool>(emplaced, true); //invalidates iterator
   }
 
   template <class... Ts>
   iterator emplace_hint(const_iterator hint, Ts&&... xs) {
-    throw std::exception("not implemented");
+    return cache_.emplace(cache_.end(), std::forward<Ts>(xs)...); //should be optimized with the hint
   }
 
   iterator erase(const_iterator i) {
@@ -188,18 +187,24 @@ public:
   mapped_type& operator[](const key_type& key) {
     for(auto& it : cache_)
       if(it.first == key)
-        return it.first;
+        return it.second;
     return cache_.end()->second;
   }
 
   template <class K>
   iterator find(const K& key) {
-    throw std::exception("not implemented");
+    for(auto it = cache_.begin(); it != cache_.end(); ++it)
+      if(*it == key)
+        return it;
+    return cache_.end();
   }
 
   template <class K>
   const_iterator find(const K& key) const {
-    throw std::exception("not implemented");
+    for(auto it = cache_.cbegin(); it != cache_.cend(); ++it)
+      if(*it == key)
+        return it;
+    return cache_.cend();
   }
 
   template <class K>
@@ -218,35 +223,24 @@ private:
 
 template <class K, class T, class A>
 bool operator==(const flat_map<K, T, A>& xs, const flat_map<K, T, A>& ys) {
-#if 0
-  if(xs.size() != ys.size())
-    return false;
-  auto &it_1 = xs.begin();
-  auto &it_2 = ys.begin();
-  for(; it_1 != xs.end() || it_2 != ys.end(); ++it_1, ++it_2) {
-    if(it_1 != it_2)
-      return false;
-  }
-  return true;
-#endif //0
-  throw std::exception("not implemented"); //WHAT KIND OF COMPARE SHOULD WE USE?
+  throw std::exception("not implemented"); //which kind of comparing should we use?
   return false;
 }
 
 template <class K, class T, class A>
 bool operator!=(const flat_map<K, T, A>& xs, const flat_map<K, T, A>& ys) {
-  throw std::exception("not implemented"); //WHAT KIND OF COMPARE SHOULD WE USE?
+  throw std::exception("not implemented"); //which kind of comparing should we use?
   return false;
 }
 
 template <class K, class T, class A>
 bool operator<(const flat_map<K, T, A>& xs, const flat_map<K, T, A>& ys) {
-  throw std::exception("not implemented"); //WHAT KIND OF COMPARE SHOULD WE USE?
+  throw std::exception("not implemented"); //which kind of comparing should we use?
   return false;
 }
 
 template <class K, class T, class A>
 bool operator>=(const flat_map<K, T, A>& xs, const flat_map<K, T, A>& ys) {
-  throw std::exception("not implemented"); //WHAT KIND OF COMPARE SHOULD WE USE?
+  throw std::exception("not implemented"); //which kind of comparing should we use?
   return false;
 }
