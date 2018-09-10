@@ -146,10 +146,40 @@ void test_at() {
     const std::string val = map.at( 0 );
     assert( val == "0" );
   }
+  {
+    flat_map<int, std::string> fmap;
+    fmap[0] = "000";
+
+    assert(fmap.size() == 1);
+    assert(fmap.at(0) == "000");
+  }
 }
 
 void test_compare_ops() {
-  //not implemented yet
+  {
+    flat_map<int, std::string> fmap1 { { 0, "0" }, { 1, "1" } };
+    flat_map<int, std::string> fmap2 { { 0, "0" }, { 1, "1" } };
+
+    assert( fmap1 == fmap2 );
+  }
+  {
+    flat_map<int, std::string> fmap1 { { 0, "0" }, { 1, "1" } };
+    flat_map<int, std::string> fmap2 { { 1, "0" }, { 1, "1" } };
+
+    assert( fmap1 != fmap2 );
+  }
+  {
+    flat_map<int, std::string> fmap1 { { 0, "0" }, { 1, "1" } };
+    flat_map<int, std::string> fmap2 { { 1, "0" }, { 1, "1" } };
+
+    assert( fmap1 < fmap2 );
+  }
+  {
+    flat_map<int, std::string> fmap1 { { 1, "0" }, { 2, "1" } };
+    flat_map<int, std::string> fmap2 { { 1, "0" }, { 1, "1" } };
+
+    assert( fmap1 >= fmap2 );
+  }
 }
 
 void test_insert_with_hint() {

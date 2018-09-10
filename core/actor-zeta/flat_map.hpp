@@ -29,15 +29,17 @@ public:
   using reverse_iterator       = typename vector_type::reverse_iterator;
   using const_reverse_iterator = typename vector_type::const_reverse_iterator;
 
-  flat_map() = default;
+  flat_map() noexcept = default;
 
-  flat_map(const vector_type& r) {
-    cache_ = r;
-  }
+  ~flat_map() noexcept = default;
 
-  flat_map(std::initializer_list<value_type> l) {
-    cache_ = { l };
-  }
+  flat_map(const vector_type& r) noexcept
+    : cache_(r)
+  { }
+
+  flat_map(std::initializer_list<value_type> l) noexcept
+    : cache_(l)
+  { }
 
   template <class InputIterator>
   flat_map(InputIterator first, InputIterator last) {
@@ -161,16 +163,16 @@ public:
     return cache_.erase(first, last);
   }
 
-  size_type erase(const key_type& x) {
-    for(auto& it : cache_)
-      if(it.first == x)
-        cache_.erase(it);
+  size_type erase(const key_type& key) {
+    const const_iterator it = find(key);
+    if(it != cache_.cend())
+      cache_.erase(it);
     return cache_.size();
   }
 
   template <class K>
   mapped_type& at(const K& key) {
-    for(auto& it : cache_)
+    for(auto &it : cache_)
       if(it.first == key)
         return it.second;
     throw std::out_of_range("Can't find any value with the key");
@@ -178,7 +180,7 @@ public:
 
   template <class K>
   const mapped_type& at(const K& key) const {
-    for(auto& it : cache_)
+    for(auto &it : cache_)
       if(it.first == key)
         return it.second;
     throw std::out_of_range("Can't find any value with the key");
@@ -188,32 +190,22 @@ public:
     for(auto& it : cache_)
       if(it.first == key)
         return it.second;
-    return cache_.end()->second;
+    return (*cache_.insert(cache_.end(), value_type())).second;
   }
 
   template <class K>
   iterator find(const K& key) {
-    for(auto it = cache_.begin(); it != cache_.end(); ++it)
-      if(*it == key)
-        return it;
-    return cache_.end();
+    return std::find(cache_.begin(), cache_.end(), key);
   }
 
   template <class K>
   const_iterator find(const K& key) const {
-    for(auto it = cache_.cbegin(); it != cache_.cend(); ++it)
-      if(*it == key)
-        return it;
-    return cache_.cend();
+    return std::find(cache_.cbegin(), cache_.cend(), key);
   }
 
   template <class K>
   size_type count(const K& key) const {
-    size_type count = 0;
-    for(auto& it : cache_)
-      if(it.first == key)
-        ++count;
-    return count;
+    return std::count(cache_.begin(), cache_.end(), key);
   }
 
 private:
@@ -223,24 +215,21 @@ private:
 
 template <class K, class T, class A>
 bool operator==(const flat_map<K, T, A>& xs, const flat_map<K, T, A>& ys) {
-  throw std::exception("not implemented"); //which kind of comparing should we use?
-  return false;
+  return xs.size() == ys.size() &&
+    std::equal(xs.begin(), xs.end(), ys.begin());
 }
 
 template <class K, class T, class A>
 bool operator!=(const flat_map<K, T, A>& xs, const flat_map<K, T, A>& ys) {
-  throw std::exception("not implemented"); //which kind of comparing should we use?
-  return false;
+  return !operator==(xs, ys);
 }
 
 template <class K, class T, class A>
 bool operator<(const flat_map<K, T, A>& xs, const flat_map<K, T, A>& ys) {
-  throw std::exception("not implemented"); //which kind of comparing should we use?
-  return false;
+  return std::lexicographical_compare(xs.begin(), xs.end(), ys.begin(), ys.end());
 }
 
 template <class K, class T, class A>
 bool operator>=(const flat_map<K, T, A>& xs, const flat_map<K, T, A>& ys) {
-  throw std::exception("not implemented"); //which kind of comparing should we use?
-  return false;
+  return !operator<(xs, ys);
 }
