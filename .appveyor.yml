@@ -1,0 +1,18 @@
+version: '{build}'
+
+image:
+- Visual Studio 2017
+- Visual Studio 2015
+
+platform:
+- x86
+- x64
+
+configuration:
+- Debug
+- Release
+
+build_script:
+- cmd: >-
+    mkdir build && cd build
+    cmake ..
