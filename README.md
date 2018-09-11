@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/smart-cloud/actor-zeta.svg?branch=master)](https://travis-ci.org/smart-cloud/actor-zeta)
+[![Build status](https://ci.appveyor.com/api/projects/status/y2uaj5kkg5tsv169?svg=true)](https://ci.appveyor.com/project/smart-cloud/actor-zeta)
 
 actor-zeta
 ========================
