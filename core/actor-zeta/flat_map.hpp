@@ -29,9 +29,9 @@ public:
   using reverse_iterator       = typename vector_type::reverse_iterator;
   using const_reverse_iterator = typename vector_type::const_reverse_iterator;
 
-  flat_map() noexcept = default;
+  flat_map() = default;
 
-  ~flat_map() noexcept = default;
+  ~flat_map() = default;
 
   flat_map(const vector_type& r) noexcept
     : cache_(r)
