@@ -14,5 +14,4 @@ configuration:
 
 build_script:
 - cmd: >-
-    mkdir build && cd build
-    cmake ..
+    mkdir build && cd build && cmake ..
