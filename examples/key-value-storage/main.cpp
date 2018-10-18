@@ -157,7 +157,7 @@ public:
                             query_.parameter = std::move(parsed_raw_request);
                             query_.id = query_raw.id;
 
-                            ctx->address("storage") ->send(
+                            ctx->addresses("storage") ->send(
                                     make_message(
                                             actor_zeta::actor::actor_address(self),
                                             std::string(query_.commands),

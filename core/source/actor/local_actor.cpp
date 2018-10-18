@@ -53,7 +53,7 @@ namespace actor_zeta {
             }
         }
 
-        void local_actor::address(actor_address aa) {
+        void local_actor::addresses(actor_address aa) {
             contacts.emplace(aa->name(), aa);
         }
 
@@ -61,7 +61,7 @@ namespace actor_zeta {
             channels.emplace(channel_->name(),channel_);
         }
 
-        auto local_actor::address(const std::string &name) -> actor_address& {
+        auto local_actor::addresses(const std::string &name) -> actor_address& {
             return contacts.at(name);
         }
 
@@ -77,6 +77,10 @@ namespace actor_zeta {
             }
 
             return types;
+        }
+
+        auto local_actor::self()  -> actor_address  {
+            return address();
         }
 
     }
