@@ -10,13 +10,15 @@ namespace actor_zeta { namespace behavior {
 
     virtual ~context_t() = default;
 
-    virtual void address(actor::actor_address)                        = 0;
+    virtual void addresses(actor::actor_address)                        = 0;
 
-    virtual auto address(const std::string&) -> actor::actor_address& = 0;
+    virtual auto addresses(const std::string&) -> actor::actor_address& = 0;
 
     virtual auto channel(channel::channel) -> void                    = 0;
 
     virtual auto channel(const std::string&) -> channel::channel&     = 0;
+
+    virtual auto self() -> actor::actor_address = 0;
 
   };
   

@@ -34,13 +34,15 @@ namespace actor_zeta { namespace actor {
 
         protected:
 
-            void address(actor_address) final;
+            void addresses(actor_address) final;
 
             void channel(channel::channel) final;
 
-            auto address(const std::string&)-> actor_address& final;
+            auto addresses(const std::string&)-> actor_address& final;
 
             auto channel(const std::string&)->channel::channel& final;
+
+            auto self()  -> actor_address;
 
             void device(executor::execution_device* e);
 
