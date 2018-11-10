@@ -64,7 +64,12 @@ namespace actor_zeta {
             }
 
             template<typename T>
-            T get() {
+            auto as() -> T& {
+                return static_cast<holder <T> *>(content)->held;
+            }
+
+            template<typename T>
+            auto as() const -> const T& {
                 return static_cast<holder <T> *>(content)->held;
             }
 
@@ -103,6 +108,6 @@ namespace actor_zeta {
     }
 }
 
-inline void swap(actor_zeta::messaging::any &lhs, actor_zeta::messaging::any &rhs)noexcept {
+inline void swap(actor_zeta::messaging::any &lhs, actor_zeta::messaging::any &rhs) noexcept {
     lhs.swap(rhs);
 }
