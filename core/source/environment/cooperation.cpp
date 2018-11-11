@@ -11,6 +11,7 @@ namespace actor_zeta {
 
         auto link(group &g1, group &g2) -> void {
             g1->join(g2);
+            g2->join(g1);
         }
 
         auto cooperation::created_entry_group(actor::abstract_actor *t) -> group & {
