@@ -1,4 +1,4 @@
-#include <actor-zeta/flat_map.hpp>
+#include <actor-zeta/contaner/flat_hash_map.hpp>
 
 #include <vector>
 
@@ -7,11 +7,11 @@
 
 #include <iostream>
 #include <string>
-
+using actor_zeta::hash_map;
 void test_ctors() {
   {
     //test sizes
-    flat_map<int, std::string> fmap;
+    hash_map<int, std::string> fmap;
     std::unordered_map<int, std::string> map;
 
     assert(fmap.size() == 0);
@@ -25,7 +25,7 @@ void test_ctors() {
   }
   {
     //ctor via initialization list
-    flat_map<int, std::string> fmap          { {0, "0"}, {1, "1"} };
+    hash_map<int, std::string> fmap          { {0, "0"}, {1, "1"} };
     std::unordered_map<int, std::string> map { {0, "0"}, {1, "1"} };
 
     assert(fmap.size() == map.size());
@@ -36,9 +36,9 @@ void test_ctors() {
   }
   {
     //ctor via copy ctor
-    flat_map<int, std::string> fmap          { {0, "0"}, {1, "1"} };
+    hash_map<int, std::string> fmap          { {0, "0"}, {1, "1"} };
     std::unordered_map<int, std::string> map { {0, "0"}, {1, "1"} };
-    flat_map<int, std::string> fmap2(fmap);
+    hash_map<int, std::string> fmap2(fmap);
     std::unordered_map<int, std::string> map2(map);
 
     assert(fmap.size() == map.size());
@@ -49,9 +49,9 @@ void test_ctors() {
   }
   {
     //ctor via iterator range
-    flat_map<int, std::string> fmap          { {0, "0"}, {1, "1"} };
+    hash_map<int, std::string> fmap          { {0, "0"}, {1, "1"} };
     std::unordered_map<int, std::string> map { {0, "0"}, {1, "1"} };
-    flat_map<int, std::string> fmap2(fmap.begin(), fmap.end());
+    hash_map<int, std::string> fmap2(fmap.begin(), fmap.end());
     std::unordered_map<int, std::string> map2(map.begin(), map.end());
 
     assert(fmap.size() == map.size());
@@ -65,7 +65,7 @@ void test_ctors() {
 void test_insert() {
   {
     //test if pair is already inserted
-    flat_map<int, std::string> fmap;
+    hash_map<int, std::string> fmap;
     std::unordered_map<int, std::string> map;
     
     const bool ins1 = map.insert( {0, "0"} ).second;
@@ -80,7 +80,7 @@ void test_insert() {
 
 void test_emplace() {
   { //test if we can emplace elements
-    flat_map<int, std::string> fmap;
+    hash_map<int, std::string> fmap;
     fmap.emplace( 0, "0" );
     std::unordered_map<int, std::string> map;
     map.emplace( 0, "0" );
@@ -98,7 +98,7 @@ void test_emplace() {
     assert(it_2.second == false && it_2.first->first == 0 && it_2.first->second == "0");
 
     {
-      flat_map<int, std::string> fmap;
+      hash_map<int, std::string> fmap;
       auto &it1 = fmap.emplace( 0, "0" );
 
       assert(it1.second == true && it1.first->first == 0 && it1.first->second == "0");
@@ -112,14 +112,14 @@ void test_emplace() {
 
 void test_swap() {
   { //test if contents swapped
-    flat_map<int, std::string> fmap;
+    hash_map<int, std::string> fmap;
     
     fmap.emplace( 0, "0" );
     fmap.emplace( 1, "1" );
     fmap.emplace( 2, "2" );
     fmap.emplace( 3, "3" );
-    
-    flat_map<int, std::string> fmap_2;
+
+    hash_map<int, std::string> fmap_2;
     fmap_2.emplace( 4, "4" );
     fmap_2.emplace( 5, "5" );
     fmap_2.emplace( 6, "7" );
@@ -133,7 +133,7 @@ void test_swap() {
 
 void test_at() {
   {
-    flat_map<int, std::string> fmap;
+    hash_map<int, std::string> fmap;
     fmap.emplace( 0, "0" );
 
     const std::string val = fmap.at( 0 );
@@ -147,7 +147,7 @@ void test_at() {
     assert( val == "0" );
   }
   {
-    flat_map<int, std::string> fmap;
+    hash_map<int, std::string> fmap;
     fmap[0] = "000";
 
     assert(fmap.size() == 1);
@@ -157,26 +157,26 @@ void test_at() {
 
 void test_compare_ops() {
   {
-    flat_map<int, std::string> fmap1 { { 0, "0" }, { 1, "1" } };
-    flat_map<int, std::string> fmap2 { { 0, "0" }, { 1, "1" } };
+    hash_map<int, std::string> fmap1 { { 0, "0" }, { 1, "1" } };
+    hash_map<int, std::string> fmap2 { { 0, "0" }, { 1, "1" } };
 
     assert( fmap1 == fmap2 );
   }
   {
-    flat_map<int, std::string> fmap1 { { 0, "0" }, { 1, "1" } };
-    flat_map<int, std::string> fmap2 { { 1, "0" }, { 1, "1" } };
+    hash_map<int, std::string> fmap1 { { 0, "0" }, { 1, "1" } };
+    hash_map<int, std::string> fmap2 { { 1, "0" }, { 1, "1" } };
 
     assert( fmap1 != fmap2 );
   }
   {
-    flat_map<int, std::string> fmap1 { { 0, "0" }, { 1, "1" } };
-    flat_map<int, std::string> fmap2 { { 1, "0" }, { 1, "1" } };
+    hash_map<int, std::string> fmap1 { { 0, "0" }, { 1, "1" } };
+    hash_map<int, std::string> fmap2 { { 1, "0" }, { 1, "1" } };
 
     assert( fmap1 < fmap2 );
   }
   {
-    flat_map<int, std::string> fmap1 { { 1, "0" }, { 2, "1" } };
-    flat_map<int, std::string> fmap2 { { 1, "0" }, { 1, "1" } };
+    hash_map<int, std::string> fmap1 { { 1, "0" }, { 2, "1" } };
+    hash_map<int, std::string> fmap2 { { 1, "0" }, { 1, "1" } };
 
     assert( fmap1 >= fmap2 );
   }
@@ -185,14 +185,14 @@ void test_compare_ops() {
 void test_insert_with_hint() {
   {
     //insert with iter hint
-    flat_map<int, std::string> fmap;
+    hash_map<int, std::string> fmap;
     fmap.insert( fmap.begin(), std::pair<int, std::string>( 0, "0" ) );
     assert( fmap.size() == 1 );
     assert( fmap.begin()->first == 0 && fmap.begin()->second == "0" );
   }
   {
     //insert with const iter hint
-    flat_map<int, std::string> fmap;
+    hash_map<int, std::string> fmap;
     fmap.insert( fmap.cbegin(), std::pair<int, std::string>( 0, "0" ) );
     assert( fmap.size() == 1 );
     assert( fmap.begin()->first == 0 && fmap.begin()->second == "0" );
@@ -200,8 +200,8 @@ void test_insert_with_hint() {
 }
 
 void test_insert_input_iterator() {
-  flat_map<int, std::string> fmap { { 0, "0" }, { 1, "1" } };
-  flat_map<int, std::string> fmap2;
+  hash_map<int, std::string> fmap { { 0, "0" }, { 1, "1" } };
+  hash_map<int, std::string> fmap2;
   
   fmap2.insert( fmap.begin(), fmap.end() );
   assert( fmap2.size() == fmap.size() );
