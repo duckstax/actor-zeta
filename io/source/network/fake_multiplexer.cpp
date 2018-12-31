@@ -79,7 +79,7 @@ namespace actor_zeta {
 
         fake_socket &fake_multiplexer::add_scenario(const std::string &host, uint16_t port) {
             connection_identifying id(network::connect_type::tcp, host, port);
-            scenario.emplace(id, std::move(fake_socket()));
+            scenario.emplace(id, fake_socket());
             return scenario.at(id);
         }
 

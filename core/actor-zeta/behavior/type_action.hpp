@@ -8,7 +8,7 @@ namespace actor_zeta { namespace behavior {
 ///
         class type_action final {
         public:
-            type_action() = delete;
+            type_action() = default;
 
             type_action(const type_action &) = default;
 

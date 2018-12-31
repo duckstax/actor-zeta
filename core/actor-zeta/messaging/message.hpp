@@ -1,14 +1,12 @@
 #pragma once
 
-#include <memory>
-
 #include <actor-zeta/behavior/type_action.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
 #include <actor-zeta/messaging/any.hpp>
 #include <actor-zeta/messaging/message_header.hpp>
 
-namespace actor_zeta {
-    namespace messaging {
+namespace actor_zeta { namespace messaging {
+
 ///
 /// @brief
 ///
@@ -20,11 +18,11 @@ namespace actor_zeta {
 
             message &operator=(const message &) = delete;
 
-            message(message &&) noexcept ;
+            message(message &&other) = default;
 
-            message &operator=(message &&) noexcept ;
+            message &operator=(message &&) = default;
 
-            ~message();
+            ~message() = default;
 
             message(actor::actor_address /*sender*/, const std::string& /*name*/, any &&/*body*/);
 
@@ -33,22 +31,29 @@ namespace actor_zeta {
             auto sender() const -> actor::actor_address ;
 
             template<typename T>
-            auto body() -> T {
-                return get_body().get<T>();
+            auto body() const -> const T& {
+                return body_.as<T>();
+            }
+
+            template<typename T>
+            auto body() -> T& {
+                return body_.as<T>();
             }
 
             auto clone() const -> message;
 
             operator bool();
 
+            void swap(message& other) noexcept;
+
         private:
             message(const message_header &header, const any &body);
 
-            auto get_body() -> any &;
+            bool init;
 
-            struct impl;
+            message_header header_;
 
-            std::unique_ptr<impl> pimpl;
+            any  body_;
         };
 
         template <typename T>
@@ -57,4 +62,8 @@ namespace actor_zeta {
         }
 
     }
+}
+
+inline void swap(actor_zeta::messaging::message &lhs, actor_zeta::messaging::message &rhs) noexcept {
+    lhs.swap(rhs);
 }

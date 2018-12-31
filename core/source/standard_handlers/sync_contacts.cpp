@@ -17,7 +17,7 @@ namespace actor_zeta {
         auto address = context_.message().body<actor::actor_address>();
 
         if(address){
-            context_->address(address);
+            context_->addresses(address);
         } else {
             error(address->name());
         }
