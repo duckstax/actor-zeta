@@ -6,7 +6,7 @@ project(${PROJECT} CXX)
 
 include_directories(.)
 
-list(APPEND HEADER_FILES
+set(HEADER_FILES
         actor-zeta/actor/abstract_actor.hpp
         actor-zeta/actor/actor.hpp
         actor-zeta/actor/actor_address.hpp
@@ -31,12 +31,12 @@ list(APPEND HEADER_FILES
         actor-zeta/environment/group.hpp
         actor-zeta/environment/storage_space.hpp
 
+        actor-zeta/executor/policy/unprofiled.hpp
         actor-zeta/executor/policy/work_sharing.hpp
         actor-zeta/executor/abstract_coordinator.hpp
         actor-zeta/executor/coordinator.hpp
         actor-zeta/executor/executable.hpp
         actor-zeta/executor/execution_device.hpp
-        actor-zeta/executor/time_unit.hpp
         actor-zeta/executor/worker.hpp
 
         actor-zeta/messaging/blocking_mail_queue.hpp
@@ -55,7 +55,7 @@ list(APPEND HEADER_FILES
         actor-zeta/ref_counted.hpp
 )
 
-list(APPEND SOURCE_FILES
+set(SOURCE_FILES
         source/actor/abstract_actor.cpp
         source/actor/actor.cpp
         source/actor/actor_address.cpp
@@ -78,6 +78,10 @@ list(APPEND SOURCE_FILES
         source/environment/environment.cpp
         source/environment/group.cpp
         source/environment/storage_space.cpp
+
+        source/executor/abstract_coordinator.cpp
+        source/executor/executable.cpp
+        source/executor/execution_device.cpp
 
         source/messaging/message.cpp
         source/messaging/message_header.cpp

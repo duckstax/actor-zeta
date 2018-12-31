@@ -5,28 +5,25 @@
 #include <cstddef>
 #include <condition_variable>
 
-#include "actor-zeta/forwards.hpp"
+#include <actor-zeta/executor/policy/unprofiled.hpp>
 
 namespace actor_zeta { namespace executor {
 ///
 /// @brief
 ///
-        class work_sharing {
-        private:
-            template<class WorkerOrCoordinator>
-            static auto cast(WorkerOrCoordinator *self) -> decltype(self->data()) {
-                return self->data();
-            }
-
+        class work_sharing final : public unprofiled {
         public:
-            using queue_type = std::list<executable *>;
+            using queue_type = std::list< executable*>;
 
-            ~work_sharing() {}
+            ~work_sharing() override {
+
+            }
 ///
 /// @brief
 ///
-            struct coordinator_data {
-                inline explicit coordinator_data(executor::abstract_coordinator *) {
+            struct coordinator_data final {
+                inline explicit coordinator_data(abstract_coordinator *) {
+
                 }
 
                 queue_type queue;
@@ -36,8 +33,9 @@ namespace actor_zeta { namespace executor {
 ///
 /// @brief
 ///
-            struct worker_data {
-                inline explicit worker_data(executor::abstract_coordinator *) {
+            struct worker_data final {
+                inline explicit worker_data(abstract_coordinator *) {
+
                 }
             };
 
@@ -66,18 +64,22 @@ namespace actor_zeta { namespace executor {
             }
 
             template<class Worker>
-            void resume_job_later(Worker *self, executable *job) {
+            void resume_job_later(Worker* self, executable* job) {
                 enqueue(self->parent(), job);
             }
 
             template<class Worker>
-            executable *dequeue(Worker *self) {
+            executable* dequeue(Worker* self) {
                 auto &parent_data = cast(self->parent());
                 std::unique_lock<std::mutex> guard(parent_data.lock);
                 parent_data.cv.wait(guard, [&] { return !parent_data.queue.empty(); });
                 executable *job = parent_data.queue.front();
                 parent_data.queue.pop_front();
                 return job;
+            }
+
+            template<class Worker, class UnaryFunction>
+            void foreach_resumable(Worker *, UnaryFunction) {
             }
 
             template<class Coordinator, class UnaryFunction>
@@ -97,5 +99,5 @@ namespace actor_zeta { namespace executor {
                 }
             }
         };
-    }
-}
+
+}}

@@ -1,25 +1,24 @@
 #pragma once
 
-#include <thread>
-#include "actor-zeta/forwards.hpp"
+#include <chrono>
+#include <atomic>
+#include <cstddef>
+#include <array>
 
-namespace actor_zeta {
-    namespace executor {
+#include <actor-zeta/actor/actor.hpp>
+#include <actor-zeta/messaging/message.hpp>
+#include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/executor/executable.hpp>
+
+namespace actor_zeta { namespace executor {
 ///
 /// @brief
 ///
         class abstract_coordinator {
         public:
+            abstract_coordinator(std::size_t num_worker_threads, std::size_t max_throughput);
+
             virtual void submit(executable *) = 0;
-
-            virtual void start() = 0;
-
-            virtual ~abstract_coordinator() = default;
-
-            abstract_coordinator(std::size_t num_worker_threads, std::size_t max_throughput_param)
-                    : max_throughput_(max_throughput_param),
-                      num_workers_(((0 == num_worker_threads) ? std::thread::hardware_concurrency() * 2 - 1 : num_worker_threads)) {
-            };
 
             inline size_t max_throughput() const {
                 return max_throughput_;
@@ -29,9 +28,15 @@ namespace actor_zeta {
                 return num_workers_;
             }
 
-        private:
+            virtual void start() = 0;
+
+        protected:
+            std::atomic<size_t> next_worker_;
+
             std::size_t max_throughput_;
+
             std::size_t num_workers_;
+
         };
-    }
-}
+
+}}

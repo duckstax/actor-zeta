@@ -28,7 +28,7 @@ namespace actor_zeta {
             device(e);
             if (hide) {//TODO:???
                 device(e);
-                device()->put_execute_latest(this);
+                device()->execute_async(this);
             } else {
                 this->run(e,std::numeric_limits<std::size_t>::max());
             }

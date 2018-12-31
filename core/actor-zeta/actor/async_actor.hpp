@@ -31,9 +31,9 @@ namespace actor_zeta { namespace actor {
         protected:
             async_actor(environment::abstract_environment *, mailbox_type*, const std::string &);
 
-            void attach_to_scheduler() final;
+            void intrusive_ptr_add_ref_impl() override;
 
-            void detach_from_scheduler() final;
+            void intrusive_ptr_release_impl() override;
 
         private:
 
