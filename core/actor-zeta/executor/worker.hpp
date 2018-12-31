@@ -1,15 +1,15 @@
 #pragma once
 
+#include <cstddef>
 #include <thread>
-#include <atomic>
-#include <mutex>
 
-#include "execution_device.hpp"
-#include "executable.hpp"
-#include "actor-zeta/forwards.hpp"
+#include <actor-zeta/executor/execution_device.hpp>
+#include <actor-zeta/executor/executable.hpp>
 
-namespace actor_zeta {
-    namespace executor {
+namespace actor_zeta { namespace executor {
+
+        template<class Policy>
+        class coordinator;
 ///
 /// @brief
 /// @tparam Policy
@@ -21,15 +21,25 @@ namespace actor_zeta {
             using coordinator_ptr = coordinator<Policy> *;
             using policy_data = typename Policy::worker_data;
 
-            worker(size_t worker_id, coordinator_ptr worker_parent, size_t throughput)
-                    : max_throughput_(throughput),
+            worker(size_t worker_id, coordinator_ptr worker_parent,
+                   const policy_data &init, size_t throughput)
+                    : execution_device(),
+                      max_throughput_(throughput),
                       id_(worker_id),
                       parent_(worker_parent),
-                      data_(worker_parent) {
+                      data_(init) {
             }
 
             void start() {
-                this_thread_ = std::thread(&worker::run,this);
+                ///assert(this_thread_.get_id() == std::thread::id{}); TODO: do not check; see implement asio
+                auto current_worker = this;
+                this_thread_ = std::thread{
+                        [current_worker] {
+                        /// TODO: hook
+                            current_worker->run();
+                        /// TODO: hook
+                    }
+                };
             }
 
             worker(const worker &) = delete;
@@ -37,10 +47,12 @@ namespace actor_zeta {
             worker &operator=(const worker &) = delete;
 
             void external_enqueue(job_ptr job) {
+                ///assert(job != nullptr); TODO: do not check
                 policy_.external_enqueue(this, job);
             }
 
-            void put_execute_latest(job_ptr job) override {
+            void execute_async(job_ptr job) override {
+                ///assert(job != nullptr); TODO: do not check
                 policy_.internal_enqueue(this, job);
             }
 
@@ -50,6 +62,10 @@ namespace actor_zeta {
 
             size_t id() const {
                 return id_;
+            }
+
+            std::thread &get_thread() {
+                return this_thread_;
             }
 
             policy_data &data() {
@@ -65,21 +81,27 @@ namespace actor_zeta {
             void run() {
                 for (;;) {
                     auto job = policy_.dequeue(this);
+                    /// assert(job != nullptr); TODO: do not check
+                    policy_.before_resume(this, job);
                     auto res = job->run(this, max_throughput_);
+                    policy_.after_resume(this, job);
                     switch (res) {
-                        case executor::executable_result::resume: {
+                        case executable_result::resume: {
                             policy_.resume_job_later(this, job);
                             break;
                         }
-                        case executor::executable_result::done: {
-                            //intrusive_ptr_release(job); //TODO : ?
+                        case executable_result::done: {
+                            policy_.after_completion(this, job);
+                            intrusive_ptr_release(job);
                             break;
                         }
-                        case executor::executable_result::awaiting: {
-                            //intrusive_ptr_release(job); //TODO : ?
+                        case executable_result::awaiting: {
+                            intrusive_ptr_release(job);
                             break;
                         }
-                        case executor::executable_result::shutdown: {
+                        case executable_result::shutdown: {
+                            policy_.after_completion(this, job);
+                            policy_.before_shutdown(this);
                             return;
                         }
                     }
@@ -93,5 +115,5 @@ namespace actor_zeta {
             policy_data data_;
             Policy policy_;
         };
-    }
-}
+
+}}

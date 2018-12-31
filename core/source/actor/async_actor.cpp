@@ -69,7 +69,7 @@ namespace actor_zeta {
 
             if (e != nullptr) {
                 device(e);
-                device()->put_execute_latest(this);
+                device()->execute_async(this);
             } else if(env()) {
                 env()->manager_execution_device().submit(this);
             } else {
@@ -79,11 +79,11 @@ namespace actor_zeta {
         }
 
 
-        void async_actor::attach_to_scheduler() {
+        void async_actor::intrusive_ptr_add_ref_impl() {
             ref();
         }
 
-        void async_actor::detach_from_scheduler() {
+        void async_actor::intrusive_ptr_release_impl() {
             deref();
         }
 
@@ -96,7 +96,7 @@ namespace actor_zeta {
             device(e);
 
             if (hide) {//TODO:???
-                device()->put_execute_latest(this);
+                device()->execute_async(this);
             } else {
                 auto max_throughput = std::numeric_limits<size_t>::max();
                 while (run(device(), max_throughput) != executor::executable_result::awaiting) {
