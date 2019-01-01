@@ -23,6 +23,11 @@ list(APPEND HEADER_FILES
         actor-zeta/channel/abstract_channel.hpp
         actor-zeta/channel/channel.hpp
 
+        actor-zeta/detail/contaner/flat_hash_map.hpp
+        actor-zeta/detail/contaner/flat_hash_table.hpp
+        actor-zeta/detail/type_traits/callable_trait.h
+        actor-zeta/detail/type_traits/type_list.h
+
         actor-zeta/environment/abstract_environment.hpp
         actor-zeta/environment/abstract_group.hpp
         actor-zeta/environment/adjacency_list.hpp
@@ -53,7 +58,6 @@ list(APPEND HEADER_FILES
         actor-zeta/intrusive_ptr.hpp
         actor-zeta/metadata.hpp
         actor-zeta/ref_counted.hpp
-        actor-zeta/flat_map.hpp
 )
 
 list(APPEND SOURCE_FILES

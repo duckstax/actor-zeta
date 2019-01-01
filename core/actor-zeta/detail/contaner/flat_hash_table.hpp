@@ -4,7 +4,7 @@
 #include <utility>
 #include <cstddef>
 
-namespace actor_zeta {
+namespace actor_zeta { namespace  detail {
 
     template<
             typename Value,
@@ -475,4 +475,4 @@ namespace actor_zeta {
     template<typename Value, typename Key, typename GetKey, typename Hash, typename Equals, typename Allocator>
     constexpr double hash_table<Value, Key, GetKey, Hash, Equals, Allocator>::DefaultMaxFillLevel;
 
-}
+}}

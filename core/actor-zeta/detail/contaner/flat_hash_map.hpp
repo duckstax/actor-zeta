@@ -3,9 +3,9 @@
 #include <functional>
 #include <type_traits>
 
-#include <actor-zeta/contaner/flat_hash_table.hpp>
+#include <actor-zeta/detail/contaner/flat_hash_table.hpp>
 
-namespace actor_zeta {
+namespace actor_zeta { namespace  detail {
 
     template<
             typename Key,
@@ -494,6 +494,4 @@ namespace actor_zeta {
     bool operator>=(const hash_map<Key,Mapped,Hash,Equals,Allocator>& xs, const hash_map<Key,Mapped,Hash,Equals,Allocator>& ys) {
         return !operator<(xs, ys);
     }
-
-
-}
+}}
