@@ -1,4 +1,4 @@
-#include <actor-zeta/contaner/flat_hash_map.hpp>
+#include <actor-zeta/detail/contaner/flat_hash_map.hpp>
 
 #include <vector>
 
@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <string>
-using actor_zeta::hash_map;
+using actor_zeta::detail::hash_map;
 void test_ctors() {
   {
     //test sizes
