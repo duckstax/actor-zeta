@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <unordered_map>
-#include <actor-zeta/detail/type_traits/callable_trait.h>
+#include <actor-zeta/detail/type_traits/callable_trait.hpp>
 #include <actor-zeta/behavior/type_action.hpp>
 #include <actor-zeta/behavior/abstract_action.hpp>
 
