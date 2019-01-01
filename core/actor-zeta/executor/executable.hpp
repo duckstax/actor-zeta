@@ -1,9 +1,12 @@
 #pragma once
 
+#include <cstddef>
+#include <cstdint>
+#include <type_traits>
+
 #include "actor-zeta/forwards.hpp"
 
-namespace actor_zeta {
-    namespace executor {
+namespace actor_zeta { namespace executor {
 ///
 /// @brief
 ///
@@ -21,13 +24,26 @@ namespace actor_zeta {
 
 
         struct executable {
-            virtual ~executable() = default;
 
-            virtual void attach_to_scheduler() = 0;
+            executable() = default;
 
-            virtual void detach_from_scheduler() = 0;
+            virtual ~executable();
 
-            virtual executable_result run(executor::execution_device *,size_t max_throughput) = 0;
+            virtual void intrusive_ptr_add_ref_impl() = 0;
+
+            virtual void intrusive_ptr_release_impl() = 0;
+
+            virtual auto run(executor::execution_device *, size_t max_throughput) -> executable_result = 0;
         };
-    }
-}
+
+        template<class T>
+        auto intrusive_ptr_add_ref(T *ptr) -> typename std::enable_if<std::is_same<T *, executable *>::value>::type {
+            ptr->intrusive_ptr_add_ref_impl();
+        }
+
+        template<class T>
+        auto intrusive_ptr_release(T *ptr) -> typename std::enable_if<std::is_same<T *, executable *>::value>::type {
+            ptr->intrusive_ptr_release_impl();
+        }
+
+}}
