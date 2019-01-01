@@ -22,7 +22,7 @@ public:
         attach(
                 make_handler(
                         "update",
-                        [this]( context& ctx ) -> void {
+                        [this]( context& ctx,int&dummy ) -> void {
 
                         std::cerr<<"update"<<std::endl;
 
@@ -33,7 +33,7 @@ public:
         attach(
                 make_handler(
                         "find",
-                        [this]( context& ctx ) -> void {
+                        [this]( context& ctx,int&dummy ) -> void {
 
                         std::cerr<<"find"<<std::endl;
 
@@ -44,7 +44,7 @@ public:
         attach(
                 make_handler(
                         "remove",
-                        [this]( context& ctx ) -> void {
+                        [this]( context& ctx,int&dummy ) -> void {
 
                         std::cerr<<"remove"<<std::endl;
 
