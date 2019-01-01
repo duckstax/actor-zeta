@@ -47,7 +47,7 @@ public:
         attach(
                 make_handler(
                         "update",
-                        [this]( context& ctx ) -> void {
+                        [this]( context& ctx,int&dummy ) -> void {
 
 
                         }
@@ -57,7 +57,7 @@ public:
         attach(
                 make_handler(
                         "find",
-                        [this]( context& ctx ) -> void {
+                        [this]( context& ctx,int&dummy ) -> void {
 
 
                         }
@@ -67,7 +67,7 @@ public:
         attach(
                 make_handler(
                         "remove",
-                        [this]( context& ctx ) -> void {
+                        [this]( context& ctx,int&dummy ) -> void {
 
                         }
                 )
