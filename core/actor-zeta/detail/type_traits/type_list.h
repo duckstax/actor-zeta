@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <type_traits>
 
-namespace actor_zeta { namespace  detail {
+namespace actor_zeta { namespace  type_traits {
 
 // A list of types.
         template<class... Ts>

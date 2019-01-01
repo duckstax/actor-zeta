@@ -3,7 +3,6 @@
 #include <memory>
 #include <unordered_map>
 #include <actor-zeta/detail/type_traits/callable_trait.h>
-
 #include <actor-zeta/behavior/type_action.hpp>
 #include <actor-zeta/behavior/abstract_action.hpp>
 
@@ -11,7 +10,6 @@ namespace actor_zeta { namespace behavior {
 ///
 /// @brief
 ///
-
         class reactions final {
         public:
             using event_type     = type_action;
@@ -35,17 +33,17 @@ namespace actor_zeta { namespace behavior {
 
             bool add(abstract_action*);
 
-            auto end() -> iterator;
-
             auto begin() -> iterator;
 
-            auto cend() -> const_iterator;
-
-            auto cbegin() -> const_iterator;
+            auto end() -> iterator;
 
             auto begin() const -> const_iterator;
 
             auto end() const -> const_iterator;
+
+            auto cbegin() -> const_iterator;
+
+            auto cend() -> const_iterator;
 
         private:
             storage reactions_;

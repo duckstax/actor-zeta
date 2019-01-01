@@ -33,12 +33,12 @@ namespace actor_zeta { namespace behavior {
             template<
                     std::size_t N,
                     typename F,
-                    class Args = typename detail::get_callable_trait<F>::arg_types
+                    class Args = typename type_traits::get_callable_trait<F>::arg_types
             >
             helper(const char(&aStr)[N],F&&f):
                     abstract_action(aStr){
                     helper_= [f](context &arg) -> void {
-                        using arg_type_2 = typename detail::type_list_at<Args, 1>::type;
+                        using arg_type_2 = typename type_traits::type_list_at<Args, 1>::type;
                         using clear_args_type_2 = typename std::decay<arg_type_2>::type;
                         auto& tmp = arg.message().body<clear_args_type_2>();
                         f(arg, tmp);

@@ -3,8 +3,10 @@
 #include <functional>
 #include "type_list.h"
 
-namespace actor_zeta { namespace  detail {
+namespace actor_zeta { namespace  type_traits {
 
+        template<bool _Cond, typename _Tp = void>
+        using enable_if_t = typename std::enable_if<_Cond, _Tp>::type;
 
         template<class T>
         using decay_t = typename std::decay<T>::type;
@@ -84,17 +86,27 @@ namespace actor_zeta { namespace  detail {
         struct get_callable_trait : get_callable_trait_helper<decay_t<T>> {
         };
 
-        template<class T>
-        struct is_callable {
-            template<class C>
-            static bool _fun(C *, typename get_callable_trait<C>::type * = nullptr);
+        template<class... Ts>
+        using void_t = void;
 
-            static void _fun(void *);
+        namespace detail {
+            template<template<class...> class Trait, class Enabler, class... Args>
+            struct is_detected : std::false_type {
+            };
 
-            using result_type = decltype(_fun(static_cast<decay_t<T> *>(nullptr)));
+            template<template<class...> class Trait, class... Args>
+            struct is_detected<Trait, void_t<Trait<Args...>>, Args...> : std::true_type {
+            };
+        }
 
-        public:
-            static constexpr bool value = std::is_same<bool, result_type>::value;
-        };
+        template<template<class...> class Trait, class... Args>
+        using is_detected = typename detail::is_detected<Trait, void, Args...>::type;
+
+        template<typename C, typename T, typename U>
+        using is_callable_t = decltype(std::declval<C &>()(std::declval<T>(), std::declval<U>()));
+
+        template<typename C, typename T, typename U>
+        using is_callable = is_detected<is_callable_t, C, T, U>;
+
 
     }}
