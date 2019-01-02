@@ -72,7 +72,7 @@ namespace actor_zeta {
         std::set<std::string> local_actor::message_types() const {
             std::set<std::string> types;
 
-            for(auto&i: reactions_) {
+            for(const auto&i: reactions_) {
                 types.emplace(i.first.to_string());
             }
 

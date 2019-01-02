@@ -5,10 +5,9 @@
 #include <actor-zeta/behavior/context.hpp>
 #include <memory>
 
-namespace actor_zeta {
-    namespace behavior {
+namespace actor_zeta { namespace behavior {
 
-        inline void error(const std::string &_error_) {
+        inline void error_duplicate_handler(const char *_error_) {
             std::cerr << "Duplicate" << std::endl;
             std::cerr << "Handler: " << _error_ << std::endl;
             std::cerr << "Duplicate" << std::endl;
@@ -20,7 +19,7 @@ namespace actor_zeta {
             if (it != reactions_.end()) {
                 return it->second->invoke(d);
             } else {
-                return reactions_.at("skip")->invoke(d);
+                return reactions_["skip"]->invoke(d);
             }
         }
 
@@ -28,10 +27,10 @@ namespace actor_zeta {
             auto it = reactions_.find(aa->name());
             bool status = false ;
             if( it == reactions_.end() ) {
-               auto it1 =  reactions_.emplace(aa->name(), std::unique_ptr<abstract_action>(aa));
-               status = it1.second;
+                auto it1 =  reactions_.emplace(aa->name(), std::unique_ptr<abstract_action>(aa));
+                status = it1.second;
             } else {
-                error(aa->name().to_string());
+                error_duplicate_handler(aa->name().to_string().c_str());
             }
 
             return status;
@@ -60,9 +59,4 @@ namespace actor_zeta {
         auto reactions::end() const -> reactions::const_iterator {
             return reactions_.end();
         }
-
-        reactions::reactions()  = default;
-
-
-    }
-}
+    }}

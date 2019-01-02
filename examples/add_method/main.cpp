@@ -33,7 +33,7 @@ public:
         attach(
                 make_handler(
                         "find",
-                        [this]( context& ctx ) -> void {
+                        [this]( context& ctx) -> void {
 
                         }
                 )

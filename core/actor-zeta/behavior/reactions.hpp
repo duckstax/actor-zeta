@@ -2,23 +2,23 @@
 
 #include <memory>
 #include <unordered_map>
-
+#include <actor-zeta/detail/type_traits/callable_trait.hpp>
 #include <actor-zeta/behavior/type_action.hpp>
 #include <actor-zeta/behavior/abstract_action.hpp>
+#include <actor-zeta/detail/contaner/hashmap.h>
 
 namespace actor_zeta { namespace behavior {
 ///
 /// @brief
 ///
-
         class reactions final {
         public:
             using event_type     = type_action;
-            using storage        = std::unordered_map<event_type, std::unique_ptr<abstract_action>>;
-            using iterator       = storage::iterator ;
-            using const_iterator = storage::const_iterator ;
+            using storage        = /*actor_zeta::contaner::unordered_split_flatmap*/std::unordered_map<event_type, std::unique_ptr<abstract_action>>;
+            using iterator       = storage::iterator;
+            using const_iterator = storage::const_iterator;
 
-            reactions();
+            reactions()  = default;
 
             reactions(const reactions &) = delete;
 
@@ -30,9 +30,9 @@ namespace actor_zeta { namespace behavior {
 
             ~reactions() = default;
 
-            bool add(abstract_action *aa);
+            void execute(context&);
 
-            void execute(context &);
+            bool add(abstract_action*);
 
             auto begin() -> iterator;
 
@@ -50,5 +50,4 @@ namespace actor_zeta { namespace behavior {
             storage reactions_;
         };
 
-    } /// namespace behavior
-} /// namespace actor_zeta
+}} /// namespace actor_zeta { namespace behavior {}}

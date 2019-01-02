@@ -23,6 +23,11 @@ set(HEADER_FILES
         actor-zeta/channel/abstract_channel.hpp
         actor-zeta/channel/channel.hpp
 
+        actor-zeta/detail/contaner/hashmap.h
+
+        actor-zeta/detail/type_traits/callable_trait.hpp
+        actor-zeta/detail/type_traits/type_list.hpp
+
         actor-zeta/environment/abstract_environment.hpp
         actor-zeta/environment/abstract_group.hpp
         actor-zeta/environment/adjacency_list.hpp
@@ -107,3 +112,5 @@ target_include_directories(
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/header
 )
+
+add_subdirectory(test)
