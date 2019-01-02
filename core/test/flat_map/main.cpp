@@ -1,13 +1,16 @@
-#include <actor-zeta/detail/contaner/flat_hash_map.hpp>
+#include <actor-zeta/detail/contaner/hashmap.h>
 
 #include <vector>
-
 #include <unordered_map>
 #include <cassert>
-
 #include <iostream>
 #include <string>
-using actor_zeta::detail::hash_map;
+
+using actor_zeta::contaner::unordered_split_flatmap;
+
+template <typename K ,typename V>
+using hash_map = unordered_split_flatmap<K,V>;
+
 void test_ctors() {
   {
     //test sizes

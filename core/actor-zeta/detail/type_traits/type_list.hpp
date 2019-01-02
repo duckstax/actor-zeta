@@ -27,8 +27,6 @@ namespace actor_zeta { namespace  type_traits {
         template<class... Ts>
         constexpr size_t type_list_size<type_list<Ts...>>::value;
 
-
-
 // type at(size_t)
 
         template<size_t N, class... E>

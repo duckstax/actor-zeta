@@ -1,15 +1,10 @@
 #pragma once
 
 #include <functional>
-#include "type_list.hpp"
+#include <actor-zeta/detail/type_traits/type_list.hpp>
+#include <actor-zeta/detail/type_traits/type_traits.hpp>
 
 namespace actor_zeta { namespace  type_traits {
-
-        template<bool _Cond, typename _Tp = void>
-        using enable_if_t = typename std::enable_if<_Cond, _Tp>::type;
-
-        template<class T>
-        using decay_t = typename std::decay<T>::type;
 
         template<class Functor>
         struct callable_trait;
@@ -86,21 +81,6 @@ namespace actor_zeta { namespace  type_traits {
         struct get_callable_trait : get_callable_trait_helper<decay_t<T>> {
         };
 
-        template<class... Ts>
-        using void_t = void;
-
-        namespace detail {
-            template<template<class...> class Trait, class Enabler, class... Args>
-            struct is_detected : std::false_type {
-            };
-
-            template<template<class...> class Trait, class... Args>
-            struct is_detected<Trait, void_t<Trait<Args...>>, Args...> : std::true_type {
-            };
-        }
-
-        template<template<class...> class Trait, class... Args>
-        using is_detected = typename detail::is_detected<Trait, void, Args...>::type;
 
         template<typename C, typename T, typename U>
         using is_callable_t = decltype(std::declval<C &>()(std::declval<T>(), std::declval<U>()));

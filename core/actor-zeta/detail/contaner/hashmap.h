@@ -6,7 +6,7 @@
 #include <new>
 #include <tuple>
 
-#include <actor-zeta/detail/type_traits/callable_trait.hpp>
+#include <actor-zeta/detail/type_traits/type_traits.hpp>
 
 namespace actor_zeta { namespace contaner {
 

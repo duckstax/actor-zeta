@@ -19,7 +19,7 @@ namespace actor_zeta { namespace behavior {
             if (it != reactions_.end()) {
                 return it->second->invoke(d);
             } else {
-                return reactions_.at("skip")->invoke(d);
+                return reactions_["skip"]->invoke(d);
             }
         }
 
