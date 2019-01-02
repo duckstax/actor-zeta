@@ -1,14 +1,12 @@
 #include <string>
 #include <cstdint>
-#include <typeinfo>
 #include <type_traits>
 #include <cassert>
 #include <actor-zeta/detail/type_traits/type_list.hpp>
 
-using namespace actor_zeta::type_traits;
-
 int main() {
     using std::is_same;
+    using namespace actor_zeta::type_traits;
     using l1 = type_list<int, float, std::string>;
     using r1 = type_list<std::string, float,int>;
     assert((is_same<int, type_list_at<l1, 0>::type>::value));
