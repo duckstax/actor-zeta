@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <new>
 #include <tuple>
+#include <memory>
 
 #include <actor-zeta/detail/type_traits/type_traits.hpp>
 
@@ -62,8 +63,8 @@ namespace actor_zeta { namespace contaner {
 
     template<typename Key, typename Value>
     class unordered_split_flatmap final : private impl::split_flatmap_storage<Key, Value> {
-        static_assert(std::is_nothrow_move_constructible<Key>{});
-        static_assert(std::is_nothrow_move_constructible<Value>{});
+        static_assert(std::is_nothrow_move_constructible<Key>{},"The type Key is not move_constructible!");
+        static_assert(std::is_nothrow_move_constructible<Value>{},"The type Value is not move_constructible!");
     public:
         using key_type = Key;
         using mapped_type = Value;
