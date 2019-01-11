@@ -66,14 +66,15 @@ namespace actor_zeta {
 
         bool async_actor::send(messaging::message && mep, executor::execution_device *e) {
             mailbox().put(std::move(mep));
-
+            /// add a reference count to this actor and coordinator it
+            intrusive_ptr_add_ref(this);
             if (e != nullptr) {
                 device(e);
                 device()->execute_async(this);
             } else if(env()) {
                 env()->manager_execution_device().submit(this);
             } else {
-                /** local */
+                /// local
             }
             return true;
         }
@@ -96,6 +97,9 @@ namespace actor_zeta {
             device(e);
 
             if (hide) {//TODO:???
+                /// coordinator has a reference count to the actor as long as
+                /// it is waiting to get scheduled
+                intrusive_ptr_add_ref(this);
                 device()->execute_async(this);
             } else {
                 auto max_throughput = std::numeric_limits<size_t>::max();

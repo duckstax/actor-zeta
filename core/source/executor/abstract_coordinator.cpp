@@ -8,8 +8,8 @@ namespace actor_zeta { namespace executor {
                 std::size_t max_throughput
         ):
             next_worker_(0),
-            max_throughput_(0),
-            num_workers_(0){
+            max_throughput_(max_throughput),
+            num_workers_(num_worker_threads){
 
         }
 
