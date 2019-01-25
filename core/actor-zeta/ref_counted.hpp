@@ -10,7 +10,7 @@ namespace actor_zeta {
 ///
     class ref_counted {
     public:
-        ~ref_counted();
+        virtual ~ref_counted();
 
         ref_counted();
 
