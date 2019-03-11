@@ -1,12 +1,17 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(PROJECT actor-zeta-io)
+set(project actor-zeta-io)
 
-project(${PROJECT} CXX)
+if (CMAKE_VERSION VERSION_LESS 3.0)
+    PROJECT(${project} CXX)
+else()
+    cmake_policy(SET CMP0048 NEW)
+    PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
+endif()
 
 include_directories(.)
 
-list(APPEND HEADER_FILES
+set(HEADER_FILES
         actor-zeta/actor/broker.hpp
 
         actor-zeta/environment/network_environment.hpp
@@ -17,28 +22,28 @@ list(APPEND HEADER_FILES
         actor-zeta/forwards.hpp
 )
 
-list(APPEND SOURCE_FILES
+set(SOURCE_FILES
         source/network/connection_identifying.cpp
         source/network/fake_multiplexer.cpp
         source/broker.cpp
 )
 
 add_library(
-        ${PROJECT}
+        ${PROJECT_NAME} ${BUILD_TYPE}
         ${SOURCE_FILES}
         ${HEADER_FILES}
 )
 
 target_link_libraries(
-        ${PROJECT}
+        ${PROJECT_NAME}
         PUBLIC
         actor-zeta-core
 )
 
-set_target_properties( ${PROJECT} PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/io)
+set_target_properties( ${PROJECT_NAME} PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/io)
 
 target_include_directories(
-        ${PROJECT}
+        ${PROJECT_NAME}
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/header
 )

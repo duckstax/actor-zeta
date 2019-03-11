@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(project groups)
-
-project(${project} CXX)
+project(groups CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES main.cpp)
 
-add_executable(${project} ${SOURCE_FILES})
-target_link_libraries(${project} actor-zeta-core)
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+
+target_link_libraries(${PROJECT_NAME} actor-zeta-core)

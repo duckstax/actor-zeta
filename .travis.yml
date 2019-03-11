@@ -3,7 +3,7 @@ language: cpp
 
 script:
   - mkdir build && cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER -DEXAMPLES=ON -DALLOW_TESTS=ON
   - cmake --build . -- VERBOSE=1
 
 

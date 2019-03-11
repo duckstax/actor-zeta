@@ -1,18 +1,43 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(PROJECT actor-zeta)
+set(CMAKE_CXX_STANDARD 11)
 
-project(${PROJECT} CXX)
+set(project actor-zeta)
 
-option(CMake_RUN_CLANG_TIDY "Run clang-tidy with the compiler." ON)
+set (CMAKE_PROJECT_VERSION_MAJOR 1)
+set (CMAKE_PROJECT_VERSION_MINOR 0)
+set (CMAKE_PROJECT_VERSION_PATCH 0)
+set (CMAKE_PROJECT_VERSION "${CMAKE_PROJECT_VERSION_MAJOR}.${CMAKE_PROJECT_VERSION_MINOR}.${CMAKE_PROJECT_VERSION_PATCH}")
+
+if (CMAKE_VERSION VERSION_LESS 3.0)
+    PROJECT(${project} CXX)
+else()
+    cmake_policy(SET CMP0048 NEW)
+    PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
+endif()
+
+option(CMake_RUN_CLANG_TIDY "Run clang-tidy with the compiler." OFF)
 
 option(IO "Enable building actor-zeta-io" ON)
 
-option(EXAMPLES "Enable building examples" ON)
+option(EXAMPLES "Enable building examples" OFF)
 
 message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
-add_compile_options(-std=c++11)
+option(SHARED "" OFF)
+
+option(RTTI "" OFF)
+
+option(ALLOW_TESTS "" OFF)
+
+option(DEV_MODE "" OFF)
+
+if (SHARED)
+    set(BUILD_TYPE SHARED)
+else()
+    set(BUILD_TYPE STATIC)
+endif ()
+
 
 if(NOT WIN32)
     add_compile_options(
@@ -22,9 +47,6 @@ if(NOT WIN32)
     )
 endif()
 
-IF(NOT APPLE AND NOT WIN32)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -pthread ")
-ENDIF()
 
 find_program(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
@@ -59,15 +81,11 @@ if(CMAKE_GENERATOR STREQUAL Xcode)
 endif()
 
 
-include_directories(
-        core
-)
+include_directories(core)
 
 
 if(IO)
-    include_directories(
-            io
-    )
+    include_directories(io)
 endif()
 
 
@@ -80,3 +98,5 @@ endif()
 if(EXAMPLES)
     add_subdirectory(examples)
 endif()
+
+add_custom_target(${PROJECT_NAME} ALL COMMAND ${CMAKE_CXX_ARCHIVE_CREATE} lib${PROJECT_NAME}.a $<TARGET_FILE:actor-zeta-core> $<TARGET_FILE:actor-zeta-io>)
