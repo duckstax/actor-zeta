@@ -5,11 +5,12 @@
 #include <thread>
 #include <list>
 #include <cassert>
-
-#include <actor-zeta/network/multiplexer.hpp>
 #include <unordered_map>
 #include <utility>
 #include <atomic>
+#include <functional>
+
+#include <actor-zeta/network/multiplexer.hpp>
 
 namespace actor_zeta { namespace network {
 
@@ -135,11 +136,7 @@ namespace actor_zeta { namespace network {
             }
 
 
-            actor::actor_address& address() {
-                return address_;
-            }
-
-            actor::actor_address& address() const {
+            actor::actor_address address() const {
                 return address_;
             }
 
@@ -159,9 +156,9 @@ namespace actor_zeta { namespace network {
 
             std::size_t start() override;
 
-            void new_tcp_listener(const std::string &host, uint16_t port, const actor::actor_address &) override;
+            void new_tcp_listener(const std::string &host, uint16_t port, actor::actor_address ) override;
 
-            void new_tcp_connection(const std::string &host, uint16_t port, const actor::actor_address &) override;
+            void new_tcp_connection(const std::string &host, uint16_t port, actor::actor_address)  override;
 
             void close(const connection_identifying &) override;
 
