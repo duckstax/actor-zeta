@@ -10,11 +10,13 @@ script:
 env:
   - BUILD_TYPE=Release COMPILER=g++-4.9
   - BUILD_TYPE=Release COMPILER=g++-5
+  - BUILD_TYPE=Release COMPILER=g++-7
   - BUILD_TYPE=Release COMPILER=g++-6
   - BUILD_TYPE=Release COMPILER=clang++-3.9
   - BUILD_TYPE=Release COMPILER=clang++-4.0
   - BUILD_TYPE=Debug COMPILER=g++-4.9
   - BUILD_TYPE=Debug COMPILER=g++-5
+  - BUILD_TYPE=Debug COMPILER=g++-7
   - BUILD_TYPE=Debug COMPILER=g++-6
   - BUILD_TYPE=Debug COMPILER=clang++-3.9
   - BUILD_TYPE=Debug COMPILER=clang++-4.0
@@ -30,6 +32,7 @@ addons:
       - g++-4.9
       - g++-5
       - g++-6
+      - g++-7
       - clang-3.9
       - clang-4.0
 
