@@ -36,12 +36,12 @@ add_library(
 
 target_link_libraries(
         ${PROJECT_NAME}
-        PRIVATE
+        PUBLIC
         actor-zeta-core
 )
 
 target_include_directories(
         ${PROJECT_NAME}
-        PRIVATE
+        PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/header
 )
