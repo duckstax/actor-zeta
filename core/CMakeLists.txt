@@ -106,13 +106,10 @@ set(SOURCE_FILES
 find_package( Threads )
 
 add_library(
-        ${PROJECT_NAME} ${BUILD_TYPE}
+        ${PROJECT_NAME} OBJECT
         ${SOURCE_FILES}
         ${HEADER_FILES}
 )
-
-
-set_target_properties( ${PROJECT} PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/core)
 
 target_link_libraries (
         ${PROJECT_NAME}
@@ -122,7 +119,7 @@ target_link_libraries (
 
 target_include_directories(
         ${PROJECT_NAME}
-        PUBLIC
+        PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/header
 )
 

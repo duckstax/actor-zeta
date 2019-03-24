@@ -4,11 +4,12 @@ namespace actor_zeta {
     namespace network {
 
         connection_identifying::connection_identifying(const connect_type &tc, const std::string &ip_, const int &port_)
-                :type_connect_ (tc),ip_(ip_),port_(port_){}
+                : type_connect_(tc), ip_(ip_), port_(port_) {}
 
         std::string connection_identifying::to_string() const {
             std::string qq;
-            qq.append(std::to_string(type_connect_)).append("://").append(ip_).append(":").append(std::to_string(port_));
+            qq.append(std::to_string(type_connect_)).append("://").append(ip_).append(":").append(
+                    std::to_string(port_));
             return qq;
         }
 
@@ -28,18 +29,21 @@ namespace actor_zeta {
 
 namespace std {
     std::string to_string(actor_zeta::network::connect_type tc) {
+        std::string tmp;
         switch (tc) {
             case actor_zeta::network::connect_type::tcp: {
-                return std::string("tcp");
+                tmp = "tcp";
             }
 
             case actor_zeta::network::connect_type::udp: {
-                return std::string("udp");
+                tmp = "udp";
             }
         }
+        return tmp;
     }
 
     std::string to_string(actor_zeta::network::connection_identifying ci) {
         return ci.to_string();
     }
+
 }

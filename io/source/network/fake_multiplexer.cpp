@@ -69,8 +69,11 @@ namespace actor_zeta {
             sockets.erase(id);
         }
 
-        void fake_multiplexer::new_tcp_connection(const std::string &host, uint16_t port,
-                                                  actor::actor_address address) {
+        void fake_multiplexer::new_tcp_connection(
+                const std::string &/**host*/,
+                uint16_t /**port*/,
+                actor::actor_address /**address*/
+        ) {
             /**
              * TODO: Implementation
             */

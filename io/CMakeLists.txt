@@ -29,21 +29,19 @@ set(SOURCE_FILES
 )
 
 add_library(
-        ${PROJECT_NAME} ${BUILD_TYPE}
+        ${PROJECT_NAME} OBJECT
         ${SOURCE_FILES}
         ${HEADER_FILES}
 )
 
 target_link_libraries(
         ${PROJECT_NAME}
-        PUBLIC
+        PRIVATE
         actor-zeta-core
 )
 
-set_target_properties( ${PROJECT_NAME} PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/io)
-
 target_include_directories(
         ${PROJECT_NAME}
-        PUBLIC
+        PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/header
 )
