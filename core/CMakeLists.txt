@@ -55,9 +55,11 @@ set(HEADER_FILES
         actor-zeta/standard_handlers/skip.hpp
 
         actor-zeta/forwards.hpp
+        actor-zeta/intrusive_list.hpp
         actor-zeta/intrusive_ptr.hpp
         actor-zeta/metadata.hpp
         actor-zeta/ref_counted.hpp
+        actor-zeta/spinlock.hpp
 )
 
 set(SOURCE_FILES
@@ -96,6 +98,8 @@ set(SOURCE_FILES
         source/standard_handlers/skip.cpp
         source/standard_handlers/sync_contacts.cpp
         source/ref_counted.cpp
+        source/spinlock.cpp
+
 )
 
 add_library(
