@@ -34,12 +34,6 @@ add_library(
         ${HEADER_FILES}
 )
 
-target_link_libraries(
-        ${PROJECT_NAME}
-        PUBLIC
-        actor-zeta-core
-)
-
 target_include_directories(
         ${PROJECT_NAME}
         PUBLIC
