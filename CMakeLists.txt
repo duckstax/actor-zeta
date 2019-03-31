@@ -157,7 +157,7 @@ add_library(${PROJECT_NAME} ${BUILD_TYPE}  $<TARGET_OBJECTS:actor-zeta-core> $<T
 
 target_link_libraries(
         ${PROJECT_NAME}
-        PRIVATE
+        PUBLIC
         actor-zeta-core
         actor-zeta-io
 )
