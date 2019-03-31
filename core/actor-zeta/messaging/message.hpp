@@ -4,6 +4,7 @@
 #include <actor-zeta/actor/actor_address.hpp>
 #include <actor-zeta/messaging/any.hpp>
 #include <actor-zeta/messaging/message_header.hpp>
+#include <actor-zeta/detail/intrusive_list.hpp>
 
 namespace actor_zeta { namespace messaging {
 
@@ -12,6 +13,9 @@ namespace actor_zeta { namespace messaging {
 ///
         class message final {
         public:
+            ///TODO: see intrusive_list
+            intrusive_list_node link;
+
             message();
 
             message(const message &) = delete;
@@ -42,7 +46,7 @@ namespace actor_zeta { namespace messaging {
 
             auto clone() const -> message;
 
-            operator bool();
+            explicit operator bool();
 
             void swap(message& other) noexcept;
 

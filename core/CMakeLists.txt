@@ -23,10 +23,13 @@ set(HEADER_FILES
         actor-zeta/channel/abstract_channel.hpp
         actor-zeta/channel/channel.hpp
 
-        actor-zeta/detail/contaner/hashmap.h
-
-        actor-zeta/detail/type_traits/callable_trait.hpp
-        actor-zeta/detail/type_traits/type_list.hpp
+        actor-zeta/detail/callable_trait.hpp
+        actor-zeta/detail/intrusive_list.hpp
+        actor-zeta/detail/intrusive_ptr.hpp
+        actor-zeta/detail/ref_counted.hpp
+        actor-zeta/detail/spinlock.hpp
+        actor-zeta/detail/type_list.hpp
+        actor-zeta/detail/type_traits.hpp
 
         actor-zeta/environment/abstract_environment.hpp
         actor-zeta/environment/abstract_group.hpp
@@ -55,11 +58,7 @@ set(HEADER_FILES
         actor-zeta/standard_handlers/skip.hpp
 
         actor-zeta/forwards.hpp
-        actor-zeta/intrusive_list.hpp
-        actor-zeta/intrusive_ptr.hpp
         actor-zeta/metadata.hpp
-        actor-zeta/ref_counted.hpp
-        actor-zeta/spinlock.hpp
 )
 
 set(SOURCE_FILES

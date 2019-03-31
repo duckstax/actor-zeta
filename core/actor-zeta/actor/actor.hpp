@@ -1,7 +1,8 @@
 #pragma once
 
 #include <string>
-#include <actor-zeta/intrusive_ptr.hpp>
+
+#include <actor-zeta/detail/intrusive_ptr.hpp>
 #include <actor-zeta/forwards.hpp>
 
 //smart actor

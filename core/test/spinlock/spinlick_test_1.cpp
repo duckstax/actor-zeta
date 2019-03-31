@@ -1,5 +1,5 @@
 
-#include "actor-zeta/spinlock.hpp"
+#include "actor-zeta/detail/spinlock.hpp"
 
 int main(){
 

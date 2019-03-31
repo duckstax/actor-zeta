@@ -1,4 +1,4 @@
-#include <actor-zeta/spinlock.hpp>
+#include <actor-zeta/detail/spinlock.hpp>
 
 namespace actor_zeta {
 

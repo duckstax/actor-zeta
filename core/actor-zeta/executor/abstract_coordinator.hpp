@@ -18,6 +18,8 @@ namespace actor_zeta { namespace executor {
         public:
             abstract_coordinator(std::size_t num_worker_threads, std::size_t max_throughput);
 
+            virtual ~abstract_coordinator() = default;
+
             virtual void submit(executable *) = 0;
 
             inline size_t max_throughput() const {

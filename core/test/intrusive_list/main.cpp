@@ -1,19 +1,15 @@
 
 #include <cassert>
-#include "actor-zeta/intrusive_list.hpp"
+#include <actor-zeta/messaging/message.hpp>
 
 
-struct test_list_item final {
-    int dummy;
-    actor_zeta::intrusive_list_node link;
-};
 
 int main() {
-    test_list_item b1, b2, b3;
+    actor_zeta::messaging::message b1, b2, b3;
 
-    using test_list_type = actor_zeta::intrusive_list<test_list_item, &test_list_item::link>;
+    using message_list_type = actor_zeta::intrusive_list<actor_zeta::messaging::message, &actor_zeta::messaging::message::link>;
 
-    test_list_type the_list;
+    message_list_type the_list;
     assert(the_list.empty());
 
     /// single item basic operations
@@ -50,7 +46,7 @@ int main() {
 
     /// remove one item
     {
-        test_list_type::unlink(&b1);
+        message_list_type::unlink(&b1);
         assert(not the_list.empty());
         assert(the_list.front() == &b2);
         assert(the_list.back() == &b3);
@@ -70,7 +66,7 @@ int main() {
 
     /// remove last element
     {
-        test_list_type::unlink(&b3);
+        message_list_type::unlink(&b3);
         assert(the_list.empty());
     }
 

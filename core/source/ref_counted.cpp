@@ -1,4 +1,4 @@
-#include <actor-zeta/ref_counted.hpp>
+#include <actor-zeta/detail/ref_counted.hpp>
 
 namespace actor_zeta {
 
