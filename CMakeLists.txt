@@ -153,7 +153,16 @@ if(ALLOW_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
+find_package( Threads )
+
 add_library(${PROJECT_NAME} ${BUILD_TYPE}  $<TARGET_OBJECTS:actor-zeta-core> $<TARGET_OBJECTS:actor-zeta-io>)
+
+target_link_libraries (
+        ${PROJECT_NAME}
+        PUBLIC
+        ${CMAKE_THREAD_LIBS_INIT}
+)
+
 
 target_include_directories(
         ${PROJECT_NAME}

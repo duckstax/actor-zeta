@@ -103,19 +103,12 @@ set(SOURCE_FILES
         source/ref_counted.cpp
 )
 
-find_package( Threads )
-
 add_library(
         ${PROJECT_NAME} OBJECT
         ${SOURCE_FILES}
         ${HEADER_FILES}
 )
 
-target_link_libraries (
-        ${PROJECT_NAME}
-        PUBLIC
-        ${CMAKE_THREAD_LIBS_INIT}
-)
 
 target_include_directories(
         ${PROJECT_NAME}
