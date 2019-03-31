@@ -10,16 +10,22 @@ script:
 env:
   - BUILD_TYPE=Release COMPILER=g++-4.9
   - BUILD_TYPE=Release COMPILER=g++-5
-  - BUILD_TYPE=Release COMPILER=g++-7
   - BUILD_TYPE=Release COMPILER=g++-6
+  - BUILD_TYPE=Release COMPILER=g++-7
   - BUILD_TYPE=Release COMPILER=clang++-3.9
   - BUILD_TYPE=Release COMPILER=clang++-4.0
+  - BUILD_TYPE=Release COMPILER=clang++-5.0
+  - BUILD_TYPE=Release COMPILER=clang++-6.0
+  - BUILD_TYPE=Release COMPILER=clang++-7.0
   - BUILD_TYPE=Debug COMPILER=g++-4.9
   - BUILD_TYPE=Debug COMPILER=g++-5
-  - BUILD_TYPE=Debug COMPILER=g++-7
   - BUILD_TYPE=Debug COMPILER=g++-6
+  - BUILD_TYPE=Debug COMPILER=g++-7
   - BUILD_TYPE=Debug COMPILER=clang++-3.9
   - BUILD_TYPE=Debug COMPILER=clang++-4.0
+  - BUILD_TYPE=Debug COMPILER=clang++-5.0
+  - BUILD_TYPE=Debug COMPILER=clang++-6.0
+  - BUILD_TYPE=Debug COMPILER=clang++-7.0
 
 
 addons:
@@ -28,6 +34,7 @@ addons:
       - ubuntu-toolchain-r-test
       - llvm-toolchain-trusty-3.9
       - llvm-toolchain-trusty-4.0
+      - llvm-toolchain-trusty-5.0
     packages:
       - g++-4.9
       - g++-5
@@ -35,6 +42,9 @@ addons:
       - g++-7
       - clang-3.9
       - clang-4.0
+      - clang-5.0
+      - clang-6.0
+      - clang-7.0
 
 matrix:
   include:
