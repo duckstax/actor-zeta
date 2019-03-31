@@ -155,13 +155,6 @@ endif()
 
 add_library(${PROJECT_NAME} ${BUILD_TYPE}  $<TARGET_OBJECTS:actor-zeta-core> $<TARGET_OBJECTS:actor-zeta-io>)
 
-target_link_libraries(
-        ${PROJECT_NAME}
-        PUBLIC
-        actor-zeta-core
-        actor-zeta-io
-)
-
 target_include_directories(
         ${PROJECT_NAME}
         PUBLIC
