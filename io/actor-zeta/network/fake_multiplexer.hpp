@@ -94,11 +94,12 @@ namespace actor_zeta { namespace network {
             }
 
             void write(const buffer& b) {
+                bool is_equality = (current_satet.buffer_ == b);
                 assert(!scenario.empty());
                 current_satet=std::move(scenario.front());
                 scenario.pop_front();
                 assert(current_satet.state == client_state::write);
-                assert(current_satet.buffer_ == b);
+                assert(is_equality);
             }
 
             std::size_t wait_size() {
