@@ -33,10 +33,12 @@ namespace std {
         switch (tc) {
             case actor_zeta::network::connect_type::tcp: {
                 tmp = "tcp";
+                break;
             }
 
             case actor_zeta::network::connect_type::udp: {
                 tmp = "udp";
+                break;
             }
         }
         return tmp;

@@ -1,7 +1,6 @@
-language: cpp
-sudo: false
-os: linux
 dist: trusty
+sudo: false
+language: cpp
 
 script:
   - mkdir build && cd build
@@ -152,13 +151,6 @@ matrix:
     - env: COMPILER=clang++-6.0 BUILD_TYPE=Release
       addons: *clang60
 
-    # Clang 6.0 c++17
-    - env: COMPILER=clang++-6.0 BUILD_TYPE=Debug
-      addons: *clang60
-
-    - env: COMPILER=clang++-6.0 BUILD_TYPE=Release
-      addons: *clang60
-
     # Clang 7.0
     - env: COMPILER=clang++-7 BUILD_TYPE=Debug
       addons: &clang70
@@ -174,16 +166,21 @@ matrix:
     - env: COMPILER=clang++-7 BUILD_TYPE=Release
       addons: *clang70
 
-    # Clang 7.0 c++17
-    - env: COMPILER=clang++-7 BUILD_TYPE=Debug
-      addons: *clang70
-
-    - env: COMPILER=clang++-7 BUILD_TYPE=Release
-      addons: *clang70
-
     ##########################################################################
     # GCC on Linux
     ##########################################################################
+
+    # GCC 4.9
+    - env: COMPILER=g++-4.9 BUILD_TYPE=Debug
+      addons: &gcc49
+        apt:
+          packages: g++-4.9
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - env: COMPILER=g++-4.9 BUILD_TYPE=Release
+      addons: *gcc49
+
 
     # GCC 5
     - env: COMPILER=g++-5 BUILD_TYPE=Debug
@@ -214,13 +211,6 @@ matrix:
           packages: g++-7
           sources:
             - ubuntu-toolchain-r-test
-
-    - env: COMPILER=g++-7 BUILD_TYPE=Release
-      addons: *gcc7
-
-    # GCC 7 c++17
-    - env: COMPILER=g++-7 BUILD_TYPE=Debug
-      addons: *gcc7
 
     - env: COMPILER=g++-7 BUILD_TYPE=Release
       addons: *gcc7
