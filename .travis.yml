@@ -1,5 +1,4 @@
 dist: trusty
-sudo: false
 language: cpp
 
 script:
@@ -129,12 +128,6 @@ matrix:
     - env: COMPILER=clang++-5.0 BUILD_TYPE=Release
       addons: *clang50
 
-    - env: COMPILER=clang++-5.0 BUILD_TYPE=Debug
-      addons: *clang50
-
-    - env: COMPILER=clang++-5.0 BUILD_TYPE=Release
-      addons: *clang50
-
     # Clang 6.0
     - env: COMPILER=clang++-6.0 BUILD_TYPE=Debug
       addons: &clang60
@@ -158,6 +151,7 @@ matrix:
           packages:
             - clang-7
             - g++-7
+            - cmake
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-7
