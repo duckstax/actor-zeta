@@ -106,7 +106,7 @@ matrix:
             - llvm-toolchain-precise-3.6
     - os: linux
       dist: trusty
-      env: COMPILER=clang++-3.6 BUILD_TYPE=Release
+      env: MATRIX_EVAL="CC=clang-3.6 && CXX=clang++-3.6 && BUILD_TYPE=Release"
       addons: *clang36
 
     # Clang 3.7
@@ -238,7 +238,7 @@ matrix:
 
     - os: linux
       dist: trusty
-      env: COMPILER=clang++-7 BUILD_TYPE=Release
+      env: MATRIX_EVAL="CC=clang-7 && CXX=clang++-7 && BUILD_TYPE=Release"
       addons: *clang70
 
     ##########################################################################
