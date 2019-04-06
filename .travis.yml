@@ -6,6 +6,9 @@ script:
   - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON
   - cmake --build . -- VERBOSE=1
 
+cache:
+  - apt
+  - ccache
 
 matrix:
   include:
