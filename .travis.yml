@@ -1,4 +1,3 @@
-dist: trusty
 language: cpp
 
 script:
@@ -46,7 +45,9 @@ matrix:
     ##########################################################################
 
     # Clang 3.6
-    - env: COMPILER=clang++-3.6 BUILD_TYPE=Debug
+    - os: linux
+      dist: trusty
+      env: COMPILER=clang++-3.6 BUILD_TYPE=Debug
       addons: &clang36
         apt:
           packages:
@@ -56,12 +57,15 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.6
-
-    - env: COMPILER=clang++-3.6 BUILD_TYPE=Release
+    - os: linux
+      dist: trusty
+      env: COMPILER=clang++-3.6 BUILD_TYPE=Release
       addons: *clang36
 
     # Clang 3.7
-    - env: COMPILER=clang++-3.7 BUILD_TYPE=Debug
+    - os: linux
+      dist: trusty
+      env: COMPILER=clang++-3.7 BUILD_TYPE=Debug
       addons: &clang37
         apt:
           packages:
@@ -71,12 +75,15 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.7
-
-    - env: COMPILER=clang++-3.7 BUILD_TYPE=Release
+    - os: linux
+      dist: trusty
+      env: COMPILER=clang++-3.7 BUILD_TYPE=Release
       addons: *clang37
 
     # Clang 3.8
-    - env: COMPILER=clang++-3.8 BUILD_TYPE=Debug
+    - os: linux
+      dist: trusty
+      env: COMPILER=clang++-3.8 BUILD_TYPE=Debug
       addons: &clang38
         apt:
           packages:
@@ -86,12 +93,15 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.8
-
-    - env: COMPILER=clang++-3.8 BUILD_TYPE=Release
+    - os: linux
+      dist: trusty
+      env: COMPILER=clang++-3.8 BUILD_TYPE=Release
       addons: *clang38
 
     # Clang 3.9
-    - env: COMPILER=clang++-3.9 BUILD_TYPE=Debug
+    - os: linux
+      dist: trusty
+      env: COMPILER=clang++-3.9 BUILD_TYPE=Debug
       addons: &clang39
         apt:
           packages:
@@ -101,12 +111,15 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.9
-
-    - env: COMPILER=clang++-3.9 BUILD_TYPE=Release
+    - os: linux
+      dist: trusty
+      env: COMPILER=clang++-3.9 BUILD_TYPE=Release
       addons: *clang39
 
     # Clang 4.0
-    - env: COMPILER=clang++-4.0 BUILD_TYPE=Debug
+    - os: linux
+      dist: trusty
+      env: COMPILER=clang++-4.0 BUILD_TYPE=Debug
       addons: &clang40
         apt:
           packages:
@@ -150,12 +163,15 @@ matrix:
             - llvm-toolchain-trusty-6.0
             - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
               key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
-
-    - env: COMPILER=clang++-6.0 BUILD_TYPE=Release
+    - os: linux
+      dist: trusty
+      env: COMPILER=clang++-6.0 BUILD_TYPE=Release
       addons: *clang60
 
     # Clang 7.0
-    - env: COMPILER=clang++-7 BUILD_TYPE=Debug
+    - os: linux
+      dist: trusty
+      env: COMPILER=clang++-7 BUILD_TYPE=Debug
       addons: &clang70
         apt:
           packages:
@@ -166,8 +182,9 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-7
 
-
-    - env: COMPILER=clang++-7 BUILD_TYPE=Release
+    - os: linux
+      dist: trusty
+      env: COMPILER=clang++-7 BUILD_TYPE=Release
       addons: *clang70
 
     ##########################################################################
@@ -175,7 +192,9 @@ matrix:
     ##########################################################################
 
     # GCC 4.9
-    - env: COMPILER=g++-4.9 BUILD_TYPE=Debug
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-4.9 BUILD_TYPE=Debug
       addons: &gcc49
         apt:
           packages:
@@ -184,13 +203,16 @@ matrix:
             - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
-
-    - env: COMPILER=g++-4.9 BUILD_TYPE=Release
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-4.9 BUILD_TYPE=Release
       addons: *gcc49
 
 
     # GCC 5
-    - env: COMPILER=g++-5 BUILD_TYPE=Debug
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-5 BUILD_TYPE=Debug
       addons: &gcc5
         apt:
           packages:
@@ -200,11 +222,15 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-5 BUILD_TYPE=Release
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-5 BUILD_TYPE=Release
       addons: *gcc5
 
     # GCC 6
-    - env: COMPILER=g++-6 BUILD_TYPE=Debug
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-6 BUILD_TYPE=Debug
       addons: &gcc6
         apt:
           packages:
@@ -214,11 +240,15 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-6 BUILD_TYPE=Release
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-6 BUILD_TYPE=Release
       addons: *gcc6
 
     # GCC 7
-    - env: COMPILER=g++-7 BUILD_TYPE=Debug
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-7 BUILD_TYPE=Debug
       addons: &gcc7
         apt:
           packages:
@@ -227,6 +257,7 @@ matrix:
             - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
-
-    - env: COMPILER=g++-7 BUILD_TYPE=Release
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-7 BUILD_TYPE=Release
       addons: *gcc7
