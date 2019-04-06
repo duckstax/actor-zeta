@@ -219,7 +219,8 @@ matrix:
     - os: linux
       dist: trusty
       env:
-        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9 && BUILD_TYPE=Debug"
+        - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7 && BUILD_TYPE=Debug"
+
       addons: &clang70
         apt:
           packages:
