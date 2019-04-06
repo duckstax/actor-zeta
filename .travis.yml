@@ -13,32 +13,79 @@ matrix:
   include:
 
     ##########################################################################
-    # Clang on OSX
-    # Travis seems to take longer to start OSX instances,
-    # so leave this first for the overall build to be faster
+    # GCC on Linux
     ##########################################################################
 
-    # XCode 8.3
-    - env: COMPILER=clang++ BUILD_TYPE=Debug
-      os: osx
-      osx_image: xcode8.3
-      compiler: clang
+    # GCC 4.9
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-4.9 BUILD_TYPE=Debug
+      addons: &gcc49
+        apt:
+          packages:
+            - g++-4.9
+            - cmake=2.\*
+            - cmake-data=2.\*
+          sources:
+            - ubuntu-toolchain-r-test
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-4.9 BUILD_TYPE=Release
+      addons: *gcc49
 
-    - env: COMPILER=clang++ BUILD_TYPE=Release
-      os: osx
-      osx_image: xcode8.3
-      compiler: clang
 
-    # XCode 9.1
-    - env: COMPILER=clang++ BUILD_TYPE=Debug
-      os: osx
-      osx_image: xcode9.1
-      compiler: clang
+    # GCC 5
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-5 BUILD_TYPE=Debug
+      addons: &gcc5
+        apt:
+          packages:
+            - g++-5
+            - cmake=2.\*
+            - cmake-data=2.\*
+          sources:
+            - ubuntu-toolchain-r-test
 
-    - env: COMPILER=clang++ BUILD_TYPE=Release
-      os: osx
-      osx_image: xcode9.1
-      compiler: clang
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-5 BUILD_TYPE=Release
+      addons: *gcc5
+
+    # GCC 6
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-6 BUILD_TYPE=Debug
+      addons: &gcc6
+        apt:
+          packages:
+            - g++-6
+            - cmake=2.\*
+            - cmake-data=2.\*
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-6 BUILD_TYPE=Release
+      addons: *gcc6
+
+    # GCC 7
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-7 BUILD_TYPE=Debug
+      addons: &gcc7
+        apt:
+          packages:
+            - g++-7
+            - cmake=2.\*
+            - cmake-data=2.\*
+          sources:
+            - ubuntu-toolchain-r-test
+    - os: linux
+      dist: trusty
+      env: COMPILER=g++-7 BUILD_TYPE=Release
+      addons: *gcc7
 
     ##########################################################################
     # Clang on Linux
@@ -176,6 +223,11 @@ matrix:
         apt:
           packages:
             - clang-7
+            - libclang-7-dev
+            - llvm-7-dev
+            - lld-7
+            - libc++-7-dev
+            - libc++abi-7-dev
             - cmake=2.\*
             - cmake-data=2.\*
           sources:
@@ -188,76 +240,29 @@ matrix:
       addons: *clang70
 
     ##########################################################################
-    # GCC on Linux
+    # Clang on OSX
+    # Travis seems to take longer to start OSX instances,
+    # so leave this first for the overall build to be faster
     ##########################################################################
 
-    # GCC 4.9
-    - os: linux
-      dist: trusty
-      env: COMPILER=g++-4.9 BUILD_TYPE=Debug
-      addons: &gcc49
-        apt:
-          packages:
-            - g++-4.9
-            - cmake=2.\*
-            - cmake-data=2.\*
-          sources:
-            - ubuntu-toolchain-r-test
-    - os: linux
-      dist: trusty
-      env: COMPILER=g++-4.9 BUILD_TYPE=Release
-      addons: *gcc49
+    # XCode 8.3
+    - env: COMPILER=clang++ BUILD_TYPE=Debug
+      os: osx
+      osx_image: xcode8.3
+      compiler: clang
 
+    - env: COMPILER=clang++ BUILD_TYPE=Release
+      os: osx
+      osx_image: xcode8.3
+      compiler: clang
 
-    # GCC 5
-    - os: linux
-      dist: trusty
-      env: COMPILER=g++-5 BUILD_TYPE=Debug
-      addons: &gcc5
-        apt:
-          packages:
-            - g++-5
-            - cmake=2.\*
-            - cmake-data=2.\*
-          sources:
-            - ubuntu-toolchain-r-test
+    # XCode 9.1
+    - env: COMPILER=clang++ BUILD_TYPE=Debug
+      os: osx
+      osx_image: xcode9.1
+      compiler: clang
 
-    - os: linux
-      dist: trusty
-      env: COMPILER=g++-5 BUILD_TYPE=Release
-      addons: *gcc5
-
-    # GCC 6
-    - os: linux
-      dist: trusty
-      env: COMPILER=g++-6 BUILD_TYPE=Debug
-      addons: &gcc6
-        apt:
-          packages:
-            - g++-6
-            - cmake=2.\*
-            - cmake-data=2.\*
-          sources:
-            - ubuntu-toolchain-r-test
-
-    - os: linux
-      dist: trusty
-      env: COMPILER=g++-6 BUILD_TYPE=Release
-      addons: *gcc6
-
-    # GCC 7
-    - os: linux
-      dist: trusty
-      env: COMPILER=g++-7 BUILD_TYPE=Debug
-      addons: &gcc7
-        apt:
-          packages:
-            - g++-7
-            - cmake=2.\*
-            - cmake-data=2.\*
-          sources:
-            - ubuntu-toolchain-r-test
-    - os: linux
-      dist: trusty
-      env: COMPILER=g++-7 BUILD_TYPE=Release
-      addons: *gcc7
+    - env: COMPILER=clang++ BUILD_TYPE=Release
+      os: osx
+      osx_image: xcode9.1
+      compiler: clang
