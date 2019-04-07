@@ -292,3 +292,25 @@ matrix:
       dist: trusty
       env: MATRIX_EVAL="CC=clang-7 && CXX=clang++-7 && BUILD_TYPE=Release"
       addons: *clang70
+
+    ##########################################################################
+    # Cmake on Linux
+    ##########################################################################
+
+    # GCC 4.9
+    - os: linux
+      env: COMPILER=g++-4.9 BUILD_TYPE=Debug
+      name: CMake 2.8
+      addons: &gcc49
+        apt:
+          packages:
+            - g++-4.9
+            - cmake=2.\*
+            - cmake-data=2.\*
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: COMPILER=g++-4.9 BUILD_TYPE=Release
+      name: CMake 2.8
+      addons: *gcc49
