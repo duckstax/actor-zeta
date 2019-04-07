@@ -9,9 +9,6 @@ cache:
   - apt
   - ccache
 
-before_install:
-  - eval "${MATRIX_EVAL}"
-
 matrix:
   include:
 
@@ -248,7 +245,6 @@ matrix:
     # Travis seems to take longer to start OSX instances,
     # so leave this first for the overall build to be faster
     ##########################################################################
-
 
     # XCode 6.4
     - os: osx
