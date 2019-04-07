@@ -299,6 +299,7 @@ matrix:
 
     # GCC 4.9
     - os: linux
+      dist: precise
       env: COMPILER=g++-4.9 BUILD_TYPE=Debug
       name: CMake 2.8
       addons: &gcc49
@@ -311,6 +312,7 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
+      dist: precise
       env: COMPILER=g++-4.9 BUILD_TYPE=Release
       name: CMake 2.8
       addons: *gcc49
