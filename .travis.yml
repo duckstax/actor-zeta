@@ -9,6 +9,9 @@ cache:
   - apt
   - ccache
 
+before_install:
+  - eval "${MATRIX_EVAL}"
+
 matrix:
   include:
 
@@ -229,11 +232,6 @@ matrix:
         apt:
           packages:
             - clang-7
-            - libclang-7-dev
-            - llvm-7-dev
-            - lld-7
-            - libc++-7-dev
-            - libc++abi-7-dev
             - cmake=2.\*
             - cmake-data=2.\*
           sources:
@@ -250,6 +248,43 @@ matrix:
     # Travis seems to take longer to start OSX instances,
     # so leave this first for the overall build to be faster
     ##########################################################################
+
+
+    # XCode 6.4
+    - os: osx
+      osx_image: xcode6.4
+      env: BUILD_TYPE=Debug
+
+    - os: osx
+      osx_image: xcode6.4
+      env: BUILD_TYPE=Release
+
+    # XCode 7.3
+    - os: osx
+      osx_image: xcode7.3
+      env: BUILD_TYPE=Debug
+
+    - os: osx
+      osx_image: xcode7.3
+      env: BUILD_TYPE=Release
+
+    # XCode 8
+    - os: osx
+      osx_image: xcode8
+      env: BUILD_TYPE=Debug
+
+    - os: osx
+      osx_image: xcode8
+      env: BUILD_TYPE=Release
+
+    # XCode 8.2
+    - os: osx
+      osx_image: xcode8.2
+      env: BUILD_TYPE=Debug
+
+    - os: osx
+      osx_image: xcode8.2
+      env: BUILD_TYPE=Release
 
     # XCode 8.3
     - env: COMPILER=clang++ BUILD_TYPE=Debug
