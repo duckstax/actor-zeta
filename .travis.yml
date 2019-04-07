@@ -2,6 +2,7 @@ language: cpp
 
 script:
   - mkdir build && cd build
+  - cmake --version
   - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER -DDEV_MODE=ON
   - cmake --build . -- VERBOSE=1
 
@@ -77,10 +78,9 @@ matrix:
         apt:
           packages:
             - g++-4.9
-            - cmake=2.\*
-            - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
+
     - os: linux
       dist: trusty
       env: COMPILER=g++-4.9 BUILD_TYPE=Release
@@ -95,8 +95,6 @@ matrix:
         apt:
           packages:
             - g++-5
-            - cmake=2.\*
-            - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
 
@@ -113,8 +111,6 @@ matrix:
         apt:
           packages:
             - g++-6
-            - cmake=2.\*
-            - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
 
@@ -131,10 +127,9 @@ matrix:
         apt:
           packages:
             - g++-7
-            - cmake=2.\*
-            - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
+
     - os: linux
       dist: trusty
       env: COMPILER=g++-7 BUILD_TYPE=Release
@@ -152,11 +147,10 @@ matrix:
         apt:
           packages:
             - clang-3.6
-            - cmake=2.\*
-            - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.6
+
     - os: linux
       dist: trusty
       env: MATRIX_EVAL="CC=clang-3.6 && CXX=clang++-3.6 && BUILD_TYPE=Release"
@@ -170,11 +164,10 @@ matrix:
         apt:
           packages:
             - clang-3.7
-            - cmake=2.\*
-            - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.7
+
     - os: linux
       dist: trusty
       env: MATRIX_EVAL="CC=clang-3.7 && CXX=clang++-3.7 && BUILD_TYPE=Release"
@@ -188,11 +181,10 @@ matrix:
         apt:
           packages:
             - clang-3.8
-            - cmake=2.\*
-            - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.8
+
     - os: linux
       dist: trusty
       env: MATRIX_EVAL="CC=clang-3.8 && CXX=clang++-3.8 && BUILD_TYPE=Release"
@@ -206,11 +198,10 @@ matrix:
         apt:
           packages:
             - clang-3.9
-            - cmake=2.\*
-            - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.9
+
     - os: linux
       dist: trusty
       env: MATRIX_EVAL="CC=clang-3.9 && CXX=clang++-3.9 && BUILD_TYPE=Release"
@@ -224,13 +215,13 @@ matrix:
         apt:
           packages:
             - clang-4.0
-            - cmake=2.\*
-            - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-4.0
 
-    - env: MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0 && BUILD_TYPE=Release"
+    - os: linux
+      dist: trusty
+      env: MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0 && BUILD_TYPE=Release"
       addons: *clang40
 
     # Clang 5.0
@@ -241,13 +232,12 @@ matrix:
         apt:
           packages:
             - clang-5.0
-            - cmake=2.\*
-            - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-5.0
             - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-5.0 main'
               key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+
     - os: linux
       dist: trusty
       env: MATRIX_EVAL="CC=clang-5 && CXX=clang++-5 && BUILD_TYPE=Release"
@@ -261,13 +251,12 @@ matrix:
         apt:
           packages:
             - clang-6.0
-            - cmake=2.\*
-            - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-6.0
             - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
               key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+
     - os: linux
       dist: trusty
       env: MATRIX_EVAL="CC=clang-6 && CXX=clang++-6 && BUILD_TYPE=Release"
@@ -277,13 +266,10 @@ matrix:
     - os: linux
       dist: trusty
       env: MATRIX_EVAL="CC=clang-7 && CXX=clang++-7 && BUILD_TYPE=Debug"
-
       addons: &clang70
         apt:
           packages:
             - clang-7
-            - cmake=2.\*
-            - cmake-data=2.\*
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-7
@@ -292,27 +278,3 @@ matrix:
       dist: trusty
       env: MATRIX_EVAL="CC=clang-7 && CXX=clang++-7 && BUILD_TYPE=Release"
       addons: *clang70
-
-    ##########################################################################
-    # Cmake on Linux
-    ##########################################################################
-
-    # GCC 4.9
-    - os: linux
-      dist: precise
-      env: COMPILER=g++-4.9 BUILD_TYPE=Debug
-      name: CMake 2.8
-      addons: &gcc49
-        apt:
-          packages:
-            - g++-4.9
-            - cmake=2.\*
-            - cmake-data=2.\*
-          sources:
-            - ubuntu-toolchain-r-test
-
-    - os: linux
-      dist: precise
-      env: COMPILER=g++-4.9 BUILD_TYPE=Release
-      name: CMake 2.8
-      addons: *gcc49

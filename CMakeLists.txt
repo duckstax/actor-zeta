@@ -102,6 +102,12 @@ else()
     set(BUILD_TYPE STATIC)
 endif ()
 
+
+if(NOT WIN32)
+    add_compile_options(-v)
+endif()
+
+
 find_program(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
