@@ -2,7 +2,7 @@ language: cpp
 
 script:
   - mkdir build && cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER -DDEV_MODE=ON
   - cmake --build . -- VERBOSE=1
 
 cache:

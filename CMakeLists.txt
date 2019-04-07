@@ -31,11 +31,11 @@ option(ALLOW_TESTS "Enable building test" OFF)
 
 option(SHARED "" OFF)
 
-option(DEV_MODE "" OFF)
+option(DEV_MODE "developer mode" OFF)
 
-option(RTTI_DISABLE "" ON)
+option(RTTI_DISABLE "RTTI DISABLE" ON)
 
-option(EXCEPTIONS_DISABLE "" ON)
+option(EXCEPTIONS_DISABLE "EXCEPTIONS DISABLE" ON)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 
@@ -143,19 +143,17 @@ endif()
 
 include_directories(core)
 add_subdirectory(core)
+list(APPEND OBJECT_LISTS "$<TARGET_OBJECTS:actor-zeta-core>")
 
 if(IO)
     include_directories(io)
     add_subdirectory(io)
-endif()
-
-if(ALLOW_EXAMPLES)
-    add_subdirectory(examples)
+    list(APPEND OBJECT_LISTS "$<TARGET_OBJECTS:actor-zeta-io>")
 endif()
 
 find_package( Threads )
 
-add_library(${PROJECT_NAME} ${BUILD_TYPE}  $<TARGET_OBJECTS:actor-zeta-core> $<TARGET_OBJECTS:actor-zeta-io>)
+add_library(${PROJECT_NAME} ${BUILD_TYPE} ${OBJECT_LISTS})
 
 target_link_libraries (
         ${PROJECT_NAME}
@@ -170,3 +168,7 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/core/actor-zeta
         ${CMAKE_CURRENT_SOURCE_DIR}/io/actor-zeta
 )
+
+if(ALLOW_EXAMPLES)
+    add_subdirectory(examples)
+endif()
