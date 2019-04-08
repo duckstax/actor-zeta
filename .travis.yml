@@ -1,6 +1,10 @@
 dist: trusty
 language: cpp
 
+compiler:
+  - clang
+  - gcc
+
 cache:
   - apt
   - ccache
