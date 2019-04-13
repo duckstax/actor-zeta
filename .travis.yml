@@ -152,6 +152,7 @@ matrix:
 
     # Clang 3.6
     - os: linux
+      dist: trusty
       compiler: clang
       env: COMPILER=clang++-3.6  BUILD_TYPE=Debug
       addons: &clang36
@@ -169,6 +170,7 @@ matrix:
 
     # Clang 3.7
     - os: linux
+      dist: trusty
       compiler: clang
       env: COMPILER=clang++-3.7  BUILD_TYPE=Debug
       addons: &clang37
