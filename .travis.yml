@@ -18,10 +18,29 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-7
+            - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-7.0 main'
+              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
 
     - os: linux
       env: CC=clang-7.0 CXX=clang++-7.0  BUILD_TYPE=Release
       addons: *clang70
+
+    # Clang 8.0
+    - os: linux
+      env: CC=clang-8.0 CXX=clang++-8.0  BUILD_TYPE=Debug
+      addons: &clang80
+        apt:
+          packages:
+            - clang-8.0
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-7
+            - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-8.0 main'
+              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+
+    - os: linux
+      env: CC=clang-8.0 CXX=clang++-8.0  BUILD_TYPE=Release
+      addons: *clang80
 
 script:
   - mkdir build && cd build
