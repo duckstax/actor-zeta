@@ -15,8 +15,8 @@ matrix:
     # Clang 3.6
     - os: linux
       dist: trusty
-      #compiler: clang
-      env: CC=clang-3.6 && CXX=clang++-3.6   BUILD_TYPE=Debug
+      compiler: clang
+      env: CC=clang-3.6  CXX=clang++-3.6   BUILD_TYPE=Debug
       addons: &clang36
         apt:
           packages:
