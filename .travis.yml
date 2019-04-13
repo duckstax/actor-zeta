@@ -257,7 +257,6 @@ matrix:
 
     # Clang 7.0
     - os: linux
-      dist: trusty
       env: CC=clang-7.0 CXX=clang++-7.0  BUILD_TYPE=Debug
       addons: &clang70
         apt:
@@ -265,12 +264,28 @@ matrix:
             - clang-7.0
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-7.0
+            - llvm-toolchain-trusty-7
 
     - os: linux
-      dist: trusty
       env: CC=clang-7.0 CXX=clang++-7.0  BUILD_TYPE=Release
       addons: *clang70
+
+install:
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]];
+    then
+    cmake --version || brew install cmake;
+    fi
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]];
+    then
+      if dpkg --compare-versions $(cmake --version | head -1| awk '{print $3}') lt "3.1"
+      then
+        CMAKE_URL="https://cmake.org/files/v3.8/cmake-3.8.1-Linux-x86_64.tar.gz"
+        mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+        export PATH=${PWD}/cmake/bin:${PATH}
+        cmake --version
+      fi
+    fi
 
 script:
   - mkdir build && cd build
