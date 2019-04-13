@@ -168,9 +168,7 @@ matrix:
 
     # Clang 3.7
     - os: linux
-      dist: trusty
-      compiler: clang
-      env: COMPILER=clang++-3.7  BUILD_TYPE=Debug
+      env:  CC=clang-3.7 CXX=clang++-3.7  BUILD_TYPE=Debug
       addons: &clang37
         apt:
           packages:
@@ -180,14 +178,12 @@ matrix:
             - llvm-toolchain-precise-3.7
 
     - os: linux
-      compiler: clang
-      env: COMPILER=clang++-3.7  BUILD_TYPE=Release
+      env: CC=clang-3.7 CXX=clang++-3.7  BUILD_TYPE=Release
       addons: *clang37
 
     # Clang 3.8
     - os: linux
-      compiler: clang
-      env: COMPILER=clang++-3.8  BUILD_TYPE=Debug
+      env: CC=clang-3.8 CXX=clang++-3.8  BUILD_TYPE=Debug
       addons: &clang38
         apt:
           packages:
@@ -197,14 +193,12 @@ matrix:
             - llvm-toolchain-precise-3.8
 
     - os: linux
-      compiler: clang
-      env: COMPILER=clang++-3.8  BUILD_TYPE=Release
+      env: CC=clang-3.8 CXX=clang++-3.8  BUILD_TYPE=Release
       addons: *clang38
 
     # Clang 3.9
     - os: linux
-      compiler: clang
-      env: COMPILER=clang++-3.9  BUILD_TYPE=Debug
+      env: CC=clang-3.9 CXX=clang++-3.9  BUILD_TYPE=Debug
       addons: &clang39
         apt:
           packages:
@@ -214,14 +208,12 @@ matrix:
             - llvm-toolchain-precise-3.9
 
     - os: linux
-      compiler: clang
-      env: COMPILER=clang++-3.9  BUILD_TYPE=Release
+      env: CC=clang-3.9 CXX=clang++-3.9  BUILD_TYPE=Release
       addons: *clang39
 
     # Clang 4
     - os: linux
-      compiler: clang
-      env: COMPILER=clang++-4.0  BUILD_TYPE=Debug
+      env: CC=clang-4.0 CXX=clang++-4.0  BUILD_TYPE=Debug
       addons: &clang40
         apt:
           packages:
@@ -231,14 +223,12 @@ matrix:
             - llvm-toolchain-trusty-4.0
 
     - os: linux
-      compiler: clang
-      env: COMPILER=clang++-4.0  BUILD_TYPE=Release
+      env: CC=clang-4.0 CXX=clang++-4.0  BUILD_TYPE=Release
       addons: *clang40
 
     # Clang 5
     - os: linux
-      compiler: clang
-      env: COMPILER=clang++-5.0  BUILD_TYPE=Debug
+      env: CC=clang-5.0 CXX=clang++-5.0  BUILD_TYPE=Debug
       addons: &clang50
         apt:
           packages:
@@ -248,14 +238,13 @@ matrix:
             - llvm-toolchain-trusty-5.0
 
     - os: linux
-      compiler: clang
-      env: COMPILER=clang++-5.0  BUILD_TYPE=Release
+      env: CC=clang-5.0 CXX=clang++-5.0  BUILD_TYPE=Release
       addons: *clang50
 
     # Clang 6.0
     - os: linux
       compiler: clang
-      env: COMPILER=clang++-6.0  BUILD_TYPE=Debug
+      env: CC=clang-6.0 CXX=clang++-6.0  BUILD_TYPE=Debug
       addons: &clang60
         apt:
           packages:
@@ -265,14 +254,12 @@ matrix:
             - llvm-toolchain-trusty-6.0
 
     - os: linux
-      compiler: clang
-      env: COMPILER=clang++-6.0  BUILD_TYPE=Release
+      env: CC=clang-6.0 CXX=clang++-6.0  BUILD_TYPE=Release
       addons: *clang60
 
     # Clang 7.0
     - os: linux
-      compiler: clang
-      env: COMPILER=clang++-7.0  BUILD_TYPE=Debug
+      env: CC=clang-7.0 CXX=clang++-7.0  BUILD_TYPE=Debug
       addons: &clang70
         apt:
           packages:
@@ -282,8 +269,7 @@ matrix:
             - llvm-toolchain-trusty-7.0
 
     - os: linux
-      compiler: clang
-      env: COMPILER=clang++-7.0  BUILD_TYPE=Release
+      env: CC=clang-7.0 CXX=clang++-7.0  BUILD_TYPE=Release
       addons: *clang70
 
 script:
