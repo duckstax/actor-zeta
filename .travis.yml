@@ -1,254 +1,61 @@
-os: linux
 dist: trusty
 language: cpp
 
-cache:
-  - apt
-  - ccache
+script:
+  - mkdir build && cd build
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER
+  - cmake --build . -- VERBOSE=1
+
+
+env:
+  - BUILD_TYPE=Release COMPILER=g++-4.9
+  - BUILD_TYPE=Release COMPILER=g++-5
+  - BUILD_TYPE=Release COMPILER=g++-6
+  - BUILD_TYPE=Release COMPILER=clang++-3.9
+  - BUILD_TYPE=Release COMPILER=clang++-4.0
+  - BUILD_TYPE=Debug COMPILER=g++-4.9
+  - BUILD_TYPE=Debug COMPILER=g++-5
+  - BUILD_TYPE=Debug COMPILER=g++-6
+  - BUILD_TYPE=Debug COMPILER=clang++-3.9
+  - BUILD_TYPE=Debug COMPILER=clang++-4.0
+
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-trusty-3.9
+      - llvm-toolchain-trusty-4.0
+    packages:
+      - g++-4.9
+      - g++-5
+      - g++-6
+      - clang-3.9
+      - clang-4.0
 
 matrix:
   include:
-    ##########################################################################
-    # Clang on OSX
-    ##########################################################################
-
-    # XCode 7.3
+    - os: osx
+      osx_image: xcode6.4
+      env: BUILD_TYPE=Debug
     - os: osx
       osx_image: xcode7.3
       env: BUILD_TYPE=Debug
-
+    - os: osx
+      osx_image: xcode8
+      env: BUILD_TYPE=Debug
+    - os: osx
+      osx_image: xcode8.2
+      env: BUILD_TYPE=Debug
+    - os: osx
+      osx_image: xcode6.4
+      env: BUILD_TYPE=Release
     - os: osx
       osx_image: xcode7.3
       env: BUILD_TYPE=Release
-
-    # XCode 8
-    - os: osx
-      osx_image: xcode8
-      env: BUILD_TYPE=Debug
-
     - os: osx
       osx_image: xcode8
       env: BUILD_TYPE=Release
-
-    # XCode 8.2
-    - os: osx
-      osx_image: xcode8.2
-      env: BUILD_TYPE=Debug
-
     - os: osx
       osx_image: xcode8.2
       env: BUILD_TYPE=Release
-
-    # XCode 8.3
-    - env: COMPILER=clang++ BUILD_TYPE=Debug
-      os: osx
-      osx_image: xcode8.3
-      compiler: clang
-
-    - env: COMPILER=clang++ BUILD_TYPE=Release
-      os: osx
-      osx_image: xcode8.3
-      compiler: clang
-
-    # XCode 9.1
-    - env: COMPILER=clang++ BUILD_TYPE=Debug
-      os: osx
-      osx_image: xcode9.1
-      compiler: clang
-
-    - env: COMPILER=clang++ BUILD_TYPE=Release
-      os: osx
-      osx_image: xcode9.1
-      compiler: clang
-
-    ##########################################################################
-    # GCC on Linux
-    ##########################################################################
-
-    # GCC 4.9
-    - env: COMPILER=g++-4.9 BUILD_TYPE=Debug
-      addons: &gcc49
-        apt:
-          packages:
-            - g++-4.9
-          sources:
-            - ubuntu-toolchain-r-test
-
-    - env: COMPILER=g++-4.9 BUILD_TYPE=Release
-      addons: *gcc49
-
-
-    # GCC 5
-    - env: COMPILER=g++-5 BUILD_TYPE=Debug
-      addons: &gcc5
-        apt:
-          packages:
-            - g++-5
-          sources:
-            - ubuntu-toolchain-r-test
-
-    - env: COMPILER=g++-5 BUILD_TYPE=Release
-      addons: *gcc5
-
-    # GCC 6
-    - env: COMPILER=g++-6 BUILD_TYPE=Debug
-      addons: &gcc6
-        apt:
-          packages:
-            - g++-6
-          sources:
-            - ubuntu-toolchain-r-test
-
-    - env: COMPILER=g++-6 BUILD_TYPE=Release
-      addons: *gcc6
-
-    # GCC 7
-    - env: COMPILER=g++-7 BUILD_TYPE=Debug
-      addons: &gcc7
-        apt:
-          packages:
-            - g++-7
-          sources:
-            - ubuntu-toolchain-r-test
-
-    - env: COMPILER=g++-7 BUILD_TYPE=Release
-      addons: *gcc7
-
-    # GCC 8
-    - env: COMPILER=g++-8 BUILD_TYPE=Debug
-      addons: &gcc8
-        apt:
-          packages:
-            - g++-8
-          sources:
-            - ubuntu-toolchain-r-test
-
-    - env: COMPILER=g++-8 BUILD_TYPE=Release
-      addons: *gcc8
-
-    ##########################################################################
-    # Clang on Linux
-    ##########################################################################
-
-    # Clang 3.6
-    - env: C_COMPILER=clang-3.6  CXX_COMPILER=clang++-3.6   BUILD_TYPE=Debug
-      addons: &clang36
-        apt:
-          packages:
-            - clang-3.6
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.6
-
-    - env: C_COMPILER=clang-3.6 CXX_COMPILER=clang++-3.6 BUILD_TYPE=Release
-      addons: *clang36
-
-    # Clang 3.7
-    - env:  C_COMPILER=clang-3.7 CXX_COMPILER=clang++-3.7  BUILD_TYPE=Debug
-      addons: &clang37
-        apt:
-          packages:
-            - clang-3.7
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.7
-
-    - env: C_COMPILER=clang-3.7 CXX_COMPILER=clang++-3.7  BUILD_TYPE=Release
-      addons: *clang37
-
-    # Clang 3.8
-    - env: C_COMPILER=clang-3.8 CXX_COMPILER=clang++-3.8  BUILD_TYPE=Debug
-      addons: &clang38
-        apt:
-          packages:
-            - clang-3.8
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.8
-
-    - env: C_COMPILER=clang-3.8 CXX_COMPILER=clang++-3.8  BUILD_TYPE=Release
-      addons: *clang38
-
-    # Clang 3.9
-    - env: C_COMPILER=clang-3.9 CXX_COMPILER=clang++-3.9  BUILD_TYPE=Debug
-      addons: &clang39
-        apt:
-          packages:
-            - clang-3.9
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.9
-
-    - env: C_COMPILER=clang-3.9 CXX_COMPILER=clang++-3.9  BUILD_TYPE=Release
-      addons: *clang39
-
-    # Clang 4
-    - env: C_COMPILER=clang-4.0 CXX_COMPILER=clang++-4.0  BUILD_TYPE=Debug
-      addons: &clang40
-        apt:
-          packages:
-            - clang-4.0
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
-
-    - env: C_COMPILER=clang-4.0 CXX_COMPILER=clang++-4.0  BUILD_TYPE=Release
-      addons: *clang40
-
-    # Clang 5
-    - env: C_COMPILER=clang-5.0 CXX_COMPILER=clang++-5.0  BUILD_TYPE=Debug
-      addons: &clang50
-        apt:
-          packages:
-            - clang-5.0
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
-
-    - env: C_COMPILER=clang-5.0 CXX_COMPILER=clang++-5.0  BUILD_TYPE=Release
-      addons: *clang50
-
-    # Clang 6.0
-    - env: C_COMPILER=clang-6.0 CXX_COMPILER=clang++-6.0  BUILD_TYPE=Debug
-      addons: &clang60
-        apt:
-          packages:
-            - clang-6.0
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-6.0
-
-    - env: C_COMPILER=clang-6.0 CXX_COMPILER=clang++-6.0  BUILD_TYPE=Release
-      addons: *clang60
-
-    # Clang 7.0
-    - env: C_COMPILER=clang-7 CXX_COMPILER=clang++-7  BUILD_TYPE=Debug
-      addons: &clang70
-        apt:
-          packages:
-            - clang-7
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-7
-
-    - env: C_COMPILER=clang-7 CXX_COMPILER=clang++-7  BUILD_TYPE=Release
-      addons: *clang70
-
-    # Clang 8.0
-    - env: C_COMPILER=clang-8 CXX_COMPILER=clang++-8  BUILD_TYPE=Debug
-      addons: &clang80
-        apt:
-          packages:
-            - clang-8
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-8
-
-
-    - env: C_COMPILER=clang-8 CXX_COMPILER=clang++-8  BUILD_TYPE=Release
-      addons: *clang80
-
-script:
-  - mkdir build && cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER -DDEV_MODE=ON
-  - cmake --build . -- VERBOSE=1
