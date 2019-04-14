@@ -20,9 +20,9 @@ namespace actor_zeta { namespace network {
 
             virtual std::size_t start() = 0;
 
-            virtual void new_tcp_listener(const std::string &host, uint16_t port, const actor::actor_address &) = 0;
+            virtual void new_tcp_listener(const std::string &host, uint16_t port, actor::actor_address ) = 0;
 
-            virtual void new_tcp_connection(const std::string &host, uint16_t port, const actor::actor_address &) = 0;
+            virtual void new_tcp_connection(const std::string &host, uint16_t port, actor::actor_address ) = 0;
 
             virtual void close(const connection_identifying &) = 0;
 

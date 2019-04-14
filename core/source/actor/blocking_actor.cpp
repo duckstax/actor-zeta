@@ -7,7 +7,7 @@ namespace actor_zeta {
     namespace actor {
 
         executor::executable_result
-        blocking_actor::run(executor::execution_device *e, size_t max_throughput) {
+        blocking_actor::run(executor::execution_device *e, size_t /*max_throughput*/) {
 
             device(e);
             for (;;) {

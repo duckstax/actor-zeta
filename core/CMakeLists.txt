@@ -1,8 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(PROJECT actor-zeta-core)
+set(project actor-zeta-core)
 
-project(${PROJECT} CXX)
+if (CMAKE_VERSION VERSION_LESS 3.0)
+    PROJECT(${project} CXX)
+else()
+    cmake_policy(SET CMP0048 NEW)
+    PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
+endif()
 
 include_directories(.)
 
@@ -99,18 +104,18 @@ set(SOURCE_FILES
 )
 
 add_library(
-        ${PROJECT}
+        ${PROJECT_NAME} OBJECT
         ${SOURCE_FILES}
         ${HEADER_FILES}
 )
 
 
-set_target_properties( ${PROJECT} PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/core)
-
 target_include_directories(
-        ${PROJECT}
-        PUBLIC
+        ${PROJECT_NAME}
+        PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/header
 )
 
-add_subdirectory(test)
+if (ALLOW_TESTS)
+    add_subdirectory(test)
+endif ()

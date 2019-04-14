@@ -89,7 +89,7 @@ public:
     }
 
     ///check
-    auto in(const std::string& key) -> bool {
+    auto in(const std::string& /*key*/) -> bool {
         return true;
     }
 
@@ -119,7 +119,7 @@ public:
         attach(
                 make_handler(
                         "read",
-                        [this,self](context& ctx,query_raw_t&query_raw) -> void {
+                        [self](context& ctx,query_raw_t&query_raw) -> void {
                             auto raw = query_raw.raw;
                             std::vector<buffer> parsed_raw_request;
                             std::string delimiter(".");
@@ -152,7 +152,7 @@ public:
         attach(
                 make_handler(
                         "write",
-                        [this](context& ctx,response_t&response) -> void {
+                        [this](context& /*ctx*/,response_t&response) -> void {
                             multiplexer_->write(response.id,response.r_);
                         }
                 )
@@ -161,7 +161,7 @@ public:
         attach(
                 make_handler(
                         "close",
-                        [this](context& ctx,response_t&response) -> void {
+                        [this](context& /*ctx*/,response_t&response) -> void {
                             multiplexer_->close(response.id);
                         }
                 )

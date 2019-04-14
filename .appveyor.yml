@@ -23,4 +23,4 @@ init:
 
 build_script:
 - mkdir build && cd build
-- cmake .. -G %generator% -DCMAKE_BUILD_TYPE=%configuration%
+- cmake .. -G %generator% -DCMAKE_BUILD_TYPE=%configuration% -DDEV_MODE=ON
