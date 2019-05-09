@@ -36,11 +36,11 @@ namespace actor_zeta { namespace environment {
                 return 0;
             }
 
-            executor::abstract_executor &manager_execution_device() override final {
+            executor::abstract_executor &manager_execution_device() final {
                 return *coordinator_.get();
             }
 
-            cooperation &manager_group() override final {
+            cooperation &manager_group() final {
                 return cooperation_;
             }
 

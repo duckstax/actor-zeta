@@ -16,7 +16,7 @@ namespace actor_zeta { namespace actor {
             virtual ~abstract_action();
 
             template<std::size_t N>
-            abstract_action(const char(&aStr)[N]) : name_(aStr) {}
+            explicit abstract_action(const char(&aStr)[N]) : name_(aStr) {}
 
             virtual void invoke(context &) = 0;
 
@@ -61,7 +61,7 @@ namespace actor_zeta { namespace actor {
 
         class helper final : public abstract_action {
         public:
-            ~helper() = default;
+            ~helper() override = default;
 
             template<
                     std::size_t N,
@@ -72,7 +72,7 @@ namespace actor_zeta { namespace actor {
                 helper_ = transformer<F>{}(std::forward<F>(f));
             }
 
-            void invoke(context &ctx) {
+            void invoke(context &ctx) final {
                 helper_(ctx);
             }
 

@@ -15,9 +15,9 @@ namespace actor_zeta { namespace  detail {
             using const_iterator = list_vertices::const_iterator;
 
             struct cmp {
-                bool operator()(node p, vertex_id s) const { return p.id() < s; }
+                bool operator()(const node& p, vertex_id s) const { return p.id() < s; }
 
-                bool operator()(vertex_id s, node p) const { return s < p.id(); }
+                bool operator()(vertex_id s, const node& p) const { return s < p.id(); }
             };
 
             node() = delete;

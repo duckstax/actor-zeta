@@ -29,7 +29,7 @@ namespace actor_zeta { namespace actor {
 
             auto message_types() const -> std::set<std::string> final;
 
-            virtual ~local_actor() override ;
+            ~local_actor() override ;
 
         protected:
 

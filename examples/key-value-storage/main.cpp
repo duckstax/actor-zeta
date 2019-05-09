@@ -50,6 +50,7 @@ public:
         add_handler(
                 "update",
                 [this, self](context &ctx, query_t &tmp) -> void {
+                    std::cerr << "Operation:" << "update" <<std::endl;
                     auto status = update(tmp.parameter[0], tmp.parameter[1]);
                     assert(in("1qaz"));
                     assert(find("1qaz") == "7");
@@ -116,6 +117,7 @@ public:
         add_handler(
                 "read",
                 [self](context &ctx, query_raw_t &query_raw) -> void {
+                    std::cerr << "Operation:" << "read" <<std::endl;
                     auto raw = query_raw.raw;
                     std::vector<buffer> parsed_raw_request;
                     std::string delimiter(".");
@@ -147,6 +149,7 @@ public:
         add_handler(
                 "write",
                 [this](context & /*ctx*/, response_t &response) -> void {
+                    std::cerr << "Operation:" << "write" <<std::endl;
                     multiplexer_->write(response.id, response.r_);
                 }
         );
@@ -154,6 +157,7 @@ public:
         add_handler(
                 "close",
                 [this](context & /*ctx*/, response_t &response) -> void {
+                    std::cerr << "Operation:" << "close" <<std::endl;
                     multiplexer_->close(response.id);
                 }
         );
@@ -170,7 +174,18 @@ int main() {
 
     auto* multiplexer = new actor_zeta::network::fake_multiplexer;
 
-    multiplexer->add_scenario(host,port).add({"update.1qaz.7",actor_zeta::network::client_state::read}).add({"1",actor_zeta::network::client_state::write}).add({actor_zeta::network::client_state::close});
+    multiplexer->add_scenario(host,port)
+    .add("update.1qaz.7",actor_zeta::network::client_state::read)
+
+    .add(
+            [](const std::string&buffer) -> bool {
+                std::cerr << "Operation:" << "check write" <<std::endl;
+                return "1" == buffer;
+            },
+            actor_zeta::network::client_state::write,
+            0
+    )
+    .add(actor_zeta::network::client_state::close);
 
     auto* env = new network_environment(new actor_zeta::executor::executor<actor_zeta::executor::work_sharing>(1,std::numeric_limits<std::size_t>::max()),multiplexer);
 

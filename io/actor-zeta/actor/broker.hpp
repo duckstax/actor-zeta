@@ -18,7 +18,7 @@ namespace actor_zeta {
                       multiplexer_(multiplexer) {
             }
 
-            virtual ~broker() override = default;
+            ~broker() override = default;
 
         protected:
             intrusive_ptr<network::multiplexer> multiplexer_;

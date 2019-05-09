@@ -19,7 +19,7 @@ namespace actor_zeta { namespace actor {
 
             abstract_actor &operator=(const abstract_actor &) = delete;
 
-            virtual ~abstract_actor() override;
+            ~abstract_actor() override;
 
             virtual bool send(messaging::message&&) = 0;
 
