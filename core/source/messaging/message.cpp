@@ -7,7 +7,7 @@
 
 namespace actor_zeta { namespace messaging {
 
-        auto message::command() const noexcept -> const behavior::type_action & {
+        auto message::command() const noexcept -> const actor::type_action & {
             return header_.command();
         }
 
@@ -19,12 +19,12 @@ namespace actor_zeta { namespace messaging {
             return init;
         }
 
-        message::message(actor::actor_address sender_,const std::string& name, any &&body):
+        message::message(actor::actor_address sender_,const std::string& name, detail::any &&body):
             init(true),
             header_(std::move(sender_),name),
             body_(std::move(body)) {}
 
-        message::message(const message_header &header, const any &body):
+        message::message(const message_header &header, const detail::any &body):
             init(true),
             header_(header),
             body_(body) {}

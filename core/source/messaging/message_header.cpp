@@ -1,10 +1,9 @@
 #include <utility>
 #include "actor-zeta/messaging/message_header.hpp"
 
-namespace actor_zeta {
-    namespace messaging {
+namespace actor_zeta { namespace messaging {
 
-        auto message_header::command() const noexcept -> const behavior::type_action & {
+        auto message_header::command() const noexcept -> const actor::type_action & {
             return command_;
         }
 
@@ -15,6 +14,4 @@ namespace actor_zeta {
             return sender_;
         }
 
-
-    }
-}
+}}

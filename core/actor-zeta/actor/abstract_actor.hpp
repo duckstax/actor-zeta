@@ -12,12 +12,18 @@ namespace actor_zeta { namespace actor {
 ///
 
         class abstract_actor : public ref_counted {
-        public:           
+        public:
+            abstract_actor() = delete;
+
+            abstract_actor(const abstract_actor &) = delete;
+
+            abstract_actor &operator=(const abstract_actor &) = delete;
+
+            virtual ~abstract_actor() override;
+
             virtual bool send(messaging::message&&) = 0;
 
             virtual bool send(messaging::message&&, executor::execution_device *) = 0;
-
-            virtual ~abstract_actor();
 
             actor_address address() const noexcept;
 
@@ -37,12 +43,6 @@ namespace actor_zeta { namespace actor {
             metadata type_;
 
         private:
-            abstract_actor() = delete;
-
-            abstract_actor(const abstract_actor &) = delete;
-
-            abstract_actor &operator=(const abstract_actor &) = delete;
-
             environment::environment env_;
         };
     }

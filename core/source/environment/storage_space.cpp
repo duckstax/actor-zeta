@@ -2,13 +2,13 @@
 #include <unordered_map>
 
 #include <actor-zeta/actor/abstract_actor.hpp>
-#include "actor-zeta/environment/adjacency_list.hpp"
+#include "actor-zeta/detail/adjacency_list.hpp"
 #include "actor-zeta/actor/actor.hpp"
 
 
-namespace actor_zeta {
-    namespace environment {
-        using registry = adjacency_list<stored_vertex, node>;
+namespace actor_zeta { namespace environment {
+
+        using registry = detail::adjacency_list<detail::stored_vertex, detail::node>;
 
         class storage final {
         public:

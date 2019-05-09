@@ -10,8 +10,8 @@
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/actor/basic_actor.hpp>
 
-using actor_zeta::behavior::make_handler;
-using actor_zeta::behavior::context;
+using actor_zeta::actor::make_handler;
+using actor_zeta::actor::context;
 using actor_zeta::messaging::make_message;
 using actor_zeta::environment::abstract_environment;
 using actor_zeta::actor::basic_async_actor;
@@ -20,29 +20,29 @@ using actor_zeta::actor::basic_async_actor;
 class storage_t final : public basic_async_actor {
 public:
     storage_t(abstract_environment *ptr) : basic_async_actor(ptr, "storage") {
-        attach(
+        add_handler(
                 make_handler(
                         "update",
-                        [](context& /*ctx*/) -> void {
+                        [](context & /*ctx*/) -> void {
 
 
                         }
                 )
         );
 
-        attach(
+        add_handler(
                 make_handler(
                         "find",
-                        []( context& /*ctx*/) -> void {
+                        [](context & /*ctx*/) -> void {
 
                         }
                 )
         );
 
-        attach(
+        add_handler(
                 make_handler(
                         "remove",
-                        []( context& /*ctx*/ ) -> void {
+                        [](context & /*ctx*/ ) -> void {
 
                         }
                 )

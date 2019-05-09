@@ -2,12 +2,12 @@
 
 #include <functional>
 
-#include <actor-zeta/behavior/context.hpp>
+#include <actor-zeta/actor/context.hpp>
 #include <actor-zeta/forwards.hpp>
-#include <actor-zeta/behavior/type_action.hpp>
+#include <actor-zeta/actor/type_action.hpp>
 #include <actor-zeta/detail/type_traits/callable_trait.hpp>
 
-namespace actor_zeta { namespace behavior {
+namespace actor_zeta { namespace actor {
 ///
 /// @brief Abstract concept of an action
 ///

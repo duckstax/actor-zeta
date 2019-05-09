@@ -1,6 +1,6 @@
-#include <actor-zeta/behavior/context.hpp>
+#include <actor-zeta/actor/context.hpp>
 
-namespace actor_zeta { namespace behavior {
+namespace actor_zeta { namespace actor {
 
         context::~context() {
             if( ptr.get() != nullptr ){
@@ -38,5 +38,5 @@ namespace actor_zeta { namespace behavior {
         const messaging::message &context::message() const {
             return msg;
         }
-    } /// behavior
-} /// actor_zeta
+
+}}

@@ -1,10 +1,9 @@
 #pragma once
 
-#include <actor-zeta/behavior/type_action.hpp>
+#include <actor-zeta/actor/type_action.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
 
-namespace actor_zeta {
-    namespace messaging {
+namespace actor_zeta { namespace messaging {
 ///
 /// @brief
 ///
@@ -24,13 +23,13 @@ namespace actor_zeta {
 
             message_header(actor::actor_address sender_, const std::string& name);
 
-            auto command() const noexcept -> const behavior::type_action &;
+            auto command() const noexcept -> const actor::type_action &;
 
             auto sender() const -> actor::actor_address ;
 
         private:
             actor::actor_address sender_;
-            behavior::type_action command_;
+            actor::type_action command_;
         };
     }
 }

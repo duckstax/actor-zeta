@@ -2,8 +2,8 @@
 #include "actor-zeta/environment/group.hpp"
 #include "actor-zeta/messaging/message.hpp"
 
-namespace actor_zeta {
-    namespace environment {
+namespace actor_zeta { namespace environment {
+
         auto abstract_group::id() const -> id_t {
             return entry_point_;
         }
@@ -106,6 +106,25 @@ namespace actor_zeta {
             }
             return false;
         }
-    }
-}
+
+        void abstract_group::add_shared(const actor::actor_address& address) {
+            storage_space_.get(entry_point_)->send(
+                    messaging::make_message(
+                            address,
+                            "sync_contacts",
+                            actor::actor_address(address)
+                    )
+            );
+            for (auto &i:storage_space_.current_layer(entry_point_)) {
+                i->send(
+                        messaging::make_message(
+                                address,
+                                "sync_contacts",
+                                actor::actor_address(address)
+                        )
+                );
+            }
+        }
+
+}}
 

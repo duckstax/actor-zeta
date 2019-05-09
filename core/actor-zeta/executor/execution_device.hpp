@@ -15,7 +15,7 @@ namespace actor_zeta { namespace executor {
 
         virtual ~execution_device();
 
-        virtual void execute_async(executable *) = 0;
+        virtual void execute(executable *) = 0;
 
     };
 }}

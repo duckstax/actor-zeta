@@ -2,18 +2,33 @@
 #include <iostream>
 
 #include <actor-zeta/actor/local_actor.hpp>
-#include <actor-zeta/standard_handlers/skip.hpp>
-#include <actor-zeta/standard_handlers/sync_contacts.hpp>
+#include <actor-zeta/actor/actor_address.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
 #include <actor-zeta/environment/environment.hpp>
 #include <actor-zeta/messaging/message.hpp>
-#include <actor-zeta/actor/actor_address.hpp>
-#include <actor-zeta/standard_handlers/add_channel.hpp>
 #include <actor-zeta/channel/channel.hpp>
+#include <actor-zeta/actor/abstract_action.hpp>
 
-namespace actor_zeta {
+namespace actor_zeta { namespace actor {
 
-    namespace actor {
+        inline void error_sync_contacts(const std::string &__error__) {
+            std::cerr << "WARNING" << std::endl;
+            std::cerr << "Not initialization actor_address type:" << __error__ << std::endl;
+            std::cerr << "WARNING" << std::endl;
+        }
+
+        inline void error_skip(const std::string &__error__) {
+            std::cerr << "WARNING" << std::endl;
+            std::cerr << "Skip" << __error__ << std::endl;
+            std::cerr << "WARNING" << std::endl;
+        }
+
+        inline void error_add_channel(const std::string &__error__) {
+            std::cerr << "WARNING" << std::endl;
+            std::cerr << "Not initialization channel type:" << __error__ << std::endl;
+            std::cerr << "WARNING" << std::endl;
+        }
+
         local_actor::local_actor(
                 environment::abstract_environment *env,
                 const std::string &type
@@ -24,12 +39,48 @@ namespace actor_zeta {
         }
 
         void local_actor::initialize() {
-            attach(new sync_contacts());
-            attach(new skip());
-            attach(new add_channel());
+            add_handler(
+                    make_handler(
+                            "sync_contacts",
+                            [](context &context_) {
+                                auto address = context_.message().body<actor_address>();
+
+                                if (address) {
+                                    context_->addresses(address);
+                                } else {
+                                    error_sync_contacts(address->name());
+                                }
+                            }
+                    )
+            );
+
+            // TODO: "skip" -> "" ?
+            add_handler(
+                    make_handler(
+                            "skip",
+                            [](context &context_) {
+                                error_skip(context_.message().command().to_string());
+                            }
+                    )
+            );
+
+            add_handler(
+                    make_handler(
+                            "add_channel",
+                            [](context &context_) {
+                                auto channel_ = context_.message().body<channel::channel>();
+                                if (channel_) {
+                                    context_->channel(channel_);
+                                } else {
+                                    error_add_channel(channel_->name());
+                                }
+                            }
+                    )
+            );
+
         }
         
-        void local_actor::attach(behavior::abstract_action *ptr_aa) {
+        void local_actor::add_handler(abstract_action *ptr_aa) {
             reactions_.add(ptr_aa);
         }
 
@@ -43,11 +94,11 @@ namespace actor_zeta {
         }
 
 
-        executor::execution_device *local_actor::device() const {
+        executor::execution_device *local_actor::attach() const {
             return executor_;
         }
 
-        void local_actor::device(executor::execution_device *e) {
+        void local_actor::attach(executor::execution_device *e) {
             if (e!= nullptr) {
                 executor_ = e;
             }

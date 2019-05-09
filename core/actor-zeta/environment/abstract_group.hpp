@@ -23,7 +23,7 @@ namespace actor_zeta { namespace environment {
 
             abstract_group &operator=(abstract_group &&)= default;
 
-            ~abstract_group() = default;
+            ~abstract_group() override = default;
 
             abstract_group(storage_space, actor::abstract_actor *);
 
@@ -35,13 +35,15 @@ namespace actor_zeta { namespace environment {
 
             void add_shared(actor::abstract_actor *);
 
+            void add_shared(const actor::actor_address&);
+
             void join(group &);
 
             auto channel() -> channel::channel;
 
-            auto send(messaging::message &&msg) -> bool override final;
+            auto send(messaging::message &&msg) -> bool final;
 
-            auto broadcast(messaging::message &&msg) -> bool override final;
+            auto broadcast(messaging::message &&msg) -> bool final;
 
         private:
             std::size_t cursor;
@@ -49,5 +51,5 @@ namespace actor_zeta { namespace environment {
             id_t entry_point_;
             layer shared_point;
         };
-    }
-}
+
+}}

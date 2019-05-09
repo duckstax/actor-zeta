@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace actor_zeta { namespace behavior {
+namespace actor_zeta { namespace actor {
 ///
 /// @brief Identifier for action
 ///
@@ -44,8 +44,8 @@ namespace actor_zeta { namespace behavior {
 
 namespace std {
     template<>
-    struct hash<actor_zeta::behavior::type_action> {
-        inline size_t operator()(const actor_zeta::behavior::type_action &ref) const {
+    struct hash<actor_zeta::actor::type_action> {
+        inline size_t operator()(const actor_zeta::actor::type_action &ref) const {
             return ref.hash();
         }
     };

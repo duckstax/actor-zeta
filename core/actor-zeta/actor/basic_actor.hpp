@@ -6,20 +6,26 @@
 
 namespace actor_zeta { namespace actor {
 
+///
+/// @brief
+///
         template<
                 typename MailBox,
                 typename Actor = async_actor
         >
         class basic_actor : public Actor {
         public:
-            virtual ~basic_actor() = default;
+            using actor_type = Actor;
+
+            template<std::size_t N>
             basic_actor(
                     environment::abstract_environment *ptr,
-                    const std::string &name
-            )
-                    : Actor(ptr, new MailBox, name) {
+                    const char(&name)[N]
+            ): actor_type(ptr, new MailBox, name) {
 
             }
+
+            virtual ~basic_actor() = default;
 
         };
 
@@ -31,6 +37,6 @@ namespace actor_zeta { namespace actor {
         >
         actor make_actor(environment::abstract_environment *ptr, const std::string &name) {
             return new basic_actor<MailBox,Actor>(ptr,name);
-        };
+        }
     }
 }

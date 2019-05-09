@@ -1,11 +1,11 @@
 #include <initializer_list>
 #include <iostream>
-#include <actor-zeta/behavior/reactions.hpp>
-#include <actor-zeta/behavior/abstract_action.hpp>
-#include <actor-zeta/behavior/context.hpp>
+#include <actor-zeta/actor/reactions.hpp>
+#include <actor-zeta/actor/abstract_action.hpp>
+#include <actor-zeta/actor/context.hpp>
 #include <memory>
 
-namespace actor_zeta { namespace behavior {
+namespace actor_zeta { namespace actor {
 
         inline void error_duplicate_handler(const char *_error_) {
             std::cerr << "Duplicate" << std::endl;

@@ -9,11 +9,11 @@
 #include <actor-zeta/actor/basic_actor.hpp>
 #include <actor-zeta/environment/abstract_environment.hpp>
 #include <actor-zeta/environment/cooperation.hpp>
-#include <actor-zeta/executor/abstract_coordinator.hpp>
+#include <actor-zeta/executor/abstract_executor.hpp>
 
 
-using actor_zeta::behavior::make_handler;
-using actor_zeta::behavior::context;
+using actor_zeta::actor::make_handler;
+using actor_zeta::actor::context;
 using actor_zeta::messaging::make_message;
 using actor_zeta::environment::abstract_environment;
 using actor_zeta::actor::basic_async_actor;
@@ -26,7 +26,7 @@ public:
       return 0;
     }
 
-    actor_zeta::executor::abstract_coordinator &manager_execution_device() override {
+    actor_zeta::executor::abstract_executor &manager_execution_device() override {
         return *e_.get();
     }
 
@@ -38,36 +38,36 @@ public:
 
 protected:
     actor_zeta::environment::cooperation cooperation_;
-    std::unique_ptr<actor_zeta::executor::abstract_coordinator> e_;
+    std::unique_ptr<actor_zeta::executor::abstract_executor> e_;
 };
 
 class storage_t final : public basic_async_actor {
 public:
     storage_t(abstract_environment *ptr): basic_async_actor(ptr,"storage"){
-        attach(
+        add_handler(
                 make_handler(
                         "update",
-                        []( context& /*ctx*/) -> void {
+                        [](context & /*ctx*/) -> void {
 
 
                         }
                 )
         );
 
-        attach(
+        add_handler(
                 make_handler(
                         "find",
-                        []( context& /*ctx*/) -> void {
+                        [](context & /*ctx*/) -> void {
 
 
                         }
                 )
         );
 
-        attach(
+        add_handler(
                 make_handler(
                         "remove",
-                        []( context& /*ctx*/) -> void {
+                        [](context & /*ctx*/) -> void {
 
                         }
                 )

@@ -2,8 +2,7 @@
 #include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
 
-namespace actor_zeta {
-    namespace actor {
+namespace actor_zeta { namespace actor {
         actor::~actor() {}
 
         actor_address actor::address() const noexcept {
@@ -18,5 +17,4 @@ namespace actor_zeta {
             using std::swap;
             heart.swap(other.heart);
         }
-    }
-}
+}}

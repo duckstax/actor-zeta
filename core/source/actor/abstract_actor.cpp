@@ -1,13 +1,12 @@
 #include "actor-zeta/actor/abstract_actor.hpp"
 #include "actor-zeta/actor/actor_address.hpp"
 
-namespace actor_zeta {
-    namespace actor {
-        abstract_actor::abstract_actor(environment::abstract_environment *env, const std::string &type): 
+namespace actor_zeta { namespace actor {
+        abstract_actor::abstract_actor(environment::abstract_environment *env, const std::string &name):
                 env_(env) {
 
             type_.type = abstract::actor;
-            type_.name = type;
+            type_.name = name;
         }
 
         actor_address abstract_actor::address() const noexcept {

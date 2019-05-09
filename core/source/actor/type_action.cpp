@@ -1,7 +1,6 @@
-#include "actor-zeta/behavior/type_action.hpp"
+#include "actor-zeta/actor/type_action.hpp"
 
-namespace actor_zeta {
-    namespace behavior {
+namespace actor_zeta { namespace actor {
 
         bool type_action::operator==(const type_action &t) const noexcept {
             return (hash() == t.hash());
@@ -23,5 +22,5 @@ namespace actor_zeta {
         auto type_action::to_string() const -> const std::string & {
             return body_;
         }
-    }
-}
+
+}}

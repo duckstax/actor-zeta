@@ -7,16 +7,12 @@ namespace actor_zeta {
     }
 
     namespace actor {
-        class abstract_actor;
-        class actor;
-        class actor_address;
-    }
-
-    namespace behavior {
+        class  abstract_actor;
+        class  actor;
+        class  actor_address;
         class  abstract_action;
         class  context;
         struct context_t;
-        class  fsm;
     }
 
     namespace channel {
@@ -32,9 +28,9 @@ namespace actor_zeta {
     }
 
     namespace executor {
-        class abstract_coordinator;
+        class abstract_executor;
         template<class Policy>
-        class  coordinator;
+        class  executor;
         struct execution_device;
         struct executable;
     }

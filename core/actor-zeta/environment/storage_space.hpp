@@ -4,8 +4,7 @@
 #include <vector>
 #include "actor-zeta/actor/actor_address.hpp"
 
-namespace actor_zeta {
-    namespace environment {
+namespace actor_zeta { namespace environment {
         using id_t=std::size_t;
         using layer = std::vector<id_t>;
 
@@ -39,5 +38,4 @@ namespace actor_zeta {
 
             std::shared_ptr<impl> pimpl;
         };
-    }
-}
+}}

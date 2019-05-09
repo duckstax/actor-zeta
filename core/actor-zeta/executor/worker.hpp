@@ -8,8 +8,8 @@
 
 namespace actor_zeta { namespace executor {
 
-        template<class Policy>
-        class coordinator;
+template<class Policy>
+class executor;
 ///
 /// @brief
 /// @tparam Policy
@@ -18,10 +18,10 @@ namespace actor_zeta { namespace executor {
         class worker final : public execution_device {
         public:
             using job_ptr = executable *;
-            using coordinator_ptr = coordinator<Policy> *;
+            using executor_ptr = executor<Policy> *;
             using policy_data = typename Policy::worker_data;
 
-            worker(size_t worker_id, coordinator_ptr worker_parent,
+            worker(size_t worker_id, executor_ptr worker_parent,
                    const policy_data &init, size_t throughput)
                     : execution_device(),
                       max_throughput_(throughput),
@@ -51,12 +51,12 @@ namespace actor_zeta { namespace executor {
                 policy_.external_enqueue(this, job);
             }
 
-            void execute_async(job_ptr job) override {
+            void execute(job_ptr job) override {
                 ///assert(job != nullptr); TODO: do not check
                 policy_.internal_enqueue(this, job);
             }
 
-            coordinator_ptr parent() {
+            executor_ptr parent() {
                 return parent_;
             }
 
@@ -111,7 +111,7 @@ namespace actor_zeta { namespace executor {
             size_t max_throughput_;
             std::thread this_thread_;
             size_t id_;
-            coordinator_ptr parent_;
+            executor_ptr parent_;
             policy_data data_;
             Policy policy_;
         };

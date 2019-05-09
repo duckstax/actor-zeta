@@ -22,7 +22,7 @@ namespace actor_zeta { namespace executor {
 /// @brief
 ///
             struct coordinator_data final {
-                inline explicit coordinator_data(abstract_coordinator *) {
+                inline explicit coordinator_data(abstract_executor *) {
 
                 }
 
@@ -34,7 +34,7 @@ namespace actor_zeta { namespace executor {
 /// @brief
 ///
             struct worker_data final {
-                inline explicit worker_data(abstract_coordinator *) {
+                inline explicit worker_data(abstract_executor *) {
 
                 }
             };

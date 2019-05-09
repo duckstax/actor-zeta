@@ -56,5 +56,13 @@ namespace actor_zeta {
 
             intrusive_ptr<abstract_group> group_;
         };
-    }
-}
+
+        inline void send(group& current_group,messaging::message&&msg){
+            current_group->send(std::move(msg));
+        }
+
+        inline void broadcast(group& current_group,messaging::message&&msg){
+            current_group->broadcast(std::move(msg));
+        }
+
+}}

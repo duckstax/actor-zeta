@@ -6,8 +6,7 @@
 #include <initializer_list>
 #include <algorithm>
 
-namespace actor_zeta {
-    namespace messaging {
+namespace actor_zeta { namespace detail {
 ///
 /// @brief
 ///
@@ -108,6 +107,6 @@ namespace actor_zeta {
     }
 }
 
-inline void swap(actor_zeta::messaging::any &lhs, actor_zeta::messaging::any &rhs) noexcept {
+inline void swap(actor_zeta::detail::any &lhs, actor_zeta::detail::any &rhs) noexcept {
     lhs.swap(rhs);
 }
