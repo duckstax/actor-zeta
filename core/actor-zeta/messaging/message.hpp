@@ -11,10 +11,10 @@ namespace actor_zeta { namespace messaging {
 ///
 /// @brief
 ///
+
         class message final {
         public:
             ///TODO: see intrusive_list
-            intrusive_list_node link;
 
             message();
 

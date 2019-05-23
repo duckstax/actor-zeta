@@ -97,9 +97,8 @@ set(SOURCE_FILES
         source/standard_handlers/skip.cpp
         source/standard_handlers/sync_contacts.cpp
         source/ref_counted.cpp
-        source/spinlock.cpp
 
-)
+        )
 
 add_library(
         ${PROJECT}

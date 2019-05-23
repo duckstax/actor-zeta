@@ -1,11 +1,10 @@
 #pragma once
 
-#include <mutex>
-#include <condition_variable>
 #include <list>
 #include <memory>
 #include <atomic>
 #include <actor-zeta/messaging/mail_box.hpp>
+#include <actor-zeta/detail/spinlock.hpp>
 
 namespace actor_zeta { namespace messaging {
 ///
@@ -15,21 +14,20 @@ namespace actor_zeta { namespace messaging {
         class blocking_mail_queue final : public mail_box {
         public:
             using cache_type = std::list<message>;
-
             using queue_base_type = std::list<message>;
-
             using unique_lock = std::unique_lock<std::mutex>;
-            using lock_guard = std::lock_guard<std::mutex>;
-            blocking_mail_queue();
-            ~blocking_mail_queue();
+            using lock_guard = std::lock_guard<spinlock>;
 
-            enqueue_result put(message&& m);
+            blocking_mail_queue():mutex(true){}
+            ~blocking_mail_queue() override = default;
 
-            message get();
+            enqueue_result put(message&& m) override;
 
-            bool push_to_cache(messaging::message &&msg_ptr);
+            message get() override;
 
-            messaging::message pop_to_cache();
+            bool push_to_cache(messaging::message &&msg_ptr) override;
+
+            messaging::message pop_to_cache() override;
 
         private:
 
@@ -37,8 +35,8 @@ namespace actor_zeta { namespace messaging {
 
             void sync();
 
-            mutable std::mutex mutex;
-            std::condition_variable cv;
+            spinlock mutex;
+
             
             queue_base_type mail_queue;
             queue_base_type local_queue;

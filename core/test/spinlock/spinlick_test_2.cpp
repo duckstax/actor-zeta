@@ -23,14 +23,6 @@ int main() {
     assert(!sp2.try_lock());
     sp.unlock();
     sp2.unlock();
-
-    {
-        actor_zeta::spinlock::scoped_lock lock(sp);
-        assert(!sp.try_lock());
-        actor_zeta::spinlock::scoped_lock lock2(sp2);
-        assert(!sp.try_lock());
-        assert(!sp2.try_lock());
-    }
-
+    
     return 0;
 }

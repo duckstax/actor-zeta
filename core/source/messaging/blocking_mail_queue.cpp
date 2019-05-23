@@ -12,7 +12,6 @@ namespace actor_zeta { namespace messaging {
                 mail_queue.push_back(std::move(m));
                 status = enqueue_result::success;
             }
-            cv.notify_one();
             return status;
         }
 
@@ -60,10 +59,4 @@ namespace actor_zeta { namespace messaging {
             local_queue.splice(local_queue.begin(), mail_queue);
         }
 
-        blocking_mail_queue::~blocking_mail_queue() = default;
-
-        blocking_mail_queue::blocking_mail_queue() = default;
-
-
-    }
-}
+}}
