@@ -1,5 +1,5 @@
-#include "actor-zeta/actor/abstract_actor.hpp"
-#include "actor-zeta/actor/actor_address.hpp"
+#include <actor-zeta/actor/abstract_actor.hpp>
+#include <actor-zeta/actor/actor_address.hpp>
 
 namespace actor_zeta { namespace actor {
         abstract_actor::abstract_actor(environment::abstract_environment *env, const std::string &name):

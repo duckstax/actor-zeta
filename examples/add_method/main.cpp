@@ -21,31 +21,28 @@ class storage_t final : public basic_async_actor {
 public:
     storage_t(abstract_environment *ptr) : basic_async_actor(ptr, "storage") {
         add_handler(
-                make_handler(
-                        "update",
-                        [](context & /*ctx*/) -> void {
+                "update",
+                [](context & /*ctx*/) -> void {
 
 
-                        }
-                )
+                }
+
         );
 
         add_handler(
-                make_handler(
-                        "find",
-                        [](context & /*ctx*/) -> void {
 
-                        }
-                )
+                "find",
+                [](context & /*ctx*/) -> void {
+
+                }
+
         );
 
         add_handler(
-                make_handler(
-                        "remove",
-                        [](context & /*ctx*/ ) -> void {
+                "remove",
+                [](context & /*ctx*/ ) -> void {
 
-                        }
-                )
+                }
         );
     }
 

@@ -7,7 +7,8 @@
 #include <actor-zeta/environment/environment.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/channel/channel.hpp>
-#include <actor-zeta/actor/abstract_action.hpp>
+#include <actor-zeta/actor/handler.hpp>
+#include <actor-zeta/detail/string_view.hpp>
 
 namespace actor_zeta { namespace actor {
 
@@ -17,7 +18,7 @@ namespace actor_zeta { namespace actor {
             std::cerr << "WARNING" << std::endl;
         }
 
-        inline void error_skip(const std::string &__error__) {
+        inline void error_skip(detail::string_view  __error__) {
             std::cerr << "WARNING" << std::endl;
             std::cerr << "Skip" << __error__ << std::endl;
             std::cerr << "WARNING" << std::endl;
@@ -40,48 +41,38 @@ namespace actor_zeta { namespace actor {
 
         void local_actor::initialize() {
             add_handler(
-                    make_handler(
-                            "sync_contacts",
-                            [](context &context_) {
-                                auto address = context_.message().body<actor_address>();
+                    "sync_contacts",
+                    [](context &context_) {
+                        auto address = context_.message().body<actor_address>();
 
-                                if (address) {
-                                    context_->addresses(address);
-                                } else {
-                                    error_sync_contacts(address->name());
-                                }
-                            }
-                    )
+                        if (address) {
+                            context_->addresses(address);
+                        } else {
+                            error_sync_contacts(address->name());
+                        }
+                    }
             );
 
             // TODO: "skip" -> "" ?
             add_handler(
-                    make_handler(
-                            "skip",
-                            [](context &context_) {
-                                error_skip(context_.message().command().to_string());
-                            }
-                    )
+                    "skip",
+                    [](context &context_) {
+                        error_skip(context_.message().command()/*.to_string()*/);
+                    }
             );
 
             add_handler(
-                    make_handler(
-                            "add_channel",
-                            [](context &context_) {
-                                auto channel_ = context_.message().body<channel::channel>();
-                                if (channel_) {
-                                    context_->channel(channel_);
-                                } else {
-                                    error_add_channel(channel_->name());
-                                }
-                            }
-                    )
+                    "add_channel",
+                    [](context &context_) {
+                        auto channel_ = context_.message().body<channel::channel>();
+                        if (channel_) {
+                            context_->channel(channel_);
+                        } else {
+                            error_add_channel(channel_->name());
+                        }
+                    }
             );
 
-        }
-        
-        void local_actor::add_handler(abstract_action *ptr_aa) {
-            reactions_.add(ptr_aa);
         }
 
         auto local_actor::all_view_address() const -> void  {
@@ -92,7 +83,6 @@ namespace actor_zeta { namespace actor {
         local_actor::~local_actor() {
 
         }
-
 
         executor::execution_device *local_actor::attach() const {
             return executor_;
@@ -123,8 +113,8 @@ namespace actor_zeta { namespace actor {
         std::set<std::string> local_actor::message_types() const {
             std::set<std::string> types;
 
-            for(const auto&i: reactions_) {
-                types.emplace(i.first.to_string());
+            for(const auto&i: dispatch()) {
+                types.emplace(std::to_string(i.first));
             }
 
             return types;

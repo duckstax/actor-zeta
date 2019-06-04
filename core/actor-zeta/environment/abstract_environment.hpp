@@ -9,11 +9,11 @@ namespace actor_zeta { namespace environment {
 
         struct abstract_environment {
 
-            virtual int                           start()                    = 0;
+            virtual int                           start()         = 0;
 
-            virtual executor::abstract_executor & manager_execution_device() = 0;
+            virtual executor::abstract_executor & get_executor()  = 0;
 
-            virtual cooperation &                 manager_group()            = 0;
+            virtual cooperation &                 manager_group() = 0;
 
             virtual ~abstract_environment() = default;
 

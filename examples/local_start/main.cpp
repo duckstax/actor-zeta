@@ -18,40 +18,35 @@ using actor_zeta::actor::basic_async_actor;
 
 class storage_t final : public basic_async_actor {
 public:
-    storage_t(abstract_environment *ptr): basic_async_actor(ptr,"storage"){
+    storage_t(abstract_environment *ptr) : basic_async_actor(ptr, "storage") {
         add_handler(
-                make_handler(
-                        "update",
-                        [](context & /*ctx*/, std::string &data) -> void {
+                "update",
+                [](context & /*ctx*/, std::string &data) -> void {
 
-                            std::cerr << "update:" << data << std::endl;
+                    std::cerr << "update:" << data << std::endl;
 
-                        }
-                )
+                }
         );
 
         add_handler(
-                make_handler(
-                        "find",
-                        [](context & /*ctx*/) -> void {
 
-                            std::cerr << "find" << std::endl;
+                "find",
+                [](context & /*ctx*/) -> void {
 
-                        }
-                )
+                    std::cerr << "find" << std::endl;
+
+                }
         );
 
         add_handler(
-                make_handler(
-                        "remove",
-                        [](context & /*ctx*/) -> void {
 
-                            std::cerr << "remove" << std::endl;
+                "remove",
+                [](context & /*ctx*/) -> void {
 
-                        }
-                )
+                    std::cerr << "remove" << std::endl;
+
+                }
         );
-
 
 
     }
@@ -64,19 +59,18 @@ private:
 };
 
 
-
 int main() {
 
-    auto* storage_tmp = new storage_t(nullptr);
+    auto *storage_tmp = new storage_t(nullptr);
 
     actor_zeta::actor::actor storage(storage_tmp);
 
     storage->send(
-        make_message(
-                actor_zeta::actor::actor_address(),
-                "update",
-                std::string("payload")
-        )
+            make_message(
+                    actor_zeta::actor::actor_address(),
+                    "update",
+                    std::string("payload")
+            )
     );
 
     storage->send(

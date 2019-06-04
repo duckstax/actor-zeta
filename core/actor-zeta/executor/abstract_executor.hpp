@@ -32,6 +32,8 @@ namespace actor_zeta { namespace executor {
 
             virtual void start() = 0;
 
+            virtual void stop() = 0;
+
         protected:
             std::atomic<size_t> next_worker_;
 

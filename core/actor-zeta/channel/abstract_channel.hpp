@@ -2,7 +2,7 @@
 
 #include <string>
 #include <actor-zeta/forwards.hpp>
-#include "actor-zeta/ref_counted.hpp"
+#include "actor-zeta/detail/ref_counted.hpp"
 #include "../metadata.hpp"
 
 namespace actor_zeta { namespace channel {

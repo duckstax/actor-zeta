@@ -10,7 +10,7 @@ namespace actor_zeta {
         class  abstract_actor;
         class  actor;
         class  actor_address;
-        class  abstract_action;
+        class  handler;
         class  context;
         struct context_t;
     }

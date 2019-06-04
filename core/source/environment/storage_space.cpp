@@ -13,7 +13,7 @@ namespace actor_zeta { namespace environment {
         class storage final {
         public:
 
-            storage() : counter(0) {}
+            storage() = default;
 
             storage(const storage &) = default;
 
@@ -43,7 +43,7 @@ namespace actor_zeta { namespace environment {
                 return tmp;
             }
 
-            id_t counter;
+            id_t counter{0};
             std::unordered_map<id_t, actor::actor> body;
         };
 

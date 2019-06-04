@@ -15,7 +15,7 @@ namespace actor_zeta { namespace executor {
 /// @tparam Policy
 ///
         template<class Policy>
-        class executor final : public abstract_executor {
+        class executor : public abstract_executor {
         public:
             using job_ptr     = executable *;
             using policy_data = typename Policy::coordinator_data;
@@ -51,6 +51,10 @@ namespace actor_zeta { namespace executor {
                 for (auto &w : workers_) {
                     w->start();
                 }
+            }
+
+            void stop() override {
+                ///TODO: implement
             }
 
         private:

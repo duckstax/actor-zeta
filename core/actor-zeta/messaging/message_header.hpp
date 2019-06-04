@@ -1,7 +1,7 @@
 #pragma once
 
-#include <actor-zeta/actor/type_action.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/detail/string_view.hpp>
 
 namespace actor_zeta { namespace messaging {
 ///
@@ -21,15 +21,15 @@ namespace actor_zeta { namespace messaging {
 
             ~message_header() = default;
 
-            message_header(actor::actor_address sender_, const std::string& name);
+            message_header(actor::actor_address sender_, std::string name);
 
-            auto command() const noexcept -> const actor::type_action &;
+            auto command() const noexcept -> detail::string_view;
 
             auto sender() const -> actor::actor_address ;
 
         private:
             actor::actor_address sender_;
-            actor::type_action command_;
+            std::string command_;
         };
     }
 }

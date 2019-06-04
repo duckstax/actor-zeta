@@ -1,4 +1,4 @@
-#include "actor-zeta/channel/channel.hpp"
+#include <actor-zeta/channel/channel.hpp>
 namespace actor_zeta {
     namespace channel {
 

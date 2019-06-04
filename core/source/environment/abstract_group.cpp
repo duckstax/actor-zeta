@@ -1,6 +1,6 @@
-#include "actor-zeta/environment/abstract_group.hpp"
-#include "actor-zeta/environment/group.hpp"
-#include "actor-zeta/messaging/message.hpp"
+#include <actor-zeta/environment/abstract_group.hpp>
+#include <actor-zeta/environment/group.hpp>
+#include <actor-zeta/messaging/message.hpp>
 
 namespace actor_zeta { namespace environment {
 
@@ -16,11 +16,11 @@ namespace actor_zeta { namespace environment {
             if (!shared_point.empty()) {
                 for (auto &i:shared_point) {
                     t->send(
-                                    messaging::make_message(
-                                            t->address(),
-                                            "sync_contacts",
-                                            storage_space_.get(i)
-                                    )
+                            messaging::make_message(
+                                    t->address(),
+                                    "sync_contacts",
+                                    storage_space_.get(i)
+                            )
                     );
                 }
             }

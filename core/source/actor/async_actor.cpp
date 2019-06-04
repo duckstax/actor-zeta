@@ -3,7 +3,7 @@
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
 #include <actor-zeta/environment/environment.hpp>
-#include <actor-zeta/actor/abstract_action.hpp>
+#include <actor-zeta/actor/handler.hpp>
 
 namespace actor_zeta { namespace actor {
 
@@ -25,7 +25,7 @@ namespace actor_zeta { namespace actor {
                     if (msg_ptr) {
                         {
                             context context_(this, std::move(msg_ptr));
-                            reactions_.execute(context_); /** context processing */
+                            dispatch().execute(context_); /** context processing */
                         }
                         ++handled_msgs;
                         continue;
@@ -35,7 +35,7 @@ namespace actor_zeta { namespace actor {
                     if (msg_ptr) {
                         {
                             context context_(this, std::move(msg_ptr));
-                            reactions_.execute(context_); /** context processing */
+                            dispatch().execute(context_); /** context processing */
                         }
                         ++handled_msgs;
 
@@ -71,7 +71,7 @@ namespace actor_zeta { namespace actor {
                 attach(e);
                 attach()->execute(this);
             } else if(env()) {
-                env()->manager_execution_device().execute(this);
+                env()->get_executor().execute(this);
             } else {
                 /// local
             }

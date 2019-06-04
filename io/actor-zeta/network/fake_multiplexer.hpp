@@ -40,20 +40,15 @@ namespace actor_zeta { namespace network {
             fake_state(fake_state&&)= default;
             fake_state&operator=(fake_state&&)= default;
             ~fake_state() = default;
-            fake_state():
-                    waite_time(0){
-
-            }
+            fake_state()= default;
 
             fake_state(client_state next_state) :
-                    state(next_state) ,
-                    waite_time(0) {}
+                    state(next_state) {}
 
 
             fake_state(const buffer &input, client_state next_state) :
                     buffer_(input),
-                    state(next_state) ,
-                    waite_time(0) {}
+                    state(next_state){}
 
             template<class F>
             fake_state(F && checker, client_state next_state, size_t waite_time) :
@@ -64,7 +59,7 @@ namespace actor_zeta { namespace network {
             std::function<bool(const buffer &)> checker_;
             buffer buffer_;
             client_state state;
-            std::size_t waite_time;
+            std::size_t waite_time{0};
         };
 
         struct fake_socket final {

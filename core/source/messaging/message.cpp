@@ -1,5 +1,5 @@
 
-#include "actor-zeta/messaging/message.hpp"
+#include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/messaging/message_header.hpp>
 #include <utility>
 #include <actor-zeta/messaging/message.hpp>
@@ -7,7 +7,7 @@
 
 namespace actor_zeta { namespace messaging {
 
-        auto message::command() const noexcept -> const actor::type_action & {
+        auto message::command() const noexcept -> detail::string_view {
             return header_.command();
         }
 
@@ -19,9 +19,9 @@ namespace actor_zeta { namespace messaging {
             return init;
         }
 
-        message::message(actor::actor_address sender_,const std::string& name, detail::any &&body):
+        message::message(actor::actor_address sender_,std::string name, detail::any &&body):
             init(true),
-            header_(std::move(sender_),name),
+            header_(std::move(sender_),std::move(name)),
             body_(std::move(body)) {}
 
         message::message(const message_header &header, const detail::any &body):

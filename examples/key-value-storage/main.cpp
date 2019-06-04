@@ -26,6 +26,8 @@ using actor_zeta::environment::network_environment;
 using actor_zeta::network::buffer;
 using actor_zeta::actor::actor_address;
 using actor_zeta::network::query_raw_t;
+using actor_zeta::executor::executor;
+using actor_zeta::executor::work_sharing;
 
 struct query_t final {
     actor_zeta::network::connection_identifying id;
@@ -187,7 +189,7 @@ int main() {
     )
     .add(actor_zeta::network::client_state::close);
 
-    auto* env = new network_environment(new actor_zeta::executor::executor<actor_zeta::executor::work_sharing>(1,std::numeric_limits<std::size_t>::max()),multiplexer);
+    auto* env = new network_environment(new executor<work_sharing>(1,std::numeric_limits<std::size_t>::max()),multiplexer);
 
     actor_zeta::environment::environment environment(env);
 

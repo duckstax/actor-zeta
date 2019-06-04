@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <actor-zeta/intrusive_ptr.hpp>
+#include <actor-zeta/detail/intrusive_ptr.hpp>
 #include <actor-zeta/forwards.hpp>
 
 //smart actor
@@ -22,10 +22,10 @@ namespace actor_zeta { namespace actor {
             actor &operator=(actor &&a) = default;
 
             template<class T>
-            explicit  actor(intrusive_ptr <T> ptr) : heart(std::move(ptr)) {}
+            explicit  actor(intrusive_ptr <T> ptr) : ptr_(std::move(ptr)) {}
 
             template<class T>
-            explicit actor(T *ptr) : heart(ptr) {}
+            explicit actor(T *ptr) : ptr_(ptr) {}
 
             template<class T>
             actor &operator=(intrusive_ptr <T> ptr) {
@@ -46,24 +46,24 @@ namespace actor_zeta { namespace actor {
             ~actor();
 
             inline abstract_actor *operator->() const noexcept {
-                return heart.get();
+                return ptr_.get();
             }
 
             inline explicit operator bool() const noexcept {
-                return static_cast<bool>(heart);
+                return static_cast<bool>(ptr_);
             }
 
             const std::string &name() const;
 
             inline bool operator!() const noexcept {
-                return !heart;
+                return !ptr_;
             }
 
         private:
 
             void swap(actor &) noexcept;
 
-            intrusive_ptr <abstract_actor> heart;
+            intrusive_ptr <abstract_actor> ptr_;
         };
     }
 

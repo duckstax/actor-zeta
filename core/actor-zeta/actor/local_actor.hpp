@@ -8,7 +8,7 @@
 #include <actor-zeta/actor/context.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
 #include <actor-zeta/channel/channel.hpp>
-#include <actor-zeta/actor/reactions.hpp>
+#include <actor-zeta/actor/dispatcher.hpp>
 
 namespace actor_zeta { namespace actor {
 
@@ -49,18 +49,25 @@ namespace actor_zeta { namespace actor {
 
             template<std::size_t N, typename F>
             auto add_handler(const char(&name)[N], F &&f) -> void {
-                add_handler(make_handler(name,std::forward<F>(f)));
+                dispatch().on(detail::string_view(name), make_handler(std::forward<F>(f)));
             }
 
-            auto add_handler(abstract_action *) -> void;
+            auto dispatch() -> dispatcher_t& {
+                return dispatcher_;
+            }
+
+            auto dispatch() const  -> const dispatcher_t& {
+                return dispatcher_;
+            }
 
             local_actor(environment::abstract_environment *,  const std::string &);
 
-            reactions reactions_;
-            std::unordered_map<std::string, actor_address> contacts;
-            std::unordered_map<std::string, channel::channel> channels;
         private:
             void initialize();
+
+            std::unordered_map<std::string, actor_address> contacts;
+            std::unordered_map<std::string, channel::channel> channels;
+            dispatcher_t dispatcher_;
             executor::execution_device *executor_;
         };
     }

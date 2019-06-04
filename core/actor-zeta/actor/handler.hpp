@@ -4,26 +4,17 @@
 
 #include <actor-zeta/actor/context.hpp>
 #include <actor-zeta/forwards.hpp>
-#include <actor-zeta/actor/type_action.hpp>
-#include <actor-zeta/detail/type_traits/callable_trait.hpp>
+#include <actor-zeta/detail/callable_trait.hpp>
 
 namespace actor_zeta { namespace actor {
 ///
 /// @brief Abstract concept of an action
 ///
-        class abstract_action {
+        class handler {
         public:
-            virtual ~abstract_action();
-
-            template<std::size_t N>
-            explicit abstract_action(const char(&aStr)[N]) : name_(aStr) {}
+            virtual ~handler() = default;
 
             virtual void invoke(context &) = 0;
-
-            auto name() const -> const type_action &;
-
-        private:
-            const type_action name_;
         };
 
         template<
@@ -59,16 +50,12 @@ namespace actor_zeta { namespace actor {
         };
 
 
-        class helper final : public abstract_action {
+        class helper final : public handler {
         public:
             ~helper() override = default;
 
-            template<
-                    std::size_t N,
-                    typename F
-            >
-            helper(const char(&aStr)[N], F &&f):
-                    abstract_action(aStr) {
+            template<typename F>
+            helper( F &&f){
                 helper_ = transformer<F>{}(std::forward<F>(f));
             }
 
@@ -81,9 +68,9 @@ namespace actor_zeta { namespace actor {
 
         };
 
-        template<std::size_t N, typename F>
-        auto make_handler(const char(&aStr)[N], F &&f) -> abstract_action * {
-            return new helper(aStr, f);
+        template< typename F>
+        auto make_handler( F &&f) -> handler * {
+            return new helper(f);
         };
 
 }} /// namespace actor_zeta { namespace behavior {}}

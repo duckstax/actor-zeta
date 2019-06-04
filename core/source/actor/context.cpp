@@ -3,7 +3,7 @@
 namespace actor_zeta { namespace actor {
 
         context::~context() {
-            if( ptr.get() != nullptr ){
+            if( ptr != nullptr ){
                 ptr.release();
             }
 

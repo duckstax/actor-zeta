@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <type_traits>
 
-#include "actor-zeta/forwards.hpp"
+#include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace executor {
 ///

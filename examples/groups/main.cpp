@@ -23,11 +23,11 @@ class dummy_environmentl final : public abstract_environment {
 public:
 
     int start() override {
-      return 0;
+        return 0;
     }
 
-    actor_zeta::executor::abstract_executor &manager_execution_device() override {
-        return *e_.get();
+    actor_zeta::executor::abstract_executor &get_executor() override {
+        return *e_;
     }
 
     actor_zeta::environment::cooperation &manager_group() override {
@@ -43,44 +43,28 @@ protected:
 
 class storage_t final : public basic_async_actor {
 public:
-    storage_t(abstract_environment *ptr): basic_async_actor(ptr,"storage"){
+    explicit storage_t(abstract_environment *ptr) : basic_async_actor(ptr, "storage") {
         add_handler(
-                make_handler(
-                        "update",
-                        [](context & /*ctx*/) -> void {
-
-
-                        }
-                )
+                "update",
+                [](context & /*ctx*/) -> void {}
         );
 
         add_handler(
-                make_handler(
-                        "find",
-                        [](context & /*ctx*/) -> void {
-
-
-                        }
-                )
+                "find",
+                [](context & /*ctx*/) -> void {}
         );
 
         add_handler(
-                make_handler(
-                        "remove",
-                        [](context & /*ctx*/) -> void {
 
-                        }
-                )
+                "remove",
+                [](context & /*ctx*/) -> void {}
         );
-
-
-
     }
 
     ~storage_t() override = default;
 
 private:
-    std::unordered_map<std::string,std::string> storage_;
+    std::unordered_map<std::string, std::string> storage_;
 
 };
 
@@ -88,23 +72,21 @@ class network_t final : public basic_async_actor {
 public:
     ~network_t() override = default;
 
-    explicit network_t(abstract_environment *ptr): basic_async_actor(ptr,"network"){
-
-    }
+    explicit network_t(abstract_environment *ptr) : basic_async_actor(ptr, "network") {}
 };
 
 int main() {
 
-    auto* env = new dummy_environmentl;
+    auto *env = new dummy_environmentl;
 
     actor_zeta::environment::environment environment(env);
 
-    auto& group_storage = environment->manager_group().created_group( new storage_t(env));
+    auto &group_storage = environment->manager_group().created_group(new storage_t(env));
 
-    auto& group_fake_network = environment->manager_group().created_group(new network_t(env));
+    auto &group_fake_network = environment->manager_group().created_group(new network_t(env));
 
-    actor_zeta::environment::link(group_fake_network,group_storage);
-    actor_zeta::environment::link(group_storage,group_fake_network);
+    actor_zeta::environment::link(group_fake_network, group_storage);
+    actor_zeta::environment::link(group_storage, group_fake_network);
 
     return 0;
 }
