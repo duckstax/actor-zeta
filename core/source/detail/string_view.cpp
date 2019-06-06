@@ -14,3 +14,18 @@ namespace std {
     }
 
 }
+namespace actor_zeta { namespace  detail {
+        int string_view::compare(actor_zeta::detail::string_view str) const noexcept {
+            auto s0 = size();
+            auto s1 = str.size();
+            auto fallback = [](int x, int y) {
+                return x == 0 ? y : x;
+            };
+            if (s0 == s1)
+                return strncmp(data(), str.data(), s0);
+            else if (s0 < s1)
+                return fallback(strncmp(data(), str.data(), s0), -1);
+            return fallback(strncmp(data(), str.data(), s1), 1);
+        }
+
+    }}

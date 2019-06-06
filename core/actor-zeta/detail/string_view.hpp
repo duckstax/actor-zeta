@@ -74,29 +74,20 @@ namespace actor_zeta { namespace detail {
                 return end();
             }
 
-            bool operator==(const string_view& s) const noexcept {
-                auto s0 = size();
-                auto s1 = s.size();
-                auto fallback = [](int x, int y) {
-                    return x == 0 ? y : x;
-                };
-                if (s0 == s1) {
-                    return strncmp(data(), s.data(), s0) == 0 ;
-                }    else if (s0 < s1) {
-                    return fallback(strncmp(data(), s.data(), s0), -1);
-                }
-                return fallback(strncmp(data(), s.data(), s1), 1);
-            }
+            int compare(string_view str) const noexcept;
 
         private:
             const char *data_;
             size_t size_;
         };
 
-        template< class CharT, class Traits >
-        constexpr bool operator== (
-                string_view lhs,
-                string_view rhs ) noexcept { return lhs== rhs;}
+        inline constexpr bool operator==(string_view lhs, string_view rhs){
+            return (lhs.size() == rhs.size()) && (lhs.compare(rhs) == 0);
+        }
+
+        inline constexpr bool operator!=(string_view lhs, string_view rhs){
+            return !(lhs == rhs);
+        }
 
 
     }}
@@ -112,8 +103,8 @@ namespace std {
     template<>
     struct hash<actor_zeta::detail::string_view> final {
         size_t operator()(const actor_zeta::detail::string_view& x) const noexcept {
-            string_view::const_iterator p = x.cbegin();
-            string_view::const_iterator end = x.cend();
+            auto p = x.cbegin();
+            auto end = x.cend();
             uint32_t result = 2166136261U; // We implement an FNV-like string hash.
             while (p != end)
                 result = (result * 16777619) ^ (uint8_t)*p++;
