@@ -90,7 +90,7 @@ namespace actor_zeta { namespace executor {
             };
 
             profiled_executor(std::size_t num_worker_threads, std::size_t max_throughput) : super(num_worker_threads,max_throughput) {
-                auto fname = "executor-profiling-output-file.txt";
+                auto fname = "profiling-output-file.txt";
                 file_.open(fname);
                 if (!file_)
                     std::cerr << R"([WARNING] could not open file ")"
@@ -119,9 +119,9 @@ namespace actor_zeta { namespace executor {
             void stop() override {
                 super::stop();
                 auto now = clock_type::now().time_since_epoch();
-                auto wallclock = system_start_ + (now - clock_start_);
+                auto wall_clock = system_start_ + (now - clock_start_);
                 for (size_t i = 0; i < worker_states_.size(); ++i) {
-                    record(wallclock, "worker", i, worker_states_[i].worker);
+                    record(wall_clock, "worker", i, worker_states_[i].worker);
                 }
             }
 

@@ -9,7 +9,7 @@ namespace actor_zeta { namespace executor {
     class profiled_executor;
 
     template<class Policy>
-    struct profiled : Policy {
+    struct profiled final : Policy {
         using executor_type = profiled_executor<profiled<Policy>>;
 
         static actor_id id_of(executable *job) {
