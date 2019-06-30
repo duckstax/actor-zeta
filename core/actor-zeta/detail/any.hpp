@@ -5,12 +5,15 @@
 #include <type_traits>
 #include <initializer_list>
 #include <algorithm>
+#include <actor-zeta/detail/type_traits.hpp>
 
 namespace actor_zeta {
     namespace detail {
 ///
 /// @brief
 ///
+
+/// Drop-in replacement for C++17 std::any.
         template<class T>
         struct in_place_type_tag final {};
 
@@ -34,8 +37,8 @@ namespace actor_zeta {
 #define lite_in_place_type(T)   in_place_type<T>
 
 
-class enabler{};
-#define REQUIRES(...) \
+class enabler final {};
+#define requires(...) \
 , typename = typename std::enable_if< (__VA_ARGS__), enabler >::type
 
         class any final {
@@ -44,18 +47,18 @@ class enabler{};
 
             any(any const &other) : content(other.content ? other.content->clone() : nullptr) {}
 
-            any(any &&other) noexcept : content(std::move(other.content)) {
+            any(any &&other) noexcept : content(other.content) {
                 other.content = nullptr;
             }
 
             template<
                     class ValueType,
-                    class T = typename std::decay<ValueType>::type REQUIRES( ! std::is_same<T, any>::value )>
+                    class T = typename std::decay<ValueType>::type requires(! std::is_same<T, any>::value )>
             any(ValueType &&value) noexcept : content(new holder<T>(std::move(value))) {}
 
             template<
                     class T,
-                    class... Args REQUIRES(std::is_constructible<T, Args && ...>::value)>
+                    class... Args requires(std::is_constructible<T, Args && ...>::value)>
             explicit any( lite_in_place_type_t(T), Args&&... args ):
                 content( new holder<T> ( T(std::forward<Args>(args)...))){
 
@@ -64,7 +67,7 @@ class enabler{};
             template<
                     class T,
                     class U,
-                    class... Args REQUIRES(std::is_constructible<T, std::initializer_list<U> &, Args && ...>::value)
+                    class... Args requires(std::is_constructible<T, std::initializer_list<U> &, Args && ...>::value)
             >
             explicit any(lite_in_place_type_t(T), std::initializer_list<U> il, Args &&... args):
                 content(new holder<T>(T(il, std::forward<Args>(args)...))) {
@@ -85,7 +88,7 @@ class enabler{};
                 return *this;
             }
 
-            template<class ValueType, class T = typename std::decay<ValueType>::type REQUIRES( ! std::is_same<T, any>::value )>
+            template<class ValueType, class T = typename std::decay<ValueType>::type requires(! std::is_same<T, any>::value )>
             any &operator=(ValueType &&value) {
                 any(std::move(value)).swap(*this);
                 return *this;
@@ -96,7 +99,7 @@ class enabler{};
                 any(T(std::forward<Args>(args)...)).swap(*this);
             }
 
-            template<class T, class U, class... Args REQUIRES(std::is_constructible<T, std::initializer_list<U> &, Args && ...>::value)>
+            template<class T, class U, class... Args requires(std::is_constructible<T, std::initializer_list<U> &, Args && ...>::value)>
             void emplace(std::initializer_list<U> il, Args &&... args) {
                 any(T(il, std::forward<Args>(args)...)).swap(*this);
             }
@@ -117,12 +120,20 @@ class enabler{};
             /// non-standard:
             template<class ValueType>
             const ValueType *to_ptr() const {
-                return &(static_cast<holder <ValueType> *>( content )->held);
+                if(content == nullptr){
+                    return nullptr;
+                } else {
+                    return &(static_cast<holder <ValueType> *>( content )->held);
+                }
             }
 
             template<class ValueType>
             ValueType *to_ptr() {
-                return &(static_cast<holder <ValueType> *>( content )->held);
+                if(content == nullptr){
+                    return nullptr;
+                } else {
+                    return &(static_cast<holder <ValueType> *>( content )->held);
+                }
             }
 
         private:
@@ -165,9 +176,10 @@ class enabler{};
         }
 
 
-        template<class ValueType, typename = typename std::enable_if<(
-                std::is_reference<ValueType>::value ||
-                std::is_copy_constructible<ValueType>::value), enabler>::type
+        template<class ValueType//,
+                //typename = typename std::enable_if<(
+                //std::is_reference<ValueType>::value ||
+                //std::is_copy_constructible<ValueType>::value), enabler>::type
         >
         inline ValueType any_cast(any const &operand) {
             const ValueType *result = any_cast<typename std::add_const<typename std::remove_reference<ValueType>::type>::type>(&operand);
@@ -176,8 +188,9 @@ class enabler{};
         }
 
         template<
-                class ValueType, typename = typename std::enable_if<(std::is_reference<ValueType>::value ||
-                                                                     std::is_copy_constructible<ValueType>::value), enabler>::type
+                class ValueType//,
+                //typename = typename std::enable_if<(std::is_reference<ValueType>::value ||
+                //                                                     std::is_copy_constructible<ValueType>::value), enabler>::type
 
         >
         inline ValueType any_cast(any &operand) {
@@ -188,7 +201,7 @@ class enabler{};
 
         template<
                 class ValueType
-                REQUIRES(std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value )
+                //requires(std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value )
         >
 
         inline ValueType any_cast(any &&operand) {
