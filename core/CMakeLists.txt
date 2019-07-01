@@ -72,6 +72,8 @@ set(SOURCE_FILES
         source/actor/local_actor.cpp
         source/actor/dispatcher.cpp
 
+        source/detail/string_view.cpp
+
         source/channel/abstract_channel.cpp
         source/channel/channel.cpp
 
@@ -92,7 +94,7 @@ set(SOURCE_FILES
         source/messaging/blocking_mail_queue.cpp
 
         source/ref_counted.cpp
-        actor-zeta/detail/string_view.hpp source/detail/string_view.cpp)
+)
 
 add_library(
         ${PROJECT_NAME} OBJECT
