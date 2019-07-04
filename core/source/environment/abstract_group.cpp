@@ -1,9 +1,9 @@
-#include "actor-zeta/environment/abstract_group.hpp"
-#include "actor-zeta/environment/group.hpp"
-#include "actor-zeta/messaging/message.hpp"
+#include <actor-zeta/environment/abstract_group.hpp>
+#include <actor-zeta/environment/group.hpp>
+#include <actor-zeta/messaging/message.hpp>
 
-namespace actor_zeta {
-    namespace environment {
+namespace actor_zeta { namespace environment {
+
         auto abstract_group::id() const -> id_t {
             return entry_point_;
         }
@@ -16,11 +16,11 @@ namespace actor_zeta {
             if (!shared_point.empty()) {
                 for (auto &i:shared_point) {
                     t->send(
-                                    messaging::make_message(
-                                            t->address(),
-                                            "sync_contacts",
-                                            storage_space_.get(i)
-                                    )
+                            messaging::make_message(
+                                    t->address(),
+                                    "sync_contacts",
+                                    storage_space_.get(i)
+                            )
                     );
                 }
             }
@@ -106,6 +106,25 @@ namespace actor_zeta {
             }
             return false;
         }
-    }
-}
+
+        void abstract_group::add_shared(const actor::actor_address& address) {
+            storage_space_.get(entry_point_)->send(
+                    messaging::make_message(
+                            address,
+                            "sync_contacts",
+                            actor::actor_address(address)
+                    )
+            );
+            for (auto &i:storage_space_.current_layer(entry_point_)) {
+                i->send(
+                        messaging::make_message(
+                                address,
+                                "sync_contacts",
+                                actor::actor_address(address)
+                        )
+                );
+            }
+        }
+
+}}
 

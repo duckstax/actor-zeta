@@ -40,29 +40,26 @@ namespace actor_zeta { namespace network {
             fake_state(fake_state&&)= default;
             fake_state&operator=(fake_state&&)= default;
             ~fake_state() = default;
-            fake_state():
-                    waite_time(0){
-
-            }
+            fake_state()= default;
 
             fake_state(client_state next_state) :
-                    state(next_state) ,
-                    waite_time(0) {}
+                    state(next_state) {}
 
 
             fake_state(const buffer &input, client_state next_state) :
                     buffer_(input),
-                    state(next_state) ,
-                    waite_time(0) {}
+                    state(next_state){}
 
-            fake_state(const buffer &input, client_state next_state, size_t waite_time) :
-                    buffer_(input),
+            template<class F>
+            fake_state(F && checker, client_state next_state, size_t waite_time) :
+                    checker_(std::forward<F>(checker)),
                     state(next_state),
                     waite_time(waite_time) {}
 
+            std::function<bool(const buffer &)> checker_;
             buffer buffer_;
             client_state state;
-            std::size_t waite_time;
+            std::size_t waite_time{0};
         };
 
         struct fake_socket final {
@@ -71,8 +68,9 @@ namespace actor_zeta { namespace network {
             fake_socket&operator=(fake_socket&&) = default;
 
 
-            fake_socket& add(fake_state&&state){
-                scenario.emplace_back(std::move(state));
+            template <class ...Args>
+            fake_socket& add(Args&&... args){
+                scenario.emplace_back(std::forward<Args>(args)...);
                 return *this;
             }
 
@@ -99,7 +97,7 @@ namespace actor_zeta { namespace network {
                 current_satet=std::move(scenario.front());
                 scenario.pop_front();
                 assert(current_satet.state == client_state::write);
-                bool is_equality = (current_satet.buffer_ == b);
+                bool is_equality = (current_satet.checker_(b));
                 ///TODO: see hack
                 if(is_equality){
                     assert(is_equality);

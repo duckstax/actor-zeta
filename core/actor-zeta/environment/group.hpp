@@ -1,7 +1,7 @@
 #pragma once
 
-#include "actor-zeta/intrusive_ptr.hpp"
-#include "abstract_group.hpp"
+#include <actor-zeta/detail/intrusive_ptr.hpp>
+#include <actor-zeta/environment/abstract_group.hpp>
 
 namespace actor_zeta {
     namespace environment {
@@ -56,5 +56,13 @@ namespace actor_zeta {
 
             intrusive_ptr<abstract_group> group_;
         };
-    }
-}
+
+        inline void send(group& current_group,messaging::message&&msg){
+            current_group->send(std::move(msg));
+        }
+
+        inline void broadcast(group& current_group,messaging::message&&msg){
+            current_group->broadcast(std::move(msg));
+        }
+
+}}

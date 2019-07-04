@@ -3,13 +3,12 @@
 #include <memory>
 #include <unordered_map>
 
-#include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/forwards.hpp>
-#include <actor-zeta/behavior/context.hpp>
+#include <actor-zeta/actor/context.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
 #include <actor-zeta/channel/channel.hpp>
-#include <actor-zeta/behavior/reactions.hpp>
+#include <actor-zeta/actor/dispatcher.hpp>
 
 namespace actor_zeta { namespace actor {
 
@@ -18,10 +17,10 @@ namespace actor_zeta { namespace actor {
 ///
         class local_actor :
                 public abstract_actor ,
-                public behavior::context_t {
+                public context_t {
         public:
-                                                            //hide
-            virtual void launch(executor::execution_device*, bool) = 0;
+
+            virtual void launch(executor::execution_device*, bool /*hide*/) = 0;
 
             /*
             * debug method
@@ -30,36 +29,45 @@ namespace actor_zeta { namespace actor {
 
             auto message_types() const -> std::set<std::string> final;
 
-            virtual ~local_actor();
+            ~local_actor() override ;
 
         protected:
 
-            void addresses(actor_address) final;
+            auto addresses(actor_address) -> void final;
 
-            void channel(channel::channel) final;
+            auto channel(channel::channel) -> void final;
 
             auto addresses(const std::string&)-> actor_address& final;
 
             auto channel(const std::string&)->channel::channel& final;
 
-            auto self()  -> actor_address;
+            auto self()  -> actor_address override;
 
-            void device(executor::execution_device* e);
+            auto attach(executor::execution_device *e) -> void;
 
-            executor::execution_device* device() const;
+            auto attach() const -> executor::execution_device* ;
 
-            void attach(behavior::abstract_action *);
+            template<std::size_t N, typename F>
+            auto add_handler(const char(&name)[N], F &&f) -> void {
+                dispatch().on(detail::string_view(name), make_handler(std::forward<F>(f)));
+            }
+
+            auto dispatch() -> dispatcher_t& {
+                return dispatcher_;
+            }
+
+            auto dispatch() const  -> const dispatcher_t& {
+                return dispatcher_;
+            }
 
             local_actor(environment::abstract_environment *,  const std::string &);
 
-            virtual void initialize();
-            
+        private:
+            void initialize();
 
-        protected:
-            behavior::reactions reactions_;
             std::unordered_map<std::string, actor_address> contacts;
             std::unordered_map<std::string, channel::channel> channels;
-        private:
+            dispatcher_t dispatcher_;
             executor::execution_device *executor_;
         };
     }

@@ -11,21 +11,16 @@ namespace actor_zeta { namespace executor {
 ///
 /// @brief
 ///
-        class work_sharing final : public unprofiled {
+        class work_sharing : public unprofiled {
         public:
             using queue_type = std::list< executable*>;
 
-            ~work_sharing() override {
-
-            }
+            ~work_sharing() override = default;
 ///
 /// @brief
 ///
             struct coordinator_data final {
-                inline explicit coordinator_data(abstract_coordinator *) {
-
-                }
-
+                inline explicit coordinator_data(abstract_executor *) {}
                 queue_type queue;
                 std::mutex lock;
                 std::condition_variable cv;
@@ -34,9 +29,7 @@ namespace actor_zeta { namespace executor {
 /// @brief
 ///
             struct worker_data final {
-                inline explicit worker_data(abstract_coordinator *) {
-
-                }
+                inline explicit worker_data(abstract_executor *) {}
             };
 
             template<class Coordinator>

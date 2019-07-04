@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <type_traits>
 #include <cassert>
-#include <actor-zeta/detail/type_traits/type_list.hpp>
+#include <actor-zeta/detail/type_list.hpp>
 
 int main() {
     

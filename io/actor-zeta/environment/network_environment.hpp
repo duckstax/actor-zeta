@@ -10,7 +10,7 @@ namespace actor_zeta { namespace environment {
 
         using actor_zeta::network::multiplexer;
         using actor_zeta::environment::cooperation;
-        using actor_zeta::executor::abstract_coordinator;
+        using actor_zeta::executor::abstract_executor;
 
 
         class network_environment final :
@@ -22,25 +22,25 @@ namespace actor_zeta { namespace environment {
 
             network_environment &operator=(const network_environment &) = delete;
 
-            ~network_environment() = default;
+            ~network_environment() override = default;
 
-            network_environment(abstract_coordinator *coordinator, multiplexer *ptr) :
+            network_environment(abstract_executor *executor_, multiplexer *ptr) :
                     multiplexer_(ptr),
-                    coordinator_(coordinator) {
+                    executor_(executor_) {
 
             }
 
-            int start() override final {
-                coordinator_->start();
+            int start() final {
+                executor_->start();
                 multiplexer_->start();
                 return 0;
             }
 
-            executor::abstract_coordinator &manager_execution_device() override final {
-                return *coordinator_.get();
+            executor::abstract_executor &get_executor() final {
+                return *executor_;
             }
 
-            cooperation &manager_group() override final {
+            cooperation &manager_group() final {
                 return cooperation_;
             }
 
@@ -48,7 +48,7 @@ namespace actor_zeta { namespace environment {
         private:
             intrusive_ptr<multiplexer> multiplexer_;
             cooperation cooperation_;
-            std::unique_ptr<abstract_coordinator> coordinator_;
+            std::unique_ptr<abstract_executor> executor_;
         };
 
     }

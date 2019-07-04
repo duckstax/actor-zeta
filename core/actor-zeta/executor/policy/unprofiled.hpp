@@ -6,27 +6,19 @@ namespace actor_zeta { namespace executor {
 
         class unprofiled {
         public:
-            virtual ~unprofiled() {}
+            virtual ~unprofiled() = default;
 
             template<class Worker>
-            void before_shutdown(Worker *) {
-
-            }
+            void before_shutdown(Worker *) {}
 
             template<class Worker>
-            void before_resume(Worker *, executable *) {
-
-            }
+            void before_resume(Worker *, executable *) {}
 
             template<class Worker>
-            void after_resume(Worker *, executable *) {
-
-            }
+            void after_resume(Worker *, executable *) {}
 
             template<class Worker>
-            void after_completion(Worker *, executable *) {
-
-            }
+            void after_completion(Worker *, executable *) {}
 
         protected:
             template<class WorkerOrCoordinator>

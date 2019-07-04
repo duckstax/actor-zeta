@@ -7,7 +7,7 @@
 #include <set>
 #include <vector>
 
-#include <actor-zeta/executor/abstract_coordinator.hpp>
+#include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/worker.hpp>
 
 namespace actor_zeta { namespace executor {
@@ -15,14 +15,14 @@ namespace actor_zeta { namespace executor {
 /// @tparam Policy
 ///
         template<class Policy>
-        class coordinator final : public abstract_coordinator {
+        class executor : public abstract_executor {
         public:
             using job_ptr     = executable *;
             using policy_data = typename Policy::coordinator_data;
             using worker_type = worker<Policy>;
 
-            coordinator(size_t num_worker_threads, size_t max_throughput_param):
-                abstract_coordinator(num_worker_threads, max_throughput_param),
+            executor(size_t num_worker_threads, size_t max_throughput_param):
+                abstract_executor(num_worker_threads, max_throughput_param),
                 data_(this) {
             }
 
@@ -30,7 +30,7 @@ namespace actor_zeta { namespace executor {
                 return workers_[x].get();
             }
 
-            void submit(job_ptr job) override {
+            void execute(job_ptr job) override {
                 policy_.central_enqueue(this, job);
             }
 
@@ -51,6 +51,10 @@ namespace actor_zeta { namespace executor {
                 for (auto &w : workers_) {
                     w->start();
                 }
+            }
+
+            void stop() override {
+                ///TODO: implement
             }
 
         private:

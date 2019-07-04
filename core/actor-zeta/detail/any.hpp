@@ -5,10 +5,11 @@
 #include <type_traits>
 #include <initializer_list>
 #include <algorithm>
+#include <actor-zeta/detail/type_traits.hpp>
 
-namespace actor_zeta {
-    namespace messaging {
-///
+namespace actor_zeta { namespace detail {
+
+        ///
 /// @brief
 ///
         class any final {
@@ -105,9 +106,8 @@ namespace actor_zeta {
             placeholder *content;
         };
 
-    }
-}
+        inline void swap(any &lhs, any &rhs) noexcept {
+            lhs.swap(rhs);
+        }
 
-inline void swap(actor_zeta::messaging::any &lhs, actor_zeta::messaging::any &rhs) noexcept {
-    lhs.swap(rhs);
-}
+}}

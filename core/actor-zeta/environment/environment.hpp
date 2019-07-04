@@ -12,7 +12,7 @@ namespace actor_zeta { namespace environment {
         public:
             environment() = delete;
 
-            environment(const environment &) = default;
+            environment(const environment &) = delete;
 
             environment &operator=(const environment &)= delete;
 
@@ -22,7 +22,7 @@ namespace actor_zeta { namespace environment {
 
             ~environment();
 
-            environment(abstract_environment *ptr);
+            explicit environment(abstract_environment *ptr);
 
             template<class T>
             environment &operator=(T *ptr) {

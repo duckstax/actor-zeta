@@ -9,8 +9,8 @@
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/actor/basic_actor.hpp>
 
-using actor_zeta::behavior::make_handler;
-using actor_zeta::behavior::context;
+using actor_zeta::actor::make_handler;
+using actor_zeta::actor::context;
 using actor_zeta::messaging::make_message;
 using actor_zeta::environment::abstract_environment;
 using actor_zeta::actor::basic_async_actor;
@@ -18,40 +18,35 @@ using actor_zeta::actor::basic_async_actor;
 
 class storage_t final : public basic_async_actor {
 public:
-    storage_t(abstract_environment *ptr): basic_async_actor(ptr,"storage"){
-        attach(
-                make_handler(
-                        "update",
-                        []( context& /*ctx*/,std::string&data) -> void {
+    storage_t(abstract_environment *ptr) : basic_async_actor(ptr, "storage") {
+        add_handler(
+                "update",
+                [](context & /*ctx*/, std::string &data) -> void {
 
-                            std::cerr<<"update:"<< data <<std::endl;
+                    std::cerr << "update:" << data << std::endl;
 
-                        }
-                )
+                }
         );
 
-        attach(
-                make_handler(
-                        "find",
-                        []( context& /*ctx*/) -> void {
+        add_handler(
 
-                            std::cerr<<"find"<<std::endl;
+                "find",
+                [](context & /*ctx*/) -> void {
 
-                        }
-                )
+                    std::cerr << "find" << std::endl;
+
+                }
         );
 
-        attach(
-                make_handler(
-                        "remove",
-                        []( context& /*ctx*/) -> void {
+        add_handler(
 
-                            std::cerr<<"remove"<<std::endl;
+                "remove",
+                [](context & /*ctx*/) -> void {
 
-                        }
-                )
+                    std::cerr << "remove" << std::endl;
+
+                }
         );
-
 
 
     }
@@ -64,19 +59,18 @@ private:
 };
 
 
-
 int main() {
 
-    auto* storage_tmp = new storage_t(nullptr);
+    auto *storage_tmp = new storage_t(nullptr);
 
     actor_zeta::actor::actor storage(storage_tmp);
 
     storage->send(
-        make_message(
-                actor_zeta::actor::actor_address(),
-                "update",
-                std::string("payload")
-        )
+            make_message(
+                    actor_zeta::actor::actor_address(),
+                    "update",
+                    std::string("payload")
+            )
     );
 
     storage->send(

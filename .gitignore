@@ -34,3 +34,5 @@
 .idea/
 
 .DS_Store
+# Project exclude paths
+/cmake-build-debug/

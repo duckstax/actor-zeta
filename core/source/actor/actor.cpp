@@ -2,21 +2,19 @@
 #include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
 
-namespace actor_zeta {
-    namespace actor {
+namespace actor_zeta { namespace actor {
         actor::~actor() {}
 
         actor_address actor::address() const noexcept {
-            return heart->address();
+            return ptr_->address();
         };
 
         const std::string& actor::name() const {
-            return heart->name();
+            return ptr_->name();
         }
 
         void actor::swap(actor &other) noexcept {
             using std::swap;
-            heart.swap(other.heart);
+            ptr_.swap(other.ptr_);
         }
-    }
-}
+}}

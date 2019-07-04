@@ -5,8 +5,7 @@
 #include <actor-zeta/environment/group.hpp>
 
 
-namespace actor_zeta {
-    namespace environment {
+namespace actor_zeta { namespace environment {
 ///
 /// @brief
 ///

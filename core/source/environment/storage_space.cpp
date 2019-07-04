@@ -1,19 +1,19 @@
-#include "actor-zeta/environment/storage_space.hpp"
+#include <actor-zeta/environment/storage_space.hpp>
 #include <unordered_map>
 
 #include <actor-zeta/actor/abstract_actor.hpp>
-#include "actor-zeta/environment/adjacency_list.hpp"
-#include "actor-zeta/actor/actor.hpp"
+#include <actor-zeta/detail/adjacency_list.hpp>
+#include <actor-zeta/actor/actor.hpp>
 
 
-namespace actor_zeta {
-    namespace environment {
-        using registry = adjacency_list<stored_vertex, node>;
+namespace actor_zeta { namespace environment {
+
+        using registry = detail::adjacency_list<detail::stored_vertex, detail::node>;
 
         class storage final {
         public:
 
-            storage() : counter(0) {}
+            storage() = default;
 
             storage(const storage &) = default;
 
@@ -43,7 +43,7 @@ namespace actor_zeta {
                 return tmp;
             }
 
-            id_t counter;
+            id_t counter{0};
             std::unordered_map<id_t, actor::actor> body;
         };
 

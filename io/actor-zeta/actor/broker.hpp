@@ -12,16 +12,15 @@ namespace actor_zeta {
 
         class broker : public basic_async_actor  {
         public:
-            broker(environment::abstract_environment * env, const std::string & name, network::multiplexer* multiplexer)
+            template<std::size_t N>
+            broker(environment::abstract_environment * env,  const char(&name)[N], network::multiplexer* multiplexer)
                     : basic_async_actor(env, name),
                       multiplexer_(multiplexer) {
             }
 
-            virtual ~broker() override = default;
+            ~broker() override = default;
 
         protected:
-            void initialize() override;
-
             intrusive_ptr<network::multiplexer> multiplexer_;
         };
     }

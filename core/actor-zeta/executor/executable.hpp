@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <type_traits>
 
-#include "actor-zeta/forwards.hpp"
+#include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace executor {
 ///
@@ -33,7 +33,7 @@ namespace actor_zeta { namespace executor {
 
             virtual void intrusive_ptr_release_impl() = 0;
 
-            virtual auto run(executor::execution_device *, size_t max_throughput) -> executable_result = 0;
+            virtual auto run(execution_device *, size_t max_throughput) -> executable_result = 0;
         };
 
         template<class T>

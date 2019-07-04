@@ -20,9 +20,9 @@ namespace actor_zeta { namespace actor {
             using mailbox_type = messaging::mail_box;
 
             blocking_actor(environment::abstract_environment *,mailbox_type* , const std::string &);
-            executor::executable_result run(executor::execution_device *, size_t) override final;
-            void launch(executor::execution_device *,bool) override final ;
-            virtual ~blocking_actor();
+            executor::executable_result run(executor::execution_device *, size_t) final;
+            void launch(executor::execution_device *,bool) final ;
+            ~blocking_actor() override;
 
             messaging::message next_message();
 

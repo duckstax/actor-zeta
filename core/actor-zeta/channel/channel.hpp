@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/intrusive_ptr.hpp>
+#include <actor-zeta/detail/intrusive_ptr.hpp>
 #include <actor-zeta/channel/abstract_channel.hpp>
 
 namespace actor_zeta { namespace channel {

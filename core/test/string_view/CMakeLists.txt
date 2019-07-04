@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(project metaprogramming)
+set(project string_view)
 
 if (CMAKE_VERSION VERSION_LESS 3.0)
     PROJECT(${project} CXX)
@@ -12,3 +12,4 @@ endif()
 set(SOURCE_FILES main.cpp)
 
 add_executable(${project} ${SOURCE_FILES})
+target_link_libraries(${project} actor-zeta)

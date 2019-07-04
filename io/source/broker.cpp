@@ -3,8 +3,6 @@
 
 namespace actor_zeta { namespace actor {
 
-        void broker::initialize() {
-            local_actor::initialize();
-        }
+
     }
 }

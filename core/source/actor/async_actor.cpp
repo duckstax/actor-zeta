@@ -1,12 +1,11 @@
 #include <iostream>
 #include <actor-zeta/actor/async_actor.hpp>
-#include <actor-zeta/executor/abstract_coordinator.hpp>
+#include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
 #include <actor-zeta/environment/environment.hpp>
-#include <actor-zeta/behavior/abstract_action.hpp>
+#include <actor-zeta/actor/handler.hpp>
 
-namespace actor_zeta {
-    namespace actor {
+namespace actor_zeta { namespace actor {
 
         inline void error(){
             std::cerr << " WARNING " << std::endl;
@@ -15,7 +14,7 @@ namespace actor_zeta {
         }
 
         executor::executable_result async_actor::run(executor::execution_device *e, size_t max_throughput) {
-            device(e);
+            attach(e);
             //---------------------------------------------------------------------------
 
             {
@@ -25,8 +24,8 @@ namespace actor_zeta {
                     msg_ptr = pop_to_cache();
                     if (msg_ptr) {
                         {
-                            behavior::context context_(this, std::move(msg_ptr));
-                            reactions_.execute(context_); /** context processing */
+                            context context_(this, std::move(msg_ptr));
+                            dispatch().execute(context_); /** context processing */
                         }
                         ++handled_msgs;
                         continue;
@@ -35,8 +34,8 @@ namespace actor_zeta {
                     msg_ptr = next_message();
                     if (msg_ptr) {
                         {
-                            behavior::context context_(this, std::move(msg_ptr));
-                            reactions_.execute(context_); /** context processing */
+                            context context_(this, std::move(msg_ptr));
+                            dispatch().execute(context_); /** context processing */
                         }
                         ++handled_msgs;
 
@@ -69,10 +68,10 @@ namespace actor_zeta {
             /// add a reference count to this actor and coordinator it
             intrusive_ptr_add_ref(this);
             if (e != nullptr) {
-                device(e);
-                device()->execute_async(this);
+                attach(e);
+                attach()->execute(this);
             } else if(env()) {
-                env()->manager_execution_device().submit(this);
+                env()->get_executor().execute(this);
             } else {
                 /// local
             }
@@ -94,16 +93,16 @@ namespace actor_zeta {
         }
 
         void async_actor::launch(executor::execution_device *e, bool hide) {
-            device(e);
+            attach(e);
 
             if (hide) {//TODO:???
                 /// coordinator has a reference count to the actor as long as
                 /// it is waiting to get scheduled
                 intrusive_ptr_add_ref(this);
-                device()->execute_async(this);
+                attach()->execute(this);
             } else {
                 auto max_throughput = std::numeric_limits<size_t>::max();
-                while (run(device(), max_throughput) != executor::executable_result::awaiting) {
+                while (run(attach(), max_throughput) != executor::executable_result::awaiting) {
                 }
             }
         }

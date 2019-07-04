@@ -1,8 +1,8 @@
 #pragma once
 
 #include <functional>
-#include <actor-zeta/detail/type_traits/type_list.hpp>
-#include <actor-zeta/detail/type_traits/type_traits.hpp>
+#include <actor-zeta/detail/type_list.hpp>
+#include <actor-zeta/detail/type_traits.hpp>
 
 namespace actor_zeta { namespace  type_traits {
 

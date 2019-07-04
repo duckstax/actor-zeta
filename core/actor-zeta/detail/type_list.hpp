@@ -8,9 +8,7 @@ namespace actor_zeta { namespace  type_traits {
 // A list of types.
         template<class... Ts>
         struct type_list {
-            constexpr type_list() {
-                // nop
-            }
+            constexpr type_list() = default;
         };
 
 // size_t size(type_list)

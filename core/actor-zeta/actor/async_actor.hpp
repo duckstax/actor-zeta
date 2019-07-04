@@ -3,7 +3,6 @@
 #include <actor-zeta/messaging/mail_box.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
 #include <actor-zeta/actor/local_actor.hpp>
-#include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/executor/executable.hpp>
 
@@ -22,7 +21,7 @@ namespace actor_zeta { namespace actor {
 
             bool send(messaging::message&&, executor::execution_device *) final;
 
-            void launch(executor::execution_device *, bool) final;
+            void launch(executor::execution_device *, bool /*hide*/) final;
 
             executor::executable_result run(executor::execution_device *, size_t max_throughput) final;
 

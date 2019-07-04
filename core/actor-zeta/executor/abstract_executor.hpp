@@ -14,11 +14,13 @@ namespace actor_zeta { namespace executor {
 ///
 /// @brief
 ///
-        class abstract_coordinator {
+        class abstract_executor {
         public:
-            abstract_coordinator(std::size_t num_worker_threads, std::size_t max_throughput);
+            abstract_executor(std::size_t num_worker_threads, std::size_t max_throughput);
 
-            virtual void submit(executable *) = 0;
+            virtual ~abstract_executor() = default;
+
+            virtual void execute(executable *) = 0;
 
             inline size_t max_throughput() const {
                 return max_throughput_;
@@ -29,6 +31,8 @@ namespace actor_zeta { namespace executor {
             }
 
             virtual void start() = 0;
+
+            virtual void stop() = 0;
 
         protected:
             std::atomic<size_t> next_worker_;

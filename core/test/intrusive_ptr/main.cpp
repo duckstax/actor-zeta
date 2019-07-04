@@ -1,8 +1,8 @@
 #include <vector>
 #include <cstddef>
 
-#include <actor-zeta/ref_counted.hpp>
-#include <actor-zeta/intrusive_ptr.hpp>
+#include <actor-zeta/detail/ref_counted.hpp>
+#include <actor-zeta/detail/intrusive_ptr.hpp>
 #include <cassert>
 #include <iostream>
 
@@ -55,7 +55,7 @@ public:
         ++class1_instances;
     }
 
-    ~class1() {
+    ~class1() override {
         --class1_instances;
     }
 

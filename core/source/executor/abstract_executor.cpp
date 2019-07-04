@@ -1,9 +1,9 @@
-#include <actor-zeta/executor/abstract_coordinator.hpp>
+#include <actor-zeta/executor/abstract_executor.hpp>
 
 
 namespace actor_zeta { namespace executor {
 
-        abstract_coordinator::abstract_coordinator(
+        abstract_executor::abstract_executor(
                 std::size_t num_worker_threads,
                 std::size_t max_throughput
         ):
