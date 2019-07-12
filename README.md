@@ -1,10 +1,10 @@
 [![Build Status](https://travis-ci.org/smart-cloud/actor-zeta.svg?branch=master)](https://travis-ci.org/smart-cloud/actor-zeta)
-[![Build status](https://ci.appveyor.com/api/projects/status/y2uaj5kkg5tsv169?svg=true)](https://ci.appveyor.com/project/smart-cloud/actor-zeta)
+[![Build Status](https://travis-ci.org/jinntechio/actor-zeta.svg?branch=master)](https://travis-ci.org/jinntechio/actor-zeta)
 
 actor-zeta
 ========================
 
-actor-zeta is an open source C++11 actor model implementation featuring lightweight & fast  and more.
+actor-zeta is an open source C++11  virtual actor model implementation featuring lightweight & fast and more.
 
 The libraray uses a standard practice for its versioning: major.minor.patchlevel. example : 0.0.1
 

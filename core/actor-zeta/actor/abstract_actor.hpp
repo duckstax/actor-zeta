@@ -21,9 +21,9 @@ namespace actor_zeta { namespace actor {
 
             ~abstract_actor() override;
 
-            virtual bool send(messaging::message&&) = 0;
+            virtual bool send(messaging::message) = 0;
 
-            virtual bool send(messaging::message&&, executor::execution_device *) = 0;
+            virtual bool send(messaging::message, executor::execution_device *) = 0;
 
             actor_address address() const noexcept;
 

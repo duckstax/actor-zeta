@@ -40,9 +40,4 @@ namespace actor_zeta { namespace actor {
             intrusive_ptr<abstract_actor> ptr_;
         };
 
-        inline void send(actor_address& address, messaging::message&& msg){
-            address->send(std::move(msg));
-        }
-
-    }
-}
+}}
