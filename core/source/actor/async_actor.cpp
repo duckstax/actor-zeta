@@ -63,7 +63,7 @@ namespace actor_zeta { namespace actor {
             return executor::executable_result::resume;
         }
 
-        bool async_actor::send(messaging::message && mep, executor::execution_device *e) {
+        bool async_actor::send(messaging::message mep, executor::execution_device *e) {
             mailbox().put(std::move(mep));
             /// add a reference count to this actor and coordinator it
             intrusive_ptr_add_ref(this);
@@ -107,7 +107,7 @@ namespace actor_zeta { namespace actor {
             }
         }
 
-        bool async_actor::send(messaging::message&&msg) {
+        bool async_actor::send(messaging::message msg) {
             return send(std::move(msg), nullptr);
         }
 
@@ -116,7 +116,7 @@ namespace actor_zeta { namespace actor {
             return push_to_cache(std::move(msg_ptr));
         }
 
-        bool async_actor::push_to_cache(messaging::message &&msg_ptr) {
+        bool async_actor::push_to_cache(messaging::message msg_ptr) {
             return mailbox().push_to_cache(std::move(msg_ptr));
         }
 
