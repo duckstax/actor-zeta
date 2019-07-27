@@ -9,10 +9,9 @@ else()
     PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
 endif()
 
-include_directories(.)
+include_directories(SYSTEM .)
 
 set(HEADER_FILES
-        actor-zeta/actor/handler.hpp
         actor-zeta/actor/abstract_actor.hpp
         actor-zeta/actor/actor.hpp
         actor-zeta/actor/actor_address.hpp
@@ -20,11 +19,11 @@ set(HEADER_FILES
         actor-zeta/actor/basic_actor.hpp
         actor-zeta/actor/blocking_actor.hpp
         actor-zeta/actor/context.hpp
-        actor-zeta/actor/local_actor.hpp
         actor-zeta/actor/dispatcher.hpp
-
-        actor-zeta/channel/abstract_channel.hpp
-        actor-zeta/channel/channel.hpp
+        actor-zeta/actor/handler.hpp
+        actor-zeta/actor/local_actor.hpp
+        actor-zeta/actor/metadata.hpp
+        actor-zeta/actor/supervisor.hpp
 
         actor-zeta/detail/adjacency_list.hpp
         actor-zeta/detail/any.hpp
@@ -34,13 +33,7 @@ set(HEADER_FILES
         actor-zeta/detail/string_view.hpp
         actor-zeta/detail/type_list.hpp
         actor-zeta/detail/type_traits.hpp
-
-        actor-zeta/environment/abstract_environment.hpp
-        actor-zeta/environment/abstract_group.hpp
-        actor-zeta/environment/cooperation.hpp
-        actor-zeta/environment/environment.hpp
-        actor-zeta/environment/group.hpp
-        actor-zeta/environment/storage_space.hpp
+        actor-zeta/detail/storage_space.hpp
 
         actor-zeta/executor/policy/profiled.hpp
         actor-zeta/executor/policy/unprofiled.hpp
@@ -58,7 +51,6 @@ set(HEADER_FILES
         actor-zeta/messaging/message_header.hpp
 
         actor-zeta/forwards.hpp
-        actor-zeta/metadata.hpp
 )
 
 set(SOURCE_FILES
@@ -71,19 +63,11 @@ set(SOURCE_FILES
         source/actor/context.cpp
         source/actor/local_actor.cpp
         source/actor/dispatcher.cpp
+        source/actor/supervisor.cpp
 
         source/detail/string_view.cpp
-
-        source/channel/abstract_channel.cpp
-        source/channel/channel.cpp
-
-        source/environment/abstract_environment.cpp
-        source/environment/storage_space.cpp
-        source/environment/abstract_group.cpp
-        source/environment/cooperation.cpp
-        source/environment/environment.cpp
-        source/environment/group.cpp
-        source/environment/storage_space.cpp
+        source/detail/storage_space.cpp
+        source/detail/ref_counted.cpp
 
         source/executor/abstract_executor.cpp
         source/executor/executable.cpp
@@ -92,8 +76,6 @@ set(SOURCE_FILES
         source/messaging/message.cpp
         source/messaging/message_header.cpp
         source/messaging/blocking_mail_queue.cpp
-
-        source/ref_counted.cpp
 )
 
 add_library(

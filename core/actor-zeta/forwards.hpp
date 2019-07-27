@@ -13,18 +13,12 @@ namespace actor_zeta {
         class  handler;
         class  context;
         struct context_t;
-    }
-
-    namespace channel {
-        struct abstract_channel;
-        class  channel;
+        class supervisor;
     }
 
     namespace environment {
-        class  group;
-        class  cooperation;
         class  environment;
-        struct abstract_environment;
+        class abstract_environment;
     }
 
     namespace executor {

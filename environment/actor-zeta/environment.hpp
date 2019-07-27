@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/environment/abstract_environment.hpp>
+#include <actor-zeta/abstract_environment.hpp>
 #include <memory>
 
 namespace actor_zeta { namespace environment {

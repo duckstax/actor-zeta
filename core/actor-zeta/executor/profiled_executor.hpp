@@ -7,7 +7,7 @@
 
 #include <actor-zeta/executor/policy/work_sharing.hpp>
 #include <actor-zeta/executor/policy/profiled.hpp>
-#include <actor-zeta/metadata.hpp>
+#include <actor-zeta/actor/metadata.hpp>
 
 
 namespace actor_zeta { namespace executor {

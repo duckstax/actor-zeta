@@ -25,10 +25,10 @@ namespace actor_zeta { namespace actor {
 
             executor::executable_result run(executor::execution_device *, size_t max_throughput) final;
 
-            virtual ~async_actor();
+            ~async_actor() override;
 
         protected:
-            async_actor(environment::abstract_environment *, mailbox_type*, const std::string &);
+            async_actor(supervisor *, mailbox_type*, detail::string_view);
 
             void intrusive_ptr_add_ref_impl() override;
 

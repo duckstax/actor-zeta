@@ -19,7 +19,7 @@ namespace actor_zeta { namespace actor {
 
             template<std::size_t N>
             basic_actor(
-                    environment::abstract_environment *ptr,
+                    supervisor *ptr,
                     const char(&name)[N]
             ): actor_type(ptr, new MailBox, name) {
 
@@ -35,7 +35,7 @@ namespace actor_zeta { namespace actor {
                 typename MailBox,
                 typename Actor = async_actor
         >
-        actor make_actor(environment::abstract_environment *ptr, const std::string &name) {
+        actor make_actor(supervisor *ptr, const std::string &name) {
             return new basic_actor<MailBox,Actor>(ptr,name);
         }
     }

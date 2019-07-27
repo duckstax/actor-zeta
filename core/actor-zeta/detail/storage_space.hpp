@@ -1,11 +1,12 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-#include "actor-zeta/actor/actor_address.hpp"
+#include "../../../../../../../usr/include/c++/8/memory"
+#include "../../../../../../../usr/include/c++/8/vector"
+#include "../actor/actor_address.hpp"
 
-namespace actor_zeta { namespace environment {
-        using id_t=std::size_t;
+namespace actor_zeta { namespace detail {
+
+        using id_t = std::size_t;
         using layer = std::vector<id_t>;
 
 ///

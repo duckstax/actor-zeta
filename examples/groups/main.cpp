@@ -7,14 +7,11 @@
 
 #include <actor-zeta/actor/actor.hpp>
 #include <actor-zeta/actor/basic_actor.hpp>
-#include <actor-zeta/environment/abstract_environment.hpp>
-#include <actor-zeta/environment/cooperation.hpp>
+#include <actor-zeta/abstract_environment.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
+#include <actor-zeta/environment.hpp>
 
-
-using actor_zeta::actor::make_handler;
 using actor_zeta::actor::context;
-using actor_zeta::messaging::make_message;
 using actor_zeta::environment::abstract_environment;
 using actor_zeta::actor::basic_async_actor;
 
@@ -30,14 +27,9 @@ public:
         return *e_;
     }
 
-    actor_zeta::environment::cooperation &manager_group() override {
-        return cooperation_;
-    }
-
     ~dummy_environmentl() override = default;
 
 protected:
-    actor_zeta::environment::cooperation cooperation_;
     std::unique_ptr<actor_zeta::executor::abstract_executor> e_;
 };
 
@@ -81,12 +73,12 @@ int main() {
 
     actor_zeta::environment::environment environment(env);
 
-    auto &group_storage = environment->manager_group().created_group(new storage_t(env));
+    auto &group_storage = environment->created_group(new storage_t(env));
 
-    auto &group_fake_network = environment->manager_group().created_group(new network_t(env));
+    auto &group_fake_network = environment->created_group(new network_t(env));
 
-    actor_zeta::environment::link(group_fake_network, group_storage);
-    actor_zeta::environment::link(group_storage, group_fake_network);
+    actor_zeta::actor::link(group_fake_network, group_storage);
+    actor_zeta::actor::link(group_storage, group_fake_network);
 
     return 0;
 }

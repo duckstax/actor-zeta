@@ -7,7 +7,6 @@
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/actor/context.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
-#include <actor-zeta/channel/channel.hpp>
 #include <actor-zeta/actor/dispatcher.hpp>
 
 namespace actor_zeta { namespace actor {
@@ -35,11 +34,7 @@ namespace actor_zeta { namespace actor {
 
             auto addresses(actor_address) -> void final;
 
-            auto channel(channel::channel) -> void final;
-
-            auto addresses(const std::string&)-> actor_address& final;
-
-            auto channel(const std::string&)->channel::channel& final;
+            auto addresses(detail::string_view)-> actor_address& final;
 
             auto self()  -> actor_address override;
 
@@ -60,13 +55,16 @@ namespace actor_zeta { namespace actor {
                 return dispatcher_;
             }
 
-            local_actor(environment::abstract_environment *,  const std::string &);
+            local_actor(supervisor *, detail::string_view);
+
+            auto env() -> supervisor* ;
 
         private:
+
             void initialize();
 
-            std::unordered_map<std::string, actor_address> contacts;
-            std::unordered_map<std::string, channel::channel> channels;
+            supervisor* env_;
+            std::unordered_map<detail::string_view, actor_address> contacts;
             dispatcher_t dispatcher_;
             executor::execution_device *executor_;
         };

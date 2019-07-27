@@ -2,8 +2,8 @@
 #include <actor-zeta/actor/async_actor.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
-#include <actor-zeta/environment/environment.hpp>
 #include <actor-zeta/actor/handler.hpp>
+#include <actor-zeta/actor/supervisor.hpp>
 
 namespace actor_zeta { namespace actor {
 
@@ -70,8 +70,8 @@ namespace actor_zeta { namespace actor {
             if (e != nullptr) {
                 attach(e);
                 attach()->execute(this);
-            } else if(env()) {
-                env()->get_executor().execute(this);
+            } else if(env() != nullptr) {
+                env()->executor().execute(this);
             } else {
                 /// local
             }
@@ -87,7 +87,7 @@ namespace actor_zeta { namespace actor {
             deref();
         }
 
-        async_actor::async_actor(environment::abstract_environment *env,mailbox_type* mail_ptr, const std::string &name):
+        async_actor::async_actor(supervisor *env,mailbox_type* mail_ptr, detail::string_view name):
                 local_actor(env, name),
                 mailbox_(mail_ptr) {
         }

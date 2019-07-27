@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <actor-zeta/detail/string_view.hpp>
 
 namespace actor_zeta {
 
@@ -9,7 +10,7 @@ namespace actor_zeta {
         enum class abstract : uint8_t {
             non = 0x00,
             actor,
-            channel
+            supervisor
         };
 
         enum class locations : uint8_t {
@@ -21,7 +22,7 @@ namespace actor_zeta {
         struct metadata final {
             abstract type;
             locations location;
-            std::string name;
+            detail::string_view name;
         };
 
 } /// actor_zeta

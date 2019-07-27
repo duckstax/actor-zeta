@@ -33,7 +33,7 @@ namespace actor_zeta { namespace actor {
             }
         }
 
-        blocking_actor::blocking_actor(environment::abstract_environment *env,mailbox_type* mail, const std::string &type)
+        blocking_actor::blocking_actor(supervisor *env,mailbox_type* mail, detail::string_view type)
                 : local_actor(env, type),
                   mailbox_(mail) {
 

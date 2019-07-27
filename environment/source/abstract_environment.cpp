@@ -1,5 +1,5 @@
-#include <actor-zeta/environment/abstract_environment.hpp>
-#include <actor-zeta/environment/supervisor_heavy.hpp>
+#include <actor-zeta/abstract_environment.hpp>
+#include <actor-zeta/supervisor_heavy.hpp>
 
 namespace actor_zeta { namespace environment {
 

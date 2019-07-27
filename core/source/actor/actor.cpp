@@ -9,7 +9,7 @@ namespace actor_zeta { namespace actor {
             return ptr_->address();
         };
 
-        const std::string& actor::name() const {
+        detail::string_view actor::name() const {
             return ptr_->name();
         }
 

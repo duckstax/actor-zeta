@@ -1,4 +1,4 @@
-#include <actor-zeta/environment/storage_space.hpp>
+#include <actor-zeta/detail/storage_space.hpp>
 #include <unordered_map>
 
 #include <actor-zeta/actor/abstract_actor.hpp>
@@ -6,7 +6,7 @@
 #include <actor-zeta/actor/actor.hpp>
 
 
-namespace actor_zeta { namespace environment {
+namespace actor_zeta { namespace detail {
 
         using registry = detail::adjacency_list<detail::stored_vertex, detail::node>;
 
