@@ -14,7 +14,7 @@ namespace actor_zeta { namespace actor {
 
         class abstract_actor : public ref_counted {
         public:
-            //abstract_actor()= delete;
+            abstract_actor()= default;
             abstract_actor(const abstract_actor &) = delete;
             abstract_actor &operator=(const abstract_actor &) = delete;
             ~abstract_actor() override;

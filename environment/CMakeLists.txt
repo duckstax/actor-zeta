@@ -13,6 +13,9 @@ include_directories(SYSTEM .)
 
 set(HEADER_FILES
 
+        actor-zeta/detail/adjacency_list.hpp
+        actor-zeta/detail/storage_space.hpp
+
         actor-zeta/abstract_environment.hpp
         actor-zeta/environment.hpp
         actor-zeta/network_environment.hpp
@@ -25,6 +28,7 @@ set(SOURCE_FILES
         source/abstract_environment.cpp
         source/environment.cpp
         source/supervisor_heavy.cpp
+        source/storage_space.cpp
         source/network_environment.cpp)
 
 add_library(

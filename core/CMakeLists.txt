@@ -25,7 +25,6 @@ set(HEADER_FILES
         actor-zeta/actor/metadata.hpp
         actor-zeta/actor/supervisor.hpp
 
-        actor-zeta/detail/adjacency_list.hpp
         actor-zeta/detail/any.hpp
         actor-zeta/detail/callable_trait.hpp
         actor-zeta/detail/intrusive_ptr.hpp
@@ -33,7 +32,6 @@ set(HEADER_FILES
         actor-zeta/detail/string_view.hpp
         actor-zeta/detail/type_list.hpp
         actor-zeta/detail/type_traits.hpp
-        actor-zeta/detail/storage_space.hpp
 
         actor-zeta/executor/policy/profiled.hpp
         actor-zeta/executor/policy/unprofiled.hpp
@@ -66,7 +64,6 @@ set(SOURCE_FILES
         source/actor/supervisor.cpp
 
         source/detail/string_view.cpp
-        source/detail/storage_space.cpp
         source/detail/ref_counted.cpp
 
         source/executor/abstract_executor.cpp
