@@ -8,7 +8,7 @@ namespace actor_zeta { namespace environment {
                 executor_(executor_) {
         }
 
-        int network_environment::start() {
+        std::size_t network_environment::start() {
             executor_->start();
             multiplexer_->start();
             return 0;

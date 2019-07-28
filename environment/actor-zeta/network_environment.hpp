@@ -21,7 +21,7 @@ namespace actor_zeta { namespace environment {
 
             network_environment(abstract_executor *executor_, multiplexer *ptr);
 
-            int start() final;
+            std::size_t start() final;
 
             executor::abstract_executor &get_executor() final;
 
