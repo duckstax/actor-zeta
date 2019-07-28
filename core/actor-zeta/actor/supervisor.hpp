@@ -9,7 +9,9 @@ namespace actor_zeta { namespace actor {
 
     class supervisor : public abstract_actor {
     public:
-        ~supervisor() override = default;
+        explicit supervisor(detail::string_view);
+
+        ~supervisor() override;
 
         virtual auto shutdown() noexcept -> void = 0;
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <string>
 #include <actor-zeta/detail/string_view.hpp>
 
 namespace actor_zeta {

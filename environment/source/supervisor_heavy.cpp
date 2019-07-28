@@ -93,10 +93,10 @@ namespace actor_zeta { namespace environment {
         }
 
         supervisor_heavy::supervisor_heavy(abstract_environment*env,detail::storage_space ss, actor::abstract_actor *t):
+            supervisor(detail::string_view("supervisor_heavy")),
             cursor(0),
             storage_space_(ss),env_(env) {
             entry_point_ = ss.add(t);
-            type_.type = abstract::supervisor;
         }
 
         auto supervisor_heavy::shutdown() noexcept -> void {

@@ -9,4 +9,8 @@ namespace actor_zeta { namespace environment {
             return *(it.first->second);
         }
 
-}}
+        actor::supervisor &abstract_environment::manager_supervisor(detail::string_view name) {
+            return *supervisors.at(name);
+        }
+
+    }}

@@ -47,13 +47,9 @@ namespace actor_zeta { namespace actor {
                 dispatch().on(detail::string_view(name), make_handler(std::forward<F>(f)));
             }
 
-            auto dispatch() -> dispatcher_t& {
-                return dispatcher_;
-            }
+            auto dispatch() -> dispatcher_t&;
 
-            auto dispatch() const  -> const dispatcher_t& {
-                return dispatcher_;
-            }
+            auto dispatch() const  -> const dispatcher_t&;
 
             local_actor(supervisor *, detail::string_view);
 

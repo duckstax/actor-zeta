@@ -27,5 +27,9 @@ namespace actor_zeta { namespace actor {
             return std::set<std::string>();
         }
 
+        abstract_actor::abstract_actor(detail::string_view name) {
+            type_.name = name;
+        }
+
     }
 }
