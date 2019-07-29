@@ -7,11 +7,12 @@
 
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/actor/basic_actor.hpp>
-#include <actor-zeta/environment/abstract_environment.hpp>
+#include <actor-zeta/environment.hpp>
+#include <actor-zeta/supervisor_heavy.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/network/fake_multiplexer.hpp>
 #include <actor-zeta/actor/broker.hpp>
-#include <actor-zeta/environment/network_environment.hpp>
+#include <actor-zeta/network_environment.hpp>
 #include <actor-zeta/executor/executor.hpp>
 #include <actor-zeta/executor/policy/work_sharing.hpp>
 
@@ -28,6 +29,13 @@ using actor_zeta::actor::actor_address;
 using actor_zeta::network::query_raw_t;
 using actor_zeta::executor::executor;
 using actor_zeta::executor::work_sharing;
+using actor_zeta::executor::abstract_executor;
+using actor_zeta::actor::context;
+using actor_zeta::environment::abstract_environment;
+using actor_zeta::actor::basic_async_actor;
+using actor_zeta::environment::supervisor_heavy;
+using actor_zeta::environment::environment;
+using actor_zeta::environment::make_environment;
 
 struct query_t final {
     actor_zeta::network::connection_identifying id;
@@ -47,7 +55,7 @@ struct response_t final {
 
 class storage_t final : public basic_async_actor {
 public:
-    explicit storage_t(abstract_environment *ptr): basic_async_actor(ptr,"storage"){
+    explicit storage_t(supervisor_heavy&ptr): basic_async_actor(ptr,"storage"){
         auto* self = this;
         add_handler(
                 "update",
@@ -111,14 +119,13 @@ private:
 };
 
 
-class fake_broker final : public broker {
+class fake_broker final : public basic_async_actor {
 public:
 
-    fake_broker(abstract_environment *ptr, multiplexer* ptr_): broker(ptr,"network",ptr_){
-        auto* self = this;
+    fake_broker(supervisor_heavy&ptr):basic_async_actor(ptr,"network"){
         add_handler(
                 "read",
-                [self](context &ctx, query_raw_t &query_raw) -> void {
+                [this](context &ctx, query_raw_t &query_raw) -> void {
                     std::cerr << "Operation:" << "read" <<std::endl;
                     auto raw = query_raw.raw;
                     std::vector<buffer> parsed_raw_request;
@@ -140,7 +147,7 @@ public:
 
                     ctx->addresses("storage")->send(
                             make_message(
-                                    actor_zeta::actor::actor_address(self),
+                                    actor_zeta::actor::actor_address(address()),
                                     std::string(query_.commands),
                                     std::move(query_)
                             )
@@ -152,7 +159,6 @@ public:
                 "write",
                 [this](context & /*ctx*/, response_t &response) -> void {
                     std::cerr << "Operation:" << "write" <<std::endl;
-                    multiplexer_->write(response.id, response.r_);
                 }
         );
 
@@ -189,19 +195,16 @@ int main() {
     )
     .add(actor_zeta::network::client_state::close);
 
-    auto* env = new network_environment(new executor<work_sharing>(1,std::numeric_limits<std::size_t>::max()),multiplexer);
+    auto environment =  make_environment<network_environment>(new executor<work_sharing>(1,std::numeric_limits<std::size_t>::max()),multiplexer);
 
-    actor_zeta::environment::environment environment(env);
+    auto&supervisor = environment->supervisor<supervisor_heavy>(environment.get());
 
-    auto& group_storage = environment->manager_group().created_group(new storage_t(env));
+    auto storage = supervisor.join<storage_t>(supervisor);
+    auto broker = supervisor.join<fake_broker>(supervisor);
 
-    auto& group_fake_broker = environment->manager_group().created_group(new fake_broker(env,multiplexer));
+    actor_zeta::actor::link(broker,storage);
 
-    actor_zeta::environment::link(group_fake_broker,group_storage);
-
-    actor_zeta::environment::link(group_storage,group_fake_broker);
-
-    multiplexer->new_tcp_listener(host, port, group_fake_broker->entry_point() );
+    multiplexer->new_tcp_listener(host, port, broker->entry_point() );
 
     return environment->start();
 }

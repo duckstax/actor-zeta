@@ -1,5 +1,6 @@
 #include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/messaging/message.hpp>
 
 namespace actor_zeta { namespace actor {
 
@@ -29,6 +30,10 @@ namespace actor_zeta { namespace actor {
 
         abstract_actor::abstract_actor(detail::string_view name) {
             type_.name = name;
+        }
+
+        bool abstract_actor::send(messaging::message msg) {
+            return send(std::move(msg), nullptr);
         }
 
     }

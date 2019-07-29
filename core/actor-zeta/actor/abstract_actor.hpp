@@ -24,7 +24,7 @@ namespace actor_zeta { namespace actor {
 
             explicit abstract_actor(detail::string_view);
 
-            virtual bool send(messaging::message) = 0;
+            bool send(messaging::message);
 
             virtual bool send(messaging::message, executor::execution_device *) = 0;
 

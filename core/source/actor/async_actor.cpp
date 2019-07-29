@@ -70,11 +70,10 @@ namespace actor_zeta { namespace actor {
             if (e != nullptr) {
                 attach(e);
                 attach()->execute(this);
-            } else if(env() != nullptr) {
-                env()->executor().execute(this);
             } else {
-                /// local
+                env().executor().execute(this);
             }
+
             return true;
         }
 
@@ -87,9 +86,14 @@ namespace actor_zeta { namespace actor {
             deref();
         }
 
-        async_actor::async_actor(supervisor *env,mailbox_type* mail_ptr, detail::string_view name):
-                local_actor(env, name),
-                mailbox_(mail_ptr) {
+        async_actor::async_actor(
+                  supervisor &env
+                , mailbox_type* mail_ptr
+                , detail::string_view name
+                )
+                : local_actor(env, name)
+                , mailbox_(mail_ptr)
+                {
         }
 
         void async_actor::launch(executor::execution_device *e, bool hide) {
@@ -105,10 +109,6 @@ namespace actor_zeta { namespace actor {
                 while (run(attach(), max_throughput) != executor::executable_result::awaiting) {
                 }
             }
-        }
-
-        bool async_actor::send(messaging::message msg) {
-            return send(std::move(msg), nullptr);
         }
 
         bool async_actor::has_next_message() {

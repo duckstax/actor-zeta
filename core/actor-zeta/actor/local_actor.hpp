@@ -51,15 +51,15 @@ namespace actor_zeta { namespace actor {
 
             auto dispatch() const  -> const dispatcher_t&;
 
-            local_actor(supervisor *, detail::string_view);
+            local_actor(supervisor &, detail::string_view);
 
-            auto env() -> supervisor* ;
+            auto env() -> supervisor& ;
 
         private:
 
             void initialize();
 
-            supervisor* env_;
+            supervisor& env_;
             std::unordered_map<detail::string_view, actor_address> contacts;
             dispatcher_t dispatcher_;
             executor::execution_device *executor_;

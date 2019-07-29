@@ -29,6 +29,10 @@ namespace actor_zeta {
 
         environment::environment(abstract_environment *ptr) : environment_(ptr) {}
 
+        auto environment::get() noexcept -> abstract_environment* {
+            return environment_.get();
+        }
+
 
     }
 }

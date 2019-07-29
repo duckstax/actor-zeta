@@ -26,7 +26,7 @@ namespace actor_zeta { namespace detail {
 
             ~storage_space() = default;
 
-            auto add(actor::abstract_actor *) -> id_t;
+            auto add(actor::abstract_actor *) -> std::pair<const id_t,actor::actor>;
 
             auto create_link(id_t, id_t) -> void;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/abstract_environment.hpp>
+#include <actor-zeta/environment.hpp>
 #include <actor-zeta/network/multiplexer.hpp>
 #include <memory>
 

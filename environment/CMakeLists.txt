@@ -16,7 +16,6 @@ set(HEADER_FILES
         actor-zeta/detail/adjacency_list.hpp
         actor-zeta/detail/storage_space.hpp
 
-        actor-zeta/abstract_environment.hpp
         actor-zeta/environment.hpp
         actor-zeta/network_environment.hpp
         actor-zeta/supervisor_heavy.hpp

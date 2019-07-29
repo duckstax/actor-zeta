@@ -23,10 +23,11 @@ namespace actor_zeta { namespace actor {
         }
 
         local_actor::local_actor(
-                supervisor *env,
+                supervisor &env,
                 detail::string_view name
-        ):abstract_actor(name){
-            env_ = env;
+        )
+        : abstract_actor(name)
+        , env_ (env){
             initialize();
             type_.type = abstract::actor;
             type_.location = locations::local;
@@ -96,7 +97,7 @@ namespace actor_zeta { namespace actor {
             return address();
         }
 
-        auto local_actor::env() -> supervisor * {
+        auto local_actor::env() -> supervisor & {
             return env_;
         }
 

@@ -17,8 +17,6 @@ namespace actor_zeta { namespace actor {
 
             using mailbox_type = messaging::mail_box;
 
-            bool send(messaging::message ) final;
-
             bool send(messaging::message, executor::execution_device *) final;
 
             void launch(executor::execution_device *, bool /*hide*/) final;
@@ -28,7 +26,7 @@ namespace actor_zeta { namespace actor {
             ~async_actor() override;
 
         protected:
-            async_actor(supervisor *, mailbox_type*, detail::string_view);
+            async_actor(supervisor &, mailbox_type*, detail::string_view);
 
             void intrusive_ptr_add_ref_impl() override;
 

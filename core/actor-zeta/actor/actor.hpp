@@ -15,7 +15,7 @@ namespace actor_zeta { namespace actor {
         public:
             actor() = default;
 
-            actor(const actor &a) = delete;
+            actor(const actor &a) = default; //TODO TMP;
 
             actor(actor &&a) = default;
 

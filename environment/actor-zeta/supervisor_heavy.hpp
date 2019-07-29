@@ -4,6 +4,7 @@
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/detail/storage_space.hpp>
 #include <actor-zeta/actor/supervisor.hpp>
+#include <actor-zeta/actor/actor.hpp>
 
 
 namespace actor_zeta { namespace environment {
@@ -13,21 +14,24 @@ namespace actor_zeta { namespace environment {
 ///
         class supervisor_heavy : public actor::supervisor {
         public:
-            supervisor_heavy(abstract_environment*,detail::storage_space ss, actor::abstract_actor *t);
+            explicit supervisor_heavy(abstract_environment*);
 
             ~supervisor_heavy() override = default;
 
             auto id() const -> id_t;
 
-            void add(actor::abstract_actor *);
+            auto join(actor::abstract_actor *t) -> actor_zeta::actor::actor;
+
+            template<typename Actor, typename Supervisor, typename... Args>
+            auto join(Supervisor& supervisor, Args... args) -> actor_zeta::actor::actor {
+                return join(new Actor(supervisor, std::forward<Args>(args)...));
+            }
 
             void add_shared(const actor::actor_address &);
 
             auto entry_point() -> actor::actor_address override;
 
             auto join(supervisor &) -> void override;
-
-            auto send(messaging::message) -> bool override;
 
             bool send(messaging::message, executor::execution_device *) override;
 
