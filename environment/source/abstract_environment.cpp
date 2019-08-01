@@ -15,7 +15,7 @@ namespace actor_zeta { namespace environment {
         }
 
         auto abstract_environment::create_supervisor(actor::supervisor *ptr) -> actor::supervisor & {
-            supervisors.emplace("",intrusive_ptr<actor::supervisor>(ptr));
+            supervisors.emplace(detail::string_view(""),intrusive_ptr<actor::supervisor>(ptr));
             return *ptr;
         }
 
