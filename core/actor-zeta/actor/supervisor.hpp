@@ -1,7 +1,6 @@
 #pragma once
 
 #include <actor-zeta/actor/monitorable_actor.hpp>
-#include <actor-zeta/actor/actor.hpp>
 #include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace actor {

@@ -17,7 +17,7 @@ namespace actor_zeta {
     }
 
     namespace environment {
-        class  environment;
+        class environment;
         class abstract_environment;
     }
 

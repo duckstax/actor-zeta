@@ -8,23 +8,16 @@
 #include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/actor/basic_actor.hpp>
-#include <actor-zeta/environment.hpp>
 #include <actor-zeta/actor/supervisor.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/network/fake_multiplexer.hpp>
-#include <actor-zeta/actor/broker.hpp>
-#include <actor-zeta/network_environment.hpp>
 #include <actor-zeta/executor/executor.hpp>
 #include <actor-zeta/executor/policy/work_sharing.hpp>
 
-using actor_zeta::actor::make_handler;
 using actor_zeta::actor::context;
-using actor_zeta::messaging::make_message;
 using actor_zeta::environment::abstract_environment;
 using actor_zeta::actor::basic_async_actor;
-using actor_zeta::actor::broker;
 using actor_zeta::network::multiplexer;
-using actor_zeta::environment::network_environment;
 using actor_zeta::network::buffer;
 using actor_zeta::actor::actor_address;
 using actor_zeta::network::query_raw_t;
@@ -35,8 +28,6 @@ using actor_zeta::actor::context;
 using actor_zeta::environment::abstract_environment;
 using actor_zeta::actor::basic_async_actor;
 using actor_zeta::actor::supervisor;
-using actor_zeta::environment::environment;
-using actor_zeta::environment::make_environment;
 using actor_zeta::network::fake_multiplexer;
 
 struct query_t final {
@@ -132,12 +123,11 @@ public:
                     response_t response;
                     response.r_ = std::to_string(status);
                     response.id = tmp.id;
-                    ctx.message().sender()->enqueue(
-                            make_message(
-                                    actor_address(self),
-                                    "write",
-                                    std::move(response)
-                            )
+                    actor_zeta::actor::send(
+                            ctx.message().sender(),
+                            actor_address(self),
+                            "write",
+                            std::move(response)
                     );
                 }
         );
@@ -156,8 +146,7 @@ public:
         if(it == storage_.end()){
             storage_.emplace(key,blob);
         } else {
-            it->second.reserve(blob.size());
-            it->second.replace(it->second.cbegin(),it->second.cend(),blob);
+            it->second=blob;
         }
         return true;
     }
@@ -191,7 +180,7 @@ public:
     explicit fake_broker(supervisor_network*ptr):basic_async_actor(ptr,"network"){
         add_handler(
                 "read",
-                [](context &/*ctx*/, query_raw_t &query_raw) -> void {
+                [this](context & ctx, query_raw_t &query_raw) -> void {
                     std::cerr << "Operation:" << "read" <<std::endl;
                     auto raw = query_raw.raw;
                     std::vector<buffer> parsed_raw_request;
@@ -210,15 +199,14 @@ public:
                     parsed_raw_request.erase(parsed_raw_request.begin());
                     query_.parameter = std::move(parsed_raw_request);
                     query_.id = query_raw.id;
-/*
-                    ctx->addresses("storage")->send(
-                            make_message(
-                                    actor_zeta::actor::actor_address(address()),
-                                    std::string(query_.commands),
-                                    std::move(query_)
-                            )
+                    actor_zeta::actor::send(
+                            ctx->addresses(actor_zeta::detail::string_view("storage")),
+                            actor_zeta::actor::actor_address(address()),
+                            std::string(query_.commands),
+                            std::move(query_)
                     );
-                    */
+
+
                 }
         );
 
@@ -264,5 +252,7 @@ int main() {
 
     multiplexer->new_tcp_listener(host, port, broker->address() );
 
-    return 0;
+    supervisor->startup();
+
+    return  multiplexer->start();
 }

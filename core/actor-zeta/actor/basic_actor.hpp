@@ -48,6 +48,15 @@ namespace actor_zeta { namespace actor {
             );
         }
 
+        template<typename Actor,typename... Args>
+        inline void send(const Actor&a1,Args... args){
+            a1->enqueue(
+                    messaging::make_message(
+                            std::forward<Args>(args)...
+                    )
+            );
+        }
+
         inline void link_imp(const actor_address& a1,const actor_address& a2 ){
             send(a1,a2,"sync_contacts",a2);
             send(a2,a1,"sync_contacts",a1);
