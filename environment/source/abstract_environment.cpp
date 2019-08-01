@@ -1,5 +1,5 @@
 #include <actor-zeta/environment.hpp>
-#include <actor-zeta/supervisor_heavy.hpp>
+#include <actor-zeta/detail/intrusive_ptr.hpp>
 
 namespace actor_zeta { namespace environment {
 
@@ -15,7 +15,7 @@ namespace actor_zeta { namespace environment {
         }
 
         auto abstract_environment::create_supervisor(actor::supervisor *ptr) -> actor::supervisor & {
-            supervisors.emplace("",ptr);
+            supervisors.emplace("",intrusive_ptr<actor::supervisor>(ptr));
             return *ptr;
         }
 
