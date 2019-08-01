@@ -20,10 +20,6 @@ namespace actor_zeta { namespace actor {
             return type_.name;
         }
 
-        auto abstract_actor::locating() const -> locations {
-            return type_.location;
-        }
-
         auto abstract_actor::message_types() const -> std::set<std::string> {
             return std::set<std::string>();
         }
@@ -32,9 +28,8 @@ namespace actor_zeta { namespace actor {
             type_.name = name;
         }
 
-        bool abstract_actor::send(messaging::message msg) {
-            return send(std::move(msg), nullptr);
+        bool abstract_actor::enqueue(messaging::message msg) {
+            return enqueue(std::move(msg), nullptr);
         }
 
-    }
-}
+}}

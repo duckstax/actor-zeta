@@ -5,7 +5,6 @@
 #include <vector>
 #include <iostream>
 
-#include <actor-zeta/actor/actor.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/actor/basic_actor.hpp>
 
@@ -15,57 +14,42 @@ using actor_zeta::messaging::make_message;
 using actor_zeta::environment::abstract_environment;
 using actor_zeta::actor::basic_async_actor;
 
-
 class storage_t final : public basic_async_actor {
 public:
-    storage_t(abstract_environment *ptr) : basic_async_actor(ptr, "storage") {
+    storage_t() : basic_async_actor(nullptr, "storage") {
         add_handler(
                 "update",
                 [](context & /*ctx*/, std::string &data) -> void {
-
                     std::cerr << "update:" << data << std::endl;
-
                 }
         );
 
         add_handler(
-
                 "find",
                 [](context & /*ctx*/) -> void {
-
                     std::cerr << "find" << std::endl;
-
                 }
         );
 
         add_handler(
-
                 "remove",
                 [](context & /*ctx*/) -> void {
-
                     std::cerr << "remove" << std::endl;
-
                 }
         );
-
 
     }
 
     ~storage_t() override = default;
-
-
-private:
 
 };
 
 
 int main() {
 
-    auto *storage_tmp = new storage_t(nullptr);
+    auto* storage = new storage_t();
 
-    actor_zeta::actor::actor storage(storage_tmp);
-
-    storage->send(
+    storage->enqueue(
             make_message(
                     actor_zeta::actor::actor_address(),
                     "update",
@@ -73,7 +57,7 @@ int main() {
             )
     );
 
-    storage->send(
+    storage->enqueue(
             make_message(
                     actor_zeta::actor::actor_address(),
                     "find",
@@ -81,7 +65,7 @@ int main() {
             )
     );
 
-    storage->send(
+    storage->enqueue(
             make_message(
                     actor_zeta::actor::actor_address(),
                     "remove",
@@ -89,7 +73,7 @@ int main() {
             )
     );
 
-    storage_tmp->launch(nullptr, false);
+    storage->launch(nullptr, false);
 
     return 0;
 }

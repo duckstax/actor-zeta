@@ -16,8 +16,6 @@ namespace actor_zeta { namespace actor {
 
     virtual ~context_t() = default;
 
-    virtual void addresses(actor_address)                          = 0;
-
     virtual auto addresses(detail::string_view) -> actor_address&  = 0;
 
     virtual auto self() -> actor_address                           = 0;

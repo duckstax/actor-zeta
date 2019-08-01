@@ -24,13 +24,13 @@ namespace actor_zeta { namespace environment {
             actor::supervisor& manager_supervisor(detail::string_view name);
 
             template<typename Supervisor,typename... Args>
-            auto supervisor(Args... args) -> Supervisor & {
+            auto supervisor(Args... args) -> Supervisor* {
                 auto*supervisor = new Supervisor(std::forward<Args>(args)...);
                 create_supervisor(supervisor);
-                return *supervisor;
+                return supervisor;
             }
 
-            auto ghraht() -> detail::storage_space{
+            auto graph() -> detail::storage_space{
                 return storage_space_;
             }
 

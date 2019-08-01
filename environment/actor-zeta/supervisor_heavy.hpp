@@ -5,6 +5,7 @@
 #include <actor-zeta/detail/storage_space.hpp>
 #include <actor-zeta/actor/supervisor.hpp>
 #include <actor-zeta/actor/actor.hpp>
+#include <actor-zeta/actor/monitorable_actor.hpp>
 
 
 namespace actor_zeta { namespace environment {
@@ -20,20 +21,17 @@ namespace actor_zeta { namespace environment {
 
             auto id() const -> id_t;
 
-            auto join(actor::abstract_actor *t) -> actor_zeta::actor::actor;
-
-            template<typename Actor, typename Supervisor, typename... Args>
-            auto join(Supervisor& supervisor, Args... args) -> actor_zeta::actor::actor {
-                return join(new Actor(supervisor, std::forward<Args>(args)...));
-            }
-
             void add_shared(const actor::actor_address &);
 
             auto entry_point() -> actor::actor_address override;
 
+            using supervisor::join;
+
+            auto join(actor::monitorable_actor *t) -> actor_zeta::actor::actor_address final;
+
             auto join(supervisor &) -> void override;
 
-            bool send(messaging::message, executor::execution_device *) override;
+            bool enqueue(messaging::message, executor::execution_device *) final;
 
             auto broadcast(messaging::message) -> bool override;
 
@@ -41,7 +39,7 @@ namespace actor_zeta { namespace environment {
 
             auto startup() noexcept -> void override ;
 
-            auto executor() noexcept -> executor::abstract_executor& override;
+            auto executor() noexcept -> executor::abstract_executor& final;
 
         protected:
             std::size_t cursor;

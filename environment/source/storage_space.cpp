@@ -25,10 +25,10 @@ namespace actor_zeta { namespace detail {
 
             ~storage() = default;
 
-            auto add(actor::abstract_actor *object) -> std::pair<const id_t,actor::actor> {
+            auto add(actor::abstract_actor *object) -> std::pair<const id_t,actor::actor_address> {
                 id_t id = inc();
                 auto result = body.emplace(id, actor::actor(object));
-                return std::make_pair(result.first->first,result.first->second);
+                return std::make_pair(result.first->first,result.first->second.address());
             }
 
             auto get_actor(id_t id) -> actor::actor_address {
@@ -59,7 +59,7 @@ namespace actor_zeta { namespace detail {
 
         storage_space::storage_space() : pimpl(new storage_space::impl) {}
 
-        auto storage_space::add(actor::abstract_actor *t) -> std::pair<const id_t,actor::actor> {
+        auto storage_space::add(actor::abstract_actor *t) -> std::pair<const id_t,actor::actor_address> {
             auto result = pimpl->actors.add(t);
             pimpl->registry_.add_vertex(result.first);
             return result;

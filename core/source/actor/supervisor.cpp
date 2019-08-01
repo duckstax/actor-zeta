@@ -7,9 +7,8 @@ namespace actor_zeta { namespace actor {
             g2.join(g1);
         }
 
-        supervisor::supervisor(detail::string_view name):abstract_actor(name) {
+        supervisor::supervisor(detail::string_view name):base_actor(name) {
             type_.type = abstract::supervisor;
-            type_.location = locations::local;
         }
 
         supervisor::~supervisor() {}

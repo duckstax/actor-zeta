@@ -12,15 +12,8 @@ namespace actor_zeta {
             supervisor
         };
 
-        enum class locations : uint8_t {
-            non = 0x00,
-            local,
-            remote,
-        };
-
         struct metadata final {
             abstract type;
-            locations location;
             detail::string_view name;
         };
 

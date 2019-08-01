@@ -19,7 +19,7 @@ namespace actor_zeta { namespace actor {
 
             template<std::size_t N>
             basic_actor(
-                    supervisor &ptr,
+                    supervisor *ptr,
                     const char(&name)[N]
             ): actor_type(ptr, new MailBox, detail::string_view(name)) {
 
@@ -41,7 +41,7 @@ namespace actor_zeta { namespace actor {
 
         template<typename Actor,typename... Args>
         inline void send(Actor&a1,Args... args){
-            a1->send(
+            a1->enqueue(
                     messaging::make_message(
                             std::forward<Args>(args)...
                     )

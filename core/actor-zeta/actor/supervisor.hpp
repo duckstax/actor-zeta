@@ -1,13 +1,14 @@
 #pragma once
 
-#include <actor-zeta/actor/abstract_actor.hpp>
+#include <actor-zeta/actor/monitorable_actor.hpp>
+#include <actor-zeta/actor/actor.hpp>
 #include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace actor {
 
     using messaging::message;
 
-    class supervisor : public abstract_actor {
+    class supervisor : public base_actor {
     public:
         explicit supervisor(detail::string_view);
 
@@ -22,6 +23,13 @@ namespace actor_zeta { namespace actor {
         virtual auto broadcast(message) -> bool = 0;
 
         virtual auto entry_point() -> actor_address = 0;
+
+        virtual auto join(monitorable_actor *t) -> actor_zeta::actor::actor_address = 0;
+
+        template<typename Actor, typename Supervisor, typename... Args>
+        auto join(Supervisor* supervisor, Args... args) -> actor_zeta::actor::actor_address {
+            return join(new Actor(supervisor, std::forward<Args>(args)...));
+        }
 
         virtual auto join(supervisor &) -> void = 0;
     };

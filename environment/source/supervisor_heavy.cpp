@@ -5,7 +5,7 @@
 namespace actor_zeta { namespace environment {
 
         void supervisor_heavy::join(supervisor &g) {
-            entry_point()->send(
+            entry_point()->enqueue(
                     messaging::make_message(
                             g.entry_point(),
                             "sync_contacts",
@@ -14,7 +14,7 @@ namespace actor_zeta { namespace environment {
             );
             if (!storage_space_.current_layer(entry_point_).empty()) {
                 for (auto &i:storage_space_.current_layer(entry_point_)) {
-                    i->send(
+                    i->enqueue(
                             messaging::make_message(
                                     g.entry_point(),
                                     "sync_contacts",
@@ -29,11 +29,11 @@ namespace actor_zeta { namespace environment {
             return storage_space_.get(entry_point_); /// TODO: return  actor::actor_address -> std::pair<bool,actor_address>
         }
 
-        auto supervisor_heavy::join(actor::abstract_actor *t) -> actor_zeta::actor::actor {
+        auto supervisor_heavy::join(actor::monitorable_actor *t) -> actor_zeta::actor::actor_address {
             /*
             if (!shared_point.empty()) {
                 for (auto &i:shared_point) {
-                    t->send(
+                    t->enqueue(
                             messaging::make_message(
                                     t->address(),
                                     "sync_contacts",
@@ -52,7 +52,7 @@ namespace actor_zeta { namespace environment {
             auto tmp_address = storage_space_.current_layer(entry_point_);
             if (!tmp_address.empty()) {
                 for(auto& i : tmp_address){
-                    i->send(msg.clone());
+                    i->enqueue(msg.clone());
                 }
                 return true;
             }
@@ -64,7 +64,7 @@ namespace actor_zeta { namespace environment {
         }
 
         void supervisor_heavy::add_shared(const actor::actor_address &address) {
-            /*actor::send(
+            /*actor::enqueue(
                     storage_space_.get(entry_point_),
                     address,
                     "sync_contacts",
@@ -72,7 +72,7 @@ namespace actor_zeta { namespace environment {
             );
             */
 
-            storage_space_.get(entry_point_)->send(
+            storage_space_.get(entry_point_)->enqueue(
                     messaging::make_message(
                             address,
                             "sync_contacts",
@@ -81,7 +81,7 @@ namespace actor_zeta { namespace environment {
             );
             
             for (auto &i:storage_space_.current_layer(entry_point_)) {
-                i->send(
+                i->enqueue(
                         messaging::make_message(
                                 address,
                                 "sync_contacts",
@@ -94,7 +94,7 @@ namespace actor_zeta { namespace environment {
         supervisor_heavy::supervisor_heavy(abstract_environment*env)
             : supervisor(detail::string_view("supervisor_heavy"))
             , cursor(0)
-            , storage_space_(env->ghraht())
+            , storage_space_(env->graph())
             , env_(env)
         {
         }
@@ -111,10 +111,10 @@ namespace actor_zeta { namespace environment {
             return env_->get_executor();
         }
 
-        bool supervisor_heavy::send(messaging::message msg, executor::execution_device *) {
+        bool supervisor_heavy::enqueue(messaging::message msg, executor::execution_device *) {
             auto tmp_address = storage_space_.current_layer(entry_point_);
             if (!tmp_address.empty()) {
-                tmp_address[cursor]->send(std::move(msg));
+                tmp_address[cursor]->enqueue(std::move(msg));
                 ++cursor;
                 if (cursor >= tmp_address.size()) {
                     cursor = 0;

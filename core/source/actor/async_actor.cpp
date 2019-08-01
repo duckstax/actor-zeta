@@ -63,15 +63,17 @@ namespace actor_zeta { namespace actor {
             return executor::executable_result::resume;
         }
 
-        bool async_actor::send(messaging::message mep, executor::execution_device *e) {
+        bool async_actor::enqueue(messaging::message mep, executor::execution_device *e) {
             mailbox().put(std::move(mep));
             /// add a reference count to this actor and coordinator it
             intrusive_ptr_add_ref(this);
             if (e != nullptr) {
                 attach(e);
                 attach()->execute(this);
+            } else if(env() != nullptr) {
+                env()->executor().execute(this);
             } else {
-                env().executor().execute(this);
+                return false;
             }
 
             return true;
@@ -87,11 +89,11 @@ namespace actor_zeta { namespace actor {
         }
 
         async_actor::async_actor(
-                  supervisor &env
+                  supervisor *env
                 , mailbox_type* mail_ptr
                 , detail::string_view name
                 )
-                : local_actor(env, name)
+                : monitorable_actor(env, name)
                 , mailbox_(mail_ptr)
                 {
         }

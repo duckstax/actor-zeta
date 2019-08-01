@@ -14,7 +14,7 @@ namespace actor_zeta { namespace actor {
 
         class abstract_actor : public ref_counted {
         public:
-            abstract_actor() = delete;
+            abstract_actor()= delete;
 
             abstract_actor(const abstract_actor &) = delete;
 
@@ -24,9 +24,9 @@ namespace actor_zeta { namespace actor {
 
             explicit abstract_actor(detail::string_view);
 
-            bool send(messaging::message);
+            auto enqueue(messaging::message) -> bool;
 
-            virtual bool send(messaging::message, executor::execution_device *) = 0;
+            virtual bool enqueue(messaging::message, executor::execution_device *) = 0;
 
             virtual auto message_types() const -> std::set<std::string> ;
 
@@ -35,8 +35,6 @@ namespace actor_zeta { namespace actor {
             auto type() const -> abstract;
 
             auto name() const -> detail::string_view;
-
-            auto locating() const -> locations;
 
             metadata type_;
         };

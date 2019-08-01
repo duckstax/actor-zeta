@@ -5,7 +5,6 @@
 #include <vector>
 #include <iostream>
 
-#include <actor-zeta/actor/actor.hpp>
 #include <actor-zeta/actor/basic_actor.hpp>
 #include <actor-zeta/environment.hpp>
 #include <actor-zeta/supervisor_heavy.hpp>
@@ -51,7 +50,7 @@ protected:
 
 class storage_t final : public basic_async_actor {
 public:
-    explicit storage_t(supervisor_heavy&ptr) : basic_async_actor(ptr, "storage") {
+    explicit storage_t(supervisor_heavy*ptr) : basic_async_actor(ptr, "storage") {
         add_handler(
                 "update",
                 [](context & /*ctx*/) -> void {}
@@ -76,30 +75,30 @@ class network_t final : public basic_async_actor {
 public:
     ~network_t() override = default;
 
-    explicit network_t(supervisor_heavy&ptr) : basic_async_actor(ptr, "network") {}
+    explicit network_t(supervisor_heavy*ptr) : basic_async_actor(ptr, "network") {}
 };
 
 int main() {
 
     auto env = make_environment<dummy_environment>(new dummy_executor);
 
-    auto&supervisor = env->supervisor<supervisor_heavy>(env.get());
+    auto*supervisor = env->supervisor<supervisor_heavy>(env.get());
 
-    auto storage = supervisor.join<storage_t>(supervisor);
+    auto storage = supervisor->join<storage_t>(supervisor);
 
-    auto network = supervisor.join<network_t>(supervisor);
+    auto network = supervisor->join<network_t>(supervisor);
 
     actor_zeta::actor::link(storage,network);
 
-    auto&supervisor1 = env->supervisor<supervisor_heavy>(env.get());
+    auto*supervisor1 = env->supervisor<supervisor_heavy>(env.get());
 
-    supervisor.join(supervisor1);
+    supervisor->join(*supervisor1);
 
-    supervisor1.join(supervisor);
+    supervisor1->join(*supervisor);
 
-    auto storage1 = supervisor1.join<storage_t>(supervisor);
+    auto storage1 = supervisor1->join<storage_t>(supervisor);
 
-    auto network1 = supervisor1.join<network_t>(supervisor);
+    auto network1 = supervisor1->join<network_t>(supervisor);
 
     actor_zeta::actor::link(storage1,network1);
 
