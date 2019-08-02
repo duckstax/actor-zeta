@@ -21,12 +21,10 @@ namespace actor_zeta { namespace actor {
 
         virtual auto broadcast(message) -> bool = 0;
 
-        virtual auto entry_point() -> actor_address = 0;
-
         virtual auto join(monitorable_actor *t) -> actor_zeta::actor::actor_address = 0;
 
         template<typename Actor, typename Supervisor, typename... Args>
-        auto join(Supervisor* supervisor, Args... args) -> actor_zeta::actor::actor_address {
+        inline auto join(Supervisor* supervisor, Args... args) -> actor_zeta::actor::actor_address {
             return join(new Actor(supervisor, std::forward<Args>(args)...));
         }
 

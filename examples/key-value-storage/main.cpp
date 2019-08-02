@@ -77,8 +77,6 @@ public:
 
     auto broadcast(actor_zeta::messaging::message) -> bool final  {return false;}
 
-    auto entry_point() -> actor_zeta::actor::actor_address final {return address();}
-
     auto join(supervisor &) -> void final {
 
     }

@@ -24,17 +24,15 @@ namespace actor_zeta { namespace environment {
             actor::supervisor& manager_supervisor(detail::string_view name);
 
             template<typename Supervisor,typename... Args>
-            auto supervisor(Args... args) -> Supervisor* {
+            inline auto supervisor(Args... args) -> Supervisor* {
                 auto*supervisor = new Supervisor(std::forward<Args>(args)...);
                 create_supervisor(supervisor);
                 return supervisor;
             }
 
-            auto graph() -> detail::storage_space{
-                return storage_space_;
-            }
+            auto graph() -> detail::storage_space;
 
-            virtual auto create_supervisor(actor::supervisor* ptr) -> actor::supervisor &;
+            auto create_supervisor(actor::supervisor* ptr) -> actor::supervisor &;
 
         protected:
             std::unordered_map<detail::string_view, intrusive_ptr<actor_zeta::actor::supervisor>> supervisors;

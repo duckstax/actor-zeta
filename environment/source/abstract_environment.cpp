@@ -19,4 +19,8 @@ namespace actor_zeta { namespace environment {
             return *ptr;
         }
 
+        auto abstract_environment::graph() -> detail::storage_space {
+            return storage_space_;
+        }
+
     }}

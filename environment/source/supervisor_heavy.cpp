@@ -5,28 +5,24 @@
 namespace actor_zeta { namespace environment {
 
         void supervisor_heavy::join(supervisor &g) {
-            entry_point()->enqueue(
+            address()->enqueue(
                     messaging::make_message(
-                            g.entry_point(),
+                            g.address(),
                             "sync_contacts",
-                            g.entry_point()
+                            g.address()
                     )
             );
             if (!storage_space_.current_layer(entry_point_).empty()) {
                 for (auto &i:storage_space_.current_layer(entry_point_)) {
                     i->enqueue(
                             messaging::make_message(
-                                    g.entry_point(),
+                                    g.address(),
                                     "sync_contacts",
-                                    g.entry_point()
+                                    g.address()
                             )
                     );
                 }
             }
-        }
-
-        auto supervisor_heavy::entry_point() -> actor::actor_address {
-            return storage_space_.get(entry_point_); /// TODO: return  actor::actor_address -> std::pair<bool,actor_address>
         }
 
         auto supervisor_heavy::join(actor::monitorable_actor *t) -> actor_zeta::actor::actor_address {

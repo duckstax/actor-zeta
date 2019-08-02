@@ -8,15 +8,13 @@ actor-zeta is an open source C++11  virtual actor model implementation featuring
 
 The libraray uses a standard practice for its versioning: major.minor.patchlevel. example : 0.0.1
 
-This project is in a very early / experimental stage.
-
 ## Dependencies
 
 * CMake
 
 ## Supported Compilers
 
-* GCC >= 4.8
+* GCC >= 4.8.5
 * Clang >= 3.3
 * Microsoft Visual Studio >= 2015
 

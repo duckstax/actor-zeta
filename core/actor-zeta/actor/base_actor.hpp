@@ -27,7 +27,7 @@ namespace actor_zeta { namespace actor {
             auto self() -> actor_address override;
 
             template<std::size_t N, typename F>
-            auto add_handler(const char(&name)[N], F &&f) -> void {
+            inline auto add_handler(const char(&name)[N], F &&f) -> void {
                 dispatch().on(detail::string_view(name), make_handler(std::forward<F>(f)));
             }
 

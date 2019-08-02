@@ -23,8 +23,6 @@ namespace actor_zeta { namespace environment {
 
             void add_shared(const actor::actor_address &);
 
-            auto entry_point() -> actor::actor_address override;
-
             using supervisor::join;
 
             auto join(actor::monitorable_actor *t) -> actor_zeta::actor::actor_address final;

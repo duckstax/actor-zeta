@@ -22,18 +22,19 @@ class dummy_executor final : public abstract_executor {
 public:
     dummy_executor():abstract_executor(1,10000){}
 
-    void execute(actor_zeta::executor::executable *ptr) {
+    void execute(actor_zeta::executor::executable *ptr) override {
         ptr->run(nullptr, max_throughput());
     }
-    void start(){}
-    void stop(){}
+    void start() override{}
+    void stop() override{}
 };
 
 class dummy_environment final : public abstract_environment {
 public:
-    dummy_environment(actor_zeta::executor::abstract_executor* ptr):e_(ptr){
+    explicit dummy_environment(actor_zeta::executor::abstract_executor* ptr):e_(ptr){
 
     }
+
     std::size_t start() override {
         return 0;
     }
