@@ -1,19 +1,17 @@
-#include <cstdio>
 #include <cassert>
 
 #include <map>
 #include <vector>
-#include <iostream>
 
-#include <actor-zeta/actor/basic_actor.hpp>
+#include <actor-zeta/core.hpp>
 #include <actor-zeta/environment.hpp>
 #include <actor-zeta/supervisor_heavy.hpp>
-#include <actor-zeta/executor/abstract_executor.hpp>
 
-using actor_zeta::executor::abstract_executor;
-using actor_zeta::actor::context;
+using actor_zeta::basic_async_actor ;
+using actor_zeta::abstract_executor;
+using actor_zeta::context;
+
 using actor_zeta::environment::abstract_environment;
-using actor_zeta::actor::basic_async_actor;
 using actor_zeta::environment::supervisor_heavy;
 using actor_zeta::environment::environment;
 using actor_zeta::environment::make_environment;
@@ -22,7 +20,7 @@ class dummy_executor final : public abstract_executor {
 public:
     dummy_executor():abstract_executor(1,10000){}
 
-    void execute(actor_zeta::executor::executable *ptr) override {
+    void execute(actor_zeta::executable *ptr) override {
         ptr->run(nullptr, max_throughput());
     }
     void start() override{}
@@ -31,7 +29,7 @@ public:
 
 class dummy_environment final : public abstract_environment {
 public:
-    explicit dummy_environment(actor_zeta::executor::abstract_executor* ptr):e_(ptr){
+    explicit dummy_environment(actor_zeta::abstract_executor* ptr):e_(ptr){
 
     }
 
@@ -39,14 +37,14 @@ public:
         return 0;
     }
 
-    actor_zeta::executor::abstract_executor &get_executor() override {
+    actor_zeta::abstract_executor &get_executor() override {
         return *e_;
     }
 
     ~dummy_environment() override = default;
 
 protected:
-    std::unique_ptr<actor_zeta::executor::abstract_executor> e_;
+    std::unique_ptr<actor_zeta::abstract_executor> e_;
 };
 
 class storage_t final : public basic_async_actor {

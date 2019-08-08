@@ -92,10 +92,10 @@ namespace actor_zeta { namespace actor {
                   supervisor *env
                 , mailbox_type* mail_ptr
                 , detail::string_view name
-                )
-                : monitorable_actor(env, name)
+        )
+                : executable_actor(env, name)
                 , mailbox_(mail_ptr)
-                {
+        {
         }
 
         void async_actor::launch(executor::execution_device *e, bool hide) {

@@ -19,12 +19,18 @@ namespace actor_zeta { namespace actor {
             std::cerr << "error add handler" << std::endl;
         }
 
-        void dispatcher_t::execute(context &d) {
-            auto it = handlers_.find(d.message().command());
+        inline void error_skip(detail::string_view  __error__) {
+            std::cerr << "WARNING" << std::endl;
+            std::cerr << "Skip : " << __error__ << std::endl;
+            std::cerr << "WARNING" << std::endl;
+        }
+
+        void dispatcher_t::execute(context &ctx) {
+            auto it = handlers_.find(ctx.message().command());
             if (it != handlers_.end()) {
-                return it->second->invoke(d);
+                return it->second->invoke(ctx);
             } else {
-                return handlers_.at(detail::string_view("skip"))->invoke(d);
+                error_skip(ctx.message().command());
             }
         }
 

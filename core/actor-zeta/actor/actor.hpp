@@ -67,6 +67,4 @@ namespace actor_zeta { namespace actor {
 
             intrusive_ptr <abstract_actor> ptr_;
         };
-    }
-
-}
+}}

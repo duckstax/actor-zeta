@@ -5,14 +5,11 @@
 #include <vector>
 #include <iostream>
 
-#include <actor-zeta/messaging/message.hpp>
-#include <actor-zeta/actor/basic_actor.hpp>
+#include <actor-zeta/core.hpp>
 
-using actor_zeta::actor::make_handler;
-using actor_zeta::actor::context;
-using actor_zeta::messaging::make_message;
-using actor_zeta::environment::abstract_environment;
-using actor_zeta::actor::basic_async_actor;
+using actor_zeta::basic_async_actor;
+using actor_zeta::context;
+using actor_zeta::send;
 
 class storage_t final : public basic_async_actor {
 public:
@@ -48,31 +45,10 @@ public:
 int main() {
 
     auto* storage = new storage_t();
-
-    storage->enqueue(
-            make_message(
-                    actor_zeta::actor::actor_address(),
-                    "update",
-                    std::string("payload")
-            )
-    );
-
-    storage->enqueue(
-            make_message(
-                    actor_zeta::actor::actor_address(),
-                    "find",
-                    std::string("payload")
-            )
-    );
-
-    storage->enqueue(
-            make_message(
-                    actor_zeta::actor::actor_address(),
-                    "remove",
-                    std::string("payload")
-            )
-    );
-
+    send(storage,actor_zeta::actor::actor_address(),"update",std::string("payload"));
+    send(storage,actor_zeta::actor::actor_address(),"find",std::string("payload"));
+    send(storage,actor_zeta::actor::actor_address(),"remove",std::string("payload"));
+    
     storage->launch(nullptr, false);
 
     return 0;

@@ -7,7 +7,7 @@
 namespace actor_zeta { namespace actor {
 
 ///
-/// @brief
+/// @brief A generic actor
 ///
         template<
                 typename MailBox,
@@ -67,5 +67,4 @@ namespace actor_zeta { namespace actor {
             link_imp(actor1->address(),actor2->address());
         }
 
-    }
-}
+}}

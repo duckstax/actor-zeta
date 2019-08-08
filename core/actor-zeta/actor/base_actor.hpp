@@ -1,26 +1,38 @@
 #pragma once
 
-#include <actor-zeta/actor/abstract_actor.hpp>
+#include <memory>
+#include <unordered_map>
+
 #include <actor-zeta/forwards.hpp>
+#include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/actor/context.hpp>
-#include <actor-zeta/actor/actor_address.hpp>
 #include <actor-zeta/actor/dispatcher.hpp>
 
 namespace actor_zeta { namespace actor {
-
+///
+/// @brief A generic actor
+///
         class base_actor
                 : public abstract_actor
                 , public context_t {
         public:
             ~base_actor() override;
+        protected:
             /**
             * debug method
             */
             auto all_view_address() const -> void;
 
+            base_actor(detail::string_view name);
+
+            /// sync -> async
+            void add_link(actor_address);
+            /// sync -> async
+            void remove_link(const actor_address&);
+            /// sync -> async
+            void remove_link(detail::string_view);
+
             auto message_types() const -> std::set<std::string> final;
-        protected:
-            base_actor(detail::string_view);
 
             auto addresses(detail::string_view) -> actor_address & final;
 
@@ -38,6 +50,8 @@ namespace actor_zeta { namespace actor {
             std::unordered_map<detail::string_view, actor_address> contacts;
 
         private:
+            void initialize();
+
             dispatcher_t dispatcher_;
 
         };

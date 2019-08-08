@@ -9,7 +9,7 @@
 namespace actor_zeta { namespace executor {
 
 template<class Policy>
-class executor;
+class executor_t;
 ///
 /// @brief
 /// @tparam Policy
@@ -18,7 +18,7 @@ class executor;
         class worker final : public execution_device {
         public:
             using job_ptr = executable *;
-            using executor_ptr = executor<Policy> *;
+            using executor_ptr = executor_t<Policy> *;
             using policy_data = typename Policy::worker_data;
 
             worker(size_t worker_id, executor_ptr worker_parent,

@@ -25,7 +25,7 @@ namespace actor_zeta { namespace environment {
             }
         }
 
-        auto supervisor_heavy::join(actor::monitorable_actor *t) -> actor_zeta::actor::actor_address {
+        auto supervisor_heavy::join(actor::base_actor *t) -> actor_zeta::actor::actor_address {
             /*
             if (!shared_point.empty()) {
                 for (auto &i:shared_point) {
@@ -87,8 +87,8 @@ namespace actor_zeta { namespace environment {
             }
         }
 
-        supervisor_heavy::supervisor_heavy(abstract_environment*env)
-            : supervisor(detail::string_view("supervisor_heavy"))
+        supervisor_heavy::supervisor_heavy(abstract_environment*env,char const*name)
+            : supervisor(detail::string_view(name))
             , cursor(0)
             , storage_space_(env->graph())
             , env_(env)

@@ -24,7 +24,7 @@ namespace actor_zeta {
     namespace executor {
         class abstract_executor;
         template<class Policy>
-        class  executor;
+        class  executor_t;
         struct execution_device;
         struct executable;
     }

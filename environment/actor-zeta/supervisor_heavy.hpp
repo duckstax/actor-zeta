@@ -5,7 +5,7 @@
 #include <actor-zeta/detail/storage_space.hpp>
 #include <actor-zeta/actor/supervisor.hpp>
 #include <actor-zeta/actor/actor.hpp>
-#include <actor-zeta/actor/monitorable_actor.hpp>
+#include <actor-zeta/actor/executable_actor.hpp>
 
 
 namespace actor_zeta { namespace environment {
@@ -15,7 +15,7 @@ namespace actor_zeta { namespace environment {
 ///
         class supervisor_heavy : public actor::supervisor {
         public:
-            explicit supervisor_heavy(abstract_environment*);
+            explicit supervisor_heavy(abstract_environment*,char const*);
 
             ~supervisor_heavy() override = default;
 
@@ -25,7 +25,7 @@ namespace actor_zeta { namespace environment {
 
             using supervisor::join;
 
-            auto join(actor::monitorable_actor *t) -> actor_zeta::actor::actor_address final;
+            auto join(actor::base_actor *) -> actor_zeta::actor::actor_address final;
 
             auto join(supervisor &) -> void override;
 

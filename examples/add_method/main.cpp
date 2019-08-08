@@ -1,18 +1,12 @@
-#include <cstdio>
 #include <cassert>
 
 #include <map>
 #include <vector>
-#include <iostream>
-#include <iterator>
 
-#include <actor-zeta/actor/actor.hpp>
-#include <actor-zeta/messaging/message.hpp>
-#include <actor-zeta/actor/basic_actor.hpp>
+#include <actor-zeta/core.hpp>
 
-using actor_zeta::actor::context;
-using actor_zeta::messaging::make_message;
-using actor_zeta::actor::basic_async_actor;
+using actor_zeta::context;
+using actor_zeta::basic_async_actor;
 
 
 class storage_t final : public basic_async_actor {

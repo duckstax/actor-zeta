@@ -15,13 +15,13 @@ namespace actor_zeta { namespace executor {
 /// @tparam Policy
 ///
         template<class Policy>
-        class executor : public abstract_executor {
+        class executor_t : public abstract_executor {
         public:
             using job_ptr     = executable *;
             using policy_data = typename Policy::coordinator_data;
             using worker_type = worker<Policy>;
 
-            executor(size_t num_worker_threads, size_t max_throughput_param):
+            executor_t(size_t num_worker_threads, size_t max_throughput_param):
                 abstract_executor(num_worker_threads, max_throughput_param),
                 data_(this) {
             }

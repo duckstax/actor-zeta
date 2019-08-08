@@ -2,7 +2,7 @@
 
 #include <actor-zeta/messaging/mail_box.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
-#include <actor-zeta/actor/monitorable_actor.hpp>
+#include <actor-zeta/actor/executable_actor.hpp>
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/executor/executable.hpp>
 
@@ -11,7 +11,7 @@ namespace actor_zeta { namespace actor {
 /// @brief Specialization of actor with scheduling functionality
 ///
         class async_actor :
-                public monitorable_actor,
+                public executable_actor,
                 public executor::executable {
         public:
 
@@ -52,5 +52,4 @@ namespace actor_zeta { namespace actor {
 
             std::unique_ptr<mailbox_type> mailbox_;
         };
-    }
-}
+}}

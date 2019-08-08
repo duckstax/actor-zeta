@@ -12,8 +12,6 @@ endif()
 include_directories(.)
 
 set(HEADER_FILES
-        actor-zeta/actor/broker.hpp
-
         actor-zeta/network/multiplexer.hpp
         actor-zeta/network/connection_identifying.hpp
         actor-zeta/network/fake_multiplexer.hpp
@@ -23,7 +21,6 @@ set(HEADER_FILES
 set(SOURCE_FILES
         source/network/connection_identifying.cpp
         source/network/fake_multiplexer.cpp
-        source/broker.cpp
 )
 
 add_library(

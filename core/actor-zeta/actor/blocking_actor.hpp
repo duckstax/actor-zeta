@@ -4,7 +4,7 @@
 #include <condition_variable>
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/executor/executable.hpp>
-#include <actor-zeta/actor/monitorable_actor.hpp>
+#include <actor-zeta/actor/executable_actor.hpp>
 #include <actor-zeta/messaging/mail_box.hpp>
 
 namespace actor_zeta { namespace actor {
@@ -13,7 +13,7 @@ namespace actor_zeta { namespace actor {
 /// @brief Specialization of actor with blocking mode
 ///
         class blocking_actor  :
-                public monitorable_actor ,
+                public executable_actor ,
                 executor::executable {
         public:
 
@@ -31,5 +31,4 @@ namespace actor_zeta { namespace actor {
         private:
             std::unique_ptr<mailbox_type> mailbox_;
         };
-    }
-}
+}}

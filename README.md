@@ -6,7 +6,44 @@ actor-zeta
 
 actor-zeta is an open source C++11  virtual actor model implementation featuring lightweight & fast and more.
 
-The libraray uses a standard practice for its versioning: major.minor.patchlevel. example : 0.0.1
+
+```C++
+
+#include <actor-zeta/core.hpp>
+
+using actor_zeta::context;
+using actor_zeta::basic_async_actor;
+
+
+class storage_t final : public basic_async_actor {
+public:
+    storage_t() : basic_async_actor(nullptr, "storage") {
+        add_handler(
+                "update",
+                [](context & /*ctx*/, query_t& query) -> void {
+                
+                }
+        );
+
+        add_handler(
+                "find",
+                [](context & /*ctx*/, query_t& query) -> void {
+                
+                }
+        );
+
+        add_handler(
+                "remove",
+                [](context & /*ctx*/, query_t& query) -> void {
+                                                               
+                }
+        );
+    }
+
+    ~storage_t() override = default;
+};
+
+```
 
 ## Dependencies
 
@@ -22,4 +59,5 @@ The libraray uses a standard practice for its versioning: major.minor.patchlevel
 
 * Linux
 * Mac OS X
-* Windows
+* FreeBSD 10
+* Windows >= 7 (static builds)

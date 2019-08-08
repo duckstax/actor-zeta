@@ -35,8 +35,20 @@ namespace actor_zeta { namespace detail {
 
             constexpr string_view(const char *cstr, size_t length) noexcept: data_(cstr), size_(length) {}
 
-            template<size_t N>
-            constexpr explicit string_view(const char (&cstr)[N]) noexcept: data_(cstr), size_(N - 1) {}
+#if defined(__GNUC__)
+            constexpr string_view(const char* cstr) noexcept
+                : data_(cstr)
+                , size_(strlen(cstr))
+            {
+            }
+#else
+            template <size_t N>
+            constexpr string_view(const char (&cstr)[N]) noexcept
+                    : data_(cstr),
+                      size_(N - 1)
+            {
+            }
+#endif
 
             constexpr size_type size() const noexcept {
                 return size_;
