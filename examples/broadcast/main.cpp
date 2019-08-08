@@ -71,7 +71,7 @@ int main() {
 
     auto env = make_environment<dummy_environment>(thread_pool);
 
-    auto *supervisor = env->supervisor<supervisor_heavy>(env.get());
+    auto *supervisor = env->supervisor<supervisor_heavy>(env.get(),"bot_master");
 
     int const threads = 10;
     for(auto i = threads - 1; i > 0; --i){
