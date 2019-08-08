@@ -21,6 +21,9 @@ namespace actor_zeta {
     using executor::abstract_executor;
     using executor::executable;
 
+    using messaging::message;
+    using messaging::make_message;
+
     using actor::send;
     
 }
