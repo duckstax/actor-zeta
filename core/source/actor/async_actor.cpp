@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cassert>
+
 #include <actor-zeta/actor/async_actor.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
@@ -63,7 +65,7 @@ namespace actor_zeta { namespace actor {
             return executor::executable_result::resume;
         }
 
-        bool async_actor::enqueue(messaging::message mep, executor::execution_device *e) {
+        void async_actor::enqueue(messaging::message mep, executor::execution_device *e) {
             mailbox().put(std::move(mep));
             /// add a reference count to this actor and coordinator it
             intrusive_ptr_add_ref(this);
@@ -73,10 +75,10 @@ namespace actor_zeta { namespace actor {
             } else if(env() != nullptr) {
                 env()->executor().execute(this);
             } else {
-                return false;
+                ///TODO: assert -> ?
+                assert(false);
             }
 
-            return true;
         }
 
 

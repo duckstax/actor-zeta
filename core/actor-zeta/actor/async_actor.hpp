@@ -19,7 +19,7 @@ namespace actor_zeta { namespace actor {
 
             using abstract_actor::enqueue;
 
-            bool enqueue(messaging::message, executor::execution_device *) final;
+            void enqueue(messaging::message, executor::execution_device *) final;
 
             void launch(executor::execution_device *, bool /*hide*/) final;
 

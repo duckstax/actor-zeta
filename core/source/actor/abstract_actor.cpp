@@ -28,8 +28,8 @@ namespace actor_zeta { namespace actor {
             type_.name = name;
         }
 
-        bool abstract_actor::enqueue(messaging::message msg) {
-            return enqueue(std::move(msg), nullptr);
+        void abstract_actor::enqueue(messaging::message msg) {
+            enqueue(std::move(msg), nullptr);
         }
 
 }}

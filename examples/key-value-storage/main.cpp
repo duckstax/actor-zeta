@@ -75,7 +75,7 @@ public:
                     actor_zeta::actor::send(
                             ctx->addresses(actor_zeta::detail::string_view("storage")),
                             actor_zeta::actor::actor_address(address()),
-                            "update",///std::string(query_.commands),
+                            std::string(query_.commands),
                             std::move(query_)
                     );
                 }
@@ -119,10 +119,9 @@ public:
         return addres;
     }
 
-    auto enqueue(actor_zeta::messaging::message msg,actor_zeta::executor::execution_device *) -> bool final {
+    auto enqueue(actor_zeta::messaging::message msg,actor_zeta::executor::execution_device *) -> void final {
         context tmp(this,std::move(msg));
         dispatch().execute(tmp);
-        return false;
     }
 
 
@@ -205,7 +204,7 @@ int main() {
 
     constexpr const char * host = "localhost";
 
-    auto* multiplexer = new actor_zeta::network::fake_multiplexer;
+    std::unique_ptr<actor_zeta::network::fake_multiplexer> multiplexer(new actor_zeta::network::fake_multiplexer);
 
     multiplexer->add_scenario(host,port)
 
@@ -222,11 +221,11 @@ int main() {
 
     .add(actor_zeta::network::client_state::close);
 
-    auto* thread_pool =   new executor_t<work_sharing>(1,std::numeric_limits<std::size_t>::max());
+    std::unique_ptr<executor_t<work_sharing>> thread_pool( new executor_t<work_sharing>(1,std::numeric_limits<std::size_t>::max()));
 
-    auto*supervisor = new supervisor_network(*multiplexer,thread_pool);
+    std::unique_ptr<supervisor_network>supervisor( new supervisor_network(*multiplexer,thread_pool.get()));
 
-    auto storage = supervisor->join<storage_t>(supervisor);
+    auto storage = supervisor->join<storage_t>(supervisor.get());
 
     actor_zeta::actor::link(supervisor,storage);
 

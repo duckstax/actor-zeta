@@ -4,6 +4,7 @@
 #include <queue>
 #include <vector>
 #include <iostream>
+#include <memory>
 
 #include <actor-zeta/core.hpp>
 #include <actor-zeta/environment.hpp>
@@ -26,44 +27,15 @@ using actor_zeta::environment::supervisor_heavy;
 using actor_zeta::environment::environment;
 using actor_zeta::environment::make_environment;
 
-/// non thread safe
-class generator_task final {
-public:
+template<typename Task, typename ...Args>
+inline auto make_task(supervisor&executor_,const std::string &command, Args... args ) -> void {
+    executor_.enqueue(std::move(make_message(executor_.address(), command, std::move(Task(std::forward<Args>(args)...)))));
+}
 
-    generator_task(supervisor& e)
-        : executor_(e)
-        , enabled_(true)
-        {
-    }
-
-    ~generator_task() {
-        enabled_ = false;
-    }
-
-    void stop() {
-        enabled_ = false;
-    }
-
-    template<typename Task, typename ...Args>
-    auto reg_task_type(const std::string &command, Args... args) -> void {
-        queue_.push(std::move(make_message(executor_.address(), command, std::move(Task(std::forward<Args>(args)...)))));
-    }
-
-    void run() {
-        while (enabled_) {
-            while (!queue_.empty()) {
-                auto task = std::move(queue_.front());
-                queue_.pop();
-                executor_.enqueue(std::move(task));
-            }
-        }
-    }
-
-private:
-    supervisor& executor_;
-    bool enabled_;
-    std::queue<message> queue_;
-};
+template<typename Task, typename ...Args>
+inline auto make_task_broadcast(supervisor&executor_,const std::string &command, Args... args ) -> void {
+    executor_.broadcast(std::move(make_message(executor_.address(), command, std::move(Task(std::forward<Args>(args)...)))));
+}
 
 /// non thread safe
 class supervisor_lite final : public supervisor {
@@ -74,7 +46,6 @@ public:
             , cursor(0)
             , system_{"sync_contacts", "add_link", "remove_link"}
             {
-
     }
 
     ~supervisor_lite() final {
@@ -111,7 +82,7 @@ public:
         return address;
     }
 
-    auto enqueue(message msg, actor_zeta::executor::execution_device *) -> bool final {
+    auto enqueue(message msg, actor_zeta::executor::execution_device *) -> void final {
         auto msg_ = std::move(msg);
         auto it = system_.find(msg_.command());
         if (it != system_.end()) {
@@ -119,26 +90,23 @@ public:
         } else {
             redirect_robin(std::move(msg_));
         }
-        return true;
     }
 
 private:
-    auto local(message msg) -> bool {
+    auto local(message msg) -> void {
         context tmp(this, std::move(msg));
         dispatch().execute(tmp);
-        return true;
     }
 
-    auto redirect_robin(message msg) -> bool {
+    auto redirect_robin(message msg) -> void {
         if (!actors_.empty()) {
             actors_[cursor]->enqueue(std::move(msg));
             ++cursor;
             if (cursor >= actors_.size()) {
                 cursor = 0;
             }
-            return true;
         }
-        return false;
+        //assert(false);
     }
 
     abstract_executor *e_;
@@ -148,53 +116,46 @@ private:
 };
 
 
-struct add_like final {
+struct download_data final {
 
-    add_like(const std::string &socialNetwork, const std::string &name)
-            : social_network(socialNetwork)
-            , name(name)
-            {
-    }
+    download_data(const std::string &url, const std::string &user, const std::string &passwod)
+        : url_(url)
+        , user_(user)
+        , passwod_(passwod) {}
 
-    ~add_like() = default;
-
-    std::string social_network;
-    std::string name;
+    ~download_data() = default;
+    std::string url_;
+    std::string user_;
+    std::string passwod_;
 };
 
-struct add_comment final {
+struct work_data final {
 
-    add_comment(const std::string &socialNetwork, const std::string &name, const std::string &comment)
-            : social_network(socialNetwork)
-            , name(name)
-            , comment(comment)
-            {
-    }
+    ~work_data() = default;
 
-    ~add_comment() = default;
+    work_data(const std::string &data, const std::string &operatorName) : data_(data), operator_name_(operatorName) {}
 
-    std::string social_network;
-    std::string name;
-    std::string comment;
+    std::string data_;
+    std::string operator_name_;
 };
 
-class bot_t final : public basic_async_actor {
+class worker_t final : public basic_async_actor {
 public:
-    explicit bot_t(supervisor_lite *ptr) : basic_async_actor(ptr, "bot") {
+    explicit worker_t(supervisor_lite *ptr) : basic_async_actor(ptr, "bot") {
         add_handler(
-                "add_like",
-                [](context & /*ctx*/, add_like &like) -> void {
-                    std::cerr << "social network : " << like.social_network << std::endl;
-                    std::cerr << "name : " << like.name << std::endl;
+                "download",
+                [](context & /*ctx*/, download_data &url) -> void {
+                    std::cerr << "url : " << url.url_ << std::endl;
+                    std::cerr << "user : " << url.user_ << std::endl;
+                    std::cerr << "password : " << url.passwod_ << std::endl;
                 }
         );
 
         add_handler(
-                "add_comment",
-                [](context & /*ctx*/, add_comment &comment) -> void {
-                    std::cerr << "social network : " << comment.social_network << std::endl;
-                    std::cerr << "name : " << comment.name << std::endl;
-                    std::cerr << "comment : " << comment.comment << std::endl;
+                "work_data",
+                [](context & /*ctx*/, work_data & work_data) -> void {
+                    std::cerr << "data_ : " << work_data.data_ << std::endl;
+                    std::cerr << "operator_name : " << work_data.operator_name_ << std::endl;
                 }
         );
 
@@ -204,30 +165,35 @@ public:
         );
     }
 
-    ~bot_t() override = default;
+    ~worker_t() override = default;
+
+private:
+
 };
 
 
 int main() {
 
-    auto *thread_pool = new executor_t<work_sharing>(1, std::numeric_limits<std::size_t>::max());
+    std::unique_ptr<abstract_executor> thread_pool(new executor_t<work_sharing>(1, std::numeric_limits<std::size_t>::max()));
 
-    auto *supervisor = new supervisor_lite(thread_pool);
+    std::unique_ptr<supervisor_lite> supervisor(new supervisor_lite(thread_pool.get()));
 
-    int const threads = 10;
-    for (auto i = threads - 1; i > 0; --i) {
-        auto bot = supervisor->join<bot_t>(supervisor);
+    supervisor->startup();
+
+    int const actors = 10;
+    for (auto i = actors - 1; i > 0; --i) {
+        auto bot = supervisor->join<worker_t>(supervisor.get());
         actor_zeta::actor::link(supervisor, bot);
     }
 
-    generator_task task_master(*supervisor);
-
     int const task = 10000;
     for (auto i = task - 1; i > 0; --i) {
-        task_master.reg_task_type<add_like>("add_like", "fb", "jack");
+        make_task<download_data>(*supervisor,"download", "fb", "jack","");
     }
 
-    supervisor->startup();
-    task_master.run();
+    for (auto i = task - 1; i > 0; --i) {
+        make_task_broadcast<download_data>(*supervisor,"download", "fb", "jack","");
+    }
+
     return 0;
 }

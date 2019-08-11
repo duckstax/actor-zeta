@@ -1,4 +1,7 @@
 #include <actor-zeta/supervisor_heavy.hpp>
+
+#include <cassert>
+
 #include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/environment.hpp>
 
@@ -107,7 +110,7 @@ namespace actor_zeta { namespace environment {
             return env_->get_executor();
         }
 
-        bool supervisor_heavy::enqueue(messaging::message msg, executor::execution_device *) {
+        void supervisor_heavy::enqueue(messaging::message msg, executor::execution_device *) {
             auto tmp_address = storage_space_.current_layer(entry_point_);
             if (!tmp_address.empty()) {
                 tmp_address[cursor]->enqueue(std::move(msg));
@@ -115,9 +118,8 @@ namespace actor_zeta { namespace environment {
                 if (cursor >= tmp_address.size()) {
                     cursor = 0;
                 }
-                return true;
             }
-            return false;
+            assert(false);
         }
 
 }}

@@ -29,7 +29,7 @@ namespace actor_zeta { namespace environment {
 
             auto join(supervisor &) -> void override;
 
-            bool enqueue(messaging::message, executor::execution_device *) final;
+            void enqueue(messaging::message, executor::execution_device *) final;
 
             auto broadcast(messaging::message) -> bool override;
 

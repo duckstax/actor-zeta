@@ -24,9 +24,9 @@ namespace actor_zeta { namespace actor {
 
             explicit abstract_actor(detail::string_view);
 
-            auto enqueue(messaging::message) -> bool;
+            auto enqueue(messaging::message) -> void;
 
-            virtual bool enqueue(messaging::message, executor::execution_device *) = 0;
+            virtual void enqueue(messaging::message, executor::execution_device *) = 0;
 
             virtual auto message_types() const -> std::set<std::string> ;
 
@@ -36,6 +36,7 @@ namespace actor_zeta { namespace actor {
 
             auto name() const -> detail::string_view;
 
+        protected:
             metadata type_;
         };
 

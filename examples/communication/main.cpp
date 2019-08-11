@@ -81,7 +81,7 @@ int main() {
 
     auto env = make_environment<dummy_environment>(new dummy_executor);
 
-    auto*supervisor = env->supervisor<supervisor_heavy>(env.get());
+    auto*supervisor = env->supervisor<supervisor_heavy>(env.get(),"");
 
     auto storage = supervisor->join<storage_t>(supervisor);
 
@@ -89,7 +89,7 @@ int main() {
 
     actor_zeta::actor::link(storage,network);
 
-    auto*supervisor1 = env->supervisor<supervisor_heavy>(env.get());
+    auto*supervisor1 = env->supervisor<supervisor_heavy>(env.get(),"");
 
     supervisor->join(*supervisor1);
 

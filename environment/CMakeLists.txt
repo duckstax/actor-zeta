@@ -17,7 +17,6 @@ set(HEADER_FILES
         actor-zeta/detail/storage_space.hpp
 
         actor-zeta/environment.hpp
-        actor-zeta/network_environment.hpp
         actor-zeta/supervisor_heavy.hpp
 
 )
@@ -28,7 +27,7 @@ set(SOURCE_FILES
         source/environment.cpp
         source/supervisor_heavy.cpp
         source/storage_space.cpp
-        source/network_environment.cpp)
+        )
 
 add_library(
         ${PROJECT_NAME} OBJECT
