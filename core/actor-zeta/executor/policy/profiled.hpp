@@ -1,7 +1,7 @@
 #pragma once
 
 #include <actor-zeta/executor/executable.hpp>
-#include <actor-zeta/actor/async_actor.hpp>
+#include <actor-zeta/actor/cooperative_actor.hpp>
 
 namespace actor_zeta { namespace executor {
 
@@ -13,7 +13,7 @@ namespace actor_zeta { namespace executor {
         using executor_type = profiled_executor<profiled<Policy>>;
 
         static actor_id id_of(executable *job) {
-            auto ptr = static_cast<actor::async_actor *>(job);
+            auto ptr = static_cast<actor::cooperative_actor *>(job);
             return ptr != nullptr ? /*ptr->*/ 1 : 0;
         }
 

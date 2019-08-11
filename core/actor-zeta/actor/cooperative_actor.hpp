@@ -10,7 +10,7 @@ namespace actor_zeta { namespace actor {
 ///
 /// @brief Specialization of actor with scheduling functionality
 ///
-        class async_actor :
+        class cooperative_actor :
                 public executable_actor,
                 public executor::executable {
         public:
@@ -25,10 +25,10 @@ namespace actor_zeta { namespace actor {
 
             executor::executable_result run(executor::execution_device *, size_t max_throughput) final;
 
-            ~async_actor() override;
+            ~cooperative_actor() override;
 
         protected:
-            async_actor(supervisor *, mailbox_type*, detail::string_view);
+            cooperative_actor(supervisor *, mailbox_type*, detail::string_view);
 
             void intrusive_ptr_add_ref_impl() override;
 

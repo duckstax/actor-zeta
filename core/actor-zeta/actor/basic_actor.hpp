@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/actor/async_actor.hpp>
+#include <actor-zeta/actor/cooperative_actor.hpp>
 #include <actor-zeta/actor/actor.hpp>
 #include <actor-zeta/messaging/blocking_mail_queue.hpp>
 
@@ -11,7 +11,7 @@ namespace actor_zeta { namespace actor {
 ///
         template<
                 typename MailBox,
-                typename Actor = async_actor
+                typename Actor = cooperative_actor
         >
         class basic_actor : public Actor {
         public:
@@ -33,7 +33,7 @@ namespace actor_zeta { namespace actor {
 
         template<
                 typename MailBox,
-                typename Actor = async_actor
+                typename Actor = cooperative_actor
         >
         inline actor make_actor(supervisor *ptr, const std::string &name) {
             return new basic_actor<MailBox,Actor>(ptr,name);

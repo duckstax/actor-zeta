@@ -15,7 +15,7 @@ set(HEADER_FILES
         actor-zeta/actor/abstract_actor.hpp
         actor-zeta/actor/actor.hpp
         actor-zeta/actor/actor_address.hpp
-        actor-zeta/actor/async_actor.hpp
+        actor-zeta/actor/cooperative_actor.hpp
         actor-zeta/actor/base_actor.hpp
         actor-zeta/actor/basic_actor.hpp
         actor-zeta/actor/blocking_actor.hpp
@@ -56,7 +56,7 @@ set(SOURCE_FILES
         source/actor/abstract_actor.cpp
         source/actor/actor.cpp
         source/actor/actor_address.cpp
-        source/actor/async_actor.cpp
+        source/actor/cooperative_actor.cpp
         source/actor/blocking_actor.cpp
         source/actor/context.cpp
         source/actor/dispatcher.cpp
