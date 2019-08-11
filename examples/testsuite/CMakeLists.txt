@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(project actor-zeta-io)
+set(project testsuite)
 
 if (CMAKE_VERSION VERSION_LESS 3.0)
     PROJECT(${project} CXX)
@@ -12,10 +12,10 @@ endif()
 include_directories(.)
 
 set(HEADER_FILES
-        actor-zeta/network/multiplexer.hpp
-        actor-zeta/network/connection_identifying.hpp
-        actor-zeta/network/fake_multiplexer.hpp
-        actor-zeta/forwards.hpp
+        network/multiplexer.hpp
+        network/connection_identifying.hpp
+        network/fake_multiplexer.hpp
+        forwards.hpp
 )
 
 set(SOURCE_FILES
@@ -24,7 +24,7 @@ set(SOURCE_FILES
 )
 
 add_library(
-        ${PROJECT_NAME} OBJECT
+        ${PROJECT_NAME}
         ${SOURCE_FILES}
         ${HEADER_FILES}
 )
@@ -32,5 +32,5 @@ add_library(
 target_include_directories(
         ${PROJECT_NAME}
         PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/header
+        ${CMAKE_CURRENT_SOURCE_DIR}/network
 )

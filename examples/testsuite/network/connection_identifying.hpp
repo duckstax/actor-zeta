@@ -2,8 +2,7 @@
 
 #include <string>
 
-namespace actor_zeta {
-    namespace network {
+namespace actor_zeta { namespace network {
 ///
 /// @enum type_connect
 /// @brief

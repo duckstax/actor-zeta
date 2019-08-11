@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "actor-zeta/actor/actor_address.hpp"
-#include "actor-zeta/network/connection_identifying.hpp"
+#include <actor-zeta/actor/actor_address.hpp>
+#include <testsuite/network/connection_identifying.hpp>
 
 namespace actor_zeta { namespace network {
 ///

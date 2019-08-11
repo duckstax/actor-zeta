@@ -10,7 +10,7 @@
 #include <atomic>
 #include <functional>
 
-#include <actor-zeta/network/multiplexer.hpp>
+#include <testsuite/network/multiplexer.hpp>
 
 namespace actor_zeta { namespace network {
 

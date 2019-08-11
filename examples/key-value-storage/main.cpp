@@ -6,7 +6,7 @@
 #include <iostream>
 
 #include <actor-zeta/core.hpp>
-#include <actor-zeta/network/fake_multiplexer.hpp>
+#include <testsuite/network/fake_multiplexer.hpp>
 
 using actor_zeta::basic_async_actor;
 using actor_zeta::supervisor;

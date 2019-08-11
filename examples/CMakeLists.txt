@@ -1,3 +1,5 @@
+include_directories(.)
+add_subdirectory(testsuite)
 add_subdirectory(add_method)
 add_subdirectory(smart-send)
 add_subdirectory(local_start)
