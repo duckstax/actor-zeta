@@ -19,7 +19,7 @@ namespace actor_zeta { namespace environment {
 
             virtual std::size_t                   start()         = 0;
 
-            virtual executor::abstract_executor & get_executor()  = 0;
+            virtual executor::abstract_executor & executor()  = 0;
 
             actor::supervisor& manager_supervisor(detail::string_view name);
 

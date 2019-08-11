@@ -107,7 +107,7 @@ namespace actor_zeta { namespace environment {
         }
 
         auto supervisor_heavy::executor() noexcept -> executor::abstract_executor & {
-            return env_->get_executor();
+            return env_->executor();
         }
 
         void supervisor_heavy::enqueue(messaging::message msg, executor::execution_device *) {
