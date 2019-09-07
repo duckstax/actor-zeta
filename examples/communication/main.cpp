@@ -37,7 +37,7 @@ public:
         return 0;
     }
 
-    actor_zeta::abstract_executor &get_executor() override {
+    actor_zeta::abstract_executor &executor() override {
         return *e_;
     }
 
