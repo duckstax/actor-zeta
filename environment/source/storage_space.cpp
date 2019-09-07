@@ -8,7 +8,7 @@
 
 namespace actor_zeta { namespace detail {
 
-        using registry = detail::adjacency_list<detail::stored_vertex, detail::node>;
+        using registry = adjacency_list<stored_vertex, node>;
 
         class storage final {
         public:
