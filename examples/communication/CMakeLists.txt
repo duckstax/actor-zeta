@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(project key-value-storage)
+set(project communication)
 
 if (CMAKE_VERSION VERSION_LESS 3.0)
     PROJECT(${project} CXX)
@@ -9,10 +9,8 @@ else()
     PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
 endif()
 
-include_directories(.)
-
 set(SOURCE_FILES main.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-target_link_libraries(${PROJECT_NAME} actor-zeta testsuite)
+target_link_libraries(${PROJECT_NAME} actor-zeta)

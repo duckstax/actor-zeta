@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(project key-value-storage)
+set(project smart-send)
 
 if (CMAKE_VERSION VERSION_LESS 3.0)
     PROJECT(${project} CXX)
@@ -8,8 +8,6 @@ else()
     cmake_policy(SET CMP0048 NEW)
     PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
 endif()
-
-include_directories(.)
 
 set(SOURCE_FILES main.cpp)
 

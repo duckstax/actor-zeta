@@ -1,72 +1,48 @@
-#include <cstdio>
 #include <cassert>
 
 #include <map>
 #include <vector>
-#include <iostream>
-#include <iterator>
 
-#include <actor-zeta/actor/actor.hpp>
-#include <actor-zeta/messaging/message.hpp>
-#include <actor-zeta/actor/basic_actor.hpp>
+#include <actor-zeta/core.hpp>
 
-using actor_zeta::actor::make_handler;
-using actor_zeta::actor::context;
-using actor_zeta::messaging::make_message;
-using actor_zeta::environment::abstract_environment;
-using actor_zeta::actor::basic_async_actor;
+using actor_zeta::context;
+using actor_zeta::basic_async_actor;
 
 
 class storage_t final : public basic_async_actor {
 public:
-    storage_t(abstract_environment *ptr) : basic_async_actor(ptr, "storage") {
+    storage_t() : basic_async_actor(nullptr, "storage") {
         add_handler(
                 "update",
-                [](context & /*ctx*/) -> void {
-
-
-                }
-
+                [](context & /*ctx*/) -> void {}
         );
 
         add_handler(
-
                 "find",
-                [](context & /*ctx*/) -> void {
-
-                }
-
+                [](context & /*ctx*/) -> void {}
         );
 
         add_handler(
                 "remove",
-                [](context & /*ctx*/ ) -> void {
-
-                }
+                [](context & /*ctx*/ ) -> void {}
         );
     }
 
-
     ~storage_t() override = default;
-
-
-private:
-    std::unordered_map<std::string, std::string> storage_;
-
 };
 
 
 int main() {
 
-    auto *storage_tmp = new storage_t(nullptr);
+    auto *storage_tmp = new storage_t;
 
     actor_zeta::actor::actor storage(storage_tmp);
 
-    assert(std::string("storage") == storage->name());
+    assert(actor_zeta::detail::string_view("storage") == storage->name());
 
     auto tmp = storage->message_types();
 
-    std::set<std::string> control = {"add_channel", "skip", "sync_contacts", "update", "remove", "find"};
+    std::set<std::string> control = {"sync_contacts","add_link","remove_link", "update", "remove", "find"};
 
     std::set<std::string> diff;
 

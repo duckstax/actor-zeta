@@ -1,5 +1,8 @@
 #include <actor-zeta/executor/abstract_executor.hpp>
 
+#include <vector>
+
+#include <actor-zeta/executor/execution_device.hpp>
 
 namespace actor_zeta { namespace executor {
 
@@ -12,5 +15,26 @@ namespace actor_zeta { namespace executor {
             num_workers_(num_worker_threads){
 
         }
+
+        void cleanup_and_release(executable* ptr) {
+
+            class dummy_unit final : public execution_device {
+            public:
+                dummy_unit() = default;
+
+                void execute(executable *job) override {
+                    executables_.push_back(job);
+                }
+
+                std::vector<executable *> executables_;
+            };
+                dummy_unit dummy{};
+                while (!dummy.executables_.empty()) {
+                    dummy.executables_.pop_back();
+                }
+
+                intrusive_ptr_release(ptr);
+        }
+
 
 }}

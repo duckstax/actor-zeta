@@ -23,7 +23,7 @@ message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
 option(CMake_RUN_CLANG_TIDY "Run clang-tidy with the compiler." OFF)
 
-option(IO "Enable building actor-zeta-io" ON)
+option(ENV "Enable building actor-zeta-environment" ON)
 
 option(ALLOW_EXAMPLES "Enable building examples" OFF)
 
@@ -121,10 +121,10 @@ include_directories(core)
 add_subdirectory(core)
 list(APPEND OBJECT_LISTS "$<TARGET_OBJECTS:actor-zeta-core>")
 
-if(IO)
-    include_directories(io)
-    add_subdirectory(io)
-    list(APPEND OBJECT_LISTS "$<TARGET_OBJECTS:actor-zeta-io>")
+if(ENV)
+    include_directories(environment)
+    add_subdirectory(environment)
+    list(APPEND OBJECT_LISTS "$<TARGET_OBJECTS:actor-zeta-environment>")
 endif()
 
 find_package( Threads )
@@ -142,7 +142,7 @@ target_include_directories(
         ${PROJECT_NAME}
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/core/actor-zeta
-        ${CMAKE_CURRENT_SOURCE_DIR}/io/actor-zeta
+        ${CMAKE_CURRENT_SOURCE_DIR}/environment/actor-zeta
 )
 
 if(ALLOW_EXAMPLES)

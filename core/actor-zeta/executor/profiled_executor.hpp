@@ -7,7 +7,7 @@
 
 #include <actor-zeta/executor/policy/work_sharing.hpp>
 #include <actor-zeta/executor/policy/profiled.hpp>
-#include <actor-zeta/metadata.hpp>
+#include <actor-zeta/actor/metadata.hpp>
 
 
 namespace actor_zeta { namespace executor {
@@ -18,9 +18,9 @@ namespace actor_zeta { namespace executor {
 ///
 
         template <class Policy = profiled<work_sharing>>
-        class profiled_executor final : public executor<Policy> {
+        class profiled_executor final : public executor_t<Policy> {
         public:
-            using super = executor<Policy>;
+            using super = executor_t<Policy>;
             using clock_type = std::chrono::high_resolution_clock;
 
             using usec = std::chrono::microseconds;

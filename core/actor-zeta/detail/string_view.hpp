@@ -9,6 +9,13 @@
 
 namespace actor_zeta { namespace detail {
 /// Drop-in replacement for C++17 std::string_view.
+        namespace implementation {
+            template<typename CharT>
+            inline constexpr std::size_t length(const CharT *s, std::size_t result = 0) {
+                return *s == '\0' ? result : length(s + 1, result + 1);
+            }
+        }
+
         class string_view final {
         public:
             using value_type = char;
@@ -35,8 +42,20 @@ namespace actor_zeta { namespace detail {
 
             constexpr string_view(const char *cstr, size_t length) noexcept: data_(cstr), size_(length) {}
 
-            template<size_t N>
-            constexpr explicit string_view(const char (&cstr)[N]) noexcept: data_(cstr), size_(N - 1) {}
+#if defined(__GNUC__)
+            constexpr string_view(const char * cstr) noexcept
+                : data_(cstr)
+                , size_(implementation::length<char>(cstr))
+            {
+            }
+#else
+            template <size_t N>
+            constexpr string_view(const char (&cstr)[N]) noexcept
+                    : data_(cstr),
+                      size_(N - 1)
+            {
+            }
+#endif
 
             constexpr size_type size() const noexcept {
                 return size_;

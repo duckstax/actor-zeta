@@ -9,7 +9,7 @@
 namespace actor_zeta { namespace executor {
 
 template<class Policy>
-class executor;
+class executor_t;
 ///
 /// @brief
 /// @tparam Policy
@@ -18,7 +18,7 @@ class executor;
         class worker final : public execution_device {
         public:
             using job_ptr = executable *;
-            using executor_ptr = executor<Policy> *;
+            using executor_ptr = executor_t<Policy> *;
             using policy_data = typename Policy::worker_data;
 
             worker(size_t worker_id, executor_ptr worker_parent,
@@ -47,12 +47,12 @@ class executor;
             worker &operator=(const worker &) = delete;
 
             void external_enqueue(job_ptr job) {
-                ///assert(job != nullptr); TODO: do not check
+                assert(job != nullptr); /// TODO: do not check
                 policy_.external_enqueue(this, job);
             }
 
             void execute(job_ptr job) override {
-                ///assert(job != nullptr); TODO: do not check
+                assert(job != nullptr); /// TODO: do not check
                 policy_.internal_enqueue(this, job);
             }
 
@@ -81,7 +81,7 @@ class executor;
             void run() {
                 for (;;) {
                     auto job = policy_.dequeue(this);
-                    /// assert(job != nullptr); TODO: do not check
+                    assert(job != nullptr); /// TODO: do not check
                     policy_.before_resume(this, job);
                     auto res = job->run(this, max_throughput_);
                     policy_.after_resume(this, job);

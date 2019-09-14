@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+
+#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/detail/intrusive_ptr.hpp>
 #include <actor-zeta/forwards.hpp>
 
@@ -53,7 +55,7 @@ namespace actor_zeta { namespace actor {
                 return static_cast<bool>(ptr_);
             }
 
-            const std::string &name() const;
+           auto name() const -> detail::string_view;
 
             inline bool operator!() const noexcept {
                 return !ptr_;
@@ -65,6 +67,4 @@ namespace actor_zeta { namespace actor {
 
             intrusive_ptr <abstract_actor> ptr_;
         };
-    }
-
-}
+}}

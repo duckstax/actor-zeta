@@ -11,7 +11,6 @@ matrix:
     ##########################################################################
     # Clang on OSX
     ##########################################################################
-
     # XCode 7.3
     - os: osx
       osx_image: xcode7.3
@@ -64,6 +63,18 @@ matrix:
     ##########################################################################
     # GCC on Linux
     ##########################################################################
+
+    # GCC 4.8
+    - env: COMPILER=g++-4.8 BUILD_TYPE=Debug
+      addons: &gcc48
+        apt:
+          packages:
+            - g++-4.8
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - env: COMPILER=g++-4.8 BUILD_TYPE=Release
+      addons: *gcc48
 
     # GCC 4.9
     - env: COMPILER=g++-4.9 BUILD_TYPE=Debug

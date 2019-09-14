@@ -8,6 +8,7 @@
 #include <vector>
 
 #include <actor-zeta/executor/abstract_executor.hpp>
+#include <actor-zeta/executor/executable.hpp>
 #include <actor-zeta/executor/worker.hpp>
 
 namespace actor_zeta { namespace executor {
@@ -15,13 +16,13 @@ namespace actor_zeta { namespace executor {
 /// @tparam Policy
 ///
         template<class Policy>
-        class executor : public abstract_executor {
+        class executor_t : public abstract_executor {
         public:
             using job_ptr     = executable *;
             using policy_data = typename Policy::coordinator_data;
             using worker_type = worker<Policy>;
 
-            executor(size_t num_worker_threads, size_t max_throughput_param):
+            executor_t(size_t num_worker_threads, size_t max_throughput_param):
                 abstract_executor(num_worker_threads, max_throughput_param),
                 data_(this) {
             }
@@ -54,7 +55,69 @@ namespace actor_zeta { namespace executor {
             }
 
             void stop() override {
-                ///TODO: implement
+                /// shutdown workers
+                class shutdown_helper final
+                        : public executable
+                        , public ref_counted
+                        {
+                public:
+                    auto run(execution_device* ptr, size_t) -> executable_result override {
+                        assert(ptr != nullptr);
+                        {
+                            std::unique_lock<std::mutex> guard(mtx);
+                            last_worker = ptr;
+                            cv.notify_all();
+                            return executable_result::shutdown;
+                        }
+                    }
+
+                    void intrusive_ptr_add_ref_impl() override {
+                        intrusive_ptr_add_ref(this);
+                    }
+
+                    void intrusive_ptr_release_impl() override {
+                        intrusive_ptr_release(this);
+                    }
+
+                    shutdown_helper() : last_worker(nullptr) {}
+
+                    std::mutex mtx;
+                    std::condition_variable cv;
+                    execution_device* last_worker;
+                };
+
+                shutdown_helper sh;
+
+                std::set<worker_type*> alive_workers;
+
+                auto num = num_workers();
+
+                for (size_t i = 0; i < num; ++i) {
+                    alive_workers.insert(worker_by_id(i));
+                    sh.ref();
+                }
+
+                while (!alive_workers.empty()) {
+                    (*alive_workers.begin())->external_enqueue(&sh);
+
+                    { /// lifetime scope of guard
+                        std::unique_lock<std::mutex> guard(sh.mtx);
+                        sh.cv.wait(guard, [&] { return sh.last_worker != nullptr; });
+                    }
+
+                    alive_workers.erase(static_cast<worker_type*>(sh.last_worker));
+                    sh.last_worker = nullptr;
+                }
+
+                for (auto& w : workers_) {
+                    w->get_thread().join(); /// wait until all workers finish working
+                }
+
+                /// run cleanup code for each resumable
+                auto  f = cleanup_and_release;
+                for (auto& w : workers_)
+                    policy_.foreach_resumable(w.get(), f);
+                policy_.foreach_central_resumable(this, f);
             }
 
         private:
