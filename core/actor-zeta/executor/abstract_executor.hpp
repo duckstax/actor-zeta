@@ -43,4 +43,6 @@ namespace actor_zeta { namespace executor {
 
         };
 
+        void cleanup_and_release(executable* ptr);
+
 }}

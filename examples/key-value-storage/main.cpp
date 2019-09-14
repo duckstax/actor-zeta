@@ -135,6 +135,8 @@ private:
 /// request  :  action.parameter1.parameter2.parameterN. ....
 /// response :  action.parameter1.parameter2.parameterN. ....
 
+constexpr static const char* write = "write";
+
 class storage_t final : public basic_async_actor {
 public:
     explicit storage_t(supervisor_network*ptr): basic_async_actor(ptr,"storage"){
@@ -152,7 +154,7 @@ public:
                     actor_zeta::actor::send(
                             ctx.message().sender(),
                             actor_address(self),
-                            "write",
+                            write,
                             std::move(response)
                     );
                 }

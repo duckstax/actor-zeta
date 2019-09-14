@@ -47,12 +47,12 @@ class executor_t;
             worker &operator=(const worker &) = delete;
 
             void external_enqueue(job_ptr job) {
-                ///assert(job != nullptr); TODO: do not check
+                assert(job != nullptr); /// TODO: do not check
                 policy_.external_enqueue(this, job);
             }
 
             void execute(job_ptr job) override {
-                ///assert(job != nullptr); TODO: do not check
+                assert(job != nullptr); /// TODO: do not check
                 policy_.internal_enqueue(this, job);
             }
 
@@ -81,7 +81,7 @@ class executor_t;
             void run() {
                 for (;;) {
                     auto job = policy_.dequeue(this);
-                    /// assert(job != nullptr); TODO: do not check
+                    assert(job != nullptr); /// TODO: do not check
                     policy_.before_resume(this, job);
                     auto res = job->run(this, max_throughput_);
                     policy_.after_resume(this, job);

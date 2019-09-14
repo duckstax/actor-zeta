@@ -48,9 +48,7 @@ public:
             {
     }
 
-    ~supervisor_lite() final {
-        shutdown();
-    }
+    ~supervisor_lite() override = default;
 
     auto shutdown() noexcept -> void final {
         e_->stop();
@@ -142,6 +140,7 @@ struct work_data final {
 class worker_t final : public basic_async_actor {
 public:
     explicit worker_t(supervisor_lite *ptr) : basic_async_actor(ptr, "bot") {
+
         add_handler(
                 "download",
                 [](context & /*ctx*/, download_data &url) -> void {
@@ -158,11 +157,6 @@ public:
                     std::cerr << "operator_name : " << work_data.operator_name_ << std::endl;
                 }
         );
-
-        add_handler(
-                "action2",
-                [](context & /*ctx*/) -> void {}
-        );
     }
 
     ~worker_t() override = default;
@@ -171,22 +165,37 @@ private:
 
 };
 
-
 int main() {
 
-    std::unique_ptr<abstract_executor> thread_pool(new executor_t<work_sharing>(1, std::numeric_limits<std::size_t>::max()));
+    auto thread_pool_deleter = [&](abstract_executor* ptr){
+        ptr->stop();
+        delete ptr;
+    };
+
+    std::unique_ptr
+            <abstract_executor,
+            decltype(thread_pool_deleter)
+    > thread_pool(
+            new executor_t<work_sharing>(
+                    1,
+                    std::numeric_limits<std::size_t>::max()
+            ),
+            thread_pool_deleter
+    );
 
     std::unique_ptr<supervisor_lite> supervisor(new supervisor_lite(thread_pool.get()));
 
     supervisor->startup();
 
     int const actors = 10;
+
     for (auto i = actors - 1; i > 0; --i) {
         auto bot = supervisor->join<worker_t>(supervisor.get());
         actor_zeta::actor::link(supervisor, bot);
     }
 
     int const task = 10000;
+
     for (auto i = task - 1; i > 0; --i) {
         make_task<download_data>(*supervisor,"download", "fb", "jack","");
     }
