@@ -15,9 +15,9 @@ namespace actor_zeta { namespace environment {
 
         class abstract_environment {
         public:
-            virtual ~abstract_environment()                       = default;
+            virtual ~abstract_environment()                   = default;
 
-            virtual std::size_t                   start()         = 0;
+            virtual std::size_t                   start()     = 0;
 
             virtual executor::abstract_executor & executor()  = 0;
 
@@ -44,48 +44,9 @@ namespace actor_zeta { namespace environment {
 /// @brief An actors workplace platform 
 ///
 
-        class environment final {
-        public:
-            environment() = delete;
-
-            environment(const environment &) = delete;
-
-            environment &operator=(const environment &)= delete;
-
-            environment(environment &&) = default;
-
-            environment &operator=(environment &&)= default;
-
-            ~environment();
-
-            environment(abstract_environment *ptr);
-
-            template<class T>
-            environment &operator=(T *ptr) {
-                environment tmp{ptr};
-                swap(tmp);
-                return *this;
-            }
-
-            auto operator->() noexcept -> abstract_environment *;
-
-            auto get() noexcept  -> abstract_environment*;
-
-            explicit operator bool() const noexcept;
-
-            bool operator!() const noexcept;
-
-        private:
-
-            void swap(environment &) noexcept;
-
-            std::unique_ptr<abstract_environment> environment_;
-        };
-
-        template<typename Env, typename... Args>
-        inline auto make_environment(Args... args) -> environment {
+        template<class Env, typename... Args>
+        inline auto make_environment(Args... args) -> std::unique_ptr<abstract_environment> {
             return new Env(std::forward<Args>(args)...);
         }
 
-    } /// environment
-} /// actor_zeta
+}} /// environment /// actor_zeta

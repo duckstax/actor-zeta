@@ -33,10 +33,6 @@ namespace actor_zeta { namespace environment {
 
             auto broadcast(messaging::message) -> bool override;
 
-            auto shutdown() noexcept -> void override ;
-
-            auto startup() noexcept -> void override ;
-
             auto executor() noexcept -> executor::abstract_executor& final;
 
         protected:

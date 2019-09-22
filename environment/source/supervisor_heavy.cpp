@@ -98,14 +98,6 @@ namespace actor_zeta { namespace environment {
         {
         }
 
-        auto supervisor_heavy::shutdown() noexcept -> void {
-
-        }
-
-        auto supervisor_heavy::startup() noexcept -> void {
-
-        }
-
         auto supervisor_heavy::executor() noexcept -> executor::abstract_executor & {
             return env_->executor();
         }

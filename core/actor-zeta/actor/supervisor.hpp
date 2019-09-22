@@ -13,10 +13,6 @@ namespace actor_zeta { namespace actor {
 
         ~supervisor() override;
 
-        virtual auto shutdown() noexcept -> void = 0;
-
-        virtual auto startup() noexcept -> void = 0;
-
         virtual auto executor() noexcept -> executor::abstract_executor& = 0;
 
         virtual auto broadcast(message) -> bool = 0;

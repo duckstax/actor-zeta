@@ -18,7 +18,6 @@ set(HEADER_FILES
 
         actor-zeta/environment.hpp
         actor-zeta/supervisor_heavy.hpp
-
 )
 
 set(SOURCE_FILES
@@ -27,7 +26,7 @@ set(SOURCE_FILES
         source/environment.cpp
         source/supervisor_heavy.cpp
         source/storage_space.cpp
-        )
+)
 
 add_library(
         ${PROJECT_NAME} OBJECT
