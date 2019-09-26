@@ -24,7 +24,7 @@ namespace actor_zeta { namespace environment {
             actor::supervisor& manager_supervisor(detail::string_view name);
 
             template<typename Supervisor,typename... Args>
-            inline auto supervisor(Args... args) -> Supervisor* {
+            inline auto supervisor(Args&&... args) -> Supervisor* {
                 auto*supervisor = new Supervisor(std::forward<Args>(args)...);
                 create_supervisor(supervisor);
                 return supervisor;
