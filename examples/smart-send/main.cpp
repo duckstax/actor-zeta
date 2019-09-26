@@ -50,11 +50,11 @@ public:
 
     ~supervisor_lite() override = default;
 
-    auto shutdown() noexcept -> void final {
+    auto shutdown() noexcept -> void {
         e_->stop();
     }
 
-    auto startup() noexcept -> void final {
+    auto startup() noexcept -> void {
         e_->start();
     }
 
@@ -201,7 +201,7 @@ int main() {
     }
 
     for (auto i = task - 1; i > 0; --i) {
-        make_task_broadcast<download_data>(*supervisor,"download", "fb", "jack","");
+        make_task_broadcast<download_data>(*supervisor,"work_data", "fb", "jack","");
     }
 
     return 0;

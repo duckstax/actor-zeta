@@ -90,8 +90,8 @@ namespace actor_zeta { namespace environment {
             }
         }
 
-        supervisor_heavy::supervisor_heavy(abstract_environment*env,char const*name)
-            : supervisor(detail::string_view(name))
+        supervisor_heavy::supervisor_heavy(abstract_environment*env,detail::string_view name)
+            : supervisor(name)
             , cursor(0)
             , storage_space_(env->graph())
             , env_(env)
@@ -111,7 +111,6 @@ namespace actor_zeta { namespace environment {
                     cursor = 0;
                 }
             }
-            assert(false);
         }
 
 }}

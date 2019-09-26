@@ -15,7 +15,7 @@ namespace actor_zeta { namespace environment {
 ///
         class supervisor_heavy : public actor::supervisor {
         public:
-            explicit supervisor_heavy(abstract_environment*,char const*);
+            supervisor_heavy(abstract_environment*,detail::string_view);
 
             ~supervisor_heavy() override = default;
 
