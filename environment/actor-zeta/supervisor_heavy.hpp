@@ -13,6 +13,7 @@ namespace actor_zeta { namespace environment {
 ///
 /// @brief
 ///
+/*
         class supervisor_heavy : public actor::supervisor {
         public:
             supervisor_heavy(abstract_environment*,detail::string_view);
@@ -43,5 +44,5 @@ namespace actor_zeta { namespace environment {
             abstract_environment* env_;
 
         };
-
+*/
 }}

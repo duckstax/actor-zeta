@@ -32,7 +32,11 @@ namespace actor_zeta {
         return new actor::basic_actor<MailBox,Actor>(ptr,name);
     }
 
-    template<typename Actor, typename Supervisor, typename... Args>
+    template<
+            typename Actor,
+            typename Supervisor,
+            typename... Args
+    >
     inline auto make_actor(Supervisor* supervisor, Args... args) -> actor_zeta::actor::actor_address {
         return supervisor->join(new Actor(supervisor, std::forward<Args>(args)...));
     }
@@ -55,14 +59,31 @@ namespace actor_zeta {
         );
     }
 
-    inline void link_imp(const actor_address& a1,const actor_address& a2 ){
+    inline auto link_imp(actor_zeta::actor_address&a1,actor_zeta::actor_address&a2) -> void {
         send(a1,a2,"sync_contacts",a2);
         send(a2,a1,"sync_contacts",a1);
     }
 
-    template <typename Actor1, typename Actor2>
-    inline void link(Actor1&actor1,Actor2&actor2){
-        link_imp(actor1->address(),actor2->address());
+    inline auto link(basic_async_actor &actor1,basic_async_actor &actor2) -> void {
+        auto a1 = actor1.address();
+        auto a2 = actor2.address();
+        link_imp(a1,a2);
+    }
+
+    inline auto link(supervisor *actor1,supervisor *actor2) -> void {
+        auto a1 = actor1->address();
+        auto a2 = actor2->address();
+        link_imp(a1,a2);
+    }
+
+    inline auto link(supervisor *actor1,actor_address&actor2) -> void {
+        auto a1 = actor1->address();
+        auto a2 = actor2->address();
+        link_imp(a1,a2);
+    }
+
+    inline auto link(actor_address &actor1,actor_address&actor2) -> void {
+        link_imp(actor1,actor2);
     }
     
 }

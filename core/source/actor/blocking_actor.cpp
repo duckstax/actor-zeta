@@ -22,7 +22,7 @@ namespace actor_zeta { namespace actor {
             return executor::executable_result::done;
 
         }
-
+/*
         void blocking_actor::launch(executor::execution_device *e, bool hide) {
             attach(e);
             if (hide) {//TODO:???
@@ -32,7 +32,7 @@ namespace actor_zeta { namespace actor {
                 this->run(e,std::numeric_limits<std::size_t>::max());
             }
         }
-
+*/
         blocking_actor::blocking_actor(supervisor *env,mailbox_type* mail, detail::string_view type)
             : executable_actor(env, type)
             , mailbox_(mail)

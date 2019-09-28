@@ -14,6 +14,7 @@ using actor_zeta::basic_async_actor;
 using actor_zeta::abstract_executor;
 using actor_zeta::supervisor;
 using actor_zeta::context;
+using actor_zeta::make_actor;
 
 using actor_zeta::abstract_executor;
 using actor_zeta::executor_t;
@@ -23,7 +24,6 @@ using actor_zeta::message;
 using actor_zeta::make_message;
 
 using actor_zeta::environment::abstract_environment;
-using actor_zeta::environment::supervisor_heavy;
 using actor_zeta::environment::environment;
 using actor_zeta::environment::make_environment;
 
@@ -68,8 +68,6 @@ public:
 
         return true;
     }
-
-    auto join(supervisor &) -> void final {}
 
     using actor_zeta::actor::supervisor::join;
 
@@ -190,8 +188,8 @@ int main() {
     int const actors = 10;
 
     for (auto i = actors - 1; i > 0; --i) {
-        auto bot = supervisor->join<worker_t>(supervisor.get());
-        actor_zeta::actor::link(supervisor, bot);
+        auto bot = make_actor<worker_t>(supervisor.get());
+        actor_zeta::link(supervisor.get(), bot);
     }
 
     int const task = 10000;

@@ -6,7 +6,7 @@
 #include <actor-zeta/environment.hpp>
 
 namespace actor_zeta { namespace environment {
-
+/*
         void supervisor_heavy::join(supervisor &g) {
             address()->enqueue(
                     messaging::make_message(
@@ -42,6 +42,7 @@ namespace actor_zeta { namespace environment {
                 }
             }
             */
+/*
             auto index = storage_space_.add(t);
             storage_space_.create_link(entry_point_, index.first);
             return index.second;
@@ -71,6 +72,7 @@ namespace actor_zeta { namespace environment {
             );
             */
 
+            /*
             storage_space_.get(entry_point_)->enqueue(
                     messaging::make_message(
                             address,
@@ -112,5 +114,5 @@ namespace actor_zeta { namespace environment {
                 }
             }
         }
-
+*/
 }}

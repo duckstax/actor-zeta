@@ -48,8 +48,6 @@ int main() {
     send(storage,actor_zeta::actor::actor_address(),"update",std::string("payload"));
     send(storage,actor_zeta::actor::actor_address(),"find",std::string("payload"));
     send(storage,actor_zeta::actor::actor_address(),"remove",std::string("payload"));
-    
-    storage->launch(nullptr, false);
 
     return 0;
 }

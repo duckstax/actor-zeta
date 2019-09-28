@@ -75,8 +75,7 @@ namespace actor_zeta { namespace actor {
             } else if(env() != nullptr) {
                 env()->executor().execute(this);
             } else {
-                ///TODO: assert -> ?
-                assert(false);
+                while (run(nullptr, 1) != executor::executable_result::awaiting) {}
             }
 
         }
@@ -100,6 +99,7 @@ namespace actor_zeta { namespace actor {
         {
         }
 
+        /*
         void cooperative_actor::launch(executor::execution_device *e, bool hide) {
             attach(e);
 
@@ -114,6 +114,7 @@ namespace actor_zeta { namespace actor {
                 }
             }
         }
+        */
 
         bool cooperative_actor::has_next_message() {
             messaging::message msg_ptr = mailbox().get();

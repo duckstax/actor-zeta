@@ -19,9 +19,6 @@ namespace actor_zeta { namespace actor {
 
         virtual auto join(base_actor *t) -> actor_zeta::actor::actor_address = 0;
 
-        virtual auto join(supervisor &) -> void = 0;
     };
-
-    auto link(supervisor &g1, supervisor &g2) -> void;
 
 }}
