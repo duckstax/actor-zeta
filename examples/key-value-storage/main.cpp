@@ -96,11 +96,11 @@ public:
         multiplexer.new_tcp_listener(host, port, address() );
     }
 
-    auto shutdown() noexcept -> void final {
+    auto shutdown() noexcept -> void {
         e_->stop();
     }
 
-    auto startup() noexcept -> void final {
+    auto startup() noexcept -> void {
         e_->start();
     }
 
@@ -198,13 +198,13 @@ public:
 
 private:
     std::unordered_map<std::string,std::string> storage_;
-
 };
 
-int main() {
-    constexpr const std::size_t port =  5555;
+constexpr const std::size_t port =  5555;
 
-    constexpr const char * host = "localhost";
+constexpr const char * host = "localhost";
+
+int main() {
 
     std::unique_ptr<actor_zeta::network::fake_multiplexer> multiplexer(new actor_zeta::network::fake_multiplexer);
 

@@ -17,11 +17,10 @@ namespace actor_zeta { namespace actor {
         public:
             using actor_type = Actor;
 
-            template<std::size_t N>
             basic_actor(
                     supervisor *ptr,
-                    const char(&name)[N]
-            ): actor_type(ptr, new MailBox, detail::string_view(name)) {
+                    detail::string_view name
+            ): actor_type(ptr, new MailBox, name) {
 
             }
 
