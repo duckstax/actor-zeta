@@ -12,6 +12,7 @@ using actor_zeta::basic_async_actor;
 using actor_zeta::supervisor;
 using actor_zeta::context;
 using actor_zeta::actor_address;
+using actor_zeta::make_actor;
 
 using actor_zeta::executor_t;
 using actor_zeta::work_sharing;
@@ -72,7 +73,7 @@ public:
                     parsed_raw_request.erase(parsed_raw_request.begin());
                     query_.parameter = std::move(parsed_raw_request);
                     query_.id = query_raw.id;
-                    actor_zeta::actor::send(
+                    actor_zeta::send(
                             ctx->addresses(actor_zeta::detail::string_view("storage")),
                             actor_zeta::actor::actor_address(address()),
                             std::string(query_.commands),
@@ -96,11 +97,11 @@ public:
         multiplexer.new_tcp_listener(host, port, address() );
     }
 
-    auto shutdown() noexcept -> void final {
+    auto shutdown() noexcept -> void {
         e_->stop();
     }
 
-    auto startup() noexcept -> void final {
+    auto startup() noexcept -> void {
         e_->start();
     }
 
@@ -108,15 +109,13 @@ public:
 
     auto broadcast(actor_zeta::messaging::message) -> bool final  {return false;}
 
-    auto join(supervisor &) -> void final {}
-
     using actor_zeta::actor::supervisor::join;
 
     auto join(actor_zeta::actor::base_actor *t) -> actor_zeta::actor::actor_address final {
         actor_zeta::actor::actor tmp(t);
-        auto addres = tmp->address();
+        auto address = tmp->address();
         actors_.push_back(std::move(tmp));
-        return addres;
+        return address;
     }
 
     auto enqueue(actor_zeta::messaging::message msg,actor_zeta::executor::execution_device *) -> void final {
@@ -151,7 +150,7 @@ public:
                     response_t response;
                     response.r_ = std::to_string(status);
                     response.id = tmp.id;
-                    actor_zeta::actor::send(
+                    actor_zeta::send(
                             ctx.message().sender(),
                             actor_address(self),
                             write,
@@ -198,13 +197,13 @@ public:
 
 private:
     std::unordered_map<std::string,std::string> storage_;
-
 };
 
-int main() {
-    constexpr const std::size_t port =  5555;
+constexpr const std::size_t port =  5555;
 
-    constexpr const char * host = "localhost";
+constexpr const char * host = "localhost";
+
+int main() {
 
     std::unique_ptr<actor_zeta::network::fake_multiplexer> multiplexer(new actor_zeta::network::fake_multiplexer);
 
@@ -227,9 +226,9 @@ int main() {
 
     std::unique_ptr<supervisor_network>supervisor( new supervisor_network(*multiplexer,thread_pool.get()));
 
-    auto storage = supervisor->join<storage_t>(supervisor.get());
+    auto storage = make_actor<storage_t>(supervisor.get());
 
-    actor_zeta::actor::link(supervisor,storage);
+    actor_zeta::link(supervisor.get(),storage);
 
     supervisor->startup();
 

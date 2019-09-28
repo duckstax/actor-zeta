@@ -21,7 +21,8 @@ namespace actor_zeta { namespace actor {
 
             blocking_actor(supervisor*, mailbox_type*, detail::string_view);
             executor::executable_result run(executor::execution_device *, size_t) final;
-            void launch(executor::execution_device *,bool) final ;
+            ///TODO:
+            ///void launch(executor::execution_device *,bool) final ;
             ~blocking_actor() override;
 
             messaging::message next_message();

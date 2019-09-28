@@ -13,9 +13,10 @@ namespace actor_zeta { namespace environment {
 ///
 /// @brief
 ///
+/*
         class supervisor_heavy : public actor::supervisor {
         public:
-            explicit supervisor_heavy(abstract_environment*,char const*);
+            supervisor_heavy(abstract_environment*,detail::string_view);
 
             ~supervisor_heavy() override = default;
 
@@ -33,10 +34,6 @@ namespace actor_zeta { namespace environment {
 
             auto broadcast(messaging::message) -> bool override;
 
-            auto shutdown() noexcept -> void override ;
-
-            auto startup() noexcept -> void override ;
-
             auto executor() noexcept -> executor::abstract_executor& final;
 
         protected:
@@ -47,5 +44,5 @@ namespace actor_zeta { namespace environment {
             abstract_environment* env_;
 
         };
-
+*/
 }}

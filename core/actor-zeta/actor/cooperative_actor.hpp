@@ -21,7 +21,8 @@ namespace actor_zeta { namespace actor {
 
             void enqueue(messaging::message, executor::execution_device *) final;
 
-            void launch(executor::execution_device *, bool /*hide*/) final;
+            ///TODO:
+            //void launch(executor::execution_device *, bool /*hide*/) final;
 
             executor::executable_result run(executor::execution_device *, size_t max_throughput) final;
 

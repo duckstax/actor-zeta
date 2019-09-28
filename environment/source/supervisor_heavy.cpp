@@ -6,7 +6,7 @@
 #include <actor-zeta/environment.hpp>
 
 namespace actor_zeta { namespace environment {
-
+/*
         void supervisor_heavy::join(supervisor &g) {
             address()->enqueue(
                     messaging::make_message(
@@ -42,6 +42,7 @@ namespace actor_zeta { namespace environment {
                 }
             }
             */
+/*
             auto index = storage_space_.add(t);
             storage_space_.create_link(entry_point_, index.first);
             return index.second;
@@ -71,6 +72,7 @@ namespace actor_zeta { namespace environment {
             );
             */
 
+            /*
             storage_space_.get(entry_point_)->enqueue(
                     messaging::make_message(
                             address,
@@ -90,20 +92,12 @@ namespace actor_zeta { namespace environment {
             }
         }
 
-        supervisor_heavy::supervisor_heavy(abstract_environment*env,char const*name)
-            : supervisor(detail::string_view(name))
+        supervisor_heavy::supervisor_heavy(abstract_environment*env,detail::string_view name)
+            : supervisor(name)
             , cursor(0)
             , storage_space_(env->graph())
             , env_(env)
         {
-        }
-
-        auto supervisor_heavy::shutdown() noexcept -> void {
-
-        }
-
-        auto supervisor_heavy::startup() noexcept -> void {
-
         }
 
         auto supervisor_heavy::executor() noexcept -> executor::abstract_executor & {
@@ -119,7 +113,6 @@ namespace actor_zeta { namespace environment {
                     cursor = 0;
                 }
             }
-            assert(false);
         }
-
+*/
 }}

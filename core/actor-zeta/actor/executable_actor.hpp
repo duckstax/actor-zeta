@@ -7,7 +7,8 @@ namespace actor_zeta { namespace actor {
 
         class executable_actor : public base_actor  {
         public:
-            virtual void launch(executor::execution_device*, bool /*hide*/) = 0;
+            ///TODO:
+            ///virtual void launch(executor::execution_device*, bool /*hide*/) = 0;
 
             ~executable_actor() override ;
         protected:
