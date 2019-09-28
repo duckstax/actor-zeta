@@ -9,7 +9,7 @@ namespace actor_zeta { namespace actor {
 
     class supervisor : public base_actor {
     public:
-        explicit supervisor(detail::string_view);
+        supervisor(detail::string_view);
 
         ~supervisor() override;
 
@@ -18,11 +18,6 @@ namespace actor_zeta { namespace actor {
         virtual auto broadcast(message) -> bool = 0;
 
         virtual auto join(base_actor *t) -> actor_zeta::actor::actor_address = 0;
-
-        template<typename Actor, typename Supervisor, typename... Args>
-        inline auto join(Supervisor* supervisor, Args... args) -> actor_zeta::actor::actor_address {
-            return join(new Actor(supervisor, std::forward<Args>(args)...));
-        }
 
         virtual auto join(supervisor &) -> void = 0;
     };
