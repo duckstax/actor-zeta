@@ -5,8 +5,6 @@
 #include <unordered_set>
 
 #include <actor-zeta/core.hpp>
-#include <actor-zeta/environment.hpp>
-#include <actor-zeta/supervisor_heavy.hpp>
 
 using actor_zeta::basic_async_actor ;
 using actor_zeta::abstract_executor;
@@ -15,7 +13,6 @@ using actor_zeta::supervisor;
 
 using actor_zeta::environment::abstract_environment;
 using actor_zeta::environment::environment;
-using actor_zeta::environment::make_environment;
 using actor_zeta::make_actor;
 using actor_zeta::link;
 using actor_zeta::message;
@@ -31,23 +28,23 @@ public:
     void stop() override{}
 };
 
-class dummy_environment final : public abstract_environment {
+class dummy_environment final {
 public:
     explicit dummy_environment(actor_zeta::abstract_executor* ptr):e_(ptr){
 
     }
 
-    std::size_t start() override {
+    std::size_t start() {
         return 0;
     }
 
-    actor_zeta::abstract_executor &executor() override {
+    actor_zeta::abstract_executor &executor() {
         return *e_;
     }
 
     auto get_executor() noexcept -> actor_zeta::abstract_executor * { return e_.get(); }
 
-    ~dummy_environment() override = default;
+    ~dummy_environment() = default;
 
 protected:
     std::unique_ptr<actor_zeta::abstract_executor> e_;

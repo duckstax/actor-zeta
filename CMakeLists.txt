@@ -121,11 +121,6 @@ include_directories(core)
 add_subdirectory(core)
 list(APPEND OBJECT_LISTS "$<TARGET_OBJECTS:actor-zeta-core>")
 
-if(ENV)
-    include_directories(environment)
-    add_subdirectory(environment)
-    list(APPEND OBJECT_LISTS "$<TARGET_OBJECTS:actor-zeta-environment>")
-endif()
 
 find_package( Threads )
 

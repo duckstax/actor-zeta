@@ -25,14 +25,6 @@ namespace actor_zeta {
     using messaging::make_message;
 
     template<
-            typename MailBox,
-            typename Actor = actor::cooperative_actor
-    >
-    inline auto  make_actor(supervisor *ptr, const std::string &name) -> actor::actor {
-        return new actor::basic_actor<MailBox,Actor>(ptr,name);
-    }
-
-    template<
             typename Actor,
             typename Supervisor,
             typename... Args
@@ -41,8 +33,8 @@ namespace actor_zeta {
         return supervisor->join(new Actor(supervisor, std::forward<Args>(args)...));
     }
 
-    template<typename Actor,typename... Args>
-    inline void send(Actor&a1,Args... args){
+    template<typename Actor, typename... Args>
+    inline void send(Actor& a1, Args... args) {
         a1->enqueue(
                 messaging::make_message(
                         std::forward<Args>(args)...
@@ -50,8 +42,8 @@ namespace actor_zeta {
         );
     }
 
-    template<typename Actor,typename... Args>
-    inline void send(const Actor&a1,Args... args){
+    template<typename Actor, typename... Args>
+    inline void send(const Actor& a1, Args... args) {
         a1->enqueue(
                 messaging::make_message(
                         std::forward<Args>(args)...
@@ -59,30 +51,35 @@ namespace actor_zeta {
         );
     }
 
-    inline auto link_imp(actor_zeta::actor_address&a1,actor_zeta::actor_address&a2) -> void {
+    template<class Sender>
+    inline void send(const Sender& actor, message msg) {
+        actor->enqueue(std::move(msg));
+    }
+
+    inline void link_imp(actor_zeta::actor_address& a1,actor_zeta::actor_address& a2) {
         send(a1,a2,"sync_contacts",a2);
         send(a2,a1,"sync_contacts",a1);
     }
 
-    inline auto link(basic_async_actor &actor1,basic_async_actor &actor2) -> void {
+    inline void link(basic_async_actor& actor1,basic_async_actor& actor2) {
         auto a1 = actor1.address();
         auto a2 = actor2.address();
         link_imp(a1,a2);
     }
 
-    inline auto link(supervisor *actor1,supervisor *actor2) -> void {
+    inline void link(supervisor* actor1,supervisor* actor2) {
         auto a1 = actor1->address();
         auto a2 = actor2->address();
         link_imp(a1,a2);
     }
 
-    inline auto link(supervisor *actor1,actor_address&actor2) -> void {
+    inline void link(supervisor* actor1,actor_address& actor2) {
         auto a1 = actor1->address();
         auto a2 = actor2->address();
         link_imp(a1,a2);
     }
 
-    inline auto link(actor_address &actor1,actor_address&actor2) -> void {
+    inline void link(actor_address &actor1,actor_address&actor2) {
         link_imp(actor1,actor2);
     }
     

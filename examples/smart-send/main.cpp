@@ -7,8 +7,6 @@
 #include <memory>
 
 #include <actor-zeta/core.hpp>
-#include <actor-zeta/environment.hpp>
-#include <actor-zeta/supervisor_heavy.hpp>
 
 using actor_zeta::basic_async_actor;
 using actor_zeta::abstract_executor;
@@ -23,9 +21,6 @@ using actor_zeta::work_sharing;
 using actor_zeta::message;
 using actor_zeta::make_message;
 
-using actor_zeta::environment::abstract_environment;
-using actor_zeta::environment::environment;
-using actor_zeta::environment::make_environment;
 
 template<typename Task, typename ...Args>
 inline auto make_task(supervisor&executor_,const std::string &command, Args... args ) -> void {
