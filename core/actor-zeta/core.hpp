@@ -33,8 +33,8 @@ namespace actor_zeta {
         return supervisor->join(new Actor(supervisor, std::forward<Args>(args)...));
     }
 
-    template<typename Actor, typename... Args>
-    inline void send(Actor& a1, Args... args) {
+    template<typename Sender, typename... Args>
+    inline void send(Sender& a1, Args... args) {
         a1->enqueue(
                 messaging::make_message(
                         std::forward<Args>(args)...
@@ -42,8 +42,8 @@ namespace actor_zeta {
         );
     }
 
-    template<typename Actor, typename... Args>
-    inline void send(const Actor& a1, Args... args) {
+    template<typename Sender, typename... Args>
+    inline void send(const Sender& a1, Args... args) {
         a1->enqueue(
                 messaging::make_message(
                         std::forward<Args>(args)...
@@ -53,6 +53,11 @@ namespace actor_zeta {
 
     template<class Sender>
     inline void send(const Sender& actor, message msg) {
+        actor->enqueue(std::move(msg));
+    }
+
+    template<class Sender>
+    inline void send(Sender& actor, message msg) {
         actor->enqueue(std::move(msg));
     }
 
