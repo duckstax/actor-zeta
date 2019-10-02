@@ -156,7 +156,7 @@ int main() {
 
     std::unique_ptr<dummy_environment> env(new dummy_environment(new dummy_executor));
 
-    auto*supervisor = env->supervisor<supervisor_lite>(env.get());
+    auto*supervisor = new supervisor_lite(env.get());
 
     auto storage = make_actor<storage_t>(supervisor);
 
@@ -164,7 +164,7 @@ int main() {
 
     actor_zeta::link(storage,network);
 
-    auto*supervisor1 = env->supervisor<supervisor_lite>(env.get());
+    auto*supervisor1 = new supervisor_lite(env.get());
 
     actor_zeta::link(supervisor,supervisor1);
 
