@@ -29,7 +29,7 @@ namespace actor_zeta {
             typename Supervisor,
             typename... Args
     >
-    inline auto make_actor(Supervisor* supervisor, Args... args) -> actor_zeta::actor::actor_address {
+    inline auto make_actor(Supervisor* supervisor, Args&&... args) -> actor_zeta::actor::actor_address {
         return supervisor->join(new Actor(supervisor, std::forward<Args>(args)...));
     }
 
