@@ -16,12 +16,12 @@ namespace actor_zeta { namespace actor {
 
             auto attach() const -> executor::execution_device* ;
 
-            auto env() -> supervisor* ;
+            auto env() -> supervisor& ;
 
-            executable_actor(supervisor *, detail::string_view);
+            executable_actor(supervisor &, detail::string_view);
 
         private:
-            supervisor* supervisor_;
+            supervisor& supervisor_;
             executor::execution_device *executor_;
 
         };

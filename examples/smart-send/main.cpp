@@ -132,7 +132,7 @@ struct work_data final {
 
 class worker_t final : public basic_async_actor {
 public:
-    explicit worker_t(supervisor_lite *ptr) : basic_async_actor(ptr, "bot") {
+    explicit worker_t(supervisor_lite &ref) : basic_async_actor(ref, "bot") {
 
         add_handler(
                 "download",
@@ -183,8 +183,8 @@ int main() {
     int const actors = 10;
 
     for (auto i = actors - 1; i > 0; --i) {
-        auto bot = make_actor<worker_t>(supervisor.get());
-        actor_zeta::link(supervisor.get(), bot);
+        auto bot = make_actor<worker_t>(*supervisor);
+        actor_zeta::link(*supervisor, bot);
     }
 
     int const task = 10000;

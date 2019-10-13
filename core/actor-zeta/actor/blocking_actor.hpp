@@ -19,7 +19,7 @@ namespace actor_zeta { namespace actor {
 
             using mailbox_type = messaging::mail_box;
 
-            blocking_actor(supervisor*, mailbox_type*, detail::string_view);
+            blocking_actor(supervisor&, mailbox_type*, detail::string_view);
             executor::executable_result run(executor::execution_device *, size_t) final;
             ///TODO:
             ///void launch(executor::execution_device *,bool) final ;

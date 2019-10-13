@@ -3,7 +3,7 @@
 namespace actor_zeta { namespace actor {
 
         executable_actor::executable_actor(
-                supervisor *env,
+                supervisor &env,
                 detail::string_view name
         )
                 : base_actor(name)
@@ -25,7 +25,7 @@ namespace actor_zeta { namespace actor {
             }
         }
 
-        auto executable_actor::env() -> supervisor * {
+        auto executable_actor::env() -> supervisor & {
             return supervisor_;
         }
         

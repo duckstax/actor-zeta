@@ -28,33 +28,11 @@ public:
     void stop() override{}
 };
 
-class dummy_environment final {
-public:
-    explicit dummy_environment(actor_zeta::abstract_executor* ptr):e_(ptr){
-
-    }
-
-    std::size_t start() {
-        return 0;
-    }
-
-    actor_zeta::abstract_executor &executor() {
-        return *e_;
-    }
-
-    auto get_executor() noexcept -> actor_zeta::abstract_executor * { return e_.get(); }
-
-    ~dummy_environment() = default;
-
-protected:
-    std::unique_ptr<actor_zeta::abstract_executor> e_;
-};
-
 class supervisor_lite final : public supervisor {
 public:
-    explicit supervisor_lite(dummy_environment *ptr)
+    explicit supervisor_lite(dummy_executor *ptr)
             : supervisor("network")
-            , e_(ptr->get_executor())
+            , e_(ptr)
             , cursor(0)
             , system_{"sync_contacts", "add_link", "remove_link"}
     {
@@ -80,8 +58,6 @@ public:
 
         return true;
     }
-
-    using actor_zeta::actor::supervisor::join;
 
     auto join(actor_zeta::actor::base_actor *t) -> actor_zeta::actor::actor_address final {
         actor_zeta::actor::actor tmp(t);
@@ -124,7 +100,7 @@ private:
 
 class storage_t final : public basic_async_actor {
 public:
-    explicit storage_t(supervisor_lite*ptr) : basic_async_actor(ptr, "storage") {
+    explicit storage_t(supervisor_lite&ref) : basic_async_actor(ref, "storage") {
         add_handler(
                 "update",
                 [](context & /*ctx*/) -> void {}
@@ -149,28 +125,26 @@ class network_t final : public basic_async_actor {
 public:
     ~network_t() override = default;
 
-    explicit network_t(supervisor_lite *ptr) : basic_async_actor(ptr, "network") {}
+    explicit network_t(supervisor_lite &ref) : basic_async_actor(ref, "network") {}
 };
 
 int main() {
 
-    std::unique_ptr<dummy_environment> env(new dummy_environment(new dummy_executor));
+    auto*supervisor = new supervisor_lite(new dummy_executor);
 
-    auto*supervisor = new supervisor_lite(env.get());
+    auto storage = make_actor<storage_t>(*supervisor);
 
-    auto storage = make_actor<storage_t>(supervisor);
-
-    auto network = make_actor<network_t>(supervisor);
+    auto network = make_actor<network_t>(*supervisor);
 
     actor_zeta::link(storage,network);
 
-    auto*supervisor1 = new supervisor_lite(env.get());
+    auto*supervisor1 = new supervisor_lite(new dummy_executor);
 
     actor_zeta::link(supervisor,supervisor1);
 
-    auto storage1 = make_actor<storage_t>(supervisor1);
+    auto storage1 = make_actor<storage_t>(*supervisor1);
 
-    auto network1 = make_actor<network_t>(supervisor1);
+    auto network1 = make_actor<network_t>(*supervisor1);
 
     actor_zeta::link(storage1,network1);
 
