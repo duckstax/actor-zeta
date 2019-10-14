@@ -32,12 +32,22 @@ inline auto make_task_broadcast(supervisor&executor_,const std::string &command,
     executor_.broadcast(std::move(make_message(executor_.address(), command, std::move(Task(std::forward<Args>(args)...)))));
 }
 
+auto thread_pool_deleter = [](abstract_executor* ptr){
+    ptr->stop();
+    delete ptr;
+};
+
 /// non thread safe
 class supervisor_lite final : public supervisor {
 public:
-    explicit supervisor_lite(abstract_executor *ptr)
+    explicit supervisor_lite()
             : supervisor(actor_zeta::detail::string_view("network"))
-            , e_(ptr)
+            , e_(new executor_t<work_sharing>(
+                    1,
+                    std::numeric_limits<std::size_t>::max()
+                 ),
+                 thread_pool_deleter
+            )
             , cursor(0)
             , system_{"sync_contacts", "add_link", "remove_link"}
             {
@@ -100,8 +110,8 @@ private:
         //assert(false);
     }
 
-    abstract_executor *e_;
-    std::vector<actor_zeta::actor::actor> actors_;
+    std::unique_ptr<abstract_executor,decltype(thread_pool_deleter)> e_;
+    std::vector<actor_zeta::actor> actors_;
     std::size_t cursor;
     std::unordered_set<actor_zeta::detail::string_view> system_;
 };
@@ -160,23 +170,7 @@ private:
 
 int main() {
 
-    auto thread_pool_deleter = [&](abstract_executor* ptr){
-        ptr->stop();
-        delete ptr;
-    };
-
-    std::unique_ptr
-            <abstract_executor,
-            decltype(thread_pool_deleter)
-    > thread_pool(
-            new executor_t<work_sharing>(
-                    1,
-                    std::numeric_limits<std::size_t>::max()
-            ),
-            thread_pool_deleter
-    );
-
-    std::unique_ptr<supervisor_lite> supervisor(new supervisor_lite(thread_pool.get()));
+    actor_zeta::intrusive_ptr<supervisor_lite> supervisor(new supervisor_lite());
 
     supervisor->startup();
 
