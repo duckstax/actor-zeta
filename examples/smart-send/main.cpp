@@ -111,7 +111,7 @@ private:
     }
 
     std::unique_ptr<abstract_executor,decltype(thread_pool_deleter)> e_;
-    std::vector<actor_zeta::actor> actors_;
+    std::vector<actor_zeta::actor::actor> actors_;
     std::size_t cursor;
     std::unordered_set<actor_zeta::detail::string_view> system_;
 };
