@@ -138,7 +138,7 @@ constexpr static const char* write = "write";
 
 class storage_t final : public basic_async_actor {
 public:
-    explicit storage_t(supervisor_network*ptr): basic_async_actor(ptr,"storage"){
+    explicit storage_t(supervisor_network&ref): basic_async_actor(ref,"storage"){
         auto* self = this;
         add_handler(
                 "update",
@@ -226,9 +226,9 @@ int main() {
 
     std::unique_ptr<supervisor_network>supervisor( new supervisor_network(*multiplexer,thread_pool.get()));
 
-    auto storage = make_actor<storage_t>(supervisor.get());
+    auto storage = make_actor<storage_t>(*supervisor);
 
-    actor_zeta::link(supervisor.get(),storage);
+    actor_zeta::link(*supervisor,storage);
 
     supervisor->startup();
 

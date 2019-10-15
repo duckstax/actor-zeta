@@ -1,17 +1,41 @@
 #include <cassert>
 
-#include <map>
-#include <vector>
+#include <set>
+#include <string>
 
 #include <actor-zeta/core.hpp>
 
 using actor_zeta::context;
 using actor_zeta::basic_async_actor;
+using actor_zeta::supervisor;
+using actor_zeta::message;
+using actor_zeta::execution_device;
 
+class dummy_supervisor final : public supervisor {
+public:
+    dummy_supervisor(): supervisor("dummy_supervisor"){}
+
+    auto executor() noexcept -> actor_zeta::abstract_executor& override  {
+        return *ptr_;
+    }
+
+    auto broadcast(message) -> bool override {
+        return true;
+    }
+
+    auto join(base_actor *) -> actor_zeta::actor::actor_address override {
+        return actor_zeta::actor_address();
+    }
+
+    void enqueue(message, execution_device *) override {}
+
+private:
+    actor_zeta::abstract_executor*ptr_ = nullptr;
+};
 
 class storage_t final : public basic_async_actor {
 public:
-    storage_t() : basic_async_actor(nullptr, "storage") {
+    storage_t(dummy_supervisor&ref) : basic_async_actor(ref, "storage") {
         add_handler(
                 "update",
                 [](context & /*ctx*/) -> void {}
@@ -34,7 +58,9 @@ public:
 
 int main() {
 
-    auto *storage_tmp = new storage_t;
+    auto * supervisor = new dummy_supervisor;
+
+    auto *storage_tmp = new storage_t(*supervisor);
 
     actor_zeta::actor::actor storage(storage_tmp);
 

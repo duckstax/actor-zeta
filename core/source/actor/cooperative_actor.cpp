@@ -72,10 +72,8 @@ namespace actor_zeta { namespace actor {
             if (e != nullptr) {
                 attach(e);
                 attach()->execute(this);
-            } else if(env() != nullptr) {
-                env()->executor().execute(this);
             } else {
-                while (run(nullptr, 1) != executor::executable_result::awaiting) {}
+                env().executor().execute(this);
             }
 
         }
@@ -90,7 +88,7 @@ namespace actor_zeta { namespace actor {
         }
 
         cooperative_actor::cooperative_actor(
-                  supervisor *env
+                  supervisor &env
                 , mailbox_type* mail_ptr
                 , detail::string_view name
         )

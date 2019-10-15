@@ -20,6 +20,7 @@ namespace actor_zeta {
     using executor::work_sharing;
     using executor::abstract_executor;
     using executor::executable;
+    using executor::execution_device;
 
     using messaging::message;
     using messaging::make_message;
@@ -29,8 +30,8 @@ namespace actor_zeta {
             typename Supervisor,
             typename... Args
     >
-    inline auto make_actor(Supervisor* supervisor, Args&&... args) -> actor_zeta::actor::actor_address {
-        return supervisor->join(new Actor(supervisor, std::forward<Args>(args)...));
+    inline auto make_actor(Supervisor& supervisor, Args&&... args) -> actor_zeta::actor::actor_address {
+        return supervisor.join(new Actor(supervisor, std::forward<Args>(args)...));
     }
 
     template<typename Sender, typename... Args>
@@ -78,8 +79,8 @@ namespace actor_zeta {
         link_imp(a1,a2);
     }
 
-    inline void link(supervisor* actor1,actor_address& actor2) {
-        auto a1 = actor1->address();
+    inline void link(supervisor& actor1,actor_address& actor2) {
+        auto a1 = actor1.address();
         auto a2 = actor2->address();
         link_imp(a1,a2);
     }
