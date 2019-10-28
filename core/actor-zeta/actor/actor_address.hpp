@@ -1,7 +1,6 @@
 #pragma once
 
 #include <actor-zeta/detail/intrusive_ptr.hpp>
-#include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace actor {
@@ -20,24 +19,18 @@ namespace actor_zeta { namespace actor {
 
             actor_address &operator=(const actor_address &) = default;
 
-            explicit actor_address(abstract_actor *aa);
+            explicit actor_address(message_passing_interface *);
 
             ~actor_address();
 
-            inline abstract_actor *operator->() const noexcept {
-                return ptr_.get();
-            }
+            message_passing_interface *operator->() const noexcept;
 
-            inline explicit operator bool() const noexcept {
-                return static_cast<bool>(ptr_);
-            }
+            explicit operator bool() const noexcept;
 
-            inline bool operator!() const noexcept {
-                return !ptr_;
-            }
+            bool operator!() const noexcept;
 
         private:
-            intrusive_ptr<abstract_actor> ptr_;
+            intrusive_ptr<message_passing_interface> ptr_;
         };
 
 }}

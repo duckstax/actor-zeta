@@ -3,8 +3,8 @@
 #include <memory>
 #include <stack>
 
+#include <actor-zeta/forwards.hpp>
 #include <actor-zeta/messaging/message.hpp>
-#include <actor-zeta/actor/actor_address.hpp>
 
 namespace actor_zeta { namespace actor {
 
@@ -28,11 +28,11 @@ namespace actor_zeta { namespace actor {
 
     context() = default;
 
-    context(context_t* ptr, messaging::message&&);
+    context(context_t* ptr, messaging::message);
 
     ~context();
 
-    messaging::message& message();
+    messaging::message message();
 
     const messaging::message& message() const;
 

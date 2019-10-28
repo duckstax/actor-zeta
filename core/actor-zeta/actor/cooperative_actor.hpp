@@ -17,7 +17,7 @@ namespace actor_zeta { namespace actor {
 
             using mailbox_type = messaging::mail_box;
 
-            using abstract_actor::enqueue;
+            using message_passing_interface::enqueue;
 
             void enqueue(messaging::message, executor::execution_device *) final;
 

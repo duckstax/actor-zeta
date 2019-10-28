@@ -1,18 +1,14 @@
 #pragma once
 
-#include <set>
-
-#include <actor-zeta/detail/ref_counted.hpp>
-#include <actor-zeta/actor/metadata.hpp>
+#include <actor-zeta/actor/message_passing_interface.hpp>
 #include <actor-zeta/forwards.hpp>
-#include <actor-zeta/detail/string_view.hpp>
 
 namespace actor_zeta { namespace actor {
 ///
 /// @brief Abstract concept of an actor
 ///
 
-        class abstract_actor : public ref_counted {
+        class abstract_actor : public message_passing_interface  {
         public:
             abstract_actor()= delete;
 
@@ -24,20 +20,15 @@ namespace actor_zeta { namespace actor {
 
             explicit abstract_actor(detail::string_view);
 
-            auto enqueue(messaging::message) -> void;
-
-            virtual void enqueue(messaging::message, executor::execution_device *) = 0;
-
-            virtual auto message_types() const -> std::set<std::string> ;
-
-            actor_address address() const noexcept;
-
-            auto type() const -> abstract;
-
-            auto name() const -> detail::string_view;
+            /// sync -> async
+            void add_link(actor_address);
+            /// sync -> async
+            void remove_link(const actor_address&);
+            /// sync -> async
+            void remove_link(detail::string_view);
 
         protected:
-            metadata type_;
+            void initialize();
         };
 
 }}

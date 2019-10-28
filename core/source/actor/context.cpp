@@ -25,14 +25,14 @@ namespace actor_zeta { namespace actor {
             return *ptr.get();
         }
 
-        context::context(context_t *ptr, messaging::message &&msg) :
+        context::context(context_t *ptr, messaging::message msg) :
                 ptr(ptr),
                 msg(std::move(msg)) {
 
         }
 
-        messaging::message& context::message() {
-            return msg; /// TODO hack
+        messaging::message context::message() {
+            return std::move(msg);
         }
 
         const messaging::message &context::message() const {

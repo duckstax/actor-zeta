@@ -6,9 +6,8 @@ namespace actor_zeta { namespace actor {
                 supervisor &env,
                 detail::string_view name
         )
-                : base_actor(name)
+                : abstract_actor(name)
                 , supervisor_(env){
-            type_.type = abstract::actor;
         }
 
         executable_actor::~executable_actor() {

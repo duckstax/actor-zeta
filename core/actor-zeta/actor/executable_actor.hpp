@@ -1,11 +1,13 @@
 #pragma once
 
-#include <actor-zeta/actor/base_actor.hpp>
+#include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/detail/string_view.hpp>
 
 namespace actor_zeta { namespace actor {
 
-        class executable_actor : public base_actor  {
+        class executable_actor
+                : public abstract_actor
+                , public context_t {
         public:
             ///TODO:
             ///virtual void launch(executor::execution_device*, bool /*hide*/) = 0;

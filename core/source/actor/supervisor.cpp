@@ -2,9 +2,7 @@
 
 namespace actor_zeta { namespace actor {
 
-        supervisor::supervisor(detail::string_view name):base_actor(name) {
-            type_.type = abstract::supervisor;
-        }
+        supervisor::supervisor(detail::string_view name):message_passing_interface(name,abstract::supervisor){}
 
         supervisor::~supervisor() {}
 
