@@ -1,5 +1,4 @@
 #include <actor-zeta/actor/actor_address.hpp>
-#include <actor-zeta/actor/message_passing_interface.hpp>
 
 namespace actor_zeta { namespace actor {
 
@@ -19,4 +18,4 @@ namespace actor_zeta { namespace actor {
             return !ptr_;
         }
 
-    }}
+}}

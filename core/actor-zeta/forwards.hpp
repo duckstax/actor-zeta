@@ -15,6 +15,7 @@ namespace actor_zeta {
         struct context_t;
         class supervisor;
         class message_passing_interface;
+        class dispatcher_t;
     }
 
     namespace environment {
