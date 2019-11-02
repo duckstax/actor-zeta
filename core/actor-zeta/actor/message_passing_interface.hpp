@@ -3,6 +3,7 @@
 #include <set>
 #include <unordered_map>
 
+#include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/actor/metadata.hpp>
 #include <actor-zeta/actor/dispatcher.hpp>

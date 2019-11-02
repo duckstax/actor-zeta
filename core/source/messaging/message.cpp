@@ -1,10 +1,8 @@
-#include <actor-zeta/messaging/message.hpp>
-
 #include <utility>
 
-#include <actor-zeta/messaging/message_header.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
-
+#include <actor-zeta/messaging/message_header.hpp>
+#include <actor-zeta/messaging/message.hpp>
 
 
 namespace actor_zeta { namespace messaging {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <actor-zeta/actor/message_passing_interface.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <actor-zeta/actor/message_passing_interface.hpp>
 
 namespace actor_zeta { namespace actor {
 ///

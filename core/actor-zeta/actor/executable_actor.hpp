@@ -2,12 +2,13 @@
 
 #include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/detail/string_view.hpp>
+#include <actor-zeta/actor/context.hpp>
 
 namespace actor_zeta { namespace actor {
 
         class executable_actor
                 : public abstract_actor
-                , public context_t {
+                , public context {
         public:
             ///TODO:
             ///virtual void launch(executor::execution_device*, bool /*hide*/) = 0;

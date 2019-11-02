@@ -4,7 +4,7 @@
 #include <stack>
 
 #include <actor-zeta/forwards.hpp>
-#include <actor-zeta/messaging/message.hpp>
+#include <actor-zeta/detail/string_view.hpp>
 
 namespace actor_zeta { namespace actor {
 
@@ -12,44 +12,17 @@ namespace actor_zeta { namespace actor {
 /// @brief
 ///
 
-  struct context_t {
+  struct context {
 
-    virtual ~context_t() = default;
+    virtual ~context() = default;
 
     virtual auto addresses(detail::string_view) -> actor_address&  = 0;
 
     virtual auto self() -> actor_address                           = 0;
 
+    virtual auto message() -> messaging::message& = 0;
+
   };
-  
-
-  class context final {
-  public:
-
-    context() = default;
-
-    context(context_t* ptr, messaging::message);
-
-    ~context();
-
-    messaging::message message();
-
-    const messaging::message& message() const;
-
-    auto operator ->() noexcept -> context_t*;
-
-    auto operator ->() const noexcept -> context_t*;
-
-    auto operator *() noexcept -> context_t&;
-
-    auto operator *() const noexcept -> context_t&;
-
-  private:
-    std::unique_ptr<context_t> ptr;
-    messaging::message msg;
-  };
-
-
 
 } // namespace behavior
 } // namespace actor_zeta

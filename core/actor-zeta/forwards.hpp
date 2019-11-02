@@ -4,6 +4,7 @@ namespace actor_zeta {
 
     namespace messaging {
         class message;
+        class message_header;
     }
 
     namespace actor {
@@ -11,8 +12,7 @@ namespace actor_zeta {
         class  actor;
         class  actor_address;
         class  handler;
-        class  context;
-        struct context_t;
+        struct context;
         class supervisor;
         class message_passing_interface;
         class dispatcher_t;

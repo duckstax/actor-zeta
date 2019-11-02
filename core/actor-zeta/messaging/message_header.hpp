@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/string_view.hpp>
 
 namespace actor_zeta { namespace messaging {

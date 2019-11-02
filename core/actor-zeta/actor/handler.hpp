@@ -2,7 +2,6 @@
 
 #include <functional>
 
-#include <actor-zeta/actor/context.hpp>
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 
