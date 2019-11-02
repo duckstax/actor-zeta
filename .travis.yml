@@ -6,6 +6,11 @@ cache:
   - apt
   - ccache
 
+addons:
+  apt:
+    packages:
+      - ninja-build
+
 matrix:
   include:
     ##########################################################################
