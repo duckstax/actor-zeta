@@ -146,4 +146,4 @@ matrix:
 script:
   - mkdir build && cd build
   - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER -DDEV_MODE=ON -GNinja
-  - cmake --build . -- VERBOSE=1
+  - cmake --build .
