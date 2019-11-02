@@ -1,9 +1,8 @@
 #pragma once
 
-#include <actor-zeta/messaging/mail_box.hpp>
-#include <actor-zeta/executor/execution_device.hpp>
-#include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <actor-zeta/messaging/mail_box.hpp>
+#include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/executor/executable.hpp>
 
 namespace actor_zeta { namespace actor {
