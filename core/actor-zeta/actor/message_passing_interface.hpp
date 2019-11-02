@@ -8,6 +8,7 @@
 #include <actor-zeta/actor/metadata.hpp>
 #include <actor-zeta/actor/dispatcher.hpp>
 #include <actor-zeta/actor/context.hpp>
+#include <actor-zeta/actor/actor_address.hpp>
 
 
 namespace actor_zeta { namespace actor {
