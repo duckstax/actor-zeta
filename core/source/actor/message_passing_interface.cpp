@@ -1,12 +1,19 @@
 #include <iostream>
 
 #include <actor-zeta/actor/context.hpp>
+#include <actor-zeta/actor/handler.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
 #include <actor-zeta/messaging/message.hpp>
+#include <actor-zeta/impl/handler.ipp>
 #include <actor-zeta/actor/message_passing_interface.hpp>
-#include <actor-zeta/actor/handler.hpp>
 
 namespace actor_zeta { namespace actor {
+
+        inline void error_sync_contacts(detail::string_view __error__) {
+            std::cerr << "WARNING" << std::endl;
+            std::cerr << "Not initialization actor_address type:" << __error__ << std::endl;
+            std::cerr << "WARNING" << std::endl;
+        }
 
         void message_passing_interface::enqueue(messaging::message msg) {
             enqueue(std::move(msg), nullptr);
@@ -56,10 +63,62 @@ namespace actor_zeta { namespace actor {
         message_passing_interface::message_passing_interface(detail::string_view name,abstract type) {
             type_.name = name;
             type_.type = type;
+            initialize();
         }
 
         actor_address message_passing_interface::address() const noexcept {
             return actor_address{const_cast<message_passing_interface*>(this)};
+        }
+
+        void message_passing_interface::initialize() {
+            add_handler(
+                    "sync_contacts",
+                    [this](context &context_) {
+                        auto address = context_.current_message().body<actor_address>();
+                        add_link(std::move(address));
+                    }
+            );
+
+            add_handler(
+                    "add_link",
+                    [this](context &context_) {
+                        auto address = context_.current_message().body<actor_address>();
+                        add_link(std::move(address));
+                    }
+            );
+
+            add_handler(
+                    "remove_link",
+                    [this](context &context_) {
+                        auto address = context_.current_message().body<actor_address>();
+                        remove_link(address);
+                    }
+            );
+        }
+
+        void message_passing_interface::add_link(actor_address address) {
+
+            if (address) {
+                auto name = address->name();
+                contacts.emplace(name,std::move(address));
+            } else {
+                error_sync_contacts(address->name());
+            }
+
+        }
+
+        void message_passing_interface::remove_link(const actor_address& address) {
+            auto it = contacts.find(address->name());
+            if(it != contacts.end()){
+                contacts.erase(it);
+            }
+        }
+
+        void message_passing_interface::remove_link(detail::string_view name) {
+            auto it = contacts.find(name);
+            if(it != contacts.end()){
+                contacts.erase(it);
+            }
         }
 
     }}

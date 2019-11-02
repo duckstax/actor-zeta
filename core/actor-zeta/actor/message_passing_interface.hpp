@@ -57,7 +57,15 @@ namespace actor_zeta { namespace actor {
 
             auto name() const -> detail::string_view;
 
+            /// sync -> async
+            void add_link(actor_address);
+            /// sync -> async
+            void remove_link(const actor_address&);
+            /// sync -> async
+            void remove_link(detail::string_view);
+
         protected:
+            void initialize();
             std::unordered_map<detail::string_view, actor_address> contacts;
             dispatcher_t dispatcher_;
             metadata type_;

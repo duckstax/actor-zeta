@@ -1,6 +1,7 @@
 #pragma once
 
 #include <actor-zeta/forwards.hpp>
+#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/actor/message_passing_interface.hpp>
 
 namespace actor_zeta { namespace actor {
@@ -18,17 +19,20 @@ namespace actor_zeta { namespace actor {
 
             ~abstract_actor() override;
 
-            explicit abstract_actor(detail::string_view);
+            ///TODO:
+            ///virtual void launch(executor::execution_device*, bool /*hide*/) = 0;
 
-            /// sync -> async
-            void add_link(actor_address);
-            /// sync -> async
-            void remove_link(const actor_address&);
-            /// sync -> async
-            void remove_link(detail::string_view);
-
+            abstract_actor(supervisor &,detail::string_view);
         protected:
-            void initialize();
+            auto attach(executor::execution_device *) -> void;
+
+            auto attach() const -> executor::execution_device* ;
+
+            auto env() -> supervisor& ;
+
+        private:
+            supervisor& supervisor_;
+            executor::execution_device *executor_;
         };
 
 }}

@@ -2,7 +2,7 @@
 
 #include <actor-zeta/messaging/mail_box.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
-#include <actor-zeta/actor/executable_actor.hpp>
+#include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/executor/executable.hpp>
 
@@ -10,9 +10,9 @@ namespace actor_zeta { namespace actor {
 ///
 /// @brief Specialization of actor with scheduling functionality
 ///
-        class cooperative_actor :
-                public executable_actor,
-                public executor::executable {
+        class cooperative_actor
+                : public abstract_actor
+                , public executor::executable {
         public:
 
             using mailbox_type = messaging::mail_box;

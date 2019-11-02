@@ -61,7 +61,6 @@ set(SOURCE_FILES
         source/actor/context.cpp
         source/actor/dispatcher.cpp
         source/actor/supervisor.cpp
-        source/actor/executable_actor.cpp
         source/actor/message_passing_interface.cpp
 
         source/detail/string_view.cpp

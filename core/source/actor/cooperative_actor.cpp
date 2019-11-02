@@ -92,7 +92,7 @@ namespace actor_zeta { namespace actor {
                 , mailbox_type* mail_ptr
                 , detail::string_view name
         )
-                : executable_actor(env, name)
+                : abstract_actor(env, name)
                 , mailbox_(mail_ptr)
         {
         }
