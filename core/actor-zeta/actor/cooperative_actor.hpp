@@ -39,7 +39,9 @@ namespace actor_zeta { namespace actor {
 
 // message processing -----------------------------------------------------
 
-            messaging::message next_message();
+            auto next_message() -> void ;
+
+            auto current_message() -> messaging::message& override;
 
             bool has_next_message();
 
@@ -50,7 +52,7 @@ namespace actor_zeta { namespace actor {
             messaging::message pop_to_cache();
 
 // ----------------------------------------------------- message processing
-
+            messaging::message current_message_;
             std::unique_ptr<mailbox_type> mailbox_;
         };
 }}

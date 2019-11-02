@@ -1,9 +1,12 @@
 #pragma once
 
-
-#include <actor-zeta/actor/basic_actor.hpp>
+#include <actor-zeta/actor/context.hpp>
+#include <actor-zeta/actor/handler.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/messaging/message.hpp>
+#include <actor-zeta/actor/basic_actor.hpp>
 #include <actor-zeta/actor/supervisor.hpp>
+#include <actor-zeta/impl/handler.ipp>
 
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/executor.hpp>
@@ -11,11 +14,11 @@
 
 namespace actor_zeta {
 
+    using actor::abstract_actor;
     using actor::context;
     using actor::basic_async_actor;
     using actor::actor_address;
     using actor::context;
-    using actor::basic_async_actor;
     using actor::supervisor;
 
     using executor::executor_t;

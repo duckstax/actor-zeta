@@ -8,7 +8,7 @@ namespace actor_zeta { namespace actor {
 
         class executable_actor
                 : public abstract_actor
-                , public context {
+                {
         public:
             ///TODO:
             ///virtual void launch(executor::execution_device*, bool /*hide*/) = 0;

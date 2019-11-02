@@ -2,7 +2,6 @@
 
 #include <actor-zeta/actor/context.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
-#include <actor-zeta/messaging/message_header.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/actor/message_passing_interface.hpp>
 #include <actor-zeta/actor/handler.hpp>

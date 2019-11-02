@@ -3,7 +3,6 @@
 
 #include <actor-zeta/actor/context.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
-#include <actor-zeta/messaging/message_header.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
@@ -35,8 +34,8 @@ namespace actor_zeta { namespace actor {
                         continue;
                     }
 
-                    msg_ptr = next_message();
-                    if (msg_ptr) {
+                   next_message();
+                    if (current_message()) {
                         {
                             dispatch().execute(*this); /** context processing */
                         }
@@ -51,10 +50,10 @@ namespace actor_zeta { namespace actor {
 
             //---------------------------------------------------------------------------
 
-            messaging::message msg_ptr = next_message();
-            while (msg_ptr) {
-                push_to_cache(std::move(msg_ptr));
-                msg_ptr = next_message();
+            next_message();
+            while (current_message()) {
+                push_to_cache(std::move(current_message()));
+                next_message();
             }
 
             //---------------------------------------------------------------------------
@@ -132,12 +131,16 @@ namespace actor_zeta { namespace actor {
             return *mailbox_;
         }
 
-        messaging::message cooperative_actor::next_message() {
-            return mailbox().get();
+        void cooperative_actor::next_message() {
+           current_message_ =  mailbox().get();
         }
 
         cooperative_actor::~cooperative_actor(){
 
+        }
+
+        auto cooperative_actor::current_message() -> messaging::message & {
+            return current_message_;
         }
     }
 }

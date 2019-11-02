@@ -59,7 +59,7 @@ public:
         return true;
     }
 
-    auto join(actor_zeta::actor::base_actor *t) -> actor_zeta::actor::actor_address final {
+    auto join(actor_zeta::actor::abstract_actor *t) -> actor_zeta::actor::actor_address final {
         actor_zeta::actor::actor tmp(t);
         auto address = tmp->address();
         actors_.push_back(std::move(tmp));
@@ -78,8 +78,8 @@ public:
 
 private:
     auto local(message msg) -> void {
-        context tmp(this, std::move(msg));
-        dispatch().execute(tmp);
+        set_current_message(std::move(msg));
+        dispatch().execute(*this);
     }
 
     auto redirect_robin(message msg) -> void {

@@ -19,6 +19,12 @@ namespace actor_zeta { namespace actor {
 
         virtual auto join(abstract_actor *) -> actor_zeta::actor::actor_address = 0;
 
+    protected:
+        auto set_current_message(messaging::message) -> void;
+    private:
+        messaging::message current_message_;
+        auto current_message  () -> messaging::message& final;
+
     };
 
 }}

@@ -23,7 +23,7 @@ public:
         return true;
     }
 
-    auto join(base_actor *) -> actor_zeta::actor::actor_address override {
+    auto join(actor_zeta::abstract_actor *) -> actor_zeta::actor::actor_address override {
         return actor_zeta::actor_address();
     }
 

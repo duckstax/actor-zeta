@@ -1,10 +1,11 @@
 #include <iostream>
 
 #include <actor-zeta/actor/context.hpp>
+#include <actor-zeta/actor/handler.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
-#include <actor-zeta/messaging/message_header.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/actor/abstract_actor.hpp>
+#include <actor-zeta/impl/handler.ipp>
 
 
 namespace actor_zeta { namespace actor {
@@ -24,7 +25,7 @@ namespace actor_zeta { namespace actor {
             add_handler(
                     "sync_contacts",
                     [this](context &context_) {
-                        auto address = context_.message().body<actor_address>();
+                        auto address = context_.current_message().body<actor_address>();
                         add_link(std::move(address));
                     }
             );
@@ -32,7 +33,7 @@ namespace actor_zeta { namespace actor {
             add_handler(
                     "add_link",
                     [this](context &context_) {
-                        auto address = context_.message().body<actor_address>();
+                        auto address = context_.current_message().body<actor_address>();
                         add_link(std::move(address));
                     }
             );
@@ -40,7 +41,7 @@ namespace actor_zeta { namespace actor {
             add_handler(
                     "remove_link",
                     [this](context &context_) {
-                        auto address = context_.message().body<actor_address>();
+                        auto address = context_.current_message().body<actor_address>();
                         remove_link(address);
                     }
             );

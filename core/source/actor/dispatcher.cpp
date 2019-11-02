@@ -5,7 +5,6 @@
 
 #include <actor-zeta/actor/context.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
-#include <actor-zeta/messaging/message_header.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/actor/handler.hpp>
 
@@ -31,11 +30,11 @@ namespace actor_zeta { namespace actor {
         }
 
         void dispatcher_t::execute(context &ctx) {
-            auto it = handlers_.find(ctx.message().command());
+            auto it = handlers_.find(ctx.current_message().command());
             if (it != handlers_.end()) {
                 return it->second->invoke(ctx);
             } else {
-                error_skip(ctx.message().command());
+                error_skip(ctx.current_message().command());
             }
         }
 

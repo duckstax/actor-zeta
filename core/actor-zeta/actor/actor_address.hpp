@@ -24,11 +24,17 @@ namespace actor_zeta { namespace actor {
 
             ~actor_address();
 
-            message_passing_interface *operator->() const noexcept;
+            inline message_passing_interface *operator->() const noexcept {
+                return ptr_.get();
+            }
 
-            explicit operator bool() const noexcept;
+            inline  operator bool() const noexcept {
+                return static_cast<bool>(ptr_);
+            }
 
-            bool operator!() const noexcept;
+            inline  bool operator!() const noexcept {
+                return !ptr_;
+            }
 
         private:
             intrusive_ptr<message_passing_interface> ptr_;

@@ -7,11 +7,14 @@
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/actor/metadata.hpp>
 #include <actor-zeta/actor/dispatcher.hpp>
+#include <actor-zeta/actor/context.hpp>
 
 
 namespace actor_zeta { namespace actor {
 
-        class message_passing_interface : public ref_counted {
+        class message_passing_interface
+                : public ref_counted
+                , public  context {
         public:
 
             message_passing_interface() = delete;
@@ -30,14 +33,14 @@ namespace actor_zeta { namespace actor {
 
             auto message_types() const -> std::set<std::string>;
 
-            auto addresses(detail::string_view) -> actor_address &;
+            auto addresses(detail::string_view) -> actor_address & override;
 
-            auto self() -> actor_address ;
+            auto self() -> actor_address override ;
 
             actor_address address() const noexcept;
 
             template<typename F>
-            inline auto add_handler(detail::string_view name, F &&f) -> void {
+            auto add_handler(detail::string_view name, F &&f) -> void {
                 dispatch().on(name, make_handler(std::forward<F>(f)));
             }
 
