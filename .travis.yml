@@ -6,11 +6,6 @@ cache:
   - apt
   - ccache
 
-addons:
-  apt:
-    packages:
-      - ninja-build
-
 matrix:
   include:
     ##########################################################################
@@ -75,6 +70,7 @@ matrix:
         apt:
           packages:
             - g++-4.8
+            - ninja-build
           sources:
             - ubuntu-toolchain-r-test
 
@@ -86,6 +82,7 @@ matrix:
       addons: &gcc49
         apt:
           packages:
+            - ninja-build
             - g++-4.9
           sources:
             - ubuntu-toolchain-r-test
@@ -99,6 +96,7 @@ matrix:
       addons: &gcc5
         apt:
           packages:
+            - ninja-build
             - g++-5
           sources:
             - ubuntu-toolchain-r-test
@@ -111,6 +109,7 @@ matrix:
       addons: &gcc6
         apt:
           packages:
+            - ninja-build
             - g++-6
           sources:
             - ubuntu-toolchain-r-test
@@ -123,6 +122,7 @@ matrix:
       addons: &gcc7
         apt:
           packages:
+            - ninja-build
             - g++-7
           sources:
             - ubuntu-toolchain-r-test
@@ -135,6 +135,7 @@ matrix:
       addons: &gcc8
         apt:
           packages:
+            - ninja-build
             - g++-8
           sources:
             - ubuntu-toolchain-r-test
