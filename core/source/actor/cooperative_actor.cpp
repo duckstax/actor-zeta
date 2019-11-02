@@ -89,8 +89,8 @@ namespace actor_zeta { namespace actor {
 
         cooperative_actor::cooperative_actor(
                   supervisor &env
-                , mailbox_type* mail_ptr
                 , detail::string_view name
+                , mailbox_type* mail_ptr
         )
                 : abstract_actor(env, name)
                 , mailbox_(mail_ptr)
