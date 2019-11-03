@@ -31,6 +31,8 @@ namespace actor_zeta { namespace actor {
 
             auto name() const -> detail::string_view;
 
+            auto message_types() const -> std::set<std::string>;
+
             auto enqueue(messaging::message) -> void;
 
             virtual void enqueue(messaging::message, executor::execution_device *) = 0;
@@ -40,7 +42,6 @@ namespace actor_zeta { namespace actor {
 
             auto broadcast(messaging::message) -> bool;
 
-            auto message_types() const -> std::set<std::string>;
 
             auto addresses(detail::string_view) -> actor_address & override;
 
