@@ -60,10 +60,10 @@ namespace actor_zeta { namespace actor {
 
         message_passing_interface::~message_passing_interface() {}
 
-        message_passing_interface::message_passing_interface(detail::string_view name,abstract type) {
-            contacts_.reset(new std::unordered_map<detail::string_view,actor_address>);
-            type_.name = name;
-            type_.type = type;
+        message_passing_interface::message_passing_interface(detail::string_view name,abstract type)
+            : contacts_(new std::unordered_map<detail::string_view,actor_address>)
+            , type_{0,type,name}
+            {
             initialize();
         }
 

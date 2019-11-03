@@ -42,11 +42,9 @@ namespace actor_zeta { namespace actor {
 
             auto broadcast(messaging::message) -> bool;
 
-
             auto addresses(detail::string_view) -> actor_address & override;
 
             auto self() -> actor_address override ;
-
 
             template<typename F>
             auto add_handler(detail::string_view name, F &&f) -> void {
