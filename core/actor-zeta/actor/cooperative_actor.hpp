@@ -11,7 +11,8 @@ namespace actor_zeta { namespace actor {
 ///
         class cooperative_actor
                 : public abstract_actor
-                , public executor::executable {
+                , public executor::executable
+                {
         public:
 
             using mailbox_type = messaging::mail_box;

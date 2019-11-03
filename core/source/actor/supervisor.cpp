@@ -17,15 +17,4 @@ namespace actor_zeta { namespace actor {
             current_message_ = std::move(msg);
         }
 
-        auto supervisor::broadcast(message msg) -> bool {
-
-            auto tmp = std::move(msg);
-
-            for(auto&i:*contacts_){
-                i.second->enqueue(tmp.clone());
-            }
-
-            return true;
-        }
-
-    }}
+}}

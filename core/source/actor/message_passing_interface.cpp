@@ -122,4 +122,15 @@ namespace actor_zeta { namespace actor {
             }
         }
 
+        auto message_passing_interface::broadcast(messaging::message msg) -> bool {
+
+            auto tmp = std::move(msg);
+
+            for(auto&i:*contacts_){
+                i.second->enqueue(tmp.clone());
+            }
+
+            return true;
+        }
+
     }}

@@ -25,11 +25,20 @@ namespace actor_zeta { namespace actor {
 
             ~message_passing_interface() override;
 
-            message_passing_interface(detail::string_view,abstract);
+            actor_address address() const noexcept;
+
+            auto type() const -> abstract;
+
+            auto name() const -> detail::string_view;
 
             auto enqueue(messaging::message) -> void;
 
             virtual void enqueue(messaging::message, executor::execution_device *) = 0;
+
+        protected:
+            message_passing_interface(detail::string_view,abstract);
+
+            auto broadcast(messaging::message) -> bool;
 
             auto message_types() const -> std::set<std::string>;
 
@@ -37,7 +46,6 @@ namespace actor_zeta { namespace actor {
 
             auto self() -> actor_address override ;
 
-            actor_address address() const noexcept;
 
             template<typename F>
             auto add_handler(detail::string_view name, F &&f) -> void {
@@ -53,10 +61,6 @@ namespace actor_zeta { namespace actor {
 
             auto dispatch() const -> const dispatcher_t &;
 
-            auto type() const -> abstract;
-
-            auto name() const -> detail::string_view;
-
             /// sync -> async
             void add_link(actor_address);
             /// sync -> async
@@ -64,7 +68,7 @@ namespace actor_zeta { namespace actor {
             /// sync -> async
             void remove_link(detail::string_view);
 
-        protected:
+        private:
             void initialize();
             std::unique_ptr<std::unordered_map<detail::string_view, actor_address>> contacts_;
             dispatcher_t dispatcher_;
