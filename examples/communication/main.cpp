@@ -50,15 +50,6 @@ public:
 
     auto executor() noexcept -> actor_zeta::abstract_executor & final { return *e_; }
 
-    auto broadcast(message msg) -> bool final {
-
-        for (auto &i:*contacts_) {
-            i.second->enqueue(std::move(msg));
-        }
-
-        return true;
-    }
-
     auto join(actor_zeta::actor::abstract_actor *t) -> actor_zeta::actor::actor_address final {
         actor_zeta::actor::actor tmp(t);
         auto address = tmp->address();

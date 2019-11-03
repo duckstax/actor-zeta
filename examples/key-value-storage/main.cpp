@@ -107,8 +107,6 @@ public:
 
     auto executor() noexcept -> actor_zeta::executor::abstract_executor& final { return *e_;}
 
-    auto broadcast(actor_zeta::messaging::message) -> bool final  {return false;}
-
     using actor_zeta::actor::supervisor::join;
 
     auto join(actor_zeta::actor::abstract_actor *t) -> actor_zeta::actor::actor_address final {

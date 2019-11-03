@@ -15,7 +15,7 @@ namespace actor_zeta { namespace actor {
 
         virtual auto executor() noexcept -> executor::abstract_executor& = 0;
 
-        virtual auto broadcast(message) -> bool = 0;
+        auto broadcast(message) -> bool;
 
         virtual auto join(abstract_actor *) -> actor_zeta::actor::actor_address = 0;
 
