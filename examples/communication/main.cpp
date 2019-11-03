@@ -52,7 +52,7 @@ public:
 
     auto broadcast(message msg) -> bool final {
 
-        for (auto &i:contacts) {
+        for (auto &i:*contacts_) {
             i.second->enqueue(std::move(msg));
         }
 

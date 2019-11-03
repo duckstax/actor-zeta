@@ -66,7 +66,7 @@ namespace actor_zeta { namespace actor {
 
         protected:
             void initialize();
-            std::unordered_map<detail::string_view, actor_address> contacts;
+            std::unique_ptr<std::unordered_map<detail::string_view, actor_address>> contacts_;
             dispatcher_t dispatcher_;
             metadata type_;
 

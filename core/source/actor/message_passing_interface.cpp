@@ -30,12 +30,12 @@ namespace actor_zeta { namespace actor {
         }
 
         auto message_passing_interface::all_view_address() const -> void  {
-            for (auto &i: contacts)
+            for (auto &i: *contacts_)
                 std::cerr << i.first << std::endl;
         }
 
         auto message_passing_interface::addresses(detail::string_view name) -> actor_address& {
-            return contacts.at(name);
+            return contacts_->at(name);
         }
 
         auto message_passing_interface::self()  -> actor_address  {
@@ -61,6 +61,7 @@ namespace actor_zeta { namespace actor {
         message_passing_interface::~message_passing_interface() {}
 
         message_passing_interface::message_passing_interface(detail::string_view name,abstract type) {
+            contacts_.reset(new std::unordered_map<detail::string_view,actor_address>);
             type_.name = name;
             type_.type = type;
             initialize();
@@ -100,7 +101,7 @@ namespace actor_zeta { namespace actor {
 
             if (address) {
                 auto name = address->name();
-                contacts.emplace(name,std::move(address));
+                contacts_->emplace(name, std::move(address));
             } else {
                 error_sync_contacts(address->name());
             }
@@ -108,16 +109,16 @@ namespace actor_zeta { namespace actor {
         }
 
         void message_passing_interface::remove_link(const actor_address& address) {
-            auto it = contacts.find(address->name());
-            if(it != contacts.end()){
-                contacts.erase(it);
+            auto it = contacts_->find(address->name());
+            if(it != contacts_->end()){
+                contacts_->erase(it);
             }
         }
 
         void message_passing_interface::remove_link(detail::string_view name) {
-            auto it = contacts.find(name);
-            if(it != contacts.end()){
-                contacts.erase(it);
+            auto it = contacts_->find(name);
+            if(it != contacts_->end()){
+                contacts_->erase(it);
             }
         }
 
