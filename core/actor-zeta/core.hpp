@@ -1,5 +1,6 @@
 #pragma once
 
+// clang-format off
 #include <actor-zeta/actor/context.hpp>
 #include <actor-zeta/actor/handler.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
@@ -7,7 +8,7 @@
 #include <actor-zeta/actor/basic_actor.hpp>
 #include <actor-zeta/actor/supervisor.hpp>
 #include <actor-zeta/impl/handler.ipp>
-
+// clang-format on
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/executor.hpp>
 #include <actor-zeta/executor/policy/work_sharing.hpp>
