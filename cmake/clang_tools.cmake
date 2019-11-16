@@ -17,12 +17,14 @@ if (CLANG_FORMAT)
     add_custom_target(
             clang-format
             COMMAND ${CLANG_FORMAT}
+            -style=file
             -i
-            ${SOURCE_FILES} ${TEST_SOURCE_FILES}
+            ${ALL_SOURCE_FILES}
     )
 endif ()
 
 option(ADDRESS_SANITIZER "Enable Clang AddressSanitizer" OFF)
+
 if (ADDRESS_SANITIZER)
     message(STATUS "AddressSanitizer enabled for debug build")
     set(CMAKE_CXX_FLAGS_DEBUG
@@ -30,6 +32,7 @@ if (ADDRESS_SANITIZER)
 endif ()
 
 option(UNDEFINED_SANITIZER "Enable Clang UndefinedBehaviorSanitizer" OFF)
+
 if (UNDEFINED_SANITIZER)
     message(STATUS "UndefinedBehaviorSanitizer enabled for debug build")
     set(CMAKE_CXX_FLAGS_DEBUG
@@ -37,6 +40,7 @@ if (UNDEFINED_SANITIZER)
 endif ()
 
 option(CLANG_CODE_COVERAGE "Enable code coverage metrics in Clang" OFF)
+
 if (CLANG_CODE_COVERAGE)
     message(STATUS "Code coverage metrics enabled for debug build")
     set(CMAKE_CXX_FLAGS_DEBUG

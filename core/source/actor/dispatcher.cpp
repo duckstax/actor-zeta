@@ -3,11 +3,12 @@
 #include <iostream>
 #include <memory>
 
+// clang-format off
 #include <actor-zeta/actor/context.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/actor/handler.hpp>
-
+// clang-format on
 
 namespace actor_zeta { namespace actor {
 
