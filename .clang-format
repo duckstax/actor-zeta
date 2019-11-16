@@ -1,42 +1,29 @@
 ---
-AccessModifierOffset: -2
-AlignEscapedNewlinesLeft: false
+AlignConsecutiveAssignments: true
+AlignEscapedNewlines: Right
 AlignTrailingComments: true
+AllowAllArgumentsOnNextLine: false
+AllowAllConstructorInitializersOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortIfStatementsOnASingleLine: false
-AllowShortLoopsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
 AlwaysBreakBeforeMultilineStrings: true
-AlwaysBreakTemplateDeclarations: true
-BinPackParameters: true
-BreakBeforeBinaryOperators: NonAssignment
+AlwaysBreakTemplateDeclarations: Yes
+BinPackArguments: false
+BinPackParameters: false
+BreakAfterJavaFieldAnnotations: true
+BreakBeforeBinaryOperators: All
 BreakBeforeBraces: Attach
-BreakBeforeTernaryOperators: false
-ColumnLimit: 80
-ConstructorInitializerAllOnOneLineOrOnePerLine: true
-ConstructorInitializerIndentWidth: 4
-ContinuationIndentWidth: 2
-Cpp11BracedListStyle: true
-IndentCaseLabels: true
-IndentWidth: 2
-MaxEmptyLinesToKeep: 1
-NamespaceIndentation: None
-
-# Force pointers to the type
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: BeforeComma
+BreakStringLiterals: false
+ColumnLimit: 300
+CompactNamespaces: true
+FixNamespaceComments: true
+IncludeBlocks: Regroup
 DerivePointerAlignment: false
 PointerAlignment: Left
-
-# Put space after = and after control statements
-SpaceBeforeAssignmentOperators: true
-SpaceBeforeParens: ControlStatements
-
-SpaceInEmptyParentheses: false
-SpacesBeforeTrailingComments: 1
-SpacesInAngles: false
-SpacesInCStyleCastParentheses: false
-SpacesInParentheses: false
+Language: Cpp
 Standard: Cpp11
-UseTab: Never
-BreakConstructorInitializersBeforeComma: false
 ...
 
