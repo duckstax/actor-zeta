@@ -7,7 +7,7 @@
 
 namespace actor_zeta { namespace actor {
 
-        supervisor::supervisor(detail::string_view name):message_passing_interface(name,abstract::supervisor){}
+        supervisor::supervisor(detail::string_view name): abstract_async_container(name, abstract::supervisor){}
 
         supervisor::~supervisor() {}
 

@@ -1,13 +1,13 @@
 #pragma once
 
 #include <actor-zeta/forwards.hpp>
-#include <actor-zeta/actor/message_passing_interface.hpp>
+#include <actor-zeta/actor/abstract_async_container.hpp>
 
 namespace actor_zeta { namespace actor {
 
     using messaging::message;
 
-    class supervisor : public message_passing_interface {
+    class supervisor : public abstract_async_container {
     public:
         supervisor(detail::string_view);
 
@@ -17,7 +17,7 @@ namespace actor_zeta { namespace actor {
 
         virtual auto join(abstract_actor *) -> actor_zeta::actor::actor_address = 0;
 
-        using message_passing_interface::broadcast;
+        using abstract_async_container::broadcast;
     protected:
         auto set_current_message(messaging::message) -> void;
     private:

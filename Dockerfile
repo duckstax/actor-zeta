@@ -6,6 +6,9 @@ RUN    apt-get update
     \  apt-utils
     \  gcc
     \  g++
+    \  clang
+    \  clang-format
+    \  clang-tidy
     \  openssh-server
     \  cmake
     \  build-essential

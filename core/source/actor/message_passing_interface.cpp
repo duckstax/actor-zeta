@@ -6,7 +6,7 @@
 #include <actor-zeta/actor/actor_address.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/impl/handler.ipp>
-#include <actor-zeta/actor/message_passing_interface.hpp>
+#include <actor-zeta/actor/abstract_async_container.hpp>
 // clang-format on
 
 namespace actor_zeta { namespace actor {
@@ -17,11 +17,11 @@ namespace actor_zeta { namespace actor {
             std::cerr << "WARNING" << std::endl;
         }
 
-        void message_passing_interface::enqueue(messaging::message msg) {
+        void abstract_async_container::enqueue(messaging::message msg) {
             enqueue(std::move(msg), nullptr);
         }
 
-        auto  message_passing_interface::message_types() const -> std::set<std::string> {
+        auto  abstract_async_container::message_types() const -> std::set<std::string> {
             std::set<std::string> types;
 
             for(const auto&i: dispatch()) {
@@ -31,49 +31,49 @@ namespace actor_zeta { namespace actor {
             return types;
         }
 
-        auto message_passing_interface::all_view_address() const -> void  {
+        auto abstract_async_container::all_view_address() const -> void  {
             for (auto &i: *contacts_)
                 std::cerr << i.first << std::endl;
         }
 
-        auto message_passing_interface::addresses(detail::string_view name) -> actor_address& {
+        auto abstract_async_container::addresses(detail::string_view name) -> actor_address& {
             return contacts_->at(name);
         }
 
-        auto message_passing_interface::self()  -> actor_address  {
+        auto abstract_async_container::self()  -> actor_address  {
             return address();
         }
 
-        auto message_passing_interface::dispatch() -> dispatcher_t & {
+        auto abstract_async_container::dispatch() -> dispatcher_t & {
             return dispatcher_;
         }
 
-        auto message_passing_interface::dispatch() const -> const dispatcher_t & {
+        auto abstract_async_container::dispatch() const -> const dispatcher_t & {
             return dispatcher_;
         }
 
-        auto message_passing_interface::type() const -> abstract {
+        auto abstract_async_container::type() const -> abstract {
             return type_.type;
         }
 
-        auto message_passing_interface::name() const -> detail::string_view {
+        auto abstract_async_container::name() const -> detail::string_view {
             return type_.name;
         }
 
-        message_passing_interface::~message_passing_interface() {}
+        abstract_async_container::~abstract_async_container() {}
 
-        message_passing_interface::message_passing_interface(detail::string_view name,abstract type)
+        abstract_async_container::abstract_async_container(detail::string_view name,abstract type)
             : contacts_(new std::unordered_map<detail::string_view,actor_address>)
             , type_{0,type,name}
             {
             initialize();
         }
 
-        actor_address message_passing_interface::address() const noexcept {
-            return actor_address{const_cast<message_passing_interface*>(this)};
+        actor_address abstract_async_container::address() const noexcept {
+            return actor_address{const_cast<abstract_async_container*>(this)};
         }
 
-        void message_passing_interface::initialize() {
+        void abstract_async_container::initialize() {
             add_handler(
                     "sync_contacts",
                     [this](context &context_) {
@@ -99,7 +99,7 @@ namespace actor_zeta { namespace actor {
             );
         }
 
-        void message_passing_interface::add_link(actor_address address) {
+        void abstract_async_container::add_link(actor_address address) {
 
             if (address) {
                 auto name = address->name();
@@ -110,21 +110,21 @@ namespace actor_zeta { namespace actor {
 
         }
 
-        void message_passing_interface::remove_link(const actor_address& address) {
+        void abstract_async_container::remove_link(const actor_address& address) {
             auto it = contacts_->find(address->name());
             if(it != contacts_->end()){
                 contacts_->erase(it);
             }
         }
 
-        void message_passing_interface::remove_link(detail::string_view name) {
+        void abstract_async_container::remove_link(detail::string_view name) {
             auto it = contacts_->find(name);
             if(it != contacts_->end()){
                 contacts_->erase(it);
             }
         }
 
-        auto message_passing_interface::broadcast(messaging::message msg) -> bool {
+        auto abstract_async_container::broadcast(messaging::message msg) -> bool {
 
             auto tmp = std::move(msg);
 

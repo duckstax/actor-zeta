@@ -18,7 +18,7 @@ set(HEADER_FILES
         actor-zeta/actor/cooperative_actor.hpp
         actor-zeta/actor/basic_actor.hpp
         actor-zeta/actor/blocking_actor.hpp
-        actor-zeta/actor/message_passing_interface.hpp
+        actor-zeta/actor/abstract_async_container.hpp
         actor-zeta/actor/context.hpp
         actor-zeta/actor/dispatcher.hpp
         actor-zeta/actor/handler.hpp

@@ -14,7 +14,7 @@ namespace actor_zeta {
         class  handler;
         struct context;
         class supervisor;
-        class message_passing_interface;
+        class abstract_async_container;
         class dispatcher_t;
     }
 
