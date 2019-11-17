@@ -19,7 +19,7 @@ namespace actor_zeta { namespace actor {
                 supervisor &env,
                 detail::string_view name
         )
-                : abstract_async_container(name, abstract::actor)
+                : communication_module(name, abstract::actor)
                 , supervisor_(env){
         }
 

@@ -18,7 +18,7 @@ set(HEADER_FILES
         actor-zeta/actor/cooperative_actor.hpp
         actor-zeta/actor/basic_actor.hpp
         actor-zeta/actor/blocking_actor.hpp
-        actor-zeta/actor/abstract_async_container.hpp
+        actor-zeta/actor/communication_module.hpp
         actor-zeta/actor/context.hpp
         actor-zeta/actor/dispatcher.hpp
         actor-zeta/actor/handler.hpp
@@ -61,7 +61,7 @@ set(SOURCE_FILES
         source/actor/context.cpp
         source/actor/dispatcher.cpp
         source/actor/supervisor.cpp
-        source/actor/message_passing_interface.cpp
+        source/actor/communication_module.cpp
 
         source/detail/string_view.cpp
         source/detail/ref_counted.cpp

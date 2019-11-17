@@ -2,14 +2,14 @@
 
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/string_view.hpp>
-#include <actor-zeta/actor/abstract_async_container.hpp>
+#include <actor-zeta/actor/communication_module.hpp>
 
 namespace actor_zeta { namespace actor {
 ///
 /// @brief Abstract concept of an actor
 ///
 
-        class abstract_actor : public abstract_async_container  {
+        class abstract_actor : public communication_module  {
         public:
             abstract_actor()= delete;
 

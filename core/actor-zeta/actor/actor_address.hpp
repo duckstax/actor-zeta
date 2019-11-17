@@ -1,7 +1,7 @@
 #pragma once
 
 #include <actor-zeta/forwards.hpp>
-#include <actor-zeta/actor/abstract_async_container.hpp>
+#include <actor-zeta/actor/communication_module.hpp>
 #include <actor-zeta/detail/intrusive_ptr.hpp>
 
 namespace actor_zeta { namespace actor {
@@ -20,11 +20,11 @@ namespace actor_zeta { namespace actor {
 
             actor_address &operator=(const actor_address &) = default;
 
-            explicit actor_address(abstract_async_container *);
+            explicit actor_address(communication_module *);
 
             ~actor_address();
 
-            inline abstract_async_container *operator->() const noexcept {
+            inline communication_module *operator->() const noexcept {
                 return ptr_.get();
             }
 
@@ -37,7 +37,7 @@ namespace actor_zeta { namespace actor {
             }
 
         private:
-            intrusive_ptr<abstract_async_container> ptr_;
+            intrusive_ptr<communication_module> ptr_;
         };
 
 }}

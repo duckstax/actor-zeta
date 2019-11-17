@@ -12,18 +12,18 @@
 
 namespace actor_zeta { namespace actor {
 
-        class abstract_async_container
+        class communication_module
                 : public ref_counted
                 , public context {
         public:
 
-            abstract_async_container() = delete;
+            communication_module() = delete;
 
-            abstract_async_container(const abstract_async_container &) = delete;
+            communication_module(const communication_module &) = delete;
 
-            abstract_async_container &operator=(const abstract_async_container &) = delete;
+            communication_module &operator=(const communication_module &) = delete;
 
-            ~abstract_async_container() override;
+            ~communication_module() override;
 
             actor_address address() const noexcept;
 
@@ -38,7 +38,7 @@ namespace actor_zeta { namespace actor {
             virtual void enqueue(messaging::message, executor::execution_device *) = 0;
 
         protected:
-            abstract_async_container(detail::string_view, abstract);
+            communication_module(detail::string_view, abstract);
 
             auto broadcast(messaging::message) -> bool;
 
