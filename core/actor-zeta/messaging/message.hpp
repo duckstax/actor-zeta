@@ -1,9 +1,9 @@
 #pragma once
 
-#include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/any.hpp>
-#include <actor-zeta/messaging/message_header.hpp>
 #include <actor-zeta/detail/string_view.hpp>
+#include <actor-zeta/messaging/message_header.hpp>
 
 namespace actor_zeta { namespace messaging {
 
@@ -55,16 +55,6 @@ namespace actor_zeta { namespace messaging {
 
             detail::any  body_;
         };
-
-        template <std::size_t N,typename T>
-        inline auto make_message(actor::actor_address sender_,const char(&name)[N], T &&data) -> message {
-            return message(sender_,name, std::forward<T>(data));
-        }
-
-        template <typename T>
-        inline auto make_message(actor::actor_address sender_,std::string name, T &&data) -> message {
-            return message(sender_,name, std::forward<T>(data));
-        }
 
 }}
 

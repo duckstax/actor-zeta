@@ -1,35 +1,41 @@
-#include <actor-zeta/actor/abstract_actor.hpp>
+#include <iostream>
+
+// clang-format off
+#include <actor-zeta/actor/context.hpp>
+#include <actor-zeta/actor/handler.hpp>
 #include <actor-zeta/actor/actor_address.hpp>
 #include <actor-zeta/messaging/message.hpp>
+#include <actor-zeta/actor/abstract_actor.hpp>
+#include <actor-zeta/impl/handler.ipp>
+// clang-format on
 
 namespace actor_zeta { namespace actor {
-
-        actor_address abstract_actor::address() const noexcept {
-            return actor_address{const_cast<abstract_actor *>(this)};
-        }
 
         abstract_actor::~abstract_actor() {
 
         }
 
-        auto abstract_actor::type() const -> abstract {
-            return type_.type;
+        abstract_actor::abstract_actor(
+                supervisor &env,
+                detail::string_view name
+        )
+                : communication_module(name, abstract::actor)
+                , supervisor_(env){
         }
 
-        auto abstract_actor::name() const -> detail::string_view {
-            return type_.name;
+        executor::execution_device *abstract_actor::attach() const {
+            return executor_;
         }
 
-        auto abstract_actor::message_types() const -> std::set<std::string> {
-            return std::set<std::string>();
+        void abstract_actor::attach(executor::execution_device *e) {
+            if (e!= nullptr) {
+                executor_ = e;
+            }
         }
 
-        abstract_actor::abstract_actor(detail::string_view name) {
-            type_.name = name;
+        auto abstract_actor::env() -> supervisor & {
+            return supervisor_;
         }
 
-        void abstract_actor::enqueue(messaging::message msg) {
-            enqueue(std::move(msg), nullptr);
-        }
 
 }}

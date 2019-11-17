@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/jinntechio/actor-zeta.svg?branch=master)](https://travis-ci.org/jinntechio/actor-zeta)
+[![Build Status](https://travis-ci.org/jinncrafters/actor-zeta.svg?branch=master)](https://travis-ci.org/jinncrafters/actor-zeta)
 
 actor-zeta
 ========================
@@ -45,9 +45,32 @@ public:
 
 ```
 
+## For Users
+
+Add the corresponding remote to your conan:
+
+```bash
+    conan remote add jinncrafters https://api.bintray.com/conan/jinncrafters/conan
+```
+
+### Basic setup
+```bash
+    $ conan install sol2/2.20.6@jinncrafters/stable
+```
+### Project setup
+
+If you handle multiple dependencies in your project is better to add a *conanfile.txt*
+
+    [requires]
+    actor-zeta/1.0.0@jinntechio/stable
+
+    [generators]
+    cmake
+
 ## Dependencies
 
 * CMake
+* Conan
 
 ## Supported Compilers
 

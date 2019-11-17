@@ -16,9 +16,9 @@ set(HEADER_FILES
         actor-zeta/actor/actor.hpp
         actor-zeta/actor/actor_address.hpp
         actor-zeta/actor/cooperative_actor.hpp
-        actor-zeta/actor/base_actor.hpp
         actor-zeta/actor/basic_actor.hpp
         actor-zeta/actor/blocking_actor.hpp
+        actor-zeta/actor/communication_module.hpp
         actor-zeta/actor/context.hpp
         actor-zeta/actor/dispatcher.hpp
         actor-zeta/actor/handler.hpp
@@ -61,6 +61,7 @@ set(SOURCE_FILES
         source/actor/context.cpp
         source/actor/dispatcher.cpp
         source/actor/supervisor.cpp
+        source/actor/communication_module.cpp
 
         source/detail/string_view.cpp
         source/detail/ref_counted.cpp
@@ -72,8 +73,7 @@ set(SOURCE_FILES
         source/messaging/message.cpp
         source/messaging/message_header.cpp
         source/messaging/blocking_mail_queue.cpp
-        source/actor/base_actor.cpp
-        source/actor/executable_actor.cpp)
+)
 
 add_library(
         ${PROJECT_NAME} OBJECT

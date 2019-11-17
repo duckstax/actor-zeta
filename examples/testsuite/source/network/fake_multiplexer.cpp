@@ -45,7 +45,7 @@ namespace actor_zeta {
                         query_raw.id = id;
                         query_raw.raw = connection.socket().read();
                         connection.address()->enqueue(
-                                messaging::make_message(
+                                messaging::message(
                                         actor::actor_address(),
                                         "read",
                                         std::move(query_raw)

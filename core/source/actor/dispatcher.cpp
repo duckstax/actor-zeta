@@ -1,9 +1,14 @@
-#include <initializer_list>
-#include <iostream>
 #include <actor-zeta/actor/dispatcher.hpp>
-#include <actor-zeta/actor/handler.hpp>
-#include <actor-zeta/actor/context.hpp>
+
+#include <iostream>
 #include <memory>
+
+// clang-format off
+#include <actor-zeta/actor/context.hpp>
+#include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/messaging/message.hpp>
+#include <actor-zeta/actor/handler.hpp>
+// clang-format on
 
 namespace actor_zeta { namespace actor {
 
@@ -26,11 +31,11 @@ namespace actor_zeta { namespace actor {
         }
 
         void dispatcher_t::execute(context &ctx) {
-            auto it = handlers_.find(ctx.message().command());
+            auto it = handlers_.find(ctx.current_message().command());
             if (it != handlers_.end()) {
                 return it->second->invoke(ctx);
             } else {
-                error_skip(ctx.message().command());
+                error_skip(ctx.current_message().command());
             }
         }
 

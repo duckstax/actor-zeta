@@ -20,7 +20,7 @@ namespace actor_zeta { namespace actor {
             basic_actor(
                     supervisor &ptr,
                     detail::string_view name
-            ): actor_type(ptr, new MailBox, name) {
+            ): actor_type(ptr, name, new MailBox) {
 
             }
 

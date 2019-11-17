@@ -74,7 +74,7 @@ public:
                     query_.parameter = std::move(parsed_raw_request);
                     query_.id = query_raw.id;
                     actor_zeta::send(
-                            ctx->addresses(actor_zeta::detail::string_view("storage")),
+                            ctx.addresses("storage"),
                             actor_zeta::actor::actor_address(address()),
                             std::string(query_.commands),
                             std::move(query_)
@@ -107,11 +107,9 @@ public:
 
     auto executor() noexcept -> actor_zeta::executor::abstract_executor& final { return *e_;}
 
-    auto broadcast(actor_zeta::messaging::message) -> bool final  {return false;}
-
     using actor_zeta::actor::supervisor::join;
 
-    auto join(actor_zeta::actor::base_actor *t) -> actor_zeta::actor::actor_address final {
+    auto join(actor_zeta::actor::abstract_actor *t) -> actor_zeta::actor::actor_address final {
         actor_zeta::actor::actor tmp(t);
         auto address = tmp->address();
         actors_.push_back(std::move(tmp));
@@ -119,8 +117,8 @@ public:
     }
 
     auto enqueue(actor_zeta::messaging::message msg,actor_zeta::executor::execution_device *) -> void final {
-        context tmp(this,std::move(msg));
-        dispatch().execute(tmp);
+        set_current_message(std::move(msg));
+        dispatch().execute(*this);
     }
 
 
@@ -151,7 +149,7 @@ public:
                     response.r_ = std::to_string(status);
                     response.id = tmp.id;
                     actor_zeta::send(
-                            ctx.message().sender(),
+                            ctx.current_message().sender(),
                             actor_address(self),
                             write,
                             std::move(response)

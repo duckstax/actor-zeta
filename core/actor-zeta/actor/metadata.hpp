@@ -13,6 +13,7 @@ namespace actor_zeta {
         };
 
         struct metadata final {
+            actor_id id_;
             abstract type;
             detail::string_view name;
         };

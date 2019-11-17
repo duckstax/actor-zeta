@@ -1,23 +1,23 @@
 #pragma once
 
-#include <actor-zeta/messaging/mail_box.hpp>
-#include <actor-zeta/executor/execution_device.hpp>
-#include <actor-zeta/actor/executable_actor.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <actor-zeta/messaging/mail_box.hpp>
+#include <actor-zeta/actor/abstract_actor.hpp>
 #include <actor-zeta/executor/executable.hpp>
 
 namespace actor_zeta { namespace actor {
 ///
 /// @brief Specialization of actor with scheduling functionality
 ///
-        class cooperative_actor :
-                public executable_actor,
-                public executor::executable {
+        class cooperative_actor
+                : public abstract_actor
+                , public executor::executable
+                {
         public:
 
             using mailbox_type = messaging::mail_box;
 
-            using abstract_actor::enqueue;
+            using communication_module::enqueue;
 
             void enqueue(messaging::message, executor::execution_device *) final;
 
@@ -29,7 +29,7 @@ namespace actor_zeta { namespace actor {
             ~cooperative_actor() override;
 
         protected:
-            cooperative_actor(supervisor &, mailbox_type*, detail::string_view);
+            cooperative_actor(supervisor &, detail::string_view,mailbox_type*);
 
             void intrusive_ptr_add_ref_impl() override;
 
@@ -39,7 +39,9 @@ namespace actor_zeta { namespace actor {
 
 // message processing -----------------------------------------------------
 
-            messaging::message next_message();
+            auto next_message() -> void ;
+
+            auto current_message() -> messaging::message& override;
 
             bool has_next_message();
 
@@ -50,7 +52,7 @@ namespace actor_zeta { namespace actor {
             messaging::message pop_to_cache();
 
 // ----------------------------------------------------- message processing
-
+            messaging::message current_message_;
             std::unique_ptr<mailbox_type> mailbox_;
         };
 }}

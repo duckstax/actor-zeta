@@ -1,11 +1,15 @@
 #include <iostream>
 #include <cassert>
 
-#include <actor-zeta/actor/cooperative_actor.hpp>
+// clang-format off
+#include <actor-zeta/actor/context.hpp>
+#include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
-#include <actor-zeta/actor/handler.hpp>
 #include <actor-zeta/actor/supervisor.hpp>
+#include <actor-zeta/actor/cooperative_actor.hpp>
+// clang-format on
 
 namespace actor_zeta { namespace actor {
 
@@ -26,18 +30,16 @@ namespace actor_zeta { namespace actor {
                     msg_ptr = pop_to_cache();
                     if (msg_ptr) {
                         {
-                            context context_(this, std::move(msg_ptr));
-                            dispatch().execute(context_); /** context processing */
+                            dispatch().execute(*this); /** context processing */
                         }
                         ++handled_msgs;
                         continue;
                     }
 
-                    msg_ptr = next_message();
-                    if (msg_ptr) {
+                   next_message();
+                    if (current_message()) {
                         {
-                            context context_(this, std::move(msg_ptr));
-                            dispatch().execute(context_); /** context processing */
+                            dispatch().execute(*this); /** context processing */
                         }
                         ++handled_msgs;
 
@@ -50,10 +52,10 @@ namespace actor_zeta { namespace actor {
 
             //---------------------------------------------------------------------------
 
-            messaging::message msg_ptr = next_message();
-            while (msg_ptr) {
-                push_to_cache(std::move(msg_ptr));
-                msg_ptr = next_message();
+            next_message();
+            while (current_message()) {
+                push_to_cache(std::move(current_message()));
+                next_message();
             }
 
             //---------------------------------------------------------------------------
@@ -89,10 +91,10 @@ namespace actor_zeta { namespace actor {
 
         cooperative_actor::cooperative_actor(
                   supervisor &env
-                , mailbox_type* mail_ptr
                 , detail::string_view name
+                , mailbox_type* mail_ptr
         )
-                : executable_actor(env, name)
+                : abstract_actor(env, name)
                 , mailbox_(mail_ptr)
         {
         }
@@ -131,12 +133,16 @@ namespace actor_zeta { namespace actor {
             return *mailbox_;
         }
 
-        messaging::message cooperative_actor::next_message() {
-            return mailbox().get();
+        void cooperative_actor::next_message() {
+           current_message_ =  mailbox().get();
         }
 
         cooperative_actor::~cooperative_actor(){
 
+        }
+
+        auto cooperative_actor::current_message() -> messaging::message & {
+            return current_message_;
         }
     }
 }
