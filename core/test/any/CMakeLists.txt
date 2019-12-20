@@ -11,4 +11,6 @@ endif()
 
 set(SOURCE_FILES main.cpp)
 
-add_executable(${project} ${SOURCE_FILES})
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+
+target_link_libraries(${PROJECT_NAME} actor-zeta)

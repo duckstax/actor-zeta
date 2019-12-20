@@ -25,7 +25,8 @@ set(HEADER_FILES
         actor-zeta/actor/metadata.hpp
         actor-zeta/actor/supervisor.hpp
 
-        actor-zeta/detail/any.hpp
+        #actor-zeta/detail/any.hpp
+        actor-zeta/detail/experimental_any.hpp
         actor-zeta/detail/callable_trait.hpp
         actor-zeta/detail/intrusive_ptr.hpp
         actor-zeta/detail/ref_counted.hpp
