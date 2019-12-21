@@ -32,12 +32,12 @@ namespace actor_zeta { namespace messaging {
 
             template<typename T>
             auto body() const -> const T& {
-                return body_.as<T>();
+                return detail::any_cast<const T&>(body_);
             }
 
             template<typename T>
             auto body() -> T& {
-                return body_.as<T>();
+                return detail::any_cast<T&>(body_);
             }
 
             auto clone() const -> message;

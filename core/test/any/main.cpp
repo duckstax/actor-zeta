@@ -1,4 +1,4 @@
-#include <actor-zeta/detail/experimental_any.hpp>
+#include <actor-zeta/detail/any.hpp>
 #include <numeric>
 #include <vector>
 #include <string>
@@ -16,142 +16,115 @@ struct test_object final {
     bool            mbThrowOnCopy;       // Throw an exception of this object is copied, moved, or assigned to another.
     int64_t         mId;                 // Unique id for each object, equal to its creation number. This value is not coped from other TestObjects during any operations, including moves.
     uint32_t        mMagicValue;         // Used to verify that an instance is valid and that it is not corrupted. It should always be kMagicValue.
-    static int64_t  sTOCount;            // Count of all current existing TestObjects.
-    static int64_t  sTOCtorCount;        // Count of times any ctor was called.
-    static int64_t  sTODtorCount;        // Count of times dtor was called.
-    static int64_t  sTODefaultCtorCount; // Count of times the default ctor was called.
-    static int64_t  sTOArgCtorCount;     // Count of times the x0,x1,x2 ctor was called.
-    static int64_t  sTOCopyCtorCount;    // Count of times copy ctor was called.
-    static int64_t  sTOMoveCtorCount;    // Count of times move ctor was called.
-    static int64_t  sTOCopyAssignCount;  // Count of times copy assignment was called.
-    static int64_t  sTOMoveAssignCount;  // Count of times move assignment was called.
+    static int64_t  count;            // Count of all current existing TestObjects.
+    static int64_t  ctor_count;        // Count of times any ctor was called.
+    static int64_t  dtor_count;        // Count of times dtor was called.
+    static int64_t  default_ctor_count; // Count of times the default ctor was called.
+    static int64_t  arg_ctor_count;     // Count of times the x0,x1,x2 ctor was called.
+    static int64_t  copy_ctor_count;    // Count of times copy ctor was called.
+    static int64_t  move_ctor_count;    // Count of times move ctor was called.
+    static int64_t  copy_assign_count;  // Count of times copy assignment was called.
+    static int64_t  move_assign_count;  // Count of times move assignment was called.
     static int      sMagicErrorCount;    // Number of magic number mismatch errors.
 
     explicit test_object(int x = 0, bool bThrowOnCopy = false)
             : mX(x), mbThrowOnCopy(bThrowOnCopy), mMagicValue(kMagicValue)
     {
-        ++sTOCount;
-        ++sTOCtorCount;
-        ++sTODefaultCtorCount;
-        mId = sTOCtorCount;
+        ++count;
+        ++ctor_count;
+        ++default_ctor_count;
+        mId = ctor_count;
     }
 
-    // This constructor exists for the purpose of testing variadiac template arguments, such as with the emplace container functions.
     test_object(int x0, int x1, int x2, bool bThrowOnCopy = false)
             : mX(x0 + x1 + x2), mbThrowOnCopy(bThrowOnCopy), mMagicValue(kMagicValue)
     {
-        ++sTOCount;
-        ++sTOCtorCount;
-        ++sTOArgCtorCount;
-        mId = sTOCtorCount;
+        ++count;
+        ++ctor_count;
+        ++arg_ctor_count;
+        mId = ctor_count;
     }
 
     test_object(const test_object& testObject)
             : mX(testObject.mX), mbThrowOnCopy(testObject.mbThrowOnCopy), mMagicValue(testObject.mMagicValue)
     {
-        ++sTOCount;
-        ++sTOCtorCount;
-        ++sTOCopyCtorCount;
-        mId = sTOCtorCount;
-        if(mbThrowOnCopy)
-        {
-#if EASTL_EXCEPTIONS_ENABLED
-            throw "Disallowed test_object copy";
-#endif
-        }
+        ++count;
+        ++ctor_count;
+        ++copy_ctor_count;
+        mId = ctor_count;
     }
 
     test_object(test_object&& testObject)
             : mX(testObject.mX), mbThrowOnCopy(testObject.mbThrowOnCopy), mMagicValue(testObject.mMagicValue)
     {
-        ++sTOCount;
-        ++sTOCtorCount;
-        ++sTOMoveCtorCount;
-        mId = sTOCtorCount;
+        ++count;
+        ++ctor_count;
+        ++move_ctor_count;
+        mId = ctor_count;
         testObject.mX = 0;
-        if(mbThrowOnCopy)
-        {
-#if EASTL_EXCEPTIONS_ENABLED
-            throw "Disallowed test_object copy";
-#endif
-        }
     }
 
     test_object& operator=(const test_object& testObject){
-        ++sTOCopyAssignCount;
+        ++copy_assign_count;
 
         if(&testObject != this){
             mX = testObject.mX;
-            // Leave mId alone.
             mMagicValue = testObject.mMagicValue;
             mbThrowOnCopy = testObject.mbThrowOnCopy;
-            if(mbThrowOnCopy)
-            {
-#if EASTL_EXCEPTIONS_ENABLED
-                throw "Disallowed test_object copy";
-#endif
-            }
         }
         return *this;
     }
 
     test_object& operator=(test_object&& testObject){
-        ++sTOMoveAssignCount;
+        ++move_assign_count;
 
         if(&testObject != this){
             std::swap(mX, testObject.mX);
-            // Leave mId alone.
             std::swap(mMagicValue, testObject.mMagicValue);
             std::swap(mbThrowOnCopy, testObject.mbThrowOnCopy);
-
-            if(mbThrowOnCopy)
-            {
-#if EASTL_EXCEPTIONS_ENABLED
-                throw "Disallowed test_object copy";
-#endif
-            }
         }
         return *this;
     }
 
     ~test_object(){
-        if(mMagicValue != kMagicValue)
+        if(mMagicValue != kMagicValue) {
             ++sMagicErrorCount;
+        }
         mMagicValue = 0;
-        --sTOCount;
-        ++sTODtorCount;
+        --count;
+        ++dtor_count;
     }
 
-    static void Reset(){
-        sTOCount            = 0;
-        sTOCtorCount        = 0;
-        sTODtorCount        = 0;
-        sTODefaultCtorCount = 0;
-        sTOArgCtorCount     = 0;
-        sTOCopyCtorCount    = 0;
-        sTOMoveCtorCount    = 0;
-        sTOCopyAssignCount  = 0;
-        sTOMoveAssignCount  = 0;
+    static void reset(){
+        count            = 0;
+        ctor_count        = 0;
+        dtor_count        = 0;
+        default_ctor_count = 0;
+        arg_ctor_count     = 0;
+        copy_ctor_count    = 0;
+        move_ctor_count    = 0;
+        copy_assign_count  = 0;
+        move_assign_count  = 0;
         sMagicErrorCount    = 0;
     }
 
-    static bool IsClear() {
-        return (sTOCount == 0) && (sTODtorCount == sTOCtorCount) && (sMagicErrorCount == 0);
+    static bool is_clear() {
+        return (count == 0) && (dtor_count == ctor_count) && (sMagicErrorCount == 0);
     }
 };
 
-int64_t test_object::sTOCount            = 0;
-int64_t test_object::sTOCtorCount        = 0;
-int64_t test_object::sTODtorCount        = 0;
-int64_t test_object::sTODefaultCtorCount = 0;
-int64_t test_object::sTOArgCtorCount     = 0;
-int64_t test_object::sTOCopyCtorCount    = 0;
-int64_t test_object::sTOMoveCtorCount    = 0;
-int64_t test_object::sTOCopyAssignCount  = 0;
-int64_t test_object::sTOMoveAssignCount  = 0;
-int     test_object::sMagicErrorCount    = 0;
+int64_t test_object::count              = 0;
+int64_t test_object::ctor_count         = 0;
+int64_t test_object::dtor_count         = 0;
+int64_t test_object::default_ctor_count = 0;
+int64_t test_object::arg_ctor_count     = 0;
+int64_t test_object::copy_ctor_count    = 0;
+int64_t test_object::move_ctor_count    = 0;
+int64_t test_object::copy_assign_count  = 0;
+int64_t test_object::move_assign_count  = 0;
+int     test_object::sMagicErrorCount   = 0;
 
-struct small_test_object{
+struct small_test_object final {
     static int mCtorCount;
 
     small_test_object() noexcept { mCtorCount++; }
@@ -160,14 +133,14 @@ struct small_test_object{
     small_test_object& operator=(const small_test_object&) noexcept { mCtorCount++; return *this; }
     ~small_test_object() noexcept { mCtorCount--; }
 
-    static void Reset() { mCtorCount = 0; }
-    static bool IsClear() { return mCtorCount == 0; }
+    static void reset() { mCtorCount = 0; }
+    static bool is_clear() { return mCtorCount == 0; }
 };
 
 int small_test_object::mCtorCount = 0;
 
 
-struct RequiresInitList{
+struct RequiresInitList final {
     RequiresInitList(std::initializer_list<int> ilist): sum(std::accumulate(begin(ilist), end(ilist), 0)) {}
 
     int sum;
@@ -182,23 +155,20 @@ int main() {
     }
 
     {
-        // default construct
         any a;
-        assert(a.has_value() == false);
+        assert(!a.has_value());
     }
 
     {
-        // test object ctors & dtors are called for a large object
-        test_object::Reset();
+        test_object::reset();
         { any a{test_object()}; }
-        assert(test_object::IsClear());
+        assert(!test_object::is_clear());
     }
 
     {
-        // test object ctors & dtors are called for a small object
-        small_test_object::Reset();
+        small_test_object::reset();
         { any a{small_test_object()}; }
-        assert(small_test_object::IsClear());
+        assert(small_test_object::is_clear());
     }
 
     {
@@ -233,13 +203,6 @@ int main() {
     {
         any a = 42;
         assert(any_cast<int>(a) == 42);
-
-#if EASTL_EXCEPTIONS_ENABLED
-        int throwCount = 0;
-			try { assert(any_cast<short>(a) == 42); }
-			catch (bad_any_cast) { throwCount++;  }
-			assert(throwCount != 0);
-#endif
     }
 
     {
@@ -282,7 +245,7 @@ int main() {
     }
 
     {
-        test_object::Reset();
+        test_object::reset();
         {
             std::vector<any> va = {42, 'a', 42.f, 3333u, 4444ul, 5555ull, 6666.0};
 
@@ -294,17 +257,17 @@ int main() {
             assert(any_cast<unsigned long long>(va[5]) == 5555ull);
             assert(any_cast<double>(va[6]) == 6666.0);
 
-            va[3] = test_object(3333); // replace a small integral with a large heap allocated object.
+            va[3] = test_object(3333);
 
             assert(any_cast<int>(va[0]) == 42);
             assert(any_cast<char>(va[1]) == 'a');
             assert(any_cast<float>(va[2]) == 42.f);
-            assert(any_cast<test_object>(va[3]).mX == 3333); // not 3333u because test_object ctor takes a signed type.
+            assert(any_cast<test_object>(va[3]).mX == 3333);
             assert(any_cast<unsigned long>(va[4]) == 4444ul);
             assert(any_cast<unsigned long long>(va[5]) == 5555ull);
             assert(any_cast<double>(va[6]) == 6666.0);
         }
-        assert(test_object::IsClear());
+        assert(!test_object::is_clear());
     }
 
     {
@@ -348,7 +311,6 @@ int main() {
         assert(a1.has_value());
     }
 
-    // swap tests
     {
         {
             any a1 = 42;
@@ -380,26 +342,6 @@ int main() {
         }
     }
 
-#if EASTL_RTTI_ENABLED
-    {
-		#if defined(EA_COMPILER_MSVC)
-			assert(EA::StdC::Strcmp(any(42).type().name(), "int") == 0);
-			assert(EA::StdC::Strcmp(any(42.f).type().name(), "float") == 0);
-			assert(EA::StdC::Strcmp(any(42u).type().name(), "unsigned int") == 0);
-			assert(EA::StdC::Strcmp(any(42ul).type().name(), "unsigned long") == 0);
-			assert(EA::StdC::Strcmp(any(42l).type().name(), "long") == 0);
-
-		#elif defined(EA_COMPILER_CLANG) || defined(EA_COMPILER_GNUC)
-			assert(EA::StdC::Strcmp(any(42).type().name(), "i") == 0);
-			assert(EA::StdC::Strcmp(any(42.f).type().name(), "f") == 0);
-			assert(EA::StdC::Strcmp(any(42u).type().name(), "j") == 0);
-			assert(EA::StdC::Strcmp(any(42ul).type().name(), "m") == 0);
-			assert(EA::StdC::Strcmp(any(42l).type().name(), "l") == 0);
-		#endif
-	}
-#endif
-
-    // emplace, small object tests
     {
         any a;
 
@@ -415,18 +357,16 @@ int main() {
         assert(!a.has_value());
     }
 
-    // emplace, large object tests
     {
-        test_object::Reset();
+        test_object::reset();
         {
             any a;
             a.emplace<test_object>();
             assert(a.has_value());
         }
-        assert(test_object::IsClear());
+        assert(!test_object::is_clear());
     }
 
-    // emplace, initializer_list
     {
         {
             any a;
@@ -437,24 +377,9 @@ int main() {
         }
     }
 
-    // equivalence tests
     {
         any a, b;
         assert(!a.has_value() == !b.has_value());
-
-#if EASTL_EXCEPTIONS_ENABLED
-        int bad_any_cast_thrown = 0;
-			try
-			{
-				assert(any_cast<int>(a) == any_cast<int>(b));
-			}
-			catch (eastl::bad_any_cast)
-			{
-				bad_any_cast_thrown++;
-			}
-			assert(bad_any_cast_thrown != 0);
-#endif
-
 
         a = 42; b = 24;
         assert(any_cast<int>(a) != any_cast<int>(b));
@@ -465,20 +390,18 @@ int main() {
         assert(a.has_value() == b.has_value());
     }
 
-    // move tests
     {
         any a = std::string("hello world");
         assert(any_cast<std::string&>(a) == "hello world");
 
-        auto s = move(any_cast<std::string&>(a)); // move string out
+        auto s = move(any_cast<std::string&>(a));
         assert(s == "hello world");
         assert(any_cast<std::string&>(a).empty());
 
-        any_cast<std::string&>(a) = move(s); // move string in
+        any_cast<std::string&>(a) = move(s);
         assert(any_cast<std::string&>(a) == "hello world");
     }
 
-    // nullptr tests
     {
         any* a = nullptr;
         assert(any_cast<int>(a) == nullptr);
@@ -498,7 +421,6 @@ int main() {
         assert(any_cast<const volatile short*>(&b) == nullptr);
     }
 
-    // make_any
     {
         {
             auto a = make_any<int>(42);
@@ -511,14 +433,12 @@ int main() {
         }
     }
 
-    // user reported regression that eastl::any constructor was not decaying the deduced type correctly.
     {
         float f = 42.f;
         any a(f);
         assert(any_cast<float>(a) == 42.f);
     }
 
-    //testing unsafe operations
     {
         any a = 1;
         int* i = any_cast<int>(&a);
@@ -535,7 +455,6 @@ int main() {
         assert((*r) == 3);
     }
 
-    // user regression when calling the assignment operator
     {
         {
             any a1;
