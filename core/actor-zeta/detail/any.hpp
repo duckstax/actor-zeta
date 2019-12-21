@@ -16,7 +16,6 @@ namespace actor_zeta { namespace detail {
 
 /// Drop-in replacement for C++17 std::any.
 
-
         namespace implementation {
             inline void implementation_hack_bad_any_cast() {
                 assert(false);
@@ -243,18 +242,18 @@ namespace actor_zeta { namespace detail {
             template<class ValueType>
             any(ValueType &&value,
                 typename std::enable_if<!std::is_same<typename std::decay<ValueType>::type, any>::value>::type * = 0) {
-                using DecayedValueType = type_traits::decay_t<ValueType>;
-                static_assert(std::is_copy_constructible<DecayedValueType>::value,"ValueType must be copy-constructible");
-                storage_handler<DecayedValueType>::construct(storage_, std::forward<ValueType>(value));
-                handler_ = &storage_handler<DecayedValueType>::handler_func;
+                using decayed_value_type = type_traits::decay_t<ValueType>;
+                static_assert(std::is_copy_constructible<decayed_value_type>::value, "ValueType must be copy-constructible");
+                storage_handler<decayed_value_type>::construct(storage_, std::forward<ValueType>(value));
+                handler_ = &storage_handler<decayed_value_type>::handler_func;
             }
 
             template<class T, class... Args>
             explicit any(type_traits::in_place_type_t<T>, Args &&... args) {
-                using StorageHandlerT = storage_handler<type_traits::decay_t<T>>;
+                using storage_handler_t = storage_handler<type_traits::decay_t<T>>;
                 static_assert(std::is_constructible<T, Args...>::value, "T must be constructible with Args...");
-                StorageHandlerT::construct_in_place(storage_, std::forward<Args>(args)...);
-                handler_ = &StorageHandlerT::handler_func;
+                storage_handler_t::construct_in_place(storage_, std::forward<Args>(args)...);
+                handler_ = &storage_handler_t::handler_func;
             }
 
             template<class T, class U, class... Args>
@@ -262,10 +261,10 @@ namespace actor_zeta { namespace detail {
                          std::initializer_list<U> il,
                          Args &&... args,
                          typename std::enable_if<std::is_constructible<T, std::initializer_list<U> &, Args...>::value, void>::type * = 0) {
-                using StorageHandlerT = storage_handler<type_traits::decay_t<T>>;
+                using storage_handler_t = storage_handler<type_traits::decay_t<T>>;
 
-                StorageHandlerT::construct_in_place(storage_, il, std::forward<Args>(args)...);
-                handler_ = &StorageHandlerT::handler_func;
+                storage_handler_t::construct_in_place(storage_, il, std::forward<Args>(args)...);
+                handler_ = &storage_handler_t::handler_func;
             }
 
             template<class ValueType>
@@ -287,21 +286,21 @@ namespace actor_zeta { namespace detail {
 
             template<class T, class... Args>
             void emplace(Args &&... args) {
-                using StorageHandlerT =  storage_handler<type_traits::decay_t<T>>;
+                using storage_handler_t =  storage_handler<type_traits::decay_t<T>>;
                 static_assert(std::is_constructible<T, Args...>::value, "T must be constructible with Args...");
                 reset();
-                StorageHandlerT::construct_in_place(storage_, std::forward<Args>(args)...);
-                handler_ = &StorageHandlerT::handler_func;
+                storage_handler_t::construct_in_place(storage_, std::forward<Args>(args)...);
+                handler_ = &storage_handler_t::handler_func;
             }
 
             template<class NT, class U, class... Args>
             typename std::enable_if<std::is_constructible<NT, std::initializer_list<U> &, Args...>::value, void>::type
             emplace(std::initializer_list<U> il, Args &&... args) {
-                using StorageHandlerT = storage_handler<type_traits::decay_t<NT>>;
+                using storage_handler_t = storage_handler<type_traits::decay_t<NT>>;
 
                 reset();
-                StorageHandlerT::construct_in_place(storage_, il, std::forward<Args>(args)...);
-                handler_ = &StorageHandlerT::handler_func;
+                storage_handler_t::construct_in_place(storage_, il, std::forward<Args>(args)...);
+                handler_ = &storage_handler_t::handler_func;
             }
 
 
@@ -312,6 +311,7 @@ namespace actor_zeta { namespace detail {
             }
 
             void swap(any &other) noexcept {
+                using std::swap;
                 if (this == &other) {
                     return;
                 }
@@ -344,7 +344,6 @@ namespace actor_zeta { namespace detail {
 
 
         inline void swap(any &rhs, any &lhs) noexcept {
-            using std::swap;
             rhs.swap(lhs);
         }
 
