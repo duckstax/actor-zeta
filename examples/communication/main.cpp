@@ -121,7 +121,7 @@ public:
 
 int main() {
 
-    auto*supervisor = new supervisor_lite(new dummy_executor);
+    std::unique_ptr<supervisor_lite> supervisor(new supervisor_lite(new dummy_executor));
 
     auto storage = make_actor<storage_t>(*supervisor);
 
@@ -129,9 +129,9 @@ int main() {
 
     actor_zeta::link(storage,network);
 
-    auto*supervisor1 = new supervisor_lite(new dummy_executor);
+    std::unique_ptr<supervisor_lite> supervisor1(new supervisor_lite(new dummy_executor));
 
-    actor_zeta::link(supervisor,supervisor1);
+    actor_zeta::link(*supervisor,*supervisor1);
 
     auto storage1 = make_actor<storage_t>(*supervisor1);
 

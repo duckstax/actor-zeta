@@ -88,13 +88,22 @@ namespace actor_zeta {
         link_imp(a1,a2);
     }
 
-    inline void link(supervisor* actor1,supervisor* actor2) {
+    template <class Supervisor>
+    inline void link(Supervisor* actor1,Supervisor* actor2) {
         auto a1 = actor1->address();
         auto a2 = actor2->address();
         link_imp(a1,a2);
     }
 
-    inline void link(supervisor& actor1,actor_address& actor2) {
+    template <class Supervisor>
+    inline void link(Supervisor& actor1,Supervisor& actor2) {
+        auto a1 = actor1.address();
+        auto a2 = actor2.address();
+        link_imp(a1,a2);
+    }
+
+    template <class Supervisor>
+    inline void link(Supervisor& actor1,actor_address& actor2) {
         auto a1 = actor1.address();
         auto a2 = actor2->address();
         link_imp(a1,a2);
