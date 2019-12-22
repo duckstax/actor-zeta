@@ -250,8 +250,8 @@ namespace actor_zeta { namespace detail {
 
             template<class T, class... Args>
             explicit any(type_traits::in_place_type_t<T>, Args &&... args) {
-                using storage_handler_t = storage_handler<type_traits::decay_t<T>>;
                 static_assert(std::is_constructible<T, Args...>::value, "T must be constructible with Args...");
+                using storage_handler_t = storage_handler<type_traits::decay_t<T>>;
                 storage_handler_t::construct_in_place(storage_, std::forward<Args>(args)...);
                 handler_ = &storage_handler_t::handler_func;
             }
@@ -286,8 +286,8 @@ namespace actor_zeta { namespace detail {
 
             template<class T, class... Args>
             void emplace(Args &&... args) {
-                using storage_handler_t =  storage_handler<type_traits::decay_t<T>>;
                 static_assert(std::is_constructible<T, Args...>::value, "T must be constructible with Args...");
+                using storage_handler_t =  storage_handler<type_traits::decay_t<T>>;
                 reset();
                 storage_handler_t::construct_in_place(storage_, std::forward<Args>(args)...);
                 handler_ = &storage_handler_t::handler_func;
