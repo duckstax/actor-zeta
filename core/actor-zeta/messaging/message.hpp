@@ -24,7 +24,7 @@ namespace actor_zeta { namespace messaging {
 
             ~message() = default;
 
-            message(actor::actor_address /*sender*/, std::string /*name*/, detail::any &&/*body*/);
+            message(actor::actor_address /*sender*/, std::string /*name*/, detail::any /*body*/);
 
             auto command() const noexcept -> detail::string_view;
 
@@ -38,6 +38,11 @@ namespace actor_zeta { namespace messaging {
             template<typename T>
             auto body() -> T& {
                 return detail::any_cast<T&>(body_);
+            }
+
+
+            auto body() -> detail::any& {
+                return body_;
             }
 
             auto clone() const -> message;

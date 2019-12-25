@@ -9,6 +9,7 @@
 #include <actor-zeta/actor/supervisor.hpp>
 #include <actor-zeta/impl/handler.ipp>
 // clang-format on
+#include <actor-zeta/detail/any.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/executor.hpp>
 #include <actor-zeta/executor/policy/work_sharing.hpp>
@@ -30,14 +31,14 @@ namespace actor_zeta {
 
     using messaging::message;
 
-    template <std::size_t N,typename T>
-    inline auto make_message(actor::actor_address sender_,const char(&name)[N], T &&data) -> message {
-        return message(sender_,name, std::forward<T>(data));
+    template<class T, typename... Args>
+    inline auto make_message(actor::actor_address sender_,T name,Args&&... args) -> message {
+        return message(sender_,std::forward<T>(name), std::move(detail::any(std::tuple<type_traits::decay_t<Args>...>{std::forward<Args>(args)...})));
     }
 
-    template <typename T>
-    inline auto make_message(actor::actor_address sender_,std::string name, T &&data) -> message {
-        return message(sender_,name, std::forward<T>(data));
+    template<class T,typename Arg>
+    inline auto make_message(actor::actor_address sender_, T name,Arg&& arg) -> message {
+        return message(std::move(sender_),std::forward<T>(name), std::move(detail::any(std::forward<Arg>(arg))));
     }
 
     template<

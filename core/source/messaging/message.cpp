@@ -19,7 +19,7 @@ namespace actor_zeta { namespace messaging {
             return init;
         }
 
-        message::message(actor::actor_address sender_,std::string name, detail::any &&body):
+        message::message(actor::actor_address sender_,std::string name, detail::any body):
             init(true),
             header_(std::move(sender_),std::move(name)),
             body_(std::move(body)) {}

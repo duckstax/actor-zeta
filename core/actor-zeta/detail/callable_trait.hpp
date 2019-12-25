@@ -20,18 +20,15 @@ namespace actor_zeta { namespace  type_traits {
 
 /// member const function pointer
         template<class C, typename R, class... Ts>
-        struct callable_trait<R (C::*)(Ts...) const> : callable_trait<R(Ts...)> {
-        };
+        struct callable_trait<R (C::*)(Ts...) const> : callable_trait<R(Ts...)> {};
 
 /// member function pointer
         template<class C, typename R, class... Ts>
-        struct callable_trait<R (C::*)(Ts...)> : callable_trait<R(Ts...)> {
-        };
+        struct callable_trait<R (C::*)(Ts...)> : callable_trait<R(Ts...)> {};
 
 /// good ol' function pointer
         template<class R, class... Ts>
-        struct callable_trait<R (*)(Ts...)> : callable_trait<R(Ts...)> {
-        };
+        struct callable_trait<R (*)(Ts...)> : callable_trait<R(Ts...)> {};
 
         template<class T>
         struct has_apply_operator {
@@ -74,12 +71,10 @@ namespace actor_zeta { namespace  type_traits {
         };
 
         template<class T>
-        struct get_callable_trait_helper<T, false, false> {
-        };
+        struct get_callable_trait_helper<T, false, false> {};
 
         template<class T>
-        struct get_callable_trait : get_callable_trait_helper<decay_t<T>> {
-        };
+        struct get_callable_trait : get_callable_trait_helper<decay_t<T>> {};
 
 
         template<typename C, typename T, typename U>

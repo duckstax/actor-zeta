@@ -48,6 +48,31 @@ namespace actor_zeta { namespace  type_traits {
         template<size_t Len, size_t Align =__alignof__(typename aligned_storage_msa<Len>::type)>
         using aligned_storage_t = typename std::aligned_storage<Len, Align>::type;
 
+        template<typename _Tp>
+        using remove_reference_t = typename std::remove_reference<_Tp>::type;
+
+        template <std::size_t ...>
+        struct index_sequence
+        { };
+
+        template <std::size_t N, std::size_t ... Next>
+        struct index_sequence_helper : public index_sequence_helper<N-1U, N-1U, Next...>
+        { };
+
+        template <std::size_t ... Next>
+        struct index_sequence_helper<0U, Next ... >{
+            using type = index_sequence<Next ... >;
+        };
+
+        template <std::size_t N>
+        using make_index_sequence = typename index_sequence_helper<N>::type;
+
+        template<typename _Tp>
+        using add_rvalue_reference_t = typename std::add_rvalue_reference<_Tp>::type;
+
+        template<typename _Tp>
+        using add_rvalue_reference_t = typename std::add_rvalue_reference<_Tp>::type;
+
 /// C++ 17
 
         namespace detail {
