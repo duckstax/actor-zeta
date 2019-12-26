@@ -52,8 +52,7 @@ namespace actor_zeta { namespace actor {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &ctx) -> void {
                     using CallTraits =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
-                    using arg_type = typename CallTraits::arg_types;
-                    using Tuple = std::tuple<type_traits::decay_t<arg_type>>;
+                    using Tuple =  typename CallTraits::decayed_arg_types_in_a_tuple;
                     auto &args_ = *detail::any_cast<Tuple>(&ctx.current_message().body());
                     constexpr int Args_size = type_traits::type_list_size<typename type_traits::get_callable_trait<F>::arg_types>::value;
                     apply_impl(f, ctx, std::move(args_),type_traits::make_index_sequence<Args_size>{});

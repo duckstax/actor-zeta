@@ -14,6 +14,7 @@ namespace actor_zeta { namespace  type_traits {
         struct callable_trait<R(Ts...)> {
             using result_type = R;
             using arg_types = type_list<Ts...>;
+            using decayed_arg_types_in_a_tuple =  std::tuple<Ts...>; /// std::tuple<type_traits::decay_t<Ts>...>;
             using fun_sig = R(Ts...);
             using fun_type = std::function<R(Ts...)>;
         };
@@ -56,6 +57,7 @@ namespace actor_zeta { namespace  type_traits {
             using arg_types = typename type::arg_types;
             using fun_type = typename type::fun_type;
             using fun_sig = typename type::fun_sig;
+            using decayed_arg_types_in_a_tuple = typename type::decayed_arg_types_in_a_tuple ;
             static constexpr size_t num_args = type_list_size<arg_types>::value;
         };
 
@@ -67,6 +69,7 @@ namespace actor_zeta { namespace  type_traits {
             using arg_types = typename type::arg_types;
             using fun_type = typename type::fun_type;
             using fun_sig = typename type::fun_sig;
+            using decayed_arg_types_in_a_tuple = typename type::decayed_arg_types_in_a_tuple ;
             static constexpr size_t num_args = type_list_size<arg_types>::value;
         };
 
