@@ -56,7 +56,7 @@ namespace actor_zeta { namespace actor {
                     using Tuple = std::tuple<type_traits::decay_t<arg_type>>;
                     auto &args_ = *detail::any_cast<Tuple>(&ctx.current_message().body());
                     constexpr int Args_size = type_traits::type_list_size<typename type_traits::get_callable_trait<F>::arg_types>::value;
-                    apply_impl(std::forward<F>(f), ctx, std::move(args_),type_traits::make_index_sequence<Args_size>{});
+                    apply_impl(f, ctx, std::move(args_),type_traits::make_index_sequence<Args_size>{});
                 };
             }
         };
