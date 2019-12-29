@@ -6,44 +6,70 @@
 
 namespace actor_zeta { namespace  type_traits {
 
-        template<class Functor>
+        template <class Functor>
         struct callable_trait;
 
-/// good ol' function
-        template<class R, class... Ts>
-        struct callable_trait<R(Ts...)> {
+// good ol' function
+        template <class R, class... Ts>
+        struct callable_trait<R (Ts...)> {
             using result_type = R;
             using arg_types = type_list<Ts...>;
-            using fun_sig = R(Ts...);
-            using fun_type = std::function<R(Ts...)>;
+            using fun_sig = R (Ts...);
+            using fun_type = std::function<R (Ts...)>;
+            static constexpr size_t number_of_arguments = sizeof...(Ts);
         };
+/*
+        // member noexcept const function pointer
+        template <class C, typename R, class... Ts>
+        struct callable_trait<R (C::*)(Ts...) const noexcept>: callable_trait<R(Ts...)> {};
 
-/// member const function pointer
-        template<class C, typename R, class... Ts>
-        struct callable_trait<R (C::*)(Ts...) const> : callable_trait<R(Ts...)> {};
+// member noexcept function pointer
+        template <class C, typename R, class... Ts>
+        struct callable_trait<R (C::*)(Ts...) noexcept> : callable_trait<R(Ts...)> {};
 
-/// member function pointer
-        template<class C, typename R, class... Ts>
-        struct callable_trait<R (C::*)(Ts...)> : callable_trait<R(Ts...)> {};
+// member const function pointer
+        template <class C, typename R, class... Ts>
+        struct callable_trait<R (C::*)(Ts...) const> : callable_trait<R (Ts...)> {};
 
-/// good ol' function pointer
-        template<class R, class... Ts>
-        struct callable_trait<R (*)(Ts...)> : callable_trait<R(Ts...)> {};
+// member function pointer
+        template <class C, typename R, class... Ts>
+        struct callable_trait<R (C::*)(Ts...)> : callable_trait<R (Ts...)> {};
 
-        template<class T>
+// good ol' noexcept function pointer
+        template <class R, class... Ts>
+        struct callable_trait<R (*)(Ts...) noexcept> : callable_trait<R(Ts...)> {};
+
+// good ol' function pointer
+        template <class R, class... Ts>
+        struct callable_trait<R (*)(Ts...)> : callable_trait<R (Ts...)> {};
+*/
+
+// member const function pointer
+        template <class C, typename R, class... Ts>
+        struct callable_trait<R (C::*)(Ts...) const> : callable_trait<R (Ts...)> {};
+
+// member function pointer
+        template <class C, typename R, class... Ts>
+        struct callable_trait<R (C::*)(Ts...)> : callable_trait<R (Ts...)> {};
+
+// good ol' function pointer
+        template <class R, class... Ts>
+        struct callable_trait<R (*)(Ts...)> : callable_trait<R (Ts...)> {};
+
+        template <class T>
         struct has_apply_operator {
-            template<class U>
-            static auto sfinae(U *) -> decltype(&U::operator(), std::true_type());
+            template <class U>
+            static auto sfinae(U*) -> decltype(&U::operator(), std::true_type());
 
-            template<class U>
+            template <class U>
             static auto sfinae(...) -> std::false_type;
 
             using type = decltype(sfinae<T>(nullptr));
             static constexpr bool value = type::value;
         };
 
-/// matches (IsFun || IsMemberFun)
-        template<class T,
+// matches (IsFun || IsMemberFun)
+        template <class T,
                 bool IsFun = std::is_function<T>::value
                              || std::is_function<
                         typename std::remove_pointer<T>::type
@@ -56,32 +82,51 @@ namespace actor_zeta { namespace  type_traits {
             using arg_types = typename type::arg_types;
             using fun_type = typename type::fun_type;
             using fun_sig = typename type::fun_sig;
-            static constexpr size_t number_of_arguments = type_list_size<arg_types>::value;
+            static constexpr size_t number_of_arguments = tl_size<arg_types>::value;
         };
 
-/// assume functor providing operator()
-        template<class T>
+// assume functor providing operator()
+        template <class T>
         struct get_callable_trait_helper<T, false, true> {
             using type = callable_trait<decltype(&T::operator())>;
             using result_type = typename type::result_type;
             using arg_types = typename type::arg_types;
             using fun_type = typename type::fun_type;
             using fun_sig = typename type::fun_sig;
-            static constexpr size_t number_of_arguments = type_list_size<arg_types>::value;
+            static constexpr size_t number_of_arguments = tl_size<arg_types>::value;
         };
 
-        template<class T>
+        template <class T>
         struct get_callable_trait_helper<T, false, false> {};
 
-        template<class T>
+        template <class T>
         struct get_callable_trait : get_callable_trait_helper<decay_t<T>> {};
 
+        template <class T>
+        using get_callable_trait_t = typename get_callable_trait<T>::type;
 
-        template<typename C, typename T, typename U>
-        using is_callable_t = decltype(std::declval<C &>()(std::declval<T>(), std::declval<U>()));
+        template <class T>
+        struct is_callable final {
+            template <class C>
+            static bool _fun(C*, typename get_callable_trait<C>::type* = nullptr);
 
-        template<typename C, typename T, typename U>
-        using is_callable = is_detected<is_callable_t, C, T, U>;
+            static void _fun(void*);
+
+            using result_type = decltype(_fun(static_cast<decay_t<T>*>(nullptr)));
+            static constexpr bool value = std::is_same<bool, result_type>::value;
+        };
+
+        template <class F, class... Ts>
+        struct is_callable_with final {
+            template <class U>
+            static auto sfinae(U*) -> decltype((std::declval<U&>())(std::declval<Ts>()...), std::true_type());
+
+            template <class U>
+            static auto sfinae(...) -> std::false_type;
+
+            using type = decltype(sfinae<F>(nullptr));
+            static constexpr bool value = type::value;
+        };
 
 
 }}
