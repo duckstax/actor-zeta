@@ -6,49 +6,17 @@
 namespace actor_zeta { namespace  type_traits {
 
         struct unit_t final {
-            constexpr unit_t() noexcept {
-                // nop
-            }
+            constexpr unit_t() noexcept {}
 
-            constexpr unit_t(const unit_t&) noexcept {
-                // nop
-            }
+            constexpr unit_t(const unit_t&) noexcept {}
 
             template <class T>
-            explicit constexpr unit_t(T&&) noexcept {
-                // nop
-            }
-
-            static constexpr int compare(const unit_t&) noexcept {
-                return 0;
-            }
+            explicit constexpr unit_t(T&&) noexcept {}
 
             template <class... Ts>
             constexpr unit_t operator()(Ts&&...) const noexcept {
                 return {};
             }
-        };
-
-        static constexpr unit_t unit = unit_t{};
-
-        template <class T>
-        struct lift_void {
-            using type = T;
-        };
-
-        template <>
-        struct lift_void<void> {
-            using type = unit_t;
-        };
-
-        template <class T>
-        struct unlift_void {
-            using type = T;
-        };
-
-        template <>
-        struct unlift_void<unit_t> {
-            using type = void;
         };
 
 // A list of types.
@@ -67,6 +35,14 @@ namespace actor_zeta { namespace  type_traits {
         template <class... Ts>
         struct is_type_list<type_list<Ts...>> {
             static constexpr bool value = true;
+        };
+/// type list to  Tuple
+        template<class List>
+        struct type_list_to_tuple;
+
+        template<class... Ts>
+        struct type_list_to_tuple<type_list<Ts...>> {
+            using type = std::tuple<Ts...>;
         };
 
 // size_t size(type_list)

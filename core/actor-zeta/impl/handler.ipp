@@ -8,8 +8,8 @@
 namespace actor_zeta { namespace actor {
         template<
                 typename F,
-                class Args = typename type_traits::get_callable_trait<F>::arg_types,
-                int Args_size = type_traits::type_list_size<typename type_traits::get_callable_trait<F>::arg_types>::value
+                class Args = typename type_traits::get_callable_trait<F>::args_types,
+                int Args_size = type_traits::get_callable_trait<F>::number_of_arguments
         >
         struct transformer;
 
@@ -53,8 +53,8 @@ namespace actor_zeta { namespace actor {
                 return [f](context &ctx) -> void {
                     constexpr int args_size = type_traits::get_callable_trait<F>::number_of_arguments;
                     using CallTraits =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
-                    using args_type_list =  typename type_traits::tl_slice_t<typename CallTraits::arg_types,1,args_size>;
-                    using Tuple =  std::tuple< typename type_traits::type_list_at_t<args_type_list, 0>,typename type_traits::type_list_at_t<args_type_list, 1>>;
+                    using args_type_list =  typename type_traits::tl_slice_t<typename CallTraits::args_decay_types,1,args_size>;
+                    using Tuple =  typename type_traits::type_list_to_tuple<args_type_list>::type; //std::tuple< typename type_traits::type_list_at_t<args_type_list, 0>,typename type_traits::type_list_at_t<args_type_list, 1>>;
                     auto &args_ = ctx.current_message().body<Tuple>();
                     apply_impl(f, ctx, std::move(args_),type_traits::make_index_sequence<args_size-1>{});
                 };
