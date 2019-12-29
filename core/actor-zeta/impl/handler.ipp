@@ -63,8 +63,8 @@ namespace actor_zeta { namespace actor {
                     using CallTraits =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
                     using args_type_list =  typename type_traits::tl_slice_t<typename CallTraits::args_types,1,args_size>;
                     using Tuple =  typename type_list_to_tuple<args_type_list>::type;
-                    auto &args_ = ctx.current_message().body<Tuple>();
-                    ///apply_impl(f, ctx, std::move(args_),type_traits::make_index_sequence<args_size-1>{});
+                    auto &args = ctx.current_message().body<Tuple>();
+                    apply_impl(f, ctx, std::move(args),type_traits::make_index_sequence<args_size-1>{});
                 };
             }
         };
