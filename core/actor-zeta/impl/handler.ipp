@@ -51,11 +51,12 @@ namespace actor_zeta { namespace actor {
         struct transformer<F, Args, 3>  {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &ctx) -> void {
+                    constexpr int Args_size = type_traits::get_callable_trait<F>::number_of_arguments;
                     using CallTraits =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
-                    using Tuple =  typename CallTraits::decayed_arg_types_in_a_tuple;
+                    using args_type_list =  typename type_traits::tl_slice_t<typename CallTraits::arg_types,1,Args_size>;
+                    using Tuple =  std::tuple< typename type_traits::type_list_at_t<args_type_list, 0>,typename type_traits::type_list_at_t<args_type_list, 1>>;
                     auto &args_ = *detail::any_cast<Tuple>(&ctx.current_message().body());
-                    constexpr int Args_size = type_traits::type_list_size<typename type_traits::get_callable_trait<F>::arg_types>::value;
-                    apply_impl(f, ctx, std::move(args_),type_traits::make_index_sequence<Args_size>{});
+                    apply_impl(f, ctx, std::move(args_),type_traits::make_index_sequence<Args_size-1>{});
                 };
             }
         };
