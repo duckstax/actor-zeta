@@ -3,7 +3,7 @@
 #include <iterator>
 
 namespace actor_zeta { namespace  type_traits {
-
+/*
         template<class... Ts>
         using void_t = void;
 
@@ -26,7 +26,7 @@ namespace actor_zeta { namespace  type_traits {
 
         template<typename I>
         using is_input_iterator = typename std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<I>::iterator_category>::type;
-
+*/
 //// C++ 14
         template<bool _Cond, typename _Tp = void>
         using enable_if_t = typename std::enable_if<_Cond, _Tp>::type;
@@ -52,12 +52,10 @@ namespace actor_zeta { namespace  type_traits {
         using remove_reference_t = typename std::remove_reference<_Tp>::type;
 
         template <std::size_t ...>
-        struct index_sequence
-        { };
+        struct index_sequence{ };
 
         template <std::size_t N, std::size_t ... Next>
-        struct index_sequence_helper : public index_sequence_helper<N-1U, N-1U, Next...>
-        { };
+        struct index_sequence_helper : public index_sequence_helper<N-1U, N-1U, Next...>{ };
 
         template <std::size_t ... Next>
         struct index_sequence_helper<0U, Next ... >{

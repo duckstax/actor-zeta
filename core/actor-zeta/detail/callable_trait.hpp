@@ -14,20 +14,9 @@ namespace actor_zeta { namespace  type_traits {
         struct callable_trait<R (Args...)> {
             using result_type = R;
             using args_types = type_list<Args...>;
-            using args_decay_types = type_list<decay_t<Args>...> ;
             using fun_sig = R (Args...);
             using fun_type = std::function<R (Args...)>;
             static constexpr size_t number_of_arguments = type_list_size<args_types>::value;
-
-            ///template<size_t Index>
-            //using arg_type = typename std::tuple_element<Index, std::tuple<Args...>>::type;
-
-            ///using decayedArgTypesInATuple = std::tuple<type_traits::decay_t<Args>...>;
-
-            ///template<size_t Index>
-            ///static type_traits::add_rvalue_reference_t<arg_type<Index>> getArgReference(decayedArgTypesInATuple& t) {
-            ///    return static_cast<type_traits::add_rvalue_reference_t<arg_type<Index>>>(std::get<Index>(t));
-            //}
         };
 /*
         // member noexcept const function pointer
@@ -91,7 +80,6 @@ namespace actor_zeta { namespace  type_traits {
             using type = callable_trait<T>;
             using result_type = typename type::result_type;
             using args_types = typename type::args_types;
-            using args_decay_types = typename type::args_decay_types;
             using fun_type = typename type::fun_type;
             using fun_sig = typename type::fun_sig;
             static constexpr size_t number_of_arguments = tl_size<args_types>::value;
@@ -103,7 +91,6 @@ namespace actor_zeta { namespace  type_traits {
             using type = callable_trait<decltype(&T::operator())>;
             using result_type = typename type::result_type;
             using args_types = typename type::args_types;
-            using args_decay_types = typename type::args_decay_types;
             using fun_type = typename type::fun_type;
             using fun_sig = typename type::fun_sig;
             static constexpr size_t number_of_arguments = tl_size<args_types>::value;

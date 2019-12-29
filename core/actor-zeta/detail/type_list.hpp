@@ -36,14 +36,6 @@ namespace actor_zeta { namespace  type_traits {
         struct is_type_list<type_list<Ts...>> {
             static constexpr bool value = true;
         };
-/// type list to  Tuple
-        template<class List>
-        struct type_list_to_tuple;
-
-        template<class... Ts>
-        struct type_list_to_tuple<type_list<Ts...>> {
-            using type = std::tuple<Ts...>;
-        };
 
 // size_t size(type_list)
 
