@@ -40,7 +40,10 @@ namespace actor_zeta { namespace actor {
 
         template <class F, class Tuple, std::size_t... I>
         void apply_impl(F&& f,context& ctx, Tuple&& t, type_traits::index_sequence<I...>){
-            f(ctx,std::get<I>( t)...);
+            using call_trait =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
+            constexpr int args_size = call_trait::number_of_arguments;
+            using args_type_list = typename type_traits::tl_slice_t<typename call_trait::args_types,1,args_size>;
+            f(ctx,static_cast<typename type_traits::type_list_at<args_type_list,I>::type>(std::get<I>(t))...);
         }
 
         /// type list to  Tuple
@@ -59,9 +62,26 @@ namespace actor_zeta { namespace actor {
         struct transformer<F, Args, 3>  {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &ctx) -> void {
-                    constexpr int args_size = type_traits::get_callable_trait<F>::number_of_arguments;
-                    using CallTraits =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
-                    using args_type_list =  typename type_traits::tl_slice_t<typename CallTraits::args_types,1,args_size>;
+                    using call_trait =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
+                    constexpr int args_size = call_trait::number_of_arguments;
+                    using args_type_list =  typename type_traits::tl_slice_t<typename call_trait::args_types,1,args_size>;
+                    using Tuple =  typename type_list_to_tuple<args_type_list>::type;
+                    auto &args = ctx.current_message().body<Tuple>();
+                    apply_impl(f, ctx, std::move(args),type_traits::make_index_sequence<args_size-1>{});
+                };
+            }
+        };
+
+        template<
+                typename F,
+                class Args
+        >
+        struct transformer<F, Args, 4>  {
+            auto operator()(F &&f) -> std::function<void(context & )> {
+                return [f](context &ctx) -> void {
+                    using call_trait =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
+                    constexpr int args_size = call_trait::number_of_arguments;
+                    using args_type_list =  typename type_traits::tl_slice_t<typename call_trait::args_types,1,args_size>;
                     using Tuple =  typename type_list_to_tuple<args_type_list>::type;
                     auto &args = ctx.current_message().body<Tuple>();
                     apply_impl(f, ctx, std::move(args),type_traits::make_index_sequence<args_size-1>{});
