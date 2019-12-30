@@ -72,7 +72,7 @@ namespace actor_zeta { namespace actor {
 
         template <class F, std::size_t... I>
         void apply_impl(F&& f,context& ctx, type_traits::index_sequence<I...>){
-            using call_trait =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
+            using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
             constexpr int args_size = call_trait::number_of_arguments;
             using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types,1,args_size>;
             using Tuple =  type_list_to_tuple_t<args_type_list>;
@@ -87,7 +87,7 @@ namespace actor_zeta { namespace actor {
         struct transformer<F, Args, 3>  {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &ctx) -> void {
-                    using call_trait =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
+                    using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
                     constexpr int args_size = call_trait::number_of_arguments;
                     apply_impl(f, ctx,type_traits::make_index_sequence<args_size-1>{});
                 };
@@ -101,7 +101,7 @@ namespace actor_zeta { namespace actor {
         struct transformer<F, Args, 4>  {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &ctx) -> void {
-                    using call_trait =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
+                    using call_trait = type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
                     constexpr int args_size = call_trait::number_of_arguments;
                     apply_impl(f, ctx,type_traits::make_index_sequence<args_size-1>{});
                 };
