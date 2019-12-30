@@ -9,7 +9,10 @@ namespace actor_zeta { namespace actor {
         template<
                 typename F,
                 class Args = typename type_traits::get_callable_trait<F>::args_types,
-                int Args_size = type_traits::get_callable_trait<F>::number_of_arguments
+                int Args_size = type_traits::get_callable_trait<F>::number_of_arguments,
+                bool IsFun = std::is_function<F>::value || std::is_function<typename std::remove_pointer<F>::type>::value
+                             ||
+                             std::is_member_function_pointer<F>::value
         >
         struct transformer;
 
@@ -17,7 +20,7 @@ namespace actor_zeta { namespace actor {
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 0> {
+        struct transformer<F, Args, 0, false> {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &) -> void {
                     f();
@@ -30,7 +33,7 @@ namespace actor_zeta { namespace actor {
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 1> {
+        struct transformer<F, Args, 1, false> {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return f;
             }
@@ -40,7 +43,7 @@ namespace actor_zeta { namespace actor {
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 2> {
+        struct transformer<F, Args, 2, false> {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &arg) -> void {
                     using arg_type_2 = typename type_traits::type_list_at<Args, 1>::type;
@@ -70,26 +73,26 @@ namespace actor_zeta { namespace actor {
         template<class... Ts>
         using type_list_to_tuple_t = typename type_list_to_tuple<Ts...>::type;
 
-        template <class F, std::size_t... I>
-        void apply_impl(F&& f,context& ctx, type_traits::index_sequence<I...>){
+        template<class F, std::size_t... I>
+        void apply_impl(F&& f, context& ctx, type_traits::index_sequence<I...>) {
             using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
             constexpr int args_size = call_trait::number_of_arguments;
-            using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types,1,args_size>;
+            using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types, 1, args_size>;
             using Tuple =  type_list_to_tuple_t<args_type_list>;
             auto &args = ctx.current_message().body<Tuple>();
-            f(ctx,static_cast< forward_arg<args_type_list,I>>(std::get<I>(args))...);
+            f(ctx, static_cast< forward_arg<args_type_list,I>>(std::get<I>(args))...);
         }
 
         template<
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 3>  {
+        struct transformer<F, Args, 3, false> {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &ctx) -> void {
                     using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
                     constexpr int args_size = call_trait::number_of_arguments;
-                    apply_impl(f, ctx,type_traits::make_index_sequence<args_size-1>{});
+                    apply_impl(f, ctx, type_traits::make_index_sequence<args_size - 1>{});
                 };
             }
         };
@@ -98,12 +101,12 @@ namespace actor_zeta { namespace actor {
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 4>  {
+        struct transformer<F, Args, 4, false> {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &ctx) -> void {
                     using call_trait = type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
                     constexpr int args_size = call_trait::number_of_arguments;
-                    apply_impl(f, ctx,type_traits::make_index_sequence<args_size-1>{});
+                    apply_impl(f, ctx, type_traits::make_index_sequence<args_size - 1>{});
                 };
             }
         };
