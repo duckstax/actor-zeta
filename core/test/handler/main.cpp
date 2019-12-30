@@ -69,7 +69,7 @@ int main() {
 
     auto* ptr_3 = make_handler(
             [](context&, int data_1 , int& data_2 ){
-                std::cerr << "ptr_4 : " << data_1 << " : " << data_2 << std::endl;
+                std::cerr << "ptr_3 : " << data_1 << " : " << data_2 << std::endl;
             }
 
     );
@@ -80,7 +80,7 @@ int main() {
 
     auto* ptr_4 = make_handler(
             [](context&, int data_1 , int& data_2, const std::string&data_3  ){
-                std::cerr << "ptr_3 : " << data_1 << " : " << data_2 <<" : " << data_3 << std::endl;
+                std::cerr << "ptr_4 : " << data_1 << " : " << data_2 <<" : " << data_3 << std::endl;
             }
 
     );

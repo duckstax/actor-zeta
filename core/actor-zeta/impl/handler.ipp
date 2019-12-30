@@ -3,7 +3,6 @@
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/type_list.hpp>
-#include <type_traits>
 
 
 namespace actor_zeta { namespace actor {
@@ -76,6 +75,9 @@ namespace actor_zeta { namespace actor {
             using type = std::tuple<type_traits::decay_t<Ts>...>;
         };
 
+        template<class... Ts>
+        using type_list_to_tuple_t = typename type_list_to_tuple<Ts...>::type;
+
         template<
                 typename F,
                 class Args
@@ -85,8 +87,8 @@ namespace actor_zeta { namespace actor {
                 return [f](context &ctx) -> void {
                     using call_trait =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
                     constexpr int args_size = call_trait::number_of_arguments;
-                    using args_type_list =  typename type_traits::tl_slice_t<typename call_trait::args_types,1,args_size>;
-                    using Tuple =  typename type_list_to_tuple<args_type_list>::type;
+                    using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types,1,args_size>;
+                    using Tuple =  type_list_to_tuple_t<args_type_list>;
                     auto &args = ctx.current_message().body<Tuple>();
                     apply_impl(f, ctx, std::move(args),type_traits::make_index_sequence<args_size-1>{});
                 };
@@ -102,8 +104,8 @@ namespace actor_zeta { namespace actor {
                 return [f](context &ctx) -> void {
                     using call_trait =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
                     constexpr int args_size = call_trait::number_of_arguments;
-                    using args_type_list =  typename type_traits::tl_slice_t<typename call_trait::args_types,1,args_size>;
-                    using Tuple =  typename type_list_to_tuple<args_type_list>::type;
+                    using args_type_list =  type_traits::tl_slice_t<typename call_trait::args_types,1,args_size>;
+                    using Tuple =  type_list_to_tuple_t<args_type_list>;
                     auto &args = ctx.current_message().body<Tuple>();
                     apply_impl(f, ctx, std::move(args),type_traits::make_index_sequence<args_size-1>{});
                 };
