@@ -3,6 +3,7 @@
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/type_list.hpp>
+#include <type_traits>
 
 
 namespace actor_zeta { namespace actor {
@@ -12,6 +13,19 @@ namespace actor_zeta { namespace actor {
                 int Args_size = type_traits::get_callable_trait<F>::number_of_arguments
         >
         struct transformer;
+
+        template<
+                typename F,
+                class Args
+        >
+        struct transformer<F, Args, 0> {
+            auto operator()(F &&f) -> std::function<void(context & )> {
+                return [f](context &) -> void {
+                    f();
+                };
+            }
+        };
+
 
         template<
                 typename F,
@@ -38,12 +52,19 @@ namespace actor_zeta { namespace actor {
             }
         };
 
+        template <class List , std::size_t  I>
+        using  forward_arg =
+                typename std::conditional<std::is_lvalue_reference<type_traits::type_list_at_t<List, I>>::value,
+                typename std::add_lvalue_reference<type_traits::decay_t<type_traits::type_list_at_t<List, I>> >::type,
+                typename std::add_rvalue_reference<type_traits::decay_t<type_traits::type_list_at_t<List, I>>>::type
+        >::type;
+
         template <class F, class Tuple, std::size_t... I>
         void apply_impl(F&& f,context& ctx, Tuple&& t, type_traits::index_sequence<I...>){
             using call_trait =  type_traits::get_callable_trait<type_traits::remove_reference_t<F>>;
             constexpr int args_size = call_trait::number_of_arguments;
             using args_type_list = typename type_traits::tl_slice_t<typename call_trait::args_types,1,args_size>;
-            f(ctx,static_cast<typename type_traits::type_list_at<args_type_list,I>::type>(std::get<I>(t))...);
+            f(ctx,static_cast< forward_arg<args_type_list,I>>(std::get<I>(t))...);
         }
 
         /// type list to  Tuple
