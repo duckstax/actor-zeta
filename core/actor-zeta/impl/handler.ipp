@@ -6,13 +6,11 @@
 
 
 namespace actor_zeta { namespace actor {
+
         template<
                 typename F,
                 class Args = typename type_traits::get_callable_trait<F>::args_types,
-                int Args_size = type_traits::get_callable_trait<F>::number_of_arguments,
-                bool IsFun = std::is_function<F>::value || std::is_function<typename std::remove_pointer<F>::type>::value
-                             ||
-                             std::is_member_function_pointer<F>::value
+                int Args_size = type_traits::get_callable_trait<F>::number_of_arguments
         >
         struct transformer;
 
@@ -20,7 +18,7 @@ namespace actor_zeta { namespace actor {
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 0, false> {
+        struct transformer<F, Args, 0> {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &) -> void {
                     f();
@@ -33,7 +31,7 @@ namespace actor_zeta { namespace actor {
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 1, false> {
+        struct transformer<F, Args, 1> {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return f;
             }
@@ -43,7 +41,7 @@ namespace actor_zeta { namespace actor {
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 2, false> {
+        struct transformer<F, Args, 2> {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &arg) -> void {
                     using arg_type_2 = typename type_traits::type_list_at<Args, 1>::type;
@@ -54,10 +52,10 @@ namespace actor_zeta { namespace actor {
             }
         };
 
-        template <class List , std::size_t  I>
-        using  forward_arg =
-                typename std::conditional<std::is_lvalue_reference<type_traits::type_list_at_t<List, I>>::value,
-                typename std::add_lvalue_reference<type_traits::decay_t<type_traits::type_list_at_t<List, I>> >::type,
+        template<class List, std::size_t I>
+        using forward_arg =
+        typename std::conditional<std::is_lvalue_reference<type_traits::type_list_at_t<List, I>>::value,
+                typename std::add_lvalue_reference<type_traits::decay_t<type_traits::type_list_at_t<List, I>>>::type,
                 typename std::add_rvalue_reference<type_traits::decay_t<type_traits::type_list_at_t<List, I>>>::type
         >::type;
 
@@ -74,20 +72,20 @@ namespace actor_zeta { namespace actor {
         using type_list_to_tuple_t = typename type_list_to_tuple<Ts...>::type;
 
         template<class F, std::size_t... I>
-        void apply_impl(F&& f, context& ctx, type_traits::index_sequence<I...>) {
+        void apply_impl(F &&f, context &ctx, type_traits::index_sequence<I...>) {
             using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
             constexpr int args_size = call_trait::number_of_arguments;
             using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types, 1, args_size>;
             using Tuple =  type_list_to_tuple_t<args_type_list>;
             auto &args = ctx.current_message().body<Tuple>();
-            f(ctx, static_cast< forward_arg<args_type_list,I>>(std::get<I>(args))...);
+            f(ctx, static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
         }
 
         template<
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 3, false> {
+        struct transformer<F, Args, 3> {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &ctx) -> void {
                     using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
@@ -101,7 +99,7 @@ namespace actor_zeta { namespace actor {
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 4, false> {
+        struct transformer<F, Args, 4> {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &ctx) -> void {
                     using call_trait = type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
@@ -111,10 +109,107 @@ namespace actor_zeta { namespace actor {
             }
         };
 
+        template<class F, typename ClassPtr, std::size_t... I>
+        void apply_impl_for_class(F &&f, ClassPtr *ptr, context &ctx, type_traits::index_sequence<I...>) {
+            using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
+            constexpr int args_size = call_trait::number_of_arguments;
+            using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types, 1, args_size>;
+            using Tuple =  type_list_to_tuple_t<args_type_list>;
+            auto &args = ctx.current_message().body<Tuple>();
+            (ptr->*f)(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
+        }
 
-    template<typename F>
-    helper::helper(F &&f) {
-        helper_ = transformer<F>{}(std::forward<F>(f));
-    }
+        template<
+                typename F,
+                typename ClassPtr,
+                class Args = typename type_traits::get_callable_trait<F>::args_types,
+                int Args_size = type_traits::get_callable_trait<F>::number_of_arguments
+        >
+        struct transformer_for_class;
 
+        template<
+                typename F,
+                typename ClassPtr,
+                class Args
+        >
+        struct transformer_for_class<F, ClassPtr, Args, 0> {
+            auto operator()(F &&f, ClassPtr *ptr) -> std::function<void(context & )> {
+                return [f, ptr](context &) -> void {
+                    (ptr->*f)();
+                };
+            }
+        };
+
+
+        template<
+                typename F,
+                typename ClassPtr,
+                class Args
+        >
+        struct transformer_for_class<F, ClassPtr, Args, 1> {
+            auto operator()(F &&f, ClassPtr *ptr) -> std::function<void(context & )> {
+                return [f, ptr](context &arg) -> void {
+                    using arg_type_2 = typename type_traits::type_list_at<Args, 0>::type;
+                    using clear_args_type_2 = typename std::decay<arg_type_2>::type;
+                    auto &tmp = arg.current_message().body<clear_args_type_2>();
+                    (ptr->*f)(tmp);
+                };
+            }
+        };
+
+        template<
+                typename F,
+                typename ClassPtr,
+                class Args
+        >
+        struct transformer_for_class<F, ClassPtr, Args, 2> {
+            auto operator()(F &&f, ClassPtr *ptr) -> std::function<void(context & )> {
+                return [f, ptr](context &ctx) -> void {
+                    using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
+                    constexpr int args_size = call_trait::number_of_arguments;
+                    apply_impl(f, ctx, type_traits::make_index_sequence<args_size>{});
+                };
+            }
+        };
+
+        template<
+                typename F,
+                typename ClassPtr,
+                class Args
+        >
+        struct transformer_for_class<F, ClassPtr, Args, 3> {
+            auto operator()(F &&f, ClassPtr *ptr) -> std::function<void(context & )> {
+                return [f, ptr](context &ctx) -> void {
+                    using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
+                    constexpr int args_size = call_trait::number_of_arguments;
+                    apply_impl_for_class(f, ptr, ctx, type_traits::make_index_sequence<args_size>{});
+                };
+            }
+        };
+
+        template<
+                typename F,
+                typename ClassPtr,
+                class Args
+        >
+        struct transformer_for_class<F, ClassPtr, Args, 4> {
+            auto operator()(F &&f, ClassPtr *ptr) -> std::function<void(context & )> {
+                return [f, ptr](context &ctx) -> void {
+                    using call_trait = type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
+                    constexpr int args_size = call_trait::number_of_arguments;
+                    apply_impl_for_class(f, ptr, ctx, type_traits::make_index_sequence<args_size>{});
+                };
+            }
+        };
+
+
+        template<typename F>
+        helper::helper(F &&f) {
+            helper_ = transformer<F>{}(std::forward<F>(f));
+        }
+
+        template<typename F, typename ClassPtr>
+        helper::helper(F &&f, ClassPtr *self) {
+            helper_ = transformer_for_class<F, ClassPtr>{}(std::forward<F>(f), self);
+        }
 }}

@@ -1,13 +1,18 @@
-#include <actor-zeta/actor/handler.hpp>
-#include <actor-zeta/actor/context.hpp>
-#include <actor/actor_address.hpp>
-#include <actor-zeta/messaging/message.hpp>
-
 #include <iostream>
+
 #include <actor-zeta/core.hpp>
 
-using actor_zeta::actor::make_handler;
+using actor_zeta::basic_async_actor;
+using actor_zeta::context;
+using actor_zeta::send;
+using actor_zeta::abstract_executor;
+using actor_zeta::supervisor;
+using actor_zeta::message;
+using actor_zeta::execution_device;
+using actor_zeta::actor::bind;
 using actor_zeta::actor::context;
+using actor_zeta::actor::handler;
+using actor_zeta::actor::bind;
 
 class dummy_context final : public context {
 public:
@@ -31,23 +36,80 @@ private:
     actor_zeta::messaging::message message_;
 };
 
+class dummy_executor final : public abstract_executor {
+public:
+    dummy_executor():abstract_executor(1,10000){}
+
+    void execute(actor_zeta::executable *ptr) override {
+        ptr->run(nullptr, max_throughput());
+    }
+    void start() override{}
+    void stop() override{}
+};
+
+
+class dummy_supervisor final : public supervisor {
+public:
+
+    dummy_supervisor(actor_zeta::abstract_executor*ptr)
+            : supervisor("dummy_supervisor")
+            , ptr_(ptr)
+    {
+    }
+
+    auto executor() noexcept -> actor_zeta::abstract_executor& override  {
+        return *ptr_;
+    }
+
+    auto join(actor_zeta::abstract_actor *) -> actor_zeta::actor::actor_address override {
+        return actor_zeta::actor_address();
+    }
+
+    void enqueue(message, execution_device *) override {
+
+    }
+
+private:
+    actor_zeta::abstract_executor*ptr_;
+};
+
+
+class storage_t final : public basic_async_actor {
+public:
+    storage_t(dummy_supervisor&ref) : basic_async_actor(ref, "storage") {
+        add_handler(
+                "update",
+                bind(&storage_t::update,this)
+        );
+
+    }
+
+    ~storage_t() override = default;
+
+    void update() {
+        std::cerr << "update:"  << std::endl;
+    }
+
+};
+
+
 int main() {
     actor_zeta::actor::actor_address address_tmp;
 
-    auto* ptr_0 = make_handler(
-            [](){
-                std::cerr << "ptr_0"  << std::endl;
+    auto* ptr_0 = bind(
+            []() {
+                std::cerr << "ptr_0" << std::endl;
             }
 
     );
 
-    dummy_context tmp_0 (actor_zeta::make_message(address_tmp,"",6));
+    dummy_context tmp_0 (actor_zeta::make_message(address_tmp,""));
 
     ptr_0->invoke(tmp_0);
 
-    auto* ptr_1 = make_handler(
-            [](context&){
-                std::cerr << "ptr_1"  << std::endl;
+    auto* ptr_1 = bind(
+            [](context &) {
+                std::cerr << "ptr_1" << std::endl;
             }
 
     );
@@ -56,8 +118,8 @@ int main() {
 
     ptr_1->invoke(tmp_1);
 
-    auto* ptr_2 =  make_handler(
-            [](context&, int& data ){
+    auto* ptr_2 = bind(
+            [](context &, int &data) {
                 std::cerr << "ptr_2 :" << data << std::endl;
             }
 
@@ -67,8 +129,8 @@ int main() {
 
     ptr_2->invoke(tmp_2);
 
-    auto* ptr_3 = make_handler(
-            [](context&, int data_1 , int& data_2 ){
+    auto* ptr_3 = bind(
+            [](context &, int data_1, int &data_2) {
                 std::cerr << "ptr_3 : " << data_1 << " : " << data_2 << std::endl;
             }
 
@@ -78,9 +140,9 @@ int main() {
 
     ptr_3->invoke(tmp_3);
 
-    auto* ptr_4 = make_handler(
-            [](context&, int data_1 , int& data_2, const std::string&data_3  ){
-                std::cerr << "ptr_4 : " << data_1 << " : " << data_2 <<" : " << data_3 << std::endl;
+    auto* ptr_4 = bind(
+            [](context &, int data_1, int &data_2, const std::string &data_3) {
+                std::cerr << "ptr_4 : " << data_1 << " : " << data_2 << " : " << data_3 << std::endl;
             }
 
     );
@@ -90,5 +152,8 @@ int main() {
     ptr_4->invoke(tmp_4);
 
 
+    std::unique_ptr<dummy_supervisor> supervisor(new dummy_supervisor(new dummy_executor));
+    std::unique_ptr<storage_t>storage(new storage_t(*supervisor));
+    send(storage,actor_zeta::actor::actor_address(),"update",std::string("payload"));
     return 0;
 }

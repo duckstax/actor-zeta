@@ -57,25 +57,30 @@ public:
     storage_t(dummy_supervisor&ref) : basic_async_actor(ref, "storage") {
         add_handler(
                 "update",
-                [](context & /*ctx*/, std::string &data) -> void {
-                    std::cerr << "update:" << data << std::endl;
-                }
-        );
+                actor_zeta::actor::bind(&storage_t::update,this)
+       );
 
         add_handler(
                 "find",
-                [](context & /*ctx*/) -> void {
-                    std::cerr << "find" << std::endl;
-                }
+                actor_zeta::actor::bind(&storage_t::find,this)
         );
 
         add_handler(
                 "remove",
-                [](context & /*ctx*/) -> void {
-                    std::cerr << "remove" << std::endl;
-                }
+                actor_zeta::actor::bind(&storage_t::remote,this)
         );
 
+    }
+    void update(std::string&data){
+        std::cerr << "update:" << data << std::endl;
+    }
+
+    void find() {
+        std::cerr << "find" << std::endl;
+    }
+
+    void remote(){
+        std::cerr << "remote" << std::endl;
     }
 
     ~storage_t() override = default;

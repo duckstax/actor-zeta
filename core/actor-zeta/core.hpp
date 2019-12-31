@@ -22,6 +22,7 @@ namespace actor_zeta {
     using actor::actor_address;
     using actor::context;
     using actor::supervisor;
+    using actor::bind;
 
     using executor::executor_t;
     using executor::work_sharing;
@@ -31,14 +32,19 @@ namespace actor_zeta {
 
     using messaging::message;
 
-    template<class T, typename... Args>
-    inline auto make_message(actor::actor_address sender_,T name,Args&&... args) -> message {
-        return message(sender_,std::forward<T>(name), std::move(detail::any(std::tuple<type_traits::decay_t<Args>...>{std::forward<Args>(args)...})));
+    template<class T>
+    inline auto make_message(actor::actor_address sender_, T name) -> message {
+        return message(std::move(sender_),std::forward<T>(name));
     }
 
     template<class T,typename Arg>
     inline auto make_message(actor::actor_address sender_, T name,Arg&& arg) -> message {
         return message(std::move(sender_),std::forward<T>(name), std::move(detail::any(std::forward<Arg>(arg))));
+    }
+
+    template<class T, typename... Args>
+    inline auto make_message(actor::actor_address sender_,T name,Args&&... args) -> message {
+        return message(sender_,std::forward<T>(name), std::move(detail::any(std::tuple<type_traits::decay_t<Args>...>{std::forward<Args>(args)...})));
     }
 
     template<
