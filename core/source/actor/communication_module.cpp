@@ -76,14 +76,15 @@ namespace actor_zeta { namespace actor {
         void communication_module::initialize() {
             add_handler(
                     "sync_contacts",
-                    bind(&communication_module::add_link,this)
+                    &communication_module::add_link
             );
 
             add_handler(
                     "add_link",
-                    bind(&communication_module::add_link,this)
+                    &communication_module::add_link
             );
 
+            ///TODO: FIX
             ///add_handler(
             ///        "remove_link",
             ///        bind(&communication_module::remove_link,this)
@@ -124,10 +125,6 @@ namespace actor_zeta { namespace actor {
             }
 
             return true;
-        }
-
-        auto communication_module::add_handler(detail::string_view name, handler *handler_ptr) -> void {
-            dispatch().on(name, handler_ptr);
         }
 
     }}

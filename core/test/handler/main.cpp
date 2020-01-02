@@ -79,15 +79,15 @@ public:
     storage_t(dummy_supervisor&ref) : basic_async_actor(ref, "storage") {
         add_handler(
                 "update",
-                bind(&storage_t::update,this)
+                &storage_t::update
         );
 
     }
 
     ~storage_t() override = default;
 
-    void update() {
-        std::cerr << "update:"  << std::endl;
+    void update(std::string& data) {
+        std::cerr << "update:" << data  << std::endl;
     }
 
 };
@@ -154,6 +154,6 @@ int main() {
 
     std::unique_ptr<dummy_supervisor> supervisor(new dummy_supervisor(new dummy_executor));
     std::unique_ptr<storage_t>storage(new storage_t(*supervisor));
-    send(storage,actor_zeta::actor::actor_address(),"update",std::string("payload"));
+    send( storage, actor_zeta::actor::actor_address(), "update", std::string("payload") );
     return 0;
 }

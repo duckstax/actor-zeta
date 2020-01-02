@@ -39,7 +39,7 @@ namespace actor_zeta {
 
     template<class T,typename Arg>
     inline auto make_message(actor::actor_address sender_, T name,Arg&& arg) -> message {
-        return message(std::move(sender_),std::forward<T>(name), std::move(detail::any(std::forward<Arg>(arg))));
+        return message(std::move(sender_),std::forward<T>(name), std::move(detail::any(std::forward<type_traits::decay_t<Arg>>(arg))));
     }
 
     template<class T, typename... Args>

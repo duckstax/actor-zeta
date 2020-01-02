@@ -12,6 +12,23 @@
 
 namespace actor_zeta { namespace actor {
 
+        template<class Functor>
+        struct class_type;
+
+        template<class R, class... Args>
+        struct class_type<R(Args...)> {};
+
+        template<class C, typename R, class... Ts>
+        struct class_type<R (C::*)(Ts...) const> : class_type<R(Ts...)> {
+            using type = C;
+        };
+
+
+        template<class C, typename R, class... Ts>
+        struct class_type<R (C::*)(Ts...)> : class_type<R(Ts...)> {
+            using type = C;
+        };
+
         class communication_module
                 : public ref_counted
                 , public context {
@@ -46,7 +63,15 @@ namespace actor_zeta { namespace actor {
 
             auto self() -> actor_address override ;
 
-            auto add_handler(detail::string_view name, handler* handler_ptr) -> void;
+            template<class F>
+            auto add_handler(detail::string_view name, F &&f) ->  typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
+                dispatch().on(name, bind(std::forward<F>(f)));
+            }
+
+            template<typename F>
+            auto add_handler(detail::string_view name, F &&f) -> typename std::enable_if<std::is_member_function_pointer<F>::value>::type {
+                dispatch().on(name, bind( std::forward<F>(f), static_cast<typename class_type<F>::type*>(this)));
+            }
 
             /**
            * debug method
