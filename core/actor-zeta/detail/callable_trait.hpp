@@ -46,18 +46,22 @@ namespace actor_zeta { namespace  type_traits {
 
 // member const function pointer
         template <class C, typename R, class... Ts>
-        struct callable_trait<R (C::*)(Ts...) const> : callable_trait<R (Ts...)> {};
+        struct callable_trait<R (C::*)(Ts...) const> : callable_trait<R (Ts...)> {
+            using class_type = C;
+        };
 
 // member function pointer
         template <class C, typename R, class... Ts>
-        struct callable_trait<R (C::*)(Ts...)> : callable_trait<R (Ts...)> {};
+        struct callable_trait<R (C::*)(Ts...)> : callable_trait<R (Ts...)> {
+            using class_type = C;
+        };
 
 // good ol' function pointer
         template <class R, class... Ts>
         struct callable_trait<R (*)(Ts...)> : callable_trait<R (Ts...)> {};
 
         template <class T>
-        struct has_apply_operator {
+        struct has_apply_operator final {
             template <class U>
             static auto sfinae(U*) -> decltype(&U::operator(), std::true_type());
 
@@ -78,6 +82,7 @@ namespace actor_zeta { namespace  type_traits {
                 bool HasApplyOp = has_apply_operator<T>::value>
         struct get_callable_trait_helper {
             using type = callable_trait<T>;
+            using class_type = typename type::class_type;
             using result_type = typename type::result_type;
             using args_types = typename type::args_types;
             using fun_type = typename type::fun_type;

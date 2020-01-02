@@ -135,8 +135,7 @@ namespace actor_zeta { namespace actor {
         struct transformer_for_class<F, ClassPtr, Args, 0> {
             auto operator()(F &&f, ClassPtr *ptr) -> std::function<void(context & )> {
                 return [f, ptr](context &) -> void {
-                    auto f_ = std::mem_fn(f);
-                    f_(ptr);/// (ptr->*f)();
+                    (ptr->*f)();
                 };
             }
         };
@@ -149,13 +148,12 @@ namespace actor_zeta { namespace actor {
         >
         struct transformer_for_class<F, ClassPtr, Args, 1> {
             auto operator()(F &&f, ClassPtr *ptr) -> std::function<void(context & )> {
-                return [f, ptr](context &arg) -> void {
-                    auto f_ = std::mem_fn(f);
+                return [f, ptr](context &arg) mutable -> void  {
                     using arg_type_0 = type_traits::type_list_at_t<Args, 0>;
                     using decay_arg_type_0 = type_traits::decay_t<arg_type_0>;
                     auto &tmp = arg.current_message().body<decay_arg_type_0>();
                     using original_arg_type_0 = forward_arg<Args,0>;
-                    f_(ptr,std::forward<original_arg_type_0>(static_cast< original_arg_type_0>(tmp)));
+                    (ptr->*f)(std::forward<original_arg_type_0>(static_cast< original_arg_type_0>(tmp)));
                 };
             }
         };
