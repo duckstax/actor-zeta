@@ -109,6 +109,8 @@ namespace actor_zeta { namespace actor {
             }
         };
 
+/// class method
+
         template<class F, typename ClassPtr, std::size_t... I>
         void apply_impl_for_class(F &&f, ClassPtr *ptr, context &ctx, type_traits::index_sequence<I...>) {
             using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
