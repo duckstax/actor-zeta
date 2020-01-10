@@ -49,12 +49,12 @@ namespace actor_zeta { namespace actor {
 
             template<class F>
             auto add_handler(detail::string_view name, F &&f) ->  typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
-                dispatch().on(name, bind(std::forward<F>(f)));
+                dispatch().on(name, make_handler(std::forward<F>(f)));
             }
 
             template<typename F>
             auto add_handler(detail::string_view name, F &&f) -> typename std::enable_if<std::is_member_function_pointer<F>::value>::type {
-                dispatch().on(name, bind( std::forward<F>(f), static_cast<typename type_traits::get_callable_trait_t<F>::class_type*>(this)));
+                dispatch().on(name, make_handler(std::forward<F>(f),static_cast<typename type_traits::get_callable_trait_t<F>::class_type *>(this)));
             }
 
             /**

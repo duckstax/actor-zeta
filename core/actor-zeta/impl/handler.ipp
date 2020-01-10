@@ -114,8 +114,7 @@ namespace actor_zeta { namespace actor {
         template<class F, typename ClassPtr, std::size_t... I>
         void apply_impl_for_class(F &&f, ClassPtr *ptr, context &ctx, type_traits::index_sequence<I...>) {
             using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
-            constexpr int args_size = call_trait::number_of_arguments;
-            using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types, 1, args_size>;
+            using args_type_list = typename call_trait::args_types;
             using Tuple =  type_list_to_tuple_t<args_type_list>;
             auto &args = ctx.current_message().body<Tuple>();
             (ptr->*f)(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
@@ -170,7 +169,7 @@ namespace actor_zeta { namespace actor {
                 return [f, ptr](context &ctx) -> void {
                     using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
                     constexpr int args_size = call_trait::number_of_arguments;
-                    apply_impl(f, ctx, type_traits::make_index_sequence<args_size>{});
+                    apply_impl_for_class(f,ptr, ctx, type_traits::make_index_sequence<args_size>{});
                 };
             }
         };

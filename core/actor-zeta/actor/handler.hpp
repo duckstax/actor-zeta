@@ -35,12 +35,12 @@ namespace actor_zeta { namespace actor {
         };
 
         template<typename F>
-        inline auto bind(F&& f) -> handler* {
+        inline auto make_handler(F&& f) -> handler* {
             return new helper(std::forward<F>(f));
         };
 
         template<typename F, typename ClassPtr>
-        inline auto bind(F&& f, ClassPtr* self) -> handler* {
+        inline auto make_handler(F&& f, ClassPtr* self) -> handler* {
             return new helper(std::forward<F>(f), self);
         }
 

@@ -22,7 +22,7 @@ namespace actor_zeta {
     using actor::actor_address;
     using actor::context;
     using actor::supervisor;
-    using actor::bind;
+    using actor::make_handler;
 
     using executor::executor_t;
     using executor::work_sharing;
