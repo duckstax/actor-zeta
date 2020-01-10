@@ -107,36 +107,36 @@ public:
     ~storage_t() override = default;
 
     void init() {
-        std::cerr << " init " << std::endl;
+        std::cerr << "init " << std::endl;
     }
 
     void search(std::string &key) {
-        std::cerr << " search: "
-                  << " key: " << key
+        std::cerr << "search: "
+                  << "key: " << key
                   << std::endl;
     }
 
     void add(const std::string &key, const std::string &value) {
-        std::cerr << " add: "
+        std::cerr << "add: "
                   << "key: " << key << " | "
                   << "value: " << value << " | "
                   << std::endl;
     }
 
     void delete_table(const std::string &name, const std::string &path, int type) {
-        std::cerr << " creature_table: "
-                  << " table name: " << name << " | "
-                  << " path: " << path << " | "
-                  << " type: " << type << " | "
+        std::cerr << "delete_table: "
+                  << "table name: " << name << " | "
+                  << "path: " << path << " | "
+                  << "type: " << type << " | "
                   << std::endl;
     }
 
     void creature_table(const std::string &name, const std::string &path, int type, int time_sync) {
-        std::cerr << " creature_table: "
-                  << " table name: " << name << " | "
-                  << " path: " << path << " | "
-                  << " type: " << type << " | "
-                  << " time_sync: " << time_sync << " | "
+        std::cerr << "creature_table: "
+                  << "table name: " << name << " | "
+                  << "path: " << path << " | "
+                  << "type: " << type << " | "
+                  << "time_sync: " << time_sync << " | "
                   << std::endl;
     }
 
