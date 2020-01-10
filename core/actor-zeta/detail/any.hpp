@@ -241,7 +241,7 @@ namespace actor_zeta { namespace detail {
 
             template<class ValueType>
             any(ValueType &&value,
-                typename std::enable_if<!std::is_same<typename std::decay<ValueType>::type, any>::value>::type * = 0) {
+                type_traits::enable_if_t<!std::is_same<type_traits::decay_t<ValueType>, any>::value> * = 0) {
                 using decayed_value_type = type_traits::decay_t<ValueType>;
                 static_assert(std::is_copy_constructible<decayed_value_type>::value, "ValueType must be copy-constructible");
                 storage_handler<decayed_value_type>::construct(storage_, std::forward<ValueType>(value));
@@ -351,7 +351,7 @@ namespace actor_zeta { namespace detail {
         template<class ValueType>
         inline ValueType any_cast(const any &operand) {
             static_assert(std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value,"ValueType must be a reference or copy constructible");
-            auto *ptr = any_cast<typename std::add_const<typename std::remove_reference<ValueType>::type>::type>(&operand);
+            auto *ptr = any_cast<typename std::add_const<type_traits::remove_reference_t<ValueType>>::type>(&operand);
 
             if (ptr == nullptr) {
                 implementation::implementation_hack_bad_any_cast();
@@ -363,7 +363,7 @@ namespace actor_zeta { namespace detail {
         template<class ValueType>
         inline ValueType any_cast(any &operand) {
             static_assert(std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value,"ValueType must be a reference or copy constructible");
-            auto *ptr = any_cast<typename std::remove_reference<ValueType>::type>(&operand);
+            auto *ptr = any_cast<type_traits::remove_reference_t<ValueType>>(&operand);
 
             if (ptr == nullptr) {
                 implementation::implementation_hack_bad_any_cast();
@@ -375,7 +375,7 @@ namespace actor_zeta { namespace detail {
         template<class ValueType>
         inline ValueType any_cast(any &&operand) {
             static_assert(std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value,"ValueType must be a reference or copy constructible");
-            auto *ptr = any_cast<typename std::remove_reference<ValueType>::type>(&operand);
+            auto *ptr = any_cast<type_traits::remove_reference_t<ValueType>>(&operand);
 
             if (ptr == nullptr) {
                 implementation::implementation_hack_bad_any_cast();
