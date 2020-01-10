@@ -57,17 +57,17 @@ public:
     storage_t(dummy_supervisor&ref) : basic_async_actor(ref, "storage") {
         add_handler(
                 "update",
-                actor_zeta::actor::bind(&storage_t::update,this)
+                 &storage_t::update
        );
 
         add_handler(
                 "find",
-                actor_zeta::actor::bind(&storage_t::find,this)
+                &storage_t::find
         );
 
         add_handler(
                 "remove",
-                actor_zeta::actor::bind(&storage_t::remote,this)
+                &storage_t::remote
         );
 
     }
