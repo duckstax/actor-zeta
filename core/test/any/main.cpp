@@ -193,11 +193,14 @@ int main() {
     }
 
     {
-        struct custom_type { int data; };
+        struct custom_type {
+            custom_type():data_(){}
+            int data_;
+        };
 
-        any a = custom_type{};
-        any_cast<custom_type&>(a).data = 42;
-        assert(any_cast<custom_type>(a).data == 42);
+        any a = custom_type();
+        any_cast<custom_type&>(a).data_ = 42;
+        assert(any_cast<custom_type>(a).data_ == 42);
     }
 
     {
