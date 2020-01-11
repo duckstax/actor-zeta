@@ -11,23 +11,23 @@ using actor_zeta::detail::unsafe_any_cast;
 
 const uint32_t kMagicValue = 0x01f1cbe8;
 
-struct test_object final {
-    int             mX;                  // Value for the test_object.
-    bool            mbThrowOnCopy;       // Throw an exception of this object is copied, moved, or assigned to another.
-    int64_t         mId;                 // Unique id for each object, equal to its creation number. This value is not coped from other TestObjects during any operations, including moves.
-    uint32_t        mMagicValue;         // Used to verify that an instance is valid and that it is not corrupted. It should always be kMagicValue.
-    static int64_t  count;            // Count of all current existing TestObjects.
-    static int64_t  ctor_count;        // Count of times any ctor was called.
-    static int64_t  dtor_count;        // Count of times dtor was called.
-    static int64_t  default_ctor_count; // Count of times the default ctor was called.
-    static int64_t  arg_ctor_count;     // Count of times the x0,x1,x2 ctor was called.
-    static int64_t  copy_ctor_count;    // Count of times copy ctor was called.
-    static int64_t  move_ctor_count;    // Count of times move ctor was called.
-    static int64_t  copy_assign_count;  // Count of times copy assignment was called.
-    static int64_t  move_assign_count;  // Count of times move assignment was called.
-    static int      sMagicErrorCount;    // Number of magic number mismatch errors.
+struct big_object final {
+    int             mX;
+    bool            mbThrowOnCopy;
+    int64_t         mId;
+    uint32_t        mMagicValue;
+    static int64_t  count;
+    static int64_t  ctor_count;
+    static int64_t  dtor_count;
+    static int64_t  default_ctor_count;
+    static int64_t  arg_ctor_count;
+    static int64_t  copy_ctor_count;
+    static int64_t  move_ctor_count;
+    static int64_t  copy_assign_count;
+    static int64_t  move_assign_count;
+    static int      sMagicErrorCount;
 
-    explicit test_object(int x = 0, bool bThrowOnCopy = false)
+    explicit big_object(int x = 0, bool bThrowOnCopy = false)
             : mX(x), mbThrowOnCopy(bThrowOnCopy), mMagicValue(kMagicValue)
     {
         ++count;
@@ -36,7 +36,7 @@ struct test_object final {
         mId = ctor_count;
     }
 
-    test_object(int x0, int x1, int x2, bool bThrowOnCopy = false)
+    big_object(int x0, int x1, int x2, bool bThrowOnCopy = false)
             : mX(x0 + x1 + x2), mbThrowOnCopy(bThrowOnCopy), mMagicValue(kMagicValue)
     {
         ++count;
@@ -45,7 +45,7 @@ struct test_object final {
         mId = ctor_count;
     }
 
-    test_object(const test_object& testObject)
+    big_object(const big_object& testObject)
             : mX(testObject.mX), mbThrowOnCopy(testObject.mbThrowOnCopy), mMagicValue(testObject.mMagicValue)
     {
         ++count;
@@ -54,7 +54,7 @@ struct test_object final {
         mId = ctor_count;
     }
 
-    test_object(test_object&& testObject)
+    big_object(big_object&& testObject)
             : mX(testObject.mX), mbThrowOnCopy(testObject.mbThrowOnCopy), mMagicValue(testObject.mMagicValue)
     {
         ++count;
@@ -64,7 +64,7 @@ struct test_object final {
         testObject.mX = 0;
     }
 
-    test_object& operator=(const test_object& testObject){
+    big_object& operator=(const big_object& testObject){
         ++copy_assign_count;
 
         if(&testObject != this){
@@ -75,7 +75,7 @@ struct test_object final {
         return *this;
     }
 
-    test_object& operator=(test_object&& testObject){
+    big_object& operator=(big_object&& testObject){
         ++move_assign_count;
 
         if(&testObject != this){
@@ -86,7 +86,7 @@ struct test_object final {
         return *this;
     }
 
-    ~test_object(){
+    ~big_object(){
         if(mMagicValue != kMagicValue) {
             ++sMagicErrorCount;
         }
@@ -113,31 +113,31 @@ struct test_object final {
     }
 };
 
-int64_t test_object::count              = 0;
-int64_t test_object::ctor_count         = 0;
-int64_t test_object::dtor_count         = 0;
-int64_t test_object::default_ctor_count = 0;
-int64_t test_object::arg_ctor_count     = 0;
-int64_t test_object::copy_ctor_count    = 0;
-int64_t test_object::move_ctor_count    = 0;
-int64_t test_object::copy_assign_count  = 0;
-int64_t test_object::move_assign_count  = 0;
-int     test_object::sMagicErrorCount   = 0;
+int64_t big_object::count              = 0;
+int64_t big_object::ctor_count         = 0;
+int64_t big_object::dtor_count         = 0;
+int64_t big_object::default_ctor_count = 0;
+int64_t big_object::arg_ctor_count     = 0;
+int64_t big_object::copy_ctor_count    = 0;
+int64_t big_object::move_ctor_count    = 0;
+int64_t big_object::copy_assign_count  = 0;
+int64_t big_object::move_assign_count  = 0;
+int     big_object::sMagicErrorCount   = 0;
 
-struct small_test_object final {
+struct small_object final {
     static int mCtorCount;
 
-    small_test_object() noexcept { mCtorCount++; }
-    small_test_object(const small_test_object&) noexcept { mCtorCount++; }
-    small_test_object(small_test_object&&) noexcept { mCtorCount++; }
-    small_test_object& operator=(const small_test_object&) noexcept { mCtorCount++; return *this; }
-    ~small_test_object() noexcept { mCtorCount--; }
+    small_object() noexcept { mCtorCount++; }
+    small_object(const small_object&) noexcept { mCtorCount++; }
+    small_object(small_object&&) noexcept { mCtorCount++; }
+    small_object& operator=(const small_object&) noexcept { mCtorCount++; return *this; }
+    ~small_object() noexcept { mCtorCount--; }
 
     static void reset() { mCtorCount = 0; }
     static bool is_clear() { return mCtorCount == 0; }
 };
 
-int small_test_object::mCtorCount = 0;
+int small_object::mCtorCount = 0;
 
 
 struct RequiresInitList final {
@@ -166,15 +166,15 @@ int main() {
     }
 
     {
-        test_object::reset();
-        { any a{test_object()}; }
-        assert(!test_object::is_clear());
+        big_object::reset();
+        { any a{big_object()}; }
+        assert(!big_object::is_clear());
     }
 
     {
-        small_test_object::reset();
-        { any a{small_test_object()}; }
-        assert(small_test_object::is_clear());
+        small_object::reset();
+        { any a{small_object()}; }
+        assert(small_object::is_clear());
     }
 
     {
@@ -233,9 +233,9 @@ int main() {
     }
 
     {
-        std::vector<any> va = {42, std::string("rob"), 'a', 42.f};
+        std::vector<any> va = {42, std::string("ted"), 'a', 42.f};
         assert(any_cast<int>(va[0]) == 42);
-        assert(any_cast<std::string>(va[1]) == "rob");
+        assert(any_cast<std::string>(va[1]) == "ted");
         assert(any_cast<char>(va[2]) == 'a');
         assert(any_cast<float>(va[3]) == 42.f);
     }
@@ -243,18 +243,18 @@ int main() {
     {
         std::vector<any> va;
         va.push_back(42);
-        va.push_back(std::string("rob"));
+        va.push_back(std::string("ted"));
         va.push_back('a');
         va.push_back(42.f);
 
         assert(any_cast<int>(va[0]) == 42);
-        assert(any_cast<std::string>(va[1]) == "rob");
+        assert(any_cast<std::string>(va[1]) == "ted");
         assert(any_cast<char>(va[2]) == 'a');
         assert(any_cast<float>(va[3]) == 42.f);
     }
 
     {
-        test_object::reset();
+        big_object::reset();
         {
             std::vector<any> va = {42, 'a', 42.f, 3333u, 4444ul, 5555ull, 6666.0};
 
@@ -266,17 +266,17 @@ int main() {
             assert(any_cast<unsigned long long>(va[5]) == 5555ull);
             assert(any_cast<double>(va[6]) == 6666.0);
 
-            va[3] = test_object(3333);
+            va[3] = big_object(3333);
 
             assert(any_cast<int>(va[0]) == 42);
             assert(any_cast<char>(va[1]) == 'a');
             assert(any_cast<float>(va[2]) == 42.f);
-            assert(any_cast<test_object>(va[3]).mX == 3333);
+            assert(any_cast<big_object>(va[3]).mX == 3333);
             assert(any_cast<unsigned long>(va[4]) == 4444ul);
             assert(any_cast<unsigned long long>(va[5]) == 5555ull);
             assert(any_cast<double>(va[6]) == 6666.0);
         }
-        assert(!test_object::is_clear());
+        assert(!big_object::is_clear());
     }
 
     {
@@ -367,13 +367,13 @@ int main() {
     }
 
     {
-        test_object::reset();
+        big_object::reset();
         {
             any a;
-            a.emplace<test_object>();
+            a.emplace<big_object>();
             assert(a.has_value());
         }
-        assert(!test_object::is_clear());
+        assert(!big_object::is_clear());
     }
 
     {
