@@ -9,135 +9,135 @@ using actor_zeta::detail::any_cast;
 using actor_zeta::detail::make_any;
 using actor_zeta::detail::unsafe_any_cast;
 
-const uint32_t kMagicValue = 0x01f1cbe8;
+const uint32_t magic_value = 0x01f1cbe8;
 
 struct big_object final {
-    int             mX;
-    bool            mbThrowOnCopy;
-    int64_t         mId;
-    uint32_t        mMagicValue;
-    static int64_t  count;
-    static int64_t  ctor_count;
-    static int64_t  dtor_count;
-    static int64_t  default_ctor_count;
-    static int64_t  arg_ctor_count;
-    static int64_t  copy_ctor_count;
-    static int64_t  move_ctor_count;
-    static int64_t  copy_assign_count;
-    static int64_t  move_assign_count;
-    static int      sMagicErrorCount;
+    int             x_;
+    bool            throw_on_copy_;
+    int64_t         id_;
+    uint32_t        magic_value_;
+    static int64_t  counter_;
+    static int64_t  constructor_counter_;
+    static int64_t  dtor_counter_;
+    static int64_t  default_constructor_counter_;
+    static int64_t  arg_constructor_counter_;
+    static int64_t  copy_constructor_counter_;
+    static int64_t  move_constructor_counter_;
+    static int64_t  copy_assign_counter_;
+    static int64_t  move_assign_counter_;
+    static int      magic_error_counter_;
 
     explicit big_object(int x = 0, bool bThrowOnCopy = false)
-            : mX(x), mbThrowOnCopy(bThrowOnCopy), mMagicValue(kMagicValue)
+            : x_(x), throw_on_copy_(bThrowOnCopy), magic_value_(magic_value)
     {
-        ++count;
-        ++ctor_count;
-        ++default_ctor_count;
-        mId = ctor_count;
+        ++counter_;
+        ++constructor_counter_;
+        ++default_constructor_counter_;
+        id_ = constructor_counter_;
     }
 
     big_object(int x0, int x1, int x2, bool bThrowOnCopy = false)
-            : mX(x0 + x1 + x2), mbThrowOnCopy(bThrowOnCopy), mMagicValue(kMagicValue)
+            : x_(x0 + x1 + x2), throw_on_copy_(bThrowOnCopy), magic_value_(magic_value)
     {
-        ++count;
-        ++ctor_count;
-        ++arg_ctor_count;
-        mId = ctor_count;
+        ++counter_;
+        ++constructor_counter_;
+        ++arg_constructor_counter_;
+        id_ = constructor_counter_;
     }
 
     big_object(const big_object& testObject)
-            : mX(testObject.mX), mbThrowOnCopy(testObject.mbThrowOnCopy), mMagicValue(testObject.mMagicValue)
+            : x_(testObject.x_), throw_on_copy_(testObject.throw_on_copy_), magic_value_(testObject.magic_value_)
     {
-        ++count;
-        ++ctor_count;
-        ++copy_ctor_count;
-        mId = ctor_count;
+        ++counter_;
+        ++constructor_counter_;
+        ++copy_constructor_counter_;
+        id_ = constructor_counter_;
     }
 
     big_object(big_object&& testObject)
-            : mX(testObject.mX), mbThrowOnCopy(testObject.mbThrowOnCopy), mMagicValue(testObject.mMagicValue)
+            : x_(testObject.x_), throw_on_copy_(testObject.throw_on_copy_), magic_value_(testObject.magic_value_)
     {
-        ++count;
-        ++ctor_count;
-        ++move_ctor_count;
-        mId = ctor_count;
-        testObject.mX = 0;
+        ++counter_;
+        ++constructor_counter_;
+        ++move_constructor_counter_;
+        id_ = constructor_counter_;
+        testObject.x_ = 0;
     }
 
     big_object& operator=(const big_object& testObject){
-        ++copy_assign_count;
+        ++copy_assign_counter_;
 
         if(&testObject != this){
-            mX = testObject.mX;
-            mMagicValue = testObject.mMagicValue;
-            mbThrowOnCopy = testObject.mbThrowOnCopy;
+            x_ = testObject.x_;
+            magic_value_ = testObject.magic_value_;
+            throw_on_copy_ = testObject.throw_on_copy_;
         }
         return *this;
     }
 
     big_object& operator=(big_object&& testObject){
-        ++move_assign_count;
+        ++move_assign_counter_;
 
         if(&testObject != this){
-            std::swap(mX, testObject.mX);
-            std::swap(mMagicValue, testObject.mMagicValue);
-            std::swap(mbThrowOnCopy, testObject.mbThrowOnCopy);
+            std::swap(x_, testObject.x_);
+            std::swap(magic_value_, testObject.magic_value_);
+            std::swap(throw_on_copy_, testObject.throw_on_copy_);
         }
         return *this;
     }
 
     ~big_object(){
-        if(mMagicValue != kMagicValue) {
-            ++sMagicErrorCount;
+        if(magic_value_ != magic_value) {
+            ++magic_error_counter_;
         }
-        mMagicValue = 0;
-        --count;
-        ++dtor_count;
+        magic_value_ = 0;
+        --counter_;
+        ++dtor_counter_;
     }
 
     static void reset(){
-        count            = 0;
-        ctor_count        = 0;
-        dtor_count        = 0;
-        default_ctor_count = 0;
-        arg_ctor_count     = 0;
-        copy_ctor_count    = 0;
-        move_ctor_count    = 0;
-        copy_assign_count  = 0;
-        move_assign_count  = 0;
-        sMagicErrorCount    = 0;
+        counter_            = 0;
+        constructor_counter_        = 0;
+        dtor_counter_        = 0;
+        default_constructor_counter_ = 0;
+        arg_constructor_counter_     = 0;
+        copy_constructor_counter_    = 0;
+        move_constructor_counter_    = 0;
+        copy_assign_counter_  = 0;
+        move_assign_counter_  = 0;
+        magic_error_counter_    = 0;
     }
 
     static bool is_clear() {
-        return (count == 0) && (dtor_count == ctor_count) && (sMagicErrorCount == 0);
+        return (counter_ == 0) && (dtor_counter_ == constructor_counter_) && (magic_error_counter_ == 0);
     }
 };
 
-int64_t big_object::count              = 0;
-int64_t big_object::ctor_count         = 0;
-int64_t big_object::dtor_count         = 0;
-int64_t big_object::default_ctor_count = 0;
-int64_t big_object::arg_ctor_count     = 0;
-int64_t big_object::copy_ctor_count    = 0;
-int64_t big_object::move_ctor_count    = 0;
-int64_t big_object::copy_assign_count  = 0;
-int64_t big_object::move_assign_count  = 0;
-int     big_object::sMagicErrorCount   = 0;
+int64_t big_object::counter_              = 0;
+int64_t big_object::constructor_counter_         = 0;
+int64_t big_object::dtor_counter_         = 0;
+int64_t big_object::default_constructor_counter_ = 0;
+int64_t big_object::arg_constructor_counter_     = 0;
+int64_t big_object::copy_constructor_counter_    = 0;
+int64_t big_object::move_constructor_counter_    = 0;
+int64_t big_object::copy_assign_counter_  = 0;
+int64_t big_object::move_assign_counter_  = 0;
+int     big_object::magic_error_counter_   = 0;
 
 struct small_object final {
-    static int mCtorCount;
+    static int constructor_counter_;
 
-    small_object() noexcept { mCtorCount++; }
-    small_object(const small_object&) noexcept { mCtorCount++; }
-    small_object(small_object&&) noexcept { mCtorCount++; }
-    small_object& operator=(const small_object&) noexcept { mCtorCount++; return *this; }
-    ~small_object() noexcept { mCtorCount--; }
+    small_object() noexcept { constructor_counter_++; }
+    small_object(const small_object&) noexcept { constructor_counter_++; }
+    small_object(small_object&&) noexcept { constructor_counter_++; }
+    small_object& operator=(const small_object&) noexcept { constructor_counter_++; return *this; }
+    ~small_object() noexcept { constructor_counter_--; }
 
-    static void reset() { mCtorCount = 0; }
-    static bool is_clear() { return mCtorCount == 0; }
+    static void reset() { constructor_counter_ = 0; }
+    static bool is_clear() { return constructor_counter_ == 0; }
 };
 
-int small_object::mCtorCount = 0;
+int small_object::constructor_counter_ = 0;
 
 
 struct RequiresInitList final {
@@ -271,7 +271,7 @@ int main() {
             assert(any_cast<int>(va[0]) == 42);
             assert(any_cast<char>(va[1]) == 'a');
             assert(any_cast<float>(va[2]) == 42.f);
-            assert(any_cast<big_object>(va[3]).mX == 3333);
+            assert(any_cast<big_object>(va[3]).x_ == 3333);
             assert(any_cast<unsigned long>(va[4]) == 4444ul);
             assert(any_cast<unsigned long long>(va[5]) == 5555ull);
             assert(any_cast<double>(va[6]) == 6666.0);
