@@ -146,6 +146,12 @@ struct RequiresInitList final {
     int sum;
 };
 
+template <typename... Ts>
+void ignore_unused(Ts const& ...){}
+
+template <typename... Ts>
+void ignore_unused(){}
+
 
 int main() {
 
@@ -411,6 +417,7 @@ int main() {
         assert(any_cast<short>(a) == nullptr);
         assert(any_cast<long>(a) == nullptr);
         assert(any_cast<std::string>(a) == nullptr);
+        ignore_unused(a);
 
         any b;
         assert(any_cast<short>(&b) == nullptr);
@@ -446,16 +453,19 @@ int main() {
         any a = 1;
         int* i = any_cast<int>(&a);
         assert((*i) == 1);
+        ignore_unused(i);
 
         a = 2;
         int *j = (int*)unsafe_any_cast<void>(&a);
         assert((*j) == 2);
+        ignore_unused(j);
 
         const any b = 3;
         const void * p = unsafe_any_cast<void>(&b);
         void *q = const_cast<void *>(p);
         int *r = static_cast<int *>(q);
         assert((*r) == 3);
+        ignore_unused(r);
     }
 
     {
