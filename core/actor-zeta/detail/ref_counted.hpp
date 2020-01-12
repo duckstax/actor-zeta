@@ -18,30 +18,33 @@ namespace actor_zeta {
 
         ref_counted &operator=(const ref_counted &);
 
-        inline void ref() noexcept {
+        void ref() const noexcept {
             rc_.fetch_add(1, std::memory_order_relaxed);
         }
 
-        void deref() noexcept;
+        void deref() const noexcept {
+            if (unique() || rc_.fetch_sub(1, std::memory_order_acq_rel) == 1)
+                delete this;
+        }
 
-        inline bool unique() const noexcept {
+        /// Queries whether there is exactly one reference.
+        bool unique() const noexcept {
             return rc_ == 1;
         }
 
-        inline size_t get_reference_count() const noexcept {
+        size_t get_reference_count() const noexcept {
             return rc_;
         }
 
     protected:
-        std::atomic<size_t> rc_;
+        mutable std::atomic<size_t> rc_;
     };
 
-    inline void intrusive_ptr_add_ref(ref_counted *p) {
+    inline void intrusive_ptr_add_ref(const ref_counted* p) {
         p->ref();
     }
 
-
-    inline void intrusive_ptr_release(ref_counted *p) {
+    inline void intrusive_ptr_release(const ref_counted* p) {
         p->deref();
     }
 

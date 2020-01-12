@@ -76,27 +76,19 @@ namespace actor_zeta { namespace actor {
         void communication_module::initialize() {
             add_handler(
                     "sync_contacts",
-                    [this](context &context_) {
-                        auto address = context_.current_message().body<actor_address>();
-                        add_link(std::move(address));
-                    }
+                    &communication_module::add_link
             );
 
             add_handler(
                     "add_link",
-                    [this](context &context_) {
-                        auto address = context_.current_message().body<actor_address>();
-                        add_link(std::move(address));
-                    }
+                    &communication_module::add_link
             );
 
-            add_handler(
-                    "remove_link",
-                    [this](context &context_) {
-                        auto address = context_.current_message().body<actor_address>();
-                        remove_link(address);
-                    }
-            );
+            ///TODO: FIX
+            ///add_handler(
+            ///        "remove_link",
+            ///        bind(&communication_module::remove_link,this)
+            //);
         }
 
         void communication_module::add_link(actor_address address) {

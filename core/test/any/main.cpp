@@ -1,398 +1,509 @@
-#include <cstdlib>
-#include <string>
-#include <utility>
-#include <vector>
-
 #include <actor-zeta/detail/any.hpp>
+#include <numeric>
+#include <vector>
+#include <string>
+#include <cassert>
+
 using actor_zeta::detail::any;
 using actor_zeta::detail::any_cast;
+using actor_zeta::detail::make_any;
+using actor_zeta::detail::unsafe_any_cast;
 
-class move_copy_conting_class {
-public:
-    static unsigned int moves_count;
-    static unsigned int copy_count;
+constexpr static uint32_t magic_value = 0x01f1cbe8;
 
-    move_copy_conting_class() = default;
+struct big_object final {
+    int             x_;
+    bool            throw_on_copy_;
+    int64_t         id_;
+    uint32_t        magic_value_;
+    static int64_t  counter_;
+    static int64_t  constructor_counter_;
+    static int64_t  destructor_counter_;
+    static int64_t  default_constructor_counter_;
+    static int64_t  arg_constructor_counter_;
+    static int64_t  copy_constructor_counter_;
+    static int64_t  move_constructor_counter_;
+    static int64_t  copy_assign_counter_;
+    static int64_t  move_assign_counter_;
+    static int      magic_error_counter_;
 
-    move_copy_conting_class(move_copy_conting_class && /*param*/) {
-        ++moves_count;
+    explicit big_object(int x = 0, bool bThrowOnCopy = false)
+            : x_(x), throw_on_copy_(bThrowOnCopy), magic_value_(magic_value)
+    {
+        ++counter_;
+        ++constructor_counter_;
+        ++default_constructor_counter_;
+        id_ = constructor_counter_;
     }
 
-    move_copy_conting_class &operator=(move_copy_conting_class && /*param*/) {
-        ++moves_count;
+    big_object(int x0, int x1, int x2, bool throw_on_copy = false)
+            : x_(x0 + x1 + x2), throw_on_copy_(throw_on_copy), magic_value_(magic_value)
+    {
+        ++counter_;
+        ++constructor_counter_;
+        ++arg_constructor_counter_;
+        id_ = constructor_counter_;
+    }
+
+    big_object(const big_object& other)
+            : x_(other.x_), throw_on_copy_(other.throw_on_copy_), magic_value_(other.magic_value_)
+    {
+        ++counter_;
+        ++constructor_counter_;
+        ++copy_constructor_counter_;
+        id_ = constructor_counter_;
+    }
+
+    big_object(big_object&& other) ///TODO: noexcept
+            : x_(other.x_), throw_on_copy_(other.throw_on_copy_), magic_value_(other.magic_value_)
+    {
+        ++counter_;
+        ++constructor_counter_;
+        ++move_constructor_counter_;
+        id_ = constructor_counter_;
+        other.x_ = 0;
+    }
+
+    big_object& operator=(const big_object& other){
+        ++copy_assign_counter_;
+
+        if(&other != this){
+            x_ = other.x_;
+            magic_value_ = other.magic_value_;
+            throw_on_copy_ = other.throw_on_copy_;
+        }
         return *this;
     }
 
-    move_copy_conting_class(const move_copy_conting_class &) {
-        ++copy_count;
-    }
+    big_object& operator=(big_object&& other){
+        ++move_assign_counter_;
 
-    move_copy_conting_class &operator=(const move_copy_conting_class & /*param*/) {
-        ++copy_count;
-        return *this;
-    }
-};
-
-unsigned int move_copy_conting_class::moves_count = 0;
-unsigned int move_copy_conting_class::copy_count = 0;
-
-struct copy_counter {
-
-public:
-
-    copy_counter() = default;
-
-    copy_counter(const copy_counter &) { ++count; }
-
-    copy_counter &operator=(const copy_counter &) {
-        ++count;
+        if(&other != this){
+            std::swap(x_, other.x_);
+            std::swap(magic_value_, other.magic_value_);
+            std::swap(throw_on_copy_, other.throw_on_copy_);
+        }
         return *this;
     }
 
-    static int get_count() { return count; }
-
-private:
-
-    static int count;
-
-};
-
-int copy_counter::count = 0;
-
-template<typename T>
-class class_with_address_op {
-public:
-    explicit class_with_address_op(const T *p): ptr(p) {}
-
-    const T **operator&() {
-        return &ptr;
+    ~big_object(){
+        if(magic_value_ != magic_value) {
+            ++magic_error_counter_;
+        }
+        magic_value_ = 0;
+        --counter_;
+        ++destructor_counter_;
     }
 
-    const T *get() const {
-        return ptr;
+    static void reset(){
+        counter_                     = 0;
+        constructor_counter_         = 0;
+        destructor_counter_          = 0;
+        default_constructor_counter_ = 0;
+        arg_constructor_counter_     = 0;
+        copy_constructor_counter_    = 0;
+        move_constructor_counter_    = 0;
+        copy_assign_counter_         = 0;
+        move_assign_counter_         = 0;
+        magic_error_counter_         = 0;
     }
 
-private:
-    const T *ptr;
+    static bool is_clear() {
+        return (counter_ == 0) && (destructor_counter_ == constructor_counter_) && (magic_error_counter_ == 0);
+    }
 };
 
-void test_default_ctor() {
-    const any value;
+int64_t big_object::counter_                     = 0;
+int64_t big_object::constructor_counter_         = 0;
+int64_t big_object::destructor_counter_          = 0;
+int64_t big_object::default_constructor_counter_ = 0;
+int64_t big_object::arg_constructor_counter_     = 0;
+int64_t big_object::copy_constructor_counter_    = 0;
+int64_t big_object::move_constructor_counter_    = 0;
+int64_t big_object::copy_assign_counter_         = 0;
+int64_t big_object::move_assign_counter_         = 0;
+int     big_object::magic_error_counter_         = 0;
 
-    assert(!value.has_value());//  "no empty");
-    assert(any_cast<int>(&value) == nullptr);//  "any_cast<int>");
-}
+struct small_object final {
+    static int constructor_counter_;
 
-void test_converting_ctor() {
-    std::string text = "test message";
-    any value = std::string(text); ///HACK
+    small_object() noexcept { constructor_counter_++; }
+    small_object(const small_object&) noexcept { constructor_counter_++; }
+    small_object(small_object&&) noexcept { constructor_counter_++; }
+    small_object& operator=(const small_object&) noexcept { constructor_counter_++; return *this; }
+    ~small_object() noexcept { constructor_counter_--; }
 
-    assert(value.has_value());//  "empty");
-    assert(any_cast<std::string>(&value) != nullptr);//  "any_cast<std::string>");
-    assert(any_cast<std::string>(value) == text);// "comparing cast copy against original text");
-    assert(any_cast<std::string>(&value)!= &text);// "comparing address in copy against original text");
-}
+    static void reset() { constructor_counter_ = 0; }
+    static bool is_clear() { return constructor_counter_ == 0; }
+};
 
-void test_copy_ctor() {
-    std::string text = "test message";
-    any original = std::string(text), copy = original; //HACK
-
-    assert(copy.has_value());//  "empty");
-    assert(any_cast<std::string>(original) == any_cast<std::string>(copy));// "comparing cast copy against original");
-    assert(text == any_cast<std::string>(copy));// "comparing cast copy against original text");
-    assert(any_cast<std::string>(&original)!= any_cast<std::string>(&copy));// "comparing address in copy against original");
-}
-
-void test_copy_assign() {
-    std::string text = "test message";
-    any original = std::string(text), copy; //HACK
-    any *assign_result = &(copy = original);
-
-    assert(copy.has_value());//  "empty");
-    assert(any_cast<std::string>(original) == any_cast<std::string>(copy));// "comparing cast copy against cast original");
-    assert(text == any_cast<std::string>(copy));// "comparing cast copy against original text");
-    assert(any_cast<std::string>(&original) != any_cast<std::string>(&copy));// "comparing address in copy against original");
-    assert(assign_result == &copy);// "address of assignment result");
-}
-
-void test_converting_assign() {
-    std::string text = "test message";
-    any value;
-    any *assign_result = &(value = std::string(text)); //HACK
-
-    assert(value.has_value());//  "empty");
-    assert(any_cast<std::string>(&value)!=nullptr);//  "any_cast<std::string>");
-    assert(any_cast<std::string>(value) == text);// "comparing cast copy against original text");
-    assert(any_cast<std::string>(&value)!=&text);// "comparing address in copy against original text");
-    assert(assign_result == &value);//  "address of assignment result");
-}
-/*
-
-void test_swap() {
-    std::string text = "test message";
-    any original = text swapped;
-    std::string *original_ptr = any_cast<std::string>(&original);
-    any *swap_result = &original.swap(swapped);
-
-    assert(original.has_value());//empty
-    assert(swapped.has_value());//empty
-    assert(text == any_cast<std::string>(swapped));// "comparing swapped copy against original text
-    assert(original_ptr!= nullptr);//address in pre-swapped original
-    assert(original_ptr == any_cast<std::string>(&swapped));// "comparing address in swapped against original
-    assert(swap_result == &original);//address of swap result
-
-    any copy1 = copy_counter();
-    any copy2 = copy_counter();
-    int count = copy_counter::get_count();
-    swap(copy1, copy2);
-    assert(count == copy_counter::get_count());//checking that free swap doesn't make any copies.
-}
-*/
-void test_null_copying() {
-    const any null;
-    any copied = null, assigned;
-    assigned = null;
-
-    assert(!null.has_value());//non empty
-    assert(!copied.has_value());//empty on copied
-    assert(!assigned.has_value());//empty on copied");
-}
-/*
-void test_cast_to_reference() {
-    any a(137);
-    const any b(a);
-
-    int &ra = any_cast<int &>(a);
-    int const &ra_c = any_cast < int const & > (a);
-    int volatile &ra_v = any_cast < int volatile & > (a);
-    int const volatile &ra_cv = any_cast < int const volatile& > (a);
-
-    assert(&ra == &ra_c && &ra == &ra_v && &ra == &ra_cv);///cv references to same obj
-
-    int const &rb_c = any_cast < int const & > (b);
-    int const volatile &rb_cv = any_cast < int const volatile & > (b);
-
-    assert(&rb_c == &rb_cv);//cv references to copied const obj
-    assert(&ra != &rb_c);///copies hold different objects
-
-    ++ra;
-    int incremented = any_cast<int>(a);
-    assert(incremented == 138);///increment by reference changes value
-}
-*/
-void test_with_array() {
-    std::string  text("Char array");
-    any value1(text);
-    any value2;
-    value2 = text;
-
-    assert(value1.has_value());//type
-    assert(value2.has_value());//type
-
-    assert(any_cast<const char *>(&value1)!= nullptr);//any_cast<const char*>
-    assert(any_cast<const char *>(&value2)!= nullptr);//any_cast<const char*>
-}
-
-void test_clear() {
-    std::string text = "test message";
-    any value = text;
-    assert(value.has_value());//empty
-    value.reset();
-    assert(!value.has_value());//non-empty after clear
-}
+int small_object::constructor_counter_ = 0;
 
 
-any makeVec() {
-    return std::vector<int>(100 /*size*/, 7 /*value*/);
-}
+struct list_of_numbers final {
+    list_of_numbers(std::initializer_list<int> numbers): sum(std::accumulate(begin(numbers), end(numbers), 0)) {}
 
-void test_vectors() {
-    const std::vector<int> &vec = any_cast<std::vector<int> >(makeVec());
-    assert(vec.size() == 100u);//size of vector extracted from boost::any
-    assert(vec.back()== 7);//back value of vector extracted from boost::any
-    assert(vec.front() == 7);//front value of vector extracted from boost::any
+    int sum;
+};
 
-    std::vector<int> vec1 = any_cast<std::vector<int> >(makeVec());
-    assert(vec1.size() == 100u);//size of second vector extracted from boost::any
-    assert(vec1.back()== 7);//back value of second vector extracted from boost::any
-    assert(vec1.front()== 7);//front value of second vector extracted from boost::any
+template <typename... Ts>
+void ignore_unused(Ts const& ...){}
 
-}
-/*
-void test_addressof() {
-    int val = 10;
-    const int *ptr = &val;
-    class_with_address_op<int> obj(ptr);
-    any test_val(obj);
+template <typename... Ts>
+void ignore_unused(){}
 
-    class_with_address_op<int> returned_obj = any_cast<class_with_address_op<int> >(test_val);
-    assert(&val == returned_obj.get());///any_cast incorrectly works with type that has operator&(): addresses differ
-    assert(!!any_cast<class_with_address_op<int> >(&test_val));///any_cast incorrectly works with type that has operator&()
-    assert(unsafe_any_cast<class_with_address_op<int> >(&test_val)->get() == ptr);//unsafe_any_cast incorrectly works with type that has operator&()
-}
-*/
-void test_move_construction() {
-    any value0 = move_copy_conting_class();
-    move_copy_conting_class::copy_count = 0;
-    move_copy_conting_class::moves_count = 0;
-    any value(std::move(value0));
-
-    assert(!value0.has_value());//moved away is empty
-    assert(value.has_value());//empty
-    assert(any_cast<move_copy_conting_class>(&value) != nullptr);// "any_cast<move_copy_conting_class>
-    assert(move_copy_conting_class::copy_count == 0u);//checking copy counts
-    assert(move_copy_conting_class::moves_count == 0u);//checking move counts
-}
-
-void test_move_assignment() {
-    any value0 = move_copy_conting_class();
-    any value = move_copy_conting_class();
-    move_copy_conting_class::copy_count = 0;
-    move_copy_conting_class::moves_count = 0;
-    value = std::move(value0);
-
-    assert(!value0.has_value());//moved away is empty
-    assert(value.has_value());//empty
-    assert(any_cast<move_copy_conting_class>(&value)!= nullptr);//any_cast<move_copy_conting_class>
-    assert(move_copy_conting_class::copy_count == 0u);//checking copy counts
-    assert(move_copy_conting_class::moves_count == 0u);//checking move counts
-}
-
-void test_copy_construction() {
-    any value0 = move_copy_conting_class();
-    move_copy_conting_class::copy_count = 0;
-    move_copy_conting_class::moves_count = 0;
-    any value(value0);
-
-    assert(value0.has_value());//moved away is empty
-    assert(value.has_value());//empty
-    assert(any_cast<move_copy_conting_class>(&value)!= nullptr);//any_cast<move_copy_conting_class>
-    assert(move_copy_conting_class::copy_count == 1u);//checking copy counts
-    assert(move_copy_conting_class::moves_count == 0u);//checking move counts
-}
-
-void test_copy_assignment() {
-    any value0 = move_copy_conting_class();
-    any value = move_copy_conting_class();
-    move_copy_conting_class::copy_count = 0;
-    move_copy_conting_class::moves_count = 0;
-    value = value0;
-
-    assert(value0.has_value());//moved away is empty
-    assert(value.has_value());//empty
-    assert(any_cast<move_copy_conting_class>(&value)!= nullptr);//any_cast<move_copy_conting_class>
-    assert(move_copy_conting_class::copy_count== 1u);//checking copy counts
-    assert(move_copy_conting_class::moves_count == 0u);//checking move counts
-}
-
-void test_move_construction_from_value() {
-    move_copy_conting_class value0;
-    move_copy_conting_class::copy_count = 0;
-    move_copy_conting_class::moves_count = 0;
-    any value(std::move(value0));
-
-    assert(value.has_value());//empty
-    assert(any_cast<move_copy_conting_class>(&value)!=nullptr);//any_cast<move_copy_conting_class>
-
-    assert(move_copy_conting_class::copy_count== 0u);//checking copy counts
-    assert(move_copy_conting_class::moves_count == 1u);//checking move counts
-}
-
-void test_move_assignment_from_value() {
-    move_copy_conting_class value0;
-    any value;
-    move_copy_conting_class::copy_count = 0;
-    move_copy_conting_class::moves_count = 0;
-
-    value = std::move(value0);
-
-    assert(value.has_value());//empty
-    assert(any_cast<move_copy_conting_class>(&value)!=nullptr);//any_cast<move_copy_conting_class>
-    assert(move_copy_conting_class::copy_count == 0u);//checking copy counts
-    assert(move_copy_conting_class::moves_count == 1u);//checking move counts
-
-
-}
-
-void test_copy_construction_from_value() {
-    move_copy_conting_class value0;
-    move_copy_conting_class::copy_count = 0;
-    move_copy_conting_class::moves_count = 0;
-    any value(value0);
-
-    assert(value.has_value());//empty
-    assert(any_cast<move_copy_conting_class>(&value)!= nullptr);//any_cast<move_copy_conting_class>
-    //assert(move_copy_conting_class::copy_count == 1u);//checking copy counts
-    //assert(move_copy_conting_class::moves_count == 0u);//checking move counts
-}
-
-void test_copy_assignment_from_value() {
-    //HACK no work  correctly
-    move_copy_conting_class value0;
-    any value;
-    move_copy_conting_class::copy_count = 0;
-    move_copy_conting_class::moves_count = 0;
-    value = value0;
-
-    assert(value.has_value());//empty
-    assert(any_cast<move_copy_conting_class>(&value)!= nullptr);//any_cast<move_copy_conting_class>
-//    assert(move_copy_conting_class::copy_count == 1u);//checking copy counts
-//    assert(move_copy_conting_class::moves_count == 0u);//checking move counts
-}
-
-const any helper_method() {
-    return true;
-}
-
-bool helper_method1() {
-    return true;
-}
-
-void test_construction_from_const_any_rv() {
-    any values[] = {helper_method(), helper_method1()};
-    (void) values;
-}
-/*
-void test_cast_to_rv() {
-    move_copy_conting_class value0;
-    any value;
-    value = value0;
-    move_copy_conting_class::copy_count = 0;
-    move_copy_conting_class::moves_count = 0;
-
-    move_copy_conting_class value1 = any_cast<move_copy_conting_class &&>(value);
-
-    assert(move_copy_conting_class::copy_count== 0u);//checking copy counts
-    assert(move_copy_conting_class::moves_count == 1u);// "checking move counts
-    (void) value1;
-}
-*/
 
 int main() {
 
-    test_default_ctor();
-    test_converting_ctor();
-    test_copy_ctor();
-    test_copy_assign();
-    test_converting_assign();
-    //test_bad_cast();
-//    test_swap();
-    test_null_copying();
-    //test_cast_to_reference();
-    test_with_array();
-    test_clear();
-    test_vectors();
-    //test_addressof();
-    test_move_construction();
-    test_move_assignment();
-    test_copy_construction();
-    test_copy_assignment();
-    test_move_construction_from_value();
-    test_move_assignment_from_value();
-    test_copy_construction_from_value();
-    test_copy_assignment_from_value();
-    test_construction_from_const_any_rv();
-    //test_cast_to_rv();
+    {
+        static_assert(sizeof(std::string) <= sizeof(any), "has enough local memory to store");
+        static_assert(sizeof(std::vector<int>) <= sizeof(any), "has enough local memory to store");
+    }
+
+    {
+        any a;
+        assert(!a.has_value());
+    }
+
+    {
+        big_object::reset();
+        { any a{big_object()}; }
+        assert(!big_object::is_clear());
+    }
+
+    {
+        small_object::reset();
+        { any a{small_object()}; }
+        assert(small_object::is_clear());
+    }
+
+    {
+        any a(42);
+        assert(a.has_value() == true);
+
+        assert(any_cast<int>(a) == 42);
+        assert(any_cast<int>(a) != 1337);
+        any_cast<int&>(a) = 10;
+        assert(any_cast<int>(a) == 10);
+
+        a = 1.f;
+        any_cast<float&>(a) = 1337.f;
+        assert(any_cast<float>(a) == 1337.f);
+
+        a = 4343;
+        assert(any_cast<int>(a) == 4343);
+
+        a = std::string("hello world");
+        assert(any_cast<std::string>(a) == "hello world");
+        assert(any_cast<std::string&>(a) == "hello world");
+    }
+
+    {
+        struct custom_type {
+            custom_type():data_(){}
+            int data_;
+        };
+
+        any a = custom_type();
+        any_cast<custom_type&>(a).data_ = 42;
+        assert(any_cast<custom_type>(a).data_ == 42);
+    }
+
+    {
+        any a = 42;
+        assert(any_cast<int>(a) == 42);
+    }
+
+    {
+        std::vector<any> va = {42, 'a', 42.f, 3333u, 4444ul, 5555ull, 6666.0};
+
+        assert(any_cast<int>(va[0]) == 42);
+        assert(any_cast<char>(va[1]) == 'a');
+        assert(any_cast<float>(va[2]) == 42.f);
+        assert(any_cast<unsigned>(va[3]) == 3333u);
+        assert(any_cast<unsigned long>(va[4]) == 4444ul);
+        assert(any_cast<unsigned long long>(va[5]) == 5555ull);
+        assert(any_cast<double>(va[6]) == 6666.0);
+    }
+
+    {
+        any a(std::string("test string"));
+        assert(a.has_value());
+        assert(any_cast<std::string>(a) == "test string");
+    }
+
+    {
+        std::vector<any> va = {42, std::string("ted"), 'a', 42.f};
+        assert(any_cast<int>(va[0]) == 42);
+        assert(any_cast<std::string>(va[1]) == "ted");
+        assert(any_cast<char>(va[2]) == 'a');
+        assert(any_cast<float>(va[3]) == 42.f);
+    }
+
+    {
+        std::vector<any> va;
+        va.emplace_back(42);
+        va.emplace_back(std::string("ted"));
+        va.emplace_back('a');
+        va.emplace_back(42.f);
+
+        assert(any_cast<int>(va[0]) == 42);
+        assert(any_cast<std::string>(va[1]) == "ted");
+        assert(any_cast<char>(va[2]) == 'a');
+        assert(any_cast<float>(va[3]) == 42.f);
+    }
+
+    {
+        big_object::reset();
+        {
+            std::vector<any> va = {42, 'a', 42.f, 3333u, 4444ul, 5555ull, 6666.0};
+
+            assert(any_cast<int>(va[0]) == 42);
+            assert(any_cast<char>(va[1]) == 'a');
+            assert(any_cast<float>(va[2]) == 42.f);
+            assert(any_cast<unsigned>(va[3]) == 3333u);
+            assert(any_cast<unsigned long>(va[4]) == 4444ul);
+            assert(any_cast<unsigned long long>(va[5]) == 5555ull);
+            assert(any_cast<double>(va[6]) == 6666.0);
+
+            va[3] = big_object(3333);
+
+            assert(any_cast<int>(va[0]) == 42);
+            assert(any_cast<char>(va[1]) == 'a');
+            assert(any_cast<float>(va[2]) == 42.f);
+            assert(any_cast<big_object>(va[3]).x_ == 3333);
+            assert(any_cast<unsigned long>(va[4]) == 4444ul);
+            assert(any_cast<unsigned long long>(va[5]) == 5555ull);
+            assert(any_cast<double>(va[6]) == 6666.0);
+        }
+        assert(!big_object::is_clear());
+    }
+
+    {
+        any a(std::string("test string"));
+        assert(a.has_value());
+        a.reset();
+        assert(!a.has_value());
+    }
+
+    {
+        any a1 = 42;
+        any a2 = a1;
+
+        assert(a1.has_value());
+        assert(a2.has_value());
+        assert(any_cast<int>(a1) == any_cast<int>(a2));
+    }
+
+    {
+        any a1;
+        assert(!a1.has_value());
+        {
+            any a2(std::string("test string"));
+            a1 = any_cast<std::string>(a2);
+
+            assert(a1.has_value());
+        }
+        assert(any_cast<std::string>(a1) == "test string");
+        assert(a1.has_value());
+    }
+
+    {
+        any a1;
+        assert(!a1.has_value());
+        {
+            any a2(std::string("test string"));
+            a1 = a2;
+            assert(a1.has_value());
+        }
+        assert(any_cast<std::string&>(a1) == "test string");
+        assert(a1.has_value());
+    }
+
+    {
+        {
+            any a1 = 42;
+            any a2 = 24;
+            assert(any_cast<int>(a1) == 42);
+            assert(any_cast<int>(a2) == 24);
+
+            a1.swap(a2);
+            assert(any_cast<int>(a1) == 24);
+            assert(any_cast<int>(a2) == 42);
+
+            std::swap(a1, a2);
+            assert(any_cast<int>(a1) == 42);
+            assert(any_cast<int>(a2) == 24);
+        }
+        {
+            any a1 = std::string("hello");
+            any a2 = std::string("world");
+            assert(any_cast<std::string>(a1) == "hello");
+            assert(any_cast<std::string>(a2) == "world");
+
+            a1.swap(a2);
+            assert(any_cast<std::string>(a1) == "world");
+            assert(any_cast<std::string>(a2) == "hello");
+
+            std::swap(a1, a2);
+            assert(any_cast<std::string>(a1) == "hello");
+            assert(any_cast<std::string>(a2) == "world");
+        }
+    }
+
+    {
+        any a;
+
+        a.emplace<int>(42);
+        assert(a.has_value());
+        assert(any_cast<int>(a) == 42);
+
+        a.emplace<short>((short)8); // no way to define a short literal we must cast here.
+        assert(any_cast<short>(a) == 8);
+        assert(a.has_value());
+
+        a.reset();
+        assert(!a.has_value());
+    }
+
+    {
+        big_object::reset();
+        {
+            any a;
+            a.emplace<big_object>();
+            assert(a.has_value());
+        }
+        assert(!big_object::is_clear());
+    }
+
+    {
+        {
+            any a;
+            a.emplace<list_of_numbers>(std::initializer_list<int>{1, 2, 3, 4, 5, 6});
+
+            assert(a.has_value());
+            assert(any_cast<list_of_numbers>(a).sum == 21);
+        }
+    }
+
+    {
+        any a, b;
+        assert(!a.has_value() == !b.has_value());
+
+        a = 42; b = 24;
+        assert(any_cast<int>(a) != any_cast<int>(b));
+        assert(a.has_value() == b.has_value());
+
+        a = 42; b = 42;
+        assert(any_cast<int>(a) == any_cast<int>(b));
+        assert(a.has_value() == b.has_value());
+    }
+
+    {
+        any a = std::string("hello world");
+        assert(any_cast<std::string&>(a) == "hello world");
+
+        auto s = move(any_cast<std::string&>(a));
+        assert(s == "hello world");
+        assert(any_cast<std::string&>(a).empty());
+
+        any_cast<std::string&>(a) = move(s);
+        assert(any_cast<std::string&>(a) == "hello world");
+    }
+
+    {
+        any* a = nullptr;
+        assert(any_cast<int>(a) == nullptr);
+        assert(any_cast<short>(a) == nullptr);
+        assert(any_cast<long>(a) == nullptr);
+        assert(any_cast<std::string>(a) == nullptr);
+        ignore_unused(a);
+
+        any b;
+        assert(any_cast<short>(&b) == nullptr);
+        assert(any_cast<const short>(&b) == nullptr);
+        assert(any_cast<volatile short>(&b) == nullptr);
+        assert(any_cast<const volatile short>(&b) == nullptr);
+
+        assert(any_cast<short*>(&b) == nullptr);
+        assert(any_cast<const short*>(&b) == nullptr);
+        assert(any_cast<volatile short*>(&b) == nullptr);
+        assert(any_cast<const volatile short*>(&b) == nullptr);
+    }
+
+    {
+        {
+            auto a = make_any<int>(42);
+            assert(any_cast<int>(a) == 42);
+        }
+
+        {
+            auto a = make_any<list_of_numbers>(std::initializer_list<int>{1, 2, 3, 4, 5, 6, 7, 8});
+            assert(any_cast<list_of_numbers&>(a).sum == 36);
+        }
+    }
+
+    {
+        float f = 42.f;
+        any a(f);
+        assert(any_cast<float>(a) == 42.f);
+    }
+
+    {
+        any a = 1;
+        int* i = any_cast<int>(&a);
+        assert((*i) == 1);
+        ignore_unused(i);
+
+        a = 2;
+        int *j = (int*)unsafe_any_cast<void>(&a);
+        assert((*j) == 2);
+        ignore_unused(j);
+
+        const any b = 3;
+        const void * p = unsafe_any_cast<void>(&b);
+        void *q = const_cast<void *>(p);
+        int *r = static_cast<int *>(q);
+        assert((*r) == 3);
+        ignore_unused(r);
+    }
+
+    {
+        {
+            any a1;
+            any a2;
+            assert(a1.has_value() == false);
+            assert(a2.has_value() == false);
+
+            a1 = a2;
+            assert(a1.has_value() == false);
+            assert(a2.has_value() == false);
+        }
+
+        {
+            any a1 = 42;
+            any a2;
+            assert(a1.has_value() == true);
+            assert(a2.has_value() == false);
+
+            a1 = a2;
+            assert(a1.has_value() == false);
+            assert(a2.has_value() == false);
+        }
+
+        {
+            any a1;
+            any a2 = 42;
+            assert(a1.has_value() == false);
+            assert(a2.has_value() == true);
+
+            a1 = a2;
+            assert(a1.has_value() == true);
+            assert(a2.has_value() == true);
+            assert(any_cast<int>(a1) == 42);
+            assert(any_cast<int>(a2) == 42);
+        }
+    }
 
     return 0;
 }
