@@ -90,10 +90,10 @@ public:
 
 int main() {
     std::unique_ptr<dummy_supervisor> supervisor(new dummy_supervisor(new dummy_executor));
-    std::unique_ptr<storage_t>storage(new storage_t(*supervisor));
-    send(storage,actor_zeta::actor::actor_address(),"update",std::string("payload"));
-    send(storage,actor_zeta::actor::actor_address(),"find",std::string("payload"));
-    send(storage,actor_zeta::actor::actor_address(),"remove",std::string("payload"));
+    std::unique_ptr<storage_t> storage(new storage_t(*supervisor));
+    send(storage, actor_zeta::actor::actor_address(), "update", std::string("payload"));
+    send(storage, actor_zeta::actor::actor_address(), "find");
+    send(storage, actor_zeta::actor::actor_address(), "remove");
 
     return 0;
 }

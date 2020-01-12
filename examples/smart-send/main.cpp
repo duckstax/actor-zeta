@@ -137,20 +137,24 @@ public:
 
         add_handler(
                 "download",
-                [](context & /*ctx*/, download_data &url) -> void {
-                    std::cerr << "url : " << url.url_ << std::endl;
-                    std::cerr << "user : " << url.user_ << std::endl;
-                    std::cerr << "password : " << url.passwod_ << std::endl;
-                }
+                &worker_t::download
         );
 
         add_handler(
                 "work_data",
-                [](context & /*ctx*/, work_data & work_data) -> void {
-                    std::cerr << "data_ : " << work_data.data_ << std::endl;
-                    std::cerr << "operator_name : " << work_data.operator_name_ << std::endl;
-                }
+                &worker_t::work_data
         );
+    }
+
+    void download(download_data &url){
+        std::cerr << "url : " << url.url_ << std::endl;
+        std::cerr << "user : " << url.user_ << std::endl;
+        std::cerr << "password : " << url.passwod_ << std::endl;
+    }
+
+    void work_data(work_data & work_data) {
+        std::cerr << "data_ : " << work_data.data_ << std::endl;
+        std::cerr << "operator_name : " << work_data.operator_name_ << std::endl;
     }
 
     ~worker_t() override = default;

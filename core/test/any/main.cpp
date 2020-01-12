@@ -242,10 +242,10 @@ int main() {
 
     {
         std::vector<any> va;
-        va.push_back(42);
-        va.push_back(std::string("ted"));
-        va.push_back('a');
-        va.push_back(42.f);
+        va.emplace_back(42);
+        va.emplace_back(std::string("ted"));
+        va.emplace_back('a');
+        va.emplace_back(42.f);
 
         assert(any_cast<int>(va[0]) == 42);
         assert(any_cast<std::string>(va[1]) == "ted");
