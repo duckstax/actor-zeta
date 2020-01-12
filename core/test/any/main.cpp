@@ -9,7 +9,7 @@ using actor_zeta::detail::any_cast;
 using actor_zeta::detail::make_any;
 using actor_zeta::detail::unsafe_any_cast;
 
-const uint32_t magic_value = 0x01f1cbe8;
+constexpr static uint32_t magic_value = 0x01f1cbe8;
 
 struct big_object final {
     int             x_;
@@ -18,7 +18,7 @@ struct big_object final {
     uint32_t        magic_value_;
     static int64_t  counter_;
     static int64_t  constructor_counter_;
-    static int64_t  dtor_counter_;
+    static int64_t  destructor_counter_;
     static int64_t  default_constructor_counter_;
     static int64_t  arg_constructor_counter_;
     static int64_t  copy_constructor_counter_;
@@ -36,8 +36,8 @@ struct big_object final {
         id_ = constructor_counter_;
     }
 
-    big_object(int x0, int x1, int x2, bool bThrowOnCopy = false)
-            : x_(x0 + x1 + x2), throw_on_copy_(bThrowOnCopy), magic_value_(magic_value)
+    big_object(int x0, int x1, int x2, bool throw_on_copy = false)
+            : x_(x0 + x1 + x2), throw_on_copy_(throw_on_copy), magic_value_(magic_value)
     {
         ++counter_;
         ++constructor_counter_;
@@ -45,8 +45,8 @@ struct big_object final {
         id_ = constructor_counter_;
     }
 
-    big_object(const big_object& testObject)
-            : x_(testObject.x_), throw_on_copy_(testObject.throw_on_copy_), magic_value_(testObject.magic_value_)
+    big_object(const big_object& other)
+            : x_(other.x_), throw_on_copy_(other.throw_on_copy_), magic_value_(other.magic_value_)
     {
         ++counter_;
         ++constructor_counter_;
@@ -54,34 +54,34 @@ struct big_object final {
         id_ = constructor_counter_;
     }
 
-    big_object(big_object&& testObject)
-            : x_(testObject.x_), throw_on_copy_(testObject.throw_on_copy_), magic_value_(testObject.magic_value_)
+    big_object(big_object&& other) ///TODO: noexcept
+            : x_(other.x_), throw_on_copy_(other.throw_on_copy_), magic_value_(other.magic_value_)
     {
         ++counter_;
         ++constructor_counter_;
         ++move_constructor_counter_;
         id_ = constructor_counter_;
-        testObject.x_ = 0;
+        other.x_ = 0;
     }
 
-    big_object& operator=(const big_object& testObject){
+    big_object& operator=(const big_object& other){
         ++copy_assign_counter_;
 
-        if(&testObject != this){
-            x_ = testObject.x_;
-            magic_value_ = testObject.magic_value_;
-            throw_on_copy_ = testObject.throw_on_copy_;
+        if(&other != this){
+            x_ = other.x_;
+            magic_value_ = other.magic_value_;
+            throw_on_copy_ = other.throw_on_copy_;
         }
         return *this;
     }
 
-    big_object& operator=(big_object&& testObject){
+    big_object& operator=(big_object&& other){
         ++move_assign_counter_;
 
-        if(&testObject != this){
-            std::swap(x_, testObject.x_);
-            std::swap(magic_value_, testObject.magic_value_);
-            std::swap(throw_on_copy_, testObject.throw_on_copy_);
+        if(&other != this){
+            std::swap(x_, other.x_);
+            std::swap(magic_value_, other.magic_value_);
+            std::swap(throw_on_copy_, other.throw_on_copy_);
         }
         return *this;
     }
@@ -92,37 +92,37 @@ struct big_object final {
         }
         magic_value_ = 0;
         --counter_;
-        ++dtor_counter_;
+        ++destructor_counter_;
     }
 
     static void reset(){
-        counter_            = 0;
-        constructor_counter_        = 0;
-        dtor_counter_        = 0;
+        counter_                     = 0;
+        constructor_counter_         = 0;
+        destructor_counter_          = 0;
         default_constructor_counter_ = 0;
         arg_constructor_counter_     = 0;
         copy_constructor_counter_    = 0;
         move_constructor_counter_    = 0;
-        copy_assign_counter_  = 0;
-        move_assign_counter_  = 0;
-        magic_error_counter_    = 0;
+        copy_assign_counter_         = 0;
+        move_assign_counter_         = 0;
+        magic_error_counter_         = 0;
     }
 
     static bool is_clear() {
-        return (counter_ == 0) && (dtor_counter_ == constructor_counter_) && (magic_error_counter_ == 0);
+        return (counter_ == 0) && (destructor_counter_ == constructor_counter_) && (magic_error_counter_ == 0);
     }
 };
 
-int64_t big_object::counter_              = 0;
+int64_t big_object::counter_                     = 0;
 int64_t big_object::constructor_counter_         = 0;
-int64_t big_object::dtor_counter_         = 0;
+int64_t big_object::destructor_counter_          = 0;
 int64_t big_object::default_constructor_counter_ = 0;
 int64_t big_object::arg_constructor_counter_     = 0;
 int64_t big_object::copy_constructor_counter_    = 0;
 int64_t big_object::move_constructor_counter_    = 0;
-int64_t big_object::copy_assign_counter_  = 0;
-int64_t big_object::move_assign_counter_  = 0;
-int     big_object::magic_error_counter_   = 0;
+int64_t big_object::copy_assign_counter_         = 0;
+int64_t big_object::move_assign_counter_         = 0;
+int     big_object::magic_error_counter_         = 0;
 
 struct small_object final {
     static int constructor_counter_;
@@ -140,8 +140,8 @@ struct small_object final {
 int small_object::constructor_counter_ = 0;
 
 
-struct RequiresInitList final {
-    RequiresInitList(std::initializer_list<int> ilist): sum(std::accumulate(begin(ilist), end(ilist), 0)) {}
+struct list_of_numbers final {
+    list_of_numbers(std::initializer_list<int> numbers): sum(std::accumulate(begin(numbers), end(numbers), 0)) {}
 
     int sum;
 };
@@ -156,8 +156,8 @@ void ignore_unused(){}
 int main() {
 
     {
-        static_assert(sizeof(std::string) <= sizeof(any), "ensure that 'any' has enough local memory to store a string");
-        static_assert(sizeof(std::vector<int>) <= sizeof(any), "ensure that 'any' has enough local memory to store a vector");
+        static_assert(sizeof(std::string) <= sizeof(any), "has enough local memory to store");
+        static_assert(sizeof(std::vector<int>) <= sizeof(any), "has enough local memory to store");
     }
 
     {
@@ -379,10 +379,10 @@ int main() {
     {
         {
             any a;
-            a.emplace<RequiresInitList>(std::initializer_list<int>{1,2,3,4,5,6});
+            a.emplace<list_of_numbers>(std::initializer_list<int>{1, 2, 3, 4, 5, 6});
 
             assert(a.has_value());
-            assert(any_cast<RequiresInitList>(a).sum == 21);
+            assert(any_cast<list_of_numbers>(a).sum == 21);
         }
     }
 
@@ -438,8 +438,8 @@ int main() {
         }
 
         {
-            auto a = make_any<RequiresInitList>(std::initializer_list<int>{1,2,3,4,5,6,7,8});
-            assert(any_cast<RequiresInitList&>(a).sum == 36);
+            auto a = make_any<list_of_numbers>(std::initializer_list<int>{1, 2, 3, 4, 5, 6, 7, 8});
+            assert(any_cast<list_of_numbers&>(a).sum == 36);
         }
     }
 
