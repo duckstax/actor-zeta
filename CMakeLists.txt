@@ -14,10 +14,11 @@ else()
     PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
 endif()
 
-# This project requires C++11.
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11 CACHE STRING "The C++ standard whose features are requested." )
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+message (STATUS "STANDARD CPP = ${CMAKE_CXX_STANDARD}")
 
 message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 

@@ -73,7 +73,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-4.8 BUILD_TYPE=Release
+    - env: COMPILER=g++-4.8 BUILD_TYPE=Release -DDEV_MODE=ON
       addons: *gcc48
 
     # GCC 4.9
@@ -85,11 +85,14 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-4.9 BUILD_TYPE=Release
+    - env: COMPILER=g++-8 BUILD_TYPE=Release -DDEV_MODE=ON
+      addons: *gcc49
+
+    - env: COMPILER=g++-8 BUILD_TYPE=Release -DDEV_MODE=ON -DCMAKE_CXX_STANDARD=14
       addons: *gcc49
 
 
-    # GCC 5
+      # GCC 5
     - env: COMPILER=g++-5 BUILD_TYPE=Debug
       addons: &gcc5
         apt:
@@ -98,7 +101,10 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-5 BUILD_TYPE=Release
+    - env: COMPILER=g++-8 BUILD_TYPE=Release -DDEV_MODE=ON
+      addons: *gcc5
+
+    - env: COMPILER=g++-8 BUILD_TYPE=Release -DDEV_MODE=ON -DCMAKE_CXX_STANDARD=14
       addons: *gcc5
 
     # GCC 6
@@ -110,8 +116,15 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-6 BUILD_TYPE=Release
+    - env: COMPILER=g++-8 BUILD_TYPE=Release -DDEV_MODE=ON
       addons: *gcc6
+
+    - env: COMPILER=g++-8 BUILD_TYPE=Release -DDEV_MODE=ON -DCMAKE_CXX_STANDARD=14
+      addons: *gcc6
+
+    - env: COMPILER=g++-8 BUILD_TYPE=Release -DDEV_MODE=ON -DCMAKE_CXX_STANDARD=17
+      addons: *gcc6
+
 
     # GCC 7
     - env: COMPILER=g++-7 BUILD_TYPE=Debug
@@ -122,7 +135,13 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-7 BUILD_TYPE=Release
+    - env: COMPILER=g++-8 BUILD_TYPE=Release -DDEV_MODE=ON
+      addons: *gcc7
+
+    - env: COMPILER=g++-8 BUILD_TYPE=Release -DDEV_MODE=ON -DCMAKE_CXX_STANDARD=14
+      addons: *gcc7
+
+    - env: COMPILER=g++-8 BUILD_TYPE=Release -DDEV_MODE=ON -DCMAKE_CXX_STANDARD=17
       addons: *gcc7
 
     # GCC 8
@@ -134,7 +153,13 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-8 BUILD_TYPE=Release
+    - env: COMPILER=g++-8 BUILD_TYPE=Release -DDEV_MODE=ON
+      addons: *gcc8
+
+    - env: COMPILER=g++-8 BUILD_TYPE=Release -DDEV_MODE=ON -DCMAKE_CXX_STANDARD=14
+      addons: *gcc8
+
+    - env: COMPILER=g++-8 BUILD_TYPE=Release -DDEV_MODE=ON -DCMAKE_CXX_STANDARD=17
       addons: *gcc8
 
 script:
