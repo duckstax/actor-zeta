@@ -25,7 +25,7 @@ namespace actor_zeta { namespace actor {
             std::set<std::string> types;
 
             for(const auto&i: dispatch()) {
-                types.emplace(std::to_string(i.first));
+                types.emplace(std::string(i.first.begin(), i.first.end()));
             }
 
             return types;
