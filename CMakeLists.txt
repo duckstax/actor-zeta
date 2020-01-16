@@ -137,7 +137,6 @@ target_include_directories(
         ${PROJECT_NAME}
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/core/actor-zeta
-        ${CMAKE_CURRENT_SOURCE_DIR}/environment/actor-zeta
 )
 
 if(ALLOW_EXAMPLES)

@@ -22,6 +22,9 @@ namespace actor_zeta { namespace actor {
             template<typename F>
             helper( F &&f);
 
+            template<typename F, typename ClassPtr>
+            helper( F &&f,ClassPtr*self);
+
             void invoke(context &ctx) final {
                 helper_(ctx);
             }
@@ -31,9 +34,14 @@ namespace actor_zeta { namespace actor {
 
         };
 
-        template< typename F>
-        auto make_handler( F &&f) -> handler * {
-            return new helper(f);
+        template<typename F>
+        inline auto make_handler(F&& f) -> handler* {
+            return new helper(std::forward<F>(f));
         };
+
+        template<typename F, typename ClassPtr>
+        inline auto make_handler(F&& f, ClassPtr* self) -> handler* {
+            return new helper(std::forward<F>(f), self);
+        }
 
 }} /// namespace actor_zeta { namespace behavior {}}

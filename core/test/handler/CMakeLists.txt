@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(project any)
+set(project handler)
 
 if (CMAKE_VERSION VERSION_LESS 3.0)
     PROJECT(${project} CXX)

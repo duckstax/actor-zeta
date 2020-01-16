@@ -57,25 +57,30 @@ public:
     storage_t(dummy_supervisor&ref) : basic_async_actor(ref, "storage") {
         add_handler(
                 "update",
-                [](context & /*ctx*/, std::string &data) -> void {
-                    std::cerr << "update:" << data << std::endl;
-                }
-        );
+                 &storage_t::update
+       );
 
         add_handler(
                 "find",
-                [](context & /*ctx*/) -> void {
-                    std::cerr << "find" << std::endl;
-                }
+                &storage_t::find
         );
 
         add_handler(
                 "remove",
-                [](context & /*ctx*/) -> void {
-                    std::cerr << "remove" << std::endl;
-                }
+                &storage_t::remote
         );
 
+    }
+    void update(std::string&data){
+        std::cerr << "update:" << data << std::endl;
+    }
+
+    void find() {
+        std::cerr << "find" << std::endl;
+    }
+
+    void remote(){
+        std::cerr << "remote" << std::endl;
     }
 
     ~storage_t() override = default;
@@ -84,11 +89,11 @@ public:
 
 
 int main() {
-    auto * supervisor =  new dummy_supervisor(new dummy_executor);
-    auto* storage = new storage_t(*supervisor);
-    send(storage,actor_zeta::actor::actor_address(),"update",std::string("payload"));
-    send(storage,actor_zeta::actor::actor_address(),"find",std::string("payload"));
-    send(storage,actor_zeta::actor::actor_address(),"remove",std::string("payload"));
+    std::unique_ptr<dummy_supervisor> supervisor(new dummy_supervisor(new dummy_executor));
+    std::unique_ptr<storage_t> storage(new storage_t(*supervisor));
+    send(storage, actor_zeta::actor::actor_address(), "update", std::string("payload"));
+    send(storage, actor_zeta::actor::actor_address(), "find");
+    send(storage, actor_zeta::actor::actor_address(), "remove");
 
     return 0;
 }

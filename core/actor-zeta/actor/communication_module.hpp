@@ -8,6 +8,7 @@
 #include <actor-zeta/actor/metadata.hpp>
 #include <actor-zeta/actor/dispatcher.hpp>
 #include <actor-zeta/actor/context.hpp>
+#include <actor-zeta/detail/callable_trait.hpp>
 
 
 namespace actor_zeta { namespace actor {
@@ -46,9 +47,14 @@ namespace actor_zeta { namespace actor {
 
             auto self() -> actor_address override ;
 
-            template<typename F>
-            auto add_handler(detail::string_view name, F &&f) -> void {
+            template<class F>
+            auto add_handler(detail::string_view name, F &&f) ->  typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
                 dispatch().on(name, make_handler(std::forward<F>(f)));
+            }
+
+            template<typename F>
+            auto add_handler(detail::string_view name, F &&f) -> typename std::enable_if<std::is_member_function_pointer<F>::value>::type {
+                dispatch().on(name, make_handler(std::forward<F>(f),static_cast<typename type_traits::get_callable_trait_t<F>::class_type *>(this)));
             }
 
             /**
