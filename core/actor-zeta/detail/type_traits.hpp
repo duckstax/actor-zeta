@@ -1,8 +1,17 @@
 #pragma once
 
-#include <iterator>
+#include <actor-zeta/config.hpp>
 
 namespace actor_zeta { namespace  type_traits {
+
+#if CPP17_OR_GREATER
+
+    using std::decay_t ;
+    using std::index_sequence ;
+    using std::remove_reference_t;
+    using std::make_index_sequence;
+
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 /*
         template<class... Ts>
         using void_t = void;
@@ -105,5 +114,8 @@ namespace actor_zeta { namespace  type_traits {
 
         template <std::size_t I>
         inline in_place_tag in_place(detail::in_place_index_tag<I>) { return internal_construct_in_place_tag(); }
+
+
+#endif
 
 }}
