@@ -13,7 +13,6 @@ namespace actor_zeta { namespace detail {
     using std::any_cast;
     using std::make_any;
     using std::swap;
-    using std::bad_any_cast;
 
 }}
 
@@ -93,12 +92,6 @@ namespace actor_zeta { namespace detail {
 
             template<class ValueType>
             friend ValueType any_cast(any &&operand);
-
-            template<class ValueType>
-            friend const ValueType *unsafe_any_cast(const any *pAny) noexcept;
-
-            template<class ValueType>
-            friend ValueType *unsafe_any_cast(any *pAny) noexcept;
 
 
             template<typename T>
@@ -411,16 +404,6 @@ namespace actor_zeta { namespace detail {
         template<class ValueType>
         inline ValueType *any_cast(any *pAny) noexcept {
             return (pAny && pAny->handler_) ? static_cast<ValueType *>(pAny->handler_(any::storage_operation::get, pAny, nullptr)) : nullptr;
-        }
-
-        template<class ValueType>
-        inline const ValueType *unsafe_any_cast(const any *pAny) noexcept {
-            return unsafe_any_cast<ValueType>(const_cast<any *>(pAny));
-        }
-
-        template<class ValueType>
-        inline ValueType *unsafe_any_cast(any *pAny) noexcept {
-            return static_cast<ValueType *>(pAny->handler_(any::storage_operation::get, pAny, nullptr));
         }
 
         template<class T, class... Args>

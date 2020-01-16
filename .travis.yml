@@ -65,7 +65,7 @@ matrix:
     ##########################################################################
 
     # GCC 4.8
-    - env: COMPILER=g++-4.8 BUILD_TYPE=Debug
+    - env: COMPILER=g++-4.8 BUILD_TYPE=Debug CXX_STANDARD=11
       addons: &gcc48
         apt:
           packages:
@@ -73,11 +73,11 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-4.8 BUILD_TYPE=Release
+    - env: COMPILER=g++-4.8 BUILD_TYPE=Release CXX_STANDARD=11
       addons: *gcc48
 
     # GCC 4.9
-    - env: COMPILER=g++-4.9 BUILD_TYPE=Debug
+    - env: COMPILER=g++-4.9 BUILD_TYPE=Debug CXX_STANDARD=11
       addons: &gcc49
         apt:
           packages:
@@ -85,7 +85,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-4.9 BUILD_TYPE=Release
+    - env: COMPILER=g++-4.9 BUILD_TYPE=Release CXX_STANDARD=11
       addons: *gcc49
 
     - env: COMPILER=g++-4.9 BUILD_TYPE=Release CXX_STANDARD=14
@@ -93,7 +93,7 @@ matrix:
 
 
       # GCC 5
-    - env: COMPILER=g++-5 BUILD_TYPE=Debug
+    - env: COMPILER=g++-5 BUILD_TYPE=Debug CXX_STANDARD=11
       addons: &gcc5
         apt:
           packages:
@@ -101,14 +101,14 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-5 BUILD_TYPE=Release
+    - env: COMPILER=g++-5 BUILD_TYPE=Release CXX_STANDARD=11
       addons: *gcc5
 
     - env: CCOMPILER=g++-5 BUILD_TYPE=Release CXX_STANDARD=14
       addons: *gcc5
 
     # GCC 6
-    - env: COMPILER=g++-6 BUILD_TYPE=Debug
+    - env: COMPILER=g++-6 BUILD_TYPE=Debug CXX_STANDARD=11
       addons: &gcc6
         apt:
           packages:
@@ -116,7 +116,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-6 BUILD_TYPE=Release
+    - env: COMPILER=g++-6 BUILD_TYPE=Release CXX_STANDARD=11
       addons: *gcc6
 
     - env: COMPILER=g++-6 BUILD_TYPE=Release CXX_STANDARD=14
@@ -127,7 +127,7 @@ matrix:
 
 
     # GCC 7
-    - env: COMPILER=g++-7 BUILD_TYPE=Debug
+    - env: COMPILER=g++-7 BUILD_TYPE=Debug CXX_STANDARD=11
       addons: &gcc7
         apt:
           packages:
@@ -135,7 +135,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-7 BUILD_TYPE=Release
+    - env: COMPILER=g++-7 BUILD_TYPE=Release CXX_STANDARD=11
       addons: *gcc7
 
     - env: COMPILER=g++-7 BUILD_TYPE=Release CXX_STANDARD=14
@@ -145,7 +145,7 @@ matrix:
       addons: *gcc7
 
     # GCC 8
-    - env: COMPILER=g++-8 BUILD_TYPE=Debug
+    - env: COMPILER=g++-8 BUILD_TYPE=Debug CXX_STANDARD=11
       addons: &gcc8
         apt:
           packages:
@@ -153,7 +153,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
 
-    - env: COMPILER=g++-8 BUILD_TYPE=Release
+    - env: COMPILER=g++-8 BUILD_TYPE=Release  CXX_STANDARD=11
       addons: *gcc8
 
     - env: COMPILER=g++-8 BUILD_TYPE=Release CXX_STANDARD=14

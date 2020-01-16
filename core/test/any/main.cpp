@@ -7,7 +7,6 @@
 using actor_zeta::detail::any;
 using actor_zeta::detail::any_cast;
 using actor_zeta::detail::make_any;
-using actor_zeta::detail::unsafe_any_cast;
 
 constexpr static uint32_t magic_value = 0x01f1cbe8;
 
@@ -454,18 +453,6 @@ int main() {
         int* i = any_cast<int>(&a);
         assert((*i) == 1);
         ignore_unused(i);
-
-        a = 2;
-        int *j = (int*)unsafe_any_cast<void>(&a);
-        assert((*j) == 2);
-        ignore_unused(j);
-
-        const any b = 3;
-        const void * p = unsafe_any_cast<void>(&b);
-        void *q = const_cast<void *>(p);
-        int *r = static_cast<int *>(q);
-        assert((*r) == 3);
-        ignore_unused(r);
     }
 
     {
