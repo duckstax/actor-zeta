@@ -88,7 +88,7 @@ matrix:
     - env: COMPILER=g++-4.9 BUILD_TYPE=Release
       addons: *gcc49
 
-    - env: COMPILER=g++-4.9 BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14
+    - env: COMPILER=g++-4.9 BUILD_TYPE=Release CXX_STANDARD=14
       addons: *gcc49
 
 
@@ -104,7 +104,7 @@ matrix:
     - env: COMPILER=g++-5 BUILD_TYPE=Release
       addons: *gcc5
 
-    - env: CCOMPILER=g++-5 BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14
+    - env: CCOMPILER=g++-5 BUILD_TYPE=Release CXX_STANDARD=14
       addons: *gcc5
 
     # GCC 6
@@ -119,10 +119,10 @@ matrix:
     - env: COMPILER=g++-6 BUILD_TYPE=Release
       addons: *gcc6
 
-    - env: COMPILER=g++-6 BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14
+    - env: COMPILER=g++-6 BUILD_TYPE=Release CXX_STANDARD=14
       addons: *gcc6
 
-    - env: COCOMPILER=g++-6 BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=17
+    - env: COCOMPILER=g++-6 BUILD_TYPE=Release CXX_STANDARD=17
       addons: *gcc6
 
 
@@ -138,10 +138,10 @@ matrix:
     - env: COMPILER=g++-7 BUILD_TYPE=Release
       addons: *gcc7
 
-    - env: COMPILER=g++-7 BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14
+    - env: COMPILER=g++-7 BUILD_TYPE=Release CXX_STANDARD=14
       addons: *gcc7
 
-    - env: COMPILER=g++-7 BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=17
+    - env: COMPILER=g++-7 BUILD_TYPE=Release CXX_STANDARD=17
       addons: *gcc7
 
     # GCC 8
@@ -156,13 +156,13 @@ matrix:
     - env: COMPILER=g++-8 BUILD_TYPE=Release
       addons: *gcc8
 
-    - env: COMPILER=g++-8 BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14
+    - env: COMPILER=g++-8 BUILD_TYPE=Release CXX_STANDARD=14
       addons: *gcc8
 
-    - env: COMPILER=g++-8 BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=17
+    - env: COMPILER=g++-8 BUILD_TYPE=Release CXX_STANDARD=17
       addons: *gcc8
 
 script:
   - mkdir build && cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER -DDEV_MODE=ON
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER -DDEV_MODE=ON  -DCMAKE_CXX_STANDARD=$CXX_STANDARD
   - cmake --build . -- VERBOSE=1
