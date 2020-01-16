@@ -155,8 +155,10 @@ void ignore_unused(){}
 int main() {
 
     {
+#if not CPP17_OR_GREATER
         static_assert(sizeof(std::string) <= sizeof(any), "has enough local memory to store");
         static_assert(sizeof(std::vector<int>) <= sizeof(any), "has enough local memory to store");
+#endif
     }
 
     {
