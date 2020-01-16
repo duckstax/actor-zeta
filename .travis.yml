@@ -14,48 +14,48 @@ matrix:
     # XCode 7.3
     - os: osx
       osx_image: xcode7.3
-      env: BUILD_TYPE=Debug
+      env: BUILD_TYPE=Debug CXX_STANDARD=11
 
     - os: osx
       osx_image: xcode7.3
-      env: BUILD_TYPE=Release
+      env: BUILD_TYPE=Release CXX_STANDARD=11
 
     # XCode 8
     - os: osx
       osx_image: xcode8
-      env: BUILD_TYPE=Debug
+      env: BUILD_TYPE=Debug CXX_STANDARD=11
 
     - os: osx
       osx_image: xcode8
-      env: BUILD_TYPE=Release
+      env: BUILD_TYPE=Release CXX_STANDARD=11
 
     # XCode 8.2
     - os: osx
       osx_image: xcode8.2
-      env: BUILD_TYPE=Debug
+      env: BUILD_TYPE=Debug CXX_STANDARD=11
 
     - os: osx
       osx_image: xcode8.2
-      env: BUILD_TYPE=Release
+      env: BUILD_TYPE=Release CXX_STANDARD=11
 
     # XCode 8.3
-    - env: COMPILER=clang++ BUILD_TYPE=Debug
+    - env: COMPILER=clang++ BUILD_TYPE=Debug CXX_STANDARD=11
       os: osx
       osx_image: xcode8.3
       compiler: clang
 
-    - env: COMPILER=clang++ BUILD_TYPE=Release
+    - env: COMPILER=clang++ BUILD_TYPE=Release CXX_STANDARD=11
       os: osx
       osx_image: xcode8.3
       compiler: clang
 
     # XCode 9.1
-    - env: COMPILER=clang++ BUILD_TYPE=Debug
+    - env: COMPILER=clang++ BUILD_TYPE=Debug CXX_STANDARD=11
       os: osx
       osx_image: xcode9.1
       compiler: clang
 
-    - env: COMPILER=clang++ BUILD_TYPE=Release
+    - env: COMPILER=clang++ BUILD_TYPE=Release CXX_STANDARD=11
       os: osx
       osx_image: xcode9.1
       compiler: clang
@@ -121,10 +121,6 @@ matrix:
 
     - env: COMPILER=g++-6 BUILD_TYPE=Release CXX_STANDARD=14
       addons: *gcc6
-
-    - env: COCOMPILER=g++-6 BUILD_TYPE=Release CXX_STANDARD=17
-      addons: *gcc6
-
 
     # GCC 7
     - env: COMPILER=g++-7 BUILD_TYPE=Debug CXX_STANDARD=11
