@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cassert>
+
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/any.hpp>
 #include <actor-zeta/detail/string_view.hpp>
