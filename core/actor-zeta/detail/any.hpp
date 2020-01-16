@@ -1,5 +1,24 @@
 #pragma once
 
+#include <actor-zeta/config.hpp>
+
+#if CPP17_OR_GREATER
+
+#include <any>
+#include <utility>
+
+namespace actor_zeta { namespace detail {
+
+    using std::any;
+    using std::any_cast;
+    using std::make_any;
+    using std::swap;
+    using std::bad_any_cast;
+
+}}
+
+
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 #include <new>
 #include <utility>
 #include <type_traits>
@@ -111,3 +130,5 @@ namespace actor_zeta { namespace detail {
         }
 
 }}
+
+#endif
