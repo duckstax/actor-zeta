@@ -1,5 +1,32 @@
 #pragma  once
 
+#include <actor-zeta/config.hpp>
+
+#if CPP17_OR_GREATER
+
+#include <string_view>
+
+namespace actor_zeta { namespace detail {
+
+    using std::string_view;
+    using std::wstring_view;
+    using std::u16string_view;
+    using std::u32string_view;
+    using std::basic_string_view;
+
+    using std::operator==;
+    using std::operator!=;
+    using std::operator<;
+    using std::operator<=;
+    using std::operator>;
+    using std::operator>=;
+
+    using std::operator<<;
+
+
+}}
+
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 #include <cstddef>
 #include <cstring>
 #include <iosfwd>
@@ -132,8 +159,7 @@ namespace std {
     };
 }
 
-
-
+#endif
 
 
 

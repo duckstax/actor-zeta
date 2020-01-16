@@ -1,4 +1,9 @@
 #include <actor-zeta/detail/string_view.hpp>
+
+#if CPP17_OR_GREATER
+
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+
 #include <ostream>
 
 namespace std {
@@ -29,3 +34,5 @@ namespace actor_zeta { namespace  detail {
         }
 
     }}
+
+#endif

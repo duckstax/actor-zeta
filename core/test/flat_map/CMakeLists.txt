@@ -4,8 +4,6 @@ set(project flat_map)
 
 project(${project} CXX)
 
-set(CMAKE_CXX_STANDARD 11)
-
 set(SOURCE_FILES main.cpp)
 
 add_executable(${project} ${SOURCE_FILES})
