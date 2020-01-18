@@ -18,7 +18,7 @@ namespace actor_zeta { namespace actor {
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 0> {
+        struct transformer<F, Args, 0> final {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &) -> void {
                     f();
@@ -26,14 +26,17 @@ namespace actor_zeta { namespace actor {
             }
         };
 
-
         template<
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 1> {
+        struct transformer<F, Args, 1> final {
             auto operator()(F &&f) -> std::function<void(context & )> {
-                return f;
+                return [f](context &ctx) -> void {
+                    using type_context = type_traits::type_list_at_t<Args, 0>;
+                    using clear_type_context = type_traits::decay_t<type_context>;
+                    return f(static_cast<typename std::add_lvalue_reference<clear_type_context>::type >(ctx));
+                };
             }
         };
 
@@ -41,13 +44,15 @@ namespace actor_zeta { namespace actor {
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 2> {
+        struct transformer<F, Args, 2> final {
             auto operator()(F &&f) -> std::function<void(context & )> {
-                return [f](context &arg) -> void {
-                    using arg_type_2 = typename type_traits::type_list_at<Args, 1>::type;
-                    using clear_args_type_2 = typename std::decay<arg_type_2>::type;
-                    auto &tmp = arg.current_message().body<clear_args_type_2>();
-                    f(arg, tmp);
+                return [f](context &ctx) -> void {
+                    using type_context = type_traits::type_list_at_t<Args, 0>;
+                    using clear_type_context = type_traits::decay_t<type_context>;
+                    using arg_type_2 = type_traits::type_list_at_t<Args, 1>;
+                    using clear_args_type_2 = type_traits::decay_t<arg_type_2>;
+                    auto &tmp = ctx.current_message().body<clear_args_type_2>();
+                    f(static_cast<typename std::add_lvalue_reference<clear_type_context>::type >(ctx), tmp);
                 };
             }
         };
@@ -78,14 +83,16 @@ namespace actor_zeta { namespace actor {
             using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types, 1, args_size>;
             using Tuple =  type_list_to_tuple_t<args_type_list>;
             auto &args = ctx.current_message().body<Tuple>();
-            f(ctx, static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
+            using type_context = type_traits::type_list_at_t<typename call_trait::args_types, 0>;
+            using clear_type_context = type_traits::decay_t<type_context>;
+            f(static_cast<typename std::add_lvalue_reference<clear_type_context>::type >(ctx), static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
         }
 
         template<
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 3> {
+        struct transformer<F, Args, 3> final {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &ctx) -> void {
                     using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
@@ -99,7 +106,7 @@ namespace actor_zeta { namespace actor {
                 typename F,
                 class Args
         >
-        struct transformer<F, Args, 4> {
+        struct transformer<F, Args, 4> final {
             auto operator()(F &&f) -> std::function<void(context & )> {
                 return [f](context &ctx) -> void {
                     using call_trait = type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
@@ -133,7 +140,7 @@ namespace actor_zeta { namespace actor {
                 typename ClassPtr,
                 class Args
         >
-        struct transformer_for_class<F, ClassPtr, Args, 0> {
+        struct transformer_for_class<F, ClassPtr, Args, 0> final {
             auto operator()(F &&f, ClassPtr *ptr) -> std::function<void(context & )> {
                 return [f, ptr](context &) -> void {
                     (ptr->*f)();
@@ -147,7 +154,7 @@ namespace actor_zeta { namespace actor {
                 typename ClassPtr,
                 class Args
         >
-        struct transformer_for_class<F, ClassPtr, Args, 1> {
+        struct transformer_for_class<F, ClassPtr, Args, 1> final {
             auto operator()(F &&f, ClassPtr *ptr) -> std::function<void(context & )> {
                 return [f, ptr](context &arg) mutable -> void  {
                     using arg_type_0 = type_traits::type_list_at_t<Args, 0>;
@@ -164,7 +171,7 @@ namespace actor_zeta { namespace actor {
                 typename ClassPtr,
                 class Args
         >
-        struct transformer_for_class<F, ClassPtr, Args, 2> {
+        struct transformer_for_class<F, ClassPtr, Args, 2> final {
             auto operator()(F &&f, ClassPtr *ptr) -> std::function<void(context & )> {
                 return [f, ptr](context &ctx) -> void {
                     using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
@@ -179,7 +186,7 @@ namespace actor_zeta { namespace actor {
                 typename ClassPtr,
                 class Args
         >
-        struct transformer_for_class<F, ClassPtr, Args, 3> {
+        struct transformer_for_class<F, ClassPtr, Args, 3> final {
             auto operator()(F &&f, ClassPtr *ptr) -> std::function<void(context & )> {
                 return [f, ptr](context &ctx) -> void {
                     using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
@@ -194,7 +201,7 @@ namespace actor_zeta { namespace actor {
                 typename ClassPtr,
                 class Args
         >
-        struct transformer_for_class<F, ClassPtr, Args, 4> {
+        struct transformer_for_class<F, ClassPtr, Args, 4> final {
             auto operator()(F &&f, ClassPtr *ptr) -> std::function<void(context & )> {
                 return [f, ptr](context &ctx) -> void {
                     using call_trait = type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
