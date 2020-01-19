@@ -17,7 +17,7 @@ using actor_zeta::basic_async_actor;
 
 class key_value_storage_t final : public basic_async_actor {
 public:
-    explicit storage_t(dummy_supervisor &ref) : basic_async_actor(ref, "storage") {
+    explicit key_value_storage_t(dummy_supervisor &ref) : basic_async_actor(ref, "storage") {
 
         add_handler(
                 "init",
@@ -36,7 +36,7 @@ public:
 
     }
 
-    ~storage_t() override = default;
+    ~key_value_storage_t() override = default;
 
     void init() {
        /// ...
