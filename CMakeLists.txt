@@ -136,7 +136,7 @@ target_link_libraries (
 
 target_include_directories(
         ${PROJECT_NAME}
-        PUBLIC
+        PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/core/actor-zeta
 )
 

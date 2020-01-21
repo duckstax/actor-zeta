@@ -1,6 +1,6 @@
 #include <utility>
 
-#include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/messaging/message_header.hpp>
 #include <actor-zeta/messaging/message.hpp>
 
@@ -19,13 +19,13 @@ namespace actor_zeta { namespace messaging {
             return init;
         }
 
-        message::message(actor::actor_address sender_, std::string name):
+        message::message(base::actor_address sender_, std::string name):
             init(true),
             header_(std::move(sender_),std::move(name)),
             body_() {
         }
 
-        message::message(actor::actor_address sender_,std::string name, detail::any body):
+        message::message(base::actor_address sender_, std::string name, detail::any body):
             init(true),
             header_(std::move(sender_),std::move(name)),
             body_(std::move(body)) {}
@@ -36,7 +36,7 @@ namespace actor_zeta { namespace messaging {
             body_(body) {}
 
 
-        auto message::sender() const -> actor::actor_address {
+        auto message::sender() const -> base::actor_address {
             return header_.sender();
         }
 

@@ -5,13 +5,13 @@
 
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
-#include <actor-zeta/actor/metadata.hpp>
-#include <actor-zeta/actor/dispatcher.hpp>
-#include <actor-zeta/actor/context.hpp>
+#include <actor-zeta/base/metadata.hpp>
+#include <actor-zeta/base/dispatcher.hpp>
+#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 
         class communication_module
                 : public ref_counted

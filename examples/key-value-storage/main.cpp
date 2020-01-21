@@ -75,7 +75,7 @@ public:
                     query_.id = query_raw.id;
                     actor_zeta::send(
                             ctx.addresses("storage"),
-                            actor_zeta::actor::actor_address(address()),
+                            actor_zeta::actor_address(address()),
                             std::string(query_.commands),
                             std::move(query_)
                     );
@@ -107,10 +107,10 @@ public:
 
     auto executor() noexcept -> actor_zeta::executor::abstract_executor& final { return *e_;}
 
-    using actor_zeta::actor::supervisor::join;
+    using actor_zeta::base::supervisor::join;
 
-    auto join(actor_zeta::actor::abstract_actor *t) -> actor_zeta::actor::actor_address final {
-        actor_zeta::actor::actor tmp(t);
+    auto join(actor_zeta::base::abstract_actor *t) -> actor_zeta::base::actor_address final {
+        actor_zeta::base::actor tmp(t);
         auto address = tmp->address();
         actors_.push_back(std::move(tmp));
         return address;
@@ -125,7 +125,7 @@ public:
 private:
     fake_multiplexer& multiplexer_;
     abstract_executor* e_;
-    std::vector<actor_zeta::actor::actor> actors_;
+    std::vector<actor_zeta::base::actor> actors_;
 };
 
 /// protocol :

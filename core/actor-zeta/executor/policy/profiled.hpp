@@ -1,19 +1,17 @@
 #pragma once
 
-#include <actor-zeta/executor/executable.hpp>
-#include <actor-zeta/actor/cooperative_actor.hpp>
+#include <actor-zeta/forwards.hpp>
+#include <actor-zeta/base/cooperative_actor.hpp>
+#include <actor-zeta/base/metadata.hpp>
 
 namespace actor_zeta { namespace executor {
-
-    template <class>
-    class profiled_executor;
 
     template<class Policy>
     struct profiled final : Policy {
         using executor_type = profiled_executor<profiled<Policy>>;
 
         static actor_id id_of(executable *job) {
-            auto ptr = static_cast<actor::cooperative_actor *>(job);
+            auto ptr = static_cast<base::cooperative_actor *>(job);
             return ptr != nullptr ? /*ptr->*/ 1 : 0;
         }
 

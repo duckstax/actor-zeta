@@ -1,6 +1,6 @@
-#include <actor-zeta/actor/context.hpp>
+#include <actor-zeta/base/context.hpp>
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 
 
 }}

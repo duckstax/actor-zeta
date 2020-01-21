@@ -21,14 +21,14 @@ namespace actor_zeta { namespace messaging {
 
             ~message_header() = default;
 
-            message_header(actor::actor_address sender_, std::string name);
+            message_header(base::actor_address sender_, std::string name);
 
             auto command() const noexcept -> detail::string_view;
 
-            auto sender() const -> actor::actor_address ;
+            auto sender() const -> base::actor_address ;
 
         private:
-            actor::actor_address sender_;
+            base::actor_address sender_;
             std::string command_;
         };
     }

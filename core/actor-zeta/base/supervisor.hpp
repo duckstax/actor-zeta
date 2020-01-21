@@ -1,9 +1,9 @@
 #pragma once
 
 #include <actor-zeta/forwards.hpp>
-#include <actor-zeta/actor/communication_module.hpp>
+#include <actor-zeta/base/communication_module.hpp>
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 
     using messaging::message;
 
@@ -15,7 +15,7 @@ namespace actor_zeta { namespace actor {
 
         virtual auto executor() noexcept -> executor::abstract_executor& = 0;
 
-        virtual auto join(abstract_actor *) -> actor_zeta::actor::actor_address = 0;
+        virtual auto join(actor) -> actor_zeta::base::actor_address = 0;
 
         using communication_module::broadcast;
     protected:

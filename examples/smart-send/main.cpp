@@ -63,18 +63,18 @@ public:
         e_->start();
     }
 
-    auto executor() noexcept -> actor_zeta::executor::abstract_executor & final { return *e_; }
+    auto executor() noexcept -> actor_zeta::abstract_executor & final { return *e_; }
 
-    using actor_zeta::actor::supervisor::join;
+    using actor_zeta::supervisor::join;
 
-    auto join(actor_zeta::abstract_actor *t) -> actor_zeta::actor::actor_address final {
-        actor_zeta::actor::actor tmp(t);
+    auto join(actor_zeta::abstract_actor *t) -> actor_zeta::actor_address final {
+        actor_zeta::actor tmp(t);
         auto address = tmp->address();
         actors_.push_back(std::move(tmp));
         return address;
     }
 
-    auto enqueue(message msg, actor_zeta::executor::execution_device *) -> void final {
+    auto enqueue(message msg, actor_zeta::execution_device *) -> void final {
         auto msg_ = std::move(msg);
         auto it = system_.find(msg_.command());
         if (it != system_.end()) {
@@ -102,7 +102,7 @@ private:
     }
 
     std::unique_ptr<abstract_executor,decltype(thread_pool_deleter)> e_;
-    std::vector<actor_zeta::actor::actor> actors_;
+    std::vector<actor_zeta::actor> actors_;
     std::size_t cursor;
     std::unordered_set<actor_zeta::detail::string_view> system_;
 };

@@ -1,6 +1,6 @@
-#include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/base/actor_address.hpp>
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 
       actor_address::actor_address(communication_module *aa) : ptr_(aa) {}
 

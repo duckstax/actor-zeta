@@ -40,7 +40,7 @@ public:
         return *ptr_;
     }
 
-    auto join(actor_zeta::abstract_actor *) -> actor_zeta::actor::actor_address override {
+     auto join(actor_zeta::actor) -> actor_zeta::actor_address override {
         return actor_zeta::actor_address();
     }
 
@@ -91,9 +91,9 @@ public:
 int main() {
     std::unique_ptr<dummy_supervisor> supervisor(new dummy_supervisor(new dummy_executor));
     std::unique_ptr<storage_t> storage(new storage_t(*supervisor));
-    send(storage, actor_zeta::actor::actor_address(), "update", std::string("payload"));
-    send(storage, actor_zeta::actor::actor_address(), "find");
-    send(storage, actor_zeta::actor::actor_address(), "remove");
+    send(storage, actor_zeta::actor_address(), "update", std::string("payload"));
+    send(storage, actor_zeta::actor_address(), "find");
+    send(storage, actor_zeta::actor_address(), "remove");
 
     return 0;
 }

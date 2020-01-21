@@ -5,7 +5,7 @@
 #include <actor-zeta/detail/type_list.hpp>
 
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 
         template<
                 typename F,

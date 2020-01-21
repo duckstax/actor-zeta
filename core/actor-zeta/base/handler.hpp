@@ -4,7 +4,7 @@
 
 #include <actor-zeta/forwards.hpp>
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 ///
 /// @brief Abstract concept of an action
 ///

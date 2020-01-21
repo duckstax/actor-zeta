@@ -5,10 +5,10 @@
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/intrusive_ptr.hpp>
 
-//smart actor
-namespace actor_zeta { namespace actor {
+//smart base
+namespace actor_zeta { namespace base {
 ///
-/// @brief An actor's entity container
+/// @brief An base's entity container
 ///
         class actor final {
         public:
@@ -22,20 +22,36 @@ namespace actor_zeta { namespace actor {
 
             actor &operator=(actor &&a) = default;
 
-            template<class T>
-            explicit  actor(intrusive_ptr <T> ptr) : ptr_(std::move(ptr)) {}
+            actor(std::nullptr_t);
 
-            template<class T>
-            explicit actor(T *ptr) : ptr_(ptr) {}
+            actor& operator=(std::nullptr_t);
 
-            template<class T>
+            template <
+                    class T,
+                    class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>
+            >
+            actor(intrusive_ptr <T> ptr) : ptr_(std::move(ptr)) {}
+
+            template <
+                    class T,
+                    class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>
+            >
+            actor(T *ptr) : ptr_(ptr) {}
+
+            template <
+                    class T,
+                    class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>
+            >
             actor &operator=(intrusive_ptr <T> ptr) {
                 actor tmp{std::move(ptr)};
                 swap(tmp);
                 return *this;
             }
 
-            template<class T>
+            template <
+                    class T,
+                    class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>
+            >
             actor &operator=(T *ptr) {
                 actor tmp{ptr};
                 swap(tmp);

@@ -50,14 +50,14 @@ public:
 
     auto executor() noexcept -> actor_zeta::abstract_executor & final { return *e_; }
 
-    auto join(actor_zeta::actor::abstract_actor *t) -> actor_zeta::actor::actor_address final {
-        actor_zeta::actor::actor tmp(t);
+    auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
+        auto tmp = std::move(t);
         auto address = tmp->address();
         actors_.push_back(std::move(tmp));
         return address;
     }
 
-    auto enqueue(message msg, actor_zeta::executor::execution_device *) -> void final {
+    auto enqueue(message msg, actor_zeta::execution_device *) -> void final {
         auto msg_ = std::move(msg);
         auto it = system_.find(msg_.command());
         if (it != system_.end()) {
@@ -84,7 +84,7 @@ private:
     }
 
     abstract_executor *e_;
-    std::vector<actor_zeta::actor::actor> actors_;
+    std::vector<actor_zeta::actor> actors_;
     std::size_t cursor;
     std::unordered_set<actor_zeta::detail::string_view> system_;
 };

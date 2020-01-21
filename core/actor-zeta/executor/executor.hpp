@@ -10,6 +10,7 @@
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/executable.hpp>
 #include <actor-zeta/executor/worker.hpp>
+#include <actor-zeta/detail/ref_counted.hpp>
 
 namespace actor_zeta { namespace executor {
 /// @brief
