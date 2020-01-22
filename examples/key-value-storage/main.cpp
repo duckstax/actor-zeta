@@ -105,18 +105,18 @@ public:
         e_->start();
     }
 
-    auto executor() noexcept -> actor_zeta::executor::abstract_executor& final { return *e_;}
+    auto executor() noexcept -> actor_zeta::abstract_executor& final { return *e_;}
 
     using actor_zeta::base::supervisor::join;
 
-    auto join(actor_zeta::actor t) -> actor_zeta::base::actor_address final {
+    auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
         auto tmp = std::move(t);
         auto address = tmp->address();
         actors_.push_back(std::move(tmp));
         return address;
     }
 
-    auto enqueue(actor_zeta::messaging::message msg,actor_zeta::executor::execution_device *) -> void final {
+    auto enqueue(actor_zeta::messaging::message msg,actor_zeta::execution_device *) -> void final {
         set_current_message(std::move(msg));
         dispatch().execute(*this);
     }
