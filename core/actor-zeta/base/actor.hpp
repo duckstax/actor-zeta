@@ -1,8 +1,7 @@
 #pragma once
 
-#include <string>
-
 #include <actor-zeta/forwards.hpp>
+#include <actor-zeta/detail/type_list.hpp>
 #include <actor-zeta/detail/intrusive_ptr.hpp>
 
 //smart base
