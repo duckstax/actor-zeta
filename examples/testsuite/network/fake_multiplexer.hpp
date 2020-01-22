@@ -122,7 +122,7 @@ namespace actor_zeta { namespace network {
             connection() = default;
             using socket_t = Socket;
 
-            connection(socket_t &&socket, actor::actor_address &&address) :
+            connection(socket_t &&socket, actor_address &&address) :
                     socket_(std::forward<Socket>(socket)),
                     address_(std::move(address)) {
 
@@ -139,13 +139,13 @@ namespace actor_zeta { namespace network {
             }
 
 
-            actor::actor_address address() const {
+            actor_address address() const {
                 return address_;
             }
 
         private:
             socket_t socket_;
-            actor::actor_address address_;
+            actor_address address_;
         };
 
 
@@ -159,9 +159,9 @@ namespace actor_zeta { namespace network {
 
             std::size_t start() override;
 
-            void new_tcp_listener(const std::string &host, uint16_t port, actor::actor_address ) override;
+            void new_tcp_listener(const std::string &host, uint16_t port, actor_address ) override;
 
-            void new_tcp_connection(const std::string &host, uint16_t port, actor::actor_address)  override;
+            void new_tcp_connection(const std::string &host, uint16_t port, actor_address)  override;
 
             void close(const connection_identifying &) override;
 
