@@ -12,7 +12,6 @@ endif()
 include_directories(.)
 
 set(HEADER_FILES
-        network/multiplexer.hpp
         network/connection_identifying.hpp
         network/fake_multiplexer.hpp
         forwards.hpp

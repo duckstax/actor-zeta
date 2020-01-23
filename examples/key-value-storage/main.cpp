@@ -18,7 +18,6 @@ using actor_zeta::executor_t;
 using actor_zeta::work_sharing;
 using actor_zeta::abstract_executor;
 
-using actor_zeta::network::multiplexer;
 using actor_zeta::network::buffer;
 using actor_zeta::network::query_raw_t;
 using actor_zeta::network::fake_multiplexer;
