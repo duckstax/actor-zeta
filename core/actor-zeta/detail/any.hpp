@@ -2,7 +2,7 @@
 
 #include <actor-zeta/config.hpp>
 
-#if CPP17_OR_GREATER
+#if HAVE_STD_ANY
 
 #include <any>
 #include <utility>
@@ -17,7 +17,7 @@ namespace actor_zeta { namespace detail {
 }}
 
 
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+#else
 #include <new>
 #include <utility>
 #include <type_traits>

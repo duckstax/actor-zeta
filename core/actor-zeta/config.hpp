@@ -48,9 +48,6 @@ namespace actor_zeta {
 # define  HAVE_STD_ANY  0
 #endif
 
-#define  USES_STD_ANY  HAVE_STD_ANY
-
-
 #if CPP17_OR_GREATER && defined(__has_include )
     # if __has_include( <string_view> )
 #  define HAVE_STD_STRING_VIEW  1
@@ -60,7 +57,5 @@ namespace actor_zeta {
 #else
 # define HAVE_STD_STRING_VIEW  0
 #endif
-
-#define  USES_STD_STRING_VIEW  HAVE_STD_STRING_VIEW
 
 }
