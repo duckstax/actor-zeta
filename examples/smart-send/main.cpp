@@ -67,8 +67,8 @@ public:
 
     using actor_zeta::supervisor::join;
 
-    auto join(actor_zeta::abstract_actor *t) -> actor_zeta::actor_address final {
-        actor_zeta::actor tmp(t);
+    auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
+        auto tmp = std::move(t);
         auto address = tmp->address();
         actors_.push_back(std::move(tmp));
         return address;
