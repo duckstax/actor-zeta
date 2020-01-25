@@ -11,8 +11,6 @@ using actor_zeta::abstract_executor;
 using actor_zeta::context;
 using actor_zeta::supervisor;
 
-using actor_zeta::environment::abstract_environment;
-using actor_zeta::environment::environment;
 using actor_zeta::make_actor;
 using actor_zeta::link;
 using actor_zeta::message;
