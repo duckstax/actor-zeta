@@ -17,7 +17,7 @@ namespace actor_zeta { namespace base {
 
     virtual auto self() -> actor_address                           = 0;
 
-    virtual auto current_message() -> messaging::message& = 0;
+    virtual auto current_message() -> messaging::message&          = 0;
 
   };
 

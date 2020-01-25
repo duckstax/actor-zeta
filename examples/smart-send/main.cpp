@@ -65,8 +65,6 @@ public:
 
     auto executor() noexcept -> actor_zeta::abstract_executor & final { return *e_; }
 
-    using actor_zeta::supervisor::join;
-
     auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
         auto tmp = std::move(t);
         auto address = tmp->address();

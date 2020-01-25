@@ -34,17 +34,17 @@ namespace actor_zeta {
     using messaging::message;
 
     template<class T>
-    inline auto make_message(base::actor_address sender_, T name) -> message {
+    auto make_message(base::actor_address sender_, T name) -> message {
         return message(std::move(sender_),std::forward<T>(name));
     }
 
     template<class T,typename Arg>
-    inline auto make_message(base::actor_address sender_, T name, Arg&& arg) -> message {
+    auto make_message(base::actor_address sender_, T name, Arg&& arg) -> message {
         return message(std::move(sender_),std::forward<T>(name), std::move(detail::any(std::forward<type_traits::decay_t<Arg>>(arg))));
     }
 
     template<class T, typename... Args>
-    inline auto make_message(base::actor_address sender_, T name, Args&&... args) -> message {
+    auto make_message(base::actor_address sender_, T name, Args&&... args) -> message {
         return message(sender_,std::forward<T>(name), std::move(detail::any(std::tuple<type_traits::decay_t<Args>...>{std::forward<Args>(args)...})));
     }
 
@@ -53,12 +53,12 @@ namespace actor_zeta {
             typename Supervisor,
             typename... Args
     >
-    inline auto make_actor(Supervisor& supervisor, Args&&... args) -> actor_zeta::base::actor_address {
+    auto make_actor(Supervisor& supervisor, Args&&... args) -> actor_zeta::base::actor_address {
         return supervisor.join(new Actor(supervisor, std::forward<Args>(args)...));
     }
 
     template<typename Sender, typename... Args>
-    inline void send(Sender& a1, Args... args) {
+    void send(Sender& a1, Args... args) {
         a1->enqueue(
                 make_message(
                         std::forward<Args>(args)...
@@ -67,7 +67,7 @@ namespace actor_zeta {
     }
 
     template<typename Sender, typename... Args>
-    inline void send(const Sender& a1, Args... args) {
+    void send(const Sender& a1, Args... args) {
         a1->enqueue(
                 make_message(
                         std::forward<Args>(args)...
@@ -76,12 +76,12 @@ namespace actor_zeta {
     }
 
     template<class Sender>
-    inline void send(const Sender& actor, message msg) {
+    void send(const Sender& actor, message msg) {
         actor->enqueue(std::move(msg));
     }
 
     template<class Sender>
-    inline void send(Sender& actor, message msg) {
+    void send(Sender& actor, message msg) {
         actor->enqueue(std::move(msg));
     }
 
@@ -97,21 +97,21 @@ namespace actor_zeta {
     }
 
     template <class Supervisor>
-    inline void link(Supervisor* actor1,Supervisor* actor2) {
+    void link(Supervisor* actor1,Supervisor* actor2) {
         auto a1 = actor1->address();
         auto a2 = actor2->address();
         link_imp(a1,a2);
     }
 
     template <class Supervisor>
-    inline void link(Supervisor& actor1,Supervisor& actor2) {
+    void link(Supervisor& actor1,Supervisor& actor2) {
         auto a1 = actor1.address();
         auto a2 = actor2.address();
         link_imp(a1,a2);
     }
 
     template <class Supervisor>
-    inline void link(Supervisor& actor1,actor_address& actor2) {
+    void link(Supervisor& actor1,actor_address& actor2) {
         auto a1 = actor1.address();
         auto a2 = actor2->address();
         link_imp(a1,a2);

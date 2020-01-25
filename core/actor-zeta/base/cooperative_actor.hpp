@@ -7,7 +7,7 @@
 
 namespace actor_zeta { namespace base {
 ///
-/// @brief Specialization of base with scheduling functionality
+/// @brief Specialization of actor with scheduling functionality
 ///
         class cooperative_actor
                 : public abstract_actor

@@ -4,10 +4,10 @@
 #include <actor-zeta/detail/type_list.hpp>
 #include <actor-zeta/detail/intrusive_ptr.hpp>
 
-//smart base
+//smart actor
 namespace actor_zeta { namespace base {
 ///
-/// @brief An base's entity container
+/// @brief An Actor's entity container
 ///
         class actor final {
         public:

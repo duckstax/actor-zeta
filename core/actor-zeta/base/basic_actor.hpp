@@ -7,7 +7,7 @@
 namespace actor_zeta { namespace base {
 
 ///
-/// @brief A generic base
+/// @brief A generic actor
 ///
         template<
                 typename MailBox,

@@ -58,7 +58,6 @@ set(SOURCE_FILES
         source/actor/actor_address.cpp
         source/actor/cooperative_actor.cpp
         source/actor/blocking_actor.cpp
-        source/actor/context.cpp
         source/actor/dispatcher.cpp
         source/actor/supervisor.cpp
         source/actor/communication_module.cpp

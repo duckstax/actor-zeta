@@ -22,8 +22,6 @@ using actor_zeta::network::buffer;
 using actor_zeta::network::query_raw_t;
 using actor_zeta::network::fake_multiplexer;
 
-using actor_zeta::environment::abstract_environment;
-
 struct query_t final {
     actor_zeta::network::connection_identifying id;
     buffer commands;
@@ -106,8 +104,6 @@ public:
 
     auto executor() noexcept -> actor_zeta::abstract_executor& final { return *e_;}
 
-    using actor_zeta::base::supervisor::join;
-
     auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
         auto tmp = std::move(t);
         auto address = tmp->address();
@@ -115,7 +111,7 @@ public:
         return address;
     }
 
-    auto enqueue(actor_zeta::messaging::message msg,actor_zeta::execution_device *) -> void final {
+    auto enqueue(actor_zeta::message msg,actor_zeta::execution_device *) -> void final {
         set_current_message(std::move(msg));
         dispatch().execute(*this);
     }
@@ -124,7 +120,7 @@ public:
 private:
     fake_multiplexer& multiplexer_;
     abstract_executor* e_;
-    std::vector<actor_zeta::base::actor> actors_;
+    std::vector<actor_zeta::actor> actors_;
 };
 
 /// protocol :

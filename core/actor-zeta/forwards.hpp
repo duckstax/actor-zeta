@@ -19,11 +19,6 @@ namespace actor_zeta {
         class cooperative_actor;
     }
 
-    namespace environment {
-        class environment;
-        class abstract_environment;
-    }
-
     namespace executor {
         class work_sharing;
         template<class T>

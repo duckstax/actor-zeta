@@ -11,7 +11,7 @@
 namespace actor_zeta { namespace base {
 
 ///
-/// @brief Specialization of base with blocking mode
+/// @brief Specialization of actor with blocking mode
 ///
         class blocking_actor
                 : public abstract_actor

@@ -50,10 +50,6 @@ matrix:
       osx_image: xcode8.2
       env: BUILD_TYPE=Release CXX_STANDARD=14
 
-    - os: osx
-      osx_image: xcode8.2
-      env: BUILD_TYPE=Release CXX_STANDARD=17
-
     # XCode 8.3
     - env: COMPILER=clang++ BUILD_TYPE=Debug CXX_STANDARD=11
       os: osx

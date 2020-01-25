@@ -2,7 +2,7 @@
 
 #include <actor-zeta/config.hpp>
 
-#if HAVE_STD_STRING_VIEW
+#if CPP17_OR_GREATER
 
 #include <string_view>
 
@@ -26,7 +26,8 @@ namespace actor_zeta { namespace detail {
 
 }}
 
-#else
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+
 #include <cstddef>
 #include <cstring>
 #include <iosfwd>
