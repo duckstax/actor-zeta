@@ -12,7 +12,7 @@ using actor_zeta::basic_async_actor;
 using actor_zeta::supervisor;
 using actor_zeta::context;
 using actor_zeta::actor_address;
-using actor_zeta::make_actor;
+using actor_zeta::join;
 
 using actor_zeta::executor_t;
 using actor_zeta::work_sharing;
@@ -219,7 +219,7 @@ int main() {
 
     std::unique_ptr<supervisor_network>supervisor( new supervisor_network(*multiplexer,thread_pool.get()));
 
-    auto storage = make_actor<storage_t>(*supervisor);
+    auto storage = join<storage_t>(*supervisor);
 
     actor_zeta::link(*supervisor,storage);
 

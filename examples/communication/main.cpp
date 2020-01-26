@@ -11,7 +11,7 @@ using actor_zeta::abstract_executor;
 using actor_zeta::context;
 using actor_zeta::supervisor;
 
-using actor_zeta::make_actor;
+using actor_zeta::join;
 using actor_zeta::link;
 using actor_zeta::message;
 
@@ -121,9 +121,9 @@ int main() {
 
     std::unique_ptr<supervisor_lite> supervisor(new supervisor_lite(new dummy_executor));
 
-    auto storage = make_actor<storage_t>(*supervisor);
+    auto storage = join<storage_t>(*supervisor);
 
-    auto network = make_actor<network_t>(*supervisor);
+    auto network = join<network_t>(*supervisor);
 
     actor_zeta::link(storage,network);
 
@@ -131,9 +131,9 @@ int main() {
 
     actor_zeta::link(*supervisor,*supervisor1);
 
-    auto storage1 = make_actor<storage_t>(*supervisor1);
+    auto storage1 = join<storage_t>(*supervisor1);
 
-    auto network1 = make_actor<network_t>(*supervisor1);
+    auto network1 = join<network_t>(*supervisor1);
 
     actor_zeta::link(storage1,network1);
 

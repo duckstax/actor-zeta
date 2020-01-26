@@ -66,18 +66,15 @@ namespace actor_zeta { namespace base {
 
             auto dispatch() const -> const dispatcher_t &;
 
-            /// sync -> async
-            void add_link(actor_address);
-            /// sync -> async
-            void remove_link(const actor_address&);
-            /// sync -> async
-            void remove_link(detail::string_view);
-
         private:
+            void add_link(actor_address);
+
+            void remove_link(const actor_address&);
+
             void initialize();
+
             std::unique_ptr<std::unordered_map<detail::string_view, actor_address>> contacts_;
             dispatcher_t dispatcher_;
             metadata type_;
-
         };
 }}

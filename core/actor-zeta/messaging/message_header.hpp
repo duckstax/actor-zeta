@@ -27,6 +27,8 @@ namespace actor_zeta { namespace messaging {
 
             auto sender() const -> base::actor_address ;
 
+            operator bool();
+
         private:
             base::actor_address sender_;
             std::string command_;

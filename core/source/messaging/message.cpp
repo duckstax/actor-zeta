@@ -16,22 +16,19 @@ namespace actor_zeta { namespace messaging {
         }
 
         message::operator bool() {
-            return init;
+            return bool(header_) || body_.has_value();
         }
 
         message::message(base::actor_address sender_, std::string name):
-            init(true),
             header_(std::move(sender_),std::move(name)),
             body_() {
         }
 
         message::message(base::actor_address sender_, std::string name, detail::any body):
-            init(true),
             header_(std::move(sender_),std::move(name)),
             body_(std::move(body)) {}
 
         message::message(const message_header &header, const detail::any &body):
-            init(true),
             header_(header),
             body_(body) {}
 
@@ -40,14 +37,14 @@ namespace actor_zeta { namespace messaging {
             return header_.sender();
         }
 
-        message::message():init(false),header_(),body_() {
-
-        }
-
         void message::swap(message &other) noexcept {
             using std::swap;
             swap(header_, other.header_);
             swap(body_, other.body_);
         }
-    }
-}
+
+        auto message::body() -> detail::any & {
+            assert(body_.has_value());
+            return body_;
+        }
+}}

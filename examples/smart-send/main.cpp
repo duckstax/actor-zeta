@@ -12,7 +12,7 @@ using actor_zeta::basic_async_actor;
 using actor_zeta::abstract_executor;
 using actor_zeta::supervisor;
 using actor_zeta::context;
-using actor_zeta::make_actor;
+using actor_zeta::join;
 
 using actor_zeta::abstract_executor;
 using actor_zeta::executor_t;
@@ -170,7 +170,7 @@ int main() {
     int const actors = 10;
 
     for (auto i = actors - 1; i > 0; --i) {
-        auto bot = make_actor<worker_t>(*supervisor);
+        auto bot = join<worker_t>(*supervisor);
         actor_zeta::link(*supervisor, bot);
     }
 

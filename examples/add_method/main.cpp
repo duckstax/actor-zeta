@@ -64,7 +64,7 @@ int main() {
 
     auto tmp = storage->message_types();
 
-    std::set<std::string> control = {"sync_contacts","add_link","remove_link", "update", "remove", "find"};
+    std::set<std::string> control = {"add_link","remove_link", "update", "remove", "find"};
 
     std::set<std::string> diff;
 
