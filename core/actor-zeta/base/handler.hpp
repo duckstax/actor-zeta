@@ -37,7 +37,7 @@ namespace actor_zeta { namespace base {
         template<typename F>
         inline auto make_handler(F&& f) -> handler* {
             return new helper(std::forward<F>(f));
-        };
+        }
 
         template<typename F, typename ClassPtr>
         inline auto make_handler(F&& f, ClassPtr* self) -> handler* {

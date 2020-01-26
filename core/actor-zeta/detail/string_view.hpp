@@ -155,7 +155,7 @@ namespace std {
             uint32_t result = 2166136261U; // We implement an FNV-like string hash.
             while (p != end)
                 result = (result * 16777619) ^ (uint8_t)*p++;
-            return (size_t)result;
+            return static_cast<size_t>(result);
         }
     };
 }

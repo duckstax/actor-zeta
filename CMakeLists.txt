@@ -106,7 +106,26 @@ endif ()
 
 
 if(NOT WIN32)
-    add_compile_options(-v)
+    add_compile_options(
+            -v
+
+            -Wall
+            -Wextra
+            -Wpedantic
+
+            -Wcast-align
+            #-Wcast-qual
+            #-Wconversion
+            -Wctor-dtor-privacy
+            -Wenum-compare
+            -Wfloat-equal
+            -Wnon-virtual-dtor
+            #-Wold-style-cast
+            -Woverloaded-virtual
+            -Wredundant-decls
+            #-Wsign-conversion
+            -Wsign-promo
+    )
 endif()
 
 

@@ -12,7 +12,7 @@ namespace actor_zeta { namespace base {
 
         actor_address actor::address() const noexcept {
             return ptr_->address();
-        };
+        }
 
         detail::string_view actor::name() const {
             return ptr_->name();
