@@ -18,7 +18,7 @@ namespace actor_zeta { namespace messaging {
         }
 
         message_header::operator bool() {
-            return !command_.empty() && bool(sender_);
+            return !command_.empty() || bool(sender_);
         }
 
     }}
