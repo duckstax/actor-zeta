@@ -5,13 +5,13 @@
 
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
-#include <actor-zeta/actor/metadata.hpp>
-#include <actor-zeta/actor/dispatcher.hpp>
-#include <actor-zeta/actor/context.hpp>
+#include <actor-zeta/base/metadata.hpp>
+#include <actor-zeta/base/dispatcher.hpp>
+#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 
         class communication_module
                 : public ref_counted
@@ -66,18 +66,15 @@ namespace actor_zeta { namespace actor {
 
             auto dispatch() const -> const dispatcher_t &;
 
-            /// sync -> async
-            void add_link(actor_address);
-            /// sync -> async
-            void remove_link(const actor_address&);
-            /// sync -> async
-            void remove_link(detail::string_view);
-
         private:
+            void add_link(actor_address);
+
+            void remove_link(const actor_address&);
+
             void initialize();
+
             std::unique_ptr<std::unordered_map<detail::string_view, actor_address>> contacts_;
             dispatcher_t dispatcher_;
             metadata type_;
-
         };
 }}

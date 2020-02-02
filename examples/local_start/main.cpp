@@ -1,6 +1,3 @@
-#include <cstdio>
-#include <cassert>
-
 #include <map>
 #include <vector>
 #include <iostream>
@@ -8,7 +5,6 @@
 #include <actor-zeta/core.hpp>
 
 using actor_zeta::basic_async_actor;
-using actor_zeta::context;
 using actor_zeta::send;
 using actor_zeta::abstract_executor;
 using actor_zeta::supervisor;
@@ -40,7 +36,7 @@ public:
         return *ptr_;
     }
 
-    auto join(actor_zeta::abstract_actor *) -> actor_zeta::actor::actor_address override {
+     auto join(actor_zeta::actor) -> actor_zeta::actor_address override {
         return actor_zeta::actor_address();
     }
 
@@ -105,10 +101,9 @@ private:
 int main() {
     std::unique_ptr<dummy_supervisor> supervisor(new dummy_supervisor(new dummy_executor));
     std::unique_ptr<storage_t> storage(new storage_t(*supervisor));
-    send(storage, actor_zeta::actor::actor_address(), "update", std::string("payload"));
-    send(storage, actor_zeta::actor::actor_address(), "find");
-    send(storage, actor_zeta::actor::actor_address(), "remove");
-    send(storage, actor_zeta::actor::actor_address(), "status");
-
+    send(storage, actor_zeta::actor_address(), "update", std::string("payload"));
+    send(storage, actor_zeta::actor_address(), "find");
+    send(storage, actor_zeta::actor_address(), "remove");
+    send(storage, actor_zeta::actor_address(), "status");
     return 0;
 }

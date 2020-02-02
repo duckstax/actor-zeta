@@ -1,16 +1,16 @@
-#include <actor-zeta/actor/dispatcher.hpp>
+#include <actor-zeta/base/dispatcher.hpp>
 
 #include <iostream>
 #include <memory>
 
 // clang-format off
-#include <actor-zeta/actor/context.hpp>
-#include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/base/context.hpp>
+#include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/messaging/message.hpp>
-#include <actor-zeta/actor/handler.hpp>
+#include <actor-zeta/base/handler.hpp>
 // clang-format on
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 
         inline void error_duplicate_handler(detail::string_view _error_ ) {
             std::cerr << "Duplicate" << std::endl;

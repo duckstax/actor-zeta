@@ -4,10 +4,12 @@
 #include <fstream>
 #include <iomanip>
 #include <unordered_map>
+#include <vector>
+#include <chrono>
+#include <mutex>
 
-#include <actor-zeta/executor/policy/work_sharing.hpp>
-#include <actor-zeta/executor/policy/profiled.hpp>
-#include <actor-zeta/actor/metadata.hpp>
+#include <actor-zeta/forwards.hpp>
+#include <actor-zeta/base/metadata.hpp>
 
 
 namespace actor_zeta { namespace executor {

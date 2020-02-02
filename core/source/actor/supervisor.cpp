@@ -1,11 +1,11 @@
 // clang-format off
-#include <actor-zeta/actor/context.hpp>
-#include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/base/context.hpp>
+#include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/messaging/message.hpp>
-#include <actor-zeta/actor/supervisor.hpp>
+#include <actor-zeta/base/supervisor.hpp>
 // clang-format on
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 
         supervisor::supervisor(detail::string_view name): communication_module(name, abstract::supervisor){}
 

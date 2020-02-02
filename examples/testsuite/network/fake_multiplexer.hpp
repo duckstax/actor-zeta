@@ -9,10 +9,12 @@
 #include <utility>
 #include <atomic>
 #include <functional>
-
-#include <testsuite/network/multiplexer.hpp>
+#include "connection_identifying.hpp"
+#include <actor-zeta/core.hpp>
 
 namespace actor_zeta { namespace network {
+
+        using actor_zeta::actor_address;
 
         enum class client_state {
             close,
@@ -24,6 +26,7 @@ namespace actor_zeta { namespace network {
             disconnect
         };
 
+        using buffer = std::string;
 
         struct query_raw_t final {
             query_raw_t()= default;
@@ -122,7 +125,7 @@ namespace actor_zeta { namespace network {
             connection() = default;
             using socket_t = Socket;
 
-            connection(socket_t &&socket, actor::actor_address &&address) :
+            connection(socket_t &&socket, actor_zeta::actor_address &&address) :
                     socket_(std::forward<Socket>(socket)),
                     address_(std::move(address)) {
 
@@ -139,33 +142,33 @@ namespace actor_zeta { namespace network {
             }
 
 
-            actor::actor_address address() const {
+            actor_zeta::actor_address address() const {
                 return address_;
             }
 
         private:
             socket_t socket_;
-            actor::actor_address address_;
+            actor_zeta::actor_address address_;
         };
 
 
-        class fake_multiplexer final : public multiplexer {
+        class fake_multiplexer final {
         public:
             fake_multiplexer();
 
-            ~fake_multiplexer() override;
+            ~fake_multiplexer();
 
             fake_socket& add_scenario(const std::string &host, uint16_t port);
 
-            std::size_t start() override;
+            std::size_t start();
 
-            void new_tcp_listener(const std::string &host, uint16_t port, actor::actor_address ) override;
+            void new_tcp_listener(const std::string &host, uint16_t port, actor_zeta::actor_address );
 
-            void new_tcp_connection(const std::string &host, uint16_t port, actor::actor_address)  override;
+            void new_tcp_connection(const std::string &host, uint16_t port, actor_zeta::actor_address);
 
-            void close(const connection_identifying &) override;
+            void close(const connection_identifying &) ;
 
-            void write(const connection_identifying &, const buffer &) override;
+            void write(const connection_identifying &, const buffer &) ;
 
         private:
             std::atomic_bool enabled;

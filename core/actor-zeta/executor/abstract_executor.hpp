@@ -5,10 +5,7 @@
 #include <cstddef>
 #include <array>
 
-#include <actor-zeta/actor/actor.hpp>
-#include <actor-zeta/messaging/message.hpp>
-#include <actor-zeta/actor/actor_address.hpp>
-#include <actor-zeta/executor/executable.hpp>
+#include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace executor {
 ///

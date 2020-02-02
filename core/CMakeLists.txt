@@ -12,18 +12,18 @@ endif()
 include_directories(SYSTEM .)
 
 set(HEADER_FILES
-        actor-zeta/actor/abstract_actor.hpp
-        actor-zeta/actor/actor.hpp
-        actor-zeta/actor/actor_address.hpp
-        actor-zeta/actor/cooperative_actor.hpp
-        actor-zeta/actor/basic_actor.hpp
-        actor-zeta/actor/blocking_actor.hpp
-        actor-zeta/actor/communication_module.hpp
-        actor-zeta/actor/context.hpp
-        actor-zeta/actor/dispatcher.hpp
-        actor-zeta/actor/handler.hpp
-        actor-zeta/actor/metadata.hpp
-        actor-zeta/actor/supervisor.hpp
+        actor-zeta/base/abstract_actor.hpp
+        actor-zeta/base/actor.hpp
+        actor-zeta/base/actor_address.hpp
+        actor-zeta/base/cooperative_actor.hpp
+        actor-zeta/base/basic_actor.hpp
+        actor-zeta/base/blocking_actor.hpp
+        actor-zeta/base/communication_module.hpp
+        actor-zeta/base/context.hpp
+        actor-zeta/base/dispatcher.hpp
+        actor-zeta/base/handler.hpp
+        actor-zeta/base/metadata.hpp
+        actor-zeta/base/supervisor.hpp
 
         actor-zeta/detail/any.hpp
         actor-zeta/detail/callable_trait.hpp
@@ -58,7 +58,6 @@ set(SOURCE_FILES
         source/actor/actor_address.cpp
         source/actor/cooperative_actor.cpp
         source/actor/blocking_actor.cpp
-        source/actor/context.cpp
         source/actor/dispatcher.cpp
         source/actor/supervisor.cpp
         source/actor/communication_module.cpp

@@ -1,10 +1,10 @@
 #pragma once
 
 #include <actor-zeta/forwards.hpp>
-#include <actor-zeta/actor/communication_module.hpp>
+#include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/detail/intrusive_ptr.hpp>
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 ///
 /// @brief A compact location expressor
 ///

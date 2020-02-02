@@ -1,15 +1,15 @@
 #include <iostream>
 
 // clang-format off
-#include <actor-zeta/actor/context.hpp>
-#include <actor-zeta/actor/handler.hpp>
-#include <actor-zeta/actor/actor_address.hpp>
+#include <actor-zeta/base/context.hpp>
+#include <actor-zeta/base/handler.hpp>
+#include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/impl/handler.ipp>
-#include <actor-zeta/actor/communication_module.hpp>
+#include <actor-zeta/base/communication_module.hpp>
 // clang-format on
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 
         inline void error_sync_contacts(detail::string_view __error__) {
             std::cerr << "WARNING" << std::endl;
@@ -75,20 +75,14 @@ namespace actor_zeta { namespace actor {
 
         void communication_module::initialize() {
             add_handler(
-                    "sync_contacts",
-                    &communication_module::add_link
-            );
-
-            add_handler(
                     "add_link",
                     &communication_module::add_link
             );
 
-            ///TODO: FIX
-            ///add_handler(
-            ///        "remove_link",
-            ///        bind(&communication_module::remove_link,this)
-            //);
+            add_handler(
+                    "remove_link",
+                    &communication_module::remove_link
+            );
         }
 
         void communication_module::add_link(actor_address address) {
@@ -104,13 +98,6 @@ namespace actor_zeta { namespace actor {
 
         void communication_module::remove_link(const actor_address& address) {
             auto it = contacts_->find(address->name());
-            if(it != contacts_->end()){
-                contacts_->erase(it);
-            }
-        }
-
-        void communication_module::remove_link(detail::string_view name) {
-            auto it = contacts_->find(name);
             if(it != contacts_->end()){
                 contacts_->erase(it);
             }

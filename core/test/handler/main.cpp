@@ -8,8 +8,6 @@ using actor_zeta::abstract_executor;
 using actor_zeta::supervisor;
 using actor_zeta::message;
 using actor_zeta::execution_device;
-using actor_zeta::actor::handler;
-using actor_zeta::actor::make_handler;
 
 class dummy_executor final : public abstract_executor {
 public:
@@ -36,7 +34,7 @@ public:
         return *ptr_;
     }
 
-    auto join(actor_zeta::abstract_actor *) -> actor_zeta::actor::actor_address override {
+    auto join(actor_zeta::actor ) -> actor_zeta::actor_address override {
         return actor_zeta::actor_address();
     }
 
@@ -136,7 +134,6 @@ public:
                     std::cerr << "ptr_1" << std::endl;
                 }
         );
-
         add_handler(
                 "ptr_2",
                 [](test_handlers &handler, int &data) {
@@ -175,18 +172,19 @@ int main() {
     std::unique_ptr<dummy_supervisor> supervisor(new dummy_supervisor(new dummy_executor));
 
     std::unique_ptr<test_handlers> test_handlers_(new test_handlers(*supervisor));
-    send(test_handlers_, actor_zeta::actor::actor_address(), "ptr_0");
-    send(test_handlers_, actor_zeta::actor::actor_address(), "ptr_1");
-    send(test_handlers_, actor_zeta::actor::actor_address(), "ptr_2", 1);
-    send(test_handlers_, actor_zeta::actor::actor_address(), "ptr_3", 1, 2);
-    send(test_handlers_, actor_zeta::actor::actor_address(), "ptr_4", 1, 2, std::string("test"));
+    send(test_handlers_, actor_zeta::actor_address(), "ptr_0");
+    send(test_handlers_, actor_zeta::actor_address(), "ptr_1");
+    send(test_handlers_, actor_zeta::actor_address(), "ptr_2", 1);
+    send(test_handlers_, actor_zeta::actor_address(), "ptr_3", 1, 2);
+    send(test_handlers_, actor_zeta::actor_address(), "ptr_4", 1, 2, std::string("test"));
 
     std::unique_ptr<storage_t> storage(new storage_t(*supervisor));
-    send(storage, actor_zeta::actor::actor_address(), "init");
-    send(storage, actor_zeta::actor::actor_address(), "search", std::string("key_1"));
-    send(storage, actor_zeta::actor::actor_address(), "add", std::string("key_1"), std::string("value_1"));
-    send(storage, actor_zeta::actor::actor_address(), "delete_table", std::string("test"), std::string("/"), 12);
-    send(storage, actor_zeta::actor::actor_address(), "creature_table", std::string("test"), std::string("/"), 1, 12);
+
+    send(storage, actor_zeta::actor_address(), "init");
+    send(storage, actor_zeta::actor_address(), "search", std::string("key_1"));
+    send(storage, actor_zeta::actor_address(), "add", std::string("key_1"), std::string("value_1"));
+    send(storage, actor_zeta::actor_address(), "delete_table", std::string("test"), std::string("/"), 12);
+    send(storage, actor_zeta::actor_address(), "creature_table", std::string("test"), std::string("/"), 1, 12);
 
     return 0;
 }
