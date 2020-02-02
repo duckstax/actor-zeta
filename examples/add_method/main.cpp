@@ -19,7 +19,7 @@ public:
         return *ptr_;
     }
 
-    auto join(actor_zeta::abstract_actor *) -> actor_zeta::actor::actor_address override {
+    auto join(actor_zeta::actor) -> actor_zeta::actor_address override {
         return actor_zeta::actor_address();
     }
 
@@ -58,13 +58,13 @@ int main() {
 
     auto *storage_tmp = new storage_t(*supervisor);
 
-    actor_zeta::actor::actor storage(storage_tmp);
+    actor_zeta::actor storage(storage_tmp);
 
     assert(actor_zeta::detail::string_view("storage") == storage->name());
 
     auto tmp = storage->message_types();
 
-    std::set<std::string> control = {"sync_contacts","add_link","remove_link", "update", "remove", "find"};
+    std::set<std::string> control = {"add_link","remove_link", "update", "remove", "find"};
 
     std::set<std::string> diff;
 

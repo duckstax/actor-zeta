@@ -1,12 +1,9 @@
 #pragma once
 
-#include <memory>
-#include <stack>
-
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/string_view.hpp>
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 
 ///
 /// @brief
@@ -20,7 +17,7 @@ namespace actor_zeta { namespace actor {
 
     virtual auto self() -> actor_address                           = 0;
 
-    virtual auto current_message() -> messaging::message& = 0;
+    virtual auto current_message() -> messaging::message&          = 0;
 
   };
 

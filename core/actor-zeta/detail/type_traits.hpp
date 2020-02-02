@@ -10,9 +10,9 @@ namespace actor_zeta { namespace  type_traits {
     using std::index_sequence ;
     using std::remove_reference_t;
     using std::make_index_sequence;
+    using std::enable_if_t;
 
 #elif CPP14_OR_GREATER
-
 
     using std::decay_t ;
     using std::index_sequence ;
@@ -23,11 +23,14 @@ namespace actor_zeta { namespace  type_traits {
 
 #elif CPP11_OR_GREATER
 
-    template<bool _Cond, typename _Tp = void>
-        using enable_if_t = typename std::enable_if<_Cond, _Tp>::type;
-
-        template<class T>
+        template <class T>
         using decay_t = typename std::decay<T>::type;
+
+        template <bool B, class T, class F>
+        using conditional_t = typename std::conditional<B, T, F>::type;
+
+        template <bool V, class T = void>
+        using enable_if_t = typename std::enable_if<V, T>::type;
 
         template<std::size_t Len>
         struct aligned_storage_msa final {
@@ -40,8 +43,8 @@ namespace actor_zeta { namespace  type_traits {
         template<size_t Len, size_t Align =__alignof__(typename aligned_storage_msa<Len>::type)>
         using aligned_storage_t = typename std::aligned_storage<Len, Align>::type;
 
-        template<typename _Tp>
-        using remove_reference_t = typename std::remove_reference<_Tp>::type;
+        template <class T>
+        using remove_reference_t = typename std::remove_reference<T>::type;
 
         template <std::size_t ...>
         struct index_sequence{ };

@@ -5,10 +5,10 @@
 
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/executor/executable.hpp>
-#include <actor-zeta/actor/abstract_actor.hpp>
+#include <actor-zeta/base/abstract_actor.hpp>
 #include <actor-zeta/messaging/mail_box.hpp>
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 
 ///
 /// @brief Specialization of actor with blocking mode

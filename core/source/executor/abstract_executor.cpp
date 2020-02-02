@@ -1,9 +1,8 @@
 #include <vector>
 
-#include <actor-zeta/executor/execution_device.hpp>
-#include <actor-zeta/actor/actor_address.hpp>
-#include <actor-zeta/messaging/message_header.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
+#include <actor-zeta/executor/execution_device.hpp>
+#include <actor-zeta/executor/executor.hpp>
 
 namespace actor_zeta { namespace executor {
 

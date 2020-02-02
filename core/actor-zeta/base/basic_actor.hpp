@@ -1,10 +1,10 @@
 #pragma once
 
-#include <actor-zeta/actor/cooperative_actor.hpp>
-#include <actor-zeta/actor/actor.hpp>
+#include <actor-zeta/base/cooperative_actor.hpp>
+#include <actor-zeta/base/actor.hpp>
 #include <actor-zeta/messaging/blocking_mail_queue.hpp>
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 
 ///
 /// @brief A generic actor

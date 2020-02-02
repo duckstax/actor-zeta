@@ -4,7 +4,7 @@
 
 #include <actor-zeta/forwards.hpp>
 
-namespace actor_zeta { namespace actor {
+namespace actor_zeta { namespace base {
 ///
 /// @brief Abstract concept of an action
 ///
@@ -37,7 +37,7 @@ namespace actor_zeta { namespace actor {
         template<typename F>
         inline auto make_handler(F&& f) -> handler* {
             return new helper(std::forward<F>(f));
-        };
+        }
 
         template<typename F, typename ClassPtr>
         inline auto make_handler(F&& f, ClassPtr* self) -> handler* {

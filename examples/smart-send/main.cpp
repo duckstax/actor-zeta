@@ -12,7 +12,7 @@ using actor_zeta::basic_async_actor;
 using actor_zeta::abstract_executor;
 using actor_zeta::supervisor;
 using actor_zeta::context;
-using actor_zeta::make_actor;
+using actor_zeta::join;
 
 using actor_zeta::abstract_executor;
 using actor_zeta::executor_t;
@@ -63,18 +63,16 @@ public:
         e_->start();
     }
 
-    auto executor() noexcept -> actor_zeta::executor::abstract_executor & final { return *e_; }
+    auto executor() noexcept -> actor_zeta::abstract_executor & final { return *e_; }
 
-    using actor_zeta::actor::supervisor::join;
-
-    auto join(actor_zeta::abstract_actor *t) -> actor_zeta::actor::actor_address final {
-        actor_zeta::actor::actor tmp(t);
+    auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
+        auto tmp = std::move(t);
         auto address = tmp->address();
         actors_.push_back(std::move(tmp));
         return address;
     }
 
-    auto enqueue(message msg, actor_zeta::executor::execution_device *) -> void final {
+    auto enqueue(message msg, actor_zeta::execution_device *) -> void final {
         auto msg_ = std::move(msg);
         auto it = system_.find(msg_.command());
         if (it != system_.end()) {
@@ -102,7 +100,7 @@ private:
     }
 
     std::unique_ptr<abstract_executor,decltype(thread_pool_deleter)> e_;
-    std::vector<actor_zeta::actor::actor> actors_;
+    std::vector<actor_zeta::actor> actors_;
     std::size_t cursor;
     std::unordered_set<actor_zeta::detail::string_view> system_;
 };
@@ -172,7 +170,7 @@ int main() {
     int const actors = 10;
 
     for (auto i = actors - 1; i > 0; --i) {
-        auto bot = make_actor<worker_t>(*supervisor);
+        auto bot = join<worker_t>(*supervisor);
         actor_zeta::link(*supervisor, bot);
     }
 

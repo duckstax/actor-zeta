@@ -12,18 +12,15 @@ using actor_zeta::basic_async_actor;
 using actor_zeta::supervisor;
 using actor_zeta::context;
 using actor_zeta::actor_address;
-using actor_zeta::make_actor;
+using actor_zeta::join;
 
 using actor_zeta::executor_t;
 using actor_zeta::work_sharing;
 using actor_zeta::abstract_executor;
 
-using actor_zeta::network::multiplexer;
 using actor_zeta::network::buffer;
 using actor_zeta::network::query_raw_t;
 using actor_zeta::network::fake_multiplexer;
-
-using actor_zeta::environment::abstract_environment;
 
 struct query_t final {
     actor_zeta::network::connection_identifying id;
@@ -75,7 +72,7 @@ public:
                     query_.id = query_raw.id;
                     actor_zeta::send(
                             ctx.addresses("storage"),
-                            actor_zeta::actor::actor_address(address()),
+                            actor_zeta::actor_address(address()),
                             std::string(query_.commands),
                             std::move(query_)
                     );
@@ -105,18 +102,16 @@ public:
         e_->start();
     }
 
-    auto executor() noexcept -> actor_zeta::executor::abstract_executor& final { return *e_;}
+    auto executor() noexcept -> actor_zeta::abstract_executor& final { return *e_;}
 
-    using actor_zeta::actor::supervisor::join;
-
-    auto join(actor_zeta::actor::abstract_actor *t) -> actor_zeta::actor::actor_address final {
-        actor_zeta::actor::actor tmp(t);
+    auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
+        auto tmp = std::move(t);
         auto address = tmp->address();
         actors_.push_back(std::move(tmp));
         return address;
     }
 
-    auto enqueue(actor_zeta::messaging::message msg,actor_zeta::executor::execution_device *) -> void final {
+    auto enqueue(actor_zeta::message msg,actor_zeta::execution_device *) -> void final {
         set_current_message(std::move(msg));
         dispatch().execute(*this);
     }
@@ -125,7 +120,7 @@ public:
 private:
     fake_multiplexer& multiplexer_;
     abstract_executor* e_;
-    std::vector<actor_zeta::actor::actor> actors_;
+    std::vector<actor_zeta::actor> actors_;
 };
 
 /// protocol :
@@ -146,7 +141,7 @@ public:
                     assert(in("1qaz"));
                     assert(find("1qaz") == "7");
                     response_t response;
-                    response.r_ = std::to_string(status);
+                    response.r_ = std::to_string(static_cast<int>(status));
                     response.id = tmp.id;
                     actor_zeta::send(
                             ctx.current_message().sender(),
@@ -224,7 +219,7 @@ int main() {
 
     std::unique_ptr<supervisor_network>supervisor( new supervisor_network(*multiplexer,thread_pool.get()));
 
-    auto storage = make_actor<storage_t>(*supervisor);
+    auto storage = join<storage_t>(*supervisor);
 
     actor_zeta::link(*supervisor,storage);
 
