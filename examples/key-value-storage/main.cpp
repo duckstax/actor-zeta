@@ -141,7 +141,7 @@ public:
                     assert(in("1qaz"));
                     assert(find("1qaz") == "7");
                     response_t response;
-                    response.r_ = std::to_string(status);
+                    response.r_ = std::to_string(static_cast<int>(status));
                     response.id = tmp.id;
                     actor_zeta::send(
                             ctx.current_message().sender(),
