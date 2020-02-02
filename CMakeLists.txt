@@ -118,7 +118,7 @@ if(NOT WIN32)
             #-Wconversion
             -Wctor-dtor-privacy
             -Wenum-compare
-            -Wfloat-equal
+            #-Wfloat-equal
             -Wnon-virtual-dtor
             #-Wold-style-cast
             -Woverloaded-virtual
