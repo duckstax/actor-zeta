@@ -162,7 +162,7 @@ public:
 
 private:
     void init() {
-
+        std::cerr << "private init" << std::endl;
     }
 };
 
