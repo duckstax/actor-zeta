@@ -100,10 +100,12 @@ void apply_impl_for_class(F &&f, ClassPtr *ptr, context &ctx, type_traits::index
     (ptr->*f)(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
 }
 // clang-format on
-template <typename F, typename ClassPtr,
-          class Args = typename type_traits::get_callable_trait<F>::args_types,
-          int Args_size =
-            type_traits::get_callable_trait<F>::number_of_arguments>
+template <
+  typename F,
+  typename ClassPtr,
+  class Args = typename type_traits::get_callable_trait<F>::args_types,
+  int Args_size = type_traits::get_callable_trait<F>::number_of_arguments
+>
 struct transformer_for_class {
   auto operator()(F&& f, ClassPtr* ptr) -> std::function<void(context&)> {
     return [f, ptr](context& ctx) -> void {
