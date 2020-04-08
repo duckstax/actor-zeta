@@ -98,22 +98,21 @@ Add the corresponding remote to your conan:
 
 ### Basic setup
 ```bash
-    $ conan install actor-zeta/1.0.0a3@jinncrafters/stable
+    $ conan install actor-zeta/1.0.0a4@jinncrafters/stable
 ```
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    actor-zeta/1.0.0a3@jinncrafters/stable
+    actor-zeta/1.0.0a4@jinncrafters/stable
 
     [generators]
     cmake
 
 ## Dependencies
 
-* CMake
-* Conan
+* CMake >= 2.8
 
 ## Supported Compilers
 
