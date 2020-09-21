@@ -10,6 +10,7 @@ namespace actor_zeta { namespace base {
 /// @brief A generic actor
 ///
         template<
+                
                 typename MailBox,
                 typename Actor = cooperative_actor
         >
@@ -17,8 +18,7 @@ namespace actor_zeta { namespace base {
         public:
             using actor_type = Actor;
 
-            basic_actor(
-                    supervisor &ptr,
+            basic_actor(supervisor&ptr,
                     detail::string_view name
             ): actor_type(ptr, name, new MailBox) {
 

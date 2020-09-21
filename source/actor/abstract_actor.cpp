@@ -15,8 +15,7 @@ namespace actor_zeta { namespace base {
 
         }
 
-        abstract_actor::abstract_actor(
-                supervisor &env,
+        abstract_actor::abstract_actor(supervisor&env,
                 detail::string_view name
         )
                 : communication_module(name, abstract::actor)
@@ -33,7 +32,7 @@ namespace actor_zeta { namespace base {
             }
         }
 
-        auto abstract_actor::env() -> supervisor & {
+        auto abstract_actor::env() -> supervisor& {
             return supervisor_;
         }
 

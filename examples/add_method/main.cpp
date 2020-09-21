@@ -3,17 +3,17 @@
 #include <set>
 #include <string>
 
-#include <actor-zeta/core.hpp>
+#include <actor-zeta.hpp>
 
-using actor_zeta::context;
 using actor_zeta::basic_async_actor;
 using actor_zeta::supervisor;
 using actor_zeta::message;
 using actor_zeta::execution_device;
+ using actor_zeta::abstract_supervisor
 
-class dummy_supervisor final : public supervisor {
+class dummy_supervisor final : public abstract_supervisor {
 public:
-    dummy_supervisor(): supervisor("dummy_supervisor"){}
+    dummy_supervisor(): abstract_supervisor("dummy_supervisor"){}
 
     auto executor() noexcept -> actor_zeta::abstract_executor& override  {
         return *ptr_;

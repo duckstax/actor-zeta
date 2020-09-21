@@ -10,7 +10,6 @@
 
 using actor_zeta::basic_async_actor;
 using actor_zeta::supervisor;
-using actor_zeta::context;
 using actor_zeta::actor_address;
 using actor_zeta::join;
 

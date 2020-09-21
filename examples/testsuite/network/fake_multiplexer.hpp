@@ -10,8 +10,7 @@
 #include <atomic>
 #include <functional>
 #include "connection_identifying.hpp"
-#include <actor-zeta/core.hpp>
-
+#include <actor-zeta.hpp>
 namespace actor_zeta { namespace network {
 
         using actor_zeta::actor_address;

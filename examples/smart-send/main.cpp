@@ -6,12 +6,11 @@
 #include <iostream>
 #include <memory>
 
-#include <actor-zeta/core.hpp>
+#include <actor-zeta.hpp>
 
 using actor_zeta::basic_async_actor;
 using actor_zeta::abstract_executor;
 using actor_zeta::supervisor;
-using actor_zeta::context;
 using actor_zeta::join;
 
 using actor_zeta::abstract_executor;
@@ -24,12 +23,12 @@ using actor_zeta::make_message;
 
 template<typename Task, typename ...Args>
 inline auto make_task(supervisor&executor_,const std::string &command, Args... args ) -> void {
-    executor_.enqueue(std::move(make_message(executor_.address(), command, std::move(Task(std::forward<Args>(args)...)))));
+    executor_->enqueue(std::move(make_message(executor_.address(), command, std::move(Task(std::forward<Args>(args)...)))));
 }
 
 template<typename Task, typename ...Args>
 inline auto make_task_broadcast(supervisor&executor_,const std::string &command, Args... args ) -> void {
-    executor_.broadcast(std::move(make_message(executor_.address(), command, std::move(Task(std::forward<Args>(args)...)))));
+    executor_->broadcast(std::move(make_message(executor_.address(), command, std::move(Task(std::forward<Args>(args)...)))));
 }
 
 auto thread_pool_deleter = [](abstract_executor* ptr){
@@ -38,10 +37,10 @@ auto thread_pool_deleter = [](abstract_executor* ptr){
 };
 
 /// non thread safe
-class supervisor_lite final : public supervisor {
+class supervisor_lite final : public actor_zeta::abstract_supervisor {
 public:
     explicit supervisor_lite()
-            : supervisor(actor_zeta::detail::string_view("network"))
+            : abstract_supervisor("network")
             , e_(new executor_t<work_sharing>(
                     1,
                     std::numeric_limits<std::size_t>::max()
@@ -51,16 +50,15 @@ public:
             , cursor(0)
             , system_{"sync_contacts", "add_link", "remove_link"}
             {
+                e_->start();
     }
 
-    ~supervisor_lite() override = default;
+    auto join(actor_zeta::supervisor) -> actor_zeta::actor_address override {
+        return actor_zeta::actor_address();
+    }
 
-    auto shutdown() noexcept -> void {
+    ~supervisor_lite() override {
         e_->stop();
-    }
-
-    auto startup() noexcept -> void {
-        e_->start();
     }
 
     auto executor() noexcept -> actor_zeta::abstract_executor & final { return *e_; }
@@ -131,7 +129,7 @@ struct work_data final {
 
 class worker_t final : public basic_async_actor {
 public:
-    explicit worker_t(supervisor_lite &ref) : basic_async_actor(ref, "bot") {
+    explicit worker_t(supervisor &ref) : basic_async_actor(ref, "bot") {
 
         add_handler(
                 "download",
@@ -163,25 +161,23 @@ private:
 
 int main() {
 
-    actor_zeta::intrusive_ptr<supervisor_lite> supervisor(new supervisor_lite());
-
-    supervisor->startup();
+     actor_zeta::supervisor s(new supervisor_lite());
 
     int const actors = 10;
 
     for (auto i = actors - 1; i > 0; --i) {
-        auto bot = join<worker_t>(*supervisor);
-        actor_zeta::link(*supervisor, bot);
+        auto bot = join<worker_t>(s);
+        actor_zeta::link(s, bot);
     }
 
     int const task = 10000;
 
     for (auto i = task - 1; i > 0; --i) {
-        make_task<download_data>(*supervisor,"download", "fb", "jack","");
+        make_task<download_data>(s,"download", "fb", "jack","");
     }
 
     for (auto i = task - 1; i > 0; --i) {
-        make_task_broadcast<download_data>(*supervisor,"work_data", "fb", "jack","");
+        make_task_broadcast<download_data>(s,"work_data", "fb", "jack","");
     }
 
     return 0;

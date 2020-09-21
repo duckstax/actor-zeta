@@ -24,13 +24,9 @@ message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
 option(CMake_RUN_CLANG_TIDY "Run clang-tidy with the compiler." OFF)
 
-option(ENV "Enable building actor-zeta-environment" ON)
-
 option(ALLOW_EXAMPLES "Enable building examples" OFF)
 
 option(ALLOW_TESTS "Enable building test" OFF)
-
-option(SHARED "" OFF)
 
 option(DEV_MODE "developer mode" OFF)
 
@@ -97,35 +93,27 @@ if (DEV_MODE)
     include(cmake/clang_tools.cmake)
 endif ()
 
-if (SHARED)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-    set(BUILD_TYPE SHARED)
-else()
-    set(BUILD_TYPE STATIC)
-endif ()
-
-
-if(NOT WIN32)
+if((CMAKE_CXX_COMPILER_ID MATCHES "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
     add_compile_options(
-            -v
-
             -Wall
             -Wextra
             -Wpedantic
 
             -Wcast-align
-            #-Wcast-qual
-            #-Wconversion
+            -Wcast-qual
+            -Wconversion
             -Wctor-dtor-privacy
             -Wenum-compare
-            #-Wfloat-equal
+            -Wfloat-equal
             -Wnon-virtual-dtor
-            #-Wold-style-cast
+            -Wold-style-cast
             -Woverloaded-virtual
             -Wredundant-decls
-            #-Wsign-conversion
+            -Wsign-conversion
             -Wsign-promo
     )
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    add_compile_options(/W4 /WX)
 endif()
 
 
@@ -135,16 +123,78 @@ if(CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
 endif(CCACHE_FOUND)
 
+set(HEADER_FILES
+        header/actor-zeta/base/abstract_actor.hpp
+        header/actor-zeta/base/actor.hpp
+        header/actor-zeta/base/actor_address.hpp
+        header/actor-zeta/base/cooperative_actor.hpp
+        header/actor-zeta/base/basic_actor.hpp
+        header/actor-zeta/base/blocking_actor.hpp
+        header/actor-zeta/base/communication_module.hpp
+        header/actor-zeta/base/context.hpp
+        header/actor-zeta/base/dispatcher.hpp
+        header/actor-zeta/base/handler.hpp
+        header/actor-zeta/base/metadata.hpp
+        header/actor-zeta/base/abstract_supervisor.hpp
 
+        header/actor-zeta/detail/any.hpp
+        header/actor-zeta/detail/callable_trait.hpp
+        header/actor-zeta/detail/intrusive_ptr.hpp
+        header/actor-zeta/detail/ref_counted.hpp
+        header/actor-zeta/detail/string_view.hpp
+        header/actor-zeta/detail/type_list.hpp
+        header/actor-zeta/detail/type_traits.hpp
 
-include_directories(core)
-add_subdirectory(core)
-list(APPEND OBJECT_LISTS "$<TARGET_OBJECTS:actor-zeta-core>")
+        header/actor-zeta/executor/policy/profiled.hpp
+        header/actor-zeta/executor/policy/unprofiled.hpp
+        header/actor-zeta/executor/policy/work_sharing.hpp
+        header/actor-zeta/executor/abstract_executor.hpp
+        header/actor-zeta/executor/executor.hpp
+        header/actor-zeta/executor/executable.hpp
+        header/actor-zeta/executor/profiled_executor.hpp
+        header/actor-zeta/executor/execution_device.hpp
+        header/actor-zeta/executor/worker.hpp
 
+        header/actor-zeta/messaging/blocking_mail_queue.hpp
+        header/actor-zeta/messaging/mail_box.hpp
+        header/actor-zeta/messaging/message.hpp
+        header/actor-zeta/messaging/message_header.hpp
+
+        header/actor-zeta/forwards.hpp
+)
+
+set(SOURCE_FILES
+
+        source/actor/abstract_actor.cpp
+        source/actor/actor.cpp
+        source/actor/actor_address.cpp
+        source/actor/cooperative_actor.cpp
+        source/actor/blocking_actor.cpp
+        source/actor/dispatcher.cpp
+        source/actor/abstract_supervisor.cpp
+        source/actor/communication_module.cpp
+
+        source/detail/string_view.cpp
+        source/detail/ref_counted.cpp
+
+        source/executor/abstract_executor.cpp
+        source/executor/executable.cpp
+        source/executor/execution_device.cpp
+
+        source/messaging/message.cpp
+        source/messaging/message_header.cpp
+        source/messaging/blocking_mail_queue.cpp
+)
+
+include_directories(SYSTEM header)
 
 find_package( Threads )
 
-add_library(${PROJECT_NAME} ${BUILD_TYPE} ${OBJECT_LISTS})
+add_library(
+        ${PROJECT_NAME}
+        ${SOURCE_FILES}
+        ${HEADER_FILES}
+)
 
 target_link_libraries (
         ${PROJECT_NAME}
@@ -156,8 +206,19 @@ target_link_libraries (
 target_include_directories(
         ${PROJECT_NAME}
         PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/core/actor-zeta
+        ${CMAKE_CURRENT_SOURCE_DIR}/header/actor-zeta
 )
+
+target_include_directories(
+        ${PROJECT_NAME}
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/header
+)
+
+if (ALLOW_TESTS)
+    add_subdirectory(test)
+endif ()
+
 
 if(ALLOW_EXAMPLES)
     add_subdirectory(examples)

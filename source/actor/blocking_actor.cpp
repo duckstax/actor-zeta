@@ -35,7 +35,7 @@ namespace actor_zeta { namespace base {
             }
         }
 */
-        blocking_actor::blocking_actor(supervisor &env, detail::string_view name,mailbox_type* mail)
+        blocking_actor::blocking_actor(supervisor&env, detail::string_view name,mailbox_type* mail)
             : abstract_actor(env, name)
             , mailbox_(mail)
         {

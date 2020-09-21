@@ -22,7 +22,7 @@ namespace actor_zeta { namespace base {
             ///TODO:
             ///virtual void launch(executor::execution_device*, bool /*hide*/) = 0;
         protected:
-            abstract_actor(supervisor &,detail::string_view);
+            abstract_actor(supervisor&,detail::string_view);
 
             auto attach(executor::execution_device *) -> void;
 

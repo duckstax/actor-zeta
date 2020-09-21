@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <actor-zeta/core.hpp>
+#include <actor-zeta.hpp>
 
 using actor_zeta::basic_async_actor;
 using actor_zeta::send;
@@ -23,7 +23,7 @@ public:
 };
 
 
-class dummy_supervisor final : public supervisor {
+class dummy_supervisor final : public abstract_supervisor {
 public:
 
     explicit dummy_supervisor(actor_zeta::abstract_executor *ptr)

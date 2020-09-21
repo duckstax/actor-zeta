@@ -29,7 +29,7 @@ namespace actor_zeta { namespace base {
             ~cooperative_actor() override;
 
         protected:
-            cooperative_actor(supervisor &, detail::string_view,mailbox_type*);
+            cooperative_actor(supervisor&, detail::string_view,mailbox_type*);
 
             void intrusive_ptr_add_ref_impl() override;
 
