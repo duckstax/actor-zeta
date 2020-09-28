@@ -5,43 +5,26 @@
 #include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace base {
-///
-/// @brief Abstract concept of an action
-///
-        class handler {
-        public:
-            virtual ~handler() = default;
+    ///
+    /// @brief Abstract concept of an action
+    ///
 
-            virtual void invoke(context &) = 0;
-        };
+    using handler = std::function<void()>;
 
-        class helper final : public handler   {
-        public:
-            ~helper() override = default;
+    template<typename Context, typename F>
+    auto make_handler_base(Context&& ctx, F&& f) -> handler*;
 
-            template<typename F>
-            helper( F &&f);
+    template<typename Context, typename F, typename ClassPtr>
+    auto make_handler_base(Context&& ctx, F&& f, ClassPtr* self) -> handler*;
 
-            template<typename F, typename ClassPtr>
-            helper( F &&f,ClassPtr*self);
+    template<typename Context, typename F>
+    auto make_handler(Context&& ctx, F&& f) -> handler* {
+        return  make_handler_base<Context,F>(std::forward<Context>(ctx), std::forward<F>(f));
+    }
 
-            void invoke(context &ctx) final {
-                helper_(ctx);
-            }
+    template<typename Context, typename F, typename ClassPtr>
+    auto make_handler(Context&& ctx, F&& f, ClassPtr* self) -> handler* {
+        return make_handler_base<Context,F,ClassPtr>(std::forward<Context>(ctx), std::forward<F>(f), self);
+    }
 
-        private:
-            std::function<void(context & )> helper_;
-
-        };
-
-        template<typename F>
-        inline auto make_handler(F&& f) -> handler* {
-            return new helper(std::forward<F>(f));
-        }
-
-        template<typename F, typename ClassPtr>
-        inline auto make_handler(F&& f, ClassPtr* self) -> handler* {
-            return new helper(std::forward<F>(f), self);
-        }
-
-}} /// namespace actor_zeta { namespace behavior {}}
+}} // namespace actor_zeta::base

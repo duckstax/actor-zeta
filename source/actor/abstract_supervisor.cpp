@@ -1,5 +1,4 @@
 // clang-format off
-#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/base/abstract_supervisor.hpp>

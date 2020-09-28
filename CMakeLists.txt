@@ -129,9 +129,7 @@ set(HEADER_FILES
         header/actor-zeta/base/actor_address.hpp
         header/actor-zeta/base/cooperative_actor.hpp
         header/actor-zeta/base/basic_actor.hpp
-        header/actor-zeta/base/blocking_actor.hpp
         header/actor-zeta/base/communication_module.hpp
-        header/actor-zeta/base/context.hpp
         header/actor-zeta/base/dispatcher.hpp
         header/actor-zeta/base/handler.hpp
         header/actor-zeta/base/metadata.hpp
@@ -169,7 +167,6 @@ set(SOURCE_FILES
         source/actor/actor.cpp
         source/actor/actor_address.cpp
         source/actor/cooperative_actor.cpp
-        source/actor/blocking_actor.cpp
         source/actor/dispatcher.cpp
         source/actor/abstract_supervisor.cpp
         source/actor/communication_module.cpp

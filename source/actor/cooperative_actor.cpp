@@ -2,7 +2,6 @@
 #include <cassert>
 
 // clang-format off
-#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
@@ -115,20 +114,20 @@ namespace actor_zeta { namespace base {
         }
         */
 
-        bool cooperative_actor::has_next_message() {
+        auto cooperative_actor::has_next_message() -> bool {
             messaging::message msg_ptr = mailbox().get();
             return push_to_cache(std::move(msg_ptr));
         }
 
-        bool cooperative_actor::push_to_cache(messaging::message msg_ptr) {
+        auto cooperative_actor::push_to_cache(messaging::message msg_ptr) -> bool {
             return mailbox().push_to_cache(std::move(msg_ptr));
         }
 
-        messaging::message cooperative_actor::pop_to_cache() {
+        auto cooperative_actor::pop_to_cache() -> messaging::message {
             return mailbox().pop_to_cache();
         }
 
-        cooperative_actor::mailbox_type &cooperative_actor::mailbox() {
+        auto cooperative_actor::mailbox() -> cooperative_actor::mailbox_type & {
             return *mailbox_;
         }
 

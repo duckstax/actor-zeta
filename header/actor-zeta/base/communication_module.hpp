@@ -7,16 +7,15 @@
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/base/metadata.hpp>
 #include <actor-zeta/base/dispatcher.hpp>
-#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 
 
 namespace actor_zeta { namespace base {
 
-        class communication_module
-                : public ref_counted
-                , public context {
+        class communication_module : public ref_counted {
         public:
+
+            using dispatcher_type =  dispatcher_t<communication_module>;
 
             communication_module() = delete;
 
@@ -43,9 +42,9 @@ namespace actor_zeta { namespace base {
 
             auto broadcast(messaging::message) -> bool;
 
-            auto addresses(detail::string_view) -> actor_address & override;
+            auto addresses(detail::string_view) -> actor_address &;
 
-            auto self() -> actor_address override ;
+            auto self() -> actor_address ;
 
             template<class F>
             auto add_handler(detail::string_view name, F &&f) ->  typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
@@ -62,9 +61,9 @@ namespace actor_zeta { namespace base {
            */
             auto all_view_address() const -> void ;
 
-            auto dispatch() -> dispatcher_t &;
+            auto dispatch() -> dispatcher_type &;
 
-            auto dispatch() const -> const dispatcher_t &;
+            auto dispatch() const -> const dispatcher_type &;
 
         private:
             void add_link(actor_address);
@@ -74,7 +73,7 @@ namespace actor_zeta { namespace base {
             void initialize();
 
             std::unique_ptr<std::unordered_map<detail::string_view, actor_address>> contacts_;
-            dispatcher_t dispatcher_;
+            dispatcher_type dispatcher_;
             metadata type_;
         };
 }}

@@ -11,12 +11,9 @@ namespace actor_zeta {
         class  abstract_actor;
         class  actor;
         class  actor_address;
-        class  handler;
-        struct context;
         class supervisor;
         class abstract_supervisor;
         class communication_module;
-        class dispatcher_t;
         class cooperative_actor;
     }
 

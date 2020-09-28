@@ -23,7 +23,7 @@ namespace actor_zeta { namespace base {
 
     protected:
         auto set_current_message(messaging::message) -> void;
-        auto current_message() -> messaging::message& final;
+        auto current_message() -> messaging::message&;
 
     private:
         messaging::message current_message_;

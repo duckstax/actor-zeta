@@ -41,15 +41,15 @@ namespace actor_zeta { namespace base {
 
             auto next_message() -> void ;
 
-            auto current_message() -> messaging::message& override;
+            auto current_message() -> messaging::message&;
 
-            bool has_next_message();
+            auto has_next_message() -> bool;
 
-            mailbox_type &mailbox();
+            auto mailbox() -> mailbox_type &;
 
-            bool push_to_cache(messaging::message );
+            auto push_to_cache(messaging::message ) -> bool;
 
-            messaging::message pop_to_cache();
+            auto pop_to_cache() -> messaging::message;
 
 // ----------------------------------------------------- message processing
             messaging::message current_message_;
