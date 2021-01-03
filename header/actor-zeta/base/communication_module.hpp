@@ -12,10 +12,8 @@
 
 namespace actor_zeta { namespace base {
 
-        class communication_module : public ref_counted {
+        class communication_module {
         public:
-
-            using dispatcher_type =  dispatcher_t<communication_module>;
 
             communication_module() = delete;
 
@@ -23,9 +21,9 @@ namespace actor_zeta { namespace base {
 
             communication_module &operator=(const communication_module &) = delete;
 
-            ~communication_module() override;
+            virtual ~communication_module();
 
-            actor_address address() const noexcept;
+            address_type address() const noexcept;
 
             auto type() const -> abstract;
 
@@ -35,16 +33,18 @@ namespace actor_zeta { namespace base {
 
             auto enqueue(messaging::message) -> void;
 
-            virtual void enqueue(messaging::message, executor::execution_device *) = 0;
+            void enqueue(messaging::message, executor::execution_device *);
 
         protected:
+            virtual void enqueue_base(messaging::message, executor::execution_device *) = 0;
+
             communication_module(detail::string_view, abstract);
 
             auto broadcast(messaging::message) -> bool;
 
-            auto addresses(detail::string_view) -> actor_address &;
+            auto addresses(detail::string_view) -> address_type&;
 
-            auto self() -> actor_address ;
+            auto self() -> address_type;
 
             template<class F>
             auto add_handler(detail::string_view name, F &&f) ->  typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
@@ -61,19 +61,19 @@ namespace actor_zeta { namespace base {
            */
             auto all_view_address() const -> void ;
 
-            auto dispatch() -> dispatcher_type &;
+            auto dispatch() -> dispatcher_t &;
 
-            auto dispatch() const -> const dispatcher_type &;
+            auto dispatch() const -> const dispatcher_t &;
 
         private:
-            void add_link(actor_address);
+            void add_link(address_type);
 
-            void remove_link(const actor_address&);
+            void remove_link(const address_type&);
 
             void initialize();
-
-            std::unique_ptr<std::unordered_map<detail::string_view, actor_address>> contacts_;
-            dispatcher_type dispatcher_;
+            using contacts_type =  std::unordered_map<detail::string_view, address_type>;
+            std::unique_ptr<contacts_type> contacts_;
+            dispatcher_t dispatcher_;
             metadata type_;
         };
 }}

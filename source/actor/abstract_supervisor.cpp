@@ -1,5 +1,5 @@
 // clang-format off
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address_type.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/base/abstract_supervisor.hpp>
 // clang-format on
@@ -19,7 +19,7 @@ namespace actor_zeta { namespace base {
         current_message_ = std::move(msg);
     }
 
-    actor_address supervisor::address() const noexcept {
+    address_type supervisor::address() const noexcept {
         return ptr_->address();
     }
 

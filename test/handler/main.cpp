@@ -34,8 +34,8 @@ public:
         return *ptr_;
     }
 
-    auto join(actor_zeta::actor ) -> actor_zeta::actor_address override {
-        return actor_zeta::actor_address();
+    auto join(actor_zeta::actor ) -> actor_zeta::address_type override {
+        return actor_zeta::address_type();
     }
 
     void enqueue(message, execution_device *) override {
@@ -172,19 +172,19 @@ int main() {
     std::unique_ptr<dummy_supervisor> supervisor(new dummy_supervisor(new dummy_executor));
 
     std::unique_ptr<test_handlers> test_handlers_(new test_handlers(*supervisor));
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_0");
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_1");
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_2", 1);
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_3", 1, 2);
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_4", 1, 2, std::string("test"));
+    send(test_handlers_, actor_zeta::address_type(), "ptr_0");
+    send(test_handlers_, actor_zeta::address_type(), "ptr_1");
+    send(test_handlers_, actor_zeta::address_type(), "ptr_2", 1);
+    send(test_handlers_, actor_zeta::address_type(), "ptr_3", 1, 2);
+    send(test_handlers_, actor_zeta::address_type(), "ptr_4", 1, 2, std::string("test"));
 
     std::unique_ptr<storage_t> storage(new storage_t(*supervisor));
 
-    send(storage, actor_zeta::actor_address(), "init");
-    send(storage, actor_zeta::actor_address(), "search", std::string("key_1"));
-    send(storage, actor_zeta::actor_address(), "add", std::string("key_1"), std::string("value_1"));
-    send(storage, actor_zeta::actor_address(), "delete_table", std::string("test"), std::string("/"), 12);
-    send(storage, actor_zeta::actor_address(), "creature_table", std::string("test"), std::string("/"), 1, 12);
+    send(storage, actor_zeta::address_type(), "init");
+    send(storage, actor_zeta::address_type(), "search", std::string("key_1"));
+    send(storage, actor_zeta::address_type(), "add", std::string("key_1"), std::string("value_1"));
+    send(storage, actor_zeta::address_type(), "delete_table", std::string("test"), std::string("/"), 12);
+    send(storage, actor_zeta::address_type(), "creature_table", std::string("test"), std::string("/"), 1, 12);
 
     return 0;
 }

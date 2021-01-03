@@ -31,7 +31,7 @@ namespace actor_zeta {
         void fake_multiplexer::new_tcp_listener(
                 const std::string &host,
                 uint16_t port,
-                base::actor_address address
+                base::address_type address
         ) {
             connection_identifying id(network::connect_type::tcp, host, port);
             connection<fake_socket> connection_(std::move(scenario.at(id)), std::move(address));
@@ -46,7 +46,7 @@ namespace actor_zeta {
                         query_raw.raw = connection.socket().read();
                         connection.address()->enqueue(
                                 messaging::message(
-                                        base::actor_address(),
+                                        base::address_type(),
                                         "read",
                                         std::move(query_raw)
                                 )
@@ -72,7 +72,7 @@ namespace actor_zeta {
         void fake_multiplexer::new_tcp_connection(
                 const std::string &/**host*/,
                 uint16_t /**port*/,
-                base::actor_address /**address*/
+                base::address_type /**address_type*/
         ) {
             /**
              * TODO: Implementation

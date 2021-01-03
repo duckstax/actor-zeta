@@ -45,7 +45,7 @@ namespace actor_zeta { namespace base {
 
             auto has_next_message() -> bool;
 
-            auto mailbox() -> mailbox_type &;
+            auto    mailbox() -> mailbox_type &;
 
             auto push_to_cache(messaging::message ) -> bool;
 

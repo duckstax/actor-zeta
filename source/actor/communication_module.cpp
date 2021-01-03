@@ -3,7 +3,7 @@
 // clang-format off
 #include <actor-zeta/base/context.hpp>
 #include <actor-zeta/base/handler.hpp>
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address_type.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/impl/handler.ipp>
 #include <actor-zeta/base/communication_module.hpp>
@@ -13,7 +13,7 @@ namespace actor_zeta { namespace base {
 
         inline void error_sync_contacts(detail::string_view __error__) {
             std::cerr << "WARNING" << std::endl;
-            std::cerr << "Not initialization actor_address type:" << __error__ << std::endl;
+            std::cerr << "Not initialization address_type type:" << __error__ << std::endl;
             std::cerr << "WARNING" << std::endl;
         }
 
@@ -36,11 +36,11 @@ namespace actor_zeta { namespace base {
                 std::cerr << i.first << std::endl;
         }
 
-        auto communication_module::addresses(detail::string_view name) -> actor_address& {
+        auto communication_module::addresses(detail::string_view name) -> address_type& {
             return contacts_->at(name);
         }
 
-        auto communication_module::self()  -> actor_address  {
+        auto communication_module::self()  -> address_type {
             return address();
         }
 
@@ -63,14 +63,14 @@ namespace actor_zeta { namespace base {
         communication_module::~communication_module() {}
 
         communication_module::communication_module(detail::string_view name, abstract type)
-            : contacts_(new std::unordered_map<detail::string_view,actor_address>)
+            : contacts_(new std::unordered_map<detail::string_view, address>)
             , type_{0,type,name}
             {
             initialize();
         }
 
-        actor_address communication_module::address() const noexcept {
-            return actor_address{const_cast<communication_module*>(this)};
+        address_type communication_module::address() const noexcept {
+            return address_type{const_cast<communication_module*>(this)};
         }
 
         void communication_module::initialize() {
@@ -85,7 +85,7 @@ namespace actor_zeta { namespace base {
             );
         }
 
-        void communication_module::add_link(actor_address address) {
+        void communication_module::add_link(address_type address) {
 
             if (address) {
                 auto name = address->name();
@@ -96,7 +96,7 @@ namespace actor_zeta { namespace base {
 
         }
 
-        void communication_module::remove_link(const actor_address& address) {
+        void communication_module::remove_link(const address_type& address) {
             auto it = contacts_->find(address->name());
             if(it != contacts_->end()){
                 contacts_->erase(it);
@@ -113,5 +113,8 @@ namespace actor_zeta { namespace base {
 
             return true;
         }
+        void communication_module::enqueue(messaging::message msg, executor::execution_device* ptr) {
+            enqueue_base(std::move(msg),ptr);
+        }
 
-    }}
+}}

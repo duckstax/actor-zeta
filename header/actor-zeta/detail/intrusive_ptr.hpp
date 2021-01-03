@@ -22,6 +22,8 @@ namespace actor_zeta {
         using reference = T&;
         using const_reference = const T&;
 
+        static constexpr bool has_weak_ptr_semantics = false;
+
         constexpr intrusive_ptr() noexcept : ptr_(nullptr) {
         }
 

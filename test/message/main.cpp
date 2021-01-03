@@ -1,10 +1,10 @@
 #include <cassert>
 
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address_type.hpp>
 #include <actor-zeta/messaging/message.hpp>
 
 using actor_zeta::messaging::message;
-using actor_zeta::base::actor_address;
+using actor_zeta::messaging::message;
 
 int main() {
 
@@ -12,7 +12,7 @@ int main() {
 
     assert(msg == false);
 
-    message msg_1(actor_address(),"1",int(1));
+    message msg_1(address(),"1",int(1));
 
     assert(msg_1 == true);
 

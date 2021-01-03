@@ -58,4 +58,6 @@ namespace actor_zeta {
 # define HAVE_STD_STRING_VIEW  0
 #endif
 
+#define CACHE_LINE_SIZE 64
+
 }

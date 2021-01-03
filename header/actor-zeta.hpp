@@ -3,7 +3,7 @@
 // clang-format off
 #include <actor-zeta/base/context.hpp>
 #include <actor-zeta/base/handler.hpp>
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address_type.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/base/basic_actor.hpp>
 #include <actor-zeta/base/abstract_supervisor.hpp>
@@ -19,7 +19,7 @@ namespace actor_zeta {
 using base::actor;
 using base::abstract_actor;
 using base::basic_async_actor;
-using base::actor_address;
+using base::address_type;
 using base::supervisor;
 using base::abstract_supervisor;
 using base::make_handler;
@@ -33,17 +33,17 @@ using executor::execution_device;
 using messaging::message;
 
 template<class T>
-auto make_message(actor_address sender_, T name) -> message {
+auto make_message(address_type sender_, T name) -> message {
   return message(std::move(sender_),std::forward<T>(name));
 }
 
 template<class T,typename Arg>
-auto make_message(actor_address sender_, T name, Arg&& arg) -> message {
+auto make_message(address_type sender_, T name, Arg&& arg) -> message {
   return message(std::move(sender_),std::forward<T>(name), std::move(detail::any(std::forward<type_traits::decay_t<Arg>>(arg))));
 }
 
 template<class T, typename... Args>
-auto make_message(actor_address sender_, T name, Args&&... args) -> message {
+auto make_message(address_type sender_, T name, Args&&... args) -> message {
   return message(sender_,std::forward<T>(name), std::move(detail::any(std::tuple<type_traits::decay_t<Args>...>{std::forward<Args>(args)...})));
 }
 
@@ -52,7 +52,7 @@ template<
   typename Supervisor,
   typename... Args
 >
-auto join(Supervisor& supervisor, Args&&... args) -> actor_zeta::actor_address {
+auto join(Supervisor& supervisor, Args&&... args) -> actor_zeta::address_type {
   return supervisor->join(new Actor(supervisor, std::forward<Args>(args)...));
 }
 
@@ -84,7 +84,7 @@ void send(Sender& actor, message msg) {
   actor->enqueue(std::move(msg));
 }
 
-inline void link_imp(actor_zeta::actor_address& a1,actor_zeta::actor_address& a2) {
+inline void link_imp(actor_zeta::address_type& a1,actor_zeta::address_type& a2) {
   send(a1,a2,"add_link",a2);
   send(a2,a1,"add_link",a1);
 }
@@ -97,26 +97,26 @@ inline void link(basic_async_actor& actor1,basic_async_actor& actor2) {
 
 template <class Supervisor>
 void link(Supervisor* actor1,Supervisor* actor2) {
-  auto a1 = actor1->address();
-  auto a2 = actor2->address();
+  auto a1 = actor1->address_type();
+  auto a2 = actor2->address_type();
   link_imp(a1,a2);
 }
 
 template <class Supervisor>
 void link(Supervisor& actor1,Supervisor& actor2) {
-  auto a1 = actor1->address();
-  auto a2 = actor2->address();
+  auto a1 = actor1->address_type();
+  auto a2 = actor2->address_type();
   link_imp(a1,a2);
 }
 
 template <class Supervisor>
-void link(Supervisor& actor1,actor_address& actor2) {
-  auto a1 = actor1->address();
+void link(Supervisor& actor1, address_type& actor2) {
+  auto a1 = actor1->address_type();
   auto a2 = actor2->address();
   link_imp(a1,a2);
 }
 
-inline void link(actor_address &actor1,actor_address&actor2) {
+inline void link(address_type&actor1, address_type&actor2) {
   link_imp(actor1,actor2);
 }
 }

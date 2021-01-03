@@ -1,8 +1,9 @@
 #pragma once
 
-#include <actor-zeta/forwards.hpp>
-#include <actor-zeta/detail/type_list.hpp>
 #include <actor-zeta/detail/intrusive_ptr.hpp>
+#include <actor-zeta/detail/type_list.hpp>
+#include <actor-zeta/forwards.hpp>
+#include <detail/control_block.hpp>
 
 //smart actor
 namespace actor_zeta { namespace base {
@@ -11,6 +12,9 @@ namespace actor_zeta { namespace base {
 ///
         class actor final {
         public:
+
+            static constexpr bool has_weak_ptr_semantics = false;
+
             actor() = default;
 
             actor(const actor &a) = delete;
@@ -57,12 +61,12 @@ namespace actor_zeta { namespace base {
                 return *this;
             }
 
-            actor_address address() const noexcept;
+            address_type address() const noexcept;
 
             ~actor();
 
             inline abstract_actor *operator->() const noexcept {
-                return ptr_.get();
+                return ptr_->get();
             }
 
             inline explicit operator bool() const noexcept {
@@ -75,10 +79,24 @@ namespace actor_zeta { namespace base {
                 return !ptr_;
             }
 
+            actor(control_block<abstract_actor>* ptr, bool add_ref): ptr_(ptr, add_ref) {
+
+            }
+
         private:
+
+            actor(control_block<abstract_actor>*ptr): ptr_(ptr){}
+
+            control_block<abstract_actor>* get() const noexcept {
+                return ptr_.get();
+            }
+
+            control_block<abstract_actor>* release() noexcept {
+                return ptr_.release();
+            }
 
             void swap(actor &) noexcept;
 
-            intrusive_ptr <abstract_actor> ptr_;
+            intrusive_ptr <control_block<abstract_actor>> ptr_;
         };
 }}

@@ -53,8 +53,8 @@ public:
                 e_->start();
     }
 
-    auto join(actor_zeta::supervisor) -> actor_zeta::actor_address override {
-        return actor_zeta::actor_address();
+    auto join(actor_zeta::supervisor) -> actor_zeta::address_type override {
+        return actor_zeta::address_type();
     }
 
     ~supervisor_lite() override {
@@ -63,7 +63,7 @@ public:
 
     auto executor() noexcept -> actor_zeta::abstract_executor & final { return *e_; }
 
-    auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
+    auto join(actor_zeta::actor t) -> actor_zeta::address_type final {
         auto tmp = std::move(t);
         auto address = tmp->address();
         actors_.push_back(std::move(tmp));

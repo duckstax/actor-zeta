@@ -26,13 +26,13 @@ namespace actor_zeta { namespace messaging {
 
             ~message() = default;
 
-            message(base::actor_address /*sender*/, std::string /*name*/);
+            message(base::address_type /*sender*/, detail::string_view /*name*/);
 
-            message(base::actor_address /*sender*/, std::string /*name*/, detail::any /*body*/);
+            message(base::address_type /*sender*/, detail::string_view /*name*/, detail::any /*body*/);
 
             auto command() const noexcept -> detail::string_view;
 
-            auto sender() const -> base::actor_address ;
+            auto sender() const -> base::address_type;
 
             template<typename T>
             auto body() const -> const T& {

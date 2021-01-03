@@ -13,7 +13,7 @@
 #include <actor-zeta.hpp>
 namespace actor_zeta { namespace network {
 
-        using actor_zeta::actor_address;
+        using actor_zeta::address_type;
 
         enum class client_state {
             close,
@@ -124,7 +124,7 @@ namespace actor_zeta { namespace network {
             connection() = default;
             using socket_t = Socket;
 
-            connection(socket_t &&socket, actor_zeta::actor_address &&address) :
+            connection(socket_t &&socket, actor_zeta::address_type&&address) :
                     socket_(std::forward<Socket>(socket)),
                     address_(std::move(address)) {
 
@@ -141,13 +141,13 @@ namespace actor_zeta { namespace network {
             }
 
 
-            actor_zeta::actor_address address() const {
+            actor_zeta::address_type address() const {
                 return address_;
             }
 
         private:
             socket_t socket_;
-            actor_zeta::actor_address address_;
+            actor_zeta::address_type address_;
         };
 
 
@@ -161,9 +161,9 @@ namespace actor_zeta { namespace network {
 
             std::size_t start();
 
-            void new_tcp_listener(const std::string &host, uint16_t port, actor_zeta::actor_address );
+            void new_tcp_listener(const std::string &host, uint16_t port, actor_zeta::address_type);
 
-            void new_tcp_connection(const std::string &host, uint16_t port, actor_zeta::actor_address);
+            void new_tcp_connection(const std::string &host, uint16_t port, actor_zeta::address_type);
 
             void close(const connection_identifying &) ;
 

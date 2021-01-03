@@ -10,7 +10,7 @@ namespace actor_zeta {
     namespace base {
         class  abstract_actor;
         class  actor;
-        class  actor_address;
+        class address_type;
         class supervisor;
         class abstract_supervisor;
         class communication_module;

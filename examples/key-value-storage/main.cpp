@@ -10,7 +10,7 @@
 
 using actor_zeta::basic_async_actor;
 using actor_zeta::supervisor;
-using actor_zeta::actor_address;
+using actor_zeta::join;
 using actor_zeta::join;
 
 using actor_zeta::executor_t;
@@ -71,7 +71,7 @@ public:
                     query_.id = query_raw.id;
                     actor_zeta::send(
                             ctx.addresses("storage"),
-                            actor_zeta::actor_address(address()),
+                            actor_zeta::address_type(address()),
                             std::string(query_.commands),
                             std::move(query_)
                     );
@@ -103,7 +103,7 @@ public:
 
     auto executor() noexcept -> actor_zeta::abstract_executor& final { return *e_;}
 
-    auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
+    auto join(actor_zeta::actor t) -> actor_zeta::address_type final {
         auto tmp = std::move(t);
         auto address = tmp->address();
         actors_.push_back(std::move(tmp));
@@ -144,7 +144,7 @@ public:
                     response.id = tmp.id;
                     actor_zeta::send(
                             ctx.current_message().sender(),
-                            actor_address(self),
+                        address(self),
                             write,
                             std::move(response)
                     );

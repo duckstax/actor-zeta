@@ -15,9 +15,9 @@ namespace actor_zeta { namespace base {
 
         virtual auto executor() noexcept -> executor::abstract_executor& = 0;
 
-        virtual auto join(actor) -> actor_address = 0;
+        virtual auto join(actor) -> address_type = 0;
 
-        virtual auto join(supervisor) -> actor_address = 0;
+        virtual auto join(supervisor) -> address_type = 0;
 
         using communication_module::broadcast;
 
@@ -75,7 +75,7 @@ namespace actor_zeta { namespace base {
             return *this;
         }
 
-        actor_address address() const noexcept;
+        address_type address() const noexcept;
 
         ~supervisor();
 

@@ -1,10 +1,7 @@
-#include <actor-zeta/base/actor_address.hpp>
-#include <actor-zeta/messaging/message_header.hpp>
-#include <actor-zeta/messaging/message.hpp>
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address_type.hpp>
 #include <actor-zeta/messaging/blocking_mail_queue.hpp>
-
-
+#include <actor-zeta/messaging/message.hpp>
+#include <actor-zeta/messaging/message_header.hpp>
 
 namespace actor_zeta { namespace messaging {
 

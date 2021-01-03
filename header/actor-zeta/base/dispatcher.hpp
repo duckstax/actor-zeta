@@ -33,10 +33,9 @@ namespace actor_zeta { namespace base {
     ///
     /// @brief
     ///
-    template<typename Actor>
+
     class dispatcher_t final {
     public:
-        using actor_type = Actor;
         using key_type = detail::string_view;
         using storage = std::unordered_map<key_type,std::unique_ptr<handler>>;
         using iterator = storage::iterator;
@@ -54,7 +53,8 @@ namespace actor_zeta { namespace base {
 
         ~dispatcher_t() = default;
 
-        void execute(actor_type& ctx) {
+        template<typename Actor>
+        void execute(Actor& ctx) {
             auto it = handlers_.find(ctx.current_message().command());
             if (it != handlers_.end()) {
                 it->second->operator()(ctx);

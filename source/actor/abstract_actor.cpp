@@ -2,7 +2,7 @@
 
 // clang-format off
 #include <actor-zeta/base/handler.hpp>
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address_type.hpp>
 #include <actor-zeta/messaging/message.hpp>
 #include <actor-zeta/base/abstract_actor.hpp>
 #include <actor-zeta/impl/handler.ipp>

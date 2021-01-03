@@ -19,8 +19,8 @@ public:
         return *ptr_;
     }
 
-    auto join(actor_zeta::actor) -> actor_zeta::actor_address override {
-        return actor_zeta::actor_address();
+    auto join(actor_zeta::actor) -> actor_zeta::address_type override {
+        return actor_zeta::address_type();
     }
 
     void enqueue(message, execution_device *) override {}
