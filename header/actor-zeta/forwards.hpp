@@ -2,20 +2,19 @@
 
 namespace actor_zeta {
 
-    namespace messaging {
+
         class message;
         class message_header;
-    }
 
-    namespace base {
-        class  abstract_actor;
-        class  actor;
-        class address_type;
+
+
+        class abstract_actor;
+        class actor;
+        class address_t;
         class supervisor;
         class abstract_supervisor;
         class communication_module;
         class cooperative_actor;
-    }
 
     namespace executor {
         class work_sharing;

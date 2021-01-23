@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -7,9 +8,8 @@
 
 #include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
-#include <iostream>
 
-namespace actor_zeta { namespace base {
+namespace actor_zeta {
 
     inline void error_duplicate_handler(detail::string_view _error_) {
         std::cerr << "Duplicate" << std::endl;
@@ -17,15 +17,15 @@ namespace actor_zeta { namespace base {
         std::cerr << "Duplicate" << std::endl;
     }
 
-    inline void error_add_handler(detail::string_view _error_) {
+    inline void error_add_handler(detail::string_view error) {
         std::cerr << "error add handler" << std::endl;
-        std::cerr << "Handler: " << _error_ << std::endl;
+        std::cerr << "Handler: " << error << std::endl;
         std::cerr << "error add handler" << std::endl;
     }
 
-    inline void error_skip(detail::string_view __error__) {
+    inline void error_skip(detail::string_view error) {
         std::cerr << "WARNING" << std::endl;
-        std::cerr << "Skip : " << __error__ << std::endl;
+        std::cerr << "Skip : " << error << std::endl;
         std::cerr << "WARNING" << std::endl;
     }
 
@@ -105,4 +105,4 @@ namespace actor_zeta { namespace base {
         storage handlers_;
     };
 
-}} // namespace actor_zeta::base
+} // namespace actor_zeta::base

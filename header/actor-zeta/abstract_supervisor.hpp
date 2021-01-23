@@ -1,9 +1,10 @@
 #pragma once
 
-#include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <communication_module.hpp>
+#include <actor-zeta/message.hpp>
 
-namespace actor_zeta { namespace base {
+namespace actor_zeta {
 
     class supervisor;
 
@@ -11,23 +12,41 @@ namespace actor_zeta { namespace base {
     public:
         abstract_supervisor(detail::string_view);
 
+        abstract_supervisor(supervisor, detail::string_view);
+
         ~abstract_supervisor() override;
 
         virtual auto executor() noexcept -> executor::abstract_executor& = 0;
 
-        virtual auto join(actor) -> address_type = 0;
+        virtual auto join(actor) -> address_t = 0;
 
-        virtual auto join(supervisor) -> address_type = 0;
+        virtual auto join(supervisor) -> address_t = 0;
 
         using communication_module::broadcast;
 
+        auto address() -> address_t {
+            return address_t(this);
+        }
+
+        auto enqueue(message) -> void;
+
+        void enqueue(message, executor::execution_device*);
+
     protected:
-        auto set_current_message(messaging::message) -> void;
-        auto current_message() -> messaging::message&;
+        auto set_current_message(message) -> void;
+        auto current_message() -> message&;
+
+        virtual void enqueue_base(message, executor::execution_device*) = 0;
 
     private:
-        messaging::message current_message_;
+        message current_message_;
     };
+
+
+        template<class T>
+        auto spawn() -> void {
+
+        }
 
     class supervisor final {
     public:
@@ -48,24 +67,8 @@ namespace actor_zeta { namespace base {
         template<
             class T,
             class = type_traits::enable_if_t<std::is_base_of<abstract_supervisor, T>::value>>
-        supervisor(intrusive_ptr<T> ptr)
-            : ptr_(std::move(ptr)) {}
-
-        template<
-            class T,
-            class = type_traits::enable_if_t<std::is_base_of<abstract_supervisor, T>::value>>
         supervisor(T* ptr)
             : ptr_(ptr) {}
-
-        template<
-            class T,
-            class = type_traits::enable_if_t<std::is_base_of<abstract_supervisor, T>::value>>
-        supervisor& operator=(intrusive_ptr<T> ptr) {
-            supervisor tmp{std::move(ptr)};
-            swap(tmp);
-            return *this;
-        }
-
         template<
             class T,
             class = type_traits::enable_if_t<std::is_base_of<abstract_supervisor, T>::value>>
@@ -75,7 +78,7 @@ namespace actor_zeta { namespace base {
             return *this;
         }
 
-        address_type address() const noexcept;
+        address_t address() const noexcept;
 
         ~supervisor();
 
@@ -96,7 +99,7 @@ namespace actor_zeta { namespace base {
     private:
         void swap(supervisor&) noexcept;
 
-        intrusive_ptr<abstract_supervisor> ptr_;
+        std::unique_ptr<abstract_supervisor> ptr_;
     };
 
-}} // namespace actor_zeta::base
+} // namespace actor_zeta::base

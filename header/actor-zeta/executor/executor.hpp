@@ -10,7 +10,6 @@
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/executable.hpp>
 #include <actor-zeta/executor/worker.hpp>
-#include <actor-zeta/detail/ref_counted.hpp>
 
 namespace actor_zeta { namespace executor {
 /// @brief
@@ -59,7 +58,6 @@ namespace actor_zeta { namespace executor {
                 /// shutdown workers
                 class shutdown_helper final
                         : public executable
-                        , public ref_counted
                         {
                 public:
                     auto run(execution_device* ptr, size_t) -> executable_result override {

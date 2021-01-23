@@ -1,10 +1,10 @@
 #include <cassert>
 
 #include <actor-zeta/base/address_type.hpp>
-#include <actor-zeta/messaging/message.hpp>
+#include <message.hpp>
 
-using actor_zeta::messaging::message;
-using actor_zeta::messaging::message;
+using actor_zeta::message;
+using actor_zeta::message;
 
 int main() {
 

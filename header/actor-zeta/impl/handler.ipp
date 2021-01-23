@@ -4,7 +4,7 @@
 #include <actor-zeta/detail/type_list.hpp>
 #include <actor-zeta/forwards.hpp>
 
-namespace actor_zeta { namespace base {
+namespace actor_zeta {
 // clang-format off
 template <class List, std::size_t I>
 using forward_arg =
@@ -149,4 +149,4 @@ auto make_handler_base(Context&&ctx,F&& f, ClassPtr* self) -> handler* {
   return transformer_for_class<Context,F, ClassPtr>{}(std::forward<Context>(ctx),std::forward<F>(f), self);
 }
 
-}}
+}

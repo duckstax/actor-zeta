@@ -1,19 +1,25 @@
 #pragma once
 
-#include <mutex>
+#include <atomic>
 #include <condition_variable>
 #include <list>
 #include <memory>
-#include <atomic>
+#include <mutex>
 
-#include <actor-zeta/messaging/mail_box.hpp>
+#include "message.hpp"
 
-namespace actor_zeta { namespace messaging {
+namespace actor_zeta {
 ///
 /// @brief
 /// @tparam T
 ///
-        class blocking_mail_queue final : public mail_box {
+        enum class enqueue_result {
+            success = 0,
+            unblocked_reader,
+            queue_closed
+        };
+
+        class blocking_mail_queue final {
         public:
             using cache_type = std::list<message>;
 
@@ -28,9 +34,9 @@ namespace actor_zeta { namespace messaging {
 
             message get();
 
-            bool push_to_cache(messaging::message &&msg_ptr);
+            bool push_to_cache(message &&msg_ptr);
 
-            messaging::message pop_to_cache();
+            message pop_to_cache();
 
         private:
 
@@ -40,10 +46,9 @@ namespace actor_zeta { namespace messaging {
 
             mutable std::mutex mutex;
             std::condition_variable cv;
-            
+
             queue_base_type mail_queue;
             queue_base_type local_queue;
             cache_type cache_;
         };
-    }
 }

@@ -1,7 +1,7 @@
-#include <testsuite/network/fake_multiplexer.hpp>
-#include <iostream>
 #include <cassert>
-#include <actor-zeta/messaging/message.hpp>
+#include <iostream>
+#include <message.hpp>
+#include <testsuite/network/fake_multiplexer.hpp>
 
 namespace actor_zeta {
     namespace network {
@@ -45,7 +45,7 @@ namespace actor_zeta {
                         query_raw.id = id;
                         query_raw.raw = connection.socket().read();
                         connection.address()->enqueue(
-                                messaging::message(
+                                message(
                                         base::address_type(),
                                         "read",
                                         std::move(query_raw)

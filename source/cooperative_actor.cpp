@@ -2,15 +2,15 @@
 #include <cassert>
 
 // clang-format off
-#include <actor-zeta/base/address_type.hpp>
-#include <actor-zeta/messaging/message.hpp>
+#include <address_t.hpp>
+#include <message.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
-#include <actor-zeta/base/abstract_supervisor.hpp>
-#include <actor-zeta/base/cooperative_actor.hpp>
+#include <abstract_supervisor.hpp>
+#include <cooperative_actor.hpp>
 // clang-format on
 
-namespace actor_zeta { namespace base {
+namespace actor_zeta {
 
         inline void error(){
             std::cerr << " WARNING " << std::endl;
@@ -19,12 +19,12 @@ namespace actor_zeta { namespace base {
         }
 
         executor::executable_result cooperative_actor::run(executor::execution_device *e, size_t max_throughput) {
-            attach(e);
+            executor_ = e;
             //---------------------------------------------------------------------------
 
             {
 
-                messaging::message msg_ptr;
+                message msg_ptr;
                 for (size_t handled_msgs = 0; handled_msgs < max_throughput;) {
                     msg_ptr = pop_to_cache();
                     if (msg_ptr) {
@@ -66,34 +66,24 @@ namespace actor_zeta { namespace base {
             return executor::executable_result::resume;
         }
 
-        void cooperative_actor::enqueue(messaging::message mep, executor::execution_device *e) {
-            mailbox().put(std::move(mep));
-            /// add a reference count to this actor and coordinator it
-            intrusive_ptr_add_ref(this);
+        void cooperative_actor::enqueue_base(message msg, executor::execution_device *e) {
+            mailbox().put(std::move(msg));
             if (e != nullptr) {
-                attach(e);
-                attach()->execute(this);
+                executor_ = e;
+                executor_->execute(this);
             } else {
-                env()->executor().execute(this);
+                supervisor_->executor().execute(this);
             }
 
         }
 
-
-        void cooperative_actor::intrusive_ptr_add_ref_impl() {
-            ref();
-        }
-
-        void cooperative_actor::intrusive_ptr_release_impl() {
-            deref();
-        }
-
-        cooperative_actor::cooperative_actor(supervisor&env
-                , detail::string_view name
-                , mailbox_type* mail_ptr
+        cooperative_actor::cooperative_actor(
+            supervisor env
+            , detail::string_view name
         )
-                : abstract_actor(env, name)
-                , mailbox_(mail_ptr)
+                : abstract_actor(name)
+                , mailbox_(new mailbox_type())
+                , supervisor_(env)
         {
         }
 
@@ -115,15 +105,15 @@ namespace actor_zeta { namespace base {
         */
 
         auto cooperative_actor::has_next_message() -> bool {
-            messaging::message msg_ptr = mailbox().get();
+            message msg_ptr = mailbox().get();
             return push_to_cache(std::move(msg_ptr));
         }
 
-        auto cooperative_actor::push_to_cache(messaging::message msg_ptr) -> bool {
+        auto cooperative_actor::push_to_cache(message msg_ptr) -> bool {
             return mailbox().push_to_cache(std::move(msg_ptr));
         }
 
-        auto cooperative_actor::pop_to_cache() -> messaging::message {
+        auto cooperative_actor::pop_to_cache() -> message {
             return mailbox().pop_to_cache();
         }
 
@@ -139,9 +129,8 @@ namespace actor_zeta { namespace base {
 
         }
 
-        auto cooperative_actor::current_message() -> messaging::message & {
+        auto cooperative_actor::current_message() -> message & {
             return current_message_;
         }
     }
-}
 

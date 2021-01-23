@@ -100,21 +100,18 @@ if(CCACHE_FOUND)
 endif(CCACHE_FOUND)
 
 set(HEADER_FILES
-        header/actor-zeta/base/abstract_actor.hpp
-        header/actor-zeta/base/actor.hpp
-        header/actor-zeta/base/address_type.hpp
-        header/actor-zeta/base/cooperative_actor.hpp
-        header/actor-zeta/base/basic_actor.hpp
-        header/actor-zeta/base/communication_module.hpp
-        header/actor-zeta/base/dispatcher.hpp
-        header/actor-zeta/base/handler.hpp
-        header/actor-zeta/base/metadata.hpp
-        header/actor-zeta/base/abstract_supervisor.hpp
+        header/actor-zeta/abstract_actor.hpp
+        header/actor-zeta/abstract_supervisor.hpp
+        header/actor-zeta/actor.hpp
+        header/actor-zeta/address_t.hpp
+        header/actor-zeta/basic_actor.hpp
+        header/actor-zeta/communication_module.hpp
+        header/actor-zeta/cooperative_actor.hpp
+        header/actor-zeta/dispatcher.hpp
+        header/actor-zeta/handler.hpp
 
         header/actor-zeta/detail/any.hpp
         header/actor-zeta/detail/callable_trait.hpp
-        header/actor-zeta/detail/intrusive_ptr.hpp
-        header/actor-zeta/detail/ref_counted.hpp
         header/actor-zeta/detail/string_view.hpp
         header/actor-zeta/detail/type_list.hpp
         header/actor-zeta/detail/type_traits.hpp
@@ -129,34 +126,31 @@ set(HEADER_FILES
         header/actor-zeta/executor/execution_device.hpp
         header/actor-zeta/executor/worker.hpp
 
-        header/actor-zeta/messaging/blocking_mail_queue.hpp
-        header/actor-zeta/messaging/mail_box.hpp
-        header/actor-zeta/messaging/message.hpp
-        header/actor-zeta/messaging/message_header.hpp
+        header/actor-zeta/blocking_mail_queue.hpp
+        header/actor-zeta/message.hpp
 
         header/actor-zeta/forwards.hpp
+        header/actor-zeta.hpp
 )
 
 set(SOURCE_FILES
 
-        source/actor/abstract_actor.cpp
-        source/actor/actor.cpp
-        source/actor/address_type.cpp
-        source/actor/cooperative_actor.cpp
-        source/actor/dispatcher.cpp
-        source/actor/abstract_supervisor.cpp
-        source/actor/communication_module.cpp
+        source/abstract_actor.cpp
+        source/abstract_supervisor.cpp
+        source/actor.cpp
+        source/address_t.cpp
+        source/communication_module.cpp
+        source/cooperative_actor.cpp
+        source/dispatcher.cpp
 
         source/detail/string_view.cpp
-        source/detail/ref_counted.cpp
 
         source/executor/abstract_executor.cpp
         source/executor/executable.cpp
         source/executor/execution_device.cpp
 
-        source/messaging/message.cpp
-        source/messaging/message_header.cpp
-        source/messaging/blocking_mail_queue.cpp
+        source/message.cpp
+        source/blocking_mail_queue.cpp
 )
 
 include_directories(SYSTEM header)

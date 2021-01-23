@@ -1,8 +1,8 @@
 #pragma once
 
-#include <actor-zeta/forwards.hpp>
-#include <actor-zeta/base/cooperative_actor.hpp>
 #include <actor-zeta/base/metadata.hpp>
+#include <actor-zeta/forwards.hpp>
+#include <cooperative_actor.hpp>
 
 namespace actor_zeta { namespace executor {
 

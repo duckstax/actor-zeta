@@ -4,7 +4,7 @@
 
 #include <actor-zeta/forwards.hpp>
 
-namespace actor_zeta { namespace base {
+namespace actor_zeta {
     ///
     /// @brief Abstract concept of an action
     ///
@@ -27,4 +27,4 @@ namespace actor_zeta { namespace base {
         return make_handler_base<Context,F,ClassPtr>(std::forward<Context>(ctx), std::forward<F>(f), self);
     }
 
-}} // namespace actor_zeta::base
+} // namespace actor_zeta::base

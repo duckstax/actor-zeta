@@ -1,25 +1,25 @@
 // clang-format off
-#include <actor-zeta/base/address_type.hpp>
-#include <actor-zeta/messaging/message.hpp>
-#include <actor-zeta/base/abstract_supervisor.hpp>
+#include <address_t.hpp>
+#include <message.hpp>
+#include <abstract_supervisor.hpp>
 // clang-format on
 
-namespace actor_zeta { namespace base {
+namespace actor_zeta {
 
     abstract_supervisor::abstract_supervisor(detail::string_view name)
         : communication_module(name, abstract::supervisor) {}
 
     abstract_supervisor::~abstract_supervisor() {}
 
-    auto abstract_supervisor::current_message() -> messaging::message& {
+    auto abstract_supervisor::current_message() -> message& {
         return current_message_;
     }
 
-    auto abstract_supervisor::set_current_message(messaging::message msg) -> void {
+    auto abstract_supervisor::set_current_message(message msg) -> void {
         current_message_ = std::move(msg);
     }
 
-    address_type supervisor::address() const noexcept {
+    address_t supervisor::address() const noexcept {
         return ptr_->address();
     }
 
@@ -43,4 +43,12 @@ namespace actor_zeta { namespace base {
     supervisor::~supervisor() {
     }
 
-}} // namespace actor_zeta::base
+    void abstract_supervisor::enqueue(message msg, executor::execution_device* ptr) {
+        enqueue_base(std::move(msg), ptr);
+    }
+
+    void abstract_supervisor::enqueue(message msg) {
+        enqueue(std::move(msg), nullptr);
+    }
+
+} // namespace actor_zeta::base

@@ -1,9 +1,8 @@
-#include <actor-zeta/base/address_type.hpp>
-#include <actor-zeta/messaging/blocking_mail_queue.hpp>
-#include <actor-zeta/messaging/message.hpp>
-#include <actor-zeta/messaging/message_header.hpp>
+#include <address_t.hpp>
+#include <blocking_mail_queue.hpp>
+#include <message.hpp>
 
-namespace actor_zeta { namespace messaging {
+namespace actor_zeta {
 
 
         enqueue_result blocking_mail_queue::put(message &&m) {
@@ -32,7 +31,7 @@ namespace actor_zeta { namespace messaging {
             return tmp;
         }
 
-        bool blocking_mail_queue::push_to_cache(messaging::message &&msg_ptr) {
+        bool blocking_mail_queue::push_to_cache(message &&msg_ptr) {
             if (msg_ptr) {
                 cache().push_back(std::move(msg_ptr));
                 return true;
@@ -41,8 +40,8 @@ namespace actor_zeta { namespace messaging {
             }
         }
 
-        messaging::message blocking_mail_queue::pop_to_cache() {
-            messaging::message msg_ptr;
+        message blocking_mail_queue::pop_to_cache() {
+            message msg_ptr;
             if (!cache().empty()) {
                 msg_ptr = std::move(cache().front());
                 cache().pop_front();
@@ -66,5 +65,4 @@ namespace actor_zeta { namespace messaging {
         blocking_mail_queue::blocking_mail_queue() = default;
 
 
-    }
 }

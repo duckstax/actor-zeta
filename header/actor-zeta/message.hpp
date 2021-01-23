@@ -5,9 +5,8 @@
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/any.hpp>
 #include <actor-zeta/detail/string_view.hpp>
-#include <actor-zeta/messaging/message_header.hpp>
 
-namespace actor_zeta { namespace messaging {
+namespace actor_zeta {
 
 ///
 /// @brief
@@ -26,13 +25,13 @@ namespace actor_zeta { namespace messaging {
 
             ~message() = default;
 
-            message(base::address_type /*sender*/, detail::string_view /*name*/);
+            message(address_t /*sender*/, detail::string_view /*name*/);
 
-            message(base::address_type /*sender*/, detail::string_view /*name*/, detail::any /*body*/);
+            message(address_t /*sender*/, detail::string_view /*name*/, detail::any /*body*/);
 
             auto command() const noexcept -> detail::string_view;
 
-            auto sender() const -> base::address_type;
+            auto sender() const -> address_t;
 
             template<typename T>
             auto body() const -> const T& {
@@ -55,15 +54,13 @@ namespace actor_zeta { namespace messaging {
             void swap(message& other) noexcept;
 
         private:
-            message(const message_header &header, const detail::any &body);
-
-            message_header header_;
-
+            address_t sender_;
+            detail::string_view command_;
             detail::any  body_;
         };
 
-}}
+}
 
-inline void swap(actor_zeta::messaging::message &lhs, actor_zeta::messaging::message &rhs) noexcept {
+inline void swap(actor_zeta::message &lhs, actor_zeta::message &rhs) noexcept {
     lhs.swap(rhs);
 }
