@@ -1,8 +1,8 @@
 #pragma once
 
 #include <actor-zeta/forwards.hpp>
-#include <communication_module.hpp>
 #include <actor-zeta/message.hpp>
+#include <communication_module.hpp>
 
 namespace actor_zeta {
 
@@ -28,6 +28,10 @@ namespace actor_zeta {
             return address_t(this);
         }
 
+        auto name() -> detail::string_view {
+            return name_;
+        }
+
         auto enqueue(message) -> void;
 
         void enqueue(message, executor::execution_device*);
@@ -42,64 +46,8 @@ namespace actor_zeta {
         message current_message_;
     };
 
+    template<class T>
+    auto spawn() -> void {
+    }
 
-        template<class T>
-        auto spawn() -> void {
-
-        }
-
-    class supervisor final {
-    public:
-        supervisor() = default;
-
-        supervisor(const supervisor& a) = delete;
-
-        supervisor(supervisor&& a) = default;
-
-        supervisor& operator=(const supervisor& a) = delete;
-
-        supervisor& operator=(supervisor&& a) = default;
-
-        supervisor(std::nullptr_t);
-
-        supervisor& operator=(std::nullptr_t);
-
-        template<
-            class T,
-            class = type_traits::enable_if_t<std::is_base_of<abstract_supervisor, T>::value>>
-        supervisor(T* ptr)
-            : ptr_(ptr) {}
-        template<
-            class T,
-            class = type_traits::enable_if_t<std::is_base_of<abstract_supervisor, T>::value>>
-        supervisor& operator=(T* ptr) {
-            supervisor tmp{ptr};
-            swap(tmp);
-            return *this;
-        }
-
-        address_t address() const noexcept;
-
-        ~supervisor();
-
-        inline abstract_supervisor* operator->() const noexcept {
-            return ptr_.get();
-        }
-
-        inline explicit operator bool() const noexcept {
-            return static_cast<bool>(ptr_);
-        }
-
-        auto name() const -> detail::string_view;
-
-        inline bool operator!() const noexcept {
-            return !ptr_;
-        }
-
-    private:
-        void swap(supervisor&) noexcept;
-
-        std::unique_ptr<abstract_supervisor> ptr_;
-    };
-
-} // namespace actor_zeta::base
+} // namespace actor_zeta

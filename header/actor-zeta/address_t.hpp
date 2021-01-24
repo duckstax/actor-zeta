@@ -25,17 +25,31 @@ namespace actor_zeta {
 
         void swap(address_t&) noexcept;
         explicit operator bool() const;
-        auto type() const -> abstract;
-        auto ptr() -> void*;
+        auto name() const ->detail::string_view;
+        auto enqueue(message msg) -> void;
 
     private:
+        enum class abstract : char {
+            non = 0x00,
+            actor,
+            supervisor
+        };
         abstract type_;
-        void* ptr_;
+        union storage {
+            storage() {
+                actor = nullptr;
+                supervisor = nullptr;
+            }
+            explicit storage(abstract_actor*ptr):actor(ptr){}
+            explicit storage(abstract_supervisor*ptr):supervisor(ptr){}
+            ~storage() {
+                actor = nullptr;
+                supervisor = nullptr;
+            }
+            abstract_actor* actor;
+            abstract_supervisor* supervisor;
+        }  ptr_;
     };
-
-    auto name_(address_t& address)->detail::string_view;
-    auto enqueue_(address_t& address, message msg) -> void;
-
 
 }
 

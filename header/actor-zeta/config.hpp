@@ -59,12 +59,4 @@ namespace actor_zeta {
 #endif
 
 #define CACHE_LINE_SIZE 64
-
-    enum class abstract : char {
-        non = 0x00,
-        actor,
-        supervisor
-    };
-
-
 }

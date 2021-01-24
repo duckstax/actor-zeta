@@ -14,12 +14,12 @@ namespace actor_zeta {
 
         abstract_actor::~abstract_actor() {}
 
-        abstract_actor::abstract_actor(detail::string_view name): communication_module(name, abstract::actor) {
+        abstract_actor::abstract_actor(detail::string_view name): communication_module(name) {
             // nop
         }
 
         address_t abstract_actor::address() const noexcept {
-            return address_t(this);
+            return address_t((abstract_supervisor*) this);
         }
 
     void abstract_actor::enqueue(message msg, executor::execution_device* ptr) {
@@ -28,6 +28,9 @@ namespace actor_zeta {
 
     void abstract_actor::enqueue(message msg) {
         enqueue(std::move(msg), nullptr);
+    }
+    auto abstract_actor::name() const -> detail::string_view {
+        return name_;
     }
 
 }

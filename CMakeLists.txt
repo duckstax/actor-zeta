@@ -129,6 +129,8 @@ set(HEADER_FILES
         header/actor-zeta/blocking_mail_queue.hpp
         header/actor-zeta/message.hpp
 
+        header/actor-zeta/supervisor.hpp
+
         header/actor-zeta/forwards.hpp
         header/actor-zeta.hpp
 )
@@ -151,6 +153,7 @@ set(SOURCE_FILES
 
         source/message.cpp
         source/blocking_mail_queue.cpp
+        source/supervisor.cpp
 )
 
 include_directories(SYSTEM header)

@@ -13,7 +13,7 @@ namespace actor_zeta {
     }
 
     address_t::operator bool() const {
-        return static_cast<bool>(ptr_);
+        return type_ != abstract::non and (ptr_.supervisor != nullptr || ptr_.supervisor != nullptr);
     }
 
     address_t::address_t(abstract_actor* ptr)
@@ -25,32 +25,28 @@ namespace actor_zeta {
         : type_(abstract::supervisor)
         , ptr_(ptr) {
     }
-    auto address_t::ptr() -> void* {
-        return ptr_;
-    }
-    auto address_t::type() const -> abstract {
-        return type_;
-    }
 
-    auto enqueue_(address_t& address, message msg) -> void {
-        switch (address.type()) {
+
+    auto address_t::enqueue( message msg) -> void {
+        switch (type_) {
             case abstract::actor:
-                static_cast<abstract_actor*>(address.ptr())->enqueue(std::move(msg));
+                ptr_.actor->enqueue(std::move(msg));
                 break;
             case abstract::supervisor:
-                static_cast<abstract_supervisor*>(address.ptr())->enqueue(std::move(msg));
+                ptr_.supervisor->enqueue(std::move(msg));
                 break;
             case abstract::non:
                 break;
         }
     }
-    auto name_(address_t& address) -> detail::string_view {
-        switch (address.type()) {
+
+    auto address_t::name() const -> detail::string_view {
+        switch (type_) {
             case abstract::actor:
-                static_cast<abstract_actor*>(address.ptr())->name();
+                ptr_.actor->name();
                 break;
             case abstract::supervisor:
-                static_cast<abstract_supervisor*>(address.ptr())->name();
+                ptr_.supervisor->name();
                 break;
             case abstract::non:
                 break;

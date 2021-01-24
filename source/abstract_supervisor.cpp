@@ -7,7 +7,7 @@
 namespace actor_zeta {
 
     abstract_supervisor::abstract_supervisor(detail::string_view name)
-        : communication_module(name, abstract::supervisor) {}
+        : communication_module(name) {}
 
     abstract_supervisor::~abstract_supervisor() {}
 
@@ -17,30 +17,6 @@ namespace actor_zeta {
 
     auto abstract_supervisor::set_current_message(message msg) -> void {
         current_message_ = std::move(msg);
-    }
-
-    address_t supervisor::address() const noexcept {
-        return ptr_->address();
-    }
-
-    detail::string_view supervisor::name() const {
-        return ptr_->name();
-    }
-
-    void supervisor::swap(supervisor& other) noexcept {
-        using std::swap;
-        ptr_.swap(other.ptr_);
-    }
-
-    supervisor::supervisor(std::nullptr_t)
-        : ptr_(nullptr) {}
-
-    supervisor& supervisor::operator=(std::nullptr_t) {
-        ptr_.reset();
-        return *this;
-    }
-
-    supervisor::~supervisor() {
     }
 
     void abstract_supervisor::enqueue(message msg, executor::execution_device* ptr) {

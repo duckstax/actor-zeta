@@ -1,8 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <set>
 #include <unordered_map>
-#include <memory>
 
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/forwards.hpp>
@@ -20,19 +20,16 @@ namespace actor_zeta {
 
         virtual ~communication_module();
 
-        auto type() const -> abstract;
-
         auto message_types() const -> std::set<std::string>;
 
     protected:
-
-        communication_module(detail::string_view, abstract);
+        communication_module(detail::string_view);
 
         auto broadcast(message) -> bool;
 
         auto addresses(detail::string_view) -> address_t&;
 
-        auto self() -> address_t;
+        ///auto self() -> address_t;
 
         template<class F>
         auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
@@ -49,9 +46,11 @@ namespace actor_zeta {
            */
         auto all_view_address() const -> void;
 
-            auto dispatch() -> dispatcher_t &;
+        auto dispatch() -> dispatcher_t&;
 
-            auto dispatch() const -> const dispatcher_t &;
+        auto dispatch() const -> const dispatcher_t&;
+
+        detail::string_view name_;
 
     private:
         void add_link(const address_t&);
@@ -63,7 +62,5 @@ namespace actor_zeta {
         std::unique_ptr<contacts_type> contacts_;
         dispatcher_t dispatcher_;
         std::size_t id_;
-        abstract type_;
-        detail::string_view name_;
     };
 } // namespace actor_zeta

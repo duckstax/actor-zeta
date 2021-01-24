@@ -12,6 +12,8 @@ namespace actor_zeta {
     class abstract_actor :  communication_module {
     public:
         ~abstract_actor() override;
+        abstract_actor(const abstract_actor&) = delete;
+        abstract_actor& operator=(const abstract_actor&) = delete;
 
         address_t address() const noexcept;
 
@@ -19,18 +21,12 @@ namespace actor_zeta {
 
         void enqueue(message, executor::execution_device*);
 
-        auto name() const -> detail::string_view {
-            return name_;
-        }
+        auto name() const -> detail::string_view;
 
     protected:
         explicit abstract_actor(detail::string_view);
 
         virtual void enqueue_base(message, executor::execution_device*) = 0;
-
-    private:
-        abstract_actor(const abstract_actor&) = delete;
-        abstract_actor& operator=(const abstract_actor&) = delete;
     };
 
 }// namespace actor_zeta::base

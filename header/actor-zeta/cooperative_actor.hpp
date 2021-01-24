@@ -3,7 +3,8 @@
 #include <abstract_actor.hpp>
 #include <actor-zeta/executor/executable.hpp>
 #include <actor-zeta/forwards.hpp>
-#include <blocking_mail_queue.hpp>
+#include "blocking_mail_queue.hpp"
+#include "supervisor.hpp"
 
 namespace actor_zeta {
 ///

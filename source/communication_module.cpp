@@ -8,8 +8,6 @@
 #include <communication_module.hpp>
 // clang-format on
 
-#include <actor-zeta/abstract_actor.hpp>
-#include <actor-zeta/abstract_supervisor.hpp>
 
 namespace actor_zeta {
 
@@ -39,21 +37,18 @@ namespace actor_zeta {
     auto communication_module::addresses(detail::string_view name) -> address_t& {
         return contacts_->at(name);
     }
-
+/*
     auto communication_module::self() -> address_t {
         return this->address();
     }
+*/
 
-    auto communication_module::type() const -> abstract {
-        return type_;
-    }
 
     communication_module::~communication_module() = default;
 
-    communication_module::communication_module(detail::string_view name, abstract type)
+    communication_module::communication_module(detail::string_view name)
         : contacts_(new std::unordered_map<detail::string_view, address_t>)
         , id_(0)
-        , type_(type)
         , name_(name) {
         initialize();
     }
@@ -70,15 +65,15 @@ namespace actor_zeta {
 
     void communication_module::add_link(const address_t& address) {
         if (address) {
-            auto name = address->name();
+            auto name = address.name();
             contacts_->emplace(name, std::move(address));
         } else {
-            error_sync_contacts(address->name());
+            error_sync_contacts(address.name());
         }
     }
 
     void communication_module::remove_link(const address_t& address) {
-        auto it = contacts_->find(address->name());
+        auto it = contacts_->find(address.name());
         if (it != contacts_->end()) {
             contacts_->erase(it);
         }
@@ -88,7 +83,7 @@ namespace actor_zeta {
         auto tmp = std::move(msg);
 
         for (auto& i : *contacts_) {
-            enqueue_(i.second, tmp.clone());
+            i.second.enqueue( tmp.clone());
         }
 
         return true;

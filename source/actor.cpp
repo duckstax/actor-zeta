@@ -20,6 +20,6 @@ namespace actor_zeta {
         }
 
         address_t actor::address() const noexcept {
-            return address_t(ptr_.get());
+            return address_t{ptr_.get()};
         }
 }
