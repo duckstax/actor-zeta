@@ -21,7 +21,7 @@ namespace actor_zeta {
     auto communication_module::message_types() const -> std::set<std::string> {
         std::set<std::string> types;
 
-        for (const auto& i : dispatch()) {
+        for (const auto& i : handlers_) {
             types.emplace(std::string(i.first.begin(), i.first.end()));
         }
 
@@ -46,10 +46,8 @@ namespace actor_zeta {
 
     communication_module::~communication_module() = default;
 
-    communication_module::communication_module(detail::string_view name)
-        : contacts_(new std::unordered_map<detail::string_view, address_t>)
-        , id_(0)
-        , name_(name) {
+    communication_module::communication_module()
+        : contacts_(new std::unordered_map<detail::string_view, address_t>){
         initialize();
     }
 
@@ -87,14 +85,6 @@ namespace actor_zeta {
         }
 
         return true;
-    }
-
-    auto communication_module::dispatch() -> dispatcher_t & {
-        return dispatcher_;
-    }
-
-    auto communication_module::dispatch() const -> const dispatcher_t & {
-        return dispatcher_;
     }
 
 

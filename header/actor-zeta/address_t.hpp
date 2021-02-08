@@ -5,9 +5,9 @@
 #include <functional>
 #include <type_traits>
 
-#include <actor-zeta/forwards.hpp>
 #include <actor-zeta/config.hpp>
 #include <actor-zeta/detail/string_view.hpp>
+#include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta {
 
@@ -18,14 +18,14 @@ namespace actor_zeta {
         address_t(const address_t&) = default;
         address_t& operator=(address_t&&) = default;
         address_t& operator=(const address_t&) = default;
-        ~address_t() =default;
+        ~address_t() = default;
 
         explicit address_t(abstract_actor*);
         explicit address_t(abstract_supervisor*);
 
         void swap(address_t&) noexcept;
         explicit operator bool() const;
-        auto name() const ->detail::string_view;
+        auto name() const -> detail::string_view;
         auto enqueue(message msg) -> void;
 
     private:
@@ -35,21 +35,22 @@ namespace actor_zeta {
             supervisor
         };
         abstract type_;
-        union storage {
+        union storage final {
             storage() {
                 actor = nullptr;
                 supervisor = nullptr;
             }
-            explicit storage(abstract_actor*ptr):actor(ptr){}
-            explicit storage(abstract_supervisor*ptr):supervisor(ptr){}
+            explicit storage(abstract_actor* ptr)
+                : actor(ptr) {}
+            explicit storage(abstract_supervisor* ptr)
+                : supervisor(ptr) {}
             ~storage() {
                 actor = nullptr;
                 supervisor = nullptr;
             }
             abstract_actor* actor;
             abstract_supervisor* supervisor;
-        }  ptr_;
+        } ptr_;
     };
 
-}
-
+} // namespace actor_zeta

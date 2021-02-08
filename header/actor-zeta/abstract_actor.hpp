@@ -9,7 +9,7 @@ namespace actor_zeta {
     /// @brief Abstract concept of an actor
     ///
 
-    class abstract_actor :  communication_module {
+    class abstract_actor : public  communication_module {
     public:
         ~abstract_actor() override;
         abstract_actor(const abstract_actor&) = delete;

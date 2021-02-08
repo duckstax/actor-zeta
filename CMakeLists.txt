@@ -107,7 +107,6 @@ set(HEADER_FILES
         header/actor-zeta/basic_actor.hpp
         header/actor-zeta/communication_module.hpp
         header/actor-zeta/cooperative_actor.hpp
-        header/actor-zeta/dispatcher.hpp
         header/actor-zeta/handler.hpp
 
         header/actor-zeta/detail/any.hpp
@@ -143,7 +142,6 @@ set(SOURCE_FILES
         source/address_t.cpp
         source/communication_module.cpp
         source/cooperative_actor.cpp
-        source/dispatcher.cpp
 
         source/detail/string_view.cpp
 

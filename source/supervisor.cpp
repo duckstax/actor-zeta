@@ -7,7 +7,6 @@
 #include "actor-zeta/supervisor.hpp"
 
 
-
 namespace actor_zeta {
 
     address_t supervisor::address() const noexcept {
@@ -29,6 +28,9 @@ namespace actor_zeta {
     supervisor& supervisor::operator=(std::nullptr_t) {
         ptr_.reset();
         return *this;
+    }
+    abstract_supervisor* supervisor::get() {
+        return ptr_.get();
     }
 
     supervisor::~supervisor() = default;

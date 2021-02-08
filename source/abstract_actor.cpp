@@ -14,8 +14,8 @@ namespace actor_zeta {
 
         abstract_actor::~abstract_actor() {}
 
-        abstract_actor::abstract_actor(detail::string_view name): communication_module(name) {
-            // nop
+        abstract_actor::abstract_actor(detail::string_view name) {
+            name_=name;
         }
 
         address_t abstract_actor::address() const noexcept {

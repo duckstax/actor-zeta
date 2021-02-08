@@ -29,7 +29,7 @@ namespace actor_zeta {
                     msg_ptr = pop_to_cache();
                     if (msg_ptr) {
                         {
-                            dispatch().execute(*this); /** context processing */
+                            execute(std::move(msg_ptr)); /** context processing */
                         }
                         ++handled_msgs;
                         continue;
@@ -38,7 +38,7 @@ namespace actor_zeta {
                    next_message();
                     if (current_message()) {
                         {
-                            dispatch().execute(*this); /** context processing */
+                            execute(std::move(msg_ptr)); /** context processing */
                         }
                         ++handled_msgs;
 
@@ -83,7 +83,7 @@ namespace actor_zeta {
         )
                 : abstract_actor(name)
                 , mailbox_(new mailbox_type())
-                , supervisor_(env)
+                , supervisor_(env.get())
         {
         }
 
@@ -125,9 +125,7 @@ namespace actor_zeta {
            current_message_ =  mailbox().get();
         }
 
-        cooperative_actor::~cooperative_actor(){
-
-        }
+        cooperative_actor::~cooperative_actor() = default;
 
         auto cooperative_actor::current_message() -> message & {
             return current_message_;

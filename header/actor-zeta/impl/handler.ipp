@@ -140,12 +140,12 @@ struct transformer_for_class<Context,F, ClassPtr, Args, 1> final {
 };
 
 template <typename Context,typename F>
-auto make_handler_base(Context&&ctx,F&& f) -> handler* {
+auto make_handler_base(Context&&ctx,F&& f) -> handler {
   return  transformer<Context,F>{}(std::forward<Context>(ctx),std::forward<F>(f));
 }
 
 template <typename Context,typename F, typename ClassPtr>
-auto make_handler_base(Context&&ctx,F&& f, ClassPtr* self) -> handler* {
+auto make_handler_base(Context&&ctx,F&& f, ClassPtr* self) -> handler {
   return transformer_for_class<Context,F, ClassPtr>{}(std::forward<Context>(ctx),std::forward<F>(f), self);
 }
 

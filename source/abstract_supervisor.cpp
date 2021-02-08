@@ -6,8 +6,9 @@
 
 namespace actor_zeta {
 
-    abstract_supervisor::abstract_supervisor(detail::string_view name)
-        : communication_module(name) {}
+    abstract_supervisor::abstract_supervisor(detail::string_view name){
+        name_ = name;
+    }
 
     abstract_supervisor::~abstract_supervisor() {}
 

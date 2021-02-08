@@ -1,56 +1,52 @@
 #pragma once
 
+#include "blocking_mail_queue.hpp"
+#include "supervisor.hpp"
 #include <abstract_actor.hpp>
 #include <actor-zeta/executor/executable.hpp>
 #include <actor-zeta/forwards.hpp>
-#include "blocking_mail_queue.hpp"
-#include "supervisor.hpp"
 
 namespace actor_zeta {
-///
-/// @brief Specialization of actor with scheduling functionality
-///
-        class cooperative_actor
-                : public abstract_actor
-                , public executor::executable
-                {
-        public:
+    ///
+    /// @brief Specialization of actor with scheduling functionality
+    ///
+    class cooperative_actor
+        : public abstract_actor
+        , public executor::executable {
+    public:
+        using mailbox_type = blocking_mail_queue;
 
-            using mailbox_type = blocking_mail_queue;
+        ///TODO:
+        //void launch(executor::execution_device *, bool /*hide*/) final;
 
+        executor::executable_result run(executor::execution_device*, size_t max_throughput) final;
 
+        ~cooperative_actor() override;
 
-            ///TODO:
-            //void launch(executor::execution_device *, bool /*hide*/) final;
+    protected:
+        cooperative_actor(supervisor, detail::string_view);
 
-            executor::executable_result run(executor::execution_device *, size_t max_throughput) final;
+        void enqueue_base(message, executor::execution_device*) final;
 
-            ~cooperative_actor() override;
+        // message processing -----------------------------------------------------
 
-        protected:
-            cooperative_actor(supervisor, detail::string_view);
+        auto next_message() -> void;
 
-            void enqueue_base(message, executor::execution_device *) final;
+        auto current_message() -> message&;
 
-// message processing -----------------------------------------------------
+        auto has_next_message() -> bool;
 
-            auto next_message() -> void ;
+        auto mailbox() -> mailbox_type&;
 
-            auto current_message() -> message&;
+        auto push_to_cache(message) -> bool;
 
-            auto has_next_message() -> bool;
+        auto pop_to_cache() -> message;
 
-            auto mailbox() -> mailbox_type &;
-
-            auto push_to_cache(message ) -> bool;
-
-            auto pop_to_cache() -> message;
-
-// ----------------------------------------------------- message processing
+        // ----------------------------------------------------- message processing
     private:
-            message current_message_;
-            std::unique_ptr<mailbox_type> mailbox_;
-            supervisor supervisor_;
-            executor::execution_device *executor_;
-        };
-}
+        message current_message_;
+        std::unique_ptr<mailbox_type> mailbox_;
+        abstract_supervisor* supervisor_;
+        executor::execution_device* executor_;
+    };
+} // namespace actor_zeta

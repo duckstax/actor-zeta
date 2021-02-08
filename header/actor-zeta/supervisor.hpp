@@ -52,6 +52,8 @@ namespace actor_zeta {
             return !ptr_;
         }
 
+        abstract_supervisor* get();
+
     private:
         void swap(supervisor&) noexcept;
 
