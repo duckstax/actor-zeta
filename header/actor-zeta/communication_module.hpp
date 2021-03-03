@@ -79,8 +79,6 @@ namespace actor_zeta {
 
         auto addresses(detail::string_view) -> address_t&;
 
-        ///auto self() -> address_t;
-
         template<class F>
         auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
             on(name, make_handler(std::forward<F>(f)));

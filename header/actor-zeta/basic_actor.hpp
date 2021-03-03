@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cooperative_actor.hpp>
+#include <actor-zeta/cooperative_actor.hpp>
 
 namespace actor_zeta {
 

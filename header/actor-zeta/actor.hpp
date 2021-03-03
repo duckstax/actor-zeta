@@ -31,16 +31,7 @@ namespace actor_zeta {
             class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
         actor(T* ptr)
             : ptr_(ptr) {}
-/*
-        template<
-            class T,
-            class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
-        actor& operator=(intrusive_ptr<T> ptr) {
-            actor tmp{std::move(ptr)};
-            swap(tmp);
-            return *this;
-        }
-*/
+
         template<
             class T,
             class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
@@ -65,8 +56,6 @@ namespace actor_zeta {
         inline abstract_actor* operator->() const noexcept {
             return ptr_.get();
         }
-
-
 
     private:
         std::unique_ptr<abstract_actor> ptr_;

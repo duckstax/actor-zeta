@@ -10,17 +10,15 @@
 
 namespace actor_zeta {
 
+    abstract_actor::~abstract_actor() {}
 
+    abstract_actor::abstract_actor(detail::string_view name) {
+        name_ = name;
+    }
 
-        abstract_actor::~abstract_actor() {}
-
-        abstract_actor::abstract_actor(detail::string_view name) {
-            name_=name;
-        }
-
-        address_t abstract_actor::address() const noexcept {
-            return address_t((abstract_supervisor*) this);
-        }
+    address_t abstract_actor::address() const noexcept {
+        return address_t((abstract_supervisor*) this);
+    }
 
     void abstract_actor::enqueue(message msg, executor::execution_device* ptr) {
         enqueue_base(std::move(msg), ptr);

@@ -27,5 +27,11 @@ namespace actor_zeta {
     void abstract_supervisor::enqueue(message msg) {
         enqueue(std::move(msg), nullptr);
     }
+    auto abstract_supervisor::address() -> address_t {
+        return address_t(this);
+    }
+    auto abstract_supervisor::name() -> detail::string_view {
+        return name_;
+    }
 
 } // namespace actor_zeta::base

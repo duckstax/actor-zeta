@@ -24,13 +24,9 @@ namespace actor_zeta {
 
         using communication_module::broadcast;
 
-        auto address() -> address_t {
-            return address_t(this);
-        }
+        auto address() -> address_t;
 
-        auto name() -> detail::string_view {
-            return name_;
-        }
+        auto name() -> detail::string_view;
 
         auto enqueue(message) -> void;
 

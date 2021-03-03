@@ -2,7 +2,6 @@
 
 namespace actor_zeta {
 
-
         class message;
 
         class abstract_actor;
