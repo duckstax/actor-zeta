@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-set(project communication)
+set(project message)
 
 if (CMAKE_VERSION VERSION_LESS 3.0)
     PROJECT(${project} CXX)

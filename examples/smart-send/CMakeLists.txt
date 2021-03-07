@@ -1,16 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
-set(project smart-send)
+project(smart-send)
 
-if (CMAKE_VERSION VERSION_LESS 3.0)
-    PROJECT(${project} CXX)
-else()
-    cmake_policy(SET CMP0048 NEW)
-    PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
-endif()
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS_} -O0 -g -fno-omit-frame-pointer -fsanitize=thread") #address")
 
-set(SOURCE_FILES main.cpp)
-
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+add_executable(${PROJECT_NAME} main.cpp)
 
 target_link_libraries(${PROJECT_NAME} actor-zeta testsuite)
