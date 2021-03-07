@@ -1,25 +1,22 @@
 #pragma once
 
-#include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/string_view.hpp>
+#include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace base {
 
-///
-/// @brief
-///
+    ///
+    /// @brief
+    ///
 
-  struct context {
+    struct context {
+        virtual ~context() = default;
 
-    virtual ~context() = default;
+        virtual auto addresses(detail::string_view) -> actor_address& = 0;
 
-    virtual auto addresses(detail::string_view) -> actor_address&  = 0;
+        virtual auto self() -> actor_address = 0;
 
-    virtual auto self() -> actor_address                           = 0;
+        virtual auto current_message() -> message* = 0;
+    };
 
-    virtual auto current_message() -> message*          = 0;
-
-  };
-
-} // namespace behavior
-} // namespace actor_zeta
+}} // namespace actor_zeta::base

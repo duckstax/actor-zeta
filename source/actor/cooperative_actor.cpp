@@ -66,7 +66,7 @@ namespace actor_zeta { namespace base {
         return executor::executable_result::awaiting;
     }
 
-    void cooperative_actor::enqueue(message_ptr msg, executor::execution_device* e) {
+    void cooperative_actor::enqueue_base(message_ptr msg, executor::execution_device* e) {
         assert(msg);
         mailbox().enqueue(msg.release());
         if (flags() == static_cast<int>(state::empty)) {
@@ -102,23 +102,22 @@ namespace actor_zeta { namespace base {
     }
 
     void cooperative_actor::intrusive_ptr_add_ref_impl() {
-        std::cerr << "size : " << mailbox().cache().count() << std::endl;
         flags(static_cast<int>(state::busy));
         mailbox().try_block();
         ref();
     }
 
     void cooperative_actor::intrusive_ptr_release_impl() {
-        std::cerr << "size : " << mailbox().cache().count() << std::endl;
         flags(static_cast<int>(state::empty));
         mailbox().try_unblock();
         deref();
     }
 
     cooperative_actor::cooperative_actor(
-        supervisor_t* env,
+        supervisor_t* supervisor,
         detail::string_view name)
-        : abstract_actor(env, name) {
+        : abstract_actor( name)
+        , supervisor_(supervisor)  {
         flags(static_cast<int>(state::empty));
         mailbox().try_unblock();
     }
@@ -186,6 +185,7 @@ namespace actor_zeta { namespace base {
         auto i = cache.continuation();
         auto e = cache.end();
         while (i != e) {
+            consume(*i);
             cache.erase(i);
             return true;
         }
@@ -197,5 +197,19 @@ namespace actor_zeta { namespace base {
     auto cooperative_actor::current_message() -> message* {
         return current_message_;
     }
+
+        executor::execution_device *cooperative_actor::context() const {
+            return executor_;
+        }
+
+        void cooperative_actor::context(executor::execution_device *e) {
+            if (e!= nullptr) {
+                executor_ = e;
+            }
+        }
+
+        auto cooperative_actor::supervisor() -> supervisor_t* {
+            return supervisor_;
+        }
 
 }} // namespace actor_zeta::base

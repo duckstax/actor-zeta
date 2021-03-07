@@ -69,7 +69,7 @@ public:
         return address;
     }
 
-    auto enqueue(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_base(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
         auto msg_ = std::move(msg);
         auto it = system_.find(msg_->command());
         if (it != system_.end()) {
@@ -142,16 +142,19 @@ public:
     }
 
     void download(download_data& data) {
+        tmp_ = data.url_;
         counter_download_data++;
     }
 
     void work_data(work_data& data) {
+        tmp_ = data.data_;
         counter_work_data++;
     }
 
     ~worker_t() override = default;
 
 private:
+    std::string tmp_;
 };
 
 using namespace std::chrono_literals;
@@ -181,17 +184,12 @@ int main() {
         make_task_broadcast<work_data>(supervisor.get(), "work_data", std::string("fb"), std::string("jack"));
     }
 
-    for (; counter_work_data.load() <= task-1 && counter_download_data.load() <= task-1;) {
-        std::this_thread::sleep_for(250ms);
-        auto i =  counter_download_data.load() ;
-        auto j =  counter_work_data.load() ;
-        ///std::cerr << "counter_download_data :" << counter_download_data.load() << std::endl;
-        ///std::cerr << "counter_work_data :" << counter_work_data.load() << std::endl;
-    }
+    std::this_thread::sleep_for(180s);
 
     std::cerr << " Finish " << std::endl;
     std::cerr << "counter_download_data :" << counter_download_data.load() << std::endl;
     std::cerr << "counter_work_data :" << counter_work_data.load() << std::endl;
-
+    assert(counter_download_data.load() == 9999);
+    assert(counter_work_data.load() == 9999);
     return 0;
 }

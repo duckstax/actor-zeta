@@ -6,106 +6,105 @@
 #include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace base {
-///
-/// @brief Specialization of actor with scheduling functionality
-///
+    ///
+    /// @brief Specialization of actor with scheduling functionality
+    ///
 
-        class cooperative_actor
-                : public abstract_actor
-                , public executor::executable
-                {
-        public:
+    using max_throughput_t = std::size_t;
 
-            using mailbox_t = detail::single_reader_queue<message>;
+    class cooperative_actor
+        : public abstract_actor
+        , public executor::executable {
+    public:
+        using mailbox_t = detail::single_reader_queue<message>;
 
-            using communication_module::enqueue;
+        executor::executable_result run(executor::execution_device*, max_throughput_t) final;
 
-            void enqueue(message_ptr, executor::execution_device *) final;
+        ~cooperative_actor() override;
 
-            ///TODO:
-            //void launch(executor::execution_device *, bool /*hide*/) final;
+        void intrusive_ptr_add_ref_impl() override;
 
-            executor::executable_result run(executor::execution_device *, size_t max_throughput) final;
+        void intrusive_ptr_release_impl() override;
 
-            ~cooperative_actor() override;
+    protected:
+        cooperative_actor(supervisor_t*, detail::string_view);
 
-            void intrusive_ptr_add_ref_impl() override;
+        void enqueue_base(message_ptr, executor::execution_device*) final;
 
-            void intrusive_ptr_release_impl() override;
+        inline void setf(int flag) {
+            auto x = flags();
+            flags(x | flag);
+        }
 
-        protected:
-            cooperative_actor(supervisor_t *, detail::string_view);
+        inline void unsetf(int flag) {
+            auto x = flags();
+            flags(x & ~flag);
+        }
 
+        inline bool getf(int flag) const {
+            return (flags() & flag) != 0;
+        }
 
-            inline void setf(int flag) {
-                auto x = flags();
-                flags(x | flag);
-            }
+        inline int flags() const {
+            return flags_.load(std::memory_order_relaxed);
+        }
 
-            inline void unsetf(int flag) {
-                auto x = flags();
-                flags(x & ~flag);
-            }
+        inline void flags(int new_value) {
+            flags_.store(new_value, std::memory_order_relaxed);
+        }
 
-            inline bool getf(int flag) const {
-                return (flags() & flag) != 0;
-            }
-
-            inline int flags() const {
-                return flags_.load(std::memory_order_relaxed);
-            }
-
-            inline void flags(int new_value) {
-                flags_.store(new_value, std::memory_order_relaxed);
-            }
-
-        private:
-
-            enum class state : int {
-                empty = 0x01,
-                busy
-            };
-
-            void cleanup();
-
-            bool consume_from_cache();
-
-            void consume(message& );
-
-
-// message processing -----------------------------------------------------
-
-            inline mailbox_t & mailbox() {
-                return mailbox_;
-            }
-
-            bool activate(executor::execution_device * ctx);
-
-            auto reactivate(message& x) -> void ;
-
-            message_ptr next_message();
-
-            bool has_next_message();
-
-            void push_to_cache(message_ptr ptr);
-
-            auto current_message() -> message*;
-
-// ----------------------------------------------------- message processing
-            message* current_message_;
-            mailbox_t mailbox_;
-            std::atomic<int> flags_;
+    private:
+        enum class state : int {
+            empty = 0x01,
+            busy
         };
 
-        template<class T>
-        auto intrusive_ptr_add_ref(T *ptr) -> typename std::enable_if<std::is_same<T *, cooperative_actor *>::value>::type {
-            ptr->intrusive_ptr_add_ref_impl();
+        void cleanup();
+
+        bool consume_from_cache();
+
+        void consume(message&);
+
+        // message processing -----------------------------------------------------
+
+        inline mailbox_t& mailbox() {
+            return mailbox_;
         }
 
-        template<class T>
-        auto intrusive_ptr_release(T *ptr) -> typename std::enable_if<std::is_same<T *, cooperative_actor *>::value>::type {
-            ptr->intrusive_ptr_release_impl();
-        }
+        bool activate(executor::execution_device* ctx);
 
+        auto reactivate(message& x) -> void;
 
-}}
+        message_ptr next_message();
+
+        bool has_next_message();
+
+        void push_to_cache(message_ptr ptr);
+
+        auto current_message() -> message*;
+
+        auto context(executor::execution_device*) -> void;
+
+        auto context() const -> executor::execution_device*;
+
+        auto supervisor() -> supervisor_t*;
+
+        // ----------------------------------------------------- message processing
+        supervisor_t* supervisor_;
+        executor::execution_device* executor_;
+        message* current_message_;
+        mailbox_t mailbox_;
+        std::atomic<int> flags_;
+    };
+
+    template<class T>
+    auto intrusive_ptr_add_ref(T* ptr) -> typename std::enable_if<std::is_same<T*, cooperative_actor*>::value>::type {
+        ptr->intrusive_ptr_add_ref_impl();
+    }
+
+    template<class T>
+    auto intrusive_ptr_release(T* ptr) -> typename std::enable_if<std::is_same<T*, cooperative_actor*>::value>::type {
+        ptr->intrusive_ptr_release_impl();
+    }
+
+}} // namespace actor_zeta::base

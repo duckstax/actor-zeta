@@ -15,26 +15,9 @@ namespace actor_zeta { namespace base {
 
         }
 
-        abstract_actor::abstract_actor(
-                supervisor_t *env,
-                detail::string_view name
-        )
-                : communication_module(name, abstract::actor)
-                , supervisor_(env){
-        }
-
-        executor::execution_device *abstract_actor::context() const {
-            return executor_;
-        }
-
-        void abstract_actor::context(executor::execution_device *e) {
-            if (e!= nullptr) {
-                executor_ = e;
-            }
-        }
-
-        auto abstract_actor::supervisor() -> supervisor_t* {
-            return supervisor_;
+        abstract_actor::abstract_actor(detail::string_view type)
+                : communication_module(type, sub_type_t::actor)
+                {
         }
 
 

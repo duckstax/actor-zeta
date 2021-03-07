@@ -1,7 +1,7 @@
 #pragma once
 
-#include <actor-zeta/forwards.hpp>
 #include <actor-zeta/base/communication_module.hpp>
+#include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace base {
 
@@ -19,10 +19,10 @@ namespace actor_zeta { namespace base {
 
     protected:
         auto set_current_message(message_ptr) -> void;
-        auto current_message  () -> message* final;
+        auto current_message() -> message* final;
+
     private:
         message* current_message_;
-
     };
 
-}}
+}} // namespace actor_zeta::base

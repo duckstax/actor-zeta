@@ -14,8 +14,8 @@ namespace actor_zeta { namespace base {
             return ptr_->address();
         }
 
-        detail::string_view actor::name() const {
-            return ptr_->name();
+        detail::string_view actor::type() const {
+            return ptr_->type();
         }
 
         void actor::swap(actor &other) noexcept {
