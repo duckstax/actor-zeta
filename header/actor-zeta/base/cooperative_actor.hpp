@@ -34,7 +34,7 @@ namespace actor_zeta { namespace base {
             void intrusive_ptr_release_impl() override;
 
         protected:
-            cooperative_actor(supervisor &, detail::string_view);
+            cooperative_actor(supervisor_t *, detail::string_view);
 
 
             inline void setf(int flag) {

@@ -7,15 +7,15 @@
 
 namespace actor_zeta { namespace base {
 
-        supervisor::supervisor(detail::string_view name): communication_module(name, abstract::supervisor){}
+        supervisor_t::supervisor_t(detail::string_view name): communication_module(name, abstract::supervisor){}
 
-        supervisor::~supervisor() {}
+        supervisor_t::~supervisor_t() {}
 
-        auto supervisor::current_message() -> message* {
+        auto supervisor_t::current_message() -> message* {
             return current_message_;
         }
 
-        auto supervisor::set_current_message(message_ptr msg) -> void  {
+        auto supervisor_t::set_current_message(message_ptr msg) -> void  {
             current_message_ = msg.release();
         }
 

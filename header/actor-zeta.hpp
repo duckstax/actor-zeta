@@ -22,7 +22,7 @@ namespace actor_zeta {
     using base::basic_async_actor;
     using base::context;
     using base::make_handler;
-    using base::supervisor;
+    using base::supervisor_t;
 
     using executor::abstract_executor;
     using executor::executable;
@@ -51,8 +51,8 @@ namespace actor_zeta {
         typename Actor,
         typename Supervisor,
         typename... Args>
-    auto join(Supervisor& supervisor, Args&&... args) -> actor_zeta::actor_address {
-        return supervisor.join(new Actor(supervisor, std::forward<Args>(args)...));
+    auto join(Supervisor* supervisor, Args&&... args) -> actor_zeta::actor_address {
+        return supervisor->join(new Actor(supervisor, std::forward<Args>(args)...));
     }
 
     template<typename Sender, typename... Args>
