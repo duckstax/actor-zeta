@@ -150,17 +150,11 @@ public:
     }
 
     void download(download_data &data){
-        std::cerr << "url : " << data.url_ << std::endl;
-        std::cerr << "user : " << data.user_ << std::endl;
-        std::cerr << "password : " << data.passwod_ << std::endl;
-        ++counter_download_data;
+        counter_download_data++;
     }
 
     void work_data(work_data & data) {
-
-        std::cerr << "data_ : " << data.data_ << std::endl;
-        std::cerr << "operator_name : " << data.operator_name_ << std::endl;
-        ++counter_work_data;
+        counter_work_data++;
     }
 
     ~worker_t() override = default;
@@ -177,29 +171,34 @@ int main() {
 
     supervisor->startup();
 
-    int const actors = 10;
+   /// int const actors = 10;
 
-    for (auto i = actors - 1; i > 0; --i) {
-        auto bot = join<worker_t>(*supervisor);
-        actor_zeta::link(*supervisor, bot);
-    }
+    ///for (auto i = actors - 1; i > 0; --i) {
+    ///    auto bot = join<worker_t>(*supervisor);
+    ///    actor_zeta::link(*supervisor, bot);
+    ///}
+
+    auto bot = join<worker_t>(*supervisor);
+    actor_zeta::link(*supervisor, bot);
 
     int const task = 10000;
 
     for (auto i = task - 1; i > 0; --i) {
-        make_task<download_data>(*supervisor,"download", "fb", "jack","1");
+        make_task<download_data>(*supervisor,"download", std::string("fb"), std::string("jack"),std::string("1"));
     }
 
     for (auto i = task - 1; i > 0; --i) {
-        make_task_broadcast<work_data>(*supervisor,"work_data", "fb", "jack");
+        make_task_broadcast<work_data>(*supervisor,"work_data", std::string("fb"), std::string("jack"));
     }
 
-    for(;counter_work_data == task &&counter_download_data == task ;) {
+    for(;counter_work_data.load() <=task &&counter_download_data.load() <= task ;) {
         std::this_thread::sleep_for(250ms);
-        std::cerr << counter_work_data << std::endl;
-        std::this_thread::sleep_for(250ms);
+        std::cerr << "counter_work_data :" << counter_work_data.load() << std::endl;
+        std::cerr <<"counter_download_data :" <<counter_download_data.load() << std::endl;
     }
 
     std::this_thread::sleep_for(60s);
+    std::cerr << counter_work_data.load() << std::endl;
+    std::cerr << counter_download_data.load() << std::endl;
     return 0;
 }

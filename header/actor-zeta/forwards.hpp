@@ -4,11 +4,10 @@ namespace actor_zeta {
 
     namespace base {
         class message;
-        class message_header;
-        class  abstract_actor;
-        class  actor;
-        class  actor_address;
-        class  handler;
+        class abstract_actor;
+        class actor;
+        class actor_address;
+        class handler;
         struct context;
         class supervisor;
         class communication_module;

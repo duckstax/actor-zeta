@@ -108,7 +108,6 @@ set(HEADER_FILES
         header/actor-zeta/executor/worker.hpp
 
         header/actor-zeta/base/message.hpp
-        header/actor-zeta/base/message_header.hpp
 
         header/actor-zeta/forwards.hpp
         header/actor-zeta.hpp
@@ -133,7 +132,6 @@ set(SOURCE_FILES
 
 
         source/messaging/message.cpp
-        source/messaging/message_header.cpp
 )
 
 

@@ -19,8 +19,7 @@ namespace actor_zeta { namespace base {
             std::cerr << " WARNING " << std::endl;
         }
 
-        executor::executable_result cooperative_actor::run(executor::execution_device *e, size_t max_throughput) {
-
+        executor::executable_result cooperative_actor::run(executor::execution_device* e, size_t max_throughput) {
             if (!activate(e)) {
                 return executor::executable_result::done;
             }
@@ -37,24 +36,14 @@ namespace actor_zeta { namespace base {
                         }
                     }
                 } while (!ptr);
-                switch (reactivate(*ptr)) {
-                    case activation_result::terminated:
-                        return executor::executable_result::done;
-                    case activation_result::success:
-                        ++handled_msgs;
-                        // iterate cache to see if we are now able
-                        // to process previously skipped messages
-                        while (consume_from_cache()) {
-                            ++handled_msgs;
-
-                        }
-                        break;
-                    case activation_result::skipped:
-                        push_to_cache(std::move(ptr));
-                        break;
-                    default:
-                        break;
+                reactivate(*ptr);
+                ++handled_msgs;
+                // iterate cache to see if we are now able
+                // to process previously skipped messages
+                while (consume_from_cache()) {
+                    ++handled_msgs;
                 }
+                break;
             }
 
             if (!has_next_message() && mailbox().try_block()) {
@@ -78,8 +67,7 @@ namespace actor_zeta { namespace base {
             }
 
             /*
-            auto state =
-            switch (state) {
+            switch ( mailbox().enqueue(msg.release())) {
                 case detail::enqueue_result::unblocked_reader: {
                     intrusive_ptr_add_ref(this);
                     if (e != nullptr) {
@@ -135,7 +123,7 @@ namespace actor_zeta { namespace base {
             return true;
         }
 
-        auto cooperative_actor::reactivate(message& x) -> activation_result {
+        auto cooperative_actor::reactivate(message& x) -> void {
                 consume(x);
         }
 
@@ -189,7 +177,7 @@ void cooperative_actor::push_to_cache(message_ptr ptr) {
     cache.insert(std::partition_point(cache.continuation(),e, high_prio),ptr.release());
 }
 
-invoke_message_result cooperative_actor::consume(message& x) {
+void cooperative_actor::consume(message& x) {
     current_message_ = &x;
     execute(*this);
 
@@ -199,21 +187,18 @@ bool cooperative_actor::consume_from_cache() {
     auto& cache = mailbox().cache();
     auto i = cache.continuation();
     auto e = cache.end();
-    while (i != e)
-        switch (consume(*i)) {
-            case im_success:
-                cache.erase(i);
-                return true;
-            case im_skipped:
-                ++i;
-                break;
-            case im_dropped:
-                i = cache.erase(i);
-                break;
-        }
+    while (i != e) {
+        cache.erase(i);
+        return true;
+    }
     return false;
 }
+
 void cooperative_actor::cleanup() {}
+
+auto cooperative_actor::current_message() -> message* {
+    return current_message_;
+}
 
 }}
 

@@ -2,7 +2,6 @@
 
 #include <cassert>
 
-#include <actor-zeta/base/message_header.hpp>
 #include <actor-zeta/detail/any.hpp>
 #include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
@@ -64,14 +63,13 @@ namespace actor_zeta { namespace base {
 
             void swap(message& other) noexcept;
 
-            bool is_high_priority() const {
-                return false;
-            }
+            bool is_high_priority() const;
 
         private:
-            message(const message_header &header, const detail::any &body);
 
-            message_header header_;
+            base::actor_address sender_;
+
+            std::string command_;
 
             detail::any  body_;
 
