@@ -18,8 +18,8 @@ namespace actor_zeta { namespace base {
         using communication_module::broadcast;
 
     protected:
-        auto set_current_message(message_ptr) -> void;
-        auto current_message() -> message* final;
+        auto current_message(message_ptr) -> void;
+        auto current_message_impl() -> message* final;
 
     private:
         message* current_message_;

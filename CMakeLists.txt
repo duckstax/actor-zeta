@@ -73,7 +73,6 @@ endif()
 
 include(cmake/clang_tools.cmake)
 
-
 include_directories(SYSTEM .)
 include_directories(SYSTEM header)
 
@@ -84,9 +83,7 @@ set(HEADER_FILES
         header/actor-zeta/base/cooperative_actor.hpp
         header/actor-zeta/base/basic_actor.hpp
         header/actor-zeta/base/communication_module.hpp
-        header/actor-zeta/base/context.hpp
         header/actor-zeta/base/handler.hpp
-        header/actor-zeta/base/metadata.hpp
         header/actor-zeta/base/supervisor.hpp
 
         header/actor-zeta/detail/any.hpp
@@ -143,6 +140,8 @@ endif(CCACHE_FOUND)
 
 
 find_package( Threads )
+
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS_} -O0 -g -fno-omit-frame-pointer -fsanitize=thread")
 
 add_library(
         ${PROJECT_NAME}

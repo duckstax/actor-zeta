@@ -10,7 +10,6 @@ namespace actor_zeta { namespace base {
     /// @brief Specialization of actor with scheduling functionality
     ///
 
-    using max_throughput_t = std::size_t;
 
     class cooperative_actor
         : public abstract_actor
@@ -30,20 +29,6 @@ namespace actor_zeta { namespace base {
         cooperative_actor(supervisor_t*, detail::string_view);
 
         void enqueue_base(message_ptr, executor::execution_device*) final;
-
-        inline void setf(int flag) {
-            auto x = flags();
-            flags(x | flag);
-        }
-
-        inline void unsetf(int flag) {
-            auto x = flags();
-            flags(x & ~flag);
-        }
-
-        inline bool getf(int flag) const {
-            return (flags() & flag) != 0;
-        }
 
         inline int flags() const {
             return flags_.load(std::memory_order_relaxed);
@@ -81,7 +66,7 @@ namespace actor_zeta { namespace base {
 
         void push_to_cache(message_ptr ptr);
 
-        auto current_message() -> message*;
+        auto current_message_impl() -> message*;
 
         auto context(executor::execution_device*) -> void;
 

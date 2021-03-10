@@ -1,15 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 
-set(project communication)
-
-if (CMAKE_VERSION VERSION_LESS 3.0)
-    PROJECT(${project} CXX)
-else()
-    cmake_policy(SET CMP0048 NEW)
-    PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
-endif()
+PROJECT(communication CXX)
 
 set(SOURCE_FILES main.cpp)
+
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS_} -O0 -g -fno-omit-frame-pointer -fsanitize=thread")
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 

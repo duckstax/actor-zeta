@@ -4,8 +4,7 @@
 #include <set>
 #include <unordered_map>
 
-#include <actor-zeta/base/context.hpp>
-#include <actor-zeta/base/metadata.hpp>
+#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/forwards.hpp>
@@ -14,9 +13,15 @@ namespace actor_zeta { namespace base {
 
     using message_ptr = std::unique_ptr<message>;
 
-    class communication_module
-        : public ref_counted
-        , public context {
+    using actor_id = std::size_t;
+
+    enum class sub_type_t : uint8_t {
+        non = 0x00,
+        actor,
+        supervisor
+    };
+
+    class communication_module : public ref_counted{
     public:
         using key_type = detail::string_view;
         using storage = std::unordered_map<key_type, std::unique_ptr<handler>>;
@@ -43,14 +48,18 @@ namespace actor_zeta { namespace base {
 
         auto broadcast(message_ptr) -> bool;
 
+        auto current_message() -> message*;
+
     protected:
         communication_module(detail::string_view, sub_type_t);
 
         virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
 
-        auto addresses(detail::string_view) -> actor_address& override;
+        virtual auto current_message_impl() -> message*  = 0;
 
-        auto self() -> actor_address override;
+        auto addresses(detail::string_view) -> actor_address& ;
+
+        auto self() -> actor_address ;
 
         template<class F>
         auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
@@ -62,7 +71,7 @@ namespace actor_zeta { namespace base {
             on(name, make_handler(std::forward<F>(f), static_cast<typename type_traits::get_callable_trait_t<F>::class_type*>(this)));
         }
 
-        void execute(context&);
+        void execute();
 
         bool on(detail::string_view, handler*);
 
@@ -80,6 +89,8 @@ namespace actor_zeta { namespace base {
 
         std::unique_ptr<std::unordered_map<detail::string_view, actor_address>> contacts_;
         storage handlers_;
-        metadata type_;
+        actor_id id_;
+        detail::string_view type_;
+        sub_type_t sub_type_;
     };
 }} // namespace actor_zeta::base

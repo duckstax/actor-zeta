@@ -7,21 +7,13 @@
 #include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace executor {
-///
-/// @brief
-///
 
-///
-/// @enum
-/// @brief
-///
         enum class executable_result : uint8_t {
             resume,
             awaiting,
             done,
             shutdown
         };
-
 
         struct executable {
 
@@ -33,7 +25,7 @@ namespace actor_zeta { namespace executor {
 
             virtual void intrusive_ptr_release_impl() = 0;
 
-            virtual auto run(execution_device *, size_t max_throughput) -> executable_result = 0;
+            virtual auto run(execution_device *, max_throughput_t ) -> executable_result = 0;
         };
 
         template<class T>

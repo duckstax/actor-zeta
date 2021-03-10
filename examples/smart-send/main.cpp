@@ -12,7 +12,6 @@
 
 using actor_zeta::abstract_executor;
 using actor_zeta::basic_async_actor;
-using actor_zeta::context;
 using actor_zeta::join;
 using actor_zeta::supervisor_t;
 
@@ -81,8 +80,8 @@ public:
 
 private:
     auto local(actor_zeta::message_ptr msg) -> void {
-        set_current_message(std::move(msg));
-        execute(*this);
+        current_message(std::move(msg));
+        execute();
     }
 
     auto redirect_robin(actor_zeta::message_ptr msg) -> void {

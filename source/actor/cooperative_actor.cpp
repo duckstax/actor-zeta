@@ -2,7 +2,6 @@
 #include <iostream>
 
 // clang-format off
-#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/base/message.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
@@ -78,27 +77,6 @@ namespace actor_zeta { namespace base {
                 supervisor()->executor()->execute(this);
             }
         }
-
-        /*
-            switch ( mailbox().enqueue(msg.release())) {
-                case detail::enqueue_result::unblocked_reader: {
-                    intrusive_ptr_add_ref(this);
-                    if (e != nullptr) {
-                        context(e);
-                        context()->execute(this);
-                    } else {
-                        env().executor().execute(this);
-                    }
-                    break;
-                }
-                case detail::enqueue_result::queue_closed: {
-                    assert(false);
-                    break;
-                }
-                case detail::enqueue_result::success:
-                    break;
-            }
-             */
     }
 
     void cooperative_actor::intrusive_ptr_add_ref_impl() {
@@ -116,8 +94,9 @@ namespace actor_zeta { namespace base {
     cooperative_actor::cooperative_actor(
         supervisor_t* supervisor,
         detail::string_view name)
-        : abstract_actor( name)
-        , supervisor_(supervisor)  {
+        : abstract_actor(name)
+        , supervisor_(supervisor) {
+        assert(supervisor != nullptr);
         flags(static_cast<int>(state::empty));
         mailbox().try_unblock();
     }
@@ -140,7 +119,7 @@ namespace actor_zeta { namespace base {
         auto e = cache.separator();
         if (i == e || !i->is_high_priority()) {
             auto hp_pos = i;
-            auto tmp = mailbox().try_pop();
+            auto* tmp = mailbox().try_pop();
             while (tmp != nullptr) {
                 cache.insert(tmp->is_high_priority() ? hp_pos : e, tmp);
                 if (hp_pos == e && !tmp->is_high_priority())
@@ -177,7 +156,7 @@ namespace actor_zeta { namespace base {
 
     void cooperative_actor::consume(message& x) {
         current_message_ = &x;
-        execute(*this);
+        execute();
     }
 
     bool cooperative_actor::consume_from_cache() {
@@ -194,22 +173,20 @@ namespace actor_zeta { namespace base {
 
     void cooperative_actor::cleanup() {}
 
-    auto cooperative_actor::current_message() -> message* {
+    auto cooperative_actor::current_message_impl() -> message* {
         return current_message_;
     }
 
-        executor::execution_device *cooperative_actor::context() const {
-            return executor_;
-        }
+    executor::execution_device* cooperative_actor::context() const {
+        return executor_;
+    }
 
-        void cooperative_actor::context(executor::execution_device *e) {
-            if (e!= nullptr) {
-                executor_ = e;
-            }
-        }
+    void cooperative_actor::context(executor::execution_device* e) {
+        executor_ = e;
+    }
 
-        auto cooperative_actor::supervisor() -> supervisor_t* {
-            return supervisor_;
-        }
+    auto cooperative_actor::supervisor() -> supervisor_t* {
+        return supervisor_;
+    }
 
 }} // namespace actor_zeta::base

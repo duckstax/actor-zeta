@@ -5,12 +5,11 @@
 #include <vector>
 #include <iostream>
 
-#include <actor-zeta/core.hpp>
+#include <actor-zeta.hpp>
 #include <testsuite/network/fake_multiplexer.hpp>
 
 using actor_zeta::basic_async_actor;
-using actor_zeta::supervisor;
-using actor_zeta::context;
+using actor_zeta::supervisor_t;
 using actor_zeta::actor_address;
 using actor_zeta::join;
 
@@ -34,16 +33,16 @@ struct response_t final {
     buffer r_;
 };
 
-class supervisor_network final : public supervisor {
+class supervisor_network final : public supervisor_t {
 public:
     supervisor_network(fake_multiplexer&multiplexer,abstract_executor* ptr)
-            : supervisor(actor_zeta::detail::string_view("network"))
+            : supervisor_t(actor_zeta::detail::string_view("network"))
             , multiplexer_(multiplexer)
             , e_(ptr)
     {
         add_handler(
                 "write",
-                [this](context & /*ctx*/, response_t & response) -> void {
+                [this](response_t & response) -> void {
                     std::cerr << "Operation:" << "write" << std::endl;
                     multiplexer_.write(response.id,response.r_);
                 }
@@ -51,7 +50,7 @@ public:
 
         add_handler(
                 "read",
-                [this](context & ctx, query_raw_t &query_raw) -> void {
+                [this](query_raw_t &query_raw) -> void {
                     std::cerr << "Operation:" << "read" << std::endl;
                     auto raw = query_raw.raw;
                     std::vector<buffer> parsed_raw_request;
@@ -71,7 +70,7 @@ public:
                     query_.parameter = std::move(parsed_raw_request);
                     query_.id = query_raw.id;
                     actor_zeta::send(
-                            ctx.addresses("storage"),
+                            addresses("storage"),
                             actor_zeta::actor_address(address()),
                             std::string(query_.commands),
                             std::move(query_)
@@ -81,7 +80,7 @@ public:
 
         add_handler(
                 "close",
-                [this](context & /*ctx*/, response_t &response) -> void {
+                [this]( response_t &response) -> void {
                     std::cerr << "Operation:" << "close" << std::endl;
                     multiplexer_.close(response.id);
                 }
@@ -102,7 +101,7 @@ public:
         e_->start();
     }
 
-    auto executor() noexcept -> actor_zeta::abstract_executor& final { return *e_;}
+    auto executor() noexcept -> actor_zeta::abstract_executor* final { return e_;}
 
     auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
         auto tmp = std::move(t);
@@ -111,9 +110,9 @@ public:
         return address;
     }
 
-    auto enqueue(actor_zeta::message msg,actor_zeta::execution_device *) -> void final {
-        set_current_message(std::move(msg));
-        dispatch().execute(*this);
+    auto enqueue_base(actor_zeta::message_ptr msg,actor_zeta::execution_device *) -> void final {
+        current_message(std::move(msg));
+        execute();
     }
 
 
@@ -131,11 +130,11 @@ constexpr static const char* write = "write";
 
 class storage_t final : public basic_async_actor {
 public:
-    explicit storage_t(supervisor_network&ref): basic_async_actor(ref,"storage"){
+    explicit storage_t(supervisor_network*ptr): basic_async_actor(ptr,"storage"){
         auto* self = this;
         add_handler(
                 "update",
-                [this, self](context &ctx, query_t &tmp) -> void {
+                [this, self](query_t &tmp) -> void {
                     std::cerr << "Operation:" << "update" <<std::endl;
                     auto status = update(tmp.parameter[0], tmp.parameter[1]);
                     assert(in("1qaz"));
@@ -144,7 +143,7 @@ public:
                     response.r_ = std::to_string(static_cast<int>(status));
                     response.id = tmp.id;
                     actor_zeta::send(
-                            ctx.current_message().sender(),
+                            current_message()->sender(),
                             actor_address(self),
                             write,
                             std::move(response)
@@ -219,7 +218,7 @@ int main() {
 
     std::unique_ptr<supervisor_network>supervisor( new supervisor_network(*multiplexer,thread_pool.get()));
 
-    auto storage = join<storage_t>(*supervisor);
+    auto storage = join<storage_t>(supervisor.get());
 
     actor_zeta::link(*supervisor,storage);
 

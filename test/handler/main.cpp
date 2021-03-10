@@ -1,11 +1,11 @@
 #include <iostream>
 
-#include <actor-zeta/core.hpp>
+#include <actor-zeta.hpp>
 
 using actor_zeta::basic_async_actor;
 using actor_zeta::send;
 using actor_zeta::abstract_executor;
-using actor_zeta::supervisor;
+using actor_zeta::supervisor_t;
 using actor_zeta::message;
 using actor_zeta::execution_device;
 
@@ -23,22 +23,22 @@ public:
 };
 
 
-class dummy_supervisor final : public supervisor {
+class dummy_supervisor final : public supervisor_t {
 public:
 
     explicit dummy_supervisor(actor_zeta::abstract_executor *ptr)
-            : supervisor("dummy_supervisor"), ptr_(ptr) {
+            : supervisor_t("dummy_supervisor"), ptr_(ptr) {
     }
 
-    auto executor() noexcept -> actor_zeta::abstract_executor & override {
-        return *ptr_;
+    auto executor() noexcept -> actor_zeta::abstract_executor * override {
+        return ptr_;
     }
 
     auto join(actor_zeta::actor ) -> actor_zeta::actor_address override {
         return actor_zeta::actor_address();
     }
 
-    void enqueue(message, execution_device *) override {
+    void enqueue_base(actor_zeta::message_ptr, execution_device *) override {
 
     }
 
@@ -49,7 +49,7 @@ private:
 
 class storage_t final : public basic_async_actor {
 public:
-    explicit storage_t(dummy_supervisor &ref) : basic_async_actor(ref, "storage") {
+    explicit storage_t(dummy_supervisor *ptr) : basic_async_actor(ptr, "storage") {
 
         add_handler(
                 "init",
@@ -119,7 +119,7 @@ private:
 
 class test_handlers final : public basic_async_actor {
 public:
-    test_handlers(dummy_supervisor &ref) : basic_async_actor(ref, "test_handlers") {
+    test_handlers(dummy_supervisor *ptr) : basic_async_actor(ptr, "test_handlers") {
         add_handler(
                 "ptr_0",
                 []() {
@@ -129,30 +129,23 @@ public:
 
         add_handler(
                 "ptr_1",
-                [](test_handlers &handler) {
-                    handler.init();
-                    std::cerr << "ptr_1" << std::endl;
-                }
-        );
-        add_handler(
-                "ptr_2",
-                [](test_handlers &handler, int &data) {
-                    handler.init();
+                [this](int &data) {
+                    init();
                     std::cerr << "ptr_2 :" << data << std::endl;
                 }
         );
         add_handler(
-                "ptr_3",
-                [](test_handlers &handler, int data_1, int &data_2) {
-                    handler.init();
+                "ptr_2",
+                [this](int& data_1, int &data_2) {
+                    init();
                     std::cerr << "ptr_3 : " << data_1 << " : " << data_2 << std::endl;
                 }
         );
 
         add_handler(
-                "ptr_4",
-                [](test_handlers & handler, int data_1, int &data_2, const std::string &data_3) {
-                    handler.init();
+                "ptr_3",
+                [this](int data_1, int &data_2, const std::string &data_3) {
+                    init();
                     std::cerr << "ptr_4 : " << data_1 << " : " << data_2 << " : " << data_3 << std::endl;
                 }
         );
@@ -171,14 +164,13 @@ int main() {
 
     std::unique_ptr<dummy_supervisor> supervisor(new dummy_supervisor(new dummy_executor));
 
-    std::unique_ptr<test_handlers> test_handlers_(new test_handlers(*supervisor));
+    std::unique_ptr<test_handlers> test_handlers_(new test_handlers(supervisor.get()));
     send(test_handlers_, actor_zeta::actor_address(), "ptr_0");
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_1");
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_2", 1);
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_3", 1, 2);
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_4", 1, 2, std::string("test"));
+    send(test_handlers_, actor_zeta::actor_address(), "ptr_1", 1);
+    send(test_handlers_, actor_zeta::actor_address(), "ptr_2", 1, 2);
+    send(test_handlers_, actor_zeta::actor_address(), "ptr_3", 1, 2, std::string("test"));
 
-    std::unique_ptr<storage_t> storage(new storage_t(*supervisor));
+    std::unique_ptr<storage_t> storage(new storage_t(supervisor.get()));
 
     send(storage, actor_zeta::actor_address(), "init");
     send(storage, actor_zeta::actor_address(), "search", std::string("key_1"));

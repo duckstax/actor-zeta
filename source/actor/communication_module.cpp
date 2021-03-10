@@ -1,7 +1,6 @@
 #include <iostream>
 
 // clang-format off
-#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/base/message.hpp>
@@ -35,12 +34,12 @@ namespace actor_zeta { namespace base {
         std::cerr << "WARNING" << std::endl;
     }
 
-    void communication_module::execute(context& ctx) {
-        auto it = handlers_.find(ctx.current_message()->command());
+    void communication_module::execute() {
+        auto it = handlers_.find(current_message()->command());
         if (it != handlers_.end()) {
-            return it->second->invoke(ctx);
+            return it->second->invoke(this);
         } else {
-            error_skip(ctx.current_message()->command());
+            error_skip(current_message()->command());
         }
     }
 
@@ -88,18 +87,20 @@ namespace actor_zeta { namespace base {
     }
 
     auto communication_module::sub_type() const -> sub_type_t {
-        return type_.sub_type_;
+        return sub_type_;
     }
 
     auto communication_module::type() const -> detail::string_view {
-        return type_.type_;
+        return type_;
     }
 
     communication_module::~communication_module() {}
 
     communication_module::communication_module(detail::string_view name, sub_type_t type)
         : contacts_(new std::unordered_map<detail::string_view, actor_address>)
-        , type_{0, type, name} {
+        , id_(0)
+        , type_(name)
+        , sub_type_(type) {
         initialize();
     }
 
@@ -145,6 +146,9 @@ namespace actor_zeta { namespace base {
 
     void communication_module::enqueue(message_ptr msg, executor::execution_device* e) {
         enqueue_base(std::move(msg), e);
+    }
+    auto communication_module::current_message() -> message* {
+        return current_message_impl();
     }
 
 }} // namespace actor_zeta::base

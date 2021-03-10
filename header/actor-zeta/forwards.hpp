@@ -1,6 +1,10 @@
 #pragma once
 
+#include <cstddef>
+
 namespace actor_zeta {
+
+    using max_throughput_t = std::size_t;
 
     namespace base {
         class message;
@@ -8,7 +12,6 @@ namespace actor_zeta {
         class actor;
         class actor_address;
         class handler;
-        struct context;
         class supervisor_t;
         class communication_module;
         class dispatcher_t;
