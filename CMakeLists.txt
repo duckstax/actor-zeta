@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 PROJECT(actor-zeta CXX)
 
-set(CMAKE_CXX_STANDARD 14 CACHE STRING "The C++ standard whose features are requested." )
+set(CMAKE_CXX_STANDARD 11 CACHE STRING "The C++ standard whose features are requested." )
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -78,16 +78,17 @@ include_directories(SYSTEM .)
 include_directories(SYSTEM header)
 
 set(HEADER_FILES
-        header/actor-zeta/base/abstract_actor.hpp
-        header/actor-zeta/base/actor.hpp
-        header/actor-zeta/base/actor_address.hpp
-        header/actor-zeta/base/cooperative_actor.hpp
-        header/actor-zeta/base/basic_actor.hpp
-        header/actor-zeta/base/communication_module.hpp
-        header/actor-zeta/base/context.hpp
-        header/actor-zeta/base/handler.hpp
-        header/actor-zeta/base/metadata.hpp
-        header/actor-zeta/base/supervisor.hpp
+
+        header/actor-zeta/detail/queue/cached_queue.hpp
+        header/actor-zeta/detail/queue/fifo_inbox.hpp
+        header/actor-zeta/detail/queue/forward_iterator.hpp
+        header/actor-zeta/detail/queue/inbox_result.hpp
+        header/actor-zeta/detail/queue/lifo_inbox.hpp
+        header/actor-zeta/detail/queue/new_round_result.hpp
+        header/actor-zeta/detail/queue/singly_linked.hpp
+        header/actor-zeta/detail/queue/task_queue.hpp
+        header/actor-zeta/detail/queue/task_result.hpp
+        header/actor-zeta/detail/queue/fixed_queue.hpp
 
         header/actor-zeta/detail/any.hpp
         header/actor-zeta/detail/callable_trait.hpp
@@ -107,8 +108,21 @@ set(HEADER_FILES
         header/actor-zeta/executor/execution_device.hpp
         header/actor-zeta/executor/worker.hpp
 
-        header/actor-zeta/base/message.hpp
+        header/actor-zeta/mail_box/categorized.hpp
+        header/actor-zeta/mail_box/normal_messages.hpp
+        header/actor-zeta/mail_box/urgent_messages.hpp
+        header/actor-zeta/mail_box/message.hpp
 
+        header/actor-zeta/abstract_actor.hpp
+        header/actor-zeta/actor.hpp
+        header/actor-zeta/actor_address.hpp
+        header/actor-zeta/cooperative_actor.hpp
+        header/actor-zeta/basic_actor.hpp
+        header/actor-zeta/communication_module.hpp
+        header/actor-zeta/context.hpp
+        header/actor-zeta/handler.hpp
+        header/actor-zeta/metadata.hpp
+        header/actor-zeta/supervisor.hpp
         header/actor-zeta/forwards.hpp
         header/actor-zeta.hpp
 )
@@ -130,8 +144,7 @@ set(SOURCE_FILES
         source/executor/execution_device.cpp
         source/executor/work_sharing.cpp
 
-
-        source/messaging/message.cpp
+        source/mail_box/message.cpp
 )
 
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <actor-zeta/base/actor.hpp>
-#include <actor-zeta/base/cooperative_actor.hpp>
+#include <actor-zeta/actor.hpp>
+#include <actor-zeta/cooperative_actor.hpp>
 
 namespace actor_zeta { namespace base {
 

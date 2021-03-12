@@ -6,7 +6,7 @@
 #include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
 
-namespace actor_zeta { namespace base {
+namespace actor_zeta { namespace mail_box {
 
     ///
     /// @brief
@@ -75,8 +75,8 @@ namespace actor_zeta { namespace base {
         priority priority_ = priority::normal;
     };
 
-}} // namespace actor_zeta::base
+}} // namespace actor_zeta::mail_box
 
-inline void swap(actor_zeta::base::message& lhs, actor_zeta::base::message& rhs) noexcept {
+inline void swap(actor_zeta::mail_box::message& lhs, actor_zeta::mail_box::message& rhs) noexcept {
     lhs.swap(rhs);
 }

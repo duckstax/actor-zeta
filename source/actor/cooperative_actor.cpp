@@ -2,13 +2,13 @@
 #include <iostream>
 
 // clang-format off
-#include <actor-zeta/base/context.hpp>
-#include <actor-zeta/base/actor_address.hpp>
-#include <actor-zeta/base/message.hpp>
+#include <actor-zeta/context.hpp>
+#include <actor-zeta/actor_address.hpp>
+#include <actor-zeta/mail_box/message.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
-#include <actor-zeta/base/supervisor.hpp>
-#include <actor-zeta/base/cooperative_actor.hpp>
+#include <actor-zeta/supervisor.hpp>
+#include <actor-zeta/cooperative_actor.hpp>
 // clang-format on
 
 namespace actor_zeta { namespace base {

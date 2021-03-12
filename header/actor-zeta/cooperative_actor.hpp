@@ -1,9 +1,9 @@
 #pragma once
 
-#include <actor-zeta/base/abstract_actor.hpp>
 #include <actor-zeta/detail/single_reader_queue.hpp>
 #include <actor-zeta/executor/executable.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <actor-zeta/abstract_actor.hpp>
 
 namespace actor_zeta { namespace base {
     ///

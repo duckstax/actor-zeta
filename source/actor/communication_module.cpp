@@ -1,12 +1,12 @@
 #include <iostream>
 
 // clang-format off
-#include <actor-zeta/base/context.hpp>
-#include <actor-zeta/base/handler.hpp>
-#include <actor-zeta/base/actor_address.hpp>
-#include <actor-zeta/base/message.hpp>
+#include <actor-zeta/context.hpp>
+#include <actor-zeta/handler.hpp>
+#include <actor-zeta/actor_address.hpp>
+#include <actor-zeta/mail_box/message.hpp>
 #include <actor-zeta/impl/handler.ipp>
-#include <actor-zeta/base/communication_module.hpp>
+#include <actor-zeta/communication_module.hpp>
 // clang-format on
 
 namespace actor_zeta { namespace base {

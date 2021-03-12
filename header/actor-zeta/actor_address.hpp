@@ -1,8 +1,8 @@
 #pragma once
 
-#include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/detail/intrusive_ptr.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <actor-zeta/communication_module.hpp>
 
 namespace actor_zeta { namespace base {
     ///

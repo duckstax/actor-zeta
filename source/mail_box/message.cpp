@@ -1,9 +1,9 @@
 #include <utility>
 
-#include <actor-zeta/base/actor_address.hpp>
-#include <actor-zeta/base/message.hpp>
+#include <actor-zeta/actor_address.hpp>
+#include <actor-zeta/mail_box/message.hpp>
 
-namespace actor_zeta { namespace base {
+namespace actor_zeta { namespace mail_box {
 
     auto message::command() const noexcept -> detail::string_view {
         return detail::string_view(command_.data(), command_.size());

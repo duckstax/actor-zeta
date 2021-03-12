@@ -4,11 +4,11 @@
 #include <set>
 #include <unordered_map>
 
-#include <actor-zeta/base/context.hpp>
-#include <actor-zeta/base/metadata.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <actor-zeta/context.hpp>
+#include <actor-zeta/metadata.hpp>
 
 namespace actor_zeta { namespace base {
 
