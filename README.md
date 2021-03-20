@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/jinncrafters/actor-zeta.svg?branch=master)](https://travis-ci.org/jinncrafters/actor-zeta)
+[![Build Status](https://travis-ci.org/cyberduckninja/actor-zeta.svg?branch=master)](https://travis-ci.org/cyberduckninja/actor-zeta)
 
 actor-zeta
 ========================
