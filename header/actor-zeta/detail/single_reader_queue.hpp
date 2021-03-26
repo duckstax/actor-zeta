@@ -61,7 +61,7 @@ namespace actor_zeta { namespace detail {
         }
 
         bool empty() {
-            CAF_ASSERT(!closed());
+            assert(!closed());
             return cache_.empty() && !head_ && is_dummy(stack_.load());
         }
 
@@ -187,7 +187,7 @@ namespace actor_zeta { namespace detail {
 
         template<class Mutex, class CondVar, class TimePoint>
         bool synchronized_await(Mutex& mtx, CondVar& cv, const TimePoint& timeout) {
-            CAF_ASSERT(!closed());
+            assert(!closed());
             if (!can_fetch_more() && try_block()) {
                 std::unique_lock<Mutex> guard(mtx);
                 while (blocked()) {

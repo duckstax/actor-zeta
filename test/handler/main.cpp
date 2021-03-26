@@ -2,43 +2,37 @@
 
 #include <actor-zeta.hpp>
 
-using actor_zeta::basic_async_actor;
-using actor_zeta::send;
-using actor_zeta::abstract_executor;
-using actor_zeta::supervisor_t;
-using actor_zeta::message;
-using actor_zeta::execution_device;
-
-class dummy_executor final : public abstract_executor {
+class dummy_executor final
+    : public actor_zeta::abstract_executor
+    , public actor_zeta::execution_device {
 public:
     dummy_executor() : abstract_executor(1, 10000) {}
 
-    void execute(actor_zeta::executable *ptr) override {
-        ptr->run(nullptr, max_throughput());
+    void execute(actor_zeta::executable *ptr) final {
+        ptr->run(this, max_throughput());
     }
 
-    void start() override {}
+    void start() final {}
 
-    void stop() override {}
+    void stop() final {}
 };
 
-
-class dummy_supervisor final : public supervisor_t {
+class dummy_supervisor final : public actor_zeta::supervisor_t {
 public:
-
     explicit dummy_supervisor(actor_zeta::abstract_executor *ptr)
-            : supervisor_t("dummy_supervisor"), ptr_(ptr) {
+        : supervisor_t("dummy_supervisor")
+        , ptr_(ptr) {
     }
 
-    auto executor() noexcept -> actor_zeta::abstract_executor * override {
+    auto executor() noexcept -> actor_zeta::abstract_executor * final {
         return ptr_;
     }
 
-    auto join(actor_zeta::actor ) -> actor_zeta::actor_address override {
+    auto join(actor_zeta::actor ) -> actor_zeta::actor_address final {
         return actor_zeta::actor_address();
     }
 
-    void enqueue_base(actor_zeta::message_ptr, execution_device *) override {
+    void enqueue_base(actor_zeta::message_ptr, actor_zeta::execution_device *) final {
 
     }
 
@@ -46,10 +40,9 @@ private:
     actor_zeta::abstract_executor *ptr_;
 };
 
-
-class storage_t final : public basic_async_actor {
+class storage_t final : public actor_zeta::basic_async_actor {
 public:
-    explicit storage_t(dummy_supervisor *ptr) : basic_async_actor(ptr, "storage") {
+    explicit storage_t(dummy_supervisor *ptr) : actor_zeta::basic_async_actor(ptr, "storage") {
 
         add_handler(
                 "init",
@@ -117,9 +110,9 @@ private:
 
 };
 
-class test_handlers final : public basic_async_actor {
+class test_handlers final : public actor_zeta::basic_async_actor {
 public:
-    test_handlers(dummy_supervisor *ptr) : basic_async_actor(ptr, "test_handlers") {
+    test_handlers(dummy_supervisor *ptr) : actor_zeta::basic_async_actor(ptr, "test_handlers") {
         add_handler(
                 "ptr_0",
                 []() {

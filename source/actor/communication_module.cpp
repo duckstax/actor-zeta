@@ -10,27 +10,29 @@
 
 namespace actor_zeta { namespace base {
 
-    inline void error_sync_contacts(detail::string_view __error__) {
+    void error_sync_contacts(detail::string_view error) {
         std::cerr << "WARNING" << std::endl;
-        std::cerr << "Not initialization actor_address type:" << __error__ << std::endl;
+        std::cerr << "Not initialization actor_address type:" << error << std::endl;
         std::cerr << "WARNING" << std::endl;
     }
 
-    inline void error_duplicate_handler(detail::string_view _error_) {
+    void error_duplicate_handler(detail::string_view error) {
         std::cerr << "Duplicate" << std::endl;
-        std::cerr << "Handler: " << _error_ << std::endl;
+        std::cerr << "Handler: " << error << std::endl;
         std::cerr << "Duplicate" << std::endl;
     }
 
-    inline void error_add_handler(detail::string_view _error_) {
+    void error_add_handler(detail::string_view error) {
         std::cerr << "error add handler" << std::endl;
-        std::cerr << "Handler: " << _error_ << std::endl;
+        std::cerr << "Handler: " << error << std::endl;
         std::cerr << "error add handler" << std::endl;
     }
 
-    inline void error_skip(detail::string_view __error__) {
+    void error_skip(detail::string_view sender,detail::string_view receiver,detail::string_view command) {
         std::cerr << "WARNING" << std::endl;
-        std::cerr << "Skip : " << __error__ << std::endl;
+        std::cerr << "Sender type: " << sender << std::endl;
+        std::cerr << "Receiver type: " << receiver << std::endl;
+        std::cerr << "Skip Command: " << command << std::endl;
         std::cerr << "WARNING" << std::endl;
     }
 
@@ -39,7 +41,7 @@ namespace actor_zeta { namespace base {
         if (it != handlers_.end()) {
             return it->second->invoke(this);
         } else {
-            error_skip(current_message()->command());
+            error_skip(current_message()->sender()->type(),type(),current_message()->command());
         }
     }
 
@@ -73,9 +75,13 @@ namespace actor_zeta { namespace base {
         return types;
     }
 
-    auto communication_module::all_view_address() const -> void {
-        for (auto& i : *contacts_)
-            std::cerr << i.first << std::endl;
+    auto communication_module::all_view_address() const -> std::vector<std::string> {
+        std::vector<std::string> tmp ;
+        tmp.reserve(contacts_->size());
+        for (auto& i : *contacts_) {
+            tmp.emplace_back(std::string(i.first.begin(), i.first.end()));
+        }
+        return tmp;
     }
 
     auto communication_module::addresses(detail::string_view name) -> actor_address& {
@@ -111,11 +117,13 @@ namespace actor_zeta { namespace base {
     void communication_module::initialize() {
         add_handler(
             "add_link",
-            &communication_module::add_link);
+            &communication_module::add_link
+        );
 
         add_handler(
             "remove_link",
-            &communication_module::remove_link);
+            &communication_module::remove_link
+        );
     }
 
     void communication_module::add_link(actor_address address) {
@@ -147,6 +155,7 @@ namespace actor_zeta { namespace base {
     void communication_module::enqueue(message_ptr msg, executor::execution_device* e) {
         enqueue_base(std::move(msg), e);
     }
+
     auto communication_module::current_message() -> message* {
         return current_message_impl();
     }

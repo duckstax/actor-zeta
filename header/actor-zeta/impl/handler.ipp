@@ -28,12 +28,9 @@ using type_list_to_tuple_t = typename type_list_to_tuple<Ts...>::type;
 template<class F, std::size_t... I>
 void apply_impl(F &&f, communication_module *ctx, type_traits::index_sequence<I...>) {
     using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
-    constexpr int args_size = call_trait::number_of_arguments;
-    using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types, 1, args_size>;
+    using args_type_list = typename call_trait::args_types;
     using Tuple =  type_list_to_tuple_t<args_type_list>;
     auto &args = ctx->current_message()->body<Tuple>();
-    using type_context = type_traits::type_list_at_t<typename call_trait::args_types, 0>;
-    using clear_type_context = type_traits::decay_t<type_context>;
     f(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
 }
 // clang-format on
@@ -48,7 +45,7 @@ struct transformer {
       using call_trait =
         type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
       constexpr int args_size = call_trait::number_of_arguments;
-      apply_impl(f, ctx, type_traits::make_index_sequence<args_size - 1>{});
+      apply_impl(f, ctx, type_traits::make_index_sequence<args_size >{});
     };
   }
 };

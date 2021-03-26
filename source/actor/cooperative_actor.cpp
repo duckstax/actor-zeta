@@ -12,7 +12,7 @@
 
 namespace actor_zeta { namespace base {
 
-    inline void error() {
+    void error_address() {
         std::cerr << " WARNING " << std::endl;
         std::cerr << " WRONG ADDRESS " << std::endl;
         std::cerr << " WARNING " << std::endl;
@@ -27,19 +27,6 @@ namespace actor_zeta { namespace base {
 
         message_ptr ptr;
 
-        while (handled_msgs < max_throughput && !mailbox().cache().empty()) {
-            do {
-                ptr = next_message();
-                if (!ptr) {
-                    if (mailbox().try_block()) {
-                        return executor::executable_result::awaiting;
-                    }
-                }
-            } while (!ptr);
-            consume_from_cache();
-            ++handled_msgs;
-        }
-
         while (handled_msgs < max_throughput) {
             do {
                 ptr = next_message();
@@ -50,6 +37,19 @@ namespace actor_zeta { namespace base {
                 }
             } while (!ptr);
             reactivate(*ptr);
+            ++handled_msgs;
+        }
+
+        while (handled_msgs < max_throughput && !mailbox().cache().empty()) {
+            do {
+                ptr = next_message();
+                if (!ptr) {
+                    if (mailbox().try_block()) {
+                        return executor::executable_result::awaiting;
+                    }
+                }
+            } while (!ptr);
+            consume_from_cache();
             ++handled_msgs;
         }
 

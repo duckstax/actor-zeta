@@ -3,6 +3,8 @@
 #include <memory>
 #include <set>
 #include <unordered_map>
+#include <vector>
+#include <string>
 
 #include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
@@ -78,7 +80,7 @@ namespace actor_zeta { namespace base {
         /**
            * debug method
            */
-        auto all_view_address() const -> void;
+        auto all_view_address() const -> std::vector<std::string>;
 
     private:
         void add_link(actor_address);

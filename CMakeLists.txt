@@ -2,13 +2,13 @@ cmake_minimum_required(VERSION 3.0)
 
 PROJECT(actor-zeta CXX)
 
-set(CMAKE_CXX_STANDARD 14 CACHE STRING "The C++ standard whose features are requested." )
+set(CMAKE_CXX_STANDARD 11 CACHE STRING "The C++ standard whose features are requested.")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-message (STATUS "STANDARD CPP = ${CMAKE_CXX_STANDARD}")
+message(STATUS "STANDARD CPP = ${CMAKE_CXX_STANDARD}")
 
-message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
 option(ALLOW_EXAMPLES "Enable building examples" OFF)
 
@@ -18,37 +18,37 @@ option(RTTI_DISABLE "RTTI DISABLE" ON)
 
 option(EXCEPTIONS_DISABLE "EXCEPTIONS DISABLE" ON)
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 
     if (EXCEPTIONS_DISABLE)
         message("Disable C++ exceptions.")
         string(REGEX REPLACE "/EH[a-z]+" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
-    endif()
+    endif ()
 
     if (RTTI_DISABLE)
         message("Disable RTTI.")
         string(REGEX REPLACE "/GR" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
-    endif()
+    endif ()
 
-else(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+else (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 
     if (EXCEPTIONS_DISABLE)
         message("Disable C++ exceptions.")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
-    endif()
+    endif ()
 
     if (RTTI_DISABLE)
         message("Disable RTTI.")
         string(REGEX REPLACE "-frtti" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
-    endif()
+    endif ()
 
-endif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+endif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 
 
-if((CMAKE_CXX_COMPILER_ID MATCHES "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
+if ((CMAKE_CXX_COMPILER_ID MATCHES "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
     add_compile_options(
             -Wall
             -Wextra
@@ -67,9 +67,9 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES "Clan
             -Wsign-conversion
             -Wsign-promo
     )
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     add_compile_options(/W4 /WX)
-endif()
+endif ()
 
 include(cmake/clang_tools.cmake)
 
@@ -133,15 +133,15 @@ set(SOURCE_FILES
 
 
 find_program(CCACHE_FOUND ccache)
-if(CCACHE_FOUND)
+if (CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-endif(CCACHE_FOUND)
+endif (CCACHE_FOUND)
 
 
-find_package( Threads )
+find_package(Threads)
 
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS_} -O0 -g -fno-omit-frame-pointer -fsanitize=thread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_} -O0 -g -fno-omit-frame-pointer -fsanitize=thread")
 
 add_library(
         ${PROJECT_NAME}
@@ -150,7 +150,7 @@ add_library(
 )
 
 
-target_link_libraries (
+target_link_libraries(
         ${PROJECT_NAME}
         PUBLIC
         ${CMAKE_THREAD_LIBS_INIT}
@@ -164,10 +164,33 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/header
 )
 
-if(ALLOW_EXAMPLES)
+if (ALLOW_EXAMPLES)
     add_subdirectory(examples)
-endif()
+endif ()
 
 if (ALLOW_TESTS)
+    #############################################################################################
+    #conan
+    if (NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
+        message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+        file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/v0.15/conan.cmake" "${CMAKE_BINARY_DIR}/conan.cmake")
+    endif ()
+
+    include(${CMAKE_BINARY_DIR}/conan.cmake)
+
+    set(CONAN_SYSTEM_INCLUDES "On")
+
+    conan_cmake_run(    
+            CONANFILE conanfile.txt
+            BASIC_SETUP
+            BUILD missing
+            NO_OUTPUT_DIRS
+    )
+
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+
+    # conan
+    #############################################################################################
+    enable_testing()
     add_subdirectory(test)
 endif ()
