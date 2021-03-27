@@ -31,19 +31,14 @@ namespace actor_zeta { namespace base {
 
         void enqueue_base(message_ptr, executor::execution_device*) final;
 
-        inline void setf(int flag) {
-            auto x = flags();
-            flags(x | flag);
-        }
+        // Non thread-safe method
+        auto current_message() -> message* override;
 
-        inline void unsetf(int flag) {
-            auto x = flags();
-            flags(x & ~flag);
-        }
-
-        inline bool getf(int flag) const {
-            return (flags() & flag) != 0;
-        }
+    private:
+        enum class state : int {
+            empty = 0x01,
+            busy
+        };
 
         inline int flags() const {
             return flags_.load(std::memory_order_relaxed);
@@ -52,12 +47,6 @@ namespace actor_zeta { namespace base {
         inline void flags(int new_value) {
             flags_.store(new_value, std::memory_order_relaxed);
         }
-
-    private:
-        enum class state : int {
-            empty = 0x01,
-            busy
-        };
 
         void cleanup();
 
@@ -80,8 +69,6 @@ namespace actor_zeta { namespace base {
         bool has_next_message();
 
         void push_to_cache(message_ptr ptr);
-
-        auto current_message() -> message*;
 
         auto context(executor::execution_device*) -> void;
 
