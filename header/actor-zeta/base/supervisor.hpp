@@ -7,7 +7,7 @@ namespace actor_zeta { namespace base {
 
     class supervisor_t : public communication_module {
     public:
-        supervisor_t(detail::string_view);
+        supervisor_t(std::string);
 
         ~supervisor_t() override;
 

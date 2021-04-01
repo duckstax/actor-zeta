@@ -86,7 +86,6 @@ set(HEADER_FILES
         header/actor-zeta/base/communication_module.hpp
         header/actor-zeta/base/context.hpp
         header/actor-zeta/base/handler.hpp
-        header/actor-zeta/base/metadata.hpp
         header/actor-zeta/base/supervisor.hpp
 
         header/actor-zeta/detail/any.hpp
