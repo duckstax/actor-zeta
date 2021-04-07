@@ -7,8 +7,8 @@
 
 namespace actor_zeta { namespace base {
 
-    supervisor_t::supervisor_t(detail::string_view name)
-        : communication_module(name, sub_type_t::supervisor) {}
+    supervisor_t::supervisor_t(std::string name)
+        : communication_module(std::move(name), sub_type_t::supervisor) {}
 
     supervisor_t::~supervisor_t() {}
 

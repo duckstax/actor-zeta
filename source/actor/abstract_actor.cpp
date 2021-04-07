@@ -15,8 +15,8 @@ namespace actor_zeta { namespace base {
 
         }
 
-        abstract_actor::abstract_actor(detail::string_view type)
-                : communication_module(type, sub_type_t::actor)
+        abstract_actor::abstract_actor(std::string type)
+                : communication_module(std::move(type), sub_type_t::actor)
                 {
         }
 

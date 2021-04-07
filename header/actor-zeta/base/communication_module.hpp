@@ -3,9 +3,10 @@
 #include <memory>
 #include <set>
 #include <unordered_map>
+#include <vector>
+#include <string>
 
 #include <actor-zeta/base/context.hpp>
-#include <actor-zeta/base/metadata.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/forwards.hpp>
@@ -13,6 +14,15 @@
 namespace actor_zeta { namespace base {
 
     using message_ptr = std::unique_ptr<message>;
+
+    using actor_id = std::size_t;
+
+    enum class sub_type_t : uint8_t {
+        non = 0x00,
+        actor,
+        supervisor
+    };
+
 
     class communication_module
         : public ref_counted
@@ -44,7 +54,7 @@ namespace actor_zeta { namespace base {
         auto broadcast(message_ptr) -> bool;
 
     protected:
-        communication_module(detail::string_view, sub_type_t);
+        communication_module(std::string, sub_type_t);
 
         virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
 
@@ -69,7 +79,7 @@ namespace actor_zeta { namespace base {
         /**
            * debug method
            */
-        auto all_view_address() const -> void;
+        auto all_view_address() const -> std::vector<std::string>;
 
     private:
         void add_link(actor_address);
@@ -80,6 +90,8 @@ namespace actor_zeta { namespace base {
 
         std::unique_ptr<std::unordered_map<detail::string_view, actor_address>> contacts_;
         storage handlers_;
-        metadata type_;
+        actor_id id_;
+        sub_type_t sub_type_;
+        std::string type_;
     };
 }} // namespace actor_zeta::base

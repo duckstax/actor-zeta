@@ -41,7 +41,7 @@ auto thread_pool_deleter = [](abstract_executor* ptr) {
 class supervisor_lite final : public supervisor_t {
 public:
     explicit supervisor_lite()
-        : supervisor_t(actor_zeta::detail::string_view("network"))
+        : supervisor_t("network")
         , e_(new executor_t<work_sharing>(
                  2,
                  100),

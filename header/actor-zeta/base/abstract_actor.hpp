@@ -20,7 +20,7 @@ namespace actor_zeta { namespace base {
         ~abstract_actor() override;
 
     protected:
-        abstract_actor(detail::string_view);
+        abstract_actor(std::string);
     };
 
 }} // namespace actor_zeta::base
