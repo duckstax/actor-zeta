@@ -13,26 +13,26 @@
 namespace actor_zeta { namespace base {
 
     void error_sync_contacts(detail::string_view __error__) {
-        std::cerr << "WARNING" << std::endl;
-        std::cerr << "Not initialization actor_address type:" << __error__ << std::endl;
+        std::cerr << "WARNING" << '\n';
+        std::cerr << "Not initialization actor_address type:" << __error__ << '\n';
         std::cerr << "WARNING" << std::endl;
     }
 
     void error_duplicate_handler(detail::string_view _error_) {
-        std::cerr << "Duplicate" << std::endl;
-        std::cerr << "Handler: " << _error_ << std::endl;
+        std::cerr << "Duplicate" << '\n';
+        std::cerr << "Handler: " << _error_ << '\n';
         std::cerr << "Duplicate" << std::endl;
     }
 
     void error_add_handler(detail::string_view _error_) {
-        std::cerr << "error add handler" << std::endl;
-        std::cerr << "Handler: " << _error_ << std::endl;
+        std::cerr << "error add handler" << '\n';
+        std::cerr << "Handler: " << _error_ << '\n';
         std::cerr << "error add handler" << std::endl;
     }
 
     void error_skip(detail::string_view __error__) {
-        std::cerr << "WARNING" << std::endl;
-        std::cerr << "Skip : " << __error__ << std::endl;
+        std::cerr << "WARNING" << '\n';
+        std::cerr << "Skip, can't find handler: " << __error__ << '\n';
         std::cerr << "WARNING" << std::endl;
     }
 
@@ -98,7 +98,7 @@ namespace actor_zeta { namespace base {
     }
 
     auto communication_module::type() const -> detail::string_view {
-        return detail::string_view(type_.data(),type_.size());
+        return detail::string_view(type_.data(), type_.size());
     }
 
     communication_module::~communication_module() {}
@@ -107,7 +107,7 @@ namespace actor_zeta { namespace base {
         : contacts_(new std::unordered_map<detail::string_view, actor_address>)
         , id_(0)
         , sub_type_(sub_type)
-        , type_(std::move(type)){
+        , type_(std::move(type)) {
         initialize();
     }
 
