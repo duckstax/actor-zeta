@@ -2,12 +2,18 @@
 
 #include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <functional>
 
 namespace actor_zeta { namespace base {
 
+    using defual_spawn = std::function<actor()>;
+    void spawn(){
+
+    }
+
     class supervisor_t : public communication_module {
     public:
-        supervisor_t(detail::string_view);
+        supervisor_t(std::string);
 
         ~supervisor_t() override;
 

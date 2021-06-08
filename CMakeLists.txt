@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 PROJECT(actor-zeta CXX)
 
-set(CMAKE_CXX_STANDARD 11 CACHE STRING "The C++ standard whose features are requested." )
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "The C++ standard whose features are requested." )
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -89,6 +89,7 @@ set(HEADER_FILES
         header/actor-zeta/base/metadata.hpp
         header/actor-zeta/base/supervisor.hpp
 
+        header/actor-zeta/detail/pmr/memory_resource.hpp
         header/actor-zeta/detail/any.hpp
         header/actor-zeta/detail/callable_trait.hpp
         header/actor-zeta/detail/intrusive_ptr.hpp
@@ -122,6 +123,7 @@ set(SOURCE_FILES
         source/actor/supervisor.cpp
         source/actor/communication_module.cpp
 
+        source/detail/pmr/memory_resource.cpp
         source/detail/string_view.cpp
         source/detail/ref_counted.cpp
 
