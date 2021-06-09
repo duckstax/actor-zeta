@@ -10,7 +10,6 @@
 
 using actor_zeta::basic_async_actor;
 using actor_zeta::supervisor;
-using actor_zeta::context;
 using actor_zeta::actor_address;
 using actor_zeta::join;
 
@@ -43,7 +42,7 @@ public:
     {
         add_handler(
                 "write",
-                [this](context & /*ctx*/, response_t & response) -> void {
+                [this](communication_module & /*ctx*/, response_t & response) -> void {
                     std::cerr << "Operation:" << "write" << std::endl;
                     multiplexer_.write(response.id,response.r_);
                 }
@@ -51,7 +50,7 @@ public:
 
         add_handler(
                 "read",
-                [this](context & ctx, query_raw_t &query_raw) -> void {
+                [this](communication_module & ctx, query_raw_t &query_raw) -> void {
                     std::cerr << "Operation:" << "read" << std::endl;
                     auto raw = query_raw.raw;
                     std::vector<buffer> parsed_raw_request;
@@ -81,7 +80,7 @@ public:
 
         add_handler(
                 "close",
-                [this](context & /*ctx*/, response_t &response) -> void {
+                [this](communication_module & /*ctx*/, response_t &response) -> void {
                     std::cerr << "Operation:" << "close" << std::endl;
                     multiplexer_.close(response.id);
                 }
@@ -113,7 +112,7 @@ public:
 
     auto enqueue(actor_zeta::message msg,actor_zeta::execution_device *) -> void final {
         set_current_message(std::move(msg));
-        dispatch().execute(*this);
+        dispatch().execute();
     }
 
 
@@ -135,7 +134,7 @@ public:
         auto* self = this;
         add_handler(
                 "update",
-                [this, self](context &ctx, query_t &tmp) -> void {
+                [this, self](communication_module &ctx, query_t &tmp) -> void {
                     std::cerr << "Operation:" << "update" <<std::endl;
                     auto status = update(tmp.parameter[0], tmp.parameter[1]);
                     assert(in("1qaz"));

@@ -6,9 +6,8 @@
 
 #include <actor-zeta/core.hpp>
 
-using actor_zeta::basic_async_actor ;
+using actor_zeta::basic_async_actor;
 using actor_zeta::abstract_executor;
-using actor_zeta::context;
 using actor_zeta::supervisor;
 
 using actor_zeta::join;
@@ -68,7 +67,7 @@ public:
 private:
     auto local(message msg) -> void {
         set_current_message(std::move(msg));
-        dispatch().execute(*this);
+        dispatch().execute();
     }
 
     auto redirect_robin(message msg) -> void {
@@ -92,18 +91,18 @@ public:
     explicit storage_t(supervisor_lite&ref) : basic_async_actor(ref, "storage") {
         add_handler(
                 "update",
-                [](context & /*ctx*/) -> void {}
+                [](communication_module & /*ctx*/) -> void {}
         );
 
         add_handler(
                 "find",
-                [](context & /*ctx*/) -> void {}
+                [](communication_module & /*ctx*/) -> void {}
         );
 
         add_handler(
 
                 "remove",
-                [](context & /*ctx*/) -> void {}
+                [](communication_module & /*ctx*/) -> void {}
         );
     }
 

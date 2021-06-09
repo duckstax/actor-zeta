@@ -5,7 +5,6 @@
 
 #include <actor-zeta/core.hpp>
 
-using actor_zeta::context;
 using actor_zeta::basic_async_actor;
 using actor_zeta::supervisor;
 using actor_zeta::message;
@@ -34,17 +33,17 @@ public:
     storage_t(dummy_supervisor&ref) : basic_async_actor(ref, "storage") {
         add_handler(
                 "update",
-                [](context & /*ctx*/) -> void {}
+                [](communication_module & /*ctx*/) -> void {}
         );
 
         add_handler(
                 "find",
-                [](context & /*ctx*/) -> void {}
+                [](communication_module & /*ctx*/) -> void {}
         );
 
         add_handler(
                 "remove",
-                [](context & /*ctx*/ ) -> void {}
+                [](communication_module & /*ctx*/ ) -> void {}
         );
     }
 

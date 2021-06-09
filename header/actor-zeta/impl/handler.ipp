@@ -26,7 +26,7 @@ using type_list_to_tuple_t = typename type_list_to_tuple<Ts...>::type;
 
 // clang-format off
 template<class F, std::size_t... I>
-void apply_impl(F &&f, context &ctx, type_traits::index_sequence<I...>) {
+void apply_impl(F &&f, communication_module &ctx, type_traits::index_sequence<I...>) {
     using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
     constexpr int args_size = call_trait::number_of_arguments;
     using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types, 1, args_size>;
@@ -34,7 +34,7 @@ void apply_impl(F &&f, context &ctx, type_traits::index_sequence<I...>) {
     auto &args = ctx.current_message()->body<Tuple>();
     using type_context = type_traits::type_list_at_t<typename call_trait::args_types, 0>;
     using clear_type_context = type_traits::decay_t<type_context>;
-    f(static_cast<typename std::add_lvalue_reference<clear_type_context>::type >(ctx), static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
+    f(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
 }
 // clang-format on
 
@@ -43,27 +43,27 @@ template <typename F,
           int Args_size =
             type_traits::get_callable_trait<F>::number_of_arguments>
 struct transformer {
-  auto operator()(F&& f) -> std::function<void(context&)> {
-    return [f](context& ctx) -> void {
+  auto operator()(F&& f) -> std::function<void(communication_module&)> {
+    return [f](communication_module& ctx) -> void {
       using call_trait =
         type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
       constexpr int args_size = call_trait::number_of_arguments;
-      apply_impl(f, ctx, type_traits::make_index_sequence<args_size - 1>{});
+      apply_impl(f, ctx, type_traits::make_index_sequence<args_size>{});
     };
   }
 };
 
 template <typename F, class Args>
 struct transformer<F, Args, 0> final {
-  auto operator()(F&& f) -> std::function<void(context&)> {
-    return [f](context&) -> void { f(); };
+  auto operator()(F&& f) -> std::function<void(communication_module&)> {
+    return [f](communication_module&) -> void { f(); };
   }
 };
 
 template <typename F, class Args>
 struct transformer<F, Args, 1> final {
-  auto operator()(F&& f) -> std::function<void(context&)> {
-    return [f](context& ctx) -> void {
+  auto operator()(F&& f) -> std::function<void(communication_module&)> {
+    return [f](communication_module& ctx) -> void {
       using type_context = type_traits::type_list_at_t<Args, 0>;
       using clear_type_context = type_traits::decay_t<type_context>;
       return f(
@@ -75,8 +75,8 @@ struct transformer<F, Args, 1> final {
 
 template <typename F, class Args>
 struct transformer<F, Args, 2> final {
-  auto operator()(F&& f) -> std::function<void(context&)> {
-    return [f](context& ctx) -> void {
+  auto operator()(F&& f) -> std::function<void(communication_module&)> {
+    return [f](communication_module& ctx) -> void {
       using type_context = type_traits::type_list_at_t<Args, 0>;
       using clear_type_context = type_traits::decay_t<type_context>;
       using arg_type_2 = type_traits::type_list_at_t<Args, 1>;
@@ -92,7 +92,7 @@ struct transformer<F, Args, 2> final {
 /// class method
 // clang-format off
 template<class F, typename ClassPtr, std::size_t... I>
-void apply_impl_for_class(F &&f, ClassPtr *ptr, context &ctx, type_traits::index_sequence<I...>) {
+void apply_impl_for_class(F &&f, ClassPtr *ptr, communication_module &ctx, type_traits::index_sequence<I...>) {
     using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
     using args_type_list = typename call_trait::args_types;
     using Tuple =  type_list_to_tuple_t<args_type_list>;
@@ -107,8 +107,8 @@ template <
   int Args_size = type_traits::get_callable_trait<F>::number_of_arguments
 >
 struct transformer_for_class {
-  auto operator()(F&& f, ClassPtr* ptr) -> std::function<void(context&)> {
-    return [f, ptr](context& ctx) -> void {
+  auto operator()(F&& f, ClassPtr* ptr) -> std::function<void(communication_module&)> {
+    return [f, ptr](communication_module& ctx) -> void {
       using call_trait = type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
       constexpr int args_size = call_trait::number_of_arguments;
       apply_impl_for_class(f, ptr, ctx,type_traits::make_index_sequence<args_size>{});
@@ -118,15 +118,15 @@ struct transformer_for_class {
 
 template <typename F, typename ClassPtr, class Args>
 struct transformer_for_class<F, ClassPtr, Args, 0> final {
-  auto operator()(F&& f, ClassPtr* ptr) -> std::function<void(context&)> {
-    return [f, ptr](context&) -> void { (ptr->*f)(); };
+  auto operator()(F&& f, ClassPtr* ptr) -> std::function<void(communication_module&)> {
+    return [f, ptr](communication_module&) -> void { (ptr->*f)(); };
   }
 };
 
 template <typename F, typename ClassPtr, class Args>
 struct transformer_for_class<F, ClassPtr, Args, 1> final {
-  auto operator()(F&& f, ClassPtr* ptr) -> std::function<void(context&)> {
-    return [f, ptr](context& arg) mutable -> void {
+  auto operator()(F&& f, ClassPtr* ptr) -> std::function<void(communication_module&)> {
+    return [f, ptr](communication_module& arg) mutable -> void {
       using arg_type_0 = type_traits::type_list_at_t<Args, 0>;
       using decay_arg_type_0 = type_traits::decay_t<arg_type_0>;
       auto& tmp = arg.current_message()->body<decay_arg_type_0>();
