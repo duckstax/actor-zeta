@@ -86,8 +86,8 @@ set(HEADER_FILES
         header/actor-zeta/base/communication_module.hpp
         header/actor-zeta/base/context.hpp
         header/actor-zeta/base/handler.hpp
-        header/actor-zeta/base/metadata.hpp
         header/actor-zeta/base/supervisor.hpp
+        header/actor-zeta/base/supervisor_abstract.hpp
 
         header/actor-zeta/detail/pmr/memory_resource.hpp
         header/actor-zeta/detail/any.hpp
@@ -121,6 +121,7 @@ set(SOURCE_FILES
         source/actor/actor_address.cpp
         source/actor/cooperative_actor.cpp
         source/actor/supervisor.cpp
+        source/actor/supervisor_abstract.cpp
         source/actor/communication_module.cpp
 
         source/detail/pmr/memory_resource.cpp

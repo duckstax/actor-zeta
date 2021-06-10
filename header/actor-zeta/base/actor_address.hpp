@@ -37,7 +37,7 @@ namespace actor_zeta { namespace base {
         }
 
     private:
-        intrusive_ptr<communication_module> ptr_;
+        detail::intrusive_ptr<communication_module> ptr_;
     };
 
 }} // namespace actor_zeta::base

@@ -27,7 +27,7 @@ namespace actor_zeta { namespace base {
         void intrusive_ptr_release_impl() override;
 
     protected:
-        cooperative_actor(supervisor_t*, detail::string_view);
+        cooperative_actor(supervisor_t*, std::string);
 
         void enqueue_base(message_ptr, executor::execution_device*) final;
 

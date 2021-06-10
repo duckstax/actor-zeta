@@ -13,6 +13,7 @@
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/executor.hpp>
 #include <actor-zeta/executor/policy/work_sharing.hpp>
+#include <actor-zeta/base/supervisor_abstract.hpp>
 
 namespace actor_zeta {
 
@@ -23,6 +24,7 @@ namespace actor_zeta {
     using base::context;
     using base::make_handler;
     using base::supervisor_t;
+    using base::supervisor;
 
     using executor::abstract_executor;
     using executor::executable;
@@ -114,4 +116,23 @@ namespace actor_zeta {
     inline void link(actor_address& actor1, actor_address& actor2) {
         link_imp(actor1, actor2);
     }
+
+    template<class Supervisor, class... Args>
+    auto spawn_actor(supervisor_t*, Args&&... args) -> supervisor {
+        return new Supervisor(std::forward<Args>(args)...);
+    }
+
+    template<class Supervisor, class... Args>
+    auto spawn_actor(supervisor&, Args&&... args) -> supervisor {
+        return new Supervisor(std::forward<Args>(args)...);
+    }
+
+    template<class Supervisor, class... Args>
+    auto spawn_supervisor(supervisor_t*, Args&&... args) -> Supervisor {
+    }
+
+    template<class Supervisor, class... Args>
+    auto spawn_supervisor(supervisor&, supervisor&, Args&&... args) -> Supervisor {
+    }
+
 } // namespace actor_zeta
