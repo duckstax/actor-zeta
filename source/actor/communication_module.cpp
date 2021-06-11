@@ -30,9 +30,10 @@ namespace actor_zeta { namespace base {
         std::cerr << "error add handler" << std::endl;
     }
 
-    void error_skip(detail::string_view __error__) {
+    void error_skip(detail::string_view sender, detail::string_view reciever, detail::string_view handler) {
         std::cerr << "WARNING" << '\n';
-        std::cerr << "Skip, can't find handler: " << __error__ << '\n';
+        std::cerr << "Skip, can't find handler: " << reciever << "::" << handler;
+        std::cerr << " sender: " << sender << "\n";
         std::cerr << "WARNING" << std::endl;
     }
 
@@ -41,7 +42,9 @@ namespace actor_zeta { namespace base {
         if (it != handlers_.end()) {
             return it->second->invoke(ctx);
         } else {
-            error_skip(ctx.current_message()->command());
+            auto sender = ctx.current_message()->sender()->type();
+            auto reciever = this->type();
+            error_skip(sender, reciever, ctx.current_message()->command());
         }
     }
 
