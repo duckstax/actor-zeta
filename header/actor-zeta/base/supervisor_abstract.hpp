@@ -11,25 +11,24 @@ namespace actor_zeta { namespace base {
 
     class supervisor_t : public communication_module {
     public:
-        supervisor_t(std::string, detail::pmr::memory_resource*);
+        supervisor_t(detail::pmr::memory_resource*,std::string);
         ~supervisor_t() override;
         auto executor() noexcept -> executor::abstract_executor*;
-        auto join_actor(default_spawn_actor&) -> actor_address;
-        auto join_supervisor(default_spawn_supervisor&) -> actor_address;
         using communication_module::broadcast;
         auto resource() const -> detail::pmr::memory_resource*;
 
     protected:
         using communication_module::add_handler;
-        virtual auto executor_imp() noexcept -> executor::abstract_executor* = 0;
-        virtual auto join_imp(actor) -> actor_address = 0;
-        virtual auto join_imp(supervisor) -> actor_address = 0;
-
+        virtual auto executor_impl() noexcept -> executor::abstract_executor* = 0;
+        virtual auto add_actor_impl(actor) -> void = 0;
+        virtual auto add_supervisor_impl(supervisor) -> void = 0;
 
         auto set_current_message(message_ptr) -> void;
         auto current_message() -> message* final;
 
     private:
+        auto spawn_actor(default_spawn_actor&) -> void;
+        auto spawn_supervisor(default_spawn_supervisor&) -> void;
         message* current_message_;
         detail::pmr::memory_resource* memory_resource_;
     };

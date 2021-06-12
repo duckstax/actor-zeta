@@ -13,7 +13,6 @@
 using actor_zeta::abstract_executor;
 using actor_zeta::basic_async_actor;
 using actor_zeta::context;
-using actor_zeta::join;
 using actor_zeta::supervisor_t;
 
 using actor_zeta::abstract_executor;
@@ -41,7 +40,7 @@ auto thread_pool_deleter = [](abstract_executor* ptr) {
 class supervisor_lite final : public supervisor_t {
 public:
     explicit supervisor_lite()
-        : supervisor_t("network")
+        : supervisor_t(nullptr, "network")
         , e_(new executor_t<work_sharing>(
                  2,
                  100),
@@ -60,13 +59,14 @@ public:
         e_->start();
     }
 
-    auto executor() noexcept -> actor_zeta::abstract_executor* final { return e_.get(); }
+    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final { return e_.get(); }
 
-    auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
-        auto tmp = std::move(t);
-        auto address = tmp->address();
-        actors_.push_back(std::move(tmp));
-        return address;
+    auto add_actor_impl(actor_zeta::actor t) -> void final {
+        actors_.push_back(std::move(t));
+    }
+
+    auto add_supervisor_impl(actor_zeta::supervisor t) -> void final {
+        supervisor_.emplace_back(std::move(t));
     }
 
     auto enqueue_base(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
@@ -98,6 +98,7 @@ private:
 
     std::unique_ptr<abstract_executor, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor> actors_;
+    std::vector<actor_zeta::supervisor> supervisor_;
     std::size_t cursor;
     std::unordered_set<actor_zeta::detail::string_view> system_;
 };
@@ -130,8 +131,8 @@ static std::atomic<uint64_t> counter_work_data{0};
 
 class worker_t final : public basic_async_actor {
 public:
-    explicit worker_t(supervisor_lite* ref)
-        : basic_async_actor(ref, "bot") {
+    explicit worker_t(actor_zeta::supervisor& ptr)
+        : basic_async_actor(ptr.get(), "bot") {
         add_handler(
             "download",
             &worker_t::download);
@@ -160,7 +161,7 @@ private:
 using namespace std::chrono_literals;
 
 int main() {
-    actor_zeta::intrusive_ptr<supervisor_lite> supervisor(new supervisor_lite());
+    std::unique_ptr<supervisor_lite> supervisor(new supervisor_lite());
 
     supervisor->startup();
 
@@ -171,8 +172,7 @@ int main() {
     ///    actor_zeta::link(*supervisor, bot);
     ///}
 
-    auto bot = join<worker_t>(supervisor.get());
-    actor_zeta::link(*supervisor, bot);
+    actor_zeta::spawn_actor<worker_t>(supervisor);
 
     int const task = 10000;
 

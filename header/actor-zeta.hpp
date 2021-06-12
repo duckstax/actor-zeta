@@ -9,11 +9,12 @@
 #include <actor-zeta/base/supervisor.hpp>
 #include <actor-zeta/impl/handler.ipp>
 // clang-format on
+#include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/detail/any.hpp>
+#include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/executor.hpp>
 #include <actor-zeta/executor/policy/work_sharing.hpp>
-#include <actor-zeta/base/supervisor_abstract.hpp>
 
 namespace actor_zeta {
 
@@ -23,8 +24,8 @@ namespace actor_zeta {
     using base::basic_async_actor;
     using base::context;
     using base::make_handler;
-    using base::supervisor_t;
     using base::supervisor;
+    using base::supervisor_t;
 
     using executor::abstract_executor;
     using executor::executable;
@@ -47,14 +48,6 @@ namespace actor_zeta {
     template<class T, typename... Args>
     auto make_message(actor_address sender_, T name, Args&&... args) -> message_ptr {
         return message_ptr(new base::message(sender_, std::forward<T>(name), std::move(detail::any(std::tuple<type_traits::decay_t<Args>...>{std::forward<Args>(args)...}))));
-    }
-
-    template<
-        typename Actor,
-        typename Supervisor,
-        typename... Args>
-    auto join(Supervisor* supervisor, Args&&... args) -> actor_zeta::actor_address {
-        return supervisor->join(new Actor(supervisor, std::forward<Args>(args)...));
     }
 
     template<typename Sender, typename... Args>
@@ -117,22 +110,38 @@ namespace actor_zeta {
         link_imp(actor1, actor2);
     }
 
-    template<class Supervisor, class... Args>
-    auto spawn_actor(supervisor_t*, Args&&... args) -> supervisor {
-        return new Supervisor(std::forward<Args>(args)...);
+    template<class Actor,class Supervisor,class Tuple, std::size_t... I>
+    Actor* created_actor(Supervisor &&supervisor,Tuple&&args, type_traits::index_sequence<I...>) {
+        return new Actor(supervisor, std::get<I>(args)...);
     }
 
-    template<class Supervisor, class... Args>
-    auto spawn_actor(supervisor&, Args&&... args) -> supervisor {
-        return new Supervisor(std::forward<Args>(args)...);
+
+    template<
+        class Actor,
+        class Supervisor,
+        class... Args>
+    auto spawn_actor(const Supervisor& supervisor, Args&&... args) -> void {
+        using args_types = type_traits::type_list<Args...>;
+        static constexpr size_t number_of_arguments = type_traits::type_list_size<args_types>::value;
+        send(
+            supervisor->address(),
+            supervisor->address(),
+            "spawn_actor",
+            std::move(
+                base::default_spawn_actor(
+                    [&, args_ = std::move(std::tuple<Args&&...>(std::forward<Args&&>(args)...))](detail::pmr::memory_resource* resource){
+                      return created_actor<Actor>(supervisor, args_, type_traits::make_index_sequence<number_of_arguments>{});
+                    }
+                )
+            )
+        );
     }
 
-    template<class Supervisor, class... Args>
-    auto spawn_supervisor(supervisor_t*, Args&&... args) -> Supervisor {
-    }
+    template<
+        class Supervisor,
+        class... Args>
+    auto spawn_supervisor(Args&&... args) -> std::unique_ptr<Supervisor> {
 
-    template<class Supervisor, class... Args>
-    auto spawn_supervisor(supervisor&, supervisor&, Args&&... args) -> Supervisor {
     }
 
 } // namespace actor_zeta

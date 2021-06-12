@@ -11,7 +11,7 @@ namespace actor_zeta { namespace base {
     public:
         supervisor() = default;
 
-        supervisor(const actor& a) = delete;
+        supervisor(const supervisor& a) = delete;
 
         supervisor(supervisor&& a) = default;
 
@@ -58,6 +58,10 @@ namespace actor_zeta { namespace base {
         ~supervisor();
 
         inline supervisor_t* operator->() const noexcept {
+            return ptr_.get();
+        }
+
+        inline supervisor_t* get() const noexcept {
             return ptr_.get();
         }
 
