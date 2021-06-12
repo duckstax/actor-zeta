@@ -33,19 +33,23 @@ namespace actor_zeta { namespace base {
     auto supervisor_abstract::resource() const -> detail::pmr::memory_resource* {
         return memory_resource_;
     }
+
     auto supervisor_abstract::executor() noexcept -> executor::abstract_executor* {
         return executor_impl();
     }
+
     auto supervisor_abstract::spawn_actor(default_spawn_actor& construct) -> void {
         auto actor_tmp = std::move(construct(memory_resource_));
         auto address = actor_tmp->address();
         add_actor_impl(std::move(actor_tmp));
-        link(*this,address);
+        link(*this, address);
     }
 
     auto supervisor_abstract::spawn_supervisor(default_spawn_supervisor& construct) -> void {
         auto supervisor = std::move(construct(memory_resource_));
+        auto address = supervisor->address();
         add_supervisor_impl(std::move(supervisor));
+        link(*this, address);
     }
 
 }} // namespace actor_zeta::base

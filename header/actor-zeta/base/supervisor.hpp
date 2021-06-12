@@ -1,9 +1,7 @@
 #pragma once
 
-#include <actor-zeta/base/communication_module.hpp>
-#include <actor-zeta/detail/pmr/memory_resource.hpp>
+#include <actor-zeta/detail/intrusive_ptr.hpp>
 #include <actor-zeta/forwards.hpp>
-#include <functional>
 
 namespace actor_zeta { namespace base {
 
