@@ -9,6 +9,7 @@
 // clang-format on
 #include <actor-zeta/base/actor.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
+#include <actor-zeta/link.hpp>
 
 namespace actor_zeta { namespace base {
 
@@ -37,7 +38,9 @@ namespace actor_zeta { namespace base {
     }
     auto supervisor_abstract::spawn_actor(default_spawn_actor& construct) -> void {
         auto actor_tmp = std::move(construct(memory_resource_));
+        auto address = actor_tmp->address();
         add_actor_impl(std::move(actor_tmp));
+        link(*this,address);
     }
 
     auto supervisor_abstract::spawn_supervisor(default_spawn_supervisor& construct) -> void {

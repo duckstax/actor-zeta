@@ -40,7 +40,7 @@ public:
     explicit supervisor_lite()
         : supervisor_abstract(nullptr, "network")
         , e_(new executor_t<work_sharing>(
-                 2,
+                 1,
                  100),
              thread_pool_deleter)
         , cursor(0)
@@ -92,6 +92,8 @@ private:
                 cursor = 0;
             }
         }
+        local(std::move(msg));
+
     }
 
     std::unique_ptr<abstract_executor, decltype(thread_pool_deleter)> e_;
