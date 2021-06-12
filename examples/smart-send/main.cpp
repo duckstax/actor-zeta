@@ -44,19 +44,16 @@ public:
                  100),
              thread_pool_deleter)
         , cursor(0)
-        , system_{"sync_contacts", "add_link", "remove_link"} {
+        , system_{
+              "sync_contacts",
+              "add_link",
+              "remove_link",
+              "spawn_actor"
+        } {
         e_->start();
     }
 
     ~supervisor_lite() override = default;
-
-    auto shutdown() noexcept -> void {
-        e_->stop();
-    }
-
-    auto startup() noexcept -> void {
-        e_->start();
-    }
 
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final { return e_.get(); }
 
@@ -92,7 +89,6 @@ private:
                 cursor = 0;
             }
         }
-        local(std::move(msg));
 
     }
 
@@ -163,14 +159,13 @@ using namespace std::chrono_literals;
 int main() {
     actor_zeta::supervisor supervisor(new supervisor_lite());
 
-    /// int const actors = 10;
+     int const actors = 10;
 
-    ///for (auto i = actors - 1; i > 0; --i) {
-    ///    auto bot = join<worker_t>(*supervisor);
-    ///    actor_zeta::link(*supervisor, bot);
-    ///}
+    for (auto i = actors - 1; i > 0; --i) {
+        actor_zeta::spawn_actor<worker_t>(supervisor);
+    }
 
-    actor_zeta::spawn_actor<worker_t>(supervisor);
+    //actor_zeta::spawn_actor<worker_t>(supervisor);
 
     int const task = 10000;
 
