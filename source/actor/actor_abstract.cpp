@@ -12,13 +12,10 @@
 namespace actor_zeta { namespace base {
 
     actor_abstract::~actor_abstract() {
+    }
 
-        }
+    actor_abstract::actor_abstract(std::string type)
+        : communication_module(std::move(type), sub_type_t::actor) {
+    }
 
-        actor_abstract::actor_abstract(std::string type)
-                : communication_module(std::move(type), sub_type_t::actor)
-                {
-        }
-
-
-}}
+}} // namespace actor_zeta::base

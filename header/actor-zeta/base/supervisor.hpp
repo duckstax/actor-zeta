@@ -2,6 +2,7 @@
 
 #include <actor-zeta/detail/intrusive_ptr.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <type_traits>
 
 namespace actor_zeta { namespace base {
 
@@ -78,5 +79,8 @@ namespace actor_zeta { namespace base {
 
         intrusive_ptr<supervisor_abstract> ptr_;
     };
+
+    static_assert(std::is_move_constructible<supervisor>::value, "");
+    static_assert(not std::is_copy_constructible<supervisor>::value, "");
 
 }} // namespace actor_zeta::base

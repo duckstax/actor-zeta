@@ -40,4 +40,7 @@ namespace actor_zeta { namespace base {
         intrusive_ptr<communication_module> ptr_;
     };
 
+    static_assert(std::is_move_constructible<actor_address>::value, "");
+    static_assert(std::is_copy_constructible<actor_address>::value, "");
+
 }} // namespace actor_zeta::base

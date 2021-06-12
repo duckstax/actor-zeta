@@ -78,4 +78,7 @@ namespace actor_zeta { namespace base {
 
         intrusive_ptr<actor_abstract> ptr_;
     };
+
+    static_assert(std::is_move_constructible<actor>::value, "");
+    static_assert(not std::is_copy_constructible<actor>::value, "");
 }} // namespace actor_zeta::base
