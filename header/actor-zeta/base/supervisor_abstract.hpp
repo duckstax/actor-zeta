@@ -6,8 +6,8 @@
 
 namespace actor_zeta { namespace base {
 
-    using default_spawn_actor = std::function<actor(detail::pmr::memory_resource*)>;
-    using default_spawn_supervisor = std::function<supervisor(detail::pmr::memory_resource*)>;
+    using default_spawn_actor = std::function<actor(supervisor_abstract*)>;
+    using default_spawn_supervisor = std::function<supervisor(supervisor_abstract*)>;
 
     class supervisor_abstract : public communication_module {
     public:

@@ -7,19 +7,17 @@ namespace actor_zeta {
 
         template<
             class Actor,
-            class Supervisor,
             class Tuple, std::size_t... I,
             class = type_traits::enable_if_t<std::is_base_of<actor_abstract, Actor>::value>>
-        Actor* created_actor(Supervisor&& supervisor, Tuple&& args, type_traits::index_sequence<I...>) {
+        Actor* created_actor(actor_zeta::supervisor_abstract* supervisor, Tuple&& args, type_traits::index_sequence<I...>) {
             return new Actor(supervisor, std::get<I>(args)...);
         }
 
         template<
             class ChildrenSupervisor,
-            class ParentSupervisor,
             class Tuple, std::size_t... I,
             class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, ChildrenSupervisor>::value>>
-        ChildrenSupervisor* created_supervisor(ParentSupervisor&& supervisor, Tuple&& args, type_traits::index_sequence<I...>) {
+        ChildrenSupervisor* created_supervisor(actor_zeta::supervisor_abstract*supervisor, Tuple&& args, type_traits::index_sequence<I...>) {
             return new ChildrenSupervisor(supervisor, std::get<I>(args)...);
         }
 
@@ -39,8 +37,8 @@ namespace actor_zeta {
             "spawn_actor",
             std::move(
                 base::default_spawn_actor(
-                    [&, args_ = std::move(std::tuple<Args&&...>(std::forward<Args&&>(args)...))](detail::pmr::memory_resource* resource) {
-                        return detail::created_actor<Actor>(supervisor, args_, type_traits::make_index_sequence<number_of_arguments>{});
+                    [&, args_ = std::move(std::tuple<Args&&...>(std::forward<Args&&>(args)...))](actor_zeta::supervisor_abstract* ptr) {
+                        return detail::created_actor<Actor>(ptr, args_, type_traits::make_index_sequence<number_of_arguments>{});
                     })));
     }
 
@@ -58,8 +56,8 @@ namespace actor_zeta {
             "spawn_supervisor",
             std::move(
                 base::default_spawn_actor(
-                    [&, args_ = std::move(std::tuple<Args&&...>(std::forward<Args&&>(args)...))](detail::pmr::memory_resource* resource) {
-                        return detail::created_supervisor<ChildrenSupervisor>(supervisor, args_, type_traits::make_index_sequence<number_of_arguments>{});
+                    [&, args_ = std::move(std::tuple<Args&&...>(std::forward<Args&&>(args)...))](actor_zeta::supervisor_abstract* ptr) {
+                        return detail::created_supervisor<ChildrenSupervisor>(ptr, args_, type_traits::make_index_sequence<number_of_arguments>{});
                     })));
     }
 

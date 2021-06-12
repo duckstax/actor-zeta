@@ -127,8 +127,8 @@ static std::atomic<uint64_t> counter_work_data{0};
 
 class worker_t final : public actor_zeta::basic_async_actor {
 public:
-    explicit worker_t(actor_zeta::supervisor& ptr)
-        : actor_zeta::basic_async_actor(ptr.get(), "bot") {
+    explicit worker_t(actor_zeta::supervisor_abstract* ptr)
+        : actor_zeta::basic_async_actor(ptr, "bot") {
         add_handler(
             "download",
             &worker_t::download);
