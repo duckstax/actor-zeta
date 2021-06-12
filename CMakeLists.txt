@@ -89,6 +89,7 @@ set(HEADER_FILES
         header/actor-zeta/base/supervisor.hpp
         header/actor-zeta/base/supervisor_abstract.hpp
 
+        header/actor-zeta/detail/pmr/container.hpp
         header/actor-zeta/detail/pmr/memory_resource.hpp
         header/actor-zeta/detail/any.hpp
         header/actor-zeta/detail/callable_trait.hpp
@@ -111,6 +112,8 @@ set(HEADER_FILES
         header/actor-zeta/base/message.hpp
 
         header/actor-zeta/forwards.hpp
+        header/actor-zeta/link.hpp
+        header/actor-zeta/send.hpp
         header/actor-zeta.hpp
 )
 
@@ -135,7 +138,7 @@ set(SOURCE_FILES
 
 
         source/messaging/message.cpp
-        header/actor-zeta/link.hpp header/actor-zeta/send.hpp)
+)
 
 
 find_program(CCACHE_FOUND ccache)

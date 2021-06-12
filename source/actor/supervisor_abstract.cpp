@@ -13,13 +13,78 @@
 
 namespace actor_zeta { namespace base {
 
-    supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* memory_resource, std::string name)
+    static constexpr std::size_t DEFAULT_ALIGNMENT{alignof(std::max_align_t)};
+
+    constexpr bool is_pow2(std::size_t n) { return (0 == (n & (n - 1))); }
+
+    constexpr bool is_supported_alignment(std::size_t alignment) { return is_pow2(alignment); }
+
+    template<typename Alloc>
+    void* aligned_allocate(std::size_t bytes, std::size_t alignment, Alloc alloc) {
+        assert(is_pow2(alignment));
+
+        std::size_t padded_allocation_size{bytes + alignment + sizeof(std::ptrdiff_t)};
+
+        char* const original = static_cast<char*>(alloc(padded_allocation_size));
+
+        void* aligned{original + sizeof(std::ptrdiff_t)};
+
+        std::align(alignment, bytes, aligned, padded_allocation_size);
+
+        std::ptrdiff_t offset = static_cast<char*>(aligned) - original;
+
+        *(static_cast<std::ptrdiff_t*>(aligned) - 1) = offset;
+
+        return aligned;
+    }
+
+    template<typename Dealloc>
+    void aligned_deallocate(void* p, std::size_t bytes, std::size_t alignment, Dealloc dealloc) {
+        (void) alignment;
+        (void) bytes;
+
+        std::ptrdiff_t const offset = *(reinterpret_cast<std::ptrdiff_t*>(p) - 1);
+
+        void* const original = static_cast<char*>(p) - offset;
+
+        dealloc(original);
+    }
+
+    class new_delete_resource final : public detail::pmr::memory_resource {
+    public:
+    private:
+        void* do_allocate(std::size_t bytes, std::size_t alignment = DEFAULT_ALIGNMENT) override {
+            alignment = (is_supported_alignment(alignment)) ? alignment : DEFAULT_ALIGNMENT;
+            return aligned_allocate(bytes, alignment, [](std::size_t size) { return ::operator new(size); });
+        }
+
+        void do_deallocate(void* p, std::size_t bytes, std::size_t alignment = DEFAULT_ALIGNMENT) override {
+            aligned_deallocate(p, bytes, alignment, [](void* p) { ::operator delete(p); });
+        }
+
+        bool do_is_equal(const memory_resource& __other) const noexcept override { return &__other == this; }
+    };
+
+    supervisor_abstract::supervisor_abstract(std::string name, detail::pmr::memory_resource* memory_resource)
         : communication_module(std::move(name), sub_type_t::supervisor)
         , memory_resource_(memory_resource) {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
         add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
     }
 
+    supervisor_abstract::supervisor_abstract(std::string name)
+        : communication_module(std::move(name), sub_type_t::supervisor)
+        , memory_resource_(new new_delete_resource) {
+        add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
+        add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
+    }
+
+    supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string name)
+        : communication_module(std::move(name), sub_type_t::supervisor)
+        , memory_resource_(ptr->resource()) {
+        add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
+        add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
+    }
     supervisor_abstract::~supervisor_abstract() {}
 
     auto supervisor_abstract::current_message() -> message* {
@@ -51,5 +116,4 @@ namespace actor_zeta { namespace base {
         add_supervisor_impl(std::move(supervisor));
         link(*this, address);
     }
-
 }} // namespace actor_zeta::base

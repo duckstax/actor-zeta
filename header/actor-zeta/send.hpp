@@ -18,6 +18,7 @@
 
 namespace actor_zeta {
 
+    using base::actor_abstract;
     using base::actor;
     using base::actor_address;
     using base::basic_async_actor;
