@@ -9,10 +9,10 @@ namespace actor_zeta { namespace base {
     using default_spawn_actor = std::function<actor(detail::pmr::memory_resource*)>;
     using default_spawn_supervisor = std::function<supervisor(detail::pmr::memory_resource*)>;
 
-    class supervisor_t : public communication_module {
+    class supervisor_abstract : public communication_module {
     public:
-        supervisor_t(detail::pmr::memory_resource*,std::string);
-        ~supervisor_t() override;
+        supervisor_abstract(detail::pmr::memory_resource*, std::string);
+        ~supervisor_abstract() override;
         auto executor() noexcept -> executor::abstract_executor*;
         using communication_module::broadcast;
         auto resource() const -> detail::pmr::memory_resource*;

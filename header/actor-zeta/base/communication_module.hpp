@@ -24,7 +24,7 @@ namespace actor_zeta { namespace base {
     };
 
     class communication_module
-        : public detail::ref_counted
+        : public ref_counted
         , public context {
     public:
         using key_type = detail::string_view;

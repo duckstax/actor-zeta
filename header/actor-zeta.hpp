@@ -25,7 +25,7 @@ namespace actor_zeta {
     using base::context;
     using base::make_handler;
     using base::supervisor;
-    using base::supervisor_t;
+    using base::supervisor_abstract;
 
     using executor::abstract_executor;
     using executor::executable;

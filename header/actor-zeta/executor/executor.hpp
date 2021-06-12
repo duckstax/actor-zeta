@@ -59,7 +59,7 @@ namespace actor_zeta { namespace executor {
                 /// shutdown workers
                 class shutdown_helper final
                         : public executable
-                        , public detail::ref_counted
+                        , public ref_counted
                         {
                 public:
                     auto run(execution_device* ptr, size_t) -> executable_result override {

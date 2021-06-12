@@ -9,7 +9,7 @@ namespace actor_zeta {
         class actor_address;
         class handler;
         struct context;
-        class supervisor_t;
+        class supervisor_abstract;
         class supervisor;
         class communication_module;
         class cooperative_actor;

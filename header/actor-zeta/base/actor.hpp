@@ -28,7 +28,7 @@ namespace actor_zeta { namespace base {
         template<
             class T,
             class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
-        actor(detail::intrusive_ptr<T> ptr)
+        actor(intrusive_ptr<T> ptr)
             : ptr_(std::move(ptr)) {}
 
         template<
@@ -40,7 +40,7 @@ namespace actor_zeta { namespace base {
         template<
             class T,
             class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
-        actor& operator=(detail::intrusive_ptr<T> ptr) {
+        actor& operator=(intrusive_ptr<T> ptr) {
             actor tmp{std::move(ptr)};
             swap(tmp);
             return *this;
@@ -76,6 +76,6 @@ namespace actor_zeta { namespace base {
     private:
         void swap(actor&) noexcept;
 
-        detail::intrusive_ptr<abstract_actor> ptr_;
+        intrusive_ptr<abstract_actor> ptr_;
     };
 }} // namespace actor_zeta::base

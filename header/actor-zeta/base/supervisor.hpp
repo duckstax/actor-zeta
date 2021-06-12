@@ -25,20 +25,20 @@ namespace actor_zeta { namespace base {
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<supervisor_t, T>::value>>
-        supervisor(detail::intrusive_ptr<T> ptr)
+            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
+        supervisor(intrusive_ptr<T> ptr)
             : ptr_(std::move(ptr)) {}
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<supervisor_t, T>::value>>
+            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
         supervisor(T* ptr)
             : ptr_(ptr) {}
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<supervisor_t, T>::value>>
-        supervisor& operator=(detail::intrusive_ptr<T> ptr) {
+            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
+        supervisor& operator=(intrusive_ptr<T> ptr) {
             supervisor tmp{std::move(ptr)};
             swap(tmp);
             return *this;
@@ -46,7 +46,7 @@ namespace actor_zeta { namespace base {
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<supervisor_t, T>::value>>
+            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
         supervisor& operator=(T* ptr) {
             supervisor tmp{ptr};
             swap(tmp);
@@ -57,11 +57,11 @@ namespace actor_zeta { namespace base {
 
         ~supervisor();
 
-        inline supervisor_t* operator->() const noexcept {
+        inline supervisor_abstract* operator->() const noexcept {
             return ptr_.get();
         }
 
-        inline supervisor_t* get() const noexcept {
+        inline supervisor_abstract* get() const noexcept {
             return ptr_.get();
         }
 
@@ -78,7 +78,7 @@ namespace actor_zeta { namespace base {
     private:
         void swap(supervisor&) noexcept;
 
-        detail::intrusive_ptr<supervisor_t> ptr_;
+        intrusive_ptr<supervisor_abstract> ptr_;
     };
 
 }} // namespace actor_zeta::base

@@ -8,7 +8,7 @@
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
 
-namespace actor_zeta { namespace detail {
+namespace actor_zeta {
     ///
     /// @brief Represents intrusive pointer
     /// @tparam T
@@ -207,4 +207,4 @@ namespace actor_zeta { namespace detail {
     intrusive_ptr<T> dynamic_pointer_cast(intrusive_ptr<U> const& r) noexcept {
         return r.template downcast<T>();
     }
-}} // namespace actor_zeta::detail
+} // namespace actor_zeta

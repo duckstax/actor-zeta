@@ -11,9 +11,7 @@
 #include <actor-zeta.hpp>
 
 using actor_zeta::abstract_executor;
-using actor_zeta::basic_async_actor;
 using actor_zeta::context;
-using actor_zeta::supervisor_t;
 
 using actor_zeta::abstract_executor;
 using actor_zeta::executor_t;
@@ -22,12 +20,12 @@ using actor_zeta::work_sharing;
 using actor_zeta::make_message;
 
 template<typename Task, typename... Args>
-inline auto make_task(supervisor_t* executor_, const std::string& command, Args... args) -> void {
+inline auto make_task(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
     executor_->enqueue(std::move(make_message(executor_->address(), command, std::move(Task(std::forward<Args>(args)...)))));
 }
 
 template<typename Task, typename... Args>
-inline auto make_task_broadcast(supervisor_t* executor_, const std::string& command, Args... args) -> void {
+inline auto make_task_broadcast(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
     executor_->broadcast(make_message(executor_->address(), command, std::move(Task(std::forward<Args>(args)...))));
 }
 
@@ -37,16 +35,17 @@ auto thread_pool_deleter = [](abstract_executor* ptr) {
 };
 
 /// non thread safe
-class supervisor_lite final : public supervisor_t {
+class supervisor_lite final : public actor_zeta::supervisor_abstract {
 public:
     explicit supervisor_lite()
-        : supervisor_t(nullptr, "network")
+        : supervisor_abstract(nullptr, "network")
         , e_(new executor_t<work_sharing>(
                  2,
                  100),
              thread_pool_deleter)
         , cursor(0)
         , system_{"sync_contacts", "add_link", "remove_link"} {
+        e_->start();
     }
 
     ~supervisor_lite() override = default;
@@ -93,7 +92,6 @@ private:
                 cursor = 0;
             }
         }
-        //assert(false);
     }
 
     std::unique_ptr<abstract_executor, decltype(thread_pool_deleter)> e_;
@@ -129,10 +127,10 @@ struct work_data final {
 static std::atomic<uint64_t> counter_download_data{0};
 static std::atomic<uint64_t> counter_work_data{0};
 
-class worker_t final : public basic_async_actor {
+class worker_t final : public actor_zeta::basic_async_actor {
 public:
     explicit worker_t(actor_zeta::supervisor& ptr)
-        : basic_async_actor(ptr.get(), "bot") {
+        : actor_zeta::basic_async_actor(ptr.get(), "bot") {
         add_handler(
             "download",
             &worker_t::download);
@@ -161,9 +159,7 @@ private:
 using namespace std::chrono_literals;
 
 int main() {
-    std::unique_ptr<supervisor_lite> supervisor(new supervisor_lite());
-
-    supervisor->startup();
+    actor_zeta::supervisor supervisor(new supervisor_lite());
 
     /// int const actors = 10;
 
@@ -177,11 +173,11 @@ int main() {
     int const task = 10000;
 
     for (auto i = task - 1; i > 0; --i) {
-        make_task<download_data>(supervisor.get(), "download", std::string("fb"), std::string("jack"), std::string("1"));
+        make_task<download_data>(supervisor, "download", std::string("fb"), std::string("jack"), std::string("1"));
     }
 
     for (auto i = task - 1; i > 0; --i) {
-        make_task_broadcast<work_data>(supervisor.get(), "work_data", std::string("fb"), std::string("jack"));
+        make_task_broadcast<work_data>(supervisor, "work_data", std::string("fb"), std::string("jack"));
     }
 
     std::this_thread::sleep_for(180s);

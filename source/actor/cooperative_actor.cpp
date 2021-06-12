@@ -114,7 +114,7 @@ namespace actor_zeta { namespace base {
     }
 
     cooperative_actor::cooperative_actor(
-        supervisor_t* supervisor,
+        supervisor_abstract* supervisor,
         std::string type)
         : abstract_actor( std::move(type))
         , supervisor_(supervisor)  {
@@ -208,7 +208,7 @@ namespace actor_zeta { namespace base {
             }
         }
 
-        auto cooperative_actor::supervisor() -> supervisor_t* {
+        auto cooperative_actor::supervisor() -> supervisor_abstract* {
             return supervisor_;
         }
 

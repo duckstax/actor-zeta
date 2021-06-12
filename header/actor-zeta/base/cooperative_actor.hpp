@@ -27,7 +27,7 @@ namespace actor_zeta { namespace base {
         void intrusive_ptr_release_impl() override;
 
     protected:
-        cooperative_actor(supervisor_t*, std::string);
+        cooperative_actor(supervisor_abstract*, std::string);
 
         void enqueue_base(message_ptr, executor::execution_device*) final;
 
@@ -74,10 +74,10 @@ namespace actor_zeta { namespace base {
 
         auto context() const -> executor::execution_device*;
 
-        auto supervisor() -> supervisor_t*;
+        auto supervisor() -> supervisor_abstract*;
 
         // ----------------------------------------------------- message processing
-        supervisor_t* supervisor_;
+        supervisor_abstract* supervisor_;
         executor::execution_device* executor_;
         message* current_message_;
         mailbox_t mailbox_;
