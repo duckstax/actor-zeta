@@ -78,7 +78,7 @@ include_directories(SYSTEM .)
 include_directories(SYSTEM header)
 
 set(HEADER_FILES
-        header/actor-zeta/base/abstract_actor.hpp
+        header/actor-zeta/base/actor_abstract.hpp
         header/actor-zeta/base/actor.hpp
         header/actor-zeta/base/actor_address.hpp
         header/actor-zeta/base/cooperative_actor.hpp
@@ -116,7 +116,7 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
 
-        source/actor/abstract_actor.cpp
+        source/actor/actor_abstract.cpp
         source/actor/actor.cpp
         source/actor/actor_address.cpp
         source/actor/cooperative_actor.cpp

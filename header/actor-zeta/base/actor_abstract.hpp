@@ -9,18 +9,18 @@ namespace actor_zeta { namespace base {
     /// @brief Abstract concept of an actor
     ///
 
-    class abstract_actor : public communication_module {
+    class actor_abstract : public communication_module {
     public:
-        abstract_actor() = delete;
+        actor_abstract() = delete;
 
-        abstract_actor(const abstract_actor&) = delete;
+        actor_abstract(const actor_abstract&) = delete;
 
-        abstract_actor& operator=(const abstract_actor&) = delete;
+        actor_abstract& operator=(const actor_abstract&) = delete;
 
-        ~abstract_actor() override;
+        ~actor_abstract() override;
 
     protected:
-        abstract_actor(std::string);
+        actor_abstract(std::string);
     };
 
 }} // namespace actor_zeta::base

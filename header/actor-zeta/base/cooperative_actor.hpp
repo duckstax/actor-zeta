@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/base/abstract_actor.hpp>
+#include <actor-zeta/base/actor_abstract.hpp>
 #include <actor-zeta/detail/single_reader_queue.hpp>
 #include <actor-zeta/executor/executable.hpp>
 #include <actor-zeta/forwards.hpp>
@@ -13,7 +13,7 @@ namespace actor_zeta { namespace base {
     using max_throughput_t = std::size_t;
 
     class cooperative_actor
-        : public abstract_actor
+        : public actor_abstract
         , public executor::executable {
     public:
         using mailbox_t = detail::single_reader_queue<message>;

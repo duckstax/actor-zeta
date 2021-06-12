@@ -27,19 +27,19 @@ namespace actor_zeta { namespace base {
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
+            class = type_traits::enable_if_t<std::is_base_of<actor_abstract, T>::value>>
         actor(intrusive_ptr<T> ptr)
             : ptr_(std::move(ptr)) {}
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
+            class = type_traits::enable_if_t<std::is_base_of<actor_abstract, T>::value>>
         actor(T* ptr)
             : ptr_(ptr) {}
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
+            class = type_traits::enable_if_t<std::is_base_of<actor_abstract, T>::value>>
         actor& operator=(intrusive_ptr<T> ptr) {
             actor tmp{std::move(ptr)};
             swap(tmp);
@@ -48,7 +48,7 @@ namespace actor_zeta { namespace base {
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
+            class = type_traits::enable_if_t<std::is_base_of<actor_abstract, T>::value>>
         actor& operator=(T* ptr) {
             actor tmp{ptr};
             swap(tmp);
@@ -59,7 +59,7 @@ namespace actor_zeta { namespace base {
 
         ~actor();
 
-        inline abstract_actor* operator->() const noexcept {
+        inline actor_abstract* operator->() const noexcept {
             return ptr_.get();
         }
 
@@ -76,6 +76,6 @@ namespace actor_zeta { namespace base {
     private:
         void swap(actor&) noexcept;
 
-        intrusive_ptr<abstract_actor> ptr_;
+        intrusive_ptr<actor_abstract> ptr_;
     };
 }} // namespace actor_zeta::base
