@@ -17,8 +17,8 @@ namespace actor_zeta { namespace detail { namespace pmr {
     public:
         typedef T value_type;
 
-        polymorphic_allocator() noexcept
-            : resource_(::boost::container::pmr::get_default_resource()) {}
+        /// non C++ 17 std
+        polymorphic_allocator() noexcept =delete
 
         polymorphic_allocator(memory_resource* r) noexcept
             : resource_(r) { assert(r != 0); }
