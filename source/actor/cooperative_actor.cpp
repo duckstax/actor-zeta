@@ -115,8 +115,8 @@ namespace actor_zeta { namespace base {
     cooperative_actor::cooperative_actor(
         supervisor_t* supervisor,
         std::string type)
-        : abstract_actor( std::move(type))
-        , supervisor_(supervisor)  {
+        : abstract_actor(std::move(type))
+        , supervisor_(supervisor) {
         flags(static_cast<int>(state::empty));
         mailbox().try_unblock();
     }
@@ -197,18 +197,18 @@ namespace actor_zeta { namespace base {
         return current_message_;
     }
 
-        executor::execution_device *cooperative_actor::context() const {
-            return executor_;
-        }
+    executor::execution_device* cooperative_actor::context() const {
+        return executor_;
+    }
 
-        void cooperative_actor::context(executor::execution_device *e) {
-            if (e!= nullptr) {
-                executor_ = e;
-            }
+    void cooperative_actor::context(executor::execution_device* e) {
+        if (e != nullptr) {
+            executor_ = e;
         }
+    }
 
-        auto cooperative_actor::supervisor() -> supervisor_t* {
-            return supervisor_;
-        }
+    auto cooperative_actor::supervisor() -> supervisor_t* {
+        return supervisor_;
+    }
 
 }} // namespace actor_zeta::base
