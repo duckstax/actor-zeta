@@ -2,7 +2,6 @@
 #include <vector>
 
 // clang-format off
-#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/base/message.hpp>
@@ -37,14 +36,14 @@ namespace actor_zeta { namespace base {
         std::cerr << "WARNING" << std::endl;
     }
 
-    void communication_module::execute(context& ctx) {
-        auto it = handlers_.find(ctx.current_message()->command());
+    void communication_module::execute() {
+        auto it = handlers_.find(current_message()->command());
         if (it != handlers_.end()) {
-            return it->second->invoke(ctx);
+            return it->second->invoke(*this);
         } else {
-            auto sender = ctx.current_message()->sender()->type();
+            auto sender = current_message()->sender()->type();
             auto reciever = this->type();
-            error_skip(sender, reciever, ctx.current_message()->command());
+            error_skip(sender, reciever, current_message()->command());
         }
     }
 

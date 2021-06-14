@@ -1,8 +1,8 @@
 #include <actor-zeta/detail/any.hpp>
-#include <numeric>
-#include <vector>
-#include <string>
 #include <cassert>
+#include <numeric>
+#include <string>
+#include <vector>
 
 using actor_zeta::detail::any;
 using actor_zeta::detail::any_cast;
@@ -11,24 +11,25 @@ using actor_zeta::detail::make_any;
 constexpr static uint32_t magic_value = 0x01f1cbe8;
 
 struct big_object final {
-    int             x_;
-    bool            throw_on_copy_;
-    int64_t         id_;
-    uint32_t        magic_value_;
-    static int64_t  counter_;
-    static int64_t  constructor_counter_;
-    static int64_t  destructor_counter_;
-    static int64_t  default_constructor_counter_;
-    static int64_t  arg_constructor_counter_;
-    static int64_t  copy_constructor_counter_;
-    static int64_t  move_constructor_counter_;
-    static int64_t  copy_assign_counter_;
-    static int64_t  move_assign_counter_;
-    static int      magic_error_counter_;
+    int x_;
+    bool throw_on_copy_;
+    int64_t id_;
+    uint32_t magic_value_;
+    static int64_t counter_;
+    static int64_t constructor_counter_;
+    static int64_t destructor_counter_;
+    static int64_t default_constructor_counter_;
+    static int64_t arg_constructor_counter_;
+    static int64_t copy_constructor_counter_;
+    static int64_t move_constructor_counter_;
+    static int64_t copy_assign_counter_;
+    static int64_t move_assign_counter_;
+    static int magic_error_counter_;
 
     explicit big_object(int x = 0, bool bThrowOnCopy = false)
-            : x_(x), throw_on_copy_(bThrowOnCopy), magic_value_(magic_value)
-    {
+        : x_(x)
+        , throw_on_copy_(bThrowOnCopy)
+        , magic_value_(magic_value) {
         ++counter_;
         ++constructor_counter_;
         ++default_constructor_counter_;
@@ -36,8 +37,9 @@ struct big_object final {
     }
 
     big_object(int x0, int x1, int x2, bool throw_on_copy = false)
-            : x_(x0 + x1 + x2), throw_on_copy_(throw_on_copy), magic_value_(magic_value)
-    {
+        : x_(x0 + x1 + x2)
+        , throw_on_copy_(throw_on_copy)
+        , magic_value_(magic_value) {
         ++counter_;
         ++constructor_counter_;
         ++arg_constructor_counter_;
@@ -45,8 +47,9 @@ struct big_object final {
     }
 
     big_object(const big_object& other)
-            : x_(other.x_), throw_on_copy_(other.throw_on_copy_), magic_value_(other.magic_value_)
-    {
+        : x_(other.x_)
+        , throw_on_copy_(other.throw_on_copy_)
+        , magic_value_(other.magic_value_) {
         ++counter_;
         ++constructor_counter_;
         ++copy_constructor_counter_;
@@ -54,8 +57,9 @@ struct big_object final {
     }
 
     big_object(big_object&& other) ///TODO: noexcept
-            : x_(other.x_), throw_on_copy_(other.throw_on_copy_), magic_value_(other.magic_value_)
-    {
+        : x_(other.x_)
+        , throw_on_copy_(other.throw_on_copy_)
+        , magic_value_(other.magic_value_) {
         ++counter_;
         ++constructor_counter_;
         ++move_constructor_counter_;
@@ -63,10 +67,10 @@ struct big_object final {
         other.x_ = 0;
     }
 
-    big_object& operator=(const big_object& other){
+    big_object& operator=(const big_object& other) {
         ++copy_assign_counter_;
 
-        if(&other != this){
+        if (&other != this) {
             x_ = other.x_;
             magic_value_ = other.magic_value_;
             throw_on_copy_ = other.throw_on_copy_;
@@ -74,10 +78,10 @@ struct big_object final {
         return *this;
     }
 
-    big_object& operator=(big_object&& other){
+    big_object& operator=(big_object&& other) {
         ++move_assign_counter_;
 
-        if(&other != this){
+        if (&other != this) {
             std::swap(x_, other.x_);
             std::swap(magic_value_, other.magic_value_);
             std::swap(throw_on_copy_, other.throw_on_copy_);
@@ -85,8 +89,8 @@ struct big_object final {
         return *this;
     }
 
-    ~big_object(){
-        if(magic_value_ != magic_value) {
+    ~big_object() {
+        if (magic_value_ != magic_value) {
             ++magic_error_counter_;
         }
         magic_value_ = 0;
@@ -94,17 +98,17 @@ struct big_object final {
         ++destructor_counter_;
     }
 
-    static void reset(){
-        counter_                     = 0;
-        constructor_counter_         = 0;
-        destructor_counter_          = 0;
+    static void reset() {
+        counter_ = 0;
+        constructor_counter_ = 0;
+        destructor_counter_ = 0;
         default_constructor_counter_ = 0;
-        arg_constructor_counter_     = 0;
-        copy_constructor_counter_    = 0;
-        move_constructor_counter_    = 0;
-        copy_assign_counter_         = 0;
-        move_assign_counter_         = 0;
-        magic_error_counter_         = 0;
+        arg_constructor_counter_ = 0;
+        copy_constructor_counter_ = 0;
+        move_constructor_counter_ = 0;
+        copy_assign_counter_ = 0;
+        move_assign_counter_ = 0;
+        magic_error_counter_ = 0;
     }
 
     static bool is_clear() {
@@ -112,16 +116,16 @@ struct big_object final {
     }
 };
 
-int64_t big_object::counter_                     = 0;
-int64_t big_object::constructor_counter_         = 0;
-int64_t big_object::destructor_counter_          = 0;
+int64_t big_object::counter_ = 0;
+int64_t big_object::constructor_counter_ = 0;
+int64_t big_object::destructor_counter_ = 0;
 int64_t big_object::default_constructor_counter_ = 0;
-int64_t big_object::arg_constructor_counter_     = 0;
-int64_t big_object::copy_constructor_counter_    = 0;
-int64_t big_object::move_constructor_counter_    = 0;
-int64_t big_object::copy_assign_counter_         = 0;
-int64_t big_object::move_assign_counter_         = 0;
-int     big_object::magic_error_counter_         = 0;
+int64_t big_object::arg_constructor_counter_ = 0;
+int64_t big_object::copy_constructor_counter_ = 0;
+int64_t big_object::move_constructor_counter_ = 0;
+int64_t big_object::copy_assign_counter_ = 0;
+int64_t big_object::move_assign_counter_ = 0;
+int big_object::magic_error_counter_ = 0;
 
 struct small_object final {
     static int constructor_counter_;
@@ -129,7 +133,10 @@ struct small_object final {
     small_object() noexcept { constructor_counter_++; }
     small_object(const small_object&) noexcept { constructor_counter_++; }
     small_object(small_object&&) noexcept { constructor_counter_++; }
-    small_object& operator=(const small_object&) noexcept { constructor_counter_++; return *this; }
+    small_object& operator=(const small_object&) noexcept {
+        constructor_counter_++;
+        return *this;
+    }
     ~small_object() noexcept { constructor_counter_--; }
 
     static void reset() { constructor_counter_ = 0; }
@@ -138,22 +145,20 @@ struct small_object final {
 
 int small_object::constructor_counter_ = 0;
 
-
 struct list_of_numbers final {
-    list_of_numbers(std::initializer_list<int> numbers): sum(std::accumulate(begin(numbers), end(numbers), 0)) {}
+    list_of_numbers(std::initializer_list<int> numbers)
+        : sum(std::accumulate(begin(numbers), end(numbers), 0)) {}
 
     int sum;
 };
 
-template <typename... Ts>
-void ignore_unused(Ts const& ...){}
+template<typename... Ts>
+void ignore_unused(Ts const&...) {}
 
-template <typename... Ts>
-void ignore_unused(){}
-
+template<typename... Ts>
+void ignore_unused() {}
 
 int main() {
-
     {
 #if not CPP17_OR_GREATER
         static_assert(sizeof(std::string) <= sizeof(any), "has enough local memory to store");
@@ -201,7 +206,8 @@ int main() {
 
     {
         struct custom_type {
-            custom_type():data_(){}
+            custom_type()
+                : data_() {}
             int data_;
         };
 
@@ -322,177 +328,176 @@ int main() {
     }
 
     {
-        {
-            any a1 = 42;
-            any a2 = 24;
-            assert(any_cast<int>(a1) == 42);
-            assert(any_cast<int>(a2) == 24);
+        {any a1 = 42;
+    any a2 = 24;
+    assert(any_cast<int>(a1) == 42);
+    assert(any_cast<int>(a2) == 24);
 
-            a1.swap(a2);
-            assert(any_cast<int>(a1) == 24);
-            assert(any_cast<int>(a2) == 42);
+    a1.swap(a2);
+    assert(any_cast<int>(a1) == 24);
+    assert(any_cast<int>(a2) == 42);
 
-            std::swap(a1, a2);
-            assert(any_cast<int>(a1) == 42);
-            assert(any_cast<int>(a2) == 24);
-        }
-        {
-            any a1 = std::string("hello");
-            any a2 = std::string("world");
-            assert(any_cast<std::string>(a1) == "hello");
-            assert(any_cast<std::string>(a2) == "world");
+    std::swap(a1, a2);
+    assert(any_cast<int>(a1) == 42);
+    assert(any_cast<int>(a2) == 24);
+}
+{
+    any a1 = std::string("hello");
+    any a2 = std::string("world");
+    assert(any_cast<std::string>(a1) == "hello");
+    assert(any_cast<std::string>(a2) == "world");
 
-            a1.swap(a2);
-            assert(any_cast<std::string>(a1) == "world");
-            assert(any_cast<std::string>(a2) == "hello");
+    a1.swap(a2);
+    assert(any_cast<std::string>(a1) == "world");
+    assert(any_cast<std::string>(a2) == "hello");
 
-            std::swap(a1, a2);
-            assert(any_cast<std::string>(a1) == "hello");
-            assert(any_cast<std::string>(a2) == "world");
-        }
-    }
+    std::swap(a1, a2);
+    assert(any_cast<std::string>(a1) == "hello");
+    assert(any_cast<std::string>(a2) == "world");
+}
+}
 
+{
+    any a;
+
+    a.emplace<int>(42);
+    assert(a.has_value());
+    assert(any_cast<int>(a) == 42);
+
+    a.emplace<short>((short) 8); // no way to define a short literal we must cast here.
+    assert(any_cast<short>(a) == 8);
+    assert(a.has_value());
+
+    a.reset();
+    assert(!a.has_value());
+}
+
+{
+    big_object::reset();
     {
         any a;
-
-        a.emplace<int>(42);
+        a.emplace<big_object>();
         assert(a.has_value());
-        assert(any_cast<int>(a) == 42);
+    }
+    assert(!big_object::is_clear());
+}
 
-        a.emplace<short>((short)8); // no way to define a short literal we must cast here.
-        assert(any_cast<short>(a) == 8);
-        assert(a.has_value());
+{
+    {any a;
+a.emplace<list_of_numbers>(std::initializer_list<int>{1, 2, 3, 4, 5, 6});
 
-        a.reset();
-        assert(!a.has_value());
+assert(a.has_value());
+assert(any_cast<list_of_numbers>(a).sum == 21);
+}
+}
+
+{
+    any a, b;
+    assert(!a.has_value() == !b.has_value());
+
+    a = 42;
+    b = 24;
+    assert(any_cast<int>(a) != any_cast<int>(b));
+    assert(a.has_value() == b.has_value());
+
+    a = 42;
+    b = 42;
+    assert(any_cast<int>(a) == any_cast<int>(b));
+    assert(a.has_value() == b.has_value());
+}
+
+{
+    any a = std::string("hello world");
+    assert(any_cast<std::string&>(a) == "hello world");
+
+    auto s = move(any_cast<std::string&>(a));
+    assert(s == "hello world");
+    assert(any_cast<std::string&>(a).empty());
+
+    any_cast<std::string&>(a) = move(s);
+    assert(any_cast<std::string&>(a) == "hello world");
+}
+
+{
+    any* a = nullptr;
+    assert(any_cast<int>(a) == nullptr);
+    assert(any_cast<short>(a) == nullptr);
+    assert(any_cast<long>(a) == nullptr);
+    assert(any_cast<std::string>(a) == nullptr);
+    ignore_unused(a);
+
+    any b;
+    assert(any_cast<short>(&b) == nullptr);
+    assert(any_cast<const short>(&b) == nullptr);
+    assert(any_cast<volatile short>(&b) == nullptr);
+    assert(any_cast<const volatile short>(&b) == nullptr);
+
+    assert(any_cast<short*>(&b) == nullptr);
+    assert(any_cast<const short*>(&b) == nullptr);
+    assert(any_cast<volatile short*>(&b) == nullptr);
+    assert(any_cast<const volatile short*>(&b) == nullptr);
+}
+
+{
+    {auto a = make_any<int>(42);
+assert(any_cast<int>(a) == 42);
+}
+
+{
+    auto a = make_any<list_of_numbers>(std::initializer_list<int>{1, 2, 3, 4, 5, 6, 7, 8});
+    assert(any_cast<list_of_numbers&>(a).sum == 36);
+}
+}
+
+{
+    float f = 42.f;
+    any a(f);
+    assert(any_cast<float>(a) == 42.f);
+}
+
+{
+    any a = 1;
+    int* i = any_cast<int>(&a);
+    assert((*i) == 1);
+    ignore_unused(i);
+}
+
+{
+    {
+        any a1;
+        any a2;
+        assert(a1.has_value() == false);
+        assert(a2.has_value() == false);
+
+        a1 = a2;
+        assert(a1.has_value() == false);
+        assert(a2.has_value() == false);
     }
 
     {
-        big_object::reset();
-        {
-            any a;
-            a.emplace<big_object>();
-            assert(a.has_value());
-        }
-        assert(!big_object::is_clear());
+        any a1 = 42;
+        any a2;
+        assert(a1.has_value() == true);
+        assert(a2.has_value() == false);
+
+        a1 = a2;
+        assert(a1.has_value() == false);
+        assert(a2.has_value() == false);
     }
 
     {
-        {
-            any a;
-            a.emplace<list_of_numbers>(std::initializer_list<int>{1, 2, 3, 4, 5, 6});
+        any a1;
+        any a2 = 42;
+        assert(a1.has_value() == false);
+        assert(a2.has_value() == true);
 
-            assert(a.has_value());
-            assert(any_cast<list_of_numbers>(a).sum == 21);
-        }
+        a1 = a2;
+        assert(a1.has_value() == true);
+        assert(a2.has_value() == true);
+        assert(any_cast<int>(a1) == 42);
+        assert(any_cast<int>(a2) == 42);
     }
+}
 
-    {
-        any a, b;
-        assert(!a.has_value() == !b.has_value());
-
-        a = 42; b = 24;
-        assert(any_cast<int>(a) != any_cast<int>(b));
-        assert(a.has_value() == b.has_value());
-
-        a = 42; b = 42;
-        assert(any_cast<int>(a) == any_cast<int>(b));
-        assert(a.has_value() == b.has_value());
-    }
-
-    {
-        any a = std::string("hello world");
-        assert(any_cast<std::string&>(a) == "hello world");
-
-        auto s = move(any_cast<std::string&>(a));
-        assert(s == "hello world");
-        assert(any_cast<std::string&>(a).empty());
-
-        any_cast<std::string&>(a) = move(s);
-        assert(any_cast<std::string&>(a) == "hello world");
-    }
-
-    {
-        any* a = nullptr;
-        assert(any_cast<int>(a) == nullptr);
-        assert(any_cast<short>(a) == nullptr);
-        assert(any_cast<long>(a) == nullptr);
-        assert(any_cast<std::string>(a) == nullptr);
-        ignore_unused(a);
-
-        any b;
-        assert(any_cast<short>(&b) == nullptr);
-        assert(any_cast<const short>(&b) == nullptr);
-        assert(any_cast<volatile short>(&b) == nullptr);
-        assert(any_cast<const volatile short>(&b) == nullptr);
-
-        assert(any_cast<short*>(&b) == nullptr);
-        assert(any_cast<const short*>(&b) == nullptr);
-        assert(any_cast<volatile short*>(&b) == nullptr);
-        assert(any_cast<const volatile short*>(&b) == nullptr);
-    }
-
-    {
-        {
-            auto a = make_any<int>(42);
-            assert(any_cast<int>(a) == 42);
-        }
-
-        {
-            auto a = make_any<list_of_numbers>(std::initializer_list<int>{1, 2, 3, 4, 5, 6, 7, 8});
-            assert(any_cast<list_of_numbers&>(a).sum == 36);
-        }
-    }
-
-    {
-        float f = 42.f;
-        any a(f);
-        assert(any_cast<float>(a) == 42.f);
-    }
-
-    {
-        any a = 1;
-        int* i = any_cast<int>(&a);
-        assert((*i) == 1);
-        ignore_unused(i);
-    }
-
-    {
-        {
-            any a1;
-            any a2;
-            assert(a1.has_value() == false);
-            assert(a2.has_value() == false);
-
-            a1 = a2;
-            assert(a1.has_value() == false);
-            assert(a2.has_value() == false);
-        }
-
-        {
-            any a1 = 42;
-            any a2;
-            assert(a1.has_value() == true);
-            assert(a2.has_value() == false);
-
-            a1 = a2;
-            assert(a1.has_value() == false);
-            assert(a2.has_value() == false);
-        }
-
-        {
-            any a1;
-            any a2 = 42;
-            assert(a1.has_value() == false);
-            assert(a2.has_value() == true);
-
-            a1 = a2;
-            assert(a1.has_value() == true);
-            assert(a2.has_value() == true);
-            assert(any_cast<int>(a1) == 42);
-            assert(any_cast<int>(a2) == 42);
-        }
-    }
-
-    return 0;
+return 0;
 }
