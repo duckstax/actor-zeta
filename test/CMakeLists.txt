@@ -1,4 +1,6 @@
 #available tests
+include_directories(.)
+include_directories(../header/)
 add_subdirectory(any)
 add_subdirectory(metaprogramming)
 #add_subdirectory(flat_map)

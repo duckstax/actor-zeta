@@ -1,6 +1,6 @@
-#include <string>
 #include <actor-zeta/detail/string_view.hpp>
 #include <cassert>
+#include <string>
 
 using namespace actor_zeta::detail;
 
@@ -19,5 +19,4 @@ int main() {
         assert(x.size() == 3u);
         assert(x == string_view("abc"));
     }
-
 }
