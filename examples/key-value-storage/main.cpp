@@ -10,9 +10,8 @@
 
 using actor_zeta::actor_address;
 using actor_zeta::basic_async_actor;
-using actor_zeta::join;
 using actor_zeta::message_ptr;
-using actor_zeta::supervisor_t;
+using actor_zeta::supervisor;
 
 using actor_zeta::abstract_executor;
 using actor_zeta::executor_t;
@@ -33,10 +32,10 @@ struct response_t final {
     buffer r_;
 };
 
-class supervisor_network final : public supervisor_t {
+class supervisor_network final : public actor_zeta::supervisor_abstract {
 public:
     supervisor_network(fake_multiplexer& multiplexer, abstract_executor* ptr)
-        : supervisor_t("network")
+        : actor_zeta::supervisor_abstract("network")
         , multiplexer_(multiplexer)
         , e_(ptr) {
         add_handler(

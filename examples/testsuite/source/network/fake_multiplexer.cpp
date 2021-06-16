@@ -1,7 +1,7 @@
-#include <testsuite/network/fake_multiplexer.hpp>
 #include <actor-zeta/base/message.hpp>
 #include <cassert>
 #include <iostream>
+#include <testsuite/network/fake_multiplexer.hpp>
 
 namespace actor_zeta {
 namespace network {
