@@ -1,19 +1,20 @@
 #include <iostream>
 
-#include <actor-zeta/core.hpp>
+#include <actor-zeta.hpp>
 
-using actor_zeta::basic_async_actor;
-using actor_zeta::send;
 using actor_zeta::abstract_executor;
-using actor_zeta::supervisor;
-using actor_zeta::message;
+using actor_zeta::basic_async_actor;
 using actor_zeta::execution_device;
+using actor_zeta::message_ptr;
+using actor_zeta::send;
+using actor_zeta::supervisor_t;
 
 class dummy_executor final : public abstract_executor {
 public:
-    dummy_executor() : abstract_executor(1, 10000) {}
+    dummy_executor()
+        : abstract_executor(1, 10000) {}
 
-    void execute(actor_zeta::executable *ptr) override {
+    void execute(actor_zeta::executable* ptr) override {
         ptr->run(nullptr, max_throughput());
     }
 
@@ -22,60 +23,50 @@ public:
     void stop() override {}
 };
 
-
-class dummy_supervisor final : public supervisor {
+class dummy_supervisor final : public supervisor_t {
 public:
-
-    explicit dummy_supervisor(actor_zeta::abstract_executor *ptr)
-            : supervisor("dummy_supervisor"), ptr_(ptr) {
+    explicit dummy_supervisor(actor_zeta::abstract_executor* ptr)
+        : supervisor_t("dummy_supervisor")
+        , ptr_(ptr) {
     }
 
-    auto executor() noexcept -> actor_zeta::abstract_executor & override {
-        return *ptr_;
+    auto executor() noexcept -> actor_zeta::abstract_executor* override {
+        return ptr_;
     }
 
-    auto join(actor_zeta::actor ) -> actor_zeta::actor_address override {
+    auto join(actor_zeta::actor) -> actor_zeta::actor_address override {
         return actor_zeta::actor_address();
     }
 
-    void enqueue(message, execution_device *) override {
-
-    }
+    void enqueue_base(message_ptr, actor_zeta::execution_device*) override {}
 
 private:
-    actor_zeta::abstract_executor *ptr_;
+    actor_zeta::abstract_executor* ptr_;
 };
-
 
 class storage_t final : public basic_async_actor {
 public:
-    explicit storage_t(dummy_supervisor &ref) : basic_async_actor(ref, "storage") {
+    explicit storage_t(dummy_supervisor& ref)
+        : basic_async_actor(&ref, "storage") {
+        add_handler(
+            "init",
+            &storage_t::init);
 
         add_handler(
-                "init",
-                &storage_t::init
-        );
+            "search",
+            &storage_t::search);
 
         add_handler(
-                "search",
-                &storage_t::search
-        );
+            "add",
+            &storage_t::add);
 
         add_handler(
-                "add",
-                &storage_t::add
-        );
+            "delete_table",
+            &storage_t::delete_table);
 
         add_handler(
-                "delete_table",
-                &storage_t::delete_table
-        );
-
-        add_handler(
-                "creature_table",
-                &storage_t::creature_table
-        );
-
+            "creature_table",
+            &storage_t::creature_table);
     }
 
     ~storage_t() override = default;
@@ -85,20 +76,20 @@ private:
         std::cerr << "init " << std::endl;
     }
 
-    void search(std::string &key) {
+    void search(std::string& key) {
         std::cerr << "search: "
                   << "key: " << key
                   << std::endl;
     }
 
-    void add(const std::string &key, const std::string &value) {
+    void add(const std::string& key, const std::string& value) {
         std::cerr << "add: "
                   << "key: " << key << " | "
                   << "value: " << value << " | "
                   << std::endl;
     }
 
-    void delete_table(const std::string &name, const std::string &path, int type) {
+    void delete_table(const std::string& name, const std::string& path, int type) {
         std::cerr << "delete_table: "
                   << "table name: " << name << " | "
                   << "path: " << path << " | "
@@ -106,7 +97,7 @@ private:
                   << std::endl;
     }
 
-    void creature_table(const std::string &name, const std::string &path, int type, int time_sync) {
+    void creature_table(const std::string& name, const std::string& path, int type, int time_sync) {
         std::cerr << "creature_table: "
                   << "table name: " << name << " | "
                   << "path: " << path << " | "
@@ -114,48 +105,40 @@ private:
                   << "time_sync: " << time_sync << " | "
                   << std::endl;
     }
-
 };
 
 class test_handlers final : public basic_async_actor {
 public:
-    test_handlers(dummy_supervisor &ref) : basic_async_actor(ref, "test_handlers") {
+    test_handlers(dummy_supervisor& ref)
+        : basic_async_actor(&ref, "test_handlers") {
+        init();
         add_handler(
-                "ptr_0",
-                []() {
-                    std::cerr << "ptr_0" << std::endl;
-                }
-        );
+            "ptr_0",
+            []() {
+                std::cerr << "ptr_0" << std::endl;
+            });
 
         add_handler(
-                "ptr_1",
-                [](test_handlers &handler) {
-                    handler.init();
-                    std::cerr << "ptr_1" << std::endl;
-                }
-        );
+            "ptr_1",
+            []() {
+                std::cerr << "ptr_1" << std::endl;
+            });
         add_handler(
-                "ptr_2",
-                [](test_handlers &handler, int &data) {
-                    handler.init();
-                    std::cerr << "ptr_2 :" << data << std::endl;
-                }
-        );
+            "ptr_2",
+            [](int& data) {
+                std::cerr << "ptr_2 :" << data << std::endl;
+            });
         add_handler(
-                "ptr_3",
-                [](test_handlers &handler, int data_1, int &data_2) {
-                    handler.init();
-                    std::cerr << "ptr_3 : " << data_1 << " : " << data_2 << std::endl;
-                }
-        );
+            "ptr_3",
+            [](int data_1, int& data_2) {
+                std::cerr << "ptr_3 : " << data_1 << " : " << data_2 << std::endl;
+            });
 
         add_handler(
-                "ptr_4",
-                [](test_handlers & handler, int data_1, int &data_2, const std::string &data_3) {
-                    handler.init();
-                    std::cerr << "ptr_4 : " << data_1 << " : " << data_2 << " : " << data_3 << std::endl;
-                }
-        );
+            "ptr_4",
+            [](int data_1, int& data_2, const std::string& data_3) {
+                std::cerr << "ptr_4 : " << data_1 << " : " << data_2 << " : " << data_3 << std::endl;
+            });
     }
 
     ~test_handlers() override = default;
@@ -166,9 +149,7 @@ private:
     }
 };
 
-
 int main() {
-
     std::unique_ptr<dummy_supervisor> supervisor(new dummy_supervisor(new dummy_executor));
 
     std::unique_ptr<test_handlers> test_handlers_(new test_handlers(*supervisor));

@@ -4,7 +4,7 @@ project(smart-send)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS_} -O0 -g -fno-omit-frame-pointer -fsanitize=thread") #address")
+#set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS_} -O0 -g -fno-omit-frame-pointer -fsanitize=thread") #address")
 
 add_executable(${PROJECT_NAME} main.cpp)
 

@@ -2,7 +2,6 @@
 
 namespace actor_zeta { namespace executor {
 
-        executable::~executable() {}
+    executable::~executable() {}
 
-}}
-
+}} // namespace actor_zeta::executor

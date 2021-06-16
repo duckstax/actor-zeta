@@ -4,10 +4,10 @@ set(project testsuite)
 
 if (CMAKE_VERSION VERSION_LESS 3.0)
     PROJECT(${project} CXX)
-else()
+else ()
     cmake_policy(SET CMP0048 NEW)
     PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
-endif()
+endif ()
 
 include_directories(.)
 
@@ -15,12 +15,12 @@ set(HEADER_FILES
         network/connection_identifying.hpp
         network/fake_multiplexer.hpp
         forwards.hpp
-)
+        )
 
 set(SOURCE_FILES
         source/network/connection_identifying.cpp
         source/network/fake_multiplexer.cpp
-)
+        )
 
 add_library(
         ${PROJECT_NAME}
