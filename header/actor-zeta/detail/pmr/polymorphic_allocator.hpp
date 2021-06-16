@@ -1,24 +1,29 @@
 #pragma once
 
+#if CPP17_OR_GREATER
+
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
-
-#include <boost/container/detail/dispatch_uses_allocator.hpp>
-#include <boost/container/new_allocator.hpp>
-#include <boost/move/detail/type_traits.hpp>
-#include <boost/move/utility_core.hpp>
-
+#include <actor-zeta/detail/pmr/new_allocator.hpp>
 #include <cassert>
 #include <cstddef>
+#include <utility>
+
+#endif
 
 namespace actor_zeta { namespace detail { namespace pmr {
 
+#if CPP17_OR_GREATER
+
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
     template<class T>
     class polymorphic_allocator {
     public:
-        typedef T value_type;
+        using value_type = T;
 
         /// non C++ 17 std
-        polymorphic_allocator() noexcept =delete
+        polymorphic_allocator() noexcept = delete;
 
         polymorphic_allocator(memory_resource* r) noexcept
             : resource_(r) { assert(r != 0); }
@@ -35,14 +40,16 @@ namespace actor_zeta { namespace detail { namespace pmr {
             return *this;
         }
 
-        T* allocate(size_t n) { return static_cast<T*>(resource_->allocate(n * sizeof(T), alignof(T)); }
+        T* allocate(size_t n) {
+            return static_cast<T*>(resource_->allocate(n * sizeof(T), alignof(T));
+        }
 
-        void deallocate(T* p, size_t n) noexcept { resource_->deallocate(p, n * sizeof(T),alignof(T)); }
+        void deallocate(T* p, size_t n) noexcept { resource_->deallocate(p, n * sizeof(T), alignof(T)); }
 
         template<typename U, class... Args>
         void construct(U* p, Args&&... args) {
             new_allocator<U> na;
-            dtl::dispatch_uses_allocator(na, *this, p, std::forward<Args>(args)...);
+            dispatch_uses_allocator(na, *this, p, std::forward<Args>(args)...);
         }
 
         template<class U>
@@ -51,7 +58,8 @@ namespace actor_zeta { namespace detail { namespace pmr {
             p->~U();
         }
 
-        polymorphic_allocator select_on_container_copy_construction() const noexcept { return polymorphic_allocator(); }
+        /// non C++ 17 std
+        /// polymorphic_allocator select_on_container_copy_construction() const noexcept { return polymorphic_allocator(); }
 
         memory_resource* resource() const noexcept { return resource_; }
 
@@ -64,5 +72,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
     template<class T1, class T2>
     bool operator!=(const polymorphic_allocator<T1>& a, const polymorphic_allocator<T2>& b) noexcept { return *a.resource() != *b.resource(); }
+
+#endif
 
 }}} // namespace actor_zeta::detail::pmr
