@@ -21,12 +21,12 @@ using actor_zeta::work_sharing;
 using actor_zeta::make_message;
 
 template<typename Task, typename... Args>
-inline auto make_task(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
-    executor_->enqueue(std::move(make_message(executor_->address(), command, std::move(Task(std::forward<Args>(args)...)))));
+auto make_task(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
+    actor_zeta::send(executor_, executor_->address(), command, std::move(Task(std::forward<Args>(args)...)));
 }
 
 template<typename Task, typename... Args>
-inline auto make_task_broadcast(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
+auto make_task_broadcast(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
     executor_->broadcast(make_message(executor_->address(), command, std::move(Task(std::forward<Args>(args)...))));
 }
 
