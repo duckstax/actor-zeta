@@ -10,13 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        configuration: [ {"os":"1"} ]
+        configuration: [
+          {"os":"1"}
+        ]
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Set up Python ${{ matrix.python-version }}
-        #with:
         run: echo ${{ matrix.configuration.os }}
 
       - name: Configure CMake
