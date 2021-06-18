@@ -1,6 +1,8 @@
 #pragma once
 
 #include <actor-zeta/config.hpp>
+#include <utility>
+#include <type_traits>
 
 namespace actor_zeta { namespace type_traits {
 
@@ -112,29 +114,35 @@ namespace actor_zeta { namespace type_traits {
 
 #endif
 
-    /*
-        template<class... Ts>
+        template<typename...>
+        struct _or_;
+
+        template<>
+        struct _or_<>
+            : public std::false_type {};
+
+        template<typename _B1>
+        struct _or_<_B1>
+            : public _B1 {};
+
+        template<typename _B1, typename _B2>
+        struct _or_<_B1, _B2>
+            : public std::conditional<_B1::value, _B1, _B2>::type {};
+
+        template<typename _B1, typename _B2, typename _B3, typename... _Bn>
+        struct _or_<_B1, _B2, _B3, _Bn...>
+            : public std::conditional<_B1::value, _B1, _or_<_B2, _B3, _Bn...>>::type {};
+
+        template<typename...>
         using void_t = void;
 
-        namespace detail {
-            template<template<class...> class Trait, class Enabler, class... Args>
-            struct is_detected : std::false_type {};
+        struct erased_type {};
 
-            template<template<class...> class Trait, class... Args>
-            struct is_detected<Trait, void_t<Trait<Args...>>, Args...> : std::true_type {};
-        }
 
-        template<template<class...> class Trait, class... Args>
-        using is_detected = typename detail::is_detected<Trait, void, Args...>::type;
+        struct allocator_arg_t {
+            explicit allocator_arg_t() = default;
+        };
 
-        template<typename T, typename U>
-        using equal_compare_t = decltype(std::declval<const T &>() == std::declval<const U &>());
-
-        template<typename T, typename U>
-        using are_equal_comparable = is_detected<equal_compare_t, T, U>;
-
-        template<typename I>
-        using is_input_iterator = typename std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<I>::iterator_category>::type;
-*/
+        constexpr allocator_arg_t allocator_arg = allocator_arg_t();
 
 }} // namespace actor_zeta::type_traits
