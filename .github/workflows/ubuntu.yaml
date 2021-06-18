@@ -4,20 +4,20 @@ jobs:
     strategy:
       matrix:
         cfg:
-        - { os: ubuntu-16.04, cpp-version: gcc-4.8 }
-        - { os: ubuntu-16.04, cpp-version: gcc-5 }
-        - { os: ubuntu-16.04, cpp-version: gcc-6 }
-        - { os: ubuntu-16.04, cpp-version: gcc-7 }
-        - { os: ubuntu-16.04, cpp-version: clang-3.9 }
-        - { os: ubuntu-16.04, cpp-version: clang }
-        - { os: ubuntu-18.04, cpp-version: gcc-4.8 }
-        - { os: ubuntu-18.04, cpp-version: gcc-5 }
-        - { os: ubuntu-18.04, cpp-version: gcc-6 }
-        - { os: ubuntu-18.04, cpp-version: gcc-7 }
-        - { os: ubuntu-18.04, cpp-version: clang-3.9 }
-        - { os: ubuntu-18.04, cpp-version: clang }
-        - { os: macOS-latest, cpp-version: xcode9.3 }
-        - { os: macOS-latest, cpp-version: xcode11 }
+          - { os: ubuntu-16.04, cpp-version: gcc-4.8 }
+          - { os: ubuntu-16.04, cpp-version: gcc-5 }
+          - { os: ubuntu-16.04, cpp-version: gcc-6 }
+          - { os: ubuntu-16.04, cpp-version: gcc-7 }
+          - { os: ubuntu-16.04, cpp-version: clang-3.9 }
+          - { os: ubuntu-16.04, cpp-version: clang }
+          - { os: ubuntu-18.04, cpp-version: gcc-4.8 }
+          - { os: ubuntu-18.04, cpp-version: gcc-5 }
+          - { os: ubuntu-18.04, cpp-version: gcc-6 }
+          - { os: ubuntu-18.04, cpp-version: gcc-7 }
+          - { os: ubuntu-18.04, cpp-version: clang-3.9 }
+          - { os: ubuntu-18.04, cpp-version: clang }
+          - { os: macOS-latest, cpp-version: xcode9.3 }
+          - { os: macOS-latest, cpp-version: xcode11 }
 
     - run: |
         if ["$RUNNER_OS" == "Linux"]; then
