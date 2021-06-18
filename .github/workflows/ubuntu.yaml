@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         configuration: [
-          {"os":"ubuntu-20.04"}
+          {"os":"ubuntu-20.04"},
           {"os":"ubuntu-18.04"}
         ]
 
