@@ -16,8 +16,6 @@ jobs:
           - { os: ubuntu-18.04, cpp-version: gcc-7 }
           - { os: ubuntu-18.04, cpp-version: clang-3.9 }
           - { os: ubuntu-18.04, cpp-version: clang }
-          - { os: macOS-latest, cpp-version: xcode9.3 }
-          - { os: macOS-latest, cpp-version: xcode11 }
     - run: |
         if ["$RUNNER_OS" == "Linux"]; then
            sudo apt install ${{ matrix.cfg.cpp-version }}
