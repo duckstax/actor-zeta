@@ -1,3 +1,4 @@
+#include "link.hpp"
 #include <cassert>
 
 #include <chrono>
@@ -35,14 +36,32 @@ auto thread_pool_deleter = [](abstract_executor* ptr) {
 };
 
 const int max_queue = 100;
+struct spawn_task final {
+    spawn_task() = default;
+    ~spawn_task() = default;
+};
 
 class worker_t final : public actor_zeta::basic_async_actor {
 public:
     explicit worker_t(actor_zeta::supervisor_abstract* ptr)
         : actor_zeta::basic_async_actor(ptr, "bot") {
+        add_handler("on_spawn", &worker_t::on_spawn);
     }
 
     ~worker_t() override = default;
+
+    /**
+     * this will be called by a supervisor when it spawns new actor and broadcasts it
+     * */
+    auto on_spawn(actor_zeta::basic_async_actor* ptr) -> void {
+        //worker should link only with worker, here we check what we got from a broadcast
+        auto wrkr = dynamic_cast<worker_t*>(ptr); //what to do with rtti?
+        if (wrkr) {
+            actor_zeta::link(*this, wrkr);
+        } else {
+            std::cout << "not my type, won't link\n";
+        }
+    }
 
 private:
 };
@@ -73,7 +92,8 @@ public:
         supervisor_.emplace_back(std::move(t));
     }
 
-    auto spawn_worker() -> void {
+    auto spawn_worker(spawn_task& t_) -> void {
+        auto t = std::move(t_);
         actor_zeta::spawn_actor<worker_t>(*this);
     }
 
@@ -99,19 +119,15 @@ private:
 
 using namespace std::chrono_literals;
 
-struct spawn_task final {
-    spawn_task() = default;
-    ~spawn_task() = default;
-};
-
 auto main() -> int {
     actor_zeta::supervisor supervisor(new supervisor_lite());
 
-    int const actors = 10;
-    //int const task = 10000;
+    int const actors = 5;
+
+    worker_t wrkr(supervisor.get()); //this actor will recieve broadcasts with actors from supervisor
 
     for (auto i = actors - 1; i > 0; --i) {
-        make_task<spawn_task>(supervisor, "spawn_worker");
+        make_task<spawn_task>(supervisor, "spawn_worker"); //ask for spawns from supervisor
     }
 
     std::this_thread::sleep_for(180s);
