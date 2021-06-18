@@ -8,14 +8,10 @@ jobs:
           - { os: ubuntu-16.04, cpp-version: gcc-5 }
           - { os: ubuntu-16.04, cpp-version: gcc-6 }
           - { os: ubuntu-16.04, cpp-version: gcc-7 }
-          - { os: ubuntu-16.04, cpp-version: clang-3.9 }
-          - { os: ubuntu-16.04, cpp-version: clang }
           - { os: ubuntu-18.04, cpp-version: gcc-4.8 }
           - { os: ubuntu-18.04, cpp-version: gcc-5 }
           - { os: ubuntu-18.04, cpp-version: gcc-6 }
           - { os: ubuntu-18.04, cpp-version: gcc-7 }
-          - { os: ubuntu-18.04, cpp-version: clang-3.9 }
-          - { os: ubuntu-18.04, cpp-version: clang }
     - run: |
         if ["$RUNNER_OS" == "Linux"]; then
            sudo apt install ${{ matrix.cfg.cpp-version }}
