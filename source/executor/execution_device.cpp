@@ -2,8 +2,7 @@
 
 namespace actor_zeta { namespace executor {
 
-        execution_device::~execution_device() {
+    execution_device::~execution_device() {
+    }
 
-        }
-
-}}
+}} // namespace actor_zeta::executor

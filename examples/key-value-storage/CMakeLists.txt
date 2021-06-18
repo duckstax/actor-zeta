@@ -4,10 +4,10 @@ set(project key-value-storage)
 
 if (CMAKE_VERSION VERSION_LESS 3.0)
     PROJECT(${project} CXX)
-else()
+else ()
     cmake_policy(SET CMP0048 NEW)
     PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
-endif()
+endif ()
 
 include_directories(.)
 

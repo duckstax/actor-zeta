@@ -8,7 +8,6 @@ namespace actor_zeta {
         class actor;
         class actor_address;
         class handler;
-        struct context;
         class supervisor_abstract;
         class supervisor;
         class communication_module;

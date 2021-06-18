@@ -1,15 +1,15 @@
-#include <vector>
 #include <cstddef>
+#include <vector>
 
-#include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/detail/intrusive_ptr.hpp>
+#include <actor-zeta/detail/ref_counted.hpp>
 #include <cassert>
 #include <iostream>
 
 using namespace actor_zeta;
 
 template<class T, class... Ts>
-intrusive_ptr<T> make_counted(Ts &&... xs) {
+intrusive_ptr<T> make_counted(Ts&&... xs) {
     return intrusive_ptr<T>(new T(std::forward<Ts>(xs)...), false);
 }
 
@@ -25,7 +25,8 @@ using class1ptr = intrusive_ptr<class1>;
 
 class class0 : public ref_counted {
 public:
-    explicit class0(bool subtype = false) : subtype_(subtype) {
+    explicit class0(bool subtype = false)
+        : subtype_(subtype) {
         if (!subtype) {
             ++class0_instances;
         }
@@ -51,7 +52,8 @@ private:
 
 class class1 : public class0 {
 public:
-    class1() : class0(true) {
+    class1()
+        : class0(true) {
         ++class1_instances;
     }
 
@@ -79,9 +81,7 @@ struct fixture {
     }
 };
 
-
 int main() {
-
     /// make_counted
 
     {
@@ -134,7 +134,7 @@ int main() {
         assert(p1->unique() == false);
         assert(class0_instances == 0);
         assert(class1_instances == 1);
-        assert(p1 == static_cast<class0 *>(p2.get()));
+        assert(p1 == static_cast<class0*>(p2.get()));
     }
 
     return 0;

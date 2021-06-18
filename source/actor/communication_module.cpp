@@ -2,7 +2,6 @@
 #include <vector>
 
 // clang-format off
-#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/base/message.hpp>
@@ -13,35 +12,38 @@
 namespace actor_zeta { namespace base {
 
     void error_sync_contacts(detail::string_view __error__) {
-        std::cerr << "WARNING" << std::endl;
-        std::cerr << "Not initialization actor_address type:" << __error__ << std::endl;
+        std::cerr << "WARNING" << '\n';
+        std::cerr << "Not initialization actor_address type:" << __error__ << '\n';
         std::cerr << "WARNING" << std::endl;
     }
 
     void error_duplicate_handler(detail::string_view _error_) {
-        std::cerr << "Duplicate" << std::endl;
-        std::cerr << "Handler: " << _error_ << std::endl;
+        std::cerr << "Duplicate" << '\n';
+        std::cerr << "Handler: " << _error_ << '\n';
         std::cerr << "Duplicate" << std::endl;
     }
 
     void error_add_handler(detail::string_view _error_) {
-        std::cerr << "error add handler" << std::endl;
-        std::cerr << "Handler: " << _error_ << std::endl;
+        std::cerr << "error add handler" << '\n';
+        std::cerr << "Handler: " << _error_ << '\n';
         std::cerr << "error add handler" << std::endl;
     }
 
-    void error_skip(detail::string_view __error__) {
-        std::cerr << "WARNING" << std::endl;
-        std::cerr << "Skip : " << __error__ << std::endl;
+    void error_skip(detail::string_view sender, detail::string_view reciever, detail::string_view handler) {
+        std::cerr << "WARNING" << '\n';
+        std::cerr << "Skip, can't find handler: " << reciever << "::" << handler;
+        std::cerr << " sender: " << sender << "\n";
         std::cerr << "WARNING" << std::endl;
     }
 
-    void communication_module::execute(context& ctx) {
-        auto it = handlers_.find(ctx.current_message()->command());
+    void communication_module::execute() {
+        auto it = handlers_.find(current_message()->command());
         if (it != handlers_.end()) {
-            return it->second->invoke(ctx);
+            return it->second->invoke(*this);
         } else {
-            error_skip(ctx.current_message()->command());
+            auto sender = current_message()->sender()->type();
+            auto reciever = this->type();
+            error_skip(sender, reciever, current_message()->command());
         }
     }
 

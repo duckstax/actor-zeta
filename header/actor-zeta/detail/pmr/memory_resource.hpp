@@ -1,5 +1,6 @@
 #pragma once
 
+#include <actor-zeta/config.hpp>
 #include <cstddef>
 
 #if CPP17_OR_GREATER
@@ -39,6 +40,14 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
         virtual bool do_is_equal(const memory_resource& other) const noexcept = 0;
     };
+
+    inline bool operator==(const memory_resource& a, const memory_resource& b) noexcept {
+        return &a == &b || a.is_equal(b);
+    }
+
+    inline bool operator!=(const memory_resource& a, const memory_resource& b) noexcept {
+        return !(a == b);
+    }
 
 #endif
 

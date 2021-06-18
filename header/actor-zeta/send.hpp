@@ -1,7 +1,6 @@
 #pragma once
 
 // clang-format off
-#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/base/message.hpp>
@@ -22,7 +21,6 @@ namespace actor_zeta {
     using base::actor;
     using base::actor_address;
     using base::basic_async_actor;
-    using base::context;
     using base::make_handler;
     using base::supervisor;
     using base::supervisor_abstract;

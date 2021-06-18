@@ -6,9 +6,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
+#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace base {
@@ -24,8 +24,7 @@ namespace actor_zeta { namespace base {
     };
 
     class communication_module
-        : public ref_counted
-        , public context {
+        : public ref_counted {
     public:
         using key_type = detail::string_view;
         using storage = std::unordered_map<key_type, std::unique_ptr<handler>>;
@@ -52,14 +51,16 @@ namespace actor_zeta { namespace base {
 
         auto broadcast(message_ptr) -> bool;
 
+        virtual auto current_message() -> message* = 0;
+
     protected:
         communication_module(std::string, sub_type_t);
 
         virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
 
-        auto addresses(detail::string_view) -> actor_address& override;
+        virtual auto addresses(detail::string_view) -> actor_address&;
 
-        auto self() -> actor_address override;
+        virtual auto self() -> actor_address;
 
         template<class F>
         auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
@@ -71,7 +72,7 @@ namespace actor_zeta { namespace base {
             on(name, make_handler(std::forward<F>(f), static_cast<typename type_traits::get_callable_trait_t<F>::class_type*>(this)));
         }
 
-        void execute(context&);
+        void execute();
 
         bool on(detail::string_view, handler*);
 

@@ -11,7 +11,8 @@
 #include <actor-zeta.hpp>
 
 using actor_zeta::abstract_executor;
-using actor_zeta::context;
+using actor_zeta::basic_async_actor;
+using actor_zeta::supervisor;
 
 using actor_zeta::abstract_executor;
 using actor_zeta::executor_t;
@@ -48,8 +49,7 @@ public:
               "sync_contacts",
               "add_link",
               "remove_link",
-              "spawn_actor"
-        } {
+              "spawn_actor"} {
         e_->start();
     }
 
@@ -78,7 +78,7 @@ public:
 private:
     auto local(actor_zeta::message_ptr msg) -> void {
         set_current_message(std::move(msg));
-        execute(*this);
+        execute();
     }
 
     auto redirect_robin(actor_zeta::message_ptr msg) -> void {
@@ -89,7 +89,6 @@ private:
                 cursor = 0;
             }
         }
-
     }
 
     std::unique_ptr<abstract_executor, decltype(thread_pool_deleter)> e_;
@@ -159,7 +158,7 @@ using namespace std::chrono_literals;
 int main() {
     actor_zeta::supervisor supervisor(new supervisor_lite());
 
-     int const actors = 10;
+    int const actors = 10;
 
     for (auto i = actors - 1; i > 0; --i) {
         actor_zeta::spawn_actor<worker_t>(supervisor);

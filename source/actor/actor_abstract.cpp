@@ -1,7 +1,6 @@
 #include <iostream>
 
 // clang-format off
-#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/base/message.hpp>
