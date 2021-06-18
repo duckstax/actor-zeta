@@ -2,6 +2,8 @@
 
 #include <actor-zeta/config.hpp>
 #include <cstddef>
+#include <cstddef>
+#include <cstdio>
 
 #if CPP17_OR_GREATER
 
