@@ -1,19 +1,31 @@
+name: Build and publish
+
+on:
+  push:
+    tags:
+      - "*"
+
 jobs:
   build:
-    runs-on: ${{ matrix.cfg.os }}
+    name: Build for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        cfg:
-          - { os: ubuntu-16.04, cpp-version: gcc-4.8 }
-          - { os: ubuntu-16.04, cpp-version: gcc-5 }
-          - { os: ubuntu-16.04, cpp-version: gcc-6 }
-          - { os: ubuntu-16.04, cpp-version: gcc-7 }
-          - { os: ubuntu-18.04, cpp-version: gcc-4.8 }
-          - { os: ubuntu-18.04, cpp-version: gcc-5 }
-          - { os: ubuntu-18.04, cpp-version: gcc-6 }
-          - { os: ubuntu-18.04, cpp-version: gcc-7 }
-    - run: |
-        if ["$RUNNER_OS" == "Linux"]; then
-           sudo apt install ${{ matrix.cfg.cpp-version }}
-        fi
-shell: bash
+        include:
+          cfg:
+            - { os: ubuntu-16.04, cpp-version: gcc-4.8 }
+            - { os: ubuntu-16.04, cpp-version: gcc-5 }
+            - { os: ubuntu-16.04, cpp-version: gcc-6 }
+            - { os: ubuntu-16.04, cpp-version: gcc-7 }
+            - { os: ubuntu-18.04, cpp-version: gcc-4.8 }
+            - { os: ubuntu-18.04, cpp-version: gcc-5 }
+            - { os: ubuntu-18.04, cpp-version: gcc-6 }
+            - { os: ubuntu-18.04, cpp-version: gcc-7 }
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: |
+          if ["$RUNNER_OS" == "Linux"]; then
+             sudo apt install ${{ matrix.cfg.cpp-version }}
+          fi
