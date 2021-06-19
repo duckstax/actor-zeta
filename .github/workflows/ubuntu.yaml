@@ -9,7 +9,7 @@ jobs:
       matrix:
         configuration: [
           {"COMPILER_C":"g++-4.8","COMPILER_CXX":"gcc-4.8","BUILD_TYPE":"Release","CXX_STANDARD":11},
-          {"COMPILER":"gcc-4.8","BUILD_TYPE":"Debug","CXX_STANDARD":11}
+          {"COMPILER_C":"g++-4.8","COMPILER_CXX":"gcc-4.8","BUILD_TYPE":"Debug","CXX_STANDARD":11}
         ]
 
     steps:
