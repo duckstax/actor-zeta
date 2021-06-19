@@ -16,6 +16,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: set env
+        shell: bash
         env:
           CC: ${{ matrix.configuration.COMPILER_C}}
           CXX: ${{ matrix.configuration.COMPILER_CXX}}
