@@ -10,8 +10,8 @@ jobs:
         configuration: [
           #{ "COMPILER_C": "gcc-4.8","COMPILER_CXX": "gcc-4.8","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
           #{ "COMPILER_C": "gcc-4.8","COMPILER_CXX": "gcc-4.8","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-4.9","COMPILER_CXX": "g++-4.9","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-4.9","COMPILER_CXX": "g++-4.9","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          #{ "COMPILER_C": "gcc-4.9","COMPILER_CXX": "g++-4.9","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          #{ "COMPILER_C": "gcc-4.9","COMPILER_CXX": "g++-4.9","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
           { "COMPILER_C": "gcc-5","COMPILER_CXX": "g++-5","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
           { "COMPILER_C": "gcc-5","COMPILER_CXX": "g++-5","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
           { "COMPILER_C": "gcc-6","COMPILER_CXX": "g++-6","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
