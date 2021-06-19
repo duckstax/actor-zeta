@@ -9,12 +9,17 @@ jobs:
       matrix:
         configuration: [
           {"COMPILER_C":"gcc-10","COMPILER_CXX":"g++-10","BUILD_TYPE":"Release","CXX_STANDARD":11},
-          {"COMPILER_C":"gcc-10","COMPILER_CXX":"g++-10","BUILD_TYPE":"Debug","CXX_STANDARD":11}
+          {"COMPILER_C":"gcc-10","COMPILER_CXX":"g++-10","BUILD_TYPE":"Debug","CXX_STANDARD":11},
+          { "COMPILER_C": "gcc-4.8","COMPILER_CXX": "g++-4.8","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-4.8","COMPILER_CXX": "g++-4.8","BUILD_TYPE": "Debug","CXX_STANDARD": 11 }
         ]
 
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install compiler
+        run: |
+          sudo apt install ${{ matrix.configuration.COMPILER_C}} ${{ matrix.configuration.COMPILER_CXX}}
 
       - name: Configure CMake
         env:
