@@ -8,12 +8,17 @@ jobs:
     strategy:
       matrix:
         configuration: [
-          {"COMPILER":"gcc-4.8","BUILD_TYPE":"Release","CXX_STANDARD":11},
+          {"COMPILER_C":"g++-4.8","COMPILER_CXX":"gcc-4.8","BUILD_TYPE":"Release","CXX_STANDARD":11},
           {"COMPILER":"gcc-4.8","BUILD_TYPE":"Debug","CXX_STANDARD":11}
         ]
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: set env
+        env:
+          CC: ${{ matrix.configuration.COMPILER_C}}
+          CXX: ${{ matrix.configuration.COMPILER_CXX}}
 
       - name: Configure CMake
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.configuration.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{ matrix.configuration.CXX_STANDARD}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON
