@@ -33,7 +33,6 @@ jobs:
 
       - name: Install compiler
         run: |
-          sudo apt-get install python-software-properties
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
           sudo apt-get update
           sudo apt-get install ${{ matrix.configuration.COMPILER_C}} ${{ matrix.configuration.COMPILER_CXX}}
