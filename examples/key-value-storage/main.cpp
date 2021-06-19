@@ -88,27 +88,28 @@ public:
         constexpr const char* host = "localhost";
 
         multiplexer.new_tcp_listener(host, port, address());
-    }
 
-    auto shutdown() noexcept -> void {
-        e_->stop();
-    }
-
-    auto startup() noexcept -> void {
         e_->start();
     }
 
-    auto executor() noexcept -> actor_zeta::abstract_executor* override {
+    ~supervisor_network()  {
+        e_->stop();
+    }
+
+    auto executor_impl() noexcept -> actor_zeta::abstract_executor* override {
         return e_;
     }
 
+    auto add_actor_impl(actor_zeta::actor) -> void override {}
+    auto add_supervisor_impl(actor_zeta::supervisor) -> void override {}
+/*
     auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
         auto tmp = std::move(t);
         auto address = tmp->address();
         actors_.push_back(std::move(tmp));
         return address;
     }
-
+*/
     void enqueue_base(message_ptr msg, actor_zeta::execution_device*) final {
         set_current_message(std::move(msg));
         execute();
@@ -128,7 +129,7 @@ constexpr static const char* write = "write";
 
 class storage_t final : public basic_async_actor {
 public:
-    explicit storage_t(supervisor_network* ptr)
+    explicit storage_t(actor_zeta::supervisor_abstract* ptr)
         : basic_async_actor(ptr, "storage") {
         auto* self = this;
         add_handler(
@@ -210,13 +211,9 @@ int main() {
 
     std::unique_ptr<executor_t<work_sharing>> thread_pool(new executor_t<work_sharing>(1, std::numeric_limits<std::size_t>::max()));
 
-    std::unique_ptr<supervisor_network> supervisor(new supervisor_network(*multiplexer, thread_pool.get()));
+    actor_zeta::supervisor supervisor_tmp(new supervisor_network(*multiplexer, thread_pool.get()));
 
-    auto storage = join<storage_t>(supervisor.get());
-
-    actor_zeta::link(*supervisor, storage);
-
-    supervisor->startup();
+    actor_zeta::spawn_actor<storage_t>(supervisor_tmp);
 
     return multiplexer->start();
 }
