@@ -3,6 +3,7 @@
 #include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <new>
 
 namespace actor_zeta { namespace base {
     ///

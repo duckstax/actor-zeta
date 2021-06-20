@@ -9,6 +9,7 @@
 #include <cassert>
 #include <cstddef>
 #include <utility>
+#include <new>
 
 #endif
 

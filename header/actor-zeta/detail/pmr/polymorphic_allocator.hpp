@@ -13,6 +13,7 @@
 
 #include <tuple>
 #include <utility>
+#include <new>
 
 #endif
 
