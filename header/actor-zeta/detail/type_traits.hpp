@@ -1,8 +1,8 @@
 #pragma once
 
 #include <actor-zeta/config.hpp>
-#include <utility>
 #include <type_traits>
+#include <utility>
 
 namespace actor_zeta { namespace type_traits {
 
@@ -112,37 +112,39 @@ namespace actor_zeta { namespace type_traits {
     template<std::size_t I>
     inline in_place_tag in_place(detail::in_place_index_tag<I>) { return internal_construct_in_place_tag(); }
 
+    template<typename _Tp>
+    using remove_cvref_t = typename std::remove_cv<typename std::remove_reference<_Tp>::type>::type;
+
 #endif
 
-        template<typename...>
-        struct _or_;
+    template<typename...>
+    struct _or_;
 
-        template<>
-        struct _or_<>
-            : public std::false_type {};
+    template<>
+    struct _or_<>
+        : public std::false_type {};
 
-        template<typename _B1>
-        struct _or_<_B1>
-            : public _B1 {};
+    template<typename _B1>
+    struct _or_<_B1>
+        : public _B1 {};
 
-        template<typename _B1, typename _B2>
-        struct _or_<_B1, _B2>
-            : public std::conditional<_B1::value, _B1, _B2>::type {};
+    template<typename _B1, typename _B2>
+    struct _or_<_B1, _B2>
+        : public std::conditional<_B1::value, _B1, _B2>::type {};
 
-        template<typename _B1, typename _B2, typename _B3, typename... _Bn>
-        struct _or_<_B1, _B2, _B3, _Bn...>
-            : public std::conditional<_B1::value, _B1, _or_<_B2, _B3, _Bn...>>::type {};
+    template<typename _B1, typename _B2, typename _B3, typename... _Bn>
+    struct _or_<_B1, _B2, _B3, _Bn...>
+        : public std::conditional<_B1::value, _B1, _or_<_B2, _B3, _Bn...>>::type {};
 
-        template<typename...>
-        using void_t = void;
+    template<typename...>
+    using void_t = void;
 
-        struct erased_type {};
+    struct erased_type {};
 
+    struct allocator_arg_t {
+        explicit allocator_arg_t() = default;
+    };
 
-        struct allocator_arg_t {
-            explicit allocator_arg_t() = default;
-        };
-
-        constexpr allocator_arg_t allocator_arg = allocator_arg_t();
+    constexpr allocator_arg_t allocator_arg = allocator_arg_t();
 
 }} // namespace actor_zeta::type_traits

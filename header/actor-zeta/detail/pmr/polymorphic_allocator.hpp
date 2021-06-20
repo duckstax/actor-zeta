@@ -11,9 +11,9 @@
 #include <cassert>
 #include <cstddef>
 
+#include <new>
 #include <tuple>
 #include <utility>
-#include <new>
 
 #endif
 
@@ -22,6 +22,55 @@ namespace actor_zeta { namespace detail { namespace pmr {
 #if CPP17_OR_GREATER
 
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
+
+    template<std::size_t i, typename _Tp>
+    using tuple_element_t = typename std::tuple_element<i, _Tp>::type;
+
+    template<size_t, typename, typename, size_t>
+    struct __make_tuple_impl;
+
+    template<size_t Idx, typename _Tuple, typename... _Tp, size_t Nm>
+    struct __make_tuple_impl<Idx, std::tuple<_Tp...>, _Tuple, Nm>
+        : __make_tuple_impl<Idx + 1,
+                            std::tuple<_Tp..., tuple_element_t<Idx, _Tuple>>,
+                            _Tuple, Nm> {};
+
+    template<std::size_t Nm, typename Tuple, typename... T>
+    struct __make_tuple_impl<Nm, std::tuple<T...>, Tuple, Nm> {
+        using type = std::tuple<T...>;
+    };
+
+    template<typename _Tuple>
+    struct __do_make_tuple
+        : __make_tuple_impl<0, std::tuple<>, _Tuple, std::tuple_size<_Tuple>::value> {};
+
+    template<typename _Tuple>
+    struct __make_tuple
+        : public __do_make_tuple<type_traits::remove_cvref_t<_Tuple>> {};
+
+    template<typename...>
+    struct __combine_tuples;
+
+    template<>
+    struct __combine_tuples<> {
+        using type = std::tuple<> ;
+    };
+
+    template<typename... _Ts>
+    struct __combine_tuples<std::tuple<_Ts...>> {
+        using type =std::tuple<_Ts...>;
+    };
+
+    template<typename... _T1s, typename... _T2s, typename... _Rem>
+    struct __combine_tuples<std::tuple<_T1s...>, std::tuple<_T2s...>, _Rem...> {
+        using type = typename __combine_tuples<std::tuple<_T1s..., _T2s...>,
+                                          _Rem...>::__type;
+    };
+
+    template<typename... Args>
+    struct tuple_cat_result {
+        using type = typename __combine_tuples<typename __make_tuple<Args>::__type...>::__type;
+    };
 
     template<typename T>
     class polymorphic_allocator {
@@ -148,14 +197,14 @@ namespace actor_zeta { namespace detail { namespace pmr {
         }
 
         template<typename... Args>
-        decltype(auto)
-        construct_(uses_alloc1_ ua, std::tuple<Args...>& t) {
+        constexpr auto
+        construct_(uses_alloc1_ ua, std::tuple<Args...>& t) -> typename tuple_cat_result<Args...>::type {
             return std::tuple_cat(std::make_tuple(type_traits::allocator_arg, *(ua.a_)), std::move(t));
         }
 
         template<typename... Args>
-        decltype(auto)
-        construct_(uses_alloc2_ ua, std::tuple<Args...>& t) {
+        constexpr auto
+        construct_(uses_alloc2_ ua, std::tuple<Args...>& t) -> typename tuple_cat_result<Args...>::type {
             return std::tuple_cat(std::move(t), std::make_tuple(*(ua.a_)));
         }
 
