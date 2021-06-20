@@ -59,14 +59,14 @@ jobs:
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
           sudo apt-get update
-          sudo apt-get install ${{ matrix.configuration.COMPILER_C}} ${{ matrix.configuration.COMPILER_CXX}}
+          sudo apt-get install ninja-build ${{ matrix.configuration.COMPILER_C}} ${{ matrix.configuration.COMPILER_CXX}}
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/${{ matrix.configuration.COMPILER_C}} 60 --slave /usr/bin/g++ g++ /usr/bin/${{ matrix.configuration.COMPILER_CXX}}
 
       - name: Configure CMake
         env:
           CC: ${{ matrix.configuration.COMPILER_C}}
           CXX: ${{ matrix.configuration.COMPILER_CXX}}
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.configuration.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{ matrix.configuration.CXX_STANDARD}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON
+        run: cmake -B ${{github.workspace}}/build -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.configuration.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{ matrix.configuration.CXX_STANDARD}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config ${{ matrix.configuration.BUILD_TYPE}}
