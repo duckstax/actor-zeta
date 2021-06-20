@@ -5,9 +5,11 @@
 #include <cstdio>
 
 #if CPP17_OR_GREATER
-
-#include <memory_resource>
-
+# if __has_include(<memory_resource>)
+#  include <memory_resource>
+# elif __has_include(<experimental/memory_resource>)
+#  include <experimental/memory_resource>
+# endif
 #endif
 
 namespace actor_zeta { namespace detail { namespace pmr {
