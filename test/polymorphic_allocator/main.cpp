@@ -21,7 +21,9 @@ static_assert(std::is_copy_assignable<test_type>{}, "");
 static_assert(std::is_constructible<test_type, memory_resource*>{}, "");
 static_assert(std::is_same<test_type::value_type, x>{}, "");
 static_assert(!std::is_polymorphic<test_type>{}, "");
+#if CPP17_OR_GREATER or CPP17_OR_GREATER
 static_assert(!std::is_final<test_type>{}, "");
+#endif
 
 class derived_from_memory_resource
     : public memory_resource {
