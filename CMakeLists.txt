@@ -78,7 +78,7 @@ include_directories(SYSTEM .)
 include_directories(SYSTEM header)
 
 set(HEADER_FILES
-        header/actor-zeta/base/abstract_actor.hpp
+        header/actor-zeta/base/actor_abstract.hpp
         header/actor-zeta/base/actor.hpp
         header/actor-zeta/base/actor_address.hpp
         header/actor-zeta/base/cooperative_actor.hpp
@@ -86,7 +86,10 @@ set(HEADER_FILES
         header/actor-zeta/base/communication_module.hpp
         header/actor-zeta/base/handler.hpp
         header/actor-zeta/base/supervisor.hpp
+        header/actor-zeta/base/supervisor_abstract.hpp
 
+        header/actor-zeta/detail/pmr/container.hpp
+        header/actor-zeta/detail/pmr/memory_resource.hpp
         header/actor-zeta/detail/any.hpp
         header/actor-zeta/detail/callable_trait.hpp
         header/actor-zeta/detail/intrusive_ptr.hpp
@@ -108,18 +111,22 @@ set(HEADER_FILES
         header/actor-zeta/base/message.hpp
 
         header/actor-zeta/forwards.hpp
+        header/actor-zeta/link.hpp
+        header/actor-zeta/send.hpp
         header/actor-zeta.hpp
 )
 
 set(SOURCE_FILES
 
-        source/actor/abstract_actor.cpp
+        source/actor/actor_abstract.cpp
         source/actor/actor.cpp
         source/actor/actor_address.cpp
         source/actor/cooperative_actor.cpp
         source/actor/supervisor.cpp
+        source/actor/supervisor_abstract.cpp
         source/actor/communication_module.cpp
 
+        source/detail/pmr/memory_resource.cpp
         source/detail/string_view.cpp
         source/detail/ref_counted.cpp
 

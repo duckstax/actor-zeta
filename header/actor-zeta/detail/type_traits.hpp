@@ -1,6 +1,8 @@
 #pragma once
 
 #include <actor-zeta/config.hpp>
+#include <type_traits>
+#include <utility>
 
 namespace actor_zeta { namespace type_traits {
 
@@ -110,31 +112,39 @@ namespace actor_zeta { namespace type_traits {
     template<std::size_t I>
     inline in_place_tag in_place(detail::in_place_index_tag<I>) { return internal_construct_in_place_tag(); }
 
+    template<typename _Tp>
+    using remove_cvref_t = typename std::remove_cv<typename std::remove_reference<_Tp>::type>::type;
+
 #endif
 
-    /*
-        template<class... Ts>
-        using void_t = void;
+    template<typename...>
+    struct _or_;
 
-        namespace detail {
-            template<template<class...> class Trait, class Enabler, class... Args>
-            struct is_detected : std::false_type {};
+    template<>
+    struct _or_<>
+        : public std::false_type {};
 
-            template<template<class...> class Trait, class... Args>
-            struct is_detected<Trait, void_t<Trait<Args...>>, Args...> : std::true_type {};
-        }
+    template<typename _B1>
+    struct _or_<_B1>
+        : public _B1 {};
 
-        template<template<class...> class Trait, class... Args>
-        using is_detected = typename detail::is_detected<Trait, void, Args...>::type;
+    template<typename _B1, typename _B2>
+    struct _or_<_B1, _B2>
+        : public std::conditional<_B1::value, _B1, _B2>::type {};
 
-        template<typename T, typename U>
-        using equal_compare_t = decltype(std::declval<const T &>() == std::declval<const U &>());
+    template<typename _B1, typename _B2, typename _B3, typename... _Bn>
+    struct _or_<_B1, _B2, _B3, _Bn...>
+        : public std::conditional<_B1::value, _B1, _or_<_B2, _B3, _Bn...>>::type {};
 
-        template<typename T, typename U>
-        using are_equal_comparable = is_detected<equal_compare_t, T, U>;
+    template<typename...>
+    using void_t = void;
 
-        template<typename I>
-        using is_input_iterator = typename std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<I>::iterator_category>::type;
-*/
+    struct erased_type {};
+
+    struct allocator_arg_t {
+        explicit allocator_arg_t() = default;
+    };
+
+    constexpr allocator_arg_t allocator_arg = allocator_arg_t();
 
 }} // namespace actor_zeta::type_traits

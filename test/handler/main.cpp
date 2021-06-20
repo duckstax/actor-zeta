@@ -7,7 +7,7 @@ using actor_zeta::basic_async_actor;
 using actor_zeta::execution_device;
 using actor_zeta::message_ptr;
 using actor_zeta::send;
-using actor_zeta::supervisor_t;
+using actor_zeta::supervisor_abstract;
 
 class dummy_executor final : public abstract_executor {
 public:
@@ -23,20 +23,19 @@ public:
     void stop() override {}
 };
 
-class dummy_supervisor final : public supervisor_t {
+class dummy_supervisor final : public supervisor_abstract {
 public:
     explicit dummy_supervisor(actor_zeta::abstract_executor* ptr)
-        : supervisor_t("dummy_supervisor")
+        : supervisor_abstract("dummy_supervisor")
         , ptr_(ptr) {
     }
 
-    auto executor() noexcept -> actor_zeta::abstract_executor* override {
+    auto executor_impl() noexcept -> actor_zeta::abstract_executor* override {
         return ptr_;
     }
 
-    auto join(actor_zeta::actor) -> actor_zeta::actor_address override {
-        return actor_zeta::actor_address();
-    }
+    auto add_actor_impl(actor_zeta::actor) -> void override {}
+    auto add_supervisor_impl(actor_zeta::supervisor) -> void override {}
 
     void enqueue_base(message_ptr, actor_zeta::execution_device*) override {}
 
@@ -150,6 +149,7 @@ private:
 };
 
 int main() {
+    /*
     std::unique_ptr<dummy_supervisor> supervisor(new dummy_supervisor(new dummy_executor));
 
     std::unique_ptr<test_handlers> test_handlers_(new test_handlers(*supervisor));
@@ -166,6 +166,6 @@ int main() {
     send(storage, actor_zeta::actor_address(), "add", std::string("key_1"), std::string("value_1"));
     send(storage, actor_zeta::actor_address(), "delete_table", std::string("test"), std::string("/"), 12);
     send(storage, actor_zeta::actor_address(), "creature_table", std::string("test"), std::string("/"), 1, 12);
-
+*/
     return 0;
 }

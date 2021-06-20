@@ -110,14 +110,6 @@ namespace actor_zeta { namespace base {
         , id_(0)
         , sub_type_(sub_type)
         , type_(std::move(type)) {
-        initialize();
-    }
-
-    actor_address communication_module::address() const noexcept {
-        return actor_address{const_cast<communication_module*>(this)};
-    }
-
-    void communication_module::initialize() {
         add_handler(
             "add_link",
             &communication_module::add_link);
@@ -125,6 +117,10 @@ namespace actor_zeta { namespace base {
         add_handler(
             "remove_link",
             &communication_module::remove_link);
+    }
+
+    actor_address communication_module::address() const noexcept {
+        return actor_address{const_cast<communication_module*>(this)};
     }
 
     void communication_module::add_link(actor_address address) {

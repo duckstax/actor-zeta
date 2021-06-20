@@ -112,7 +112,7 @@ If you handle multiple dependencies in your project is better to add a *conanfil
 
 ## Dependencies
 
-* CMake >= 2.8
+* CMake >= 3.0
 
 ## Supported Compilers
 

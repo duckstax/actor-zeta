@@ -86,8 +86,6 @@ namespace actor_zeta { namespace base {
 
         void remove_link(const actor_address&);
 
-        void initialize();
-
         std::unique_ptr<std::unordered_map<detail::string_view, actor_address>> contacts_;
         storage handlers_;
         actor_id id_;

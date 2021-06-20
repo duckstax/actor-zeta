@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/base/abstract_actor.hpp>
+#include <actor-zeta/base/actor_abstract.hpp>
 #include <actor-zeta/detail/single_reader_queue.hpp>
 #include <actor-zeta/executor/executable.hpp>
 #include <actor-zeta/forwards.hpp>
@@ -13,7 +13,7 @@ namespace actor_zeta { namespace base {
     using max_throughput_t = std::size_t;
 
     class cooperative_actor
-        : public abstract_actor
+        : public actor_abstract
         , public executor::executable {
     public:
         using mailbox_t = detail::single_reader_queue<message>;
@@ -27,7 +27,7 @@ namespace actor_zeta { namespace base {
         void intrusive_ptr_release_impl() override;
 
     protected:
-        cooperative_actor(supervisor_t*, std::string);
+        cooperative_actor(supervisor_abstract*, std::string);
 
         void enqueue_base(message_ptr, executor::execution_device*) final;
 
@@ -74,10 +74,10 @@ namespace actor_zeta { namespace base {
 
         auto context() const -> executor::execution_device*;
 
-        auto supervisor() -> supervisor_t*;
+        auto supervisor() -> supervisor_abstract*;
 
         // ----------------------------------------------------- message processing
-        supervisor_t* supervisor_;
+        supervisor_abstract* supervisor_;
         executor::execution_device* executor_;
         message* current_message_;
         mailbox_t mailbox_;

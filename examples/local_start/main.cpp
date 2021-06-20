@@ -9,7 +9,7 @@ using actor_zeta::basic_async_actor;
 using actor_zeta::execution_device;
 using actor_zeta::message_ptr;
 using actor_zeta::send;
-using actor_zeta::supervisor_t;
+using actor_zeta::supervisor_abstract;
 
 class dummy_executor final : public abstract_executor {
 public:
@@ -23,20 +23,19 @@ public:
     void stop() override {}
 };
 
-class dummy_supervisor final : public supervisor_t {
+class dummy_supervisor final : public supervisor_abstract {
 public:
-    dummy_supervisor(actor_zeta::abstract_executor* ptr)
-        : supervisor_t("dummy_supervisor")
-        , ptr_(ptr) {
+    dummy_supervisor()
+        : supervisor_abstract("dummy_supervisor")
+        , ptr_(new dummy_executor) {
     }
 
-    auto executor() noexcept -> actor_zeta::abstract_executor* override {
+    auto executor_impl() noexcept -> actor_zeta::abstract_executor* override {
         return ptr_;
     }
 
-    auto join(actor_zeta::actor) -> actor_zeta::actor_address override {
-        return actor_zeta::actor_address();
-    }
+    auto add_actor_impl(actor_zeta::actor) -> void override {}
+    auto add_supervisor_impl(actor_zeta::supervisor) -> void override {}
 
     void enqueue_base(message_ptr, actor_zeta::execution_device*) override {
     }
@@ -47,8 +46,8 @@ private:
 
 class storage_t final : public basic_async_actor {
 public:
-    storage_t(dummy_supervisor& ref)
-        : basic_async_actor(&ref, "storage") {
+    storage_t(actor_zeta::supervisor_abstract* ptr)
+        : basic_async_actor(ptr, "storage") {
         add_handler(
             "update",
             &storage_t::update);
@@ -89,11 +88,11 @@ private:
 };
 
 int main() {
-    std::unique_ptr<dummy_supervisor> supervisor(new dummy_supervisor(new dummy_executor));
-    std::unique_ptr<storage_t> storage(new storage_t(*supervisor));
-    send(storage, actor_zeta::actor_address(), "update", std::string("payload"));
-    send(storage, actor_zeta::actor_address(), "find");
-    send(storage, actor_zeta::actor_address(), "remove");
-    send(storage, actor_zeta::actor_address(), "status");
+    actor_zeta::supervisor supervisor(new dummy_supervisor());
+    actor_zeta::spawn_actor<storage_t>(supervisor);
+    ///send(storage, actor_zeta::actor_address(), "update", std::string("payload"));
+    //send(storage, actor_zeta::actor_address(), "find");
+    //send(storage, actor_zeta::actor_address(), "remove");
+    ///send(storage, actor_zeta::actor_address(), "status");
     return 0;
 }

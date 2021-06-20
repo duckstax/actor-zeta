@@ -3,7 +3,7 @@
 #include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/base/message.hpp>
 #include <actor-zeta/base/actor.hpp>
-#include <actor-zeta/base/abstract_actor.hpp>
+#include <actor-zeta/base/actor_abstract.hpp>
 // clang-format on
 
 namespace actor_zeta { namespace base {

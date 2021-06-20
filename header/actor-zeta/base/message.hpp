@@ -76,6 +76,9 @@ namespace actor_zeta { namespace base {
         priority priority_ = priority::normal;
     };
 
+    static_assert(std::is_move_constructible<message>::value, "");
+    static_assert(not std::is_copy_constructible<message>::value, "");
+
 }} // namespace actor_zeta::base
 
 inline void swap(actor_zeta::base::message& lhs, actor_zeta::base::message& rhs) noexcept {

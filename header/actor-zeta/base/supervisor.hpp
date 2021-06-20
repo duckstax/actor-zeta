@@ -1,28 +1,86 @@
 #pragma once
 
-#include <actor-zeta/base/communication_module.hpp>
+#include <actor-zeta/detail/intrusive_ptr.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <type_traits>
 
 namespace actor_zeta { namespace base {
 
-    class supervisor_t : public communication_module {
+    class supervisor final {
     public:
-        supervisor_t(std::string);
+        supervisor() = default;
 
-        ~supervisor_t() override;
+        supervisor(const supervisor& a) = delete;
 
-        virtual auto executor() noexcept -> executor::abstract_executor* = 0;
+        supervisor(supervisor&& a) = default;
 
-        virtual auto join(actor) -> actor_address = 0;
+        supervisor& operator=(const supervisor& a) = delete;
 
-        using communication_module::broadcast;
+        supervisor& operator=(supervisor&& a) = default;
 
-    protected:
-        auto set_current_message(message_ptr) -> void;
-        auto current_message() -> message* final;
+        supervisor(std::nullptr_t);
+
+        supervisor& operator=(std::nullptr_t);
+
+        template<
+            class T,
+            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
+        supervisor(intrusive_ptr<T> ptr)
+            : ptr_(std::move(ptr)) {}
+
+        template<
+            class T,
+            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
+        supervisor(T* ptr)
+            : ptr_(ptr) {}
+
+        template<
+            class T,
+            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
+        supervisor& operator=(intrusive_ptr<T> ptr) {
+            supervisor tmp{std::move(ptr)};
+            swap(tmp);
+            return *this;
+        }
+
+        template<
+            class T,
+            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
+        supervisor& operator=(T* ptr) {
+            supervisor tmp{ptr};
+            swap(tmp);
+            return *this;
+        }
+
+        actor_address address() const noexcept;
+
+        ~supervisor();
+
+        inline supervisor_abstract* operator->() const noexcept {
+            return ptr_.get();
+        }
+
+        inline supervisor_abstract* get() const noexcept {
+            return ptr_.get();
+        }
+
+        inline explicit operator bool() const noexcept {
+            return static_cast<bool>(ptr_);
+        }
+
+        auto type() const -> detail::string_view;
+
+        inline bool operator!() const noexcept {
+            return !ptr_;
+        }
 
     private:
-        message* current_message_;
+        void swap(supervisor&) noexcept;
+
+        intrusive_ptr<supervisor_abstract> ptr_;
     };
+
+    static_assert(std::is_move_constructible<supervisor>::value, "");
+    static_assert(not std::is_copy_constructible<supervisor>::value, "");
 
 }} // namespace actor_zeta::base

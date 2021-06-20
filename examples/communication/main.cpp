@@ -8,9 +8,8 @@
 
 using actor_zeta::abstract_executor;
 using actor_zeta::basic_async_actor;
-using actor_zeta::supervisor_t;
+using actor_zeta::supervisor_abstract;
 
-using actor_zeta::join;
 using actor_zeta::link;
 using actor_zeta::message_ptr;
 
@@ -26,10 +25,10 @@ public:
     void stop() override {}
 };
 
-class supervisor_lite final : public supervisor_t {
+class supervisor_lite final : public supervisor_abstract {
 public:
     explicit supervisor_lite(dummy_executor* ptr)
-        : supervisor_t("network")
+        : supervisor_abstract("network")
         , e_(ptr)
         , cursor(0)
         , system_{"sync_contacts", "add_link", "remove_link"} {
@@ -37,17 +36,14 @@ public:
 
     ~supervisor_lite() override = default;
 
-    auto shutdown() noexcept -> void {
-        e_->stop();
-    }
-
-    auto startup() noexcept -> void {
-        e_->start();
-    }
-
-    auto executor() noexcept -> actor_zeta::abstract_executor* final {
+    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
         return e_;
     }
+
+    auto add_actor_impl(actor_zeta::actor) -> void override {}
+    auto add_supervisor_impl(actor_zeta::supervisor) -> void override {}
+
+    /*
 
     auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
         auto tmp = std::move(t);
@@ -55,6 +51,7 @@ public:
         actors_.push_back(std::move(tmp));
         return address;
     }
+     */
 
     void enqueue_base(message_ptr msg, actor_zeta::execution_device*) final {
         auto msg_ = std::move(msg);
@@ -90,7 +87,7 @@ private:
 
 class storage_t final : public basic_async_actor {
 public:
-    explicit storage_t(supervisor_lite* ptr)
+    explicit storage_t(actor_zeta::supervisor_abstract* ptr)
         : basic_async_actor(ptr, "storage") {
         add_handler(
             "update",
@@ -113,11 +110,30 @@ class network_t final : public basic_async_actor {
 public:
     ~network_t() override = default;
 
-    explicit network_t(supervisor_lite* ptr)
+    explicit network_t(actor_zeta::supervisor_abstract* ptr)
         : basic_async_actor(ptr, "network") {}
 };
 
 int main() {
+    actor_zeta::supervisor supervisor_tmp(new supervisor_lite(new dummy_executor));
+
+    actor_zeta::spawn_actor<storage_t>(supervisor_tmp);
+
+    actor_zeta::spawn_actor<network_t>(supervisor_tmp);
+
+    actor_zeta::supervisor supervisor1(new supervisor_lite(new dummy_executor));
+
+    actor_zeta::link(supervisor_tmp, supervisor1);
+
+    actor_zeta::spawn_actor<storage_t>(supervisor1);
+
+    actor_zeta::spawn_actor<network_t>(supervisor1);
+
+    return 0;
+}
+
+/*
+  int main() {
     std::unique_ptr<supervisor_lite> supervisor(new supervisor_lite(new dummy_executor));
 
     auto storage = join<storage_t>(supervisor.get());
@@ -138,3 +154,4 @@ int main() {
 
     return 0;
 }
+*/
