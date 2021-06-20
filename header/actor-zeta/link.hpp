@@ -4,6 +4,9 @@
 
 namespace actor_zeta {
 
+    using base::basic_async_actor;
+    using base::supervisor_abstract;
+
     inline void link_imp(actor_address& a1, actor_address& a2) {
         send(a1, a2, "add_link", a2);
         send(a2, a1, "add_link", a1);
