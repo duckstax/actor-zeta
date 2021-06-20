@@ -10,7 +10,11 @@
 #include <utility>
 
 #if CPP17_OR_GREATER
-#include <memory_resource>
+# if __has_include(<memory_resource>)
+#  include <memory_resource>
+# elif __has_include(<experimental/memory_resource>)
+#  include <experimental/memory_resource>
+# endif
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 #include "emulate_tuple_cat_result.hpp"
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
