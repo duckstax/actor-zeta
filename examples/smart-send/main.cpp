@@ -153,8 +153,6 @@ private:
     std::string tmp_;
 };
 
-using namespace std::chrono_literals;
-
 int main() {
     actor_zeta::supervisor supervisor(new supervisor_lite());
 
@@ -176,7 +174,7 @@ int main() {
         make_task_broadcast<work_data>(supervisor, "work_data", std::string("fb"), std::string("jack"));
     }
 
-    std::this_thread::sleep_for(180s);
+    std::this_thread::sleep_for(std::chrono::seconds(180));
 
     std::cerr << " Finish " << std::endl;
     std::cerr << "counter_download_data :" << counter_download_data.load() << std::endl;
