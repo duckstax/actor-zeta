@@ -1,13 +1,6 @@
 #pragma once
 
-#if CPP17_OR_GREATER
-
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
-
-#include "emulate_tuple_cat_result.hpp"
-#include <actor-zeta/detail/pmr/memory_resource.hpp>
-#include <actor-zeta/detail/pmr/uses_allocator.hpp>
-#include <actor-zeta/detail/type_traits.hpp>
+#include <actor-zeta/config.hpp>
 
 #include <cassert>
 #include <cstddef>
@@ -16,12 +9,19 @@
 #include <tuple>
 #include <utility>
 
+#if CPP17_OR_GREATER
+#include <memory_resource>
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+#include "emulate_tuple_cat_result.hpp"
+#include <actor-zeta/detail/pmr/memory_resource.hpp>
+#include <actor-zeta/detail/pmr/uses_allocator.hpp>
+#include <actor-zeta/detail/type_traits.hpp>
 #endif
 
 namespace actor_zeta { namespace detail { namespace pmr {
 
 #if CPP17_OR_GREATER
-
+    using std::pmr::polymorphic_allocator;
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
     template<typename T>
