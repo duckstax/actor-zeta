@@ -10,11 +10,11 @@
 #include <utility>
 
 #if CPP17_OR_GREATER
-# if __has_include(<memory_resource>)
-#  include <memory_resource>
-# elif __has_include(<experimental/memory_resource>)
-#  include <experimental/memory_resource>
-# endif
+#if __has_include(<memory_resource>)
+#include <memory_resource>
+#elif __has_include(<experimental/memory_resource>)
+#include <experimental/memory_resource>
+#endif
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 #include "emulate_tuple_cat_result.hpp"
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
@@ -25,7 +25,18 @@
 namespace actor_zeta { namespace detail { namespace pmr {
 
 #if CPP17_OR_GREATER
-    using std::pmr::polymorphic_allocator;
+#if __has_include(<memory_resource>)
+
+    template<class T>
+    using polymorphic_allocator = std::pmr::polymorphic_allocator<T>;
+
+#else
+
+    template<class T>
+    using polymorphic_allocator = std::experimental::pmr::polymorphic_allocator<T>;
+
+#endif
+
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
     template<typename T>
