@@ -1,12 +1,15 @@
 #pragma once
 
+#include <memory>
+
 namespace actor_zeta {
 
     namespace base {
         class message;
+        using message_ptr = std::unique_ptr<message>;
         class actor_abstract;
         class actor;
-        class actor_address;
+        class address_t;
         class handler;
         class supervisor_abstract;
         class supervisor;
