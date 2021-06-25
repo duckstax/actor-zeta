@@ -3,7 +3,7 @@
 #include <actor-zeta.hpp>
 #include <actor-zeta/base/message.hpp>
 
-using actor_zeta::base::actor_address;
+using actor_zeta::base::address_t;
 using actor_zeta::base::message;
 
 int main() {
@@ -11,7 +11,7 @@ int main() {
 
     assert(msg == false);
 
-    message msg_1(actor_address(), "1", int(1));
+    message msg_1(address_t(), "1", int(1));
 
     assert(msg_1 == true);
 
