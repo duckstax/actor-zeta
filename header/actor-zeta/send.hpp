@@ -6,6 +6,7 @@
 
 namespace actor_zeta {
     
+    using base::address;
     
     template<typename... Args>
     void send(base::supervisor& supervisor, Args... args) {
