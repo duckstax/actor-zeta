@@ -11,7 +11,7 @@
 #include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/base/address.hpp>
 #include <actor-zeta/forwards.hpp>
-
+/*
 namespace actor_zeta { namespace base {
 
     struct identifier_t final {
@@ -46,7 +46,7 @@ namespace std {
         }
     };
 } // namespace std
-
+*/
 namespace actor_zeta { namespace base {
 
     using message_ptr = std::unique_ptr<message>;
