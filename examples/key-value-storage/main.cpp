@@ -145,7 +145,7 @@ public:
                 response.id = tmp.id;
                 actor_zeta::send(
                     current_message()->sender(),
-                    actor_address(self),
+                    address(),
                     write,
                     std::move(response));
             });
