@@ -87,7 +87,7 @@ namespace actor_zeta { namespace base {
         return tmp;
     }
 
-    auto communication_module::addresses(detail::string_view type) -> range_t {
+    auto communication_module::address_book(detail::string_view type) -> range_t {
          return contacts_.equal_range(type);
     }
 

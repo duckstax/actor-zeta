@@ -8,7 +8,7 @@
 #include <actor-zeta.hpp>
 #include <testsuite/network/fake_multiplexer.hpp>
 
-using actor_zeta::actor_address;
+using actor_zeta::address_t;
 using actor_zeta::basic_async_actor;
 using actor_zeta::message_ptr;
 using actor_zeta::supervisor;
@@ -69,8 +69,8 @@ public:
                 query_.parameter = std::move(parsed_raw_request);
                 query_.id = query_raw.id;
                 actor_zeta::send(
-                    addresses("storage"),
-                    actor_zeta::actor_address(address()),
+                    actor_zeta::address(address_book("storage")),
+                    address_t(address()),
                     std::string(query_.commands),
                     std::move(query_));
             });

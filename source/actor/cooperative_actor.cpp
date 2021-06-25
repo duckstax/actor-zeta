@@ -211,4 +211,18 @@ namespace actor_zeta { namespace base {
         return supervisor_;
     }
 
+    auto address(actor_zeta::base::communication_module::range_t  range) -> address_t {
+            auto range_tmp = std::move(range);
+            auto address = std::move(range_tmp.first->second);
+
+#ifdef DEBUG
+            auto size = std::distance(range_tmp.first,range_tmp.second);
+            if(size > 1) {
+                std::cerr << "size : " << size << std::endl;
+            }
+#endif
+            return address;
+            
+    }
+
 }} // namespace actor_zeta::base

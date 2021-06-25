@@ -87,7 +87,7 @@ namespace actor_zeta { namespace base {
 
         virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
 
-        virtual auto addresses(detail::string_view) -> range_t;
+        auto address_book(detail::string_view) -> range_t;
 
         ///virtual auto self() -> address_t;
 
@@ -119,4 +119,7 @@ namespace actor_zeta { namespace base {
         storage_t handlers_;
         std::string type_;
     };
+
+auto address(actor_zeta::base::communication_module::range_t  range) -> address_t;
+
 }} // namespace actor_zeta::base
