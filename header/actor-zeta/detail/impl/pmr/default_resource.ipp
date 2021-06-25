@@ -2,8 +2,6 @@
 
 #include <actor-zeta/detail/pmr/default_resource.hpp>
 
-#include <cstdint>
-
 namespace actor_zeta { namespace detail { namespace pmr {
 
 #ifndef WEAK_CONSTINIT
