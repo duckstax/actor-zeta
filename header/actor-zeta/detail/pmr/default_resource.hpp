@@ -1,7 +1,7 @@
 #pragma once
 
 #include <actor-zeta/config.hpp>
-#include <actor-zeta/detail/pmr/mempry_resource.hpp>
+#include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <new>
 
 namespace actor_zeta { namespace detail { namespace pmr {
