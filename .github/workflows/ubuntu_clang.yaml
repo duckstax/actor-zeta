@@ -40,7 +40,7 @@ jobs:
 
       - name: Install compiler
         run: |
-          #sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+          sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
           sudo apt-get update
           sudo apt-get install ninja-build ${{ matrix.configuration.PACKAGE}}
 
