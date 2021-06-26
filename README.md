@@ -1,4 +1,8 @@
-[![Build Status](https://travis-ci.org/jinncrafters/actor-zeta.svg?branch=master)](https://travis-ci.org/jinncrafters/actor-zeta)
+
+| compiler  | Master | Develop |
+|:---:|:---:|:---:|
+| gcc 5 - 11 | |[![ubuntu](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_gcc.yaml/badge.svg?branch=develop)](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_gcc.yaml) |
+|clang 3.9 - 10 | |[![ubuntu](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_clang.yaml/badge.svg?branch=develop)](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_clang.yaml)|
 
 actor-zeta
 ========================
@@ -113,16 +117,3 @@ If you handle multiple dependencies in your project is better to add a *conanfil
 ## Dependencies
 
 * CMake >= 3.0
-
-## Supported Compilers
-
-* GCC >= 4.8.5
-* Clang >= 3.3
-* Microsoft Visual Studio >= 2015
-
-## Supported Operating Systems
-
-* Linux
-* Mac OS X
-* FreeBSD 10
-* Windows >= 7 (static builds)

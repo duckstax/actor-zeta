@@ -68,7 +68,7 @@ namespace actor_zeta { namespace base {
         }
     }
 
-    address_t::address_t()
+    address_t::address_t() noexcept
         : sub_type_(sub_type_t::none)
         , ptr_() {
     }
