@@ -52,7 +52,7 @@ namespace actor_zeta { namespace base {
             return *this;
         }
 
-        actor_address address() const noexcept;
+        address_t address() const noexcept;
 
         ~supervisor();
 

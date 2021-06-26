@@ -19,6 +19,7 @@
 #include "emulate_tuple_cat_result.hpp"
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/detail/pmr/uses_allocator.hpp>
+#include <actor-zeta/detail/pmr/default_resource.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
 #endif
 
@@ -41,12 +42,15 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
     template<typename T>
     class polymorphic_allocator {
+    private:
+     using default_resource = actor_zeta::detail::pmr::default_resource;
     public:
         using value_type = T;
         using pointer = value_type*;
 
-        /// non C++ 17 std
-        polymorphic_allocator() noexcept = delete;
+        polymorphic_allocator() noexcept 
+            : resource_(default_resource::get()){
+        }
 
         polymorphic_allocator(memory_resource* ptr)
             : resource_(ptr) { assert(ptr); }
@@ -148,8 +152,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
             ptr->~U();
         }
 
-        /// non C++ 17 std
-        ///polymorphic_allocator select_on_container_copy_construction() const { return polymorphic_allocator(); }
+        polymorphic_allocator select_on_container_copy_construction() const { return polymorphic_allocator(); }
 
         memory_resource* resource() const { return resource_; }
 

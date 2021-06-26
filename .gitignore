@@ -32,8 +32,10 @@
 
 ## Directory-based project format:
 .idea/
+.vscode
 
 .DS_Store
 # Project exclude paths
 /cmake-build-debug/
 .idea/
+build

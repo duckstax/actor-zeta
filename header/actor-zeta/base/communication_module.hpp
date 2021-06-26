@@ -9,26 +9,57 @@
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/detail/string_view.hpp>
+#include <actor-zeta/base/address.hpp>
 #include <actor-zeta/forwards.hpp>
+/*
+namespace actor_zeta { namespace base {
 
+    struct identifier_t final {
+        using id_t = std::size_t;
+        using name_t = detail::string_view;
+        identifier_t(name_t name, id_t id)
+            : name_(std::move(name))
+            , id_(id) {}
+        identifier_t(name_t name)
+            : name_(std::move(name))
+            , id_(0) {}
+        const name_t name_;
+        const id_t id_;
+    };
+
+}} // namespace actor_zeta::base
+
+namespace std {
+
+    inline constexpr auto operator==(const actor_zeta::base::identifier_t& lhs, const actor_zeta::base::identifier_t& rhs) -> bool {
+        return std::tie(lhs.name_, lhs.id_) == std::tie(rhs.name_, rhs.id_);
+    }
+
+    inline constexpr auto operator!=(const actor_zeta::base::identifier_t& lhs, const actor_zeta::base::identifier_t& rhs) -> bool {
+        return !(lhs == rhs);
+    }
+
+    template<>
+    struct hash<actor_zeta::base::identifier_t> {
+        size_t operator()(const actor_zeta::base::identifier_t& key) const {
+            return std::hash<actor_zeta::base::identifier_t::name_t>()(key.name_) ^ std::hash<actor_zeta::base::identifier_t::id_t>()(key.id_);
+        }
+    };
+} // namespace std
+*/
 namespace actor_zeta { namespace base {
 
     using message_ptr = std::unique_ptr<message>;
-
-    using actor_id = std::size_t;
-
-    enum class sub_type_t : uint8_t {
-        non = 0x00,
-        actor,
-        supervisor
-    };
 
     class communication_module
         : public ref_counted {
     public:
         using key_type = detail::string_view;
-        using storage = std::unordered_map<key_type, std::unique_ptr<handler>>;
-
+        using storage_t = std::unordered_map<key_type, std::unique_ptr<handler>>;
+        using contacts_t = std::unordered_multimap<key_type, address_t>;
+        using contacts_iterator_t = contacts_t::iterator;
+        using range_t = std::pair<contacts_iterator_t,contacts_iterator_t>;
+    
         communication_module() = delete;
 
         communication_module(const communication_module&) = delete;
@@ -36,10 +67,6 @@ namespace actor_zeta { namespace base {
         communication_module& operator=(const communication_module&) = delete;
 
         ~communication_module() override;
-
-        actor_address address() const noexcept;
-
-        auto sub_type() const -> sub_type_t;
 
         auto type() const -> detail::string_view;
 
@@ -49,18 +76,20 @@ namespace actor_zeta { namespace base {
 
         void enqueue(message_ptr, executor::execution_device*);
 
-        auto broadcast(message_ptr) -> bool;
+        auto broadcast(message_ptr) -> void;
+
+        auto broadcast(detail::string_view,message_ptr) -> void;
 
         virtual auto current_message() -> message* = 0;
 
     protected:
-        communication_module(std::string, sub_type_t);
+        communication_module(std::string);
 
         virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
 
-        virtual auto addresses(detail::string_view) -> actor_address&;
+        auto address_book(detail::string_view) -> range_t;
 
-        virtual auto self() -> actor_address;
+        ///virtual auto self() -> address_t;
 
         template<class F>
         auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
@@ -77,19 +106,20 @@ namespace actor_zeta { namespace base {
         bool on(detail::string_view, handler*);
 
         /**
-           * debug method
-           */
-        auto all_view_address() const -> std::vector<std::string>;
+        * debug method
+        */
+        auto all_view_address() const -> std::set<std::string>;
 
     private:
-        void add_link(actor_address);
+        void add_link(address_t);
 
-        void remove_link(const actor_address&);
+        void remove_link(const address_t&);
 
-        std::unique_ptr<std::unordered_map<detail::string_view, actor_address>> contacts_;
-        storage handlers_;
-        actor_id id_;
-        sub_type_t sub_type_;
+        contacts_t contacts_;
+        storage_t handlers_;
         std::string type_;
     };
+
+auto address(actor_zeta::base::communication_module::range_t  range) -> address_t;
+
 }} // namespace actor_zeta::base

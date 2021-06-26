@@ -1,6 +1,6 @@
 // clang-format off
 #include <actor-zeta/base/handler.hpp>
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address.hpp>
 #include <actor-zeta/base/message.hpp>
 #include <actor-zeta/base/basic_actor.hpp>
 #include <actor-zeta/base/supervisor.hpp>
@@ -65,21 +65,21 @@ namespace actor_zeta { namespace base {
     };
 
     supervisor_abstract::supervisor_abstract(std::string name, detail::pmr::memory_resource* memory_resource)
-        : communication_module(std::move(name), sub_type_t::supervisor)
+        : communication_module(std::move(name))//, sub_type_t::supervisor)
         , memory_resource_(memory_resource) {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
         add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
     }
 
     supervisor_abstract::supervisor_abstract(std::string name)
-        : communication_module(std::move(name), sub_type_t::supervisor)
+        : communication_module(std::move(name))//, sub_type_t::supervisor)
         , memory_resource_(new new_delete_resource) {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
         add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
     }
 
     supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string name)
-        : communication_module(std::move(name), sub_type_t::supervisor)
+        : communication_module(std::move(name))//, sub_type_t::supervisor)
         , memory_resource_(ptr->resource()) {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
         add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
@@ -114,5 +114,8 @@ namespace actor_zeta { namespace base {
         auto address = supervisor->address();
         add_supervisor_impl(std::move(supervisor));
         link(*this, address);
+    }
+    auto supervisor_abstract::address() noexcept -> address_t {
+        return address_t(this);
     }
 }} // namespace actor_zeta::base

@@ -18,6 +18,7 @@ namespace actor_zeta { namespace base {
         auto executor() noexcept -> executor::abstract_executor*;
         using communication_module::broadcast;
         auto resource() const -> detail::pmr::memory_resource*;
+        auto address() noexcept -> address_t;
 
     protected:
         using communication_module::add_handler;

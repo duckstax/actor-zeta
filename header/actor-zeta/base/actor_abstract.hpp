@@ -20,6 +20,8 @@ namespace actor_zeta { namespace base {
             return ptr;
         }
 
+        auto address() noexcept -> address_t;
+
     protected:
         actor_abstract(std::string);
         // prohibit copies, assignments, and heap allocations

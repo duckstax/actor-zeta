@@ -1,5 +1,7 @@
+#include <cstdint>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/detail/pmr/polymorphic_allocator.hpp>
+#include <actor-zeta/detail/impl/pmr/default_resource.ipp>
 #include <actor-zeta/detail/type_traits.hpp>
 
 #include <cassert>

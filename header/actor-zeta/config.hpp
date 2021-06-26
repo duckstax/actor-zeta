@@ -59,4 +59,48 @@ namespace actor_zeta {
 
 #define CACHE_LINE_SIZE 64
 
+#ifndef NODISCARD
+# ifdef __has_cpp_attribute
+#  if __has_cpp_attribute(nodiscard) && !(defined(__clang__) && (__cplusplus < 201703L))
+#   define NODISCARD [[nodiscard]]
+#  else
+#   define NODISCARD
+#  endif
+# else
+#  define NODISCARD
+# endif
+#endif
+
+#ifndef REQUIRE_CONST_INIT
+# define REQUIRE_CONST_INIT		
+# if __cpp_constinit >= 201907L
+#  undef REQUIRE_CONST_INIT		
+#  define REQUIRE_CONST_INIT constinit
+# elif defined(__clang__) && defined(__has_cpp_attribute)		
+#  if __has_cpp_attribute(clang::require_constant_initialization)		
+#   undef REQUIRE_CONST_INIT		
+#   define REQUIRE_CONST_INIT [[clang::require_constant_initialization]]		
+#  endif
+# endif
+#endif
+
+#ifndef WEAK_CONSTINIT
+# if defined(_MSC_VER) && ! defined(__clang__) && _MSC_VER < 1920
+#  define WEAK_CONSTINIT
+# elif defined(__clang__) && __clang_major__ < 4
+#  define WEAK_CONSTINIT
+# endif
+#endif
+
+
+#ifndef NO_DESTROY	
+# if defined(__clang__) && defined(__has_cpp_attribute)		
+#  if __has_cpp_attribute(clang::no_destroy)		
+#   define NO_DESTROY [[clang::no_destroy]]		
+#  endif
+# endif
+#endif
+
+#define DEBUG NDEBUG
+
 } // namespace actor_zeta
