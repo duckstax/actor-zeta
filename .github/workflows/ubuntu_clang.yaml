@@ -1,0 +1,77 @@
+name: ubuntu
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        configuration: [
+          #{ "COMPILER_C": "gcc-4.8","COMPILER_CXX": "gcc-4.8","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          #{ "COMPILER_C": "gcc-4.8","COMPILER_CXX": "gcc-4.8","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          #{ "COMPILER_C": "gcc-4.9","COMPILER_CXX": "g++-4.9","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          #{ "COMPILER_C": "gcc-4.9","COMPILER_CXX": "g++-4.9","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "COMPILER_C": "clang-3.6","COMPILER_CXX": "clang++-3.6","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-5","COMPILER_CXX": "g++-5","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-5","COMPILER_CXX": "g++-5","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "COMPILER_C": "gcc-5","COMPILER_CXX": "g++-5","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          { "COMPILER_C": "gcc-6","COMPILER_CXX": "g++-6","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-6","COMPILER_CXX": "g++-6","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-6","COMPILER_CXX": "g++-6","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "COMPILER_C": "gcc-6","COMPILER_CXX": "g++-6","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          { "COMPILER_C": "gcc-7","COMPILER_CXX": "g++-7","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-7","COMPILER_CXX": "g++-7","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-7","COMPILER_CXX": "g++-7","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "COMPILER_C": "gcc-7","COMPILER_CXX": "g++-7","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          #{ "COMPILER_C": "gcc-7","COMPILER_CXX": "g++-7","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          #{ "COMPILER_C": "gcc-7","COMPILER_CXX": "g++-7","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+          { "COMPILER_C": "gcc-8","COMPILER_CXX": "g++-8","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-8","COMPILER_CXX": "g++-8","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-8","COMPILER_CXX": "g++-8","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "COMPILER_C": "gcc-8","COMPILER_CXX": "g++-8","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          #{ "COMPILER_C": "gcc-8","COMPILER_CXX": "g++-8","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          #{ "COMPILER_C": "gcc-8","COMPILER_CXX": "g++-8","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+          { "COMPILER_C": "gcc-9","COMPILER_CXX": "g++-9","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-9","COMPILER_CXX": "g++-9","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-9","COMPILER_CXX": "g++-9","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "COMPILER_C": "gcc-9","COMPILER_CXX": "g++-9","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          { "COMPILER_C": "gcc-9","COMPILER_CXX": "g++-9","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          { "COMPILER_C": "gcc-9","COMPILER_CXX": "g++-9","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+          { "COMPILER_C": "gcc-10","COMPILER_CXX": "g++-10","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-10","COMPILER_CXX": "g++-10","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-10","COMPILER_CXX": "g++-10","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "COMPILER_C": "gcc-10","COMPILER_CXX": "g++-10","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          { "COMPILER_C": "gcc-10","COMPILER_CXX": "g++-10","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          { "COMPILER_C": "gcc-10","COMPILER_CXX": "g++-10","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+          { "COMPILER_C": "gcc-11","COMPILER_CXX": "g++-11","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-11","COMPILER_CXX": "g++-11","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "COMPILER_C": "gcc-11","COMPILER_CXX": "g++-11","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "COMPILER_C": "gcc-11","COMPILER_CXX": "g++-11","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          { "COMPILER_C": "gcc-11","COMPILER_CXX": "g++-11","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          { "COMPILER_C": "gcc-11","COMPILER_CXX": "g++-11","BUILD_TYPE": "Debug","CXX_STANDARD": 17 }
+        ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install compiler
+        run: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install ninja-build ${{ matrix.configuration.COMPILER_C}} ${{ matrix.configuration.COMPILER_CXX}}
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/${{ matrix.configuration.COMPILER_C}} 60 --slave /usr/bin/g++ g++ /usr/bin/${{ matrix.configuration.COMPILER_CXX}}
+
+      - name: Configure CMake
+        env:
+          CC: ${{ matrix.configuration.COMPILER_C}}
+          CXX: ${{ matrix.configuration.COMPILER_CXX}}
+        run: cmake -B ${{github.workspace}}/build -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.configuration.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{ matrix.configuration.CXX_STANDARD}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{ matrix.configuration.BUILD_TYPE}}
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        run: ctest -C ${{env.BUILD_TYPE}}
+      
