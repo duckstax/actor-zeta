@@ -36,7 +36,7 @@ jobs:
 
       - name: Install compiler
         run: |
-          bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+          sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
           sudo apt-get update
           sudo apt-get install ninja-build ${{ matrix.configuration.COMPILER_C}} ${{ matrix.configuration.COMPILER_CXX}}
 
