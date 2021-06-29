@@ -91,7 +91,8 @@ jobs:
           mkdir -p ${{github.workspace}}/build
           conan install ${{github.workspace}}/build/.. --build=missing -s build_type=Release
           ls -la ${{github.workspace}}/build
-          ls -la ${{github.workspace}}/build/..
+          ls -la ${{github.workspace}}/build/../
+          ls -la ${{github.workspace}}
 
       - name: Configure CMake
         env:
