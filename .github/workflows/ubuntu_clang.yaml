@@ -78,7 +78,8 @@ jobs:
         run: |
           sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
           sudo apt-get update
-          sudo apt-get install ninja-build ${{ matrix.configuration.PACKAGE}}
+          sudo apt-get install ninja-build ${{ matrix.configuration.PACKAGE}} python3-pip
+          pip3 install --no-cache-dir conan
 
       - name: Configure CMake
         env:
