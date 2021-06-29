@@ -90,9 +90,6 @@ jobs:
           conan profile update env.CC=${{ matrix.configuration.COMPILER_C}} default
           mkdir -p ${{github.workspace}}/build
           conan install ${{github.workspace}}/build/.. --build=missing -s build_type=Release
-          ls -la ${{github.workspace}}/build
-          ls -la ${{github.workspace}}/build/../
-          ls -la ${{github.workspace}}
 
       - name: Configure CMake
         env:
