@@ -187,7 +187,7 @@ if (ALLOW_TESTS)
     set(CONAN_INSTALL_CMD "conan install")
     #--build=missing -s build_type=Release
     message("COMMAND: ${CONAN_INSTALL_CMD} ${CMAKE_CURRENT_SOURCE_DIR}")
-    execute_process(COMMAND bash -c "${CONAN_INSTALL_CMD} ${CMAKE_CURRENT_SOURCE_DIR} --build=missing -s build_type=Release"
+    execute_process(COMMAND bash -c "${CONAN_INSTALL_CMD} ${CMAKE_CURRENT_SOURCE_DIR} --build=missing -s build_type=Release -s compiler=${CMAKE_COMPILER} -s compiler.version=${CMAKE_COMPILER_VER}"
     RESULT_VARIABLE CMD_ERROR)
 
     message( STATUS "CMD_ERROR:" ${CMD_ERROR})
