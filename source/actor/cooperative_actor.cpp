@@ -124,8 +124,10 @@ namespace actor_zeta { namespace base {
     cooperative_actor::~cooperative_actor() {}
 
     bool cooperative_actor::activate(executor::execution_device* ctx) {
-        assert(ctx != nullptr);
-        context(ctx);
+        //assert(ctx != nullptr);
+        if (ctx) {
+            context(ctx);
+        }
         return true;
     }
 

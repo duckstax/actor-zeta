@@ -30,7 +30,7 @@ namespace actor_zeta { namespace base {
         auto current_message() -> message* final;
 
     private:
-        auto spawn_actor(default_spawn_actor&) -> void;
+        auto spawn_actor(default_spawn_actor) -> void;
         auto spawn_supervisor(default_spawn_supervisor&) -> void;
         message* current_message_;
         detail::pmr::memory_resource* memory_resource_;
