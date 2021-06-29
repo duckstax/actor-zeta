@@ -184,17 +184,17 @@ if (ALLOW_TESTS)
     #############################################################################################
     #conan
 
-    set(CONAN_INSTALL_CMD "conan install")
-    #--build=missing -s build_type=Release
-    message("COMMAND: ${CONAN_INSTALL_CMD} ${CMAKE_CURRENT_SOURCE_DIR}")
-    execute_process(COMMAND bash -c "${CONAN_INSTALL_CMD} ${CMAKE_CURRENT_SOURCE_DIR} --build=missing -s build_type=Release -s compiler=${CMAKE_COMPILER} -s compiler.version=${CMAKE_COMPILER_VER}"
-    RESULT_VARIABLE CMD_ERROR)
+    #set(CONAN_INSTALL_CMD "conan install")
+    #message("COMMAND: ${CONAN_INSTALL_CMD} ${CMAKE_CURRENT_SOURCE_DIR}")
+    #execute_process(COMMAND bash -c "${CONAN_INSTALL_CMD} ${CMAKE_CURRENT_SOURCE_DIR} --build=missing -s build_type=Release -s compiler=${CMAKE_COMPILER} -s compiler.version=${CMAKE_COMPILER_VER}"
+    #RESULT_VARIABLE CMD_ERROR)
 
-    message( STATUS "CMD_ERROR:" ${CMD_ERROR})
+    #message( STATUS "CMD_ERROR:" ${CMD_ERROR})
 
-    message("CMAKE_BINARY_DIR is ${CMAKE_BINARY_DIR}")
-    message("CMAKE_CURRENT_BINARY_DIR is ${CMAKE_CURRENT_BINARY_DIR}")
-    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    #message("CMAKE_BINARY_DIR is ${CMAKE_BINARY_DIR}")
+    #message("CMAKE_CURRENT_BINARY_DIR is ${CMAKE_CURRENT_BINARY_DIR}")
+    message("CONAN_BUILD_INFO_DIR = ${CONAN_BUILD_INFO_DIR}")
+    include(${CONAN_BUILD_INFO_DIR}/conanbuildinfo.cmake)
     conan_basic_setup(TARGETS)
     message(STATUS "LIBS = ${CONAN_LIBS}")
     message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
