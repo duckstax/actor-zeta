@@ -92,7 +92,7 @@ jobs:
           ls -la ${{github.workspace}}/build
           ls -la ${{github.workspace}}/build/..
           ls -la ${{github.workspace}}/build/../..
-          conan install ${{github.workspace}}/build/../.. --build=missing -s build_type=Release
+          conan install ${{github.workspace}}/build/.. --build=missing -s build_type=Release
 
       - name: Configure CMake
         env:
