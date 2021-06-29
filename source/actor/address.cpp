@@ -59,6 +59,7 @@ namespace actor_zeta { namespace base {
         switch (sub_type_) {
             case sub_type_t::none:
                 std::abort();
+                //return non_type ;
             case sub_type_t::actor:
                 return ptr_.actor_->type();
             case sub_type_t::supervisor:

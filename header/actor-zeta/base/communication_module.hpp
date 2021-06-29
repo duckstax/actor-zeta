@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <list>
 
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
@@ -56,8 +57,9 @@ namespace actor_zeta { namespace base {
     public:
         using key_type = detail::string_view;
         using storage_t = std::unordered_map<key_type, std::unique_ptr<handler>>;
-        using contacts_t = std::unordered_multimap<key_type, address_t>;
-        using contacts_iterator_t = contacts_t::iterator;
+        using storage_contact_t = std::list<address_t>;
+        using contacts_t = std::unordered_map<key_type, storage_contact_t>;
+        using contacts_iterator_t = storage_contact_t::iterator;
         using range_t = std::pair<contacts_iterator_t,contacts_iterator_t>;
     
         communication_module() = delete;
@@ -87,9 +89,7 @@ namespace actor_zeta { namespace base {
 
         virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
 
-        auto address_book(detail::string_view) -> range_t;
-
-        ///virtual auto self() -> address_t;
+        auto address_book(detail::string_view) -> address_t;
 
         template<class F>
         auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
@@ -119,7 +119,5 @@ namespace actor_zeta { namespace base {
         storage_t handlers_;
         std::string type_;
     };
-
-auto address(actor_zeta::base::communication_module::range_t  range) -> address_t;
 
 }} // namespace actor_zeta::base

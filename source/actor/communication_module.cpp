@@ -87,8 +87,11 @@ namespace actor_zeta { namespace base {
         return tmp;
     }
 
-    auto communication_module::address_book(detail::string_view type) -> range_t {
-         return contacts_.equal_range(type);
+    auto communication_module::address_book(detail::string_view type) -> address_t {
+        auto result = contacts_.find(type);
+        if(result != contacts_.end()){
+             return   *(result->second.begin());
+        }
     }
 
     auto communication_module::type() const -> detail::string_view {
@@ -129,35 +132,23 @@ namespace actor_zeta { namespace base {
         auto tmp = std::move(msg);
 
         for (auto& i : contacts_) {
-            i.second.enqueue(message_ptr(tmp->clone()));
+            for(auto&j: i.second){
+                j.enqueue(message_ptr(tmp->clone()));
+            }
         }
     }
 
     auto communication_module::broadcast(detail::string_view type,message_ptr msg) -> void {
         auto tmp = std::move(msg);
 
-        auto range = contacts_.equal_range(type);
-        for (auto it = range.first; it != range.second; ++it) {
-            it->second.enqueue(message_ptr(tmp->clone()));
+        auto range = contacts_.find(type);
+        for (auto&i:range->second) {
+            i.enqueue(message_ptr(tmp->clone()));
         }
     }
 
     void communication_module::enqueue(message_ptr msg, executor::execution_device* e) {
         enqueue_base(std::move(msg), e);
-    }
-
-        auto address(actor_zeta::base::communication_module::range_t  range) -> address_t {
-            auto range_tmp = std::move(range);
-            auto address = std::move(range_tmp.first->second);
-
-#ifdef DEBUG
-            auto size = std::distance(range_tmp.first,range_tmp.second);
-            if(size > 1) {
-                std::cerr << "size : " << size << std::endl;
-            }
-#endif
-            return address;
-            
     }
 
 }} // namespace actor_zeta::base

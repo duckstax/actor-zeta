@@ -32,7 +32,8 @@ namespace actor_zeta { namespace base {
         using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types, 0, args_size>;
         using Tuple =  type_list_to_tuple_t<args_type_list>;
         auto &args = ctx.current_message()->body<Tuple>();
-        f(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
+        ///f(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
+        f((std::get<I>(args))...);
     }
 
     // clang-format on
@@ -66,7 +67,8 @@ namespace actor_zeta { namespace base {
         using args_type_list = typename call_trait::args_types;
         using Tuple =  type_list_to_tuple_t<args_type_list>;
         auto &args = ctx.current_message()->body<Tuple>();
-        (ptr->*f)(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
+        //(ptr->*f)(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
+        (ptr->*f)((std::get<I>(args))...);
     }
 
     // clang-format on

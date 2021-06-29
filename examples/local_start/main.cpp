@@ -10,6 +10,7 @@ using actor_zeta::execution_device;
 using actor_zeta::message_ptr;
 using actor_zeta::send;
 using actor_zeta::supervisor_abstract;
+using actor_zeta::actor;
 
 class dummy_executor final : public abstract_executor {
 public:
@@ -17,15 +18,15 @@ public:
         : abstract_executor(1, 10000) {}
 
     void execute(actor_zeta::executable* ptr) override {
-        ptr->run(nullptr, max_throughput());
+        ///ptr->run(this, max_throughput());
     }
     void start() override {}
     void stop() override {}
 };
 
-class dummy_supervisor final : public supervisor_abstract {
+class dummy_supervisor_t final : public supervisor_abstract {
 public:
-    dummy_supervisor()
+    dummy_supervisor_t()
         : supervisor_abstract("dummy_supervisor")
         , ptr_(new dummy_executor) {
     }
@@ -34,14 +35,19 @@ public:
         return ptr_;
     }
 
-    auto add_actor_impl(actor_zeta::actor) -> void override {}
+    auto add_actor_impl(actor a) -> void override {
+        actors_.push_back(std::move(a));
+    }
     auto add_supervisor_impl(actor_zeta::supervisor) -> void override {}
 
-    void enqueue_base(message_ptr, actor_zeta::execution_device*) override {
+    void enqueue_base(message_ptr msg, actor_zeta::execution_device*) override {
+        set_current_message(std::move(msg));
+        execute();
     }
 
 private:
     actor_zeta::abstract_executor* ptr_;
+    std::vector<actor>actors_;
 };
 
 class storage_t final : public basic_async_actor {
@@ -88,11 +94,11 @@ private:
 };
 
 int main() {
-    actor_zeta::supervisor supervisor(new dummy_supervisor());
-    actor_zeta::spawn_actor<storage_t>(supervisor);
-    ///send(storage, actor_zeta::actor_address(), "update", std::string("payload"));
-    //send(storage, actor_zeta::actor_address(), "find");
-    //send(storage, actor_zeta::actor_address(), "remove");
-    ///send(storage, actor_zeta::actor_address(), "status");
+    actor_zeta::supervisor dummy_supervisor(new dummy_supervisor_t());
+    actor_zeta::spawn_actor<storage_t>(dummy_supervisor);
+    send(dummy_supervisor, "storage", "update", std::string("payload"));
+    send(dummy_supervisor, "storage", "find");
+    send(dummy_supervisor, "storage", "remove");
+    send(dummy_supervisor, "storage", "status");
     return 0;
 }

@@ -23,14 +23,14 @@ namespace actor_zeta { namespace base {
         , body_() {}
 
     message::message(address_t sender, std::string name, detail::any body)
-        : sender_(std::move(sender))
-        , command_(std::move(name))
-        , body_(std::move(body)) {}
-
+        : sender_(sender)
+        , command_(name)
+        , body_(body) {}
+/*
     auto message::sender() const -> address_t {
         return sender_;
     }
-
+*/
     void message::swap(message& other) noexcept {
         using std::swap;
         swap(sender_, other.sender_);

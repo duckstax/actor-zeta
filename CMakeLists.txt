@@ -138,6 +138,7 @@ set(SOURCE_FILES
 
         source/messaging/message.cpp
         source/src.cpp
+        source/send.cpp
 )
 
 

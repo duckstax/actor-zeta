@@ -18,4 +18,9 @@ int main() {
     static_assert((is_same<type_list_at<l1, 0>::type, type_list_at<r1, 2>::type>::value), "");
     static_assert((is_same<type_list_at<l1, 1>::type, type_list_at<r1, 1>::type>::value), "");
     static_assert((is_same<type_list_at<l1, 2>::type, type_list_at<r1, 0>::type>::value), "");
+
+
+    
+
+    return 0;
 }
