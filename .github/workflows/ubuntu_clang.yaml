@@ -82,7 +82,7 @@ jobs:
           pip3 install --no-cache-dir conan
 
       - name: Install conan dependencies
-        run:
+        run: |
           conan profile new default --detect
           conan profile update settings.compiler=${{ matrix.configuration.COMPILER}} default
           conan profile update settings.compiler.version=${{ matrix.configuration.COMPILER_VER}} default
