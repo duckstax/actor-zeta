@@ -12,7 +12,7 @@ message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
 option(ALLOW_EXAMPLES "ALLOW EXAMPLES" OFF)
 
-option(ALLOW_TESTS "ALLOW TESTS" ON)
+option(ALLOW_TESTS "ALLOW TESTS" OFF)
 
 option(RTTI_DISABLE "RTTI DISABLE" ON)
 
@@ -185,7 +185,7 @@ if (ALLOW_TESTS)
     #conan
 
     message("CONAN_BUILD_INFO_DIR = ${CONAN_BUILD_INFO_DIR}")
-    include(${CONAN_BUILD_INFO_DIR}/../conanbuildinfo.cmake)
+    include(${CONAN_BUILD_INFO_DIR}/conanbuildinfo.cmake)
     conan_basic_setup(TARGETS)
     message(STATUS "LIBS = ${CONAN_LIBS}")
     message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")

@@ -102,7 +102,7 @@ namespace actor_zeta { namespace base {
         return executor_impl();
     }
 
-    auto supervisor_abstract::spawn_actor(default_spawn_actor construct) -> void {
+    auto supervisor_abstract::spawn_actor(default_spawn_actor& construct) -> void {
         auto actor_tmp = std::move(construct(this));
         auto address = actor_tmp->address();
         add_actor_impl(std::move(actor_tmp));
