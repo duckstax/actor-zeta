@@ -10,13 +10,18 @@ message (STATUS "STANDARD CPP = ${CMAKE_CXX_STANDARD}")
 
 message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
-option(ALLOW_EXAMPLES "Enable building examples" OFF)
+option(ALLOW_EXAMPLES "ALLOW EXAMPLES" OFF)
 
-option(ALLOW_TESTS "Enable building test" OFF)
+option(ALLOW_TESTS "ALLOW TESTS" OFF)
 
 option(RTTI_DISABLE "RTTI DISABLE" ON)
 
 option(EXCEPTIONS_DISABLE "EXCEPTIONS DISABLE" ON)
+
+message(STATUS "ALLOW_EXAMPLES = ${ALLOW_EXAMPLES}")
+message(STATUS "ALLOW_TESTS = ${ALLOW_TESTS}")
+message(STATUS "RTTI_DISABLE = ${RTTI_DISABLE}")
+message(STATUS "EXCEPTIONS_DISABLE = ${EXCEPTIONS_DISABLE}")
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 
@@ -72,7 +77,6 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
 endif()
 
 include(cmake/clang_tools.cmake)
-
 
 include_directories(SYSTEM .)
 include_directories(SYSTEM header)
@@ -176,5 +180,18 @@ if(ALLOW_EXAMPLES)
 endif()
 
 if (ALLOW_TESTS)
+    # configuration
+    #############################################################################################
+    #conan
+
+    message("CONAN_BUILD_INFO_DIR = ${CONAN_BUILD_INFO_DIR}")
+    include(${CONAN_BUILD_INFO_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup(TARGETS)
+    message(STATUS "LIBS = ${CONAN_LIBS}")
+    message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+
+    # conan
+    #############################################################################################
+    enable_testing()
     add_subdirectory(test)
 endif ()

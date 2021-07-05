@@ -47,7 +47,7 @@ namespace actor_zeta {
             supervisor->address(),
             supervisor->address(),
             "spawn_actor",
-            std::move(
+            std::forward<base::default_spawn_actor>(
                 base::default_spawn_actor(
                     [&, args_ = std::move(std::tuple<Args&&...>(std::forward<Args&&>(args)...))](actor_zeta::supervisor_abstract* ptr) {
                         return detail::created_actor<Actor>(ptr, args_, type_traits::make_index_sequence<number_of_arguments>{});
