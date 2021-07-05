@@ -46,7 +46,7 @@ namespace actor_zeta { namespace detail {
 
         template<typename T>
         void default_destroy(T* p) {
-            p->~T();
+            //p->~T();
             delete p;
         }
     } // namespace implementation
