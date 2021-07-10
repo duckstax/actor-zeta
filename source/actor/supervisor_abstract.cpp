@@ -9,8 +9,6 @@
 #include <actor-zeta/base/actor.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/link.hpp>
-#include <iostream>
-#include <memory>
 
 namespace actor_zeta { namespace base {
 
