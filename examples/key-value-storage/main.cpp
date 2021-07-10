@@ -69,7 +69,7 @@ public:
                 query_.parameter = std::move(parsed_raw_request);
                 query_.id = query_raw.id;
                 actor_zeta::send(
-                    actor_zeta::address(address_book("storage")),
+                    address_book("storage"),
                     address_t(address()),
                     std::string(query_.commands),
                     std::move(query_));
