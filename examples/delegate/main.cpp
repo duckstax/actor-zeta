@@ -1,18 +1,18 @@
 #include <iostream>
 #include <map>
-#include <vector>
 #include <set>
 #include <unordered_set>
+#include <vector>
 
 #include <actor-zeta.hpp>
 
 using actor_zeta::abstract_executor;
+using actor_zeta::actor;
 using actor_zeta::basic_async_actor;
+using actor_zeta::delegate_send;
 using actor_zeta::execution_device;
 using actor_zeta::message_ptr;
-using actor_zeta::delegate_send;
 using actor_zeta::supervisor_abstract;
-using actor_zeta::actor;
 
 using actor_zeta::abstract_executor;
 using actor_zeta::executor_t;
@@ -37,7 +37,7 @@ public:
               "sync_contacts",
               "add_link",
               "remove_link",
-              "spawn_actor","delegate"} {
+              "spawn_actor", "delegate"} {
         e_->start();
     }
 
@@ -138,6 +138,6 @@ int main() {
     delegate_send(dummy_supervisor, "storage", "status");
 
     std::this_thread::sleep_for(std::chrono::seconds(180));
-    
+
     return 0;
 }

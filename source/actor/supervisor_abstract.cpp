@@ -69,7 +69,7 @@ namespace actor_zeta { namespace base {
         , memory_resource_(memory_resource) {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
         add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
-        add_handler("delegate",&supervisor_abstract::redirect);
+        add_handler("delegate", &supervisor_abstract::redirect);
     }
 
     supervisor_abstract::supervisor_abstract(std::string name)
@@ -77,7 +77,7 @@ namespace actor_zeta { namespace base {
         , memory_resource_(new new_delete_resource) {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
         add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
-        add_handler("delegate",&supervisor_abstract::redirect);
+        add_handler("delegate", &supervisor_abstract::redirect);
     }
 
     supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string name)
@@ -85,7 +85,7 @@ namespace actor_zeta { namespace base {
         , memory_resource_(ptr->resource()) {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
         add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
-        add_handler("delegate",&supervisor_abstract::redirect);
+        add_handler("delegate", &supervisor_abstract::redirect);
     }
     supervisor_abstract::~supervisor_abstract() {}
 
@@ -119,11 +119,11 @@ namespace actor_zeta { namespace base {
         link(*this, address);
     }
 
-    auto supervisor_abstract::redirect(std::string&type,message* msg) -> void {
+    auto supervisor_abstract::redirect(std::string& type, message* msg) -> void {
         message_ptr tmp(std::move(msg));
         auto type_t = std::move(type);
         tmp->sender() = std::move(address());
-        send(address_book(type_t.c_str()),std::move(tmp));
+        send(address_book(type_t.c_str()), std::move(tmp));
     }
 
     auto supervisor_abstract::address() noexcept -> address_t {

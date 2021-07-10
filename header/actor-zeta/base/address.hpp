@@ -15,7 +15,7 @@ namespace actor_zeta { namespace base {
 
         address_t(const address_t& other);
 
-        address_t& operator=(address_t&& other) noexcept ;
+        address_t& operator=(address_t&& other) noexcept;
 
         address_t& operator=(const address_t& other);
 
@@ -38,6 +38,7 @@ namespace actor_zeta { namespace base {
         void swap(address_t& other);
 
         void* get() const;
+
     private:
         communication_module* ptr_;
     };

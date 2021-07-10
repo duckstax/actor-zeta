@@ -11,8 +11,8 @@
 
 namespace actor_zeta {
 
-    using base::message;
     using base::address_t;
+    using base::message;
     using base::message_ptr;
 
     template<class T>

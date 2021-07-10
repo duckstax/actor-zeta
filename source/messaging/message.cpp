@@ -47,14 +47,13 @@ namespace actor_zeta { namespace base {
         return body_;
     }
 
-auto message::sender()& noexcept -> address_t& {
+    auto message::sender() & noexcept -> address_t& {
         return sender_;
     }
 
-    auto message::sender()&& noexcept -> address_t&& {
+    auto message::sender() && noexcept -> address_t&& {
         return std::move(sender_);
     }
-
 
     auto message::sender() const& noexcept -> address_t const& {
         return sender_;

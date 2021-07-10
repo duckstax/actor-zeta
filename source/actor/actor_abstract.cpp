@@ -14,11 +14,11 @@ namespace actor_zeta { namespace base {
     }
 
     actor_abstract::actor_abstract(std::string type)
-        : communication_module(std::move(type)){///, sub_type_t::actor) {
+        : communication_module(std::move(type)) { ///, sub_type_t::actor) {
     }
 
-    auto actor_abstract::address()  noexcept -> address_t {
-        return address_t( this);
+    auto actor_abstract::address() noexcept -> address_t {
+        return address_t(this);
     }
 
 }} // namespace actor_zeta::base

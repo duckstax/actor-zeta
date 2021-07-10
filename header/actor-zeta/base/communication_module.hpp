@@ -1,16 +1,16 @@
 #pragma once
 
+#include <list>
 #include <memory>
 #include <set>
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <list>
 
+#include <actor-zeta/base/address.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/detail/string_view.hpp>
-#include <actor-zeta/base/address.hpp>
 #include <actor-zeta/forwards.hpp>
 /*
 namespace actor_zeta { namespace base {
@@ -60,8 +60,8 @@ namespace actor_zeta { namespace base {
         using storage_contact_t = std::list<address_t>;
         using contacts_t = std::unordered_map<key_type, storage_contact_t>;
         using contacts_iterator_t = storage_contact_t::iterator;
-        using range_t = std::pair<contacts_iterator_t,contacts_iterator_t>;
-    
+        using range_t = std::pair<contacts_iterator_t, contacts_iterator_t>;
+
         communication_module() = delete;
 
         communication_module(const communication_module&) = delete;
@@ -80,7 +80,7 @@ namespace actor_zeta { namespace base {
 
         auto broadcast(message_ptr) -> void;
 
-        auto broadcast(detail::string_view,message_ptr) -> void;
+        auto broadcast(detail::string_view, message_ptr) -> void;
 
         virtual auto current_message() -> message* = 0;
 

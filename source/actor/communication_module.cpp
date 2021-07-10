@@ -11,7 +11,7 @@
 
 namespace actor_zeta { namespace base {
 
-    void error_sync_contacts(detail::string_view name,detail::string_view error) {
+    void error_sync_contacts(detail::string_view name, detail::string_view error) {
         std::cerr << "WARNING" << '\n';
         std::cerr << "Actor name : " << name << '\n';
         std::cerr << "Not initialization address type:" << error << '\n';
@@ -90,8 +90,8 @@ namespace actor_zeta { namespace base {
 
     auto communication_module::address_book(detail::string_view type) -> address_t {
         auto result = contacts_.find(type);
-        if(result != contacts_.end()){
-             return   *(result->second.begin());
+        if (result != contacts_.end()) {
+            return *(result->second.begin());
         }
     }
 
@@ -118,13 +118,13 @@ namespace actor_zeta { namespace base {
             auto name = address.type();
             auto it = contacts_.find(name);
             if (it == contacts_.end()) {
-                auto result =  contacts_.emplace(name,storage_contact_t());
+                auto result = contacts_.emplace(name, storage_contact_t());
                 result.first->second.emplace_back(std::move(address));
             } else {
                 it->second.emplace_back(std::move(address));
             }
         } else {
-            error_sync_contacts(type(),address.type());
+            error_sync_contacts(type(), address.type());
         }
     }
 
@@ -132,11 +132,11 @@ namespace actor_zeta { namespace base {
         auto name = address.type();
         auto it = contacts_.find(name);
         if (it == contacts_.end()) {
-                // not find
+            // not find
         } else {
             auto end = it->second.end();
-            for(auto i = it->second.begin();i != end;++i){
-                if(address.get() == i->get()){
+            for (auto i = it->second.begin(); i != end; ++i) {
+                if (address.get() == i->get()) {
                     it->second.erase(i);
                 }
             }
@@ -147,17 +147,17 @@ namespace actor_zeta { namespace base {
         auto tmp = std::move(msg);
 
         for (auto& i : contacts_) {
-            for(auto&j: i.second){
+            for (auto& j : i.second) {
                 j.enqueue(message_ptr(tmp->clone()));
             }
         }
     }
 
-    auto communication_module::broadcast(detail::string_view type,message_ptr msg) -> void {
+    auto communication_module::broadcast(detail::string_view type, message_ptr msg) -> void {
         auto tmp = std::move(msg);
 
         auto range = contacts_.find(type);
-        for (auto&i:range->second) {
+        for (auto& i : range->second) {
             i.enqueue(message_ptr(tmp->clone()));
         }
     }

@@ -28,7 +28,7 @@ auto make_task(actor_zeta::supervisor& executor_, const std::string& command, Ar
 template<typename Task, typename... Args>
 auto make_task_broadcast(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
     auto address = executor_->address();
-    actor_zeta::broadcast(executor_,address, command, std::move(Task(std::forward<Args>(args)...)));
+    actor_zeta::broadcast(executor_, address, command, std::move(Task(std::forward<Args>(args)...)));
 }
 
 auto thread_pool_deleter = [](abstract_executor* ptr) {
