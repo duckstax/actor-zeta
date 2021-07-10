@@ -71,7 +71,7 @@ namespace actor_zeta { namespace base {
         , memory_resource_(memory_resource) {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
         add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
-        add_handler("redirect",&supervisor_abstract::redirect);
+        add_handler("delegate",&supervisor_abstract::redirect);
     }
 
     supervisor_abstract::supervisor_abstract(std::string name)
@@ -79,7 +79,7 @@ namespace actor_zeta { namespace base {
         , memory_resource_(new new_delete_resource) {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
         add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
-        add_handler("redirect",&supervisor_abstract::redirect);
+        add_handler("delegate",&supervisor_abstract::redirect);
     }
 
     supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string name)
@@ -87,7 +87,7 @@ namespace actor_zeta { namespace base {
         , memory_resource_(ptr->resource()) {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
         add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
-        add_handler("redirect",&supervisor_abstract::redirect);
+        add_handler("delegate",&supervisor_abstract::redirect);
     }
     supervisor_abstract::~supervisor_abstract() {}
 
@@ -122,7 +122,6 @@ namespace actor_zeta { namespace base {
     }
 
     auto supervisor_abstract::redirect(std::string&type,message* msg) -> void {
-        std::cerr << "redirect" << std::endl;
         message_ptr tmp(std::move(msg));
         auto type_t = std::move(type);
         tmp->sender() = std::move(address());

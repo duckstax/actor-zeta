@@ -16,11 +16,11 @@ namespace actor_zeta {
     }
 
     template<typename... Args>
-    void send(const base::supervisor& supervisor, std::string type, Args... args) {
+    void delegate(const base::supervisor& supervisor, std::string type, Args... args) {
         supervisor->enqueue(
             make_message(
                 supervisor->address(),
-                "redirect",
+                "delegate",
                 std::move(type),
                 std::move(make_message_ptr(
                     actor_zeta::address_t(),
