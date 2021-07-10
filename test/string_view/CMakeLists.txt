@@ -11,5 +11,12 @@ endif ()
 
 set(SOURCE_FILES main.cpp)
 
+message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
+
 add_executable(${project} ${SOURCE_FILES})
-target_link_libraries(${project} actor-zeta)
+
+target_link_libraries(${project} actor-zeta CONAN_PKG::catch2)
+
+include(CTest)
+include(Catch)
+catch_discover_tests(${PROJECT_NAME})

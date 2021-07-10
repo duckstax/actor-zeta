@@ -53,30 +53,30 @@ namespace actor_zeta { namespace base {
     }
 
     address_t::address_t(address_t&& other) noexcept
-            : address_t() {
-            swap(other);
-        }
+        : address_t() {
+        swap(other);
+    }
 
     address_t::address_t(const address_t& other) {
             if (this != &other) {
                 ptr_ = other.ptr_;
             }
         }
-        
+
     address_t& address_t::operator=(address_t&& other) noexcept {
-            if (this != &other) {
-                swap(other);
-            }
-            return *this;
+        if (this != &other) {
+            swap(other);
         }
+        return *this;
+    }
 
     address_t& address_t::operator=(const address_t& other) {
-            if (this != &other) {
-                address_t tmp(other);
-                swap(tmp);
-            }
-            return *this;
+        if (this != &other) {
+            address_t tmp(other);
+            swap(tmp);
         }
+        return *this;
+    }
 
     address_t::address_t(std::nullptr_t) noexcept
             : address_t() {}
