@@ -11,21 +11,22 @@
 
 namespace actor_zeta { namespace base {
 
-    void error_sync_contacts(detail::string_view __error__) {
+    void error_sync_contacts(detail::string_view name,detail::string_view error) {
         std::cerr << "WARNING" << '\n';
-        std::cerr << "Not initialization actor_address type:" << __error__ << '\n';
+        std::cerr << "Actor name : " << name << '\n';
+        std::cerr << "Not initialization address type:" << error << '\n';
         std::cerr << "WARNING" << std::endl;
     }
 
-    void error_duplicate_handler(detail::string_view _error_) {
+    void error_duplicate_handler(detail::string_view error) {
         std::cerr << "Duplicate" << '\n';
-        std::cerr << "Handler: " << _error_ << '\n';
+        std::cerr << "Handler: " << error << '\n';
         std::cerr << "Duplicate" << std::endl;
     }
 
-    void error_add_handler(detail::string_view _error_) {
+    void error_add_handler(detail::string_view error) {
         std::cerr << "error add handler" << '\n';
-        std::cerr << "Handler: " << _error_ << '\n';
+        std::cerr << "Handler: " << error << '\n';
         std::cerr << "error add handler" << std::endl;
     }
 
@@ -112,19 +113,33 @@ namespace actor_zeta { namespace base {
             &communication_module::remove_link);
     }
 
-    void communication_module::add_link(address_t address) {
+    void communication_module::add_link(address_t& address) {
         if (address) {
             auto name = address.type();
-            contacts_.emplace(name, std::move(address));
+            auto it = contacts_.find(name);
+            if (it == contacts_.end()) {
+                auto result =  contacts_.emplace(name,storage_contact_t());
+                result.first->second.emplace_back(std::move(address));
+            } else {
+                it->second.emplace_back(std::move(address));
+            }
         } else {
-            error_sync_contacts(address.type());
+            error_sync_contacts(type(),address.type());
         }
     }
 
     void communication_module::remove_link(const address_t& address) {
-        auto it = contacts_.find(address.type());
-        if (it != contacts_.end()) {
-            contacts_.erase(it);
+        auto name = address.type();
+        auto it = contacts_.find(name);
+        if (it == contacts_.end()) {
+                // not find
+        } else {
+            auto end = it->second.end();
+            for(auto i = it->second.begin();i != end;++i){
+                if(address.get() == i->get()){
+                    it->second.erase(i);
+                }
+            }
         }
     }
 

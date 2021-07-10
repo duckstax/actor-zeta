@@ -111,7 +111,7 @@ namespace actor_zeta { namespace base {
         auto all_view_address() const -> std::set<std::string>;
 
     private:
-        void add_link(address_t);
+        void add_link(address_t&);
 
         void remove_link(const address_t&);
 

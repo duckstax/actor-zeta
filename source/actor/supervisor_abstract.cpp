@@ -127,7 +127,6 @@ namespace actor_zeta { namespace base {
         auto type_t = std::move(type);
         tmp->sender() = std::move(address());
         send(address_book(type_t.c_str()),std::move(tmp));
-
     }
 
     auto supervisor_abstract::address() noexcept -> address_t {
