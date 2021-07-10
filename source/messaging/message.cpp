@@ -23,14 +23,10 @@ namespace actor_zeta { namespace base {
         , body_() {}
 
     message::message(address_t sender, std::string name, detail::any body)
-        : sender_(sender)
-        , command_(name)
-        , body_(body) {}
-/*
-    auto message::sender() const -> address_t {
-        return sender_;
-    }
-*/
+        : sender_(std::move(sender))
+        , command_(std::move(name))
+        , body_(std::move(body)) {}
+
     void message::swap(message& other) noexcept {
         using std::swap;
         swap(sender_, other.sender_);
@@ -50,4 +46,18 @@ namespace actor_zeta { namespace base {
         assert(body_.has_value());
         return body_;
     }
+
+auto message::sender()& noexcept -> address_t& {
+        return sender_;
+    }
+
+    auto message::sender()&& noexcept -> address_t&& {
+        return std::move(sender_);
+    }
+
+
+    auto message::sender() const& noexcept -> address_t const& {
+        return sender_;
+    }
+
 }} // namespace actor_zeta::base

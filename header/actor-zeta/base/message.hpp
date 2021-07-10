@@ -43,22 +43,11 @@ namespace actor_zeta { namespace base {
         auto command() const noexcept -> detail::string_view;
 
       
-address_t&
-    sender()& noexcept {
-        return sender_;
-    }
+    auto sender()& noexcept -> address_t&;
 
-address_t&&
+    auto sender()&& noexcept -> address_t&& ;
 
-    sender()&& noexcept {
-        return std::move(sender_);
-    }
-
-
-    address_t const&
-    sender() const& noexcept {
-        return sender_;
-    }
+    auto sender() const& noexcept -> address_t const& ;
 
         template<typename T>
         auto body() const -> const T& {

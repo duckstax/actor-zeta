@@ -10,7 +10,7 @@ using actor_zeta::abstract_executor;
 using actor_zeta::basic_async_actor;
 using actor_zeta::execution_device;
 using actor_zeta::message_ptr;
-using actor_zeta::delegate;
+using actor_zeta::delegate_send;
 using actor_zeta::supervisor_abstract;
 using actor_zeta::actor;
 
@@ -104,8 +104,8 @@ public:
 
         add_handler(
             "status",
-            [](storage_t& ctx) {
-                ctx.status();
+            [this]() {
+                status();
             });
     }
 
@@ -132,9 +132,12 @@ private:
 int main() {
     actor_zeta::supervisor dummy_supervisor(new supervisor_lite());
     actor_zeta::spawn_actor<storage_t>(dummy_supervisor);
-    delegate(dummy_supervisor, "storage", "update", std::string("payload"));
-    delegate(dummy_supervisor, "storage", "find");
-    delegate(dummy_supervisor, "storage", "remove");
-    delegate(dummy_supervisor, "storage", "status");
+    delegate_send(dummy_supervisor, "storage", "update", std::string("payload"));
+    delegate_send(dummy_supervisor, "storage", "find");
+    delegate_send(dummy_supervisor, "storage", "remove");
+    delegate_send(dummy_supervisor, "storage", "status");
+
+    std::this_thread::sleep_for(std::chrono::seconds(180));
+    
     return 0;
 }
