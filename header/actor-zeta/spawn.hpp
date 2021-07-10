@@ -2,8 +2,8 @@
 
 #include "send.hpp"
 
-#include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/base/supervisor.hpp>
+#include <actor-zeta/base/supervisor_abstract.hpp>
 
 namespace actor_zeta {
 
@@ -22,7 +22,7 @@ namespace actor_zeta {
             void* buffer = supervisor->resource()->allocate(allocate_byte, allocate_byte_alignof);
             return new (buffer) Actor(supervisor, std::get<I>(args)...);
         }
-/*
+        /*
         template<
             class ChildrenSupervisor,
             class Tuple, std::size_t... I,
@@ -53,7 +53,7 @@ namespace actor_zeta {
                         return detail::created_actor<Actor>(ptr, args_, type_traits::make_index_sequence<number_of_arguments>{});
                     })));
     }
-/*
+    /*
     template<
         class ChildrenSupervisor,
         class... Args,

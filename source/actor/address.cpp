@@ -21,66 +21,35 @@ namespace actor_zeta { namespace base {
     using message_ptr = std::unique_ptr<message>;
 
     address_t::address_t(actor_abstract* ptr)
-        : sub_type_(sub_type_t::actor)
-        , ptr_(ptr) {
+        : ptr_(ptr) {
     }
 
     address_t::address_t(supervisor_abstract* ptr)
-        : sub_type_(sub_type_t::supervisor)
-        , ptr_(ptr) {
+        : ptr_(ptr) {
     }
 
     address_t::~address_t() {
-        ptr_.destroy(sub_type_);
-        sub_type_ = sub_type_t::none;
+        ptr_ = nullptr;
     }
+
     bool address_t::operator!() const noexcept {
-        return !operator bool();
+        return !(static_cast<bool>(ptr_));
     }
 
     address_t::operator bool() const noexcept {
-        switch (sub_type_) {
-            case sub_type_t::none:
-                return false;
-            case sub_type_t::actor:
-                return static_cast<bool>(ptr_.actor_);
-            case sub_type_t::supervisor:
-                return static_cast<bool>(ptr_.supervisor_);
-            default:
-                break;
-        }
-        return false;
+        return static_cast<bool>(ptr_);
     }
 
     void address_t::enqueue(message_ptr msg) noexcept {
-        switch (sub_type_) {
-            case sub_type_t::none:
-                std::abort();
-            case sub_type_t::actor:
-                ptr_.actor_->enqueue(std::move(msg));
-                break;
-            case sub_type_t::supervisor:
-                ptr_.supervisor_->enqueue(std::move(msg));
-                break;
-        }
+        ptr_->enqueue(std::move(msg));
     }
 
     auto address_t::type() const -> detail::string_view {
-        switch (sub_type_) {
-            case sub_type_t::none:
-                std::abort();
-            case sub_type_t::actor:
-                return ptr_.actor_->type();
-            case sub_type_t::supervisor:
-                return ptr_.supervisor_->type();
-            default:
-                return non_type;
-        }
+        return ptr_->type();
     }
 
     address_t::address_t() noexcept
-        : sub_type_(sub_type_t::none)
-        , ptr_() {
+        : ptr_() {
     }
 
     address_t::address_t(address_t&& other) noexcept
@@ -91,9 +60,9 @@ namespace actor_zeta { namespace base {
     address_t::address_t(const address_t& other) {
         if (this != &other) {
             ptr_ = other.ptr_;
-            sub_type_ = other.sub_type_;
         }
     }
+
     address_t& address_t::operator=(address_t&& other) noexcept {
         if (this != &other) {
             swap(other);
@@ -110,13 +79,15 @@ namespace actor_zeta { namespace base {
     }
 
     address_t::address_t(std::nullptr_t) noexcept
-        : address_t() {
-    }
+        : address_t() {}
 
     void address_t::swap(address_t& other) {
         using std::swap;
         std::swap(ptr_, other.ptr_);
-        std::swap(sub_type_, other.sub_type_);
+    }
+
+    void* address_t::get() const {
+        return ptr_;
     }
 
 }} // namespace actor_zeta::base

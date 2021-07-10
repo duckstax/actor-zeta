@@ -15,7 +15,7 @@ namespace actor_zeta { namespace base {
 
         address_t(const address_t& other);
 
-        address_t& operator=(address_t&& other) noexcept ;
+        address_t& operator=(address_t&& other) noexcept;
 
         address_t& operator=(const address_t& other);
 
@@ -36,52 +36,11 @@ namespace actor_zeta { namespace base {
         auto operator!() const noexcept -> bool;
 
         void swap(address_t& other);
+
+        void* get() const;
+
     private:
-        enum class sub_type_t : char {
-            none = 0x0,
-            actor,
-            supervisor
-        };
-
-        sub_type_t sub_type_;
-
-        union pointer_t {
-            actor_abstract* actor_;
-            supervisor_abstract* supervisor_;
-
-            pointer_t() {
-            }
-
-            pointer_t(actor_abstract* ptr)
-                : actor_(ptr) {}
-
-            pointer_t(supervisor_abstract* ptr)
-                : supervisor_(ptr) {}
-
-            void destroy(sub_type_t sub_type) noexcept {
-                switch (sub_type) {
-                    case sub_type_t::actor: {
-                        actor_ = nullptr;
-                        break;
-                    }
-
-                    case sub_type_t::supervisor: {
-                        supervisor_ = nullptr;
-                        break;
-                    }
-
-                    case sub_type_t::none: {
-                        break;
-                    }
-
-                    default:
-                        break;
-                }
-                actor_ = nullptr;
-                supervisor_ = nullptr;
-            }
-        };
-        pointer_t ptr_;
+        communication_module* ptr_;
     };
 
     static_assert(std::is_default_constructible<address_t>::value, "");

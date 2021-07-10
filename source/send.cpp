@@ -1,12 +1,9 @@
 #include <actor-zeta/send.hpp>
-#include <actor-zeta/config.hpp>
-
-#ifdef DEBUG
-#include <iostream>
-#endif
 
 namespace actor_zeta {
-    
-    
 
-}
+    void send(base::address_t address, message_ptr msg) {
+        address.enqueue(std::move(msg));
+    }
+
+} // namespace actor_zeta

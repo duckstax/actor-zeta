@@ -142,6 +142,7 @@ set(SOURCE_FILES
 
         source/messaging/message.cpp
         source/src.cpp
+        source/send.cpp
 )
 
 
@@ -184,8 +185,8 @@ if (ALLOW_TESTS)
     #############################################################################################
     #conan
 
-    message("CONAN_BUILD_INFO_DIR = ${CONAN_BUILD_INFO_DIR}")
-    include(${CONAN_BUILD_INFO_DIR}/conanbuildinfo.cmake)
+    message("CONAN_BUILD_INFO_DIR = ${CMAKE_BINARY_DIR}")
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     conan_basic_setup(TARGETS)
     message(STATUS "LIBS = ${CONAN_LIBS}")
     message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")

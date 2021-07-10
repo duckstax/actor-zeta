@@ -44,8 +44,6 @@ public:
             "remove",
             []() -> void {});
 
-
-
         assert(actor_zeta::detail::string_view("storage") == type());
 
         auto tmp = message_types();
@@ -63,7 +61,6 @@ public:
 };
 
 int main() {
-
     actor_zeta::supervisor supervisor(new dummy_supervisor());
 
     actor_zeta::spawn_actor<storage_t>(supervisor);

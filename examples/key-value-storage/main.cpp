@@ -69,7 +69,7 @@ public:
                 query_.parameter = std::move(parsed_raw_request);
                 query_.id = query_raw.id;
                 actor_zeta::send(
-                    actor_zeta::address(address_book("storage")),
+                    address_book("storage"),
                     address_t(address()),
                     std::string(query_.commands),
                     std::move(query_));
@@ -92,7 +92,7 @@ public:
         e_->start();
     }
 
-    ~supervisor_network()  {
+    ~supervisor_network() {
         e_->stop();
     }
 
@@ -102,7 +102,7 @@ public:
 
     auto add_actor_impl(actor_zeta::actor) -> void override {}
     auto add_supervisor_impl(actor_zeta::supervisor) -> void override {}
-/*
+    /*
     auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
         auto tmp = std::move(t);
         auto address = tmp->address();
