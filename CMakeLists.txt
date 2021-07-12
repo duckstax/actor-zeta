@@ -101,6 +101,8 @@ set(HEADER_FILES
         header/actor-zeta/detail/string_view.hpp
         header/actor-zeta/detail/type_list.hpp
         header/actor-zeta/detail/type_traits.hpp
+        header/actor-zeta/detail/rtt.hpp
+        header/actor-zeta/detail/rtt_management.hpp
 
         header/actor-zeta/executor/policy/profiled.hpp
         header/actor-zeta/executor/policy/unprofiled.hpp
