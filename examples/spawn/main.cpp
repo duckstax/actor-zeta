@@ -22,12 +22,12 @@ std::atomic_int count;
 const int max_queue = 100;
 
 template<typename Task, typename... Args>
-inline auto make_task(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
+auto make_task(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
     actor_zeta::send(executor_, executor_->address(), command, std::move(Task(std::forward<Args>(args)...)));
 }
 
 template<typename Task, typename... Args>
-inline auto make_task_broadcast(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
+auto make_task_broadcast(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
     executor_->broadcast(make_message(executor_->address(), command, std::move(Task(std::forward<Args>(args)...))));
 }
 
@@ -42,6 +42,11 @@ public:
         : actor_zeta::basic_async_actor(ptr, "bot2") {
         count++;
         std::cout << "bot2 created\n";
+        add_handler("spawn_broadcast", &worker_t2::spawn_broadcast);
+    }
+
+    void spawn_broadcast(actor_zeta::address_t addr, actor_zeta::detail::string_view type) {
+        std::cout << "bot2 got actor: " << addr << " " << type << std::endl;
     }
 };
 
@@ -51,6 +56,10 @@ public:
         : actor_zeta::basic_async_actor(ptr, "bot3") {
         count++;
         std::cout << "bot3 created\n";
+        add_handler("spawn_broadcast", &worker_t2::spawn_broadcast);
+    }
+    void spawn_broadcast(actor_zeta::address_t addr, actor_zeta::detail::string_view type) {
+        std::cout << "bot3 got actor: " << addr << " " << type << std::endl;
     }
 };
 
@@ -63,11 +72,15 @@ public:
         , ptr_(ptr) {
         count++;
         add_handler("spawn_worker", &worker_t::spawn_worker);
+        add_handler("spawn_broadcast", &worker_t2::spawn_broadcast);
     }
 
     auto spawn_worker() -> void {
         actor_zeta::spawn_actor<worker_t2>(ptr_);
         actor_zeta::spawn_actor<worker_t3>(ptr_);
+    }
+    void spawn_broadcast(actor_zeta::address_t addr, actor_zeta::detail::string_view type) {
+        std::cout << "bot1 got actor: " << addr << " " << type << std::endl;
     }
 };
 
@@ -78,14 +91,18 @@ public:
         , e_(new executor_t<work_sharing>(1, max_queue),
              thread_pool_deleter)
         , system_{"add_link",
+                  "sync_contacts",
                   "remove_link",
-                  "spawn_actor"} {
+                  "spawn_actor", "delegate", "spawn_broadcast"} {
         e_->start();
+        add_handler("spawn_broadcast", &supervisor_lite::spawn_broadcast);
     }
 
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final { return e_.get(); }
 
     auto add_actor_impl(actor_zeta::actor t) -> void final {
+        std::cout << "sup: added actor:" << t.address() << " " << t.type() << std::endl;
+        spawn_broadcast(t->address(), t->type());
         actors_.emplace_back(std::move(t));
     }
 
@@ -93,8 +110,20 @@ public:
         supervisor_.emplace_back(std::move(t));
     }
 
+    auto add_supervisor_for_broadcast(actor_zeta::supervisor t) -> void {
+        supervisors_for_broadcast_.emplace_back(std::move(t));
+    }
+
+    auto spawn_broadcast(actor_zeta::address_t addr, actor_zeta::detail::string_view type) -> void {
+        for (auto& a : actors_) {
+            actor_zeta::send(a, address(), "spawn_broadcast", addr, type);
+        }
+        for (auto& s : supervisors_for_broadcast_) {
+            actor_zeta::send(s, address(), "spawn_broadcast", addr, type);
+        }
+    }
+
     auto enqueue_base(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
-        std::lock_guard<std::mutex> lock(mt);
         auto msg_ = std::move(msg);
         auto it = system_.find(msg_->command());
         if (it != system_.end()) {
@@ -108,50 +137,50 @@ private:
         execute();
     }
 
-    std::mutex mt;
     std::unique_ptr<abstract_executor, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor> actors_;
     std::vector<actor_zeta::supervisor> supervisor_;
+    std::vector<actor_zeta::supervisor> supervisors_for_broadcast_;
     std::unordered_set<actor_zeta::detail::string_view> system_;
 };
 
 auto main() -> int {
-    //TODO: broadcast handling in actors when spawn happens in supervisor
-    //TODO: link existing actors with spawned ones when their type follows some predicate (based on name?)
-    //TODO: "manager-2" has to be known in "bot1" names scope
-
-    //1. manager-1 spawns 1 actor named "bot1"
+    //1. manager-1 spawns 5 actor named "bot1"
     //2. bot1 must send spawn request for types "bot2" and "bot3" to manager-2 upon spawning
     //3. manager-2 must spawn bot2 and bot3 actors on each request
     //4. manager-2 must link bot2 to bot3 upon each spawning
-    //5. manager-2 must broatcast bots names to bot1
+    //5. manager-2 must broadcast bots names to bot1
     //6. bot1 must link itself with type "bot2" and ignore "bot3"
-    //7. spawned actors count must be equal 5*2+1
+    //7. spawned actors count must be equal 1 + sends * 2
     /*
-        ┌──manager-1────┐◄────────────►┌────────────manager-2─────────┐
-        │               │              │                              │
-        │ ┌─bot-1───┐   │              │  ┌bot-2-(x5)┐   ┌bot-3─(x5)┐ │
-        │ │         ◄───┼──────────────┼──►          ◄───►          │ │
-        │ │         │   │              │  │          │   │          │ │
-        │ └─────────┘   │              │  └──────────┘   └──────────┘ │
-        │               │              │                              │
-        └───────────────┘              └──────────────────────────────┘
+        ┌──manager-1────┐◄────────────►┌────────────manager-2───────┐
+        │               │              │                            │
+        │ ┌─bot-1───┐   │              │  ┌─bot-2────┐   ┌─bot-3──┐ │
+        │ │         ◄───┼──────────────┼──►          ◄───►        │ │
+        │ │         │   │              │  │          │   │        │ │
+        │ └─────────┘   │              │  └──────────┘   └────────┘ │
+        │               │              │                            │
+        └───────────────┘              └────────────────────────────┘
      */
     actor_zeta::supervisor supervisor1(new supervisor_lite("manager-1"));
     actor_zeta::supervisor supervisor2(new supervisor_lite("manager-2"));
     actor_zeta::link(supervisor1, supervisor2);
+    std::cout << "supervisors linked" << std::endl;
 
-    int const actors = 11;
-    int const sends = 5;
+    int const sends = 1;
+    int const actors = 1 + sends * 2;
     count = 0;
 
+    std::cout << "bot1 spawning" << std::endl;
     actor_zeta::spawn_actor<worker_t>(supervisor1); //actor creator, "bot1"
+    std::cout << "bot1 spawned" << std::endl;
 
-    for (auto i = sends - 1; i > 0; --i) {
+    for (auto i = sends - 1; i >= 0; --i) {
+        std::cout << "sending spawn request#" << i << std::endl;
         actor_zeta::delegate_send(supervisor1, "bot1", "spawn_worker");
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(10));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     std::cerr << " Finish " << std::endl;
 
     assert(count == actors);
