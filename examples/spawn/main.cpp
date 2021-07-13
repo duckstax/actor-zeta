@@ -46,13 +46,13 @@ class worker_t final : public actor_zeta::basic_async_actor {
 public:
     explicit worker_t(actor_zeta::supervisor_abstract* ptr)
         : actor_zeta::basic_async_actor(ptr, "bot1") {
+        count++;
         add_handler("spawn_worker", &worker_t::spawn_worker);
     }
 
     auto spawn_worker() -> void {
         actor_zeta::spawn_actor<worker_t2>(addresses("manager-2"));
         actor_zeta::spawn_actor<worker_t3>(addresses("manager-2"));
-        count++;
     }
 };
 
@@ -60,6 +60,7 @@ class worker_t2 final : public actor_zeta::basic_async_actor {
 public:
     explicit worker_t2(actor_zeta::supervisor_abstract* ptr)
         : actor_zeta::basic_async_actor(ptr, "bot2") {
+        count++;
         std::cout << "bot2 created\n";
     }
 };
@@ -68,6 +69,7 @@ class worker_t3 final : public actor_zeta::basic_async_actor {
 public:
     explicit worker_t3(actor_zeta::supervisor_abstract* ptr)
         : actor_zeta::basic_async_actor(ptr, "bot3") {
+        count++;
         std::cout << "bot3 created\n";
     }
 };
@@ -120,11 +122,29 @@ auto main() -> int {
     //TODO: broadcast handling in actors when spawn happens in supervisor
     //TODO: link existing actors with spawned ones when their type follows some predicate (based on name?)
     //TODO: "manager-2" has to be known in "bot1" names scope
+
+    //1. manager-1 spawns 5 actors named "bot1"
+    //2. each bot1 must send spawn request for types "bot2" and "bot3" to manager-2 upon spawning
+    //3. manager-2 must spawn bot2 and bot3 actors on each request
+    //4. manager-2 must link bot2 to bot3 upon each spawning
+    //5. manager-2 must broatcast bots names to bot1 instances
+    //6. bot1 must link itself with type "bot2" and ignore "bot3"
+    //7. spawned actors count must be equal 5*3
+    /*
+        ┌──manager-1────┐◄────────────►┌────────────manager-2───────┐
+        │               │              │                            │
+        │ ┌─bot-1───┐   │              │  ┌─bot-2────┐   ┌─bot-3──┐ │
+        │ │         ◄───┼──────────────┼──►          ◄───►        │ │
+        │ │         │   │              │  │          │   │        │ │
+        │ └─────────┘   │              │  └──────────┘   └────────┘ │
+        │               │              │                            │
+        └───────────────┘              └────────────────────────────┘
+     */
     actor_zeta::supervisor supervisor1(new supervisor_lite("manager-1"));
     actor_zeta::supervisor supervisor2(new supervisor_lite("manager-2"));
     actor_zeta::link(supervisor1, supervisor2);
 
-    int const actors = 5;
+    int const actors = 15;
     count = 0;
 
     actor_zeta::spawn_actor<worker_t>(supervisor1); //actor creator, "bot1"

@@ -20,6 +20,7 @@ using actor_zeta::work_sharing;
 
 using actor_zeta::make_message;
 
+template<typename Task, typename... Args>
 auto make_task(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
     actor_zeta::send(executor_, executor_->address(), command, std::move(Task(std::forward<Args>(args)...)));
 }
