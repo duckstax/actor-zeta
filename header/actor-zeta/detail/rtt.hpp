@@ -115,43 +115,6 @@ namespace actor_zeta { namespace detail {
             swap(this->m_volume, that.m_volume);
         }
 
-        void reserve(std::size_t new_capacity) {
-            if (new_capacity > m_capacity) {
-                reallocate(std::max(new_capacity, m_capacity * CAPACITY_INCREASING_FACTOR));
-            }
-        }
-
-        void shrink_to_fit() {
-            if (m_capacity > m_volume) {
-                reallocate(m_volume);
-            }
-        }
-
-        template<typename T>
-        void push_back(T&& object) {
-            auto creation_place = set_up_creation_place(object);
-            accomodate(std::forward<T>(object), creation_place);
-        }
-
-        void pop_back() {
-            management::destroy(m_objects.back(), data());
-            m_objects.pop_back();
-
-            if (not m_objects.empty()) {
-                auto offset = m_objects.back().offset;
-                auto size = management::size_of(m_objects.back());
-
-                m_volume = offset + size;
-            } else {
-                m_volume = 0;
-            }
-        }
-
-        void clear() {
-            destroy_all();
-            m_objects.clear();
-            m_volume = 0;
-        }
 
         template<typename T>
         const T& get(size_type index) const {
@@ -196,6 +159,25 @@ namespace actor_zeta { namespace detail {
         }
 
     private:
+
+        void reserve(std::size_t new_capacity) {
+                if (new_capacity > m_capacity) {
+                    reallocate(std::max(new_capacity, m_capacity * CAPACITY_INCREASING_FACTOR));
+                }
+            }
+
+        void shrink_to_fit() {
+            if (m_capacity > m_volume) {
+                reallocate(m_volume);
+            }
+        }
+
+        void clear() {
+            destroy_all();
+            m_objects.clear();
+            m_volume = 0;
+        }
+
         void reallocate(std::size_t new_capacity) {
             assert(new_capacity >= m_volume);
             auto new_data = std::make_unique<std::int8_t[]>(new_capacity);
