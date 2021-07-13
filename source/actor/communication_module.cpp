@@ -2,30 +2,31 @@
 #include <vector>
 
 // clang-format off
+#include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/base/handler.hpp>
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address.hpp>
 #include <actor-zeta/base/message.hpp>
 #include <actor-zeta/impl/handler.ipp>
-#include <actor-zeta/base/communication_module.hpp>
 // clang-format on
 
 namespace actor_zeta { namespace base {
 
-    void error_sync_contacts(detail::string_view __error__) {
+    void error_sync_contacts(detail::string_view name, detail::string_view error) {
         std::cerr << "WARNING" << '\n';
-        std::cerr << "Not initialization actor_address type:" << __error__ << '\n';
+        std::cerr << "Actor name : " << name << '\n';
+        std::cerr << "Not initialization address type:" << error << '\n';
         std::cerr << "WARNING" << std::endl;
     }
 
-    void error_duplicate_handler(detail::string_view _error_) {
+    void error_duplicate_handler(detail::string_view error) {
         std::cerr << "Duplicate" << '\n';
-        std::cerr << "Handler: " << _error_ << '\n';
+        std::cerr << "Handler: " << error << '\n';
         std::cerr << "Duplicate" << std::endl;
     }
 
-    void error_add_handler(detail::string_view _error_) {
+    void error_add_handler(detail::string_view error) {
         std::cerr << "error add handler" << '\n';
-        std::cerr << "Handler: " << _error_ << '\n';
+        std::cerr << "Handler: " << error << '\n';
         std::cerr << "error add handler" << std::endl;
     }
 
@@ -41,7 +42,7 @@ namespace actor_zeta { namespace base {
         if (it != handlers_.end()) {
             return it->second->invoke(*this);
         } else {
-            auto sender = current_message()->sender()->type();
+            auto sender = current_message()->sender().type();
             auto reciever = this->type();
             error_skip(sender, reciever, current_message()->command());
         }
@@ -77,26 +78,21 @@ namespace actor_zeta { namespace base {
         return types;
     }
 
-    auto communication_module::all_view_address() const -> std::vector<std::string> {
-        std::vector<std::string> tmp;
+    auto communication_module::all_view_address() const -> std::set<std::string> {
+        std::set<std::string> tmp;
 
-        for (const auto& i : *contacts_) {
-            tmp.emplace_back(std::string(i.first.begin(), i.first.end()));
+        for (const auto& i : contacts_) {
+            tmp.emplace(std::string(i.first.begin(), i.first.end()));
         }
 
         return tmp;
     }
 
-    auto communication_module::addresses(detail::string_view name) -> actor_address& {
-        return contacts_->at(name);
-    }
-
-    auto communication_module::self() -> actor_address {
-        return address();
-    }
-
-    auto communication_module::sub_type() const -> sub_type_t {
-        return sub_type_;
+    auto communication_module::address_book(detail::string_view type) -> address_t {
+        auto result = contacts_.find(type);
+        if (result != contacts_.end()) {
+            return *(result->second.begin());
+        }
     }
 
     auto communication_module::type() const -> detail::string_view {
@@ -105,10 +101,8 @@ namespace actor_zeta { namespace base {
 
     communication_module::~communication_module() {}
 
-    communication_module::communication_module(std::string type, sub_type_t sub_type)
-        : contacts_(new std::unordered_map<detail::string_view, actor_address>)
-        , id_(0)
-        , sub_type_(sub_type)
+    communication_module::communication_module(std::string type)
+        : contacts_()
         , type_(std::move(type)) {
         add_handler(
             "add_link",
@@ -119,34 +113,53 @@ namespace actor_zeta { namespace base {
             &communication_module::remove_link);
     }
 
-    actor_address communication_module::address() const noexcept {
-        return actor_address{const_cast<communication_module*>(this)};
-    }
-
-    void communication_module::add_link(actor_address address) {
+    void communication_module::add_link(address_t& address) {
         if (address) {
-            auto name = address->type();
-            contacts_->emplace(name, std::move(address));
+            auto name = address.type();
+            auto it = contacts_.find(name);
+            if (it == contacts_.end()) {
+                auto result = contacts_.emplace(name, storage_contact_t());
+                result.first->second.emplace_back(std::move(address));
+            } else {
+                it->second.emplace_back(std::move(address));
+            }
         } else {
-            error_sync_contacts(address->type());
+            error_sync_contacts(type(), address.type());
         }
     }
 
-    void communication_module::remove_link(const actor_address& address) {
-        auto it = contacts_->find(address->type());
-        if (it != contacts_->end()) {
-            contacts_->erase(it);
+    void communication_module::remove_link(const address_t& address) {
+        auto name = address.type();
+        auto it = contacts_.find(name);
+        if (it == contacts_.end()) {
+            // not find
+        } else {
+            auto end = it->second.end();
+            for (auto i = it->second.begin(); i != end; ++i) {
+                if (address.get() == i->get()) {
+                    it->second.erase(i);
+                }
+            }
         }
     }
 
-    auto communication_module::broadcast(message_ptr msg) -> bool {
+    auto communication_module::broadcast(message_ptr msg) -> void {
         auto tmp = std::move(msg);
 
-        for (auto& i : *contacts_) {
-            i.second->enqueue(message_ptr(tmp->clone()));
+        for (auto& i : contacts_) {
+            for (auto& j : i.second) {
+                j.enqueue(message_ptr(tmp->clone()));
+            }
         }
+    }
 
-        return true;
+    auto communication_module::broadcast(detail::string_view type, message_ptr msg) -> void {
+        auto tmp = std::move(msg);
+
+        auto range = contacts_.find(type);
+        for (auto& i : range->second) {
+            i.enqueue(message_ptr(tmp->clone()));
+        }
     }
 
     void communication_module::enqueue(message_ptr msg, executor::execution_device* e) {

@@ -1,5 +1,5 @@
 // clang-format off
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address.hpp>
 #include <actor-zeta/base/message.hpp>
 #include <actor-zeta/base/supervisor.hpp>
 // clang-format on
@@ -10,8 +10,8 @@ namespace actor_zeta { namespace base {
 
     supervisor::~supervisor() {}
 
-    actor_address supervisor::address() const noexcept {
-        return ptr_->address();
+    address_t supervisor::address() const noexcept {
+        return address_t(ptr_.get());
     }
 
     detail::string_view supervisor::type() const {

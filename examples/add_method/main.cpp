@@ -8,20 +8,19 @@
 using actor_zeta::basic_async_actor;
 using actor_zeta::execution_device;
 using actor_zeta::message_ptr;
-using actor_zeta::supervisor_t;
+using actor_zeta::supervisor_abstract;
 
-class dummy_supervisor final : public supervisor_t {
+class dummy_supervisor final : public supervisor_abstract {
 public:
     dummy_supervisor()
-        : supervisor_t("dummy_supervisor") {}
+        : supervisor_abstract("dummy_supervisor") {}
 
-    auto executor() noexcept -> actor_zeta::abstract_executor* override {
+    auto executor_impl() noexcept -> actor_zeta::abstract_executor* override {
         return ptr_;
     }
 
-    auto join(actor_zeta::actor) -> actor_zeta::actor_address override {
-        return actor_zeta::actor_address();
-    }
+    auto add_actor_impl(actor_zeta::actor) -> void override {}
+    auto add_supervisor_impl(actor_zeta::supervisor) -> void override {}
 
     void enqueue_base(message_ptr, actor_zeta::execution_device*) override {}
 
@@ -31,8 +30,8 @@ private:
 
 class storage_t final : public basic_async_actor {
 public:
-    storage_t(dummy_supervisor& ref)
-        : basic_async_actor(&ref, "storage") {
+    storage_t(actor_zeta::supervisor_abstract* ptr)
+        : basic_async_actor(ptr, "storage") {
         add_handler(
             "update",
             []() -> void {});
@@ -44,29 +43,27 @@ public:
         add_handler(
             "remove",
             []() -> void {});
+
+        assert(actor_zeta::detail::string_view("storage") == type());
+
+        auto tmp = message_types();
+
+        std::set<std::string> control = {"add_link", "remove_link", "update", "remove", "find"};
+
+        std::set<std::string> diff;
+
+        std::set_difference(tmp.begin(), tmp.end(), control.begin(), control.end(), std::inserter(diff, diff.begin()));
+
+        assert(diff.empty());
     }
 
     ~storage_t() override = default;
 };
 
 int main() {
-    auto* supervisor = new dummy_supervisor;
+    actor_zeta::supervisor supervisor(new dummy_supervisor());
 
-    auto* storage_tmp = new storage_t(*supervisor);
-
-    actor_zeta::actor storage(storage_tmp);
-
-    //assert(actor_zeta::detail::string_view("storage") == storage->name());
-
-    auto tmp = storage->message_types();
-
-    std::set<std::string> control = {"add_link", "remove_link", "update", "remove", "find"};
-
-    std::set<std::string> diff;
-
-    std::set_difference(tmp.begin(), tmp.end(), control.begin(), control.end(), std::inserter(diff, diff.begin()));
-
-    assert(diff.empty());
+    actor_zeta::spawn_actor<storage_t>(supervisor);
 
     return 0;
 }

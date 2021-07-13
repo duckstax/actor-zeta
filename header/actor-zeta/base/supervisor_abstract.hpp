@@ -18,6 +18,7 @@ namespace actor_zeta { namespace base {
         auto executor() noexcept -> executor::abstract_executor*;
         using communication_module::broadcast;
         auto resource() const -> detail::pmr::memory_resource*;
+        auto address() noexcept -> address_t;
 
     protected:
         using communication_module::add_handler;
@@ -29,6 +30,7 @@ namespace actor_zeta { namespace base {
         auto current_message() -> message* final;
 
     private:
+        auto redirect(std::string& type, message* msg) -> void;
         auto spawn_actor(default_spawn_actor&) -> void;
         auto spawn_supervisor(default_spawn_supervisor&) -> void;
         message* current_message_;

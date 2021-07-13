@@ -1,35 +1,59 @@
 #pragma once
 
-#if CPP17_OR_GREATER
-
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
-
-#include <actor-zeta/detail/pmr/memory_resource.hpp>
-#include <actor-zeta/detail/pmr/uses_allocator.hpp>
-#include <actor-zeta/detail/type_traits.hpp>
+#include <actor-zeta/config.hpp>
 
 #include <cassert>
 #include <cstddef>
 
+#include <new>
 #include <tuple>
 #include <utility>
 
+#if CPP17_OR_GREATER
+#if __has_include(<memory_resource>)
+#include <memory_resource>
+#elif __has_include(<experimental/memory_resource>)
+#include <experimental/memory_resource>
+#endif
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+#include "emulate_tuple_cat_result.hpp"
+#include <actor-zeta/detail/pmr/default_resource.hpp>
+#include <actor-zeta/detail/pmr/memory_resource.hpp>
+#include <actor-zeta/detail/pmr/uses_allocator.hpp>
+#include <actor-zeta/detail/type_traits.hpp>
 #endif
 
-namespace actor_zeta { namespace detail { namespace pmr {
+namespace actor_zeta {
+namespace detail {
+namespace pmr {
 
 #if CPP17_OR_GREATER
+#if __has_include(<memory_resource>)
+
+    template<class T>
+    using polymorphic_allocator = std::pmr::polymorphic_allocator<T>;
+
+#else
+
+    template<class T>
+    using polymorphic_allocator = std::experimental::pmr::polymorphic_allocator<T>;
+
+#endif
 
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
     template<typename T>
     class polymorphic_allocator {
+    private:
+        using default_resource = actor_zeta::detail::pmr::default_resource;
+
     public:
         using value_type = T;
         using pointer = value_type*;
 
-        /// non C++ 17 std
-        polymorphic_allocator() noexcept = delete;
+        polymorphic_allocator() noexcept
+            : resource_(default_resource::get()) {
+        }
 
         polymorphic_allocator(memory_resource* ptr)
             : resource_(ptr) { assert(ptr); }
@@ -131,8 +155,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
             ptr->~U();
         }
 
-        /// non C++ 17 std
-        ///polymorphic_allocator select_on_container_copy_construction() const { return polymorphic_allocator(); }
+        polymorphic_allocator select_on_container_copy_construction() const { return polymorphic_allocator(); }
 
         memory_resource* resource() const { return resource_; }
 
@@ -147,14 +170,14 @@ namespace actor_zeta { namespace detail { namespace pmr {
         }
 
         template<typename... Args>
-        decltype(auto)
-        construct_(uses_alloc1_ ua, std::tuple<Args...>& t) {
+        constexpr auto
+        construct_(uses_alloc1_ ua, std::tuple<Args...>& t) -> typename tuple_cat_result<Args...>::type {
             return std::tuple_cat(std::make_tuple(type_traits::allocator_arg, *(ua.a_)), std::move(t));
         }
 
         template<typename... Args>
-        decltype(auto)
-        construct_(uses_alloc2_ ua, std::tuple<Args...>& t) {
+        constexpr auto
+        construct_(uses_alloc2_ ua, std::tuple<Args...>& t) -> typename tuple_cat_result<Args...>::type {
             return std::tuple_cat(std::move(t), std::make_tuple(*(ua.a_)));
         }
 
@@ -174,5 +197,6 @@ namespace actor_zeta { namespace detail { namespace pmr {
     }
 
 #endif
-
-}}} // namespace actor_zeta::detail::pmr
+}
+}
+} // namespace actor_zeta::detail::pmr

@@ -1,11 +1,7 @@
-#include <cassert>
+#define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
+#include <catch2/catch.hpp>
 
-#include <actor-zeta/base/actor_address.hpp>
-#include <actor-zeta/messaging/message.hpp>
+#include "classes.hpp"
 
-using actor_zeta::base::actor_address;
-using actor_zeta::messaging::message;
-
-int main() {
-    return 0;
+TEST_CASE("spawn") {
 }

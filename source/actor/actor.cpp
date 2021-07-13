@@ -1,6 +1,5 @@
-
 // clang-format off
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address.hpp>
 #include <actor-zeta/base/message.hpp>
 #include <actor-zeta/base/actor.hpp>
 #include <actor-zeta/base/actor_abstract.hpp>
@@ -9,7 +8,7 @@
 namespace actor_zeta { namespace base {
     actor::~actor() {}
 
-    actor_address actor::address() const noexcept {
+    address_t actor::address() const noexcept {
         return ptr_->address();
     }
 

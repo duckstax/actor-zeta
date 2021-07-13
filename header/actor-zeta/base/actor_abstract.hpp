@@ -3,6 +3,7 @@
 #include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <new>
 
 namespace actor_zeta { namespace base {
     ///
@@ -18,6 +19,8 @@ namespace actor_zeta { namespace base {
         void* operator new(std::size_t, void* ptr) {
             return ptr;
         }
+
+        auto address() noexcept -> address_t;
 
     protected:
         actor_abstract(std::string);

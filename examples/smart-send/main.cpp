@@ -20,14 +20,14 @@ using actor_zeta::work_sharing;
 
 using actor_zeta::make_message;
 
-template<typename Task, typename... Args>
-inline auto make_task(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
-    executor_->enqueue(std::move(make_message(executor_->address(), command, std::move(Task(std::forward<Args>(args)...)))));
+auto make_task(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
+    actor_zeta::send(executor_, executor_->address(), command, std::move(Task(std::forward<Args>(args)...)));
 }
 
 template<typename Task, typename... Args>
-inline auto make_task_broadcast(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
-    executor_->broadcast(make_message(executor_->address(), command, std::move(Task(std::forward<Args>(args)...))));
+auto make_task_broadcast(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
+    auto address = executor_->address();
+    actor_zeta::broadcast(executor_, address, command, std::move(Task(std::forward<Args>(args)...)));
 }
 
 auto thread_pool_deleter = [](abstract_executor* ptr) {
@@ -153,8 +153,6 @@ private:
     std::string tmp_;
 };
 
-using namespace std::chrono_literals;
-
 int main() {
     actor_zeta::supervisor supervisor(new supervisor_lite());
 
@@ -176,7 +174,7 @@ int main() {
         make_task_broadcast<work_data>(supervisor, "work_data", std::string("fb"), std::string("jack"));
     }
 
-    std::this_thread::sleep_for(180s);
+    std::this_thread::sleep_for(std::chrono::seconds(180));
 
     std::cerr << " Finish " << std::endl;
     std::cerr << "counter_download_data :" << counter_download_data.load() << std::endl;

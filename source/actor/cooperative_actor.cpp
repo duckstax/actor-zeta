@@ -2,7 +2,7 @@
 #include <iostream>
 
 // clang-format off
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address.hpp>
 #include <actor-zeta/base/message.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
@@ -124,8 +124,10 @@ namespace actor_zeta { namespace base {
     cooperative_actor::~cooperative_actor() {}
 
     bool cooperative_actor::activate(executor::execution_device* ctx) {
-        assert(ctx != nullptr);
-        context(ctx);
+        //assert(ctx != nullptr);
+        if (ctx) {
+            context(ctx);
+        }
         return true;
     }
 

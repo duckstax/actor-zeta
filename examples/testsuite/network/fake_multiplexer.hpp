@@ -14,7 +14,7 @@
 
 namespace actor_zeta { namespace network {
 
-    using actor_zeta::actor_address;
+    using actor_zeta::address_t;
 
     enum class client_state {
         close,
@@ -119,7 +119,7 @@ namespace actor_zeta { namespace network {
         connection() = default;
         using socket_t = Socket;
 
-        connection(socket_t&& socket, actor_zeta::actor_address&& address)
+        connection(socket_t&& socket, actor_zeta::address_t&& address)
             : socket_(std::forward<Socket>(socket))
             , address_(std::move(address)) {
         }
@@ -134,13 +134,13 @@ namespace actor_zeta { namespace network {
             return socket_;
         }
 
-        actor_zeta::actor_address address() const {
+        actor_zeta::address_t address() const {
             return address_;
         }
 
     private:
         socket_t socket_;
-        actor_zeta::actor_address address_;
+        actor_zeta::address_t address_;
     };
 
     class fake_multiplexer final {
@@ -153,9 +153,9 @@ namespace actor_zeta { namespace network {
 
         std::size_t start();
 
-        void new_tcp_listener(const std::string& host, uint16_t port, actor_zeta::actor_address);
+        void new_tcp_listener(const std::string& host, uint16_t port, actor_zeta::address_t);
 
-        void new_tcp_connection(const std::string& host, uint16_t port, actor_zeta::actor_address);
+        void new_tcp_connection(const std::string& host, uint16_t port, actor_zeta::address_t);
 
         void close(const connection_identifying&);
 

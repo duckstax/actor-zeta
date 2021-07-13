@@ -1,10 +1,12 @@
 #pragma once
 
 #include <actor-zeta/detail/intrusive_ptr.hpp>
+#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
 #include <type_traits>
 
-namespace actor_zeta { namespace base {
+namespace actor_zeta {
+namespace base {
 
     class supervisor final {
     public:
@@ -52,7 +54,7 @@ namespace actor_zeta { namespace base {
             return *this;
         }
 
-        actor_address address() const noexcept;
+        address_t address() const noexcept;
 
         ~supervisor();
 
@@ -83,4 +85,5 @@ namespace actor_zeta { namespace base {
     static_assert(std::is_move_constructible<supervisor>::value, "");
     static_assert(not std::is_copy_constructible<supervisor>::value, "");
 
-}} // namespace actor_zeta::base
+}
+} // namespace actor_zeta::base

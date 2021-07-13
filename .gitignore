@@ -1,3 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+### C++ template
+# Prerequisites
+*.d
+
 # Compiled Object files
 *.slo
 *.lo
@@ -15,28 +20,66 @@
 
 # Fortran module files
 *.mod
+*.smod
 
 # Compiled Static libraries
 *.lai
 *.la
-*.a
-*.lib
+#*.a
+#*.lib
 
 # Executables
 *.exe
 *.out
 *.app
 
-# Covers JetBrains IDEs: CLion
-*.iml
 
-## Directory-based project format:
-.idea/
+# CMake
+cmake-build-*/
+
+# Mongo Explorer plugin
+.idea/**/mongoSettings.xml
+
+# File-based project format
+*.iws
+
+# IntelliJ
+out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+.idea
+.vscode
+CMakeCache.txt
+conan.cmake
+conan.lock
+conanbuildinfo.cmake
+conanbuildinfo.txt
+conaninfo.txt
+graph_info.json
+CMakeFiles/
+build
+.ninja_deps
+.ninja_log
+build.ninja
+compile_commands.json
 
 .DS_Store
-# Project exclude paths
 /cmake-build-debug/
-.idea/
-.cache
 build
-.vscode
+tracy
+compile_commands.json
+*.vim
+*.tracy
+.cache
