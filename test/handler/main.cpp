@@ -1,190 +1,82 @@
-#include <iostream>
+#define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
+#include <catch2/catch.hpp>
 
-#include <actor-zeta/core.hpp>
+#include "classes.hpp"
 
-using actor_zeta::basic_async_actor;
-using actor_zeta::send;
-using actor_zeta::abstract_executor;
-using actor_zeta::supervisor;
-using actor_zeta::message;
-using actor_zeta::execution_device;
+TEST_CASE("handler") {
+    supervisor supervisor_(new dummy_supervisor(1, 100));
 
-class dummy_executor final : public abstract_executor {
-public:
-    dummy_executor() : abstract_executor(1, 10000) {}
+    REQUIRE(dummy_supervisor::constructor_counter == 1);
 
-    void execute(actor_zeta::executable *ptr) override {
-        ptr->run(nullptr, max_throughput());
-    }
+    actor_zeta::spawn_actor<test_handlers>(supervisor_);
+    REQUIRE(dummy_supervisor::enqueue_base_counter == 2 /*spawn_actor & add_link*/);
+    REQUIRE(dummy_supervisor::add_actor_impl_counter == 1);
+    REQUIRE(test_handlers::init_counter == 1);
+    REQUIRE(static_cast<dummy_supervisor*>(supervisor_.get())->actors_count() == 1);
 
-    void start() override {}
+    REQUIRE(test_handlers::ptr_0_counter == 0);
+    send(
+        static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),
+        test_handlers_names::ptr_0);
+    REQUIRE(test_handlers::ptr_0_counter == 1);
 
-    void stop() override {}
-};
+    REQUIRE(test_handlers::ptr_1_counter == 0);
+    send(
+        static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),
+        test_handlers_names::ptr_1);
+    REQUIRE(test_handlers::ptr_1_counter == 1);
 
+    REQUIRE(test_handlers::ptr_2_counter == 0);
+    send(
+        static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),
+        test_handlers_names::ptr_2, 1);
+    REQUIRE(test_handlers::ptr_2_counter == 1);
 
-class dummy_supervisor final : public supervisor {
-public:
+    REQUIRE(test_handlers::ptr_3_counter == 0);
+    send(
+        static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),
+        test_handlers_names::ptr_3, 1, 2);
+    REQUIRE(test_handlers::ptr_3_counter == 1);
 
-    explicit dummy_supervisor(actor_zeta::abstract_executor *ptr)
-            : supervisor("dummy_supervisor"), ptr_(ptr) {
-    }
+    REQUIRE(test_handlers::ptr_4_counter == 0);
+    send(
+        static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),
+        test_handlers_names::ptr_4, 1, 2, std::string("test"));
+    REQUIRE(test_handlers::ptr_4_counter == 1);
 
-    auto executor() noexcept -> actor_zeta::abstract_executor & override {
-        return *ptr_;
-    }
+    actor_zeta::spawn_actor<storage_t>(supervisor_);
+    REQUIRE(dummy_supervisor::enqueue_base_counter == 4 /*spawn_actor & add_link*/);
+    REQUIRE(dummy_supervisor::add_actor_impl_counter == 2);
+    REQUIRE(storage_t::constructor_counter == 1);
+    REQUIRE(static_cast<dummy_supervisor*>(supervisor_.get())->actors_count() == 2);
 
-    auto join(actor_zeta::actor ) -> actor_zeta::actor_address override {
-        return actor_zeta::actor_address();
-    }
+    REQUIRE(storage_t::init_counter == 0);
+    send(
+        static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),
+        storage_names::init);
+    REQUIRE(storage_t::init_counter == 1);
 
-    void enqueue(message, execution_device *) override {
+    REQUIRE(storage_t::search_counter == 0);
+    send(
+        static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),
+        storage_names::search, std::string("key_1"));
+    REQUIRE(storage_t::search_counter == 1);
 
-    }
+    REQUIRE(storage_t::add_counter == 0);
+    send(
+        static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),
+        storage_names::add, std::string("key_1"), std::string("value_1"));
+    REQUIRE(storage_t::add_counter == 1);
 
-private:
-    actor_zeta::abstract_executor *ptr_;
-};
+    REQUIRE(storage_t::delete_table_counter == 0);
+    send(
+        static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),
+        storage_names::delete_table, std::string("test"), std::string("/"), 12);
+    REQUIRE(storage_t::delete_table_counter == 1);
 
-
-class storage_t final : public basic_async_actor {
-public:
-    explicit storage_t(dummy_supervisor &ref) : basic_async_actor(ref, "storage") {
-
-        add_handler(
-                "init",
-                &storage_t::init
-        );
-
-        add_handler(
-                "search",
-                &storage_t::search
-        );
-
-        add_handler(
-                "add",
-                &storage_t::add
-        );
-
-        add_handler(
-                "delete_table",
-                &storage_t::delete_table
-        );
-
-        add_handler(
-                "creature_table",
-                &storage_t::creature_table
-        );
-
-    }
-
-    ~storage_t() override = default;
-
-private:
-    void init() {
-        std::cerr << "init " << std::endl;
-    }
-
-    void search(std::string &key) {
-        std::cerr << "search: "
-                  << "key: " << key
-                  << std::endl;
-    }
-
-    void add(const std::string &key, const std::string &value) {
-        std::cerr << "add: "
-                  << "key: " << key << " | "
-                  << "value: " << value << " | "
-                  << std::endl;
-    }
-
-    void delete_table(const std::string &name, const std::string &path, int type) {
-        std::cerr << "delete_table: "
-                  << "table name: " << name << " | "
-                  << "path: " << path << " | "
-                  << "type: " << type << " | "
-                  << std::endl;
-    }
-
-    void creature_table(const std::string &name, const std::string &path, int type, int time_sync) {
-        std::cerr << "creature_table: "
-                  << "table name: " << name << " | "
-                  << "path: " << path << " | "
-                  << "type: " << type << " | "
-                  << "time_sync: " << time_sync << " | "
-                  << std::endl;
-    }
-
-};
-
-class test_handlers final : public basic_async_actor {
-public:
-    test_handlers(dummy_supervisor &ref) : basic_async_actor(ref, "test_handlers") {
-        add_handler(
-                "ptr_0",
-                []() {
-                    std::cerr << "ptr_0" << std::endl;
-                }
-        );
-
-        add_handler(
-                "ptr_1",
-                [](test_handlers &handler) {
-                    handler.init();
-                    std::cerr << "ptr_1" << std::endl;
-                }
-        );
-        add_handler(
-                "ptr_2",
-                [](test_handlers &handler, int &data) {
-                    handler.init();
-                    std::cerr << "ptr_2 :" << data << std::endl;
-                }
-        );
-        add_handler(
-                "ptr_3",
-                [](test_handlers &handler, int data_1, int &data_2) {
-                    handler.init();
-                    std::cerr << "ptr_3 : " << data_1 << " : " << data_2 << std::endl;
-                }
-        );
-
-        add_handler(
-                "ptr_4",
-                [](test_handlers & handler, int data_1, int &data_2, const std::string &data_3) {
-                    handler.init();
-                    std::cerr << "ptr_4 : " << data_1 << " : " << data_2 << " : " << data_3 << std::endl;
-                }
-        );
-    }
-
-    ~test_handlers() override = default;
-
-private:
-    void init() {
-        std::cerr << "private init" << std::endl;
-    }
-};
-
-
-int main() {
-
-    std::unique_ptr<dummy_supervisor> supervisor(new dummy_supervisor(new dummy_executor));
-
-    std::unique_ptr<test_handlers> test_handlers_(new test_handlers(*supervisor));
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_0");
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_1");
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_2", 1);
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_3", 1, 2);
-    send(test_handlers_, actor_zeta::actor_address(), "ptr_4", 1, 2, std::string("test"));
-
-    std::unique_ptr<storage_t> storage(new storage_t(*supervisor));
-
-    send(storage, actor_zeta::actor_address(), "init");
-    send(storage, actor_zeta::actor_address(), "search", std::string("key_1"));
-    send(storage, actor_zeta::actor_address(), "add", std::string("key_1"), std::string("value_1"));
-    send(storage, actor_zeta::actor_address(), "delete_table", std::string("test"), std::string("/"), 12);
-    send(storage, actor_zeta::actor_address(), "creature_table", std::string("test"), std::string("/"), 1, 12);
-
-    return 0;
+    REQUIRE(storage_t::create_table_counter == 0);
+    send(
+        static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),
+        storage_names::create_table, std::string("test"), std::string("/"), 1, 12);
+    REQUIRE(storage_t::create_table_counter == 1);
 }

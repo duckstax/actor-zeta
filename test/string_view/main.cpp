@@ -1,23 +1,21 @@
-#include <string>
-#include <actor-zeta/detail/string_view.hpp>
-#include <cassert>
+#define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
+#include <catch2/catch.hpp>
 
-using namespace actor_zeta::detail;
+#include "classes.hpp"
 
-int main() {
-    {
+TEST_CASE("string_view") {
+    SECTION("simple") {
         string_view x;
         string_view y;
-        assert(x.empty());
-        assert(x.size() == 0u);
-        assert(x.data() == nullptr);
-        assert(y == y);
+        REQUIRE(x.empty());
+        REQUIRE(x.size() == 0u);
+        REQUIRE(x.data() == nullptr);
+        REQUIRE(y == y);
     }
 
-    {
+    SECTION("compare") {
         string_view x("abc");
-        assert(x.size() == 3u);
-        assert(x == string_view("abc"));
+        REQUIRE(x.size() == 3u);
+        REQUIRE(x == string_view("abc"));
     }
-
 }

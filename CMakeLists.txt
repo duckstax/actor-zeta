@@ -10,13 +10,18 @@ message (STATUS "STANDARD CPP = ${CMAKE_CXX_STANDARD}")
 
 message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
-option(ALLOW_EXAMPLES "Enable building examples" OFF)
+option(ALLOW_EXAMPLES "ALLOW EXAMPLES" OFF)
 
-option(ALLOW_TESTS "Enable building test" OFF)
+option(ALLOW_TESTS "ALLOW TESTS" OFF)
 
 option(RTTI_DISABLE "RTTI DISABLE" ON)
 
 option(EXCEPTIONS_DISABLE "EXCEPTIONS DISABLE" ON)
+
+message(STATUS "ALLOW_EXAMPLES = ${ALLOW_EXAMPLES}")
+message(STATUS "ALLOW_TESTS = ${ALLOW_TESTS}")
+message(STATUS "RTTI_DISABLE = ${RTTI_DISABLE}")
+message(STATUS "EXCEPTIONS_DISABLE = ${EXCEPTIONS_DISABLE}")
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 
@@ -73,21 +78,22 @@ endif()
 
 include(cmake/clang_tools.cmake)
 
-
 include_directories(SYSTEM .)
 include_directories(SYSTEM header)
 
 set(HEADER_FILES
-        header/actor-zeta/base/abstract_actor.hpp
+        header/actor-zeta/base/actor_abstract.hpp
         header/actor-zeta/base/actor.hpp
-        header/actor-zeta/base/actor_address.hpp
+        header/actor-zeta/base/address.hpp
         header/actor-zeta/base/cooperative_actor.hpp
         header/actor-zeta/base/basic_actor.hpp
         header/actor-zeta/base/communication_module.hpp
-        header/actor-zeta/base/context.hpp
         header/actor-zeta/base/handler.hpp
         header/actor-zeta/base/supervisor.hpp
+        header/actor-zeta/base/supervisor_abstract.hpp
 
+        header/actor-zeta/detail/pmr/container.hpp
+        header/actor-zeta/detail/pmr/memory_resource.hpp
         header/actor-zeta/detail/any.hpp
         header/actor-zeta/detail/callable_trait.hpp
         header/actor-zeta/detail/intrusive_ptr.hpp
@@ -109,18 +115,22 @@ set(HEADER_FILES
         header/actor-zeta/base/message.hpp
 
         header/actor-zeta/forwards.hpp
+        header/actor-zeta/link.hpp
+        header/actor-zeta/send.hpp
         header/actor-zeta.hpp
 )
 
 set(SOURCE_FILES
 
-        source/actor/abstract_actor.cpp
+        source/actor/actor_abstract.cpp
         source/actor/actor.cpp
-        source/actor/actor_address.cpp
+        source/actor/address.cpp
         source/actor/cooperative_actor.cpp
         source/actor/supervisor.cpp
+        source/actor/supervisor_abstract.cpp
         source/actor/communication_module.cpp
 
+        source/detail/pmr/memory_resource.cpp
         source/detail/string_view.cpp
         source/detail/ref_counted.cpp
 
@@ -131,6 +141,8 @@ set(SOURCE_FILES
 
 
         source/messaging/message.cpp
+        source/src.cpp
+        source/send.cpp
 )
 
 
@@ -169,5 +181,18 @@ if(ALLOW_EXAMPLES)
 endif()
 
 if (ALLOW_TESTS)
+    # configuration
+    #############################################################################################
+    #conan
+
+    message("CONAN_BUILD_INFO_DIR = ${CMAKE_BINARY_DIR}")
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup(TARGETS)
+    message(STATUS "LIBS = ${CONAN_LIBS}")
+    message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+
+    # conan
+    #############################################################################################
+    enable_testing()
     add_subdirectory(test)
 endif ()

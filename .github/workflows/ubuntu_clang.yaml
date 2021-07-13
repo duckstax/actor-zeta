@@ -1,0 +1,104 @@
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        configuration: [
+          { "PACKAGE":"clang-3.9", "COMPILER":"clang", "COMPILER_VER":"3.9", "COMPILER_C": "clang-3.9","COMPILER_CXX": "clang++-3.9","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-3.9", "COMPILER":"clang", "COMPILER_VER":"3.9", "COMPILER_C": "clang-3.9","COMPILER_CXX": "clang++-3.9","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-3.9", "COMPILER":"clang", "COMPILER_VER":"3.9", "COMPILER_C": "clang-3.9","COMPILER_CXX": "clang++-3.9","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-3.9", "COMPILER":"clang", "COMPILER_VER":"3.9", "COMPILER_C": "clang-3.9","COMPILER_CXX": "clang++-3.9","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          #{ "PACKAGE":"clang-3.9", "COMPILER":"clang", "COMPILER_VER":"3.9", "COMPILER_C": "clang-3.9","COMPILER_CXX": "clang++-3.9","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          #{ "PACKAGE":"clang-3.9", "COMPILER":"clang", "COMPILER_VER":"3.9", "COMPILER_C": "clang-3.9","COMPILER_CXX": "clang++-3.9","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+          { "PACKAGE":"clang-4.0", "COMPILER":"clang", "COMPILER_VER":"4.0", "COMPILER_C": "clang-4.0","COMPILER_CXX": "clang++-4.0","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-4.0", "COMPILER":"clang", "COMPILER_VER":"4.0", "COMPILER_C": "clang-4.0","COMPILER_CXX": "clang++-4.0","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-4.0", "COMPILER":"clang", "COMPILER_VER":"4.0", "COMPILER_C": "clang-4.0","COMPILER_CXX": "clang++-4.0","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-4.0", "COMPILER":"clang", "COMPILER_VER":"4.0", "COMPILER_C": "clang-4.0","COMPILER_CXX": "clang++-4.0","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          #{ "PACKAGE":"clang-4.0", "COMPILER":"clang", "COMPILER_VER":"4.0", "COMPILER_C": "clang-4.0","COMPILER_CXX": "clang++-4.0","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          #{ "PACKAGE":"clang-4.0", "COMPILER":"clang", "COMPILER_VER":"4.0", "COMPILER_C": "clang-4.0","COMPILER_CXX": "clang++-4.0","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+          { "PACKAGE":"clang-5.0", "COMPILER":"clang", "COMPILER_VER":"5.0", "COMPILER_C": "clang-5.0","COMPILER_CXX": "clang++-5.0","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-5.0", "COMPILER":"clang", "COMPILER_VER":"5.0", "COMPILER_C": "clang-5.0","COMPILER_CXX": "clang++-5.0","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-5.0", "COMPILER":"clang", "COMPILER_VER":"5.0", "COMPILER_C": "clang-5.0","COMPILER_CXX": "clang++-5.0","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-5.0", "COMPILER":"clang", "COMPILER_VER":"5.0", "COMPILER_C": "clang-5.0","COMPILER_CXX": "clang++-5.0","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-5.0", "COMPILER":"clang", "COMPILER_VER":"5.0", "COMPILER_C": "clang-5.0","COMPILER_CXX": "clang++-5.0","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          { "PACKAGE":"clang-5.0", "COMPILER":"clang", "COMPILER_VER":"5.0", "COMPILER_C": "clang-5.0","COMPILER_CXX": "clang++-5.0","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+          { "PACKAGE":"clang-6.0", "COMPILER":"clang", "COMPILER_VER":"6.0", "COMPILER_C": "clang-6.0","COMPILER_CXX": "clang++-6.0","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-6.0", "COMPILER":"clang", "COMPILER_VER":"6.0", "COMPILER_C": "clang-6.0","COMPILER_CXX": "clang++-6.0","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-6.0", "COMPILER":"clang", "COMPILER_VER":"6.0", "COMPILER_C": "clang-6.0","COMPILER_CXX": "clang++-6.0","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-6.0", "COMPILER":"clang", "COMPILER_VER":"6.0", "COMPILER_C": "clang-6.0","COMPILER_CXX": "clang++-6.0","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-6.0", "COMPILER":"clang", "COMPILER_VER":"6.0", "COMPILER_C": "clang-6.0","COMPILER_CXX": "clang++-6.0","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          { "PACKAGE":"clang-6.0", "COMPILER":"clang", "COMPILER_VER":"6.0", "COMPILER_C": "clang-6.0","COMPILER_CXX": "clang++-6.0","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+          { "PACKAGE":"clang-7", "COMPILER":"clang", "COMPILER_VER":"7.0", "COMPILER_C": "clang-7","COMPILER_CXX": "clang++-7","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-7", "COMPILER":"clang", "COMPILER_VER":"7.0", "COMPILER_C": "clang-7","COMPILER_CXX": "clang++-7","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-7", "COMPILER":"clang", "COMPILER_VER":"7.0", "COMPILER_C": "clang-7","COMPILER_CXX": "clang++-7","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-7", "COMPILER":"clang", "COMPILER_VER":"7.0", "COMPILER_C": "clang-7","COMPILER_CXX": "clang++-7","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-7", "COMPILER":"clang", "COMPILER_VER":"7.0", "COMPILER_C": "clang-7","COMPILER_CXX": "clang++-7","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          { "PACKAGE":"clang-7", "COMPILER":"clang", "COMPILER_VER":"7.0", "COMPILER_C": "clang-7","COMPILER_CXX": "clang++-7","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+          { "PACKAGE":"clang-8", "COMPILER":"clang", "COMPILER_VER":"8", "COMPILER_C": "clang-8","COMPILER_CXX": "clang++-8","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-8", "COMPILER":"clang", "COMPILER_VER":"8", "COMPILER_C": "clang-8","COMPILER_CXX": "clang++-8","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-8", "COMPILER":"clang", "COMPILER_VER":"8", "COMPILER_C": "clang-8","COMPILER_CXX": "clang++-8","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-8", "COMPILER":"clang", "COMPILER_VER":"8", "COMPILER_C": "clang-8","COMPILER_CXX": "clang++-8","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-8", "COMPILER":"clang", "COMPILER_VER":"8", "COMPILER_C": "clang-8","COMPILER_CXX": "clang++-8","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          { "PACKAGE":"clang-8", "COMPILER":"clang", "COMPILER_VER":"8", "COMPILER_C": "clang-8","COMPILER_CXX": "clang++-8","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+          { "PACKAGE":"clang-9", "COMPILER":"clang", "COMPILER_VER":"9", "COMPILER_C": "clang-9","COMPILER_CXX": "clang++-9","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-9", "COMPILER":"clang", "COMPILER_VER":"9", "COMPILER_C": "clang-9","COMPILER_CXX": "clang++-9","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-9", "COMPILER":"clang", "COMPILER_VER":"9", "COMPILER_C": "clang-9","COMPILER_CXX": "clang++-9","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-9", "COMPILER":"clang", "COMPILER_VER":"9", "COMPILER_C": "clang-9","COMPILER_CXX": "clang++-9","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-9", "COMPILER":"clang", "COMPILER_VER":"9", "COMPILER_C": "clang-9","COMPILER_CXX": "clang++-9","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          { "PACKAGE":"clang-9", "COMPILER":"clang", "COMPILER_VER":"9", "COMPILER_C": "clang-9","COMPILER_CXX": "clang++-9","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+          { "PACKAGE":"clang-10", "COMPILER":"clang", "COMPILER_VER":"10", "COMPILER_C": "clang-10","COMPILER_CXX": "clang++-10","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-10", "COMPILER":"clang", "COMPILER_VER":"10", "COMPILER_C": "clang-10","COMPILER_CXX": "clang++-10","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          { "PACKAGE":"clang-10", "COMPILER":"clang", "COMPILER_VER":"10", "COMPILER_C": "clang-10","COMPILER_CXX": "clang++-10","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-10", "COMPILER":"clang", "COMPILER_VER":"10", "COMPILER_C": "clang-10","COMPILER_CXX": "clang++-10","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          { "PACKAGE":"clang-10", "COMPILER":"clang", "COMPILER_VER":"10", "COMPILER_C": "clang-10","COMPILER_CXX": "clang++-10","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          { "PACKAGE":"clang-10", "COMPILER":"clang", "COMPILER_VER":"10", "COMPILER_C": "clang-10","COMPILER_CXX": "clang++-10","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+          #{ "PACKAGE":"clang-11", "COMPILER":"clang", "COMPILER_VER":"11", "COMPILER_C": "clang-11","COMPILER_CXX": "clang++-11","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          #{ "PACKAGE":"clang-11", "COMPILER":"clang", "COMPILER_VER":"11", "COMPILER_C": "clang-11","COMPILER_CXX": "clang++-11","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          #{ "PACKAGE":"clang-11", "COMPILER":"clang", "COMPILER_VER":"11", "COMPILER_C": "clang-11","COMPILER_CXX": "clang++-11","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          #{ "PACKAGE":"clang-11", "COMPILER":"clang", "COMPILER_VER":"11", "COMPILER_C": "clang-11","COMPILER_CXX": "clang++-11","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          #{ "PACKAGE":"clang-11", "COMPILER":"clang", "COMPILER_VER":"11", "COMPILER_C": "clang-11","COMPILER_CXX": "clang++-11","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          #{ "PACKAGE":"clang-11", "COMPILER":"clang", "COMPILER_VER":"11", "COMPILER_C": "clang-11","COMPILER_CXX": "clang++-11","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+          #{ "PACKAGE":"clang-12", "COMPILER":"clang", "COMPILER_VER":"12", "COMPILER_C": "clang-12","COMPILER_CXX": "clang++-12","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
+          #{ "PACKAGE":"clang-12", "COMPILER":"clang", "COMPILER_VER":"12", "COMPILER_C": "clang-12","COMPILER_CXX": "clang++-12","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
+          #{ "PACKAGE":"clang-12", "COMPILER":"clang", "COMPILER_VER":"12", "COMPILER_C": "clang-12","COMPILER_CXX": "clang++-12","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
+          #{ "PACKAGE":"clang-12", "COMPILER":"clang", "COMPILER_VER":"12", "COMPILER_C": "clang-12","COMPILER_CXX": "clang++-12","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
+          #{ "PACKAGE":"clang-12", "COMPILER":"clang", "COMPILER_VER":"12", "COMPILER_C": "clang-12","COMPILER_CXX": "clang++-12","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
+          #{ "PACKAGE":"clang-12", "COMPILER":"clang", "COMPILER_VER":"12", "COMPILER_C": "clang-12","COMPILER_CXX": "clang++-12","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
+         
+        ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install compiler
+        run: |
+          sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+          sudo apt-get update
+          sudo apt-get install ninja-build ${{ matrix.configuration.PACKAGE}} python3-pip python3 python3-dev python3-setuptools
+          pip3 install --no-cache-dir conan==1.38.0
+
+      - name: Install conan dependencies
+        run: |
+          conan profile new default --detect
+          conan profile update settings.compiler=${{ matrix.configuration.COMPILER}} default
+          conan profile update settings.compiler.version=${{ matrix.configuration.COMPILER_VER}} default
+          conan profile update env.CXX=${{ matrix.configuration.COMPILER_CXX}} default
+          conan profile update env.CC=${{ matrix.configuration.COMPILER_C}} default
+          mkdir -p ${{github.workspace}}/build
+          conan install ${{github.workspace}}/build/.. -if ${{github.workspace}}/build --build=missing -s build_type=Release
+
+      - name: Configure CMake
+        env:
+          CC: ${{ matrix.configuration.COMPILER_C}}
+          CXX: ${{ matrix.configuration.COMPILER_CXX}}
+        run: cmake -B ${{github.workspace}}/build -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.configuration.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{ matrix.configuration.CXX_STANDARD}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{ matrix.configuration.BUILD_TYPE}}
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        run: ctest -C ${{env.BUILD_TYPE}}
+      

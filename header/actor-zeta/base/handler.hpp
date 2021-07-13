@@ -12,7 +12,7 @@ namespace actor_zeta { namespace base {
     public:
         virtual ~handler() = default;
 
-        virtual void invoke(context&) = 0;
+        virtual void invoke(communication_module&) = 0;
     };
 
     class helper final : public handler {
@@ -25,12 +25,12 @@ namespace actor_zeta { namespace base {
         template<typename F, typename ClassPtr>
         helper(F&& f, ClassPtr* self);
 
-        void invoke(context& ctx) final {
+        void invoke(communication_module& ctx) final {
             helper_(ctx);
         }
 
     private:
-        std::function<void(context&)> helper_;
+        std::function<void(communication_module&)> helper_;
     };
 
     template<typename F>

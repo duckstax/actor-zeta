@@ -3,20 +3,19 @@
 #include <atomic>
 #include <cstddef>
 
-
 namespace actor_zeta {
-///
-/// @brief This class represents reference counter
-///
+    ///
+    /// @brief This class represents reference counter
+    ///
     class ref_counted {
     public:
         virtual ~ref_counted();
 
         ref_counted();
 
-        ref_counted(const ref_counted &);
+        ref_counted(const ref_counted&);
 
-        ref_counted &operator=(const ref_counted &);
+        ref_counted& operator=(const ref_counted&);
 
         void ref() const noexcept {
             rc_.fetch_add(1, std::memory_order_relaxed);
@@ -48,4 +47,4 @@ namespace actor_zeta {
         p->deref();
     }
 
-}
+} // namespace actor_zeta

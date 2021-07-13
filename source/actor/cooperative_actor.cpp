@@ -2,12 +2,11 @@
 #include <iostream>
 
 // clang-format off
-#include <actor-zeta/base/context.hpp>
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address.hpp>
 #include <actor-zeta/base/message.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/execution_device.hpp>
-#include <actor-zeta/base/supervisor.hpp>
+#include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/base/cooperative_actor.hpp>
 // clang-format on
 
@@ -114,10 +113,10 @@ namespace actor_zeta { namespace base {
     }
 
     cooperative_actor::cooperative_actor(
-        supervisor_t* supervisor,
+        supervisor_abstract* supervisor,
         std::string type)
-        : abstract_actor( std::move(type))
-        , supervisor_(supervisor)  {
+        : actor_abstract(std::move(type))
+        , supervisor_(supervisor) {
         flags(static_cast<int>(state::empty));
         mailbox().try_unblock();
     }
@@ -125,8 +124,10 @@ namespace actor_zeta { namespace base {
     cooperative_actor::~cooperative_actor() {}
 
     bool cooperative_actor::activate(executor::execution_device* ctx) {
-        assert(ctx != nullptr);
-        context(ctx);
+        //assert(ctx != nullptr);
+        if (ctx) {
+            context(ctx);
+        }
         return true;
     }
 
@@ -177,7 +178,7 @@ namespace actor_zeta { namespace base {
 
     void cooperative_actor::consume(message& x) {
         current_message_ = &x;
-        execute(*this);
+        execute();
     }
 
     bool cooperative_actor::consume_from_cache() {
@@ -198,18 +199,18 @@ namespace actor_zeta { namespace base {
         return current_message_;
     }
 
-        executor::execution_device *cooperative_actor::context() const {
-            return executor_;
-        }
+    executor::execution_device* cooperative_actor::context() const {
+        return executor_;
+    }
 
-        void cooperative_actor::context(executor::execution_device *e) {
-            if (e!= nullptr) {
-                executor_ = e;
-            }
+    void cooperative_actor::context(executor::execution_device* e) {
+        if (e != nullptr) {
+            executor_ = e;
         }
+    }
 
-        auto cooperative_actor::supervisor() -> supervisor_t* {
-            return supervisor_;
-        }
+    auto cooperative_actor::supervisor() -> supervisor_abstract* {
+        return supervisor_;
+    }
 
 }} // namespace actor_zeta::base

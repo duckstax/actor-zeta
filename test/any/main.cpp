@@ -1,498 +1,336 @@
-#include <actor-zeta/detail/any.hpp>
-#include <numeric>
-#include <vector>
-#include <string>
-#include <cassert>
+#define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
+#include <catch2/catch.hpp>
 
-using actor_zeta::detail::any;
-using actor_zeta::detail::any_cast;
-using actor_zeta::detail::make_any;
+#include "classes.hpp"
 
-constexpr static uint32_t magic_value = 0x01f1cbe8;
-
-struct big_object final {
-    int             x_;
-    bool            throw_on_copy_;
-    int64_t         id_;
-    uint32_t        magic_value_;
-    static int64_t  counter_;
-    static int64_t  constructor_counter_;
-    static int64_t  destructor_counter_;
-    static int64_t  default_constructor_counter_;
-    static int64_t  arg_constructor_counter_;
-    static int64_t  copy_constructor_counter_;
-    static int64_t  move_constructor_counter_;
-    static int64_t  copy_assign_counter_;
-    static int64_t  move_assign_counter_;
-    static int      magic_error_counter_;
-
-    explicit big_object(int x = 0, bool bThrowOnCopy = false)
-            : x_(x), throw_on_copy_(bThrowOnCopy), magic_value_(magic_value)
-    {
-        ++counter_;
-        ++constructor_counter_;
-        ++default_constructor_counter_;
-        id_ = constructor_counter_;
-    }
-
-    big_object(int x0, int x1, int x2, bool throw_on_copy = false)
-            : x_(x0 + x1 + x2), throw_on_copy_(throw_on_copy), magic_value_(magic_value)
-    {
-        ++counter_;
-        ++constructor_counter_;
-        ++arg_constructor_counter_;
-        id_ = constructor_counter_;
-    }
-
-    big_object(const big_object& other)
-            : x_(other.x_), throw_on_copy_(other.throw_on_copy_), magic_value_(other.magic_value_)
-    {
-        ++counter_;
-        ++constructor_counter_;
-        ++copy_constructor_counter_;
-        id_ = constructor_counter_;
-    }
-
-    big_object(big_object&& other) ///TODO: noexcept
-            : x_(other.x_), throw_on_copy_(other.throw_on_copy_), magic_value_(other.magic_value_)
-    {
-        ++counter_;
-        ++constructor_counter_;
-        ++move_constructor_counter_;
-        id_ = constructor_counter_;
-        other.x_ = 0;
-    }
-
-    big_object& operator=(const big_object& other){
-        ++copy_assign_counter_;
-
-        if(&other != this){
-            x_ = other.x_;
-            magic_value_ = other.magic_value_;
-            throw_on_copy_ = other.throw_on_copy_;
-        }
-        return *this;
-    }
-
-    big_object& operator=(big_object&& other){
-        ++move_assign_counter_;
-
-        if(&other != this){
-            std::swap(x_, other.x_);
-            std::swap(magic_value_, other.magic_value_);
-            std::swap(throw_on_copy_, other.throw_on_copy_);
-        }
-        return *this;
-    }
-
-    ~big_object(){
-        if(magic_value_ != magic_value) {
-            ++magic_error_counter_;
-        }
-        magic_value_ = 0;
-        --counter_;
-        ++destructor_counter_;
-    }
-
-    static void reset(){
-        counter_                     = 0;
-        constructor_counter_         = 0;
-        destructor_counter_          = 0;
-        default_constructor_counter_ = 0;
-        arg_constructor_counter_     = 0;
-        copy_constructor_counter_    = 0;
-        move_constructor_counter_    = 0;
-        copy_assign_counter_         = 0;
-        move_assign_counter_         = 0;
-        magic_error_counter_         = 0;
-    }
-
-    static bool is_clear() {
-        return (counter_ == 0) && (destructor_counter_ == constructor_counter_) && (magic_error_counter_ == 0);
-    }
-};
-
-int64_t big_object::counter_                     = 0;
-int64_t big_object::constructor_counter_         = 0;
-int64_t big_object::destructor_counter_          = 0;
-int64_t big_object::default_constructor_counter_ = 0;
-int64_t big_object::arg_constructor_counter_     = 0;
-int64_t big_object::copy_constructor_counter_    = 0;
-int64_t big_object::move_constructor_counter_    = 0;
-int64_t big_object::copy_assign_counter_         = 0;
-int64_t big_object::move_assign_counter_         = 0;
-int     big_object::magic_error_counter_         = 0;
-
-struct small_object final {
-    static int constructor_counter_;
-
-    small_object() noexcept { constructor_counter_++; }
-    small_object(const small_object&) noexcept { constructor_counter_++; }
-    small_object(small_object&&) noexcept { constructor_counter_++; }
-    small_object& operator=(const small_object&) noexcept { constructor_counter_++; return *this; }
-    ~small_object() noexcept { constructor_counter_--; }
-
-    static void reset() { constructor_counter_ = 0; }
-    static bool is_clear() { return constructor_counter_ == 0; }
-};
-
-int small_object::constructor_counter_ = 0;
-
-
-struct list_of_numbers final {
-    list_of_numbers(std::initializer_list<int> numbers): sum(std::accumulate(begin(numbers), end(numbers), 0)) {}
-
-    int sum;
-};
-
-template <typename... Ts>
-void ignore_unused(Ts const& ...){}
-
-template <typename... Ts>
-void ignore_unused(){}
-
-
-int main() {
-
+TEST_CASE("any") {
     {
 #if not CPP17_OR_GREATER
-        static_assert(sizeof(std::string) <= sizeof(any), "has enough local memory to store");
-        static_assert(sizeof(std::vector<int>) <= sizeof(any), "has enough local memory to store");
+        REQUIRE(sizeof(std::string) <= sizeof(any));
+        REQUIRE(sizeof(std::vector<int>) <= sizeof(any));
 #endif
     }
 
-    {
+    SECTION("empty any") {
         any a;
-        assert(!a.has_value());
+        REQUIRE(!a.has_value());
     }
 
-    {
+    SECTION("string any") {
+        any a(std::string("test string"));
+        REQUIRE(a.has_value());
+        REQUIRE(any_cast<std::string>(a) == "test string");
+    }
+
+    SECTION("string reset any") {
+        any a(std::string("test string"));
+        REQUIRE(a.has_value());
+        a.reset();
+        REQUIRE(!a.has_value());
+    }
+
+    SECTION("assignment any") {
+        any a1 = 42;
+        any a2 = a1;
+
+        REQUIRE(a1.has_value());
+        REQUIRE(a2.has_value());
+        REQUIRE(any_cast<int>(a1) == any_cast<int>(a2));
+    }
+
+    SECTION("big_object any") {
         big_object::reset();
         { any a{big_object()}; }
-        assert(!big_object::is_clear());
+        REQUIRE(big_object::is_clear());
     }
 
-    {
+    SECTION("small_object any") {
         small_object::reset();
         { any a{small_object()}; }
-        assert(small_object::is_clear());
+        REQUIRE(small_object::is_clear());
     }
 
-    {
+    SECTION("any_cast") {
         any a(42);
-        assert(a.has_value() == true);
+        REQUIRE(a.has_value() == true);
 
-        assert(any_cast<int>(a) == 42);
-        assert(any_cast<int>(a) != 1337);
+        REQUIRE(any_cast<int>(a) == 42);
+        REQUIRE(any_cast<int>(a) != 1337);
         any_cast<int&>(a) = 10;
-        assert(any_cast<int>(a) == 10);
+        REQUIRE(any_cast<int>(a) == 10);
 
         a = 1.f;
         any_cast<float&>(a) = 1337.f;
-        assert(any_cast<float>(a) == 1337.f);
+        REQUIRE(any_cast<float>(a) == 1337.f);
 
         a = 4343;
-        assert(any_cast<int>(a) == 4343);
+        REQUIRE(any_cast<int>(a) == 4343);
 
         a = std::string("hello world");
-        assert(any_cast<std::string>(a) == "hello world");
-        assert(any_cast<std::string&>(a) == "hello world");
+        REQUIRE(any_cast<std::string>(a) == "hello world");
+        REQUIRE(any_cast<std::string&>(a) == "hello world");
     }
 
-    {
+    SECTION("custom_type any") {
         struct custom_type {
-            custom_type():data_(){}
+            custom_type()
+                : data_() {}
             int data_;
         };
 
         any a = custom_type();
         any_cast<custom_type&>(a).data_ = 42;
-        assert(any_cast<custom_type>(a).data_ == 42);
+        REQUIRE(any_cast<custom_type>(a).data_ == 42);
     }
 
-    {
-        any a = 42;
-        assert(any_cast<int>(a) == 42);
-    }
-
-    {
+    SECTION("vector any_cast 1") {
         std::vector<any> va = {42, 'a', 42.f, 3333u, 4444ul, 5555ull, 6666.0};
 
-        assert(any_cast<int>(va[0]) == 42);
-        assert(any_cast<char>(va[1]) == 'a');
-        assert(any_cast<float>(va[2]) == 42.f);
-        assert(any_cast<unsigned>(va[3]) == 3333u);
-        assert(any_cast<unsigned long>(va[4]) == 4444ul);
-        assert(any_cast<unsigned long long>(va[5]) == 5555ull);
-        assert(any_cast<double>(va[6]) == 6666.0);
+        REQUIRE(any_cast<int>(va[0]) == 42);
+        REQUIRE(any_cast<char>(va[1]) == 'a');
+        REQUIRE(any_cast<float>(va[2]) == 42.f);
+        REQUIRE(any_cast<unsigned>(va[3]) == 3333u);
+        REQUIRE(any_cast<unsigned long>(va[4]) == 4444ul);
+        REQUIRE(any_cast<unsigned long long>(va[5]) == 5555ull);
+        REQUIRE(any_cast<double>(va[6]) == 6666.0);
     }
 
-    {
-        any a(std::string("test string"));
-        assert(a.has_value());
-        assert(any_cast<std::string>(a) == "test string");
-    }
-
-    {
+    SECTION("vector any_cast 2") {
         std::vector<any> va = {42, std::string("ted"), 'a', 42.f};
-        assert(any_cast<int>(va[0]) == 42);
-        assert(any_cast<std::string>(va[1]) == "ted");
-        assert(any_cast<char>(va[2]) == 'a');
-        assert(any_cast<float>(va[3]) == 42.f);
+        REQUIRE(any_cast<int>(va[0]) == 42);
+        REQUIRE(any_cast<std::string>(va[1]) == "ted");
+        REQUIRE(any_cast<char>(va[2]) == 'a');
+        REQUIRE(any_cast<float>(va[3]) == 42.f);
     }
 
-    {
+    SECTION("vector emplace_back any_cast") {
         std::vector<any> va;
         va.emplace_back(42);
         va.emplace_back(std::string("ted"));
         va.emplace_back('a');
         va.emplace_back(42.f);
 
-        assert(any_cast<int>(va[0]) == 42);
-        assert(any_cast<std::string>(va[1]) == "ted");
-        assert(any_cast<char>(va[2]) == 'a');
-        assert(any_cast<float>(va[3]) == 42.f);
+        REQUIRE(any_cast<int>(va[0]) == 42);
+        REQUIRE(any_cast<std::string>(va[1]) == "ted");
+        REQUIRE(any_cast<char>(va[2]) == 'a');
+        REQUIRE(any_cast<float>(va[3]) == 42.f);
     }
 
-    {
+    SECTION("vector and big_object any_cast") {
         big_object::reset();
         {
             std::vector<any> va = {42, 'a', 42.f, 3333u, 4444ul, 5555ull, 6666.0};
 
-            assert(any_cast<int>(va[0]) == 42);
-            assert(any_cast<char>(va[1]) == 'a');
-            assert(any_cast<float>(va[2]) == 42.f);
-            assert(any_cast<unsigned>(va[3]) == 3333u);
-            assert(any_cast<unsigned long>(va[4]) == 4444ul);
-            assert(any_cast<unsigned long long>(va[5]) == 5555ull);
-            assert(any_cast<double>(va[6]) == 6666.0);
+            REQUIRE(any_cast<int>(va[0]) == 42);
+            REQUIRE(any_cast<char>(va[1]) == 'a');
+            REQUIRE(any_cast<float>(va[2]) == 42.f);
+            REQUIRE(any_cast<unsigned>(va[3]) == 3333u);
+            REQUIRE(any_cast<unsigned long>(va[4]) == 4444ul);
+            REQUIRE(any_cast<unsigned long long>(va[5]) == 5555ull);
+            REQUIRE(any_cast<double>(va[6]) == 6666.0);
 
             va[3] = big_object(3333);
 
-            assert(any_cast<int>(va[0]) == 42);
-            assert(any_cast<char>(va[1]) == 'a');
-            assert(any_cast<float>(va[2]) == 42.f);
-            assert(any_cast<big_object>(va[3]).x_ == 3333);
-            assert(any_cast<unsigned long>(va[4]) == 4444ul);
-            assert(any_cast<unsigned long long>(va[5]) == 5555ull);
-            assert(any_cast<double>(va[6]) == 6666.0);
+            REQUIRE(any_cast<int>(va[0]) == 42);
+            REQUIRE(any_cast<char>(va[1]) == 'a');
+            REQUIRE(any_cast<float>(va[2]) == 42.f);
+            REQUIRE(any_cast<big_object>(va[3]).x_ == 3333);
+            REQUIRE(any_cast<unsigned long>(va[4]) == 4444ul);
+            REQUIRE(any_cast<unsigned long long>(va[5]) == 5555ull);
+            REQUIRE(any_cast<double>(va[6]) == 6666.0);
         }
-        assert(!big_object::is_clear());
+        REQUIRE(big_object::is_clear());
     }
 
-    {
-        any a(std::string("test string"));
-        assert(a.has_value());
-        a.reset();
-        assert(!a.has_value());
-    }
-
-    {
-        any a1 = 42;
-        any a2 = a1;
-
-        assert(a1.has_value());
-        assert(a2.has_value());
-        assert(any_cast<int>(a1) == any_cast<int>(a2));
-    }
-
-    {
+    SECTION("assignment string any_cast 1") {
         any a1;
-        assert(!a1.has_value());
+        REQUIRE(!a1.has_value());
         {
             any a2(std::string("test string"));
             a1 = any_cast<std::string>(a2);
 
-            assert(a1.has_value());
+            REQUIRE(a1.has_value());
         }
-        assert(any_cast<std::string>(a1) == "test string");
-        assert(a1.has_value());
+        REQUIRE(any_cast<std::string>(a1) == "test string");
+        REQUIRE(a1.has_value());
     }
 
-    {
+    SECTION("assignment string any_cast 2") {
         any a1;
-        assert(!a1.has_value());
+        REQUIRE(!a1.has_value());
         {
             any a2(std::string("test string"));
             a1 = a2;
-            assert(a1.has_value());
+            REQUIRE(a1.has_value());
         }
-        assert(any_cast<std::string&>(a1) == "test string");
-        assert(a1.has_value());
+        REQUIRE(any_cast<std::string&>(a1) == "test string");
+        REQUIRE(a1.has_value());
     }
 
-    {
-        {
-            any a1 = 42;
-            any a2 = 24;
-            assert(any_cast<int>(a1) == 42);
-            assert(any_cast<int>(a2) == 24);
+    SECTION("int swap any_cast") {
+        any a1 = 42;
+        any a2 = 24;
+        REQUIRE(any_cast<int>(a1) == 42);
+        REQUIRE(any_cast<int>(a2) == 24);
 
-            a1.swap(a2);
-            assert(any_cast<int>(a1) == 24);
-            assert(any_cast<int>(a2) == 42);
+        a1.swap(a2);
+        REQUIRE(any_cast<int>(a1) == 24);
+        REQUIRE(any_cast<int>(a2) == 42);
 
-            std::swap(a1, a2);
-            assert(any_cast<int>(a1) == 42);
-            assert(any_cast<int>(a2) == 24);
-        }
-        {
-            any a1 = std::string("hello");
-            any a2 = std::string("world");
-            assert(any_cast<std::string>(a1) == "hello");
-            assert(any_cast<std::string>(a2) == "world");
-
-            a1.swap(a2);
-            assert(any_cast<std::string>(a1) == "world");
-            assert(any_cast<std::string>(a2) == "hello");
-
-            std::swap(a1, a2);
-            assert(any_cast<std::string>(a1) == "hello");
-            assert(any_cast<std::string>(a2) == "world");
-        }
+        std::swap(a1, a2);
+        REQUIRE(any_cast<int>(a1) == 42);
+        REQUIRE(any_cast<int>(a2) == 24);
     }
 
-    {
+    SECTION("string swap any_cast") {
+        any a1 = std::string("hello");
+        any a2 = std::string("world");
+        REQUIRE(any_cast<std::string>(a1) == "hello");
+        REQUIRE(any_cast<std::string>(a2) == "world");
+
+        a1.swap(a2);
+        REQUIRE(any_cast<std::string>(a1) == "world");
+        REQUIRE(any_cast<std::string>(a2) == "hello");
+
+        std::swap(a1, a2);
+        REQUIRE(any_cast<std::string>(a1) == "hello");
+        REQUIRE(any_cast<std::string>(a2) == "world");
+    }
+
+    SECTION("emplace reset any_cast") {
         any a;
 
         a.emplace<int>(42);
-        assert(a.has_value());
-        assert(any_cast<int>(a) == 42);
+        REQUIRE(a.has_value());
+        REQUIRE(any_cast<int>(a) == 42);
 
-        a.emplace<short>((short)8); // no way to define a short literal we must cast here.
-        assert(any_cast<short>(a) == 8);
-        assert(a.has_value());
+        a.emplace<short>(static_cast<short>(8)); // no way to define a short literal we must cast here.
+        REQUIRE(any_cast<short>(a) == 8);
+        REQUIRE(a.has_value());
 
         a.reset();
-        assert(!a.has_value());
+        REQUIRE(!a.has_value());
     }
 
-    {
+    SECTION("big_object emplace") {
         big_object::reset();
         {
             any a;
             a.emplace<big_object>();
-            assert(a.has_value());
+            REQUIRE(a.has_value());
         }
-        assert(!big_object::is_clear());
+        REQUIRE(big_object::is_clear());
     }
 
-    {
-        {
-            any a;
-            a.emplace<list_of_numbers>(std::initializer_list<int>{1, 2, 3, 4, 5, 6});
+    SECTION("emplace list any_cast") {
+        any a;
+        a.emplace<list_of_numbers>(std::initializer_list<int>{1, 2, 3, 4, 5, 6});
 
-            assert(a.has_value());
-            assert(any_cast<list_of_numbers>(a).sum == 21);
-        }
+        REQUIRE(a.has_value());
+        REQUIRE(any_cast<list_of_numbers>(a).sum == 21);
     }
 
-    {
+    SECTION("comparison any_cast") {
         any a, b;
-        assert(!a.has_value() == !b.has_value());
+        REQUIRE(!a.has_value() == !b.has_value());
 
-        a = 42; b = 24;
-        assert(any_cast<int>(a) != any_cast<int>(b));
-        assert(a.has_value() == b.has_value());
+        a = 42;
+        b = 24;
+        REQUIRE(any_cast<int>(a) != any_cast<int>(b));
+        REQUIRE(a.has_value() == b.has_value());
 
-        a = 42; b = 42;
-        assert(any_cast<int>(a) == any_cast<int>(b));
-        assert(a.has_value() == b.has_value());
+        a = 42;
+        b = 42;
+        REQUIRE(any_cast<int>(a) == any_cast<int>(b));
+        REQUIRE(a.has_value() == b.has_value());
     }
 
-    {
+    SECTION("string move any_cast") {
         any a = std::string("hello world");
-        assert(any_cast<std::string&>(a) == "hello world");
+        REQUIRE(any_cast<std::string&>(a) == "hello world");
 
         auto s = move(any_cast<std::string&>(a));
-        assert(s == "hello world");
-        assert(any_cast<std::string&>(a).empty());
+        REQUIRE(s == "hello world");
+        REQUIRE(any_cast<std::string&>(a).empty());
 
         any_cast<std::string&>(a) = move(s);
-        assert(any_cast<std::string&>(a) == "hello world");
+        REQUIRE(any_cast<std::string&>(a) == "hello world");
     }
 
-    {
+    SECTION("any_cast nullptr") {
         any* a = nullptr;
-        assert(any_cast<int>(a) == nullptr);
-        assert(any_cast<short>(a) == nullptr);
-        assert(any_cast<long>(a) == nullptr);
-        assert(any_cast<std::string>(a) == nullptr);
+        REQUIRE(any_cast<int>(a) == nullptr);
+        REQUIRE(any_cast<short>(a) == nullptr);
+        REQUIRE(any_cast<long>(a) == nullptr);
+        REQUIRE(any_cast<std::string>(a) == nullptr);
         ignore_unused(a);
 
         any b;
-        assert(any_cast<short>(&b) == nullptr);
-        assert(any_cast<const short>(&b) == nullptr);
-        assert(any_cast<volatile short>(&b) == nullptr);
-        assert(any_cast<const volatile short>(&b) == nullptr);
+        REQUIRE(any_cast<short>(&b) == nullptr);
+        REQUIRE(any_cast<const short>(&b) == nullptr);
+        REQUIRE(any_cast<volatile short>(&b) == nullptr);
+        REQUIRE(any_cast<const volatile short>(&b) == nullptr);
 
-        assert(any_cast<short*>(&b) == nullptr);
-        assert(any_cast<const short*>(&b) == nullptr);
-        assert(any_cast<volatile short*>(&b) == nullptr);
-        assert(any_cast<const volatile short*>(&b) == nullptr);
+        REQUIRE(any_cast<short*>(&b) == nullptr);
+        REQUIRE(any_cast<const short*>(&b) == nullptr);
+        REQUIRE(any_cast<volatile short*>(&b) == nullptr);
+        REQUIRE(any_cast<const volatile short*>(&b) == nullptr);
     }
 
-    {
-        {
-            auto a = make_any<int>(42);
-            assert(any_cast<int>(a) == 42);
-        }
-
-        {
-            auto a = make_any<list_of_numbers>(std::initializer_list<int>{1, 2, 3, 4, 5, 6, 7, 8});
-            assert(any_cast<list_of_numbers&>(a).sum == 36);
-        }
+    SECTION("make_any any_cast") {
+        auto a = make_any<int>(42);
+        REQUIRE(any_cast<int>(a) == 42);
     }
 
-    {
+    SECTION("make_any list any_cast") {
+        auto a = make_any<list_of_numbers>(std::initializer_list<int>{1, 2, 3, 4, 5, 6, 7, 8});
+        REQUIRE(any_cast<list_of_numbers&>(a).sum == 36);
+    }
+
+    SECTION("float any_cast") {
         float f = 42.f;
         any a(f);
-        assert(any_cast<float>(a) == 42.f);
+        REQUIRE(any_cast<float>(a) == 42.f);
     }
 
-    {
+    SECTION("rawptr any_cast") {
         any a = 1;
         int* i = any_cast<int>(&a);
-        assert((*i) == 1);
-        ignore_unused(i);
+        REQUIRE((*i) == 1);
     }
 
-    {
-        {
-            any a1;
-            any a2;
-            assert(a1.has_value() == false);
-            assert(a2.has_value() == false);
+    SECTION("empty any has_value") {
+        any a1;
+        any a2;
+        REQUIRE(a1.has_value() == false);
+        REQUIRE(a2.has_value() == false);
 
-            a1 = a2;
-            assert(a1.has_value() == false);
-            assert(a2.has_value() == false);
-        }
-
-        {
-            any a1 = 42;
-            any a2;
-            assert(a1.has_value() == true);
-            assert(a2.has_value() == false);
-
-            a1 = a2;
-            assert(a1.has_value() == false);
-            assert(a2.has_value() == false);
-        }
-
-        {
-            any a1;
-            any a2 = 42;
-            assert(a1.has_value() == false);
-            assert(a2.has_value() == true);
-
-            a1 = a2;
-            assert(a1.has_value() == true);
-            assert(a2.has_value() == true);
-            assert(any_cast<int>(a1) == 42);
-            assert(any_cast<int>(a2) == 42);
-        }
+        a1 = a2;
+        REQUIRE(a1.has_value() == false);
+        REQUIRE(a2.has_value() == false);
     }
 
-    return 0;
+    SECTION("any has_value") {
+        any a1 = 42;
+        any a2;
+        REQUIRE(a1.has_value() == true);
+        REQUIRE(a2.has_value() == false);
+
+        a1 = a2;
+        REQUIRE(a1.has_value() == false);
+        REQUIRE(a2.has_value() == false);
+    }
+
+    SECTION("has_value any_cast assignment") {
+        any a1;
+        any a2 = 42;
+        REQUIRE(a1.has_value() == false);
+        REQUIRE(a2.has_value() == true);
+
+        a1 = a2;
+        REQUIRE(a1.has_value() == true);
+        REQUIRE(a2.has_value() == true);
+        REQUIRE(any_cast<int>(a1) == 42);
+        REQUIRE(any_cast<int>(a2) == 42);
+    }
 }

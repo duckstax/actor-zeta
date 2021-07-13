@@ -1,6 +1,6 @@
 #include <utility>
 
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address.hpp>
 #include <actor-zeta/base/message.hpp>
 
 namespace actor_zeta { namespace base {
@@ -17,19 +17,15 @@ namespace actor_zeta { namespace base {
         return !command_.empty() || bool(sender_) || body_.has_value();
     }
 
-    message::message(base::actor_address sender, std::string name)
+    message::message(address_t sender, std::string name)
         : sender_(std::move(sender))
         , command_(std::move(name))
         , body_() {}
 
-    message::message(base::actor_address sender, std::string name, detail::any body)
+    message::message(address_t sender, std::string name, detail::any body)
         : sender_(std::move(sender))
         , command_(std::move(name))
         , body_(std::move(body)) {}
-
-    auto message::sender() const -> base::actor_address {
-        return sender_;
-    }
 
     void message::swap(message& other) noexcept {
         using std::swap;
@@ -50,4 +46,17 @@ namespace actor_zeta { namespace base {
         assert(body_.has_value());
         return body_;
     }
+
+    auto message::sender() & noexcept -> address_t& {
+        return sender_;
+    }
+
+    auto message::sender() && noexcept -> address_t&& {
+        return std::move(sender_);
+    }
+
+    auto message::sender() const& noexcept -> address_t const& {
+        return sender_;
+    }
+
 }} // namespace actor_zeta::base
