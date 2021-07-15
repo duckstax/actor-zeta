@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <iostream>
+#include <iterator>
 #include <memory>
 #include <queue>
 #include <thread>
@@ -41,12 +42,12 @@ public:
     explicit worker_t2(actor_zeta::supervisor_abstract* ptr)
         : actor_zeta::basic_async_actor(ptr, "bot2") {
         count++;
-        std::cout << "bot2 created\n";
+        std::cout << "bot2 created:" << address().get() << std::endl;
         add_handler("spawn_broadcast", &worker_t2::spawn_broadcast);
     }
 
     void spawn_broadcast(actor_zeta::address_t addr, actor_zeta::detail::string_view type) {
-        std::cout << "bot2 got actor: " << addr << " " << type << std::endl;
+        std::cout << "class:bot2 type:" << address().type() << "(" << address().get() << ") got actor: " << addr << " " << type << " " << addr.get() << std::endl;
     }
 };
 
@@ -55,11 +56,11 @@ public:
     explicit worker_t3(actor_zeta::supervisor_abstract* ptr)
         : actor_zeta::basic_async_actor(ptr, "bot3") {
         count++;
-        std::cout << "bot3 created\n";
+        std::cout << "bot3 created:" << address().get() << std::endl;
         add_handler("spawn_broadcast", &worker_t2::spawn_broadcast);
     }
     void spawn_broadcast(actor_zeta::address_t addr, actor_zeta::detail::string_view type) {
-        std::cout << "bot3 got actor: " << addr << " " << type << std::endl;
+        std::cout << "class:bot3 type:" << address().type() << "(" << address().get() << ") got actor: " << addr << " " << type << " " << addr.get() << std::endl;
     }
 };
 
@@ -71,6 +72,7 @@ public:
         : actor_zeta::basic_async_actor(ptr, "bot1")
         , ptr_(ptr) {
         count++;
+        std::cout << "bot1 created:" << address().get() << std::endl;
         add_handler("spawn_worker", &worker_t::spawn_worker);
         add_handler("spawn_broadcast", &worker_t2::spawn_broadcast);
     }
@@ -80,7 +82,7 @@ public:
         actor_zeta::spawn_actor<worker_t3>(ptr_);
     }
     void spawn_broadcast(actor_zeta::address_t addr, actor_zeta::detail::string_view type) {
-        std::cout << "bot1 got actor: " << addr << " " << type << std::endl;
+        std::cout << "class:bot1 type:" << address().type() << "(" << address().get() << ") got actor: " << addr << " " << type << " " << addr.get() << std::endl;
     }
 };
 
@@ -101,7 +103,7 @@ public:
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final { return e_.get(); }
 
     auto add_actor_impl(actor_zeta::actor t) -> void final {
-        std::cout << "sup: added actor:" << t.address() << " " << t.type() << std::endl;
+        std::cout << "sup: added actor:" << t.address() << " " << t.type() << " " << t->address().get() << std::endl;
         spawn_broadcast(t->address(), t->type());
         actors_.emplace_back(std::move(t));
     }
@@ -116,10 +118,11 @@ public:
 
     auto spawn_broadcast(actor_zeta::address_t addr, actor_zeta::detail::string_view type) -> void {
         for (auto& a : actors_) {
-            std::cout << "sendding to:" << a->type() << std::endl;
+            std::cout << "sendding to:" << a->type() << " " << a->address().get() << std::endl;
             actor_zeta::send(a, address(), "spawn_broadcast", addr, type);
         }
         for (auto& s : supervisors_for_broadcast_) {
+            std::cout << "sendding to:" << s->type() << " " << s->address().get() << std::endl;
             actor_zeta::send(s, address(), "spawn_broadcast", addr, type);
         }
     }
