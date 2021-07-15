@@ -116,6 +116,7 @@ public:
 
     auto spawn_broadcast(actor_zeta::address_t addr, actor_zeta::detail::string_view type) -> void {
         for (auto& a : actors_) {
+            std::cout << "sendding to:" << a->type() << std::endl;
             actor_zeta::send(a, address(), "spawn_broadcast", addr, type);
         }
         for (auto& s : supervisors_for_broadcast_) {
