@@ -23,9 +23,7 @@
 #include <actor-zeta/detail/type_traits.hpp>
 #endif
 
-namespace actor_zeta {
-namespace detail {
-namespace pmr {
+namespace actor_zeta { namespace detail { namespace pmr {
 
 #if CPP17_OR_GREATER
 #if __has_include(<memory_resource>)
