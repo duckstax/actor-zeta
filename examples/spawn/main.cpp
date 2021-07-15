@@ -57,7 +57,7 @@ public:
         : actor_zeta::basic_async_actor(ptr, "bot3") {
         count++;
         std::cout << "bot3 created:" << address().get() << std::endl;
-        add_handler("spawn_broadcast", &worker_t2::spawn_broadcast);
+        add_handler("spawn_broadcast", &worker_t3::spawn_broadcast);
     }
     void spawn_broadcast(actor_zeta::address_t addr, actor_zeta::detail::string_view type) {
         std::cout << "class:bot3 type:" << address().type() << "(" << address().get() << ") got actor: " << addr << " " << type << " " << addr.get() << std::endl;
@@ -74,7 +74,7 @@ public:
         count++;
         std::cout << "bot1 created:" << address().get() << std::endl;
         add_handler("spawn_worker", &worker_t::spawn_worker);
-        add_handler("spawn_broadcast", &worker_t2::spawn_broadcast);
+        add_handler("spawn_broadcast", &worker_t::spawn_broadcast);
     }
 
     auto spawn_worker() -> void {
