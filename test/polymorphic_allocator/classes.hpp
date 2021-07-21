@@ -4,8 +4,82 @@
 #include <actor-zeta/detail/pmr/polymorphic_allocator.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
 
+#include "test_memory_resource.hpp"
+
 using actor_zeta::detail::pmr::memory_resource;
 using actor_zeta::detail::pmr::polymorphic_allocator;
+
+struct destroyable {
+    static int count;
+    destroyable() { ++count; }
+    ~destroyable() { --count; }
+};
+
+int destroyable::count = 0;
+
+struct default_constructible {
+    static int constructed;
+    default_constructible()
+        : x(42) { ++constructed; }
+    int x{0};
+};
+
+int default_constructible::constructed = 0;
+
+template<class T>
+struct TestHarness {
+    TestResource R;
+    memory_resource* M = &R;
+    polymorphic_allocator<T> A = M;
+    bool constructed = false;
+    T* ptr;
+    TestHarness()
+        : ptr(A.allocate(1)) {}
+    template<class... Args>
+    void construct(Args&&... args) {
+        A.construct(ptr, std::forward<Args>(args)...);
+        constructed = true;
+    }
+    ~TestHarness() {
+        if (constructed)
+            A.destroy(ptr);
+        A.deallocate(ptr, 1);
+    }
+};
+struct CountCopies {
+    int count;
+    CountCopies()
+        : count(0) {}
+    CountCopies(CountCopies const& o)
+        : count(o.count + 1) {}
+};
+struct CountCopiesAllocV1 {
+    typedef polymorphic_allocator<char> allocator_type;
+    memory_resource* alloc;
+    int count;
+    CountCopiesAllocV1()
+        : alloc(nullptr)
+        , count(0) {}
+    CountCopiesAllocV1(std::allocator_arg_t, allocator_type const& a,
+                       CountCopiesAllocV1 const& o)
+        : alloc(a.resource())
+        , count(o.count + 1) {}
+    CountCopiesAllocV1(CountCopiesAllocV1 const& o)
+        : count(o.count + 1) {}
+};
+struct CountCopiesAllocV2 {
+    typedef polymorphic_allocator<char> allocator_type;
+    memory_resource* alloc;
+    int count;
+    CountCopiesAllocV2()
+        : alloc(nullptr)
+        , count(0) {}
+    CountCopiesAllocV2(CountCopiesAllocV2 const& o, allocator_type const& a)
+        : alloc(a.resource())
+        , count(o.count + 1) {}
+    CountCopiesAllocV2(CountCopiesAllocV2 const& o)
+        : count(o.count + 1) {}
+};
 
 struct x {
     x() = default;
