@@ -26,6 +26,7 @@ namespace actor_zeta { namespace base {
         using contacts_t = std::unordered_map<key_type, storage_contact_t>;
         using contacts_iterator_t = storage_contact_t::iterator;
         using range_t = std::pair<contacts_iterator_t, contacts_iterator_t>;
+        using address_range_t = std::pair<contacts_t::const_iterator, contacts_t::const_iterator>;
 
         communication_module() = delete;
 
@@ -55,6 +56,7 @@ namespace actor_zeta { namespace base {
         virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
 
         auto address_book(detail::string_view) -> address_t;
+        auto address_book() -> address_range_t;
 
         template<class F>
         auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {

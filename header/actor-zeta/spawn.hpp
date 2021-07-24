@@ -1,5 +1,6 @@
 #pragma once
 
+#include "actor-zeta/base/address.hpp"
 #include "actor-zeta/forwards.hpp"
 #include "send.hpp"
 
@@ -60,6 +61,13 @@ namespace actor_zeta {
         class = type_traits::enable_if_t<std::is_base_of<actor_abstract, Actor>::value>>
     auto spawn_actor(base::supervisor& supervisor, Args&&... args) -> void {
         spawn_actor_impl<Actor>(supervisor->address(), supervisor->address(), std::forward<Args>(args)...);
+    }
+
+    template<
+        class Actor,
+        class... Args>
+    auto spawn_actor(base::address_t recipient, base::address_t sender, Args&&... args) -> void {
+        spawn_actor_impl<Actor>(std::move(recipient), std::move(sender), std::forward<Args>(args)...);
     }
     /*
     template<
