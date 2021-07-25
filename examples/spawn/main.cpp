@@ -1,20 +1,19 @@
-#include <actor-zeta/link.hpp>
 #include <cassert>
+
 #include <chrono>
 #include <iostream>
-#include <iterator>
 #include <memory>
-#include <mutex>
-#include <queue>
-#include <sstream>
 #include <string>
 #include <thread>
 #include <unordered_set>
 #include <vector>
 
 #include <actor-zeta.hpp>
+#include <actor-zeta/link.hpp>
 
 using actor_zeta::abstract_executor;
+using actor_zeta::basic_async_actor;
+using actor_zeta::supervisor;
 
 using actor_zeta::abstract_executor;
 using actor_zeta::executor_t;
@@ -24,8 +23,6 @@ using actor_zeta::make_message;
 
 std::atomic_int count;
 const int max_queue = 100;
-
-std::mutex print_mt;
 
 template<typename Task, typename... Args>
 auto make_task(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
@@ -37,7 +34,7 @@ auto make_task_broadcast(actor_zeta::supervisor& executor_, const std::string& c
     executor_->broadcast(make_message(executor_->address(), command, std::move(Task(std::forward<Args>(args)...))));
 }
 
-auto thread_pool_deleter = [](abstract_executor* ptr) {
+auto thread_pool_deleter = [](actor_zeta::abstract_executor* ptr) -> void {
     ptr->stop();
     delete ptr;
 };
@@ -52,19 +49,20 @@ public:
         add_handler("print_links", &worker_t2::print_links);
     }
 
-    void spawn_broadcast(actor_zeta::address_t addr) {
-        std::cout << "class:bot2 type:" << address().type() << "(" << address().get() << ") got actor: "
-                  << addr << " " << addr.type() << " " << addr.get() << std::endl;
+    auto spawn_broadcast(actor_zeta::address_t addr) -> void {
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " got actor: " << addr.type() << "(" << addr.get() << ")" << std::endl;
         if (addr.type() == "bot3") {
-            std::cout << "class:bot2 linking with:" << addr << " " << addr.type() << " " << addr.get() << std::endl;
+            std::cout << address().type() << "(" << address().get() << ")"
+                      << " linking with it" << std::endl;
             auto self_addr = address();
             actor_zeta::link(self_addr, addr);
         }
     }
 
-    void print_links() {
-        std::lock_guard<decltype(print_mt)> mt(print_mt);
-        std::cout << "bot2 linked with:\n";
+    auto print_links() -> void {
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " linked with:\n";
         auto addrs = all_view_address();
         for (const auto& a : addrs) {
             std::cout << '\t' << a << std::endl;
@@ -77,19 +75,20 @@ public:
     explicit worker_t3(actor_zeta::supervisor_abstract* ptr)
         : actor_zeta::basic_async_actor(ptr, "bot3") {
         count++;
-        std::cout << "bot3 created:" << address().get() << std::endl;
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " created" << std::endl;
         add_handler("spawn_broadcast", &worker_t3::spawn_broadcast);
         add_handler("print_links", &worker_t3::print_links);
     }
 
-    void spawn_broadcast(actor_zeta::address_t addr) {
-        std::cout << "class:bot3 type:" << address().type() << "(" << address().get() << ") got actor: "
-                  << addr << " " << addr.type() << " " << addr.get() << std::endl;
+    auto spawn_broadcast(actor_zeta::address_t addr) -> void {
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " got actor: " << addr.type() << "(" << addr.get() << ")" << std::endl;
     }
 
-    void print_links() {
-        //std::lock_guard<decltype(print_mt)> mt(print_mt);
-        std::cout << "bot3 linked with:\n";
+    auto print_links() -> void {
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " linked with:\n";
         auto addrs = all_view_address();
         for (const auto& a : addrs) {
             std::cout << '\t' << a << std::endl;
@@ -98,18 +97,12 @@ public:
 };
 
 class worker_t final : public actor_zeta::basic_async_actor {
-    auto get_info() -> std::string {
-        std::string s;
-        std::stringstream ss(s);
-        ss << "class:bot1 type:" << this->type() << "(" << address().get() << ")";
-        return ss.str();
-    }
-
 public:
     explicit worker_t(actor_zeta::supervisor_abstract* ptr /*, int a, double b*/)
         : actor_zeta::basic_async_actor(ptr, "bot1") {
         count++;
-        std::cout << get_info() << " created" << std::endl;
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " created" << std::endl;
         add_handler("spawn_actor_in_bot", &worker_t::spawn_worker);
         add_handler("spawn_broadcast", &worker_t::spawn_broadcast);
         add_handler("print_links", &worker_t::print_links);
@@ -121,17 +114,18 @@ public:
         actor_zeta::spawn_actor<worker_t3>(addr, address());
     }
 
-    void spawn_broadcast(actor_zeta::address_t addr) {
-        std::cout << get_info() << " got actor: " << addr << " " << addr.type() << " " << addr.get() << std::endl;
+    auto spawn_broadcast(actor_zeta::address_t addr) -> void {
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " got actor: " << addr.type() << "(" << addr.get() << ")" << std::endl;
         if (addr.type() == "bot2") {
             auto self_addr = address();
             actor_zeta::link(self_addr, addr);
         }
     }
 
-    void print_links() {
-        //std::lock_guard<decltype(print_mt)> mt(print_mt);
-        std::cout << get_info() << " linked with:\n";
+    auto print_links() -> void {
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " linked with:\n";
         auto addrs = all_view_address();
         for (const auto& a : addrs) {
             std::cout << '\t' << a << std::endl;
@@ -153,7 +147,9 @@ public:
         add_handler("spawn_broadcast", &supervisor_lite::spawn_broadcast);
     }
 
-    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final { return e_.get(); }
+    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
+        return e_.get();
+    }
 
     auto add_actor_impl(actor_zeta::actor t) -> void final {
         std::cout << "sup: added actor:" << t.address() << " " << t.type() << " " << t->address().get() << std::endl;
@@ -224,10 +220,8 @@ auto main() -> int {
     int const actors = 1 + sends * 2;
     count = 0;
 
-    actor_zeta::spawn_actor<worker_t>(supervisor1); //actor creator, "bot1"
-    //actor_zeta::delegate_send(supervisor1, "bot1", "link_with", supervisor2->address()); //link bot-1 with manager-2
+    actor_zeta::spawn_actor<worker_t>(supervisor1);                                     //actor creator, "bot1"
     actor_zeta::delegate_send(supervisor1, "bot1", "add_link", supervisor2->address()); //link bot-1 with manager-2
-    //actor_zeta::delegate_send(supervisor1, "bot1", "print_links");
 
     for (auto i = sends - 1; i >= 0; --i) {
         std::cout << "sending spawn request#" << i << std::endl;
@@ -236,14 +230,15 @@ auto main() -> int {
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
     std::cerr << " Finish " << std::endl;
-    using namespace std::chrono_literals;
-    std::this_thread::sleep_for(100ms);
+
+    const auto sleep_time = std::chrono::milliseconds(100);
+    std::this_thread::sleep_for(sleep_time);
     actor_zeta::delegate_send(supervisor1, "bot1", "print_links");
-    std::this_thread::sleep_for(100ms);
+    std::this_thread::sleep_for(sleep_time);
     actor_zeta::delegate_send(supervisor2, "bot2", "print_links");
-    std::this_thread::sleep_for(100ms);
+    std::this_thread::sleep_for(sleep_time);
     actor_zeta::delegate_send(supervisor2, "bot3", "print_links");
-    std::this_thread::sleep_for(100ms);
+    std::this_thread::sleep_for(sleep_time);
 
     assert(count == actors);
     return 0;
