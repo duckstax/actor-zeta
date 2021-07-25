@@ -6,7 +6,6 @@
 #include <cassert>
 #include <memory>
 #include <new>
-#include <stdexcept>
 
 namespace actor_zeta { namespace detail { namespace pmr {
 
