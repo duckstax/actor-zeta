@@ -1,3 +1,4 @@
+#include <actor-zeta/make_message.hpp>
 #include <cassert>
 
 #include <chrono>
@@ -118,6 +119,8 @@ public:
         std::cout << address().type() << "(" << address().get() << ")"
                   << " got actor: " << addr.type() << "(" << addr.get() << ")" << std::endl;
         if (addr.type() == "bot2") {
+            std::cout << address().type() << "(" << address().get() << ")"
+                      << " linking with it" << std::endl;
             auto self_addr = address();
             actor_zeta::link(self_addr, addr);
         }
@@ -165,9 +168,7 @@ public:
         auto contacts = address_book();
         for (auto it = contacts.first; it != contacts.second; ++it) {
             if (it->first != sender.type()) {
-                for (auto& linked_addr : it->second) {
-                    actor_zeta::send(linked_addr, address(), "spawn_broadcast", address(), addr);
-                }
+                broadcast(it->first, make_message(address(), "spawn_broadcast", address(), addr));
             }
         }
     }
