@@ -40,7 +40,6 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
-    namespace resource = actor_zeta::detail::pmr::resource;
     namespace clang_impl = resource::clang_impl;
 
     template<typename T>
