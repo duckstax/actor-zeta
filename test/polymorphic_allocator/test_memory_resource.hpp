@@ -17,22 +17,14 @@
 using actor_zeta::detail::pmr::memory_resource;
 using actor_zeta::detail::pmr::polymorphic_allocator;
 
-// FIXME: This is a hack to allow uses_allocator_types.hpp to work with
-// erased_type. However we can't define that behavior directly in the header
-// because it can't include <experimental/memory_resource>
-/*template <>
-struct TransformErasedTypeAlloc<std::experimental::erased_type> {
-  using type = polymorphic_allocator<int>;
-};*/
-
-template<class ProviderT, int = 0>
-class TestResourceImp : public memory_resource {
+template<class provider_t, int = 0>
+class test_resource_impl_t : public memory_resource {
 public:
     static int resource_alive;
     static int resource_constructed;
     static int resource_destructed;
 
-    static void resetStatics() {
+    static void reset_statics() {
         assert(resource_alive == 0);
         resource_alive = 0;
         resource_constructed = 0;
@@ -40,17 +32,17 @@ public:
     }
 
     using memory_resource = memory_resource;
-    using Provider = ProviderT;
+    using provider = provider_t;
 
     int value;
 
-    explicit TestResourceImp(int val = 0)
+    explicit test_resource_impl_t(int val = 0)
         : value(val) {
         ++resource_alive;
         ++resource_constructed;
     }
 
-    ~TestResourceImp() noexcept {
+    ~test_resource_impl_t() noexcept {
         --resource_alive;
         ++resource_destructed;
     }
@@ -59,81 +51,81 @@ public:
         C.reset();
         P.reset();
     }
-    AllocController& getController() { return C; }
+    alloc_controller_t& get_controller() { return C; }
 
-    bool checkAlloc(void* p, std::size_t s, std::size_t a) const { return C.checkAlloc(p, s, a); }
+    bool check_alloc(void* p, std::size_t s, std::size_t a) const { return C.check_alloc(p, s, a); }
 
-    bool checkDealloc(void* p, std::size_t s, std::size_t a) const { return C.checkDealloc(p, s, a); }
+    bool check_dealloc(void* p, std::size_t s, std::size_t a) const { return C.check_dealloc(p, s, a); }
 
-    bool checkIsEqualCalledEq(int n) const { return C.checkIsEqualCalledEq(n); }
+    bool check_is_equal_called_eq(int n) const { return C.check_is_equal_called_eq(n); }
 
 protected:
     virtual void* do_allocate(std::size_t s, std::size_t a) {
         if (C.throw_on_alloc) {
 #ifndef TEST_HAS_NO_EXCEPTIONS
-            throw TestException{};
+            throw test_exception_t{};
 #else
             assert(false);
 #endif
         }
         void* ret = P.allocate(s, a);
-        C.countAlloc(ret, s, a);
+        C.count_alloc(ret, s, a);
         return ret;
     }
 
     virtual void do_deallocate(void* p, std::size_t s, std::size_t a) {
-        C.countDealloc(p, s, a);
+        C.count_dealloc(p, s, a);
         P.deallocate(p, s, a);
     }
 
     virtual bool do_is_equal(memory_resource const& other) const noexcept {
-        C.countIsEqual();
-        TestResourceImp const* o = static_cast<TestResourceImp const*>(&other);
+        C.count_is_equal();
+        test_resource_impl_t const* o = static_cast<test_resource_impl_t const*>(&other);
         return o && o->value == value;
     }
 
 private:
-    mutable AllocController C;
-    mutable Provider P;
-    DISALLOW_COPY(TestResourceImp);
+    mutable alloc_controller_t C;
+    mutable provider P;
+    DISALLOW_COPY(test_resource_impl_t);
 };
 
-template<class Provider, int N>
-int TestResourceImp<Provider, N>::resource_alive = 0;
+template<class provider, int N>
+int test_resource_impl_t<provider, N>::resource_alive = 0;
 
-template<class Provider, int N>
-int TestResourceImp<Provider, N>::resource_constructed = 0;
+template<class provider, int N>
+int test_resource_impl_t<provider, N>::resource_constructed = 0;
 
-template<class Provider, int N>
-int TestResourceImp<Provider, N>::resource_destructed = 0;
+template<class provider, int N>
+int test_resource_impl_t<provider, N>::resource_destructed = 0;
 
-struct NullProvider {
-    NullProvider() {}
+struct null_provider_t {
+    null_provider_t() {}
     void* allocate(size_t, size_t) { return nullptr; }
     void deallocate(void*, size_t, size_t) {}
     void reset() {}
 
 private:
-    DISALLOW_COPY(NullProvider);
+    DISALLOW_COPY(null_provider_t);
 };
 
-struct NewDeleteProvider {
-    NewDeleteProvider() {}
+struct new_delete_provider_t {
+    new_delete_provider_t() {}
     void* allocate(size_t s, size_t) { return ::operator new(s); }
     void deallocate(void* p, size_t, size_t) { ::operator delete(p); }
     void reset() {}
 
 private:
-    DISALLOW_COPY(NewDeleteProvider);
+    DISALLOW_COPY(new_delete_provider_t);
 };
 
 template<size_t Size = 4096 * 10> // 10 pages worth of memory.
-struct BufferProvider {
+struct buffer_provider_t {
     char buffer[Size];
     void* next = &buffer;
     size_t space = Size;
 
-    BufferProvider() {}
+    buffer_provider_t() {}
 
     void* allocate(size_t s, size_t a) {
         void* ret = std::align(s, a, next, space);
@@ -156,11 +148,11 @@ struct BufferProvider {
     }
 
 private:
-    DISALLOW_COPY(BufferProvider);
+    DISALLOW_COPY(buffer_provider_t);
 };
 
-using NullResource = TestResourceImp<NullProvider, 0>;
-using NewDeleteResource = TestResourceImp<NewDeleteProvider, 0>;
-using TestResource = TestResourceImp<BufferProvider<>, 0>;
-using TestResource1 = TestResourceImp<BufferProvider<>, 1>;
-using TestResource2 = TestResourceImp<BufferProvider<>, 2>;
+using null_resource_t = test_resource_impl_t<null_provider_t, 0>;
+using new_delete_resource_t = test_resource_impl_t<new_delete_provider_t, 0>;
+using test_resource_t = test_resource_impl_t<buffer_provider_t<>, 0>;
+using test_resource1_t = test_resource_impl_t<buffer_provider_t<>, 1>;
+using test_resource2_t = test_resource_impl_t<buffer_provider_t<>, 2>;

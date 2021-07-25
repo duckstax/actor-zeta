@@ -16,39 +16,39 @@ TEST_CASE("memory.resource.eq") {
         }
         // equal
         {
-            TestResource r1(1);
-            TestResource r2(1);
+            test_resource_t r1(1);
+            test_resource_t r2(1);
             memory_resource const& mr1 = r1;
             memory_resource const& mr2 = r2;
             REQUIRE(mr1 == mr2);
-            REQUIRE(r1.checkIsEqualCalledEq(1));
-            REQUIRE(r2.checkIsEqualCalledEq(0));
+            REQUIRE(r1.check_is_equal_called_eq(1));
+            REQUIRE(r2.check_is_equal_called_eq(0));
             REQUIRE(mr2 == mr1);
-            REQUIRE(r1.checkIsEqualCalledEq(1));
-            REQUIRE(r2.checkIsEqualCalledEq(1));
+            REQUIRE(r1.check_is_equal_called_eq(1));
+            REQUIRE(r2.check_is_equal_called_eq(1));
         }
         // equal same object
         {
-            TestResource r1(1);
+            test_resource_t r1(1);
             memory_resource const& mr1 = r1;
             memory_resource const& mr2 = r1;
             REQUIRE(mr1 == mr2);
-            REQUIRE(r1.checkIsEqualCalledEq(0));
+            REQUIRE(r1.check_is_equal_called_eq(0));
             REQUIRE(mr2 == mr1);
-            REQUIRE(r1.checkIsEqualCalledEq(0));
+            REQUIRE(r1.check_is_equal_called_eq(0));
         }
         // not equal
         {
-            TestResource r1(1);
-            TestResource r2(2);
+            test_resource_t r1(1);
+            test_resource_t r2(2);
             memory_resource const& mr1 = r1;
             memory_resource const& mr2 = r2;
             REQUIRE(!(mr1 == mr2));
-            REQUIRE(r1.checkIsEqualCalledEq(1));
-            REQUIRE(r2.checkIsEqualCalledEq(0));
+            REQUIRE(r1.check_is_equal_called_eq(1));
+            REQUIRE(r2.check_is_equal_called_eq(0));
             REQUIRE(!(mr2 == mr1));
-            REQUIRE(r1.checkIsEqualCalledEq(1));
-            REQUIRE(r2.checkIsEqualCalledEq(1));
+            REQUIRE(r1.check_is_equal_called_eq(1));
+            REQUIRE(r2.check_is_equal_called_eq(1));
         }
     }
 
@@ -62,47 +62,47 @@ TEST_CASE("memory.resource.eq") {
         }
         // not equal
         {
-            TestResource r1(1);
-            TestResource r2(2);
+            test_resource_t r1(1);
+            test_resource_t r2(2);
             memory_resource const& mr1 = r1;
             memory_resource const& mr2 = r2;
             REQUIRE(mr1 != mr2);
-            REQUIRE(r1.checkIsEqualCalledEq(1));
-            REQUIRE(r2.checkIsEqualCalledEq(0));
+            REQUIRE(r1.check_is_equal_called_eq(1));
+            REQUIRE(r2.check_is_equal_called_eq(0));
             REQUIRE(mr2 != mr1);
-            REQUIRE(r1.checkIsEqualCalledEq(1));
-            REQUIRE(r2.checkIsEqualCalledEq(1));
+            REQUIRE(r1.check_is_equal_called_eq(1));
+            REQUIRE(r2.check_is_equal_called_eq(1));
         }
         // equal
         {
-            TestResource r1(1);
-            TestResource r2(1);
+            test_resource_t r1(1);
+            test_resource_t r2(1);
             memory_resource const& mr1 = r1;
             memory_resource const& mr2 = r2;
             REQUIRE(!(mr1 != mr2));
-            REQUIRE(r1.checkIsEqualCalledEq(1));
-            REQUIRE(r2.checkIsEqualCalledEq(0));
+            REQUIRE(r1.check_is_equal_called_eq(1));
+            REQUIRE(r2.check_is_equal_called_eq(0));
             REQUIRE(!(mr2 != mr1));
-            REQUIRE(r1.checkIsEqualCalledEq(1));
-            REQUIRE(r2.checkIsEqualCalledEq(1));
+            REQUIRE(r1.check_is_equal_called_eq(1));
+            REQUIRE(r2.check_is_equal_called_eq(1));
         }
         // equal same object
         {
-            TestResource r1(1);
+            test_resource_t r1(1);
             memory_resource const& mr1 = r1;
             memory_resource const& mr2 = r1;
             REQUIRE(!(mr1 != mr2));
-            REQUIRE(r1.checkIsEqualCalledEq(0));
+            REQUIRE(r1.check_is_equal_called_eq(0));
             REQUIRE(!(mr2 != mr1));
-            REQUIRE(r1.checkIsEqualCalledEq(0));
+            REQUIRE(r1.check_is_equal_called_eq(0));
         }
     }
 }
 
 TEST_CASE("memory.resource.public") {
     SECTION("allocate.pass") {
-        TestResource R(42);
-        auto& P = R.getController();
+        test_resource_t R(42);
+        auto& P = R.get_controller();
         memory_resource& M = R;
         {
             REQUIRE(std::is_same<decltype(M.allocate(0, 0)), void*>::value);
@@ -117,23 +117,23 @@ TEST_CASE("memory.resource.public") {
             int a = 64;
             void* p = M.allocate(s, a);
             REQUIRE(P.alloc_count == 1);
-            REQUIRE(P.checkAlloc(p, s, a));
+            REQUIRE(P.check_alloc(p, s, a));
             s = 128;
             a = MaxAlignV;
             p = M.allocate(s);
             REQUIRE(P.alloc_count == 2);
-            REQUIRE(P.checkAlloc(p, s, a));
+            REQUIRE(P.check_alloc(p, s, a));
         }
 #ifndef TEST_HAS_NO_EXCEPTIONS
         {
-            TestResource R2;
-            auto& P = R2.getController();
+            test_resource_t R2;
+            auto& P = R2.get_controller();
             P.throw_on_alloc = true;
             memory_resource& M2 = R2;
             try {
                 M2.allocate(42);
                 REQUIRE(false);
-            } catch (TestException const&) {
+            } catch (test_exception_t const&) {
                 // do nothing.
             } catch (...) {
                 REQUIRE(false);
@@ -143,8 +143,8 @@ TEST_CASE("memory.resource.public") {
     }
 
     SECTION("deallocate.pass") {
-        NullResource R(42);
-        auto& P = R.getController();
+        null_resource_t R(42);
+        auto& P = R.get_controller();
         memory_resource& M = R;
         {
             REQUIRE(std::is_same<decltype(M.deallocate(nullptr, 0, 0)), void>::value);
@@ -160,13 +160,13 @@ TEST_CASE("memory.resource.public") {
             void* p = reinterpret_cast<void*>(640);
             M.deallocate(p, s, a);
             REQUIRE(P.dealloc_count == 1);
-            REQUIRE(P.checkDealloc(p, s, a));
+            REQUIRE(P.check_dealloc(p, s, a));
             s = 128;
             a = alignof(std::max_align_t);
             p = reinterpret_cast<void*>(12800);
             M.deallocate(p, s);
             REQUIRE(P.dealloc_count == 2);
-            REQUIRE(P.checkDealloc(p, s, a));
+            REQUIRE(P.check_dealloc(p, s, a));
         }
     }
 
@@ -174,11 +174,11 @@ TEST_CASE("memory.resource.public") {
         REQUIRE(std::has_virtual_destructor<memory_resource>::value);
         REQUIRE(std::is_nothrow_destructible<memory_resource>::value);
         REQUIRE(std::is_abstract<memory_resource>::value);
-        // Check that the destructor of `TestResource` is called when
+        // Check that the destructor of `test_resource_t` is called when
         // it is deleted as a pointer to `memory_resource`
         {
-            using TR = TestResource;
-            TR::resetStatics();
+            using TR = test_resource_t;
+            TR::reset_statics();
             memory_resource* M = new TR(42);
             REQUIRE(TR::resource_alive == 1);
             REQUIRE(TR::resource_constructed == 1);
@@ -197,46 +197,46 @@ TEST_CASE("memory.resource.public") {
             REQUIRE(noexcept(r1->is_equal(*r2)));
         }
         /*{ // @TODO !!! fix !!!
-            TestResource1 R1(1);
-            auto& P1 = R1.getController();
+            test_resource1_t R1(1);
+            auto& P1 = R1.get_controller();
             memory_resource const& M1 = R1;
-            TestResource2 R2(1);
-            auto& P2 = R2.getController();
+            test_resource2_t R2(1);
+            auto& P2 = R2.get_controller();
             memory_resource const& M2 = R2;
             REQUIRE(M1.is_equal(M2) == false);
-            REQUIRE(P1.checkIsEqualCalledEq(1));
-            REQUIRE(P2.checkIsEqualCalledEq(0));
+            REQUIRE(P1.check_is_equal_called_eq(1));
+            REQUIRE(P2.check_is_equal_called_eq(0));
             REQUIRE(M2.is_equal(M1) == false);
-            REQUIRE(P2.checkIsEqualCalledEq(1));
-            REQUIRE(P1.checkIsEqualCalledEq(1));
+            REQUIRE(P2.check_is_equal_called_eq(1));
+            REQUIRE(P1.check_is_equal_called_eq(1));
         }*/
         {
-            TestResource1 R1(1);
-            auto& P1 = R1.getController();
+            test_resource1_t R1(1);
+            auto& P1 = R1.get_controller();
             memory_resource const& M1 = R1;
-            TestResource1 R2(2);
-            auto& P2 = R2.getController();
+            test_resource1_t R2(2);
+            auto& P2 = R2.get_controller();
             memory_resource const& M2 = R2;
             REQUIRE(M1.is_equal(M2) == false);
-            REQUIRE(P1.checkIsEqualCalledEq(1));
-            REQUIRE(P2.checkIsEqualCalledEq(0));
+            REQUIRE(P1.check_is_equal_called_eq(1));
+            REQUIRE(P2.check_is_equal_called_eq(0));
             REQUIRE(M2.is_equal(M1) == false);
-            REQUIRE(P2.checkIsEqualCalledEq(1));
-            REQUIRE(P1.checkIsEqualCalledEq(1));
+            REQUIRE(P2.check_is_equal_called_eq(1));
+            REQUIRE(P1.check_is_equal_called_eq(1));
         }
         {
-            TestResource1 R1(1);
-            auto& P1 = R1.getController();
+            test_resource1_t R1(1);
+            auto& P1 = R1.get_controller();
             memory_resource const& M1 = R1;
-            TestResource1 R2(1);
-            auto& P2 = R2.getController();
+            test_resource1_t R2(1);
+            auto& P2 = R2.get_controller();
             memory_resource const& M2 = R2;
             REQUIRE(M1.is_equal(M2) == true);
-            REQUIRE(P1.checkIsEqualCalledEq(1));
-            REQUIRE(P2.checkIsEqualCalledEq(0));
+            REQUIRE(P1.check_is_equal_called_eq(1));
+            REQUIRE(P2.check_is_equal_called_eq(0));
             REQUIRE(M2.is_equal(M1) == true);
-            REQUIRE(P2.checkIsEqualCalledEq(1));
-            REQUIRE(P1.checkIsEqualCalledEq(1));
+            REQUIRE(P2.check_is_equal_called_eq(1));
+            REQUIRE(P1.check_is_equal_called_eq(1));
         }
     }
 }
@@ -244,14 +244,14 @@ TEST_CASE("memory.resource.public") {
 #if CPP17_OR_GREATER
 TEST_CASE("construct_piecewise_pair.pass") {
     SECTION("1") {
-        using T = CountCopies;
-        using U = CountCopiesAllocV1;
+        using T = count_copies_t;
+        using U = count_copies_alloc_v1_t;
         using P = std::pair<T, U>;
 
         std::tuple<T> t1;
         std::tuple<U> t2;
 
-        TestHarness<P> h;
+        test_harness_t<P> h;
         h.construct(std::piecewise_construct, t1, t2);
         P const& p = *h.ptr;
         REQUIRE(p.first.count == 2);
@@ -260,14 +260,14 @@ TEST_CASE("construct_piecewise_pair.pass") {
     }
 
     SECTION("2") {
-        using T = CountCopiesAllocV1;
-        using U = CountCopiesAllocV2;
+        using T = count_copies_alloc_v1_t;
+        using U = count_copies_alloc_v2_t;
         using P = std::pair<T, U>;
 
         std::tuple<T> t1;
         std::tuple<U> t2;
 
-        TestHarness<P> h;
+        test_harness_t<P> h;
         h.construct(std::piecewise_construct, std::move(t1), std::move(t2));
         P const& p = *h.ptr;
         REQUIRE(p.first.count == 2);
@@ -277,14 +277,14 @@ TEST_CASE("construct_piecewise_pair.pass") {
     }
 
     SECTION("3") {
-        using T = CountCopiesAllocV2;
-        using U = CountCopiesAllocV1;
+        using T = count_copies_alloc_v2_t;
+        using U = count_copies_alloc_v1_t;
         using P = std::pair<T, U>;
 
         std::tuple<T> t1;
         std::tuple<U> t2;
 
-        TestHarness<P> h;
+        test_harness_t<P> h;
         h.construct(std::piecewise_construct, std::move(t1), std::move(t2));
         P const& p = *h.ptr;
         REQUIRE(p.first.count == 2);
@@ -294,14 +294,14 @@ TEST_CASE("construct_piecewise_pair.pass") {
     }
 
     SECTION("4") {
-        using T = CountCopiesAllocV2;
-        using U = CountCopies;
+        using T = count_copies_alloc_v2_t;
+        using U = count_copies_t;
         using P = std::pair<T, U>;
 
         std::tuple<T> t1;
         std::tuple<U> t2;
 
-        TestHarness<P> h;
+        test_harness_t<P> h;
         h.construct(std::piecewise_construct, t1, t2);
         P const& p = *h.ptr;
         REQUIRE(p.first.count == 2);
@@ -339,23 +339,23 @@ TEST_CASE("memory.polymorphic.allocator.ctor") {
         }
     }
 
-    /*SECTION("default.pass") { // @TODO !!! fix !!!
+    SECTION("default.pass") { // @TODO !!! fix !!!
         {
             REQUIRE(std::is_nothrow_default_constructible<polymorphic_allocator<void>>::value);
         }
         {
             // test that the allocator gets its resource from get_default_resource
-            TestResource R1(42);
-            set_default_resource(&R1);
+            test_resource_t R1(42);
+            resource::set_default_resource(&R1);
             typedef polymorphic_allocator<void> A;
             A const a;
             REQUIRE(a.resource() == &R1);
-            set_default_resource(nullptr);
+            resource::set_default_resource(nullptr);
             A const a2;
             REQUIRE(a.resource() == &R1);
-            REQUIRE(a2.resource() == new_delete_resource());
+            REQUIRE(a2.resource() == resource::new_delete_resource());
         }
-    }*/
+    }
 
     SECTION("memory_resource_convert.pass") {
         {
@@ -365,7 +365,7 @@ TEST_CASE("memory.polymorphic.allocator.ctor") {
         }
         {
             typedef polymorphic_allocator<void> A;
-            TestResource R;
+            test_resource_t R;
             A const a(&R);
             REQUIRE(a.resource() == &R);
         }
@@ -409,78 +409,78 @@ TEST_CASE("memory.polymorphic.allocator.eq") {
         }
         // equal same type (different resource)
         {
-            TestResource d1(1);
-            TestResource d2(1);
+            test_resource_t d1(1);
+            test_resource_t d2(1);
             A1 const a1(&d1);
             A1 const a2(&d2);
             REQUIRE(a1 == a2);
-            REQUIRE(d1.checkIsEqualCalledEq(1));
-            REQUIRE(d2.checkIsEqualCalledEq(0));
+            REQUIRE(d1.check_is_equal_called_eq(1));
+            REQUIRE(d2.check_is_equal_called_eq(0));
             d1.reset();
             REQUIRE(a2 == a1);
-            REQUIRE(d1.checkIsEqualCalledEq(0));
-            REQUIRE(d2.checkIsEqualCalledEq(1));
+            REQUIRE(d1.check_is_equal_called_eq(0));
+            REQUIRE(d2.check_is_equal_called_eq(1));
         }
         // equal same type (same resource)
         {
-            TestResource d1;
+            test_resource_t d1;
             A1 const a1(&d1);
             A1 const a2(&d1);
             REQUIRE(a1 == a2);
-            REQUIRE(d1.checkIsEqualCalledEq(0));
+            REQUIRE(d1.check_is_equal_called_eq(0));
             REQUIRE(a2 == a1);
-            REQUIRE(d1.checkIsEqualCalledEq(0));
+            REQUIRE(d1.check_is_equal_called_eq(0));
         }
         // equal different type (different resource)
         {
-            TestResource d1(42);
-            TestResource d2(42);
+            test_resource_t d1(42);
+            test_resource_t d2(42);
             A1 const a1(&d1);
             A2 const a2(&d2);
             REQUIRE(a1 == a2);
-            REQUIRE(d1.checkIsEqualCalledEq(1));
-            REQUIRE(d2.checkIsEqualCalledEq(0));
+            REQUIRE(d1.check_is_equal_called_eq(1));
+            REQUIRE(d2.check_is_equal_called_eq(0));
             REQUIRE(a2 == a1);
-            REQUIRE(d1.checkIsEqualCalledEq(1));
-            REQUIRE(d2.checkIsEqualCalledEq(1));
+            REQUIRE(d1.check_is_equal_called_eq(1));
+            REQUIRE(d2.check_is_equal_called_eq(1));
         }
         // equal different type (same resource)
         {
-            TestResource d1(42);
+            test_resource_t d1(42);
             A1 const a1(&d1);
             A2 const a2(&d1);
             REQUIRE(a1 == a2);
-            REQUIRE(d1.checkIsEqualCalledEq(0));
+            REQUIRE(d1.check_is_equal_called_eq(0));
             REQUIRE(a2 == a1);
-            REQUIRE(d1.checkIsEqualCalledEq(0));
+            REQUIRE(d1.check_is_equal_called_eq(0));
         }
         // not equal same type
         {
-            TestResource d1(1);
-            TestResource d2(2);
+            test_resource_t d1(1);
+            test_resource_t d2(2);
             A1 const a1(&d1);
             A1 const a2(&d2);
             REQUIRE(!(a1 == a2));
-            REQUIRE(d1.checkIsEqualCalledEq(1));
-            REQUIRE(d2.checkIsEqualCalledEq(0));
+            REQUIRE(d1.check_is_equal_called_eq(1));
+            REQUIRE(d2.check_is_equal_called_eq(0));
             d1.reset();
             REQUIRE(!(a2 == a1));
-            REQUIRE(d1.checkIsEqualCalledEq(0));
-            REQUIRE(d2.checkIsEqualCalledEq(1));
+            REQUIRE(d1.check_is_equal_called_eq(0));
+            REQUIRE(d2.check_is_equal_called_eq(1));
         }
         // not equal different types
         /*{ // @TODO !!! fix !!!
-            TestResource d1;
-            TestResource1 d2;
+            test_resource_t d1;
+            test_resource1_t d2;
             A1 const a1(&d1);
             A2 const a2(&d2);
             REQUIRE(!(a1 == a2));
-            REQUIRE(d1.checkIsEqualCalledEq(1));
-            REQUIRE(d2.checkIsEqualCalledEq(0));
+            REQUIRE(d1.check_is_equal_called_eq(1));
+            REQUIRE(d2.check_is_equal_called_eq(0));
             d1.reset();
             REQUIRE(!(a2 == a1));
-            REQUIRE(d1.checkIsEqualCalledEq(0));
-            REQUIRE(d2.checkIsEqualCalledEq(1));
+            REQUIRE(d1.check_is_equal_called_eq(0));
+            REQUIRE(d2.check_is_equal_called_eq(1));
         }*/
     }
 
@@ -496,55 +496,55 @@ TEST_CASE("memory.polymorphic.allocator.eq") {
         }
         // not equal same type (different resource)
         {
-            TestResource d1(1);
-            TestResource d2(2);
+            test_resource_t d1(1);
+            test_resource_t d2(2);
             A1 const a1(&d1);
             A1 const a2(&d2);
             REQUIRE(a1 != a2);
-            REQUIRE(d1.checkIsEqualCalledEq(1));
-            REQUIRE(d2.checkIsEqualCalledEq(0));
+            REQUIRE(d1.check_is_equal_called_eq(1));
+            REQUIRE(d2.check_is_equal_called_eq(0));
             d1.reset();
             REQUIRE(a2 != a1);
-            REQUIRE(d1.checkIsEqualCalledEq(0));
-            REQUIRE(d2.checkIsEqualCalledEq(1));
+            REQUIRE(d1.check_is_equal_called_eq(0));
+            REQUIRE(d2.check_is_equal_called_eq(1));
         }
         // equal same type (same resource)
         {
-            TestResource d1;
+            test_resource_t d1;
             A1 const a1(&d1);
             A1 const a2(&d1);
             REQUIRE(!(a1 != a2));
-            REQUIRE(d1.checkIsEqualCalledEq(0));
+            REQUIRE(d1.check_is_equal_called_eq(0));
             REQUIRE(!(a2 != a1));
-            REQUIRE(d1.checkIsEqualCalledEq(0));
+            REQUIRE(d1.check_is_equal_called_eq(0));
         }
         // equal same type
         {
-            TestResource d1(1);
-            TestResource d2(1);
+            test_resource_t d1(1);
+            test_resource_t d2(1);
             A1 const a1(&d1);
             A1 const a2(&d2);
             REQUIRE(!(a1 != a2));
-            REQUIRE(d1.checkIsEqualCalledEq(1));
-            REQUIRE(d2.checkIsEqualCalledEq(0));
+            REQUIRE(d1.check_is_equal_called_eq(1));
+            REQUIRE(d2.check_is_equal_called_eq(0));
             d1.reset();
             REQUIRE(!(a2 != a1));
-            REQUIRE(d1.checkIsEqualCalledEq(0));
-            REQUIRE(d2.checkIsEqualCalledEq(1));
+            REQUIRE(d1.check_is_equal_called_eq(0));
+            REQUIRE(d2.check_is_equal_called_eq(1));
         }
         // not equal different types
         /*{ // @TODO !!! fix !!!
-            TestResource d1;
-            TestResource1 d2;
+            test_resource_t d1;
+            test_resource1_t d2;
             A1 const a1(&d1);
             A2 const a2(&d2);
             REQUIRE(a1 != a2);
-            REQUIRE(d1.checkIsEqualCalledEq(1));
-            REQUIRE(d2.checkIsEqualCalledEq(0));
+            REQUIRE(d1.check_is_equal_called_eq(1));
+            REQUIRE(d2.check_is_equal_called_eq(0));
             d1.reset();
             REQUIRE(a2 != a1);
-            REQUIRE(d1.checkIsEqualCalledEq(0));
-            REQUIRE(d2.checkIsEqualCalledEq(1));
+            REQUIRE(d1.check_is_equal_called_eq(0));
+            REQUIRE(d2.check_is_equal_called_eq(1));
         }*/
     }
 }
@@ -552,11 +552,11 @@ TEST_CASE("memory.polymorphic.allocator.eq") {
 template<size_t S, size_t Align>
 void testForSizeAndAlign() {
     using T = typename std::aligned_storage<S, Align>::type;
-    TestResource R;
+    test_resource_t R;
     polymorphic_allocator<T> a(&R);
     for (int N = 1; N <= 5; ++N) {
         auto ret = a.allocate(N);
-        REQUIRE(R.checkAlloc(ret, N * sizeof(T), alignof(T)));
+        REQUIRE(R.check_alloc(ret, N * sizeof(T), alignof(T)));
         a.deallocate(ret, N);
         R.reset();
     }
@@ -611,16 +611,10 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
 
     SECTION("resource.pass") {
         typedef polymorphic_allocator<void> A;
-        /**
-         * https://github.com/gcc-mirror/gcc/blob/master/libstdc%2B%2B-v3/include/std/memory_resource
-         * polymorphic_allocator() noexcept
-         *      : _M_resource(get_default_resource())
-         *      { }
-         **/
-        /*{ // @TODO !!! fix !!! on std 11/14
-            A const a; // here an assert in 11/14 because of no get_default_resource
+        {
+            A const a;
             REQUIRE(std::is_same<decltype(a.resource()), memory_resource*>::value);
-        }*/
+        }
         {
             memory_resource* mptr = (memory_resource*) 42;
             A const a(mptr);
@@ -631,20 +625,20 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
             REQUIRE(a.resource() == nullptr);
             REQUIRE(a.resource() == nullptr);
         }*/
-        /*{ // @TODO !!! fix !!! on std 11/14
+        {
             A const a;
-            REQUIRE(a.resource() == get_default_resource());
+            REQUIRE(a.resource() == resource::get_default_resource());
         }
         {
             memory_resource* mptr = (memory_resource*) 42;
-            set_default_resource(mptr);
+            resource::set_default_resource(mptr);
             A const a;
             REQUIRE(a.resource() == mptr);
-            REQUIRE(a.resource() == get_default_resource());
-        }*/
+            REQUIRE(a.resource() == resource::get_default_resource());
+        }
     }
 
-    /*SECTION("select_on_container_copy_construction.pass") { // @TODO !!! fix !!!
+    SECTION("select_on_container_copy_construction.pass") { // @TODO !!! fix !!!
         typedef polymorphic_allocator<void> A;
         {
             A const a;
@@ -655,20 +649,30 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
             A const a(mptr);
             REQUIRE(a.resource() == mptr);
             A const other = a.select_on_container_copy_construction();
-            REQUIRE(other.resource() == get_default_resource());
+            REQUIRE(other.resource() == resource::get_default_resource());
             REQUIRE(a.resource() == mptr);
         }
         {
             memory_resource* mptr = (memory_resource*) 42;
-            set_default_resource(mptr);
-            A const a(nullptr);
+            resource::set_default_resource(mptr);
+            A const a;
+            REQUIRE(a.resource() == resource::get_default_resource());
+            A const other = a.select_on_container_copy_construction();
+            REQUIRE(other.resource() == resource::get_default_resource());
+            REQUIRE(other.resource() == mptr);
+            REQUIRE(a.resource() == resource::get_default_resource());
+        }
+        /*{
+            memory_resource* mptr = (memory_resource*) 42;
+            resource::set_default_resource(mptr);
+            A const a(nullptr); // assert here !!!
             REQUIRE(a.resource() == nullptr);
             A const other = a.select_on_container_copy_construction();
-            REQUIRE(other.resource() == get_default_resource());
+            REQUIRE(other.resource() == resource::get_default_resource());
             REQUIRE(other.resource() == mptr);
             REQUIRE(a.resource() == nullptr);
-        }
-    }*/
+        }*/
+    }
 }
 
 TEST_CASE("polymorphic_allocator") {

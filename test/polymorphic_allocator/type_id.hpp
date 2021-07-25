@@ -5,62 +5,62 @@
 #include <functional>
 #include <string>
 
-// TypeID - Represent a unique identifier for a type. TypeID allows equality
+// type_id_t - Represent a unique identifier for a type. type_id_t allows equality
 // comparisons between different types.
-struct TypeID {
-    friend bool operator==(TypeID const& LHS, TypeID const& RHS) { return LHS.m_id == RHS.m_id; }
-    friend bool operator!=(TypeID const& LHS, TypeID const& RHS) { return LHS.m_id != RHS.m_id; }
+struct type_id_t {
+    friend bool operator==(type_id_t const& LHS, type_id_t const& RHS) { return LHS.m_id == RHS.m_id; }
+    friend bool operator!=(type_id_t const& LHS, type_id_t const& RHS) { return LHS.m_id != RHS.m_id; }
 
     std::string name() const {
         return m_id;
     }
 
 private:
-    explicit constexpr TypeID(const char* xid)
+    explicit constexpr type_id_t(const char* xid)
         : m_id(xid) {}
 
-    TypeID(const TypeID&) = delete;
-    TypeID& operator=(TypeID const&) = delete;
+    type_id_t(const type_id_t&) = delete;
+    type_id_t& operator=(type_id_t const&) = delete;
 
     const char* const m_id;
     template<class T>
-    friend TypeID const& makeTypeIDImp();
+    friend type_id_t const& make_type_id_impl();
 };
 
-// makeTypeID - Return the TypeID for the specified type 'T'.
+// make_type_id - Return the type_id_t for the specified type 'T'.
 template<class T>
-inline TypeID const& makeTypeIDImp() {
-    static const TypeID id(__PRETTY_FUNCTION__);
+inline type_id_t const& make_type_id_impl() {
+    static const type_id_t id(__PRETTY_FUNCTION__);
     return id;
 }
 
 template<class T>
-struct TypeWrapper {};
+struct type_wrapper_t {};
 
 template<class T>
-inline TypeID const& makeTypeID() {
-    return makeTypeIDImp<TypeWrapper<T>>();
+inline type_id_t const& make_type_id() {
+    return make_type_id_impl<type_wrapper_t<T>>();
 }
 
 template<class... Args>
-struct ArgumentListID {};
+struct argument_list_id_t {};
 
-// makeArgumentID - Create and return a unique identifier for a given set
+// make_argument_id - Create and return a unique identifier for a given set
 // of arguments.
 template<class... Args>
-inline TypeID const& makeArgumentID() {
-    return makeTypeIDImp<ArgumentListID<Args...>>();
+inline type_id_t const& make_argument_id() {
+    return make_type_id_impl<argument_list_id_t<Args...>>();
 }
 
 // COMPARE_TYPEID(...) is a utility macro for generating diagnostics when
 // two typeid's are expected to be equal
-#define COMPARE_TYPEID(LHS, RHS) CompareTypeIDVerbose(#LHS, LHS, #RHS, RHS)
+#define COMPARE_TYPEID(LHS, RHS) compare_type_id_verbose(#LHS, LHS, #RHS, RHS)
 
-inline bool CompareTypeIDVerbose(const char* LHSString, TypeID const* LHS,
-                                 const char* RHSString, TypeID const* RHS) {
+inline bool compare_type_id_verbose(const char* LHSString, type_id_t const* LHS,
+                                 const char* RHSString, type_id_t const* RHS) {
     if (*LHS == *RHS)
         return true;
-    std::printf("TypeID's not equal:\n");
+    std::printf("type_id_t's not equal:\n");
     std::printf("%s: %s\n----------\n%s: %s\n",
                 LHSString, LHS->name().c_str(),
                 RHSString, RHS->name().c_str());
