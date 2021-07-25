@@ -68,53 +68,45 @@ namespace actor_zeta { namespace detail { namespace pmr {
 #if CPP17_OR_GREATER
 #if __has_include(<memory_resource>)
 
-        memory_resource* get_default_resource() noexcept {
+        inline memory_resource* get_default_resource() noexcept {
             return std::pmr::get_default_resource();
         }
 
-        memory_resource* set_default_resource(memory_resource* __new_res) noexcept {
-            return std::pmr::set_default_resource(__new_res);
+        inline memory_resource* set_default_resource(memory_resource* new_res) noexcept {
+            return std::pmr::set_default_resource(new_res);
         }
 
-        memory_resource* new_delete_resource() noexcept {
+        inline memory_resource* new_delete_resource() noexcept {
             return std::pmr::new_delete_resource();
         }
 
-        memory_resource* null_memory_resource() noexcept {
+        inline memory_resource* null_memory_resource() noexcept {
             return std::pmr::null_memory_resource();
         }
 
-        //template<class T>
-        //using polymorphic_allocator = std::pmr::polymorphic_allocator<T>;
-
 #else
 
-        memory_resource* get_default_resource() noexcept {
+        inline memory_resource* get_default_resource() noexcept {
             return std::experimental::pmr::get_default_resource();
         }
 
-        memory_resource* set_default_resource(memory_resource* __new_res) noexcept {
-            return std::experimental::pmr::set_default_resource(__new_res);
+        inline memory_resource* set_default_resource(memory_resource* new_res) noexcept {
+            return std::experimental::pmr::set_default_resource(new_res);
         }
 
-        memory_resource* new_delete_resource() noexcept {
+        inline memory_resource* new_delete_resource() noexcept {
             return std::experimental::pmr::new_delete_resource();
         }
 
-        memory_resource* null_memory_resource() noexcept {
+        inline memory_resource* null_memory_resource() noexcept {
             return std::experimental::pmr::null_memory_resource();
         }
-
-        //template<class T>
-        //using polymorphic_allocator = std::experimental::pmr::polymorphic_allocator<T>;
 
 #endif
 
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
         namespace clang_impl {
-
-            ////////////////
 
             constexpr bool is_pow2(size_t n) { return (0 == (n & (n - 1))); }
 
@@ -149,14 +141,8 @@ namespace actor_zeta { namespace detail { namespace pmr {
                 dealloc(original);
             }
 
-            ////////////////
-            class __attribute__((__visibility__("default"))) __new_delete_memory_resource_imp
-                : public memory_resource {
+            class new_delete_memory_resource_imp_t : public memory_resource {
                 void* do_allocate(size_t size, size_t align) override {
-                    /*#ifdef _LIBCPP_HAS_NO_ALIGNED_ALLOCATION
-                if (__is_overaligned_for_new(align))
-                    __throw_bad_alloc();
-#endif*/
                     return aligned_allocate(size, align, [](size_t size) { return ::operator new(size); });
                 }
 
@@ -167,38 +153,32 @@ namespace actor_zeta { namespace detail { namespace pmr {
                 bool do_is_equal(memory_resource const& other) const noexcept override { return &other == this; }
 
             public:
-                ~__new_delete_memory_resource_imp() override = default;
+                ~new_delete_memory_resource_imp_t() override = default;
             };
 
-            class __attribute__((__visibility__("default"))) __null_memory_resource_imp
-                : public memory_resource {
+            class null_memory_resource_imp_t : public memory_resource {
             public:
-                ~__null_memory_resource_imp() = default;
+                ~null_memory_resource_imp_t() = default;
 
             protected:
-                virtual void* do_allocate(size_t, size_t) {
-                    assert(false);
-                    //throw std::runtime_error("bad_alloc");
-                    //__throw_bad_alloc();
-                }
+                virtual void* do_allocate(size_t, size_t) { assert(false); }
                 virtual void do_deallocate(void*, size_t, size_t) {}
                 virtual bool do_is_equal(memory_resource const& __other) const noexcept { return &__other == this; }
             };
 
-            union ResourceInitHelper {
+            union resource_init_helper_t {
                 struct {
-                    __new_delete_memory_resource_imp new_delete_res;
-                    __null_memory_resource_imp null_res;
+                    new_delete_memory_resource_imp_t new_delete_res;
+                    null_memory_resource_imp_t null_res;
                 } resources;
                 char dummy;
 
-                ResourceInitHelper()
-                    : resources() {
-                }
-                ~ResourceInitHelper() {}
+                resource_init_helper_t()
+                    : resources() {}
+                ~resource_init_helper_t() {}
             };
 
-            ResourceInitHelper res_init __attribute__((init_priority(101)));
+            resource_init_helper_t res_init __attribute__((init_priority(101)));
 
             memory_resource* new_delete_resource() noexcept {
                 return &res_init.resources.new_delete_res;
@@ -207,19 +187,19 @@ namespace actor_zeta { namespace detail { namespace pmr {
             memory_resource* null_memory_resource() noexcept {
                 return &res_init.resources.null_res;
             }
+
             static memory_resource*
-            __default_memory_resource(bool set = false, memory_resource* new_res = nullptr) noexcept {
+            default_memory_resource(bool set = false, memory_resource* new_res = nullptr) noexcept {
                 //#ifndef _LIBCPP_HAS_NO_ATOMIC_HEADER
-                __attribute__((__require_constant_initialization__)) static std::atomic<memory_resource*> __res =
+                // https://clang.llvm.org/docs/AttributeReference.html#require-constant-initialization-constinit-c-20
+                //__attribute__((__require_constant_initialization__))
+                static std::atomic<memory_resource*> __res =
                     {&res_init.resources.new_delete_res};
-                std::printf("%s :: __res = %p; new_res = %p\n", __func__, __res.load(), new_res);
                 if (set) {
                     new_res = new_res ? new_res : new_delete_resource();
                     // TODO: Can a weaker ordering be used?
-                    auto ret = std::atomic_exchange_explicit(
+                    return std::atomic_exchange_explicit(
                         &__res, new_res, std::memory_order_acq_rel);
-                    std::printf("%s :: __res = %p; new_res = %p\n", __func__, __res.load(), new_res);
-                    return ret;
                 } else {
                     return std::atomic_load_explicit(
                         &__res, std::memory_order_acquire);
@@ -251,15 +231,14 @@ namespace actor_zeta { namespace detail { namespace pmr {
 #endif*/
             }
             memory_resource* get_default_resource() noexcept {
-                return __default_memory_resource();
+                return default_memory_resource();
             }
 
-            memory_resource* set_default_resource(memory_resource* __new_res) noexcept {
-                auto res = __default_memory_resource(true, __new_res);
-                std::printf("%s :: res = %p\n", __func__, res);
-                return res;
+            memory_resource* set_default_resource(memory_resource* new_res) noexcept {
+                return default_memory_resource(true, new_res);
             }
         } // namespace clang_impl
+
 #endif
     } // namespace resource
 

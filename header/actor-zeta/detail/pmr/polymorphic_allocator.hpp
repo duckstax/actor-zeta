@@ -53,15 +53,10 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
         polymorphic_allocator() noexcept
             //: resource_(default_resource::get()) {
-            : resource_(clang_impl::get_default_resource()) {
-            std::printf("%s :: resource_ = %p\n", __func__, resource_);
-        }
+            : resource_(clang_impl::get_default_resource()) {}
 
         polymorphic_allocator(memory_resource* ptr)
-            : resource_(ptr) {
-            assert(ptr);
-            std::printf("%s :: resource_ = %p\n", __func__, resource_);
-        }
+            : resource_(ptr) { assert(ptr); }
 
         polymorphic_allocator(const polymorphic_allocator& other) = default;
 
