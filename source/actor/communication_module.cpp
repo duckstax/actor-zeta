@@ -1,3 +1,4 @@
+#include "detail/string_view.hpp"
 #include <iostream>
 #include <vector>
 
@@ -93,6 +94,10 @@ namespace actor_zeta { namespace base {
         if (result != contacts_.end()) {
             return *(result->second.begin());
         }
+    }
+
+    auto communication_module::address_book() -> address_range_t {
+        return std::make_pair(contacts_.cbegin(), contacts_.cend());
     }
 
     auto communication_module::type() const -> detail::string_view {

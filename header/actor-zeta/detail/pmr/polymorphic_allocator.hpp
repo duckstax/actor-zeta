@@ -195,5 +195,4 @@ namespace actor_zeta { namespace detail { namespace pmr {
     }
 
 #endif
-
 }}} // namespace actor_zeta::detail::pmr
