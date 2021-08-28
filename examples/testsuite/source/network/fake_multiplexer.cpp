@@ -3,8 +3,7 @@
 #include <iostream>
 #include <testsuite/network/fake_multiplexer.hpp>
 
-namespace actor_zeta {
-namespace network {
+namespace actor_zeta { namespace network {
 
     std::size_t fake_multiplexer::start() {
         assert(!scenario.empty());
@@ -76,5 +75,4 @@ namespace network {
         : enabled(true) {
     }
 
-}
-} // namespace actor_zeta::network
+}} // namespace actor_zeta::network
