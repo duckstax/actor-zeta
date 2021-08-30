@@ -50,7 +50,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
-    class null_memory_resource final : public memory_resource {
+    class null_memory_resource_t final : public memory_resource {
         union holder;
 
 #ifndef WEAK_CONSTINIT
@@ -58,10 +58,10 @@ namespace actor_zeta { namespace detail { namespace pmr {
         static holder instance_;
 #else
         NO_DESTROY
-        static null_memory_resource instance_;
+        static null_memory_resource_t instance_;
 #endif
 #else
-        static null_memory_resource instance_;
+        static null_memory_resource_t instance_;
 #endif
 
     public:
@@ -71,7 +71,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
                 reinterpret_cast<std::uintptr_t*>(
                     &instance_));
         }
-        ~null_memory_resource();
+        ~null_memory_resource_t();
 
         void*
         do_allocate(
@@ -89,7 +89,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
             memory_resource const& mr) const noexcept override;
     };
 
-    class default_memory_resource final : public memory_resource {
+    class default_memory_resource_t final : public memory_resource {
         union holder;
 
 #ifndef WEAK_CONSTINIT
@@ -97,10 +97,10 @@ namespace actor_zeta { namespace detail { namespace pmr {
         static holder instance_;
 #else
         NO_DESTROY
-        static default_memory_resource instance_;
+        static default_memory_resource_t instance_;
 #endif
 #else
-        static default_memory_resource instance_;
+        static default_memory_resource_t instance_;
 #endif
 
     public:
@@ -118,7 +118,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
                 &__res, std::memory_order_acquire);
         }
 
-        ~default_memory_resource();
+        ~default_memory_resource_t();
 
         void*
         do_allocate(
@@ -136,7 +136,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
             memory_resource const& mr) const noexcept override;
     };
 
-    union null_memory_resource::holder {
+    union null_memory_resource_t::holder {
 #ifndef WEAK_CONSTINIT
         constexpr
 #endif
@@ -145,10 +145,10 @@ namespace actor_zeta { namespace detail { namespace pmr {
         }
         ~holder() {}
 
-        null_memory_resource mr;
+        null_memory_resource_t mr;
     };
 
-    union default_memory_resource::holder {
+    union default_memory_resource_t::holder {
 #ifndef WEAK_CONSTINIT
         constexpr
 #endif
@@ -157,23 +157,23 @@ namespace actor_zeta { namespace detail { namespace pmr {
         }
         ~holder() {}
 
-        default_memory_resource mr;
+        default_memory_resource_t mr;
     };
 
     inline memory_resource* get_default_resource() noexcept {
-        return default_memory_resource::exchange();
+        return default_memory_resource_t::exchange();
     }
 
     inline memory_resource* set_default_resource(memory_resource* new_res) noexcept {
-        return default_memory_resource::exchange(new_res);
+        return default_memory_resource_t::exchange(new_res);
     }
 
     inline memory_resource* new_delete_resource() noexcept {
-        return default_memory_resource::exchange();
+        return default_memory_resource_t::exchange();
     }
 
     inline memory_resource* null_memory_resource() noexcept {
-        return null_memory_resource::get();
+        return null_memory_resource_t::get();
     }
 
 #endif

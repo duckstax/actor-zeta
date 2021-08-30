@@ -11,33 +11,33 @@ namespace actor_zeta { namespace detail { namespace pmr {
 #ifndef WEAK_CONSTINIT
 #ifndef NO_DESTROY
     REQUIRE_CONST_INIT
-    null_memory_resource::holder
-        null_memory_resource::instance_;
+    null_memory_resource_t::holder
+        null_memory_resource_t::instance_;
 #else
     REQUIRE_CONST_INIT
-    null_memory_resource
-        null_memory_resource::instance_;
+    null_memory_resource_t
+        null_memory_resource_t::instance_;
 #endif
 #endif
 
-    null_memory_resource::
-        ~null_memory_resource() = default;
+    null_memory_resource_t::
+        ~null_memory_resource_t() = default;
 
     void*
-    null_memory_resource::do_allocate(
+    null_memory_resource_t::do_allocate(
         std::size_t bytes,
         std::size_t alignment) {
         assert(false);
     }
 
     void
-    null_memory_resource::do_deallocate(
+    null_memory_resource_t::do_deallocate(
         void* p,
         std::size_t bytes,
         std::size_t alignment) {}
 
     bool
-    null_memory_resource::do_is_equal(
+    null_memory_resource_t::do_is_equal(
         memory_resource const& mr) const noexcept {
         return &mr == this;
     }
@@ -45,17 +45,17 @@ namespace actor_zeta { namespace detail { namespace pmr {
 #ifndef WEAK_CONSTINIT
 #ifndef NO_DESTROY
     REQUIRE_CONST_INIT
-    default_memory_resource::holder
-        default_memory_resource::instance_;
+    default_memory_resource_t::holder
+        default_memory_resource_t::instance_;
 #else
     REQUIRE_CONST_INIT
-    default_memory_resource
-        default_memory_resource::instance_;
+    default_memory_resource_t
+        default_memory_resource_t::instance_;
 #endif
 #endif
 
-    default_memory_resource::
-        ~default_memory_resource() = default;
+    default_memory_resource_t::
+        ~default_memory_resource_t() = default;
 
     constexpr bool is_pow2(size_t n) { return (0 == (n & (n - 1))); }
 
@@ -91,7 +91,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
     }
 
     void*
-    default_memory_resource::
+    default_memory_resource_t::
         do_allocate(
             std::size_t bytes,
             std::size_t alignment) {
@@ -99,7 +99,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
     }
 
     void
-    default_memory_resource::
+    default_memory_resource_t::
         do_deallocate(
             void* p,
             std::size_t bytes,
@@ -108,7 +108,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
     }
 
     bool
-    default_memory_resource::
+    default_memory_resource_t::
         do_is_equal(
             memory_resource const& mr) const noexcept {
         return this == &mr;
