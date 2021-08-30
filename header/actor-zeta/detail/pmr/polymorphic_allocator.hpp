@@ -40,20 +40,14 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
-    namespace clang_impl = resource::clang_impl;
-
     template<typename T>
     class polymorphic_allocator {
-    private:
-        using default_resource = actor_zeta::detail::pmr::default_resource;
-
     public:
         using value_type = T;
         using pointer = value_type*;
 
         polymorphic_allocator() noexcept
-            //: resource_(default_resource::get()) {
-            : resource_(clang_impl::get_default_resource()) {}
+            : resource_(get_default_resource()) {}
 
         polymorphic_allocator(memory_resource* ptr)
             : resource_(ptr) { assert(ptr); }

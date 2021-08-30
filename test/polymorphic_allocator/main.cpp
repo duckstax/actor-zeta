@@ -346,14 +346,14 @@ TEST_CASE("memory.polymorphic.allocator.ctor") {
         {
             // test that the allocator gets its resource from get_default_resource
             test_resource_t R1(42);
-            resource::set_default_resource(&R1);
+            pmr::set_default_resource(&R1);
             typedef polymorphic_allocator<void> A;
             A const a;
             REQUIRE(a.resource() == &R1);
-            resource::set_default_resource(nullptr);
+            pmr::set_default_resource(nullptr);
             A const a2;
             REQUIRE(a.resource() == &R1);
-            REQUIRE(a2.resource() == resource::new_delete_resource());
+            REQUIRE(a2.resource() == pmr::new_delete_resource());
         }
     }
 
@@ -627,14 +627,14 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
         }*/
         {
             A const a;
-            REQUIRE(a.resource() == resource::get_default_resource());
+            REQUIRE(a.resource() == pmr::get_default_resource());
         }
         {
             memory_resource* mptr = (memory_resource*) 42;
-            resource::set_default_resource(mptr);
+            pmr::set_default_resource(mptr);
             A const a;
             REQUIRE(a.resource() == mptr);
-            REQUIRE(a.resource() == resource::get_default_resource());
+            REQUIRE(a.resource() == pmr::get_default_resource());
         }
     }
 
@@ -649,26 +649,26 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
             A const a(mptr);
             REQUIRE(a.resource() == mptr);
             A const other = a.select_on_container_copy_construction();
-            REQUIRE(other.resource() == resource::get_default_resource());
+            REQUIRE(other.resource() == pmr::get_default_resource());
             REQUIRE(a.resource() == mptr);
         }
         {
             memory_resource* mptr = (memory_resource*) 42;
-            resource::set_default_resource(mptr);
+            pmr::set_default_resource(mptr);
             A const a;
-            REQUIRE(a.resource() == resource::get_default_resource());
+            REQUIRE(a.resource() == pmr::get_default_resource());
             A const other = a.select_on_container_copy_construction();
-            REQUIRE(other.resource() == resource::get_default_resource());
+            REQUIRE(other.resource() == pmr::get_default_resource());
             REQUIRE(other.resource() == mptr);
-            REQUIRE(a.resource() == resource::get_default_resource());
+            REQUIRE(a.resource() == pmr::get_default_resource());
         }
         /*{
             memory_resource* mptr = (memory_resource*) 42;
-            resource::set_default_resource(mptr);
+            pmr::set_default_resource(mptr);
             A const a(nullptr); // assert here !!!
             REQUIRE(a.resource() == nullptr);
             A const other = a.select_on_container_copy_construction();
-            REQUIRE(other.resource() == resource::get_default_resource());
+            REQUIRE(other.resource() == pmr::get_default_resource());
             REQUIRE(other.resource() == mptr);
             REQUIRE(a.resource() == nullptr);
         }*/

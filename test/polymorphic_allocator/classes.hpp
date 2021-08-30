@@ -7,13 +7,9 @@
 
 #include "test_memory_resource.hpp"
 
-#if CPP17_OR_GREATER
-namespace resource = actor_zeta::detail::pmr::resource;
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
-namespace resource = actor_zeta::detail::pmr::resource::clang_impl;
-#endif
-using actor_zeta::detail::pmr::memory_resource;
-using actor_zeta::detail::pmr::polymorphic_allocator;
+namespace pmr = actor_zeta::detail::pmr;
+using pmr::memory_resource;
+using pmr::polymorphic_allocator;
 
 struct destroyable {
     static int count;
