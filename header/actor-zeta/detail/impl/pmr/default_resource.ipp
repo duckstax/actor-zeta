@@ -18,6 +18,9 @@ namespace actor_zeta { namespace detail { namespace pmr {
     null_memory_resource_t
         null_memory_resource_t::instance_;
 #endif
+#else
+    null_memory_resource_t
+        null_memory_resource_t::instance_;
 #endif
 
     null_memory_resource_t::
@@ -52,6 +55,9 @@ namespace actor_zeta { namespace detail { namespace pmr {
     default_memory_resource_t
         default_memory_resource_t::instance_;
 #endif
+#else
+    default_memory_resource_t
+        default_memory_resource_t::instance_;
 #endif
 
     default_memory_resource_t::
