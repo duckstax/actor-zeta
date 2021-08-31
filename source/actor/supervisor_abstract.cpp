@@ -8,46 +8,16 @@
 // clang-format on
 #include <actor-zeta/base/actor.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
+#include <actor-zeta/detail/aligned_allocate.hpp>
 #include <actor-zeta/link.hpp>
 
 namespace actor_zeta { namespace base {
 
-    static constexpr std::size_t DEFAULT_ALIGNMENT{alignof(std::max_align_t)};
+    using detail::DEFAULT_ALIGNMENT;
 
-    constexpr bool is_pow2(std::size_t n) { return (0 == (n & (n - 1))); }
-
-    constexpr bool is_supported_alignment(std::size_t alignment) { return is_pow2(alignment); }
-
-    template<typename Alloc>
-    void* aligned_allocate(std::size_t bytes, std::size_t alignment, Alloc alloc) {
-        assert(is_pow2(alignment));
-
-        std::size_t padded_allocation_size{bytes + alignment + sizeof(std::ptrdiff_t)};
-
-        char* const original = static_cast<char*>(alloc(padded_allocation_size));
-
-        void* aligned{original + sizeof(std::ptrdiff_t)};
-
-        std::align(alignment, bytes, aligned, padded_allocation_size);
-
-        std::ptrdiff_t offset = static_cast<char*>(aligned) - original;
-
-        *(static_cast<std::ptrdiff_t*>(aligned) - 1) = offset;
-
-        return aligned;
-    }
-
-    template<typename Dealloc>
-    void aligned_deallocate(void* p, std::size_t bytes, std::size_t alignment, Dealloc dealloc) {
-        (void) alignment;
-        (void) bytes;
-
-        std::ptrdiff_t const offset = *(reinterpret_cast<std::ptrdiff_t*>(p) - 1);
-
-        void* const original = static_cast<char*>(p) - offset;
-
-        dealloc(original);
-    }
+    using detail::aligned_allocate;
+    using detail::aligned_deallocate;
+    using detail::is_supported_alignment;
 
     class new_delete_resource final : public detail::pmr::memory_resource {
     public:

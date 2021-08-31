@@ -1,5 +1,6 @@
 #pragma once
 
+#include <actor-zeta/detail/aligned_allocate.hpp>
 #include <actor-zeta/detail/pmr/default_resource.hpp>
 
 namespace actor_zeta { namespace detail { namespace pmr {
@@ -63,38 +64,8 @@ namespace actor_zeta { namespace detail { namespace pmr {
     default_memory_resource_t::
         ~default_memory_resource_t() = default;
 
-    constexpr bool is_pow2(size_t n) { return (0 == (n & (n - 1))); }
-
-    template<typename Alloc>
-    void* aligned_allocate(size_t bytes, size_t alignment, Alloc alloc) {
-        assert(is_pow2(alignment));
-
-        size_t padded_allocation_size{bytes + alignment + sizeof(std::ptrdiff_t)};
-
-        char* const original = static_cast<char*>(alloc(padded_allocation_size));
-
-        void* aligned{original + sizeof(std::ptrdiff_t)};
-
-        std::align(alignment, bytes, aligned, padded_allocation_size);
-
-        std::ptrdiff_t offset = static_cast<char*>(aligned) - original;
-
-        *(static_cast<std::ptrdiff_t*>(aligned) - 1) = offset;
-
-        return aligned;
-    }
-
-    template<typename Dealloc>
-    void aligned_deallocate(void* p, size_t bytes, size_t alignment, Dealloc dealloc) {
-        (void) alignment;
-        (void) bytes;
-
-        std::ptrdiff_t const offset = *(reinterpret_cast<std::ptrdiff_t*>(p) - 1);
-
-        void* const original = static_cast<char*>(p) - offset;
-
-        dealloc(original);
-    }
+    using detail::aligned_allocate;
+    using detail::aligned_deallocate;
 
     void*
     default_memory_resource_t::
