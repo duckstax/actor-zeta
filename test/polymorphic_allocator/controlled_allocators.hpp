@@ -12,27 +12,15 @@
 #define TEST_NOEXCEPT noexcept
 
 struct alloc_controller_t;
-// 'alloc_controller_t' is a concrete type that instruments and controls the
-// behavior of test allocators.
 
 template<class T, size_t ID = 0>
 class counting_allocator_t;
-// 'counting_allocator_t' is an basic implementation of the 'Allocator'
-// requirements that use the 'alloc_controller_t' interface.
 
 template<class T>
 class min_align_allocator_t;
-// 'min_align_allocator_t' is an instrumented test type which implements the
-// 'Allocator' requirements. 'min_align_allocator_t' ensures that it *never*
-// returns a pointer to over-aligned storage. For example
-// 'MinAlignPointer<char>{}.allocate(...)' will never a 2-byte aligned
-// pointer.
 
 template<class T>
 class null_allocator_t;
-// 'null_allocator_t' is an instrumented test type which implements the
-// 'Allocator' requirements except that 'allocator' and 'deallocate' are
-// nops.
 
 #define DISALLOW_COPY(Type)     \
     Type(Type const&) = delete; \

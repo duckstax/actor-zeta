@@ -312,11 +312,11 @@ TEST_CASE("construct_piecewise_pair.pass") {
 #endif
 
 TEST_CASE("memory.polymorphic.allocator.ctor") {
-    /*SECTION("assign.pass") { // @TODO !!! fix !!!
+    SECTION("assign.pass") { // @TODO !!! fix !!!
         typedef polymorphic_allocator<void> T;
         REQUIRE(std::is_copy_assignable<T>::value);
         REQUIRE(std::is_move_assignable<T>::value);
-    }*/
+    }
 
     SECTION("copy.pass") {
         typedef polymorphic_allocator<void> A1;
