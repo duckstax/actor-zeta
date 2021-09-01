@@ -469,7 +469,7 @@ TEST_CASE("memory.polymorphic.allocator.eq") {
             REQUIRE(d2.check_is_equal_called_eq(1));
         }
         // not equal different types
-        /*{ // @TODO !!! fix !!!
+        { // @TODO !!! fix !!!
             test_resource_t d1;
             test_resource1_t d2;
             A1 const a1(&d1);
@@ -481,7 +481,7 @@ TEST_CASE("memory.polymorphic.allocator.eq") {
             REQUIRE(!(a2 == a1));
             REQUIRE(d1.check_is_equal_called_eq(0));
             REQUIRE(d2.check_is_equal_called_eq(1));
-        }*/
+        }
     }
 
     SECTION("not_equal.pass") {
