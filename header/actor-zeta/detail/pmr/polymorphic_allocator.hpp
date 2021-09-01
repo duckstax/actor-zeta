@@ -52,12 +52,18 @@ namespace actor_zeta { namespace detail { namespace pmr {
         polymorphic_allocator(memory_resource* ptr)
             : resource_(ptr) { assert(ptr); }
 
+        polymorphic_allocator(polymorphic_allocator&& other) = default;
+        polymorphic_allocator(polymorphic_allocator& other) = default;
         polymorphic_allocator(const polymorphic_allocator& other) = default;
 
         template<typename _Up>
         polymorphic_allocator(const polymorphic_allocator<_Up>& other) noexcept
             : resource_(other.resource()) {}
 
+        polymorphic_allocator&
+        operator=(polymorphic_allocator&& other) = default;
+        polymorphic_allocator&
+        operator=(polymorphic_allocator& other) = default;
         polymorphic_allocator&
         operator=(const polymorphic_allocator& other) = default;
 
