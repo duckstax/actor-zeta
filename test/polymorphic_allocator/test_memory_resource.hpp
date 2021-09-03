@@ -17,7 +17,7 @@
 using actor_zeta::detail::pmr::memory_resource;
 using actor_zeta::detail::pmr::polymorphic_allocator;
 
-template<class provider_t, int = 0>
+template<class provider_t, int N>
 class test_resource_impl_t : public memory_resource {
 public:
     static int resource_alive;
@@ -35,9 +35,11 @@ public:
     using provider = provider_t;
 
     int value;
+    int type;
 
     explicit test_resource_impl_t(int val = 0)
-        : value(val) {
+        : value(val)
+        , type(N) {
         ++resource_alive;
         ++resource_constructed;
     }
@@ -80,8 +82,8 @@ protected:
 
     virtual bool do_is_equal(memory_resource const& other) const noexcept {
         C.count_is_equal();
-        test_resource_impl_t const* o = static_cast<test_resource_impl_t const*>(&other);
-        return o && o->value == value;
+        test_resource_impl_t<provider_t, N> const* o = static_cast<test_resource_impl_t<provider_t, N> const*>(&other);
+        return o && o->value == value && o->type == type;
     }
 
 private:

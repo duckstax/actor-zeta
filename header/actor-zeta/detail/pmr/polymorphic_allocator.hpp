@@ -49,8 +49,9 @@ namespace actor_zeta { namespace detail { namespace pmr {
         polymorphic_allocator() noexcept
             : resource_(get_default_resource()) {}
 
-        polymorphic_allocator(memory_resource* ptr)
-            : resource_(ptr) { assert(ptr); }
+        polymorphic_allocator(memory_resource* ptr) noexcept
+            __attribute__((__nonnull__))
+            : resource_(ptr) {}
 
         polymorphic_allocator(polymorphic_allocator&& other) = default;
         polymorphic_allocator(polymorphic_allocator& other) = default;

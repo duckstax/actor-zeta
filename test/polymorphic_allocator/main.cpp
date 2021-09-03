@@ -196,7 +196,7 @@ TEST_CASE("memory.resource.public") {
             memory_resource const* r2 = nullptr;
             REQUIRE(noexcept(r1->is_equal(*r2)));
         }
-        /*{ // @TODO !!! fix !!!
+        {
             test_resource1_t R1(1);
             auto& P1 = R1.get_controller();
             memory_resource const& M1 = R1;
@@ -209,7 +209,7 @@ TEST_CASE("memory.resource.public") {
             REQUIRE(M2.is_equal(M1) == false);
             REQUIRE(P2.check_is_equal_called_eq(1));
             REQUIRE(P1.check_is_equal_called_eq(1));
-        }*/
+        }
         {
             test_resource1_t R1(1);
             auto& P1 = R1.get_controller();
@@ -339,7 +339,7 @@ TEST_CASE("memory.polymorphic.allocator.ctor") {
         }
     }
 
-    SECTION("default.pass") { // @TODO !!! fix !!!
+    SECTION("default.pass") {
         {
             REQUIRE(std::is_nothrow_default_constructible<polymorphic_allocator<void>>::value);
         }
@@ -469,9 +469,9 @@ TEST_CASE("memory.polymorphic.allocator.eq") {
             REQUIRE(d2.check_is_equal_called_eq(1));
         }
         // not equal different types
-        { // @TODO !!! fix !!!
-            test_resource_t d1;
-            test_resource1_t d2;
+        {
+            test_resource_t d1;  // value 0 type 0
+            test_resource1_t d2; // value 0 type 1
             A1 const a1(&d1);
             A2 const a2(&d2);
             REQUIRE(!(a1 == a2));
@@ -533,9 +533,9 @@ TEST_CASE("memory.polymorphic.allocator.eq") {
             REQUIRE(d2.check_is_equal_called_eq(1));
         }
         // not equal different types
-        /*{ // @TODO !!! fix !!!
-            test_resource_t d1;
-            test_resource1_t d2;
+        {
+            test_resource_t d1;  // value 0 type 0
+            test_resource1_t d2; // value 0 type 1
             A1 const a1(&d1);
             A2 const a2(&d2);
             REQUIRE(a1 != a2);
@@ -545,7 +545,7 @@ TEST_CASE("memory.polymorphic.allocator.eq") {
             REQUIRE(a2 != a1);
             REQUIRE(d1.check_is_equal_called_eq(0));
             REQUIRE(d2.check_is_equal_called_eq(1));
-        }*/
+        }
     }
 }
 
@@ -620,11 +620,11 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
             A const a(mptr);
             REQUIRE(a.resource() == mptr);
         }
-        /*{ // @TODO !!! fix !!! on std 11/14
+        {
             A const a(nullptr);
             REQUIRE(a.resource() == nullptr);
             REQUIRE(a.resource() == nullptr);
-        }*/
+        }
         {
             A const a;
             REQUIRE(a.resource() == pmr::get_default_resource());
@@ -638,7 +638,7 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
         }
     }
 
-    SECTION("select_on_container_copy_construction.pass") { // @TODO !!! fix !!!
+    SECTION("select_on_container_copy_construction.pass") {
         typedef polymorphic_allocator<void> A;
         {
             A const a;
@@ -662,16 +662,16 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
             REQUIRE(other.resource() == mptr);
             REQUIRE(a.resource() == pmr::get_default_resource());
         }
-        /*{
+        {
             memory_resource* mptr = (memory_resource*) 42;
             pmr::set_default_resource(mptr);
-            A const a(nullptr); // assert here !!!
+            A const a(nullptr);
             REQUIRE(a.resource() == nullptr);
             A const other = a.select_on_container_copy_construction();
             REQUIRE(other.resource() == pmr::get_default_resource());
             REQUIRE(other.resource() == mptr);
             REQUIRE(a.resource() == nullptr);
-        }*/
+        }
     }
 }
 
