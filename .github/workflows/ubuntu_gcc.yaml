@@ -5,49 +5,16 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
+        standard: [11, 14, 17]
+        profile: ["Release", "Debug", "Asan"]
         configuration: [
-          #{ "COMPILER_C": "gcc-4.8", "COMPILER":"gcc", "COMPILER_VER":"4.8", "COMPILER_CXX": "gcc-4.8","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
-          #{ "COMPILER_C": "gcc-4.8", "COMPILER":"gcc", "COMPILER_VER":"4.8", "COMPILER_CXX": "gcc-4.8","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
-          #{ "COMPILER_C": "gcc-4.9", "COMPILER":"gcc", "COMPILER_VER":"4.9", "COMPILER_CXX": "g++-4.9","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
-          #{ "COMPILER_C": "gcc-4.9", "COMPILER":"gcc", "COMPILER_VER":"4.9", "COMPILER_CXX": "g++-4.9","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-5", "COMPILER":"gcc", "COMPILER_VER":"5", "COMPILER_CXX": "g++-5","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-5", "COMPILER":"gcc", "COMPILER_VER":"5", "COMPILER_CXX": "g++-5","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-5", "COMPILER":"gcc", "COMPILER_VER":"5", "COMPILER_CXX": "g++-5","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
-          { "COMPILER_C": "gcc-5", "COMPILER":"gcc", "COMPILER_VER":"5", "COMPILER_CXX": "g++-5","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
-          { "COMPILER_C": "gcc-6", "COMPILER":"gcc", "COMPILER_VER":"6", "COMPILER_CXX": "g++-6","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-6", "COMPILER":"gcc", "COMPILER_VER":"6", "COMPILER_CXX": "g++-6","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-6", "COMPILER":"gcc", "COMPILER_VER":"6", "COMPILER_CXX": "g++-6","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
-          { "COMPILER_C": "gcc-6", "COMPILER":"gcc", "COMPILER_VER":"6", "COMPILER_CXX": "g++-6","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
-          { "COMPILER_C": "gcc-7", "COMPILER":"gcc", "COMPILER_VER":"7", "COMPILER_CXX": "g++-7","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-7", "COMPILER":"gcc", "COMPILER_VER":"7", "COMPILER_CXX": "g++-7","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-7", "COMPILER":"gcc", "COMPILER_VER":"7", "COMPILER_CXX": "g++-7","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
-          { "COMPILER_C": "gcc-7", "COMPILER":"gcc", "COMPILER_VER":"7", "COMPILER_CXX": "g++-7","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
-          #{ "COMPILER_C": "gcc-7", "COMPILER":"gcc", "COMPILER_VER":"7", "COMPILER_CXX": "g++-7","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
-          #{ "COMPILER_C": "gcc-7", "COMPILER":"gcc", "COMPILER_VER":"7", "COMPILER_CXX": "g++-7","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
-          { "COMPILER_C": "gcc-8", "COMPILER":"gcc", "COMPILER_VER":"8", "COMPILER_CXX": "g++-8","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-8", "COMPILER":"gcc", "COMPILER_VER":"8", "COMPILER_CXX": "g++-8","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-8", "COMPILER":"gcc", "COMPILER_VER":"8", "COMPILER_CXX": "g++-8","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
-          { "COMPILER_C": "gcc-8", "COMPILER":"gcc", "COMPILER_VER":"8", "COMPILER_CXX": "g++-8","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
-          #{ "COMPILER_C": "gcc-8", "COMPILER":"gcc", "COMPILER_VER":"8", "COMPILER_CXX": "g++-8","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
-          #{ "COMPILER_C": "gcc-8", "COMPILER":"gcc", "COMPILER_VER":"8", "COMPILER_CXX": "g++-8","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
-          { "COMPILER_C": "gcc-9", "COMPILER":"gcc", "COMPILER_VER":"9", "COMPILER_CXX": "g++-9","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-9", "COMPILER":"gcc", "COMPILER_VER":"9", "COMPILER_CXX": "g++-9","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-9", "COMPILER":"gcc", "COMPILER_VER":"9", "COMPILER_CXX": "g++-9","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
-          { "COMPILER_C": "gcc-9", "COMPILER":"gcc", "COMPILER_VER":"9", "COMPILER_CXX": "g++-9","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
-          { "COMPILER_C": "gcc-9", "COMPILER":"gcc", "COMPILER_VER":"9", "COMPILER_CXX": "g++-9","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
-          { "COMPILER_C": "gcc-9", "COMPILER":"gcc", "COMPILER_VER":"9", "COMPILER_CXX": "g++-9","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
-          { "COMPILER_C": "gcc-10", "COMPILER":"gcc", "COMPILER_VER":"10", "COMPILER_CXX": "g++-10","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-10", "COMPILER":"gcc", "COMPILER_VER":"10", "COMPILER_CXX": "g++-10","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-10", "COMPILER":"gcc", "COMPILER_VER":"10", "COMPILER_CXX": "g++-10","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
-          { "COMPILER_C": "gcc-10", "COMPILER":"gcc", "COMPILER_VER":"10", "COMPILER_CXX": "g++-10","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
-          { "COMPILER_C": "gcc-10", "COMPILER":"gcc", "COMPILER_VER":"10", "COMPILER_CXX": "g++-10","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
-          { "COMPILER_C": "gcc-10", "COMPILER":"gcc", "COMPILER_VER":"10", "COMPILER_CXX": "g++-10","BUILD_TYPE": "Debug","CXX_STANDARD": 17 },
-          { "COMPILER_C": "gcc-11", "COMPILER":"gcc", "COMPILER_VER":"11", "COMPILER_CXX": "g++-11","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-11", "COMPILER":"gcc", "COMPILER_VER":"11", "COMPILER_CXX": "g++-11","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-11", "COMPILER":"gcc", "COMPILER_VER":"11", "COMPILER_CXX": "g++-11","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
-          { "COMPILER_C": "gcc-11", "COMPILER":"gcc", "COMPILER_VER":"11", "COMPILER_CXX": "g++-11","BUILD_TYPE": "Debug","CXX_STANDARD": 14 },
-          { "COMPILER_C": "gcc-11", "COMPILER":"gcc", "COMPILER_VER":"11", "COMPILER_CXX": "g++-11","BUILD_TYPE": "Release","CXX_STANDARD": 17 },
-          { "COMPILER_C": "gcc-11", "COMPILER":"gcc", "COMPILER_VER":"11", "COMPILER_CXX": "g++-11","BUILD_TYPE": "Debug","CXX_STANDARD": 17 }
+          { "COMPILER_C": "gcc-5", "COMPILER":"gcc", "COMPILER_VER":"5", "COMPILER_CXX": "g++-5"},
+          { "COMPILER_C": "gcc-6", "COMPILER":"gcc", "COMPILER_VER":"6", "COMPILER_CXX": "g++-6"},
+          { "COMPILER_C": "gcc-7", "COMPILER":"gcc", "COMPILER_VER":"7", "COMPILER_CXX": "g++-7"},
+          { "COMPILER_C": "gcc-8", "COMPILER":"gcc", "COMPILER_VER":"8", "COMPILER_CXX": "g++-8"},
+          { "COMPILER_C": "gcc-9", "COMPILER":"gcc", "COMPILER_VER":"9", "COMPILER_CXX": "g++-9"},
+          { "COMPILER_C": "gcc-10", "COMPILER":"gcc", "COMPILER_VER":"10", "COMPILER_CXX": "g++-10"},
+          { "COMPILER_C": "gcc-11", "COMPILER":"gcc", "COMPILER_VER":"11", "COMPILER_CXX": "g++-11"},
         ]
 
     steps:
@@ -75,10 +42,10 @@ jobs:
         env:
           CC: ${{ matrix.configuration.COMPILER_C}}
           CXX: ${{ matrix.configuration.COMPILER_CXX}}
-        run: cmake -B ${{github.workspace}}/build -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.configuration.BUILD_TYPE}} -DCMAKE_CXX_STANDARD=${{ matrix.configuration.CXX_STANDARD}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON
+        run: cmake -B ${{github.workspace}}/build -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.profile}} -DCMAKE_CXX_STANDARD=${{ matrix.standard}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON
 
       - name: Build
-        run: cmake --build ${{github.workspace}}/build --config ${{ matrix.configuration.BUILD_TYPE}}
+        run: cmake --build ${{github.workspace}}/build --config ${{ matrix.profile}}
 
       - name: Test
         working-directory: ${{github.workspace}}/build
