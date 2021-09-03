@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 #include <actor-zeta/detail/pmr/default_resource.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/detail/pmr/polymorphic_allocator.hpp>

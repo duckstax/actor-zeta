@@ -26,7 +26,7 @@ class null_allocator_t;
     Type(Type const&) = delete; \
     Type& operator=(Type const&) = delete
 
-constexpr std::size_t MaxAlignV = alignof(std::max_align_t);
+constexpr std::size_t MaxAlignV = alignof(::max_align_t);
 
 struct test_exception_t {};
 

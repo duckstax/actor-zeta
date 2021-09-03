@@ -162,7 +162,7 @@ TEST_CASE("memory.resource.public") {
             REQUIRE(P.dealloc_count == 1);
             REQUIRE(P.check_dealloc(p, s, a));
             s = 128;
-            a = alignof(std::max_align_t);
+            a = alignof(::max_align_t);
             p = reinterpret_cast<void*>(12800);
             M.deallocate(p, s);
             REQUIRE(P.dealloc_count == 2);
@@ -570,7 +570,7 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
             REQUIRE(!noexcept(a.allocate(0)));
         }
         {
-            constexpr std::size_t MA = alignof(std::max_align_t);
+            constexpr std::size_t MA = alignof(::max_align_t);
             testForSizeAndAlign<1, 1>();
             testForSizeAndAlign<1, 2>();
             testForSizeAndAlign<1, MA>();

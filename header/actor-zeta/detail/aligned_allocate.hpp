@@ -7,7 +7,7 @@
 
 namespace actor_zeta { namespace detail {
 
-    static constexpr std::size_t DEFAULT_ALIGNMENT{alignof(std::max_align_t)};
+    static constexpr std::size_t DEFAULT_ALIGNMENT{alignof(::max_align_t)};
 
     constexpr bool is_pow2(std::size_t n) { return (0 == (n & (n - 1))); }
 
