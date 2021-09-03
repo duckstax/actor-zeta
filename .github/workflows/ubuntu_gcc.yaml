@@ -76,6 +76,7 @@ jobs:
         env:
           CC: ${{ matrix.configuration.COMPILER_C}}
           CXX: ${{ matrix.configuration.COMPILER_CXX}}
+          BUILD_TYPE: ${{ matrix.profiles }}
         run: cmake -B ${{github.workspace}}/build -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.profiles }} -DCMAKE_CXX_STANDARD=${{ matrix.configuration.CXX_STANDARD}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON
 
       - name: Build
