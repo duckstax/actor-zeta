@@ -102,4 +102,10 @@ namespace actor_zeta {
 
 #define DEBUG NDEBUG
 
+#ifndef CPP11_OR_GREATER
+# define CONSTEXPR_14 constexpr
+#else
+# define CONSTEXPR_14 /*constexpr*/
+#endif
+
 } // namespace actor_zeta

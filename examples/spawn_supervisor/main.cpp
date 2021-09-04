@@ -1,0 +1,260 @@
+#include <actor-zeta/make_message.hpp>
+#include <cassert>
+
+#include <chrono>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <thread>
+#include <unordered_set>
+#include <vector>
+
+#include <actor-zeta.hpp>
+#include <actor-zeta/link.hpp>
+
+using actor_zeta::abstract_executor;
+using actor_zeta::basic_async_actor;
+using actor_zeta::supervisor;
+
+using actor_zeta::abstract_executor;
+using actor_zeta::executor_t;
+using actor_zeta::work_sharing;
+
+using actor_zeta::make_message;
+
+std::atomic_int count;
+const int max_queue = 100;
+
+template<typename Task, typename... Args>
+auto make_task(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
+    actor_zeta::send(executor_, executor_->address(), command, std::move(Task(std::forward<Args>(args)...)));
+}
+
+template<typename Task, typename... Args>
+auto make_task_broadcast(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
+    executor_->broadcast(make_message(executor_->address(), command, std::move(Task(std::forward<Args>(args)...))));
+}
+
+auto thread_pool_deleter = [](actor_zeta::abstract_executor* ptr) -> void {
+    ptr->stop();
+    delete ptr;
+};
+
+class worker_t2 final : public actor_zeta::basic_async_actor {
+public:
+    explicit worker_t2(actor_zeta::supervisor_abstract* ptr)
+        : actor_zeta::basic_async_actor(ptr, "bot2") {
+        count++;
+        std::cout << "bot2 created:" << address().get() << std::endl;
+        add_handler("spawn_broadcast", &worker_t2::spawn_broadcast);
+        add_handler("print_links", &worker_t2::print_links);
+    }
+
+    auto spawn_broadcast(actor_zeta::address_t addr) -> void {
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " got actor: " << addr.type() << "(" << addr.get() << ")" << std::endl;
+        if (addr.type() == "bot3") {
+            std::cout << address().type() << "(" << address().get() << ")"
+                      << " linking with it" << std::endl;
+            auto self_addr = address();
+            actor_zeta::link(self_addr, addr);
+        }
+    }
+
+    auto print_links() -> void {
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " linked with:\n";
+        auto addrs = all_view_address();
+        for (const auto& a : addrs) {
+            std::cout << '\t' << a << std::endl;
+        }
+    }
+};
+
+class worker_t3 final : public actor_zeta::basic_async_actor {
+public:
+    explicit worker_t3(actor_zeta::supervisor_abstract* ptr)
+        : actor_zeta::basic_async_actor(ptr, "bot3") {
+        count++;
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " created" << std::endl;
+        add_handler("spawn_broadcast", &worker_t3::spawn_broadcast);
+        add_handler("print_links", &worker_t3::print_links);
+    }
+
+    auto spawn_broadcast(actor_zeta::address_t addr) -> void {
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " got actor: " << addr.type() << "(" << addr.get() << ")" << std::endl;
+    }
+
+    auto print_links() -> void {
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " linked with:\n";
+        auto addrs = all_view_address();
+        for (const auto& a : addrs) {
+            std::cout << '\t' << a << std::endl;
+        }
+    }
+};
+
+class worker_t final : public actor_zeta::basic_async_actor {
+public:
+    explicit worker_t(actor_zeta::supervisor_abstract* ptr /*, int a, double b*/)
+        : actor_zeta::basic_async_actor(ptr, "bot1") {
+        count++;
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " created" << std::endl;
+        add_handler("spawn_actor_in_bot", &worker_t::spawn_worker);
+        add_handler("spawn_broadcast", &worker_t::spawn_broadcast);
+        add_handler("print_links", &worker_t::print_links);
+    }
+
+    auto spawn_worker() -> void {
+        auto addr = address_book("manager-2");
+        actor_zeta::spawn_actor<worker_t2>(addr, address());
+        actor_zeta::spawn_actor<worker_t3>(addr, address());
+    }
+
+    auto spawn_broadcast(actor_zeta::address_t addr) -> void {
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " got actor: " << addr.type() << "(" << addr.get() << ")" << std::endl;
+        if (addr.type() == "bot2") {
+            std::cout << address().type() << "(" << address().get() << ")"
+                      << " linking with it" << std::endl;
+            auto self_addr = address();
+            actor_zeta::link(self_addr, addr);
+        }
+    }
+
+    auto print_links() -> void {
+        std::cout << address().type() << "(" << address().get() << ")"
+                  << " linked with:\n";
+        auto addrs = all_view_address();
+        for (const auto& a : addrs) {
+            std::cout << '\t' << a << std::endl;
+        }
+    }
+};
+
+class supervisor_lite final : public actor_zeta::supervisor_abstract {
+public:
+    explicit supervisor_lite(actor_zeta::supervisor_abstract*ptr,std::string name)
+        : supervisor_abstract(ptr,std::move(name))
+        , e_(new executor_t<work_sharing>(1, max_queue),
+             thread_pool_deleter)
+        , system_{"add_link",
+                  "sync_contacts",
+                  "remove_link",
+                  "spawn_actor", "delegate", "spawn_broadcast"} {
+        e_->start();
+        add_handler("spawn_broadcast", &supervisor_lite::spawn_broadcast);
+    }
+
+    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
+        return e_.get();
+    }
+
+    auto add_actor_impl(actor_zeta::actor t) -> void final {
+        std::cout << "sup: added actor:" << t.address() << " " << t.type() << " " << t->address().get() << std::endl;
+        spawn_broadcast(address(), t->address());
+        actors_.emplace_back(std::move(t));
+    }
+
+    auto add_supervisor_impl(actor_zeta::supervisor t) -> void final {
+        supervisor_.emplace_back(std::move(t));
+    }
+
+    auto spawn_broadcast(actor_zeta::address_t sender, actor_zeta::address_t addr) -> void {
+        auto contacts = address_book();
+        for (auto it = contacts.first; it != contacts.second; ++it) {
+            if (it->first != sender.type()) {
+                broadcast(it->first, make_message(address(), "spawn_broadcast", address(), addr));
+            }
+        }
+    }
+
+    auto enqueue_base(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+        auto msg_ = std::move(msg);
+        auto it = system_.find(msg_->command());
+        if (it != system_.end()) {
+            local(std::move(msg_));
+        }
+    }
+
+private:
+    auto local(actor_zeta::message_ptr msg) -> void {
+        set_current_message(std::move(msg));
+        execute();
+    }
+
+    std::unique_ptr<abstract_executor, decltype(thread_pool_deleter)> e_;
+    std::vector<actor_zeta::actor> actors_;
+    std::vector<actor_zeta::address_t> actors_for_broadcast_;
+    std::vector<actor_zeta::supervisor> supervisor_;
+    std::unordered_set<actor_zeta::detail::string_view> system_;
+};
+
+class root_t final : public actor_zeta::supervisor_abstract {
+public:
+    root_t()
+        : supervisor_abstract("root")
+        , e_(new executor_t<work_sharing>(1, max_queue),
+             thread_pool_deleter)
+        , system_{"add_link",
+                  "sync_contacts",
+                  "remove_link",
+                  "spawn_actor", "delegate", "spawn_broadcast"} {
+        e_->start();
+        add_handler("spawn_broadcast", &supervisor_lite::spawn_broadcast);
+    }
+
+    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
+        return e_.get();
+    }
+
+    auto add_actor_impl(actor_zeta::actor t) -> void final {
+        std::cout << "sup: added actor:" << t.address() << " " << t.type() << " " << t->address().get() << std::endl;
+        spawn_broadcast(address(), t->address());
+        actors_.emplace_back(std::move(t));
+    }
+
+    auto add_supervisor_impl(actor_zeta::supervisor t) -> void final {
+        supervisor_.emplace_back(std::move(t));
+    }
+
+    auto spawn_broadcast(actor_zeta::address_t sender, actor_zeta::address_t addr) -> void {
+        auto contacts = address_book();
+        for (auto it = contacts.first; it != contacts.second; ++it) {
+            if (it->first != sender.type()) {
+                broadcast(it->first, make_message(address(), "spawn_broadcast", address(), addr));
+            }
+        }
+    }
+
+    auto enqueue_base(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+        auto msg_ = std::move(msg);
+        auto it = system_.find(msg_->command());
+        if (it != system_.end()) {
+            local(std::move(msg_));
+        }
+    }
+
+private:
+    auto local(actor_zeta::message_ptr msg) -> void {
+        set_current_message(std::move(msg));
+        execute();
+    }
+
+    std::unique_ptr<abstract_executor, decltype(thread_pool_deleter)> e_;
+    std::vector<actor_zeta::actor> actors_;
+    std::vector<actor_zeta::address_t> actors_for_broadcast_;
+    std::vector<actor_zeta::supervisor> supervisor_;
+    std::unordered_set<actor_zeta::detail::string_view> system_;
+};
+
+auto main() -> int {
+
+    auto root = actor_zeta::spawn_supervisor<root_t>();
+    actor_zeta::spawn_supervisor<supervisor_lite>(root,"pool");
+    return 0;
+}

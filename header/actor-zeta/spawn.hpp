@@ -24,7 +24,7 @@ namespace actor_zeta {
             void* buffer = supervisor->resource()->allocate(allocate_byte, allocate_byte_alignof);
             return new (buffer) Actor(supervisor, std::get<I>(args)...);
         }
-        /*
+
         template<
             class ChildrenSupervisor,
             class Tuple, std::size_t... I,
@@ -35,8 +35,6 @@ namespace actor_zeta {
             void* buffer = supervisor->resource()->allocate(allocate_byte, allocate_byte_alignof);
             return new (buffer) ChildrenSupervisor(supervisor, std::get<I>(args)...);
         }
-*/
-    } // namespace detail
 
     template<
         class Actor,
@@ -50,26 +48,28 @@ namespace actor_zeta {
             "spawn_actor",
             std::forward<base::default_spawn_actor>(
                 base::default_spawn_actor(
-                    [&, args_ = std::move(std::tuple<Args&&...>(std::forward<Args&&>(args)...))](actor_zeta::base::supervisor_abstract* ptr) {
+                    [args_ = std::move(std::tuple<Args&&...>(std::forward<Args&&>(args)...))](actor_zeta::base::supervisor_abstract* ptr) {
                         return detail::created_actor<Actor>(ptr, args_, type_traits::make_index_sequence<number_of_arguments>{});
                     })));
     }
+
+    } // namespace detail
 
     template<
         class Actor,
         class... Args,
         class = type_traits::enable_if_t<std::is_base_of<actor_abstract, Actor>::value>>
     auto spawn_actor(base::supervisor& supervisor, Args&&... args) -> void {
-        spawn_actor_impl<Actor>(supervisor->address(), supervisor->address(), std::forward<Args>(args)...);
+        detail::spawn_actor_impl<Actor>(supervisor->address(), supervisor->address(), std::forward<Args>(args)...);
     }
 
     template<
         class Actor,
         class... Args>
     auto spawn_actor(base::address_t recipient, base::address_t sender, Args&&... args) -> void {
-        spawn_actor_impl<Actor>(std::move(recipient), std::move(sender), std::forward<Args>(args)...);
+        detail::spawn_actor_impl<Actor>(std::move(recipient), std::move(sender), std::forward<Args>(args)...);
     }
-    /*
+
     template<
         class ChildrenSupervisor,
         class... Args,
@@ -77,17 +77,23 @@ namespace actor_zeta {
     auto spawn_supervisor(base::supervisor& supervisor, Args&&... args) -> void {
         using args_types = type_traits::type_list<Args...>;
         static constexpr size_t number_of_arguments = type_traits::type_list_size<args_types>::value;
-
         send(
             supervisor->address(),
             supervisor->address(),
             "spawn_supervisor",
             std::move(
-                base::default_spawn_actor(
-                    [&, args_ = std::move(std::tuple<Args&&...>(std::forward<Args&&>(args)...))](actor_zeta::supervisor_abstract* ptr) {
-                        return detail::created_supervisor<ChildrenSupervisor>(ptr, args_, type_traits::make_index_sequence<number_of_arguments>{});
+                detail::created_supervisor(
+                    [args_ = std::make_tuple(std::forward<Args>(args)...)](actor_zeta::supervisor_abstract* ptr) mutable {
+                        return detail::created_supervisor<ChildrenSupervisor>(ptr, std::move(args_), type_traits::make_index_sequence<number_of_arguments>{});
                     })));
     }
-    */
+
+    template<
+        class ChildrenSupervisor,
+        class... Args,
+        class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, ChildrenSupervisor>::value>>
+    auto spawn_supervisor(Args&&... args) -> base::supervisor {
+        return base::supervisor(new ChildrenSupervisor(std::forward<Args>(args)...));
+    }
 
 } // namespace actor_zeta
