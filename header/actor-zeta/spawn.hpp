@@ -22,7 +22,7 @@ namespace actor_zeta {
             auto allocate_byte = sizeof(Actor);
             auto allocate_byte_alignof = alignof(Actor);
             void* buffer = supervisor->resource()->allocate(allocate_byte, allocate_byte_alignof);
-            return new (buffer) Actor(supervisor, std::get<I>(args)...);
+            return new (buffer) Actor(supervisor,(std::get<I>(args))...);
         }
 
         template<
@@ -33,7 +33,7 @@ namespace actor_zeta {
             auto allocate_byte = sizeof(ChildrenSupervisor);
             auto allocate_byte_alignof = alignof(ChildrenSupervisor);
             void* buffer = supervisor->resource()->allocate(allocate_byte, allocate_byte_alignof);
-            return new (buffer) ChildrenSupervisor(supervisor, std::get<I>(args)...);
+            return new (buffer) ChildrenSupervisor(supervisor, (std::get<I>(args))...);
         }
 
     template<
@@ -82,9 +82,9 @@ namespace actor_zeta {
             supervisor->address(),
             "spawn_supervisor",
             std::move(
-                detail::created_supervisor(
-                    [args_ = std::make_tuple(std::forward<Args>(args)...)](actor_zeta::supervisor_abstract* ptr) mutable {
-                        return detail::created_supervisor<ChildrenSupervisor>(ptr, std::move(args_), type_traits::make_index_sequence<number_of_arguments>{});
+                base::default_spawn_supervisor(
+                    [args_ = std::make_tuple(std::forward<Args&&>(args)...)](actor_zeta::supervisor_abstract* ptr) {
+                        return detail::created_supervisor<ChildrenSupervisor>(ptr, args_, type_traits::make_index_sequence<number_of_arguments>{});
                     })));
     }
 
