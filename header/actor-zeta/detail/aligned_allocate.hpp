@@ -17,13 +17,13 @@ namespace actor_zeta { namespace detail {
 
     constexpr bool is_supported_alignment(std::size_t alignment) { return is_pow2(alignment); }
 
+    inline void* align(std::size_t alignment, std::size_t size, void*& ptr, std::size_t& space) {
 #ifdef __GNUC__
 #if __GNUC_PREREQ(5, 0)
-    //      If  gcc_version >= 5.0
-    using align = std::align;
+        //      If  gcc_version >= 5.0
+        return std::align(alignment, size, ptr, space);
 #elif __GNUC_PREREQ(4, 0)
-    //       If gcc_version >= 4.0
-    inline void* align(std::size_t alignment, std::size_t size, void*& ptr, std::size_t& space) {
+        //       If gcc_version >= 4.0
         auto pn = reinterpret_cast<std::size_t>(ptr);
         auto aligned = (pn + alignment - 1) & -alignment;
         auto new_space = space - (aligned - pn);
@@ -31,14 +31,16 @@ namespace actor_zeta { namespace detail {
             return nullptr;
         space = new_space;
         return ptr = reinterpret_cast<void*>(aligned);
+
+#else
+        //       Else
+        return std::align(alignment, size, ptr, space);
+#endif
+#else
+        //    If not gcc
+        return std::align(alignment, size, ptr, space);
+#endif
     }
-#else
-//       Else
-#endif
-#else
-    //    If not gcc
-    using align = std::align;
-#endif
 
     template<typename Alloc>
     void* aligned_allocate(std::size_t bytes, std::size_t alignment, Alloc alloc) {
