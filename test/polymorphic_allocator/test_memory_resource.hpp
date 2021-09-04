@@ -10,6 +10,7 @@
 
 #include "controlled_allocators.hpp"
 
+#include <actor-zeta/detail/aligned_allocate.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/detail/pmr/polymorphic_allocator.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
