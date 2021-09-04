@@ -5,6 +5,10 @@
 #include <cstdlib>
 #include <memory>
 
+#ifdef __GNUC__
+#include <features.h>
+#endif
+
 namespace actor_zeta { namespace detail {
 
     static constexpr std::size_t DEFAULT_ALIGNMENT{alignof(::max_align_t)};
@@ -12,6 +16,29 @@ namespace actor_zeta { namespace detail {
     constexpr bool is_pow2(std::size_t n) { return (0 == (n & (n - 1))); }
 
     constexpr bool is_supported_alignment(std::size_t alignment) { return is_pow2(alignment); }
+
+#ifdef __GNUC__
+#if __GNUC_PREREQ(5, 0)
+    //      If  gcc_version >= 5.0
+    using align = std::align;
+#elif __GNUC_PREREQ(4, 0)
+    //       If gcc_version >= 4.0
+    inline void* align(std::size_t alignment, std::size_t size, void*& ptr, std::size_t& space) {
+        auto pn = reinterpret_cast<std::size_t>(ptr);
+        auto aligned = (pn + alignment - 1) & -alignment;
+        auto new_space = space - (aligned - pn);
+        if (new_space < size)
+            return nullptr;
+        space = new_space;
+        return ptr = reinterpret_cast<void*>(aligned);
+    }
+#else
+//       Else
+#endif
+#else
+    //    If not gcc
+    using align = std::align;
+#endif
 
     template<typename Alloc>
     void* aligned_allocate(std::size_t bytes, std::size_t alignment, Alloc alloc) {
@@ -23,7 +50,7 @@ namespace actor_zeta { namespace detail {
 
         void* aligned{original + sizeof(std::ptrdiff_t)};
 
-        std::align(alignment, bytes, aligned, padded_allocation_size);
+        align(alignment, bytes, aligned, padded_allocation_size);
 
         std::ptrdiff_t offset = static_cast<char*>(aligned) - original;
 

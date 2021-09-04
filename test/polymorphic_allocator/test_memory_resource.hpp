@@ -130,7 +130,7 @@ struct buffer_provider_t {
     buffer_provider_t() {}
 
     void* allocate(size_t s, size_t a) {
-        void* ret = std::align(s, a, next, space);
+        void* ret = actor_zeta::detail::align(s, a, next, space);
         if (ret == nullptr) {
 #ifndef TEST_HAS_NO_EXCEPTIONS
             throw std::bad_alloc();
