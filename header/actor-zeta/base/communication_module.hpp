@@ -22,41 +22,22 @@ namespace actor_zeta { namespace base {
     public:
         using key_type = detail::string_view;
         using storage_t = std::unordered_map<key_type, std::unique_ptr<handler>>;
-        using storage_contact_t = std::list<address_t>;
-        using contacts_t = std::unordered_map<key_type, storage_contact_t>;
-        using contacts_iterator_t = storage_contact_t::iterator;
-        using range_t = std::pair<contacts_iterator_t, contacts_iterator_t>;
-        using address_range_t = std::pair<contacts_t::const_iterator, contacts_t::const_iterator>;
 
         communication_module() = delete;
-
         communication_module(const communication_module&) = delete;
-
         communication_module& operator=(const communication_module&) = delete;
-
         ~communication_module() override;
 
         auto type() const -> detail::string_view;
-
         auto message_types() const -> std::set<std::string>;
-
         auto enqueue(message_ptr) -> void;
-
         void enqueue(message_ptr, executor::execution_device*);
-
-        auto broadcast(message_ptr) -> void;
-
-        auto broadcast(detail::string_view, message_ptr) -> void;
-
-        virtual auto current_message() -> message* = 0;
+        auto current_message() -> message*;
 
     protected:
         communication_module(std::string);
-
+        virtual auto current_message_imp() -> message* = 0;
         virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
-
-        auto address_book(detail::string_view) -> address_t;
-        auto address_book() -> address_range_t;
 
         template<class F>
         auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
@@ -69,20 +50,9 @@ namespace actor_zeta { namespace base {
         }
 
         void execute();
-
         bool on(detail::string_view, handler*);
 
-        /**
-        * debug method
-        */
-        auto all_view_address() const -> std::set<std::string>;
-
     private:
-        void add_link(address_t&);
-
-        void remove_link(const address_t&);
-
-        contacts_t contacts_;
         storage_t handlers_;
         std::string type_;
     };

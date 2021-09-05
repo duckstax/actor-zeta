@@ -12,13 +12,6 @@
 
 namespace actor_zeta { namespace base {
 
-    void error_sync_contacts(detail::string_view name, detail::string_view error) {
-        std::cerr << "WARNING" << '\n';
-        std::cerr << "Actor name : " << name << '\n';
-        std::cerr << "Not initialization address type:" << error << '\n';
-        std::cerr << "WARNING" << std::endl;
-    }
-
     void error_duplicate_handler(detail::string_view error) {
         std::cerr << "Duplicate" << '\n';
         std::cerr << "Handler: " << error << '\n';
@@ -79,27 +72,6 @@ namespace actor_zeta { namespace base {
         return types;
     }
 
-    auto communication_module::all_view_address() const -> std::set<std::string> {
-        std::set<std::string> tmp;
-
-        for (const auto& i : contacts_) {
-            tmp.emplace(std::string(i.first.begin(), i.first.end()));
-        }
-
-        return tmp;
-    }
-
-    auto communication_module::address_book(detail::string_view type) -> address_t {
-        auto result = contacts_.find(type);
-        if (result != contacts_.end()) {
-            return *(result->second.begin());
-        }
-    }
-
-    auto communication_module::address_book() -> address_range_t {
-        return std::make_pair(contacts_.cbegin(), contacts_.cend());
-    }
-
     auto communication_module::type() const -> detail::string_view {
         return detail::string_view(type_.data(), type_.size());
     }
@@ -107,68 +79,13 @@ namespace actor_zeta { namespace base {
     communication_module::~communication_module() {}
 
     communication_module::communication_module(std::string type)
-        : contacts_()
-        , type_(std::move(type)) {
-        add_handler(
-            "add_link",
-            &communication_module::add_link);
-
-        add_handler(
-            "remove_link",
-            &communication_module::remove_link);
-    }
-
-    void communication_module::add_link(address_t& address) {
-        if (address) {
-            auto name = address.type();
-            auto it = contacts_.find(name);
-            if (it == contacts_.end()) {
-                auto result = contacts_.emplace(name, storage_contact_t());
-                result.first->second.emplace_back(std::move(address));
-            } else {
-                it->second.emplace_back(std::move(address));
-            }
-        } else {
-            error_sync_contacts(type(), address.type());
-        }
-    }
-
-    void communication_module::remove_link(const address_t& address) {
-        auto name = address.type();
-        auto it = contacts_.find(name);
-        if (it == contacts_.end()) {
-            // not find
-        } else {
-            auto end = it->second.end();
-            for (auto i = it->second.begin(); i != end; ++i) {
-                if (address.get() == i->get()) {
-                    it->second.erase(i);
-                }
-            }
-        }
-    }
-
-    auto communication_module::broadcast(message_ptr msg) -> void {
-        auto tmp = std::move(msg);
-
-        for (auto& i : contacts_) {
-            for (auto& j : i.second) {
-                j.enqueue(message_ptr(tmp->clone()));
-            }
-        }
-    }
-
-    auto communication_module::broadcast(detail::string_view type, message_ptr msg) -> void {
-        auto tmp = std::move(msg);
-
-        auto range = contacts_.find(type);
-        for (auto& i : range->second) {
-            i.enqueue(message_ptr(tmp->clone()));
-        }
-    }
+        : type_(std::move(type)) {}
 
     void communication_module::enqueue(message_ptr msg, executor::execution_device* e) {
         enqueue_base(std::move(msg), e);
+    }
+    auto communication_module::current_message() -> message* {
+        return current_message_imp();
     }
 
 }} // namespace actor_zeta::base

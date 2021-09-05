@@ -9,8 +9,16 @@
 #include <actor-zeta/base/actor.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/link.hpp>
+#include <iostream>
 
 namespace actor_zeta { namespace base {
+
+    void error_sync_contacts(detail::string_view name, detail::string_view error) {
+        std::cerr << "WARNING" << '\n';
+        std::cerr << "Actor name : " << name << '\n';
+        std::cerr << "Not initialization address type:" << error << '\n';
+        std::cerr << "WARNING" << std::endl;
+    }
 
     static constexpr std::size_t DEFAULT_ALIGNMENT{alignof(std::max_align_t)};
 
@@ -70,6 +78,8 @@ namespace actor_zeta { namespace base {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
         add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
         add_handler("delegate", &supervisor_abstract::redirect);
+        add_handler("add_link",&supervisor_abstract::add_link);
+        add_handler("remove_link",&supervisor_abstract::remove_link);
     }
 
     supervisor_abstract::supervisor_abstract(std::string name)
@@ -78,6 +88,8 @@ namespace actor_zeta { namespace base {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
         add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
         add_handler("delegate", &supervisor_abstract::redirect);
+        add_handler("add_link",&supervisor_abstract::add_link);
+        add_handler("remove_link",&supervisor_abstract::remove_link);
     }
 
     supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string name)
@@ -86,10 +98,12 @@ namespace actor_zeta { namespace base {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
         add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
         add_handler("delegate", &supervisor_abstract::redirect);
+        add_handler("add_link",&supervisor_abstract::add_link);
+        add_handler("remove_link",&supervisor_abstract::remove_link);
     }
     supervisor_abstract::~supervisor_abstract() {}
 
-    auto supervisor_abstract::current_message() -> message* {
+    auto supervisor_abstract::current_message_impl() -> message* {
         return current_message_;
     }
 
@@ -132,4 +146,75 @@ namespace actor_zeta { namespace base {
     auto supervisor_abstract::address() noexcept -> address_t {
         return address_t(this);
     }
+
+    auto supervisor_abstract::all_view_address() const -> std::set<std::string> {
+        std::set<std::string> tmp;
+
+        for (const auto& i : contacts_) {
+            tmp.emplace(std::string(i.first.begin(), i.first.end()));
+        }
+
+        return tmp;
+    }
+
+    auto supervisor_abstract::address_book(detail::string_view type) -> address_t {
+        auto result = contacts_.find(type);
+        if (result != contacts_.end()) {
+            return *(result->second.begin());
+        }
+    }
+
+    auto supervisor_abstract::address_book() -> address_range_t {
+        return std::make_pair(contacts_.cbegin(), contacts_.cend());
+    }
+
+    void supervisor_abstract::add_link(address_t& address) {
+        if (address) {
+            auto name = address.type();
+            auto it = contacts_.find(name);
+            if (it == contacts_.end()) {
+                auto result = contacts_.emplace(name, storage_contact_t());
+                result.first->second.emplace_back(std::move(address));
+            } else {
+                it->second.emplace_back(std::move(address));
+            }
+        } else {
+            error_sync_contacts(type(), address.type());
+        }
+    }
+
+    void supervisor_abstract::remove_link(const address_t& address) {
+        auto name = address.type();
+        auto it = contacts_.find(name);
+        if (it == contacts_.end()) {
+            // not find
+        } else {
+            auto end = it->second.end();
+            for (auto i = it->second.begin(); i != end; ++i) {
+                if (address.get() == i->get()) {
+                    it->second.erase(i);
+                }
+            }
+        }
+    }
+
+    auto supervisor_abstract::broadcast(message_ptr msg) -> void {
+        auto tmp = std::move(msg);
+
+        for (auto& i : contacts_) {
+            for (auto& j : i.second) {
+                j.enqueue(message_ptr(tmp->clone()));
+            }
+        }
+    }
+
+    auto supervisor_abstract::broadcast(detail::string_view type, message_ptr msg) -> void {
+        auto tmp = std::move(msg);
+
+        auto range = contacts_.find(type);
+        for (auto& i : range->second) {
+            i.enqueue(message_ptr(tmp->clone()));
+        }
+    }
+
 }} // namespace actor_zeta::base
