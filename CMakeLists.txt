@@ -132,6 +132,7 @@ set(SOURCE_FILES
         source/actor/communication_module.cpp
 
         source/detail/pmr/memory_resource.cpp
+        source/detail/aligned_allocate.cpp
         source/detail/string_view.cpp
         source/detail/ref_counted.cpp
 
