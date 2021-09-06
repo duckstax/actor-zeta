@@ -680,7 +680,6 @@ TEST_CASE("polymorphic_allocator") {
     REQUIRE(std::is_copy_constructible<test_type>{});
     ///REQUIRE(std::is_copy_assignable<test_type>{}); ///TODO: hack
     REQUIRE(std::is_constructible<test_type, memory_resource*>{});
-    //REQUIRE(std::is_same<test_type::value_type, x>{});
     REQUIRE(!std::is_polymorphic<test_type>{});
 #if CPP17_OR_GREATER or CPP14_OR_GREATER
     REQUIRE(!std::is_final<test_type>{});
@@ -730,30 +729,6 @@ TEST_CASE("polymorphic_allocator") {
         REQUIRE(d.do_deallocate_p == &dummy);
         REQUIRE(d.do_deallocate_bytes == 3 * sizeof(int));
         REQUIRE(d.do_deallocate_alignment == std::alignment_of<int>::value);
-    }
-
-    SECTION("construct") {
-        /*{
-            using value_type = x;
-            value_type value;
-            value.~value_type();
-            derived_from_memory_resource d;
-            polymorphic_allocator<int> pa(&d);
-            pa.construct(&value);
-            REQUIRE(value.value_ == 0);
-            value.~value_type();
-        }
-
-        {
-            using value_type = x;
-            value_type value;
-            value.~value_type();
-            derived_from_memory_resource d;
-            polymorphic_allocator<int> pa(&d);
-            pa.construct(&value, 2);
-            REQUIRE(value.value_ == 2);
-            value.~value_type();
-        }*/
     }
 
     SECTION("destroy") {
