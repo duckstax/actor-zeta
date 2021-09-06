@@ -17,7 +17,7 @@ namespace actor_zeta { namespace detail {
 
     constexpr bool is_supported_alignment(std::size_t alignment) { return is_pow2(alignment); }
 
-    inline void* align(std::size_t alignment, std::size_t size, void*& ptr, std::size_t& space) {
+    void* align(std::size_t alignment, std::size_t size, void*& ptr, std::size_t& space) {
 #ifdef __GNUC__
 #if __GNUC_PREREQ(5, 0)
         //      If  gcc_version >= 5.0
