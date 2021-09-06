@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <vector>
 
 #include <actor-zeta/detail/pmr/default_resource.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
@@ -21,7 +22,7 @@ struct destroyable {
 
 int destroyable::count = 0;
 
-struct default_constructible {
+struct default_constructible : public std::vector<int> {
     static int constructed;
     default_constructible()
         : x(42) { ++constructed; }
