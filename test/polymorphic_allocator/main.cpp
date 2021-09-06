@@ -113,8 +113,8 @@ TEST_CASE("memory.resource.public") {
             REQUIRE(!noexcept(M.allocate(0)));
         }
         {
-            int s = 42;
-            int a = 64;
+            std::size_t s = 42;
+            std::size_t a = 64;
             void* p = M.allocate(s, a);
             REQUIRE(P.alloc_count == 1);
             REQUIRE(P.check_alloc(p, s, a));
@@ -155,8 +155,8 @@ TEST_CASE("memory.resource.public") {
             REQUIRE(!noexcept(M.deallocate(nullptr, 0)));
         }
         {
-            int s = 100;
-            int a = 64;
+            std::size_t s = 100;
+            std::size_t a = 64;
             void* p = reinterpret_cast<void*>(640);
             M.deallocate(p, s, a);
             REQUIRE(P.dealloc_count == 1);
@@ -326,16 +326,16 @@ TEST_CASE("memory.polymorphic.allocator.ctor") {
         }
         // copy
         {
-            A1 const a((memory_resource*) 42);
+            A1 const a(reinterpret_cast<memory_resource*>(42));
             A1 const a2(a);
             REQUIRE(a.resource() == a2.resource());
         }
         // move
         {
-            A1 a((memory_resource*) 42);
+            A1 a(reinterpret_cast<memory_resource*>(42));
             A1 a2(std::move(a));
             REQUIRE(a.resource() == a2.resource());
-            REQUIRE(a2.resource() == (memory_resource*) 42);
+            REQUIRE(a2.resource() == reinterpret_cast<memory_resource*>(42));
         }
     }
 
@@ -382,16 +382,16 @@ TEST_CASE("memory.polymorphic.allocator.ctor") {
         }
         // copy other type
         {
-            A1 const a((memory_resource*) 42);
+            A1 const a(reinterpret_cast<memory_resource*>(42));
             A2 const a2(a);
             REQUIRE(a.resource() == a2.resource());
-            REQUIRE(a2.resource() == (memory_resource*) 42);
+            REQUIRE(a2.resource() == reinterpret_cast<memory_resource*>(42));
         }
         {
-            A1 a((memory_resource*) 42);
+            A1 a(reinterpret_cast<memory_resource*>(42));
             A2 const a2(std::move(a));
             REQUIRE(a.resource() == a2.resource());
-            REQUIRE(a2.resource() == (memory_resource*) 42);
+            REQUIRE(a2.resource() == reinterpret_cast<memory_resource*>(42));
         }
     }
 }
@@ -554,7 +554,7 @@ void testForSizeAndAlign() {
     using T = typename std::aligned_storage<S, Align>::type;
     test_resource_t R;
     polymorphic_allocator<T> a(&R);
-    for (int N = 1; N <= 5; ++N) {
+    for (std::size_t N = 1; N <= 5; ++N) {
         auto ret = a.allocate(N);
         REQUIRE(R.check_alloc(ret, N * sizeof(T), alignof(T)));
         a.deallocate(ret, N);
@@ -616,7 +616,7 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
             REQUIRE(std::is_same<decltype(a.resource()), memory_resource*>::value);
         }
         {
-            memory_resource* mptr = (memory_resource*) 42;
+            memory_resource* mptr = reinterpret_cast<memory_resource*>(42);
             A const a(mptr);
             REQUIRE(a.resource() == mptr);
         }
@@ -630,7 +630,7 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
             REQUIRE(a.resource() == pmr::get_default_resource());
         }
         {
-            memory_resource* mptr = (memory_resource*) 42;
+            memory_resource* mptr = reinterpret_cast<memory_resource*>(42);
             pmr::set_default_resource(mptr);
             A const a;
             REQUIRE(a.resource() == mptr);
@@ -645,7 +645,7 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
             REQUIRE(std::is_same<decltype(a.select_on_container_copy_construction()), A>::value);
         }
         {
-            memory_resource* mptr = (memory_resource*) 42;
+            memory_resource* mptr = reinterpret_cast<memory_resource*>(42);
             A const a(mptr);
             REQUIRE(a.resource() == mptr);
             A const other = a.select_on_container_copy_construction();
@@ -653,7 +653,7 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
             REQUIRE(a.resource() == mptr);
         }
         {
-            memory_resource* mptr = (memory_resource*) 42;
+            memory_resource* mptr = reinterpret_cast<memory_resource*>(42);
             pmr::set_default_resource(mptr);
             A const a;
             REQUIRE(a.resource() == pmr::get_default_resource());
@@ -663,7 +663,7 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
             REQUIRE(a.resource() == pmr::get_default_resource());
         }
         {
-            memory_resource* mptr = (memory_resource*) 42;
+            memory_resource* mptr = reinterpret_cast<memory_resource*>(42);
             pmr::set_default_resource(mptr);
             A const a(nullptr);
             REQUIRE(a.resource() == nullptr);
