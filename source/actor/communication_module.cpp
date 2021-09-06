@@ -85,7 +85,7 @@ namespace actor_zeta { namespace base {
         enqueue_base(std::move(msg), e);
     }
     auto communication_module::current_message() -> message* {
-        return current_message_imp();
+        return current_message_impl();
     }
 
 }} // namespace actor_zeta::base

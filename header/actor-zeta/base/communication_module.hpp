@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <actor-zeta/base/address.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/detail/string_view.hpp>
@@ -36,7 +35,7 @@ namespace actor_zeta { namespace base {
 
     protected:
         communication_module(std::string);
-        virtual auto current_message_imp() -> message* = 0;
+        virtual auto current_message_impl() -> message* = 0;
         virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
 
         template<class F>

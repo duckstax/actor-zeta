@@ -18,6 +18,8 @@ namespace actor_zeta { namespace base {
         auto executor() noexcept -> executor::abstract_executor*;
         auto resource() const -> detail::pmr::memory_resource*;
         auto address() noexcept -> address_t;
+        auto broadcast(message_ptr) -> void;
+        auto broadcast(detail::string_view, message_ptr) -> void;
 
     protected:
         using storage_contact_t = std::list<address_t>;
@@ -37,8 +39,6 @@ namespace actor_zeta { namespace base {
         * debug method
         */
         auto all_view_address() const -> std::set<std::string>;
-        auto broadcast(message_ptr) -> void;
-        auto broadcast(detail::string_view, message_ptr) -> void;
 
     private:
         auto redirect(std::string& type, message* msg) -> void;

@@ -21,7 +21,6 @@ namespace actor_zeta { namespace base {
         }
 
         auto address() noexcept -> address_t;
-
     protected:
         actor_abstract(std::string);
         // prohibit copies, assignments, and heap allocations
@@ -29,6 +28,17 @@ namespace actor_zeta { namespace base {
         void* operator new[](size_t);
         actor_abstract(const actor_abstract&) = delete;
         actor_abstract& operator=(const actor_abstract&) = delete;
+
+        auto address_book(detail::string_view) -> address_t;
+        /**
+        * debug method
+        */
+        auto all_view_address() const -> std::set<std::string>;
+
+    private:
+        void add_link(address_t&);
+        void remove_link(const address_t&);
+        std::unordered_map<detail::string_view, address_t> contacts_;
     };
 
 }} // namespace actor_zeta::base
