@@ -733,24 +733,24 @@ TEST_CASE("polymorphic_allocator") {
 
     SECTION("construct") {
         {
-            using value_type = x;
-            value_type value;
-            value.~value_type();
+            //using value_type = x;
+            x value;
+            value.~x();
             derived_from_memory_resource d;
             polymorphic_allocator<int> pa(&d);
             pa.construct(&value);
             REQUIRE(value.value_ == 0);
-            value.~value_type();
+            value.~x();
         }
         {
-            using value_type = x;
-            value_type value;
-            value.~value_type();
+            //using value_type = x;
+            x value;
+            value.~x();
             derived_from_memory_resource d;
             polymorphic_allocator<int> pa(&d);
             pa.construct(&value, 2);
             REQUIRE(value.value_ == 2);
-            value.~value_type();
+            value.~x();
         }
     }
 
