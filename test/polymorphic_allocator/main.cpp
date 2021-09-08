@@ -733,9 +733,9 @@ TEST_CASE("polymorphic_allocator") {
 
     SECTION("construct") {
         {
-            //using value_type = x;
+            // using value_type = x; // forbids type aliasing here
             x value;
-            value.~x();
+            value.~x(); // this call must use the original name
             derived_from_memory_resource d;
             polymorphic_allocator<int> pa(&d);
             pa.construct(&value);
@@ -743,9 +743,9 @@ TEST_CASE("polymorphic_allocator") {
             value.~x();
         }
         {
-            //using value_type = x;
+            // using value_type = x; // forbids type aliasing here
             x value;
-            value.~x();
+            value.~x(); // this call must use the original name
             derived_from_memory_resource d;
             polymorphic_allocator<int> pa(&d);
             pa.construct(&value, 2);
