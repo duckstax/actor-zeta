@@ -731,6 +731,29 @@ TEST_CASE("polymorphic_allocator") {
         REQUIRE(d.do_deallocate_alignment == std::alignment_of<int>::value);
     }
 
+    SECTION("construct") {
+        {
+            using value_type = x;
+            value_type value;
+            value.~value_type();
+            derived_from_memory_resource d;
+            polymorphic_allocator<int> pa(&d);
+            pa.construct(&value);
+            REQUIRE(value.value_ == 0);
+            value.~value_type();
+        }
+        {
+            using value_type = x;
+            value_type value;
+            value.~value_type();
+            derived_from_memory_resource d;
+            polymorphic_allocator<int> pa(&d);
+            pa.construct(&value, 2);
+            REQUIRE(value.value_ == 2);
+            value.~value_type();
+        }
+    }
+
     SECTION("destroy") {
         char_holder ch;
         derived_from_memory_resource d;

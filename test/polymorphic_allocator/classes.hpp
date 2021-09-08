@@ -91,7 +91,8 @@ struct count_copies_alloc_v2_t {
         : count(o.count + 1) {}
 };
 
-struct x : public std::vector<int> {
+class x : public std::vector<int> {
+public:
     x() = default;
     x(int value)
         : value_(value) {}
