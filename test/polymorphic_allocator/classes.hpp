@@ -96,6 +96,7 @@ public:
     x() = default;
     x(int value)
         : value_(value) {}
+    ~x() = default;
     int value_ = 0;
 };
 
