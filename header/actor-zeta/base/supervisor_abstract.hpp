@@ -11,7 +11,7 @@ namespace actor_zeta { namespace base {
 
     class supervisor_abstract : public communication_module {
     public:
-        supervisor_abstract(std::string, detail::pmr::memory_resource*);
+        supervisor_abstract(detail::pmr::memory_resource*,std::string);
         supervisor_abstract(std::string);
         supervisor_abstract(supervisor_abstract*, std::string);
         ~supervisor_abstract() override;

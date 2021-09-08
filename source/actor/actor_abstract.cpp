@@ -30,6 +30,10 @@ namespace actor_zeta { namespace base {
         return contacts_.at(name);
     }
 
+    auto actor_abstract::address_book(std::string&name) -> address_t {
+        return contacts_.at(detail::string_view(name.data(),name.size()));
+    }
+
     auto actor_abstract::all_view_address() const  -> std::set<std::string> {
         std::set<std::string> tmp;
         for (auto &i: contacts_) {

@@ -30,6 +30,7 @@ namespace actor_zeta { namespace base {
         actor_abstract& operator=(const actor_abstract&) = delete;
 
         auto address_book(detail::string_view) -> address_t;
+        auto address_book(std::string&) -> address_t;
         /**
         * debug method
         */

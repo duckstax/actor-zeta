@@ -72,7 +72,7 @@ namespace actor_zeta { namespace base {
         bool do_is_equal(const memory_resource& other) const noexcept override { return &other == this; }
     };
 
-    supervisor_abstract::supervisor_abstract(std::string name, detail::pmr::memory_resource* memory_resource)
+    supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* memory_resource,std::string name)
         : communication_module(std::move(name))
         , memory_resource_(memory_resource) {
         add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
@@ -134,6 +134,9 @@ namespace actor_zeta { namespace base {
         auto address = supervisor->address();
         add_supervisor_impl(std::move(supervisor));
         link(*this, address);
+        if (this != current_message()->sender().get()) {
+            link(current_message()->sender(), address);
+        }
     }
 
     auto supervisor_abstract::redirect(std::string& type, message* msg) -> void {

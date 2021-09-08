@@ -99,6 +99,22 @@ namespace actor_zeta {
         class ChildrenSupervisor,
         class... Args,
         class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, ChildrenSupervisor>::value>>
+    auto spawn_supervisor(base::supervisor_abstract* supervisor,base::address_t address, Args&&... args) -> void {
+        detail::spawn_supervisor_impl<ChildrenSupervisor>(supervisor->address(), address, std::forward<Args>(args)...);
+    }
+
+    template<
+        class ChildrenSupervisor,
+        class... Args,
+        class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, ChildrenSupervisor>::value>>
+    auto spawn_supervisor(base::supervisor_abstract* supervisor, Args&&... args) -> void {
+        detail::spawn_supervisor_impl<ChildrenSupervisor>(supervisor->address(), supervisor->address(), std::forward<Args>(args)...);
+    }
+
+    template<
+        class ChildrenSupervisor,
+        class... Args,
+        class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, ChildrenSupervisor>::value>>
     auto spawn_supervisor(Args&&... args) -> base::supervisor {
         return base::supervisor(new ChildrenSupervisor(std::forward<Args>(args)...));
     }
