@@ -121,21 +121,31 @@ namespace actor_zeta { namespace base {
 
     auto supervisor_abstract::spawn_actor(default_spawn_actor& construct) -> void {
         auto actor_tmp = std::move(construct(this));
+        std::cerr << "supervisor_abstract::spawn_actor actor : " << actor_tmp->address().get() << " " << actor_tmp.type() << std::endl;
         auto address = actor_tmp->address();
+        std::cerr << "supervisor_abstract::spawn_actor  address : " << address.get() << " " << address.type() << std::endl;;
         add_actor_impl(std::move(actor_tmp));
+        std::cerr << "supervisor_abstract::spawn_actor this : " << this << " " <<type() << std::endl;;
         link(*this, address);
-        if (this != current_message()->sender().get()) {
-            link(current_message()->sender(), address);
+        auto sender = current_message()->sender();
+        std::cerr << "supervisor_abstract::spawn_actor sender : " << sender.get() << " " << sender.type() << std::endl;;
+        if (this != sender.get()) {
+            link(sender, address);
         }
     }
 
     auto supervisor_abstract::spawn_supervisor(default_spawn_supervisor& construct) -> void {
         auto supervisor = std::move(construct(this));
+        std::cerr << "supervisor_abstract::spawn_supervisor  supervisor : " << supervisor.get() << " " << supervisor.type() << std::endl;
         auto address = supervisor->address();
+        std::cerr << "supervisor_abstract::spawn_supervisor  address : " << address.get() << " " << address.type() << std::endl;;
         add_supervisor_impl(std::move(supervisor));
+        std::cerr << "supervisor_abstract::spawn_supervisor  this : " <<  this <<" " << type() << std::endl;;
         link(*this, address);
-        if (this != current_message()->sender().get()) {
-            link(current_message()->sender(), address);
+        auto sender = current_message()->sender();
+        std::cerr << "supervisor_abstract::spawn_supervisor  sender : " <<  sender.get() <<" " << sender.type() << std::endl;;
+        if (this != sender.get()) {
+            link(sender, address);
         }
     }
 
@@ -172,7 +182,9 @@ namespace actor_zeta { namespace base {
     }
 
     void supervisor_abstract::add_link(address_t& address) {
-        if (address) {
+        std::cerr << "supervisor_abstract::add_link address: " << address.get() << " "<< address.type() << std::endl;
+        std::cerr << "supervisor_abstract::add_link this: " << this << " " << type() << std::endl;
+        if (address&&this!=address.get()) {
             auto name = address.type();
             auto it = contacts_.find(name);
             if (it == contacts_.end()) {
@@ -182,6 +194,7 @@ namespace actor_zeta { namespace base {
                 it->second.emplace_back(std::move(address));
             }
         } else {
+            std::cerr << "supervisor_abstract::add_link : " ;
             error_sync_contacts(type(), address.type());
         }
     }

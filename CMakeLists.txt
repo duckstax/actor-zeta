@@ -156,6 +156,8 @@ endif(CCACHE_FOUND)
 
 find_package( Threads )
 
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS_} -O0 -g -fno-omit-frame-pointer -fsanitize=thread")
+
 add_library(
         ${PROJECT_NAME}
         ${SOURCE_FILES}

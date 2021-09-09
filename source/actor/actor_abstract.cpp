@@ -43,9 +43,11 @@ namespace actor_zeta { namespace base {
     }
 
     void actor_abstract::add_link(address_t& address) {
-
-        if (address) {
+        std::cerr<< "actor_abstract::add_link parrent : " << this << " " << type() << std::endl;
+        std::cerr<< "actor_abstract::add_link children : " << address.get() << " " <<address.type() << std::endl;
+        if (address && this!=address.get()) {
             auto name = address.type();
+            std::cerr << "!_!." << std::endl;
             contacts_.emplace(name, std::move(address));
         } else {
             error_sync_contacts(type(), address.type());
