@@ -1,8 +1,5 @@
 #pragma once
 
-#include "base/address.hpp"
-#include <actor-zeta/base/supervisor.hpp>
-#include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/make_message.hpp>
 
@@ -23,7 +20,7 @@ namespace actor_zeta {
                 "delegate",
                 std::move(type),
                 std::move(make_message_ptr(
-                    actor_zeta::address_t(),
+                    base::empty_address,
                     std::forward<Args>(args)...))));
     }
 
@@ -35,7 +32,7 @@ namespace actor_zeta {
                 "delegate",
                 std::move(type),
                 std::move(make_message_ptr(
-                    actor_zeta::address_t(),
+                    base::empty_address,
                     std::forward<Args>(args)...))));
     }
 
@@ -67,6 +64,6 @@ namespace actor_zeta {
                 std::forward<Args>(args)...));
     }
 
-    void send(base::address_t address, message_ptr msg);
+    void send(base::address_t address, base::message_ptr msg);
 
 } // namespace actor_zeta

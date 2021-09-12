@@ -1,11 +1,5 @@
 #pragma once
 
-#include <actor-zeta/broadcast.hpp>
-#include <actor-zeta/link.hpp>
-#include <actor-zeta/make_message.hpp>
-#include <actor-zeta/send.hpp>
-#include <actor-zeta/spawn.hpp>
-
 // clang-format off
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/address.hpp>
@@ -30,6 +24,8 @@ namespace actor_zeta {
     using base::make_handler;
     using base::supervisor;
     using base::supervisor_abstract;
+    using base::message_ptr;
+    using base::empty_address;
 
     using executor::abstract_executor;
     using executor::executable;

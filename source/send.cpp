@@ -2,7 +2,7 @@
 
 namespace actor_zeta {
 
-    void send(base::address_t address, message_ptr msg) {
+    void send(base::address_t address, base::message_ptr msg) {
         address.enqueue(std::move(msg));
     }
 

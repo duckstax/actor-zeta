@@ -3,7 +3,7 @@
 #include <set>
 #include <string>
 
-#include <actor-zeta.hpp>
+#include <actor-zeta/core.hpp>
 
 using actor_zeta::basic_async_actor;
 using actor_zeta::execution_device;

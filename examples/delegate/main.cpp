@@ -4,7 +4,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include <actor-zeta.hpp>
+#include <actor-zeta/core.hpp>
 
 using actor_zeta::abstract_executor;
 using actor_zeta::actor;

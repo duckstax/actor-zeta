@@ -1,4 +1,9 @@
 // clang-format off
+#include <actor-zeta/link.hpp>
+#include <actor-zeta/base/supervisor_abstract.hpp>
+// clang-format on
+/// ------------------------------------------------
+// clang-format off
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/address.hpp>
 #include <actor-zeta/base/message.hpp>
@@ -7,8 +12,7 @@
 #include <actor-zeta/impl/handler.ipp>
 // clang-format on
 #include <actor-zeta/base/actor.hpp>
-#include <actor-zeta/base/supervisor_abstract.hpp>
-#include <actor-zeta/link.hpp>
+
 #include <iostream>
 
 namespace actor_zeta { namespace base {
@@ -75,8 +79,6 @@ namespace actor_zeta { namespace base {
     supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* memory_resource,std::string name)
         : communication_module(std::move(name))
         , memory_resource_(memory_resource) {
-        add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
-        add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
         add_handler("delegate", &supervisor_abstract::redirect);
         add_handler("add_link",&supervisor_abstract::add_link);
         add_handler("remove_link",&supervisor_abstract::remove_link);
@@ -85,8 +87,6 @@ namespace actor_zeta { namespace base {
     supervisor_abstract::supervisor_abstract(std::string name)
         : communication_module(std::move(name))
         , memory_resource_(new new_delete_resource) {
-        add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
-        add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
         add_handler("delegate", &supervisor_abstract::redirect);
         add_handler("add_link",&supervisor_abstract::add_link);
         add_handler("remove_link",&supervisor_abstract::remove_link);
@@ -95,8 +95,6 @@ namespace actor_zeta { namespace base {
     supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string name)
         : communication_module(std::move(name))
         , memory_resource_(ptr->resource()) {
-        add_handler("spawn_actor", &supervisor_abstract::spawn_actor);
-        add_handler("spawn_supervisor", &supervisor_abstract::spawn_supervisor);
         add_handler("delegate", &supervisor_abstract::redirect);
         add_handler("add_link",&supervisor_abstract::add_link);
         add_handler("remove_link",&supervisor_abstract::remove_link);
@@ -117,36 +115,6 @@ namespace actor_zeta { namespace base {
 
     auto supervisor_abstract::executor() noexcept -> executor::abstract_executor* {
         return executor_impl();
-    }
-
-    auto supervisor_abstract::spawn_actor(default_spawn_actor& construct) -> void {
-        auto actor_tmp = std::move(construct(this));
-        std::cerr << "supervisor_abstract::spawn_actor actor : " << actor_tmp->address().get() << " " << actor_tmp.type() << std::endl;
-        auto address = actor_tmp->address();
-        std::cerr << "supervisor_abstract::spawn_actor  address : " << address.get() << " " << address.type() << std::endl;;
-        add_actor_impl(std::move(actor_tmp));
-        std::cerr << "supervisor_abstract::spawn_actor this : " << this << " " <<type() << std::endl;;
-        link(*this, address);
-        auto sender = current_message()->sender();
-        std::cerr << "supervisor_abstract::spawn_actor sender : " << sender.get() << " " << sender.type() << std::endl;;
-        if (this != sender.get()) {
-            link(sender, address);
-        }
-    }
-
-    auto supervisor_abstract::spawn_supervisor(default_spawn_supervisor& construct) -> void {
-        auto supervisor = std::move(construct(this));
-        std::cerr << "supervisor_abstract::spawn_supervisor  supervisor : " << supervisor.get() << " " << supervisor.type() << std::endl;
-        auto address = supervisor->address();
-        std::cerr << "supervisor_abstract::spawn_supervisor  address : " << address.get() << " " << address.type() << std::endl;;
-        add_supervisor_impl(std::move(supervisor));
-        std::cerr << "supervisor_abstract::spawn_supervisor  this : " <<  this <<" " << type() << std::endl;;
-        link(*this, address);
-        auto sender = current_message()->sender();
-        std::cerr << "supervisor_abstract::spawn_supervisor  sender : " <<  sender.get() <<" " << sender.type() << std::endl;;
-        if (this != sender.get()) {
-            link(sender, address);
-        }
     }
 
     auto supervisor_abstract::redirect(std::string& type, message* msg) -> void {

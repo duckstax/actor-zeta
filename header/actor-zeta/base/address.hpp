@@ -43,6 +43,8 @@ namespace actor_zeta { namespace base {
         communication_module* ptr_;
     };
 
+    const static auto empty_address  = address_t();
+
     static_assert(std::is_default_constructible<address_t>::value, "");
     static_assert(std::is_move_constructible<address_t>::value, "");
     static_assert(std::is_move_assignable<address_t>::value, "");

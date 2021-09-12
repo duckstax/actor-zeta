@@ -118,7 +118,7 @@ set(HEADER_FILES
         header/actor-zeta/forwards.hpp
         header/actor-zeta/link.hpp
         header/actor-zeta/send.hpp
-        header/actor-zeta.hpp
+        header/actor-zeta/core.hpp
 )
 
 set(SOURCE_FILES
@@ -144,6 +144,7 @@ set(SOURCE_FILES
         source/messaging/message.cpp
         source/src.cpp
         source/send.cpp
+        source/link.cpp
 )
 
 

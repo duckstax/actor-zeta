@@ -53,7 +53,7 @@ namespace actor_zeta { namespace base {
 
     private:
         storage_t handlers_;
-        std::string type_;
+        const std::string type_;
     };
 
 }} // namespace actor_zeta::base

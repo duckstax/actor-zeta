@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta.hpp>
+#include <actor-zeta/core.hpp>
 #include <iostream>
 #include <list>
 
@@ -12,7 +12,6 @@ using actor_zeta::execution_device;
 using actor_zeta::executor_t;
 using actor_zeta::message_ptr;
 using actor_zeta::send;
-using actor_zeta::spawn_actor;
 using actor_zeta::supervisor;
 using actor_zeta::supervisor_abstract;
 using actor_zeta::work_sharing;

@@ -2,16 +2,12 @@
 
 #include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
-#include <actor-zeta/forwards.hpp>
+#include  <actor-zeta/link.hpp>
 
 namespace actor_zeta { namespace base {
-
-    using default_spawn_actor = std::function<actor(supervisor_abstract*)>;
-    using default_spawn_supervisor = std::function<supervisor(supervisor_abstract*)>;
-
     class supervisor_abstract : public communication_module {
     public:
-        supervisor_abstract(detail::pmr::memory_resource*,std::string);
+        supervisor_abstract(detail::pmr::memory_resource*, std::string);
         supervisor_abstract(std::string);
         supervisor_abstract(supervisor_abstract*, std::string);
         ~supervisor_abstract() override;
@@ -22,9 +18,46 @@ namespace actor_zeta { namespace base {
         auto broadcast(detail::string_view, message_ptr) -> void;
 
     protected:
+        template<
+            class Actor,
+            class... Args,
+            class = type_traits::enable_if_t<std::is_base_of<actor_abstract, Actor>::value>>
+        auto spawn_actor(Args&&... args) -> address_t {
+            auto allocate_byte = sizeof(Actor);
+            auto allocate_byte_alignof = alignof(Actor);
+            void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
+            auto* actor = new (buffer) Actor(this, std::forward<Args>(args)...);
+            auto address = actor->address();
+            add_actor_impl(actor);
+            link(*this, address);
+            auto sender = current_message()->sender();
+            if (this != sender.get()) {
+                link(sender, address);
+            }
+            return address;
+        }
+
+        template<
+            class Supervisor,
+            class... Args,
+            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, Supervisor>::value>>
+        auto spawn_supervisor(Args&&... args) -> address_t {
+            auto allocate_byte = sizeof(Supervisor);
+            auto allocate_byte_alignof = alignof(Supervisor);
+            void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
+            auto* supervisor = new (buffer) Supervisor(this, std::forward<Args>(args)...);
+            auto address = supervisor->address();
+            add_supervisor_impl(supervisor);
+            link(*this, address);
+            auto sender = current_message()->sender();
+            if (this != sender.get()) {
+                link(sender, address);
+            }
+            return address;
+        }
+
         using storage_contact_t = std::list<address_t>;
         using contacts_t = std::unordered_map<key_type, storage_contact_t>;
-        using contacts_iterator_t = storage_contact_t::iterator;
         using address_range_t = std::pair<contacts_t::const_iterator, contacts_t::const_iterator>;
 
         using communication_module::add_handler;
@@ -42,9 +75,6 @@ namespace actor_zeta { namespace base {
 
     private:
         auto redirect(std::string& type, message* msg) -> void;
-        auto spawn_actor(default_spawn_actor&) -> void;
-        auto spawn_supervisor(default_spawn_supervisor&) -> void;
-
         void add_link(address_t&);
         void remove_link(const address_t&);
 
