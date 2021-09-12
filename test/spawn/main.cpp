@@ -3,5 +3,5 @@
 
 #include "classes.hpp"
 
-TEST_CASE("spawn_actor") {
+TEST_CASE("spawn") {
 }
