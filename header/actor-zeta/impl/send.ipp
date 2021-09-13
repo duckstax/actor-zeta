@@ -1,6 +1,8 @@
 #pragma once
 
 #include <actor-zeta/send.hpp>
+#include <actor-zeta/base/supervisor_abstract.hpp>
+#include <actor-zeta/base/supervisor.hpp>
 
 namespace actor_zeta {
 
