@@ -6,6 +6,15 @@
 /// ------------------------------------------------
 #include <actor-zeta/base/actor.hpp>
 
+// clang-format off
+#include <actor-zeta/base/handler.hpp>
+#include <actor-zeta/base/address.hpp>
+#include <actor-zeta/base/message.hpp>
+#include <actor-zeta/base/basic_actor.hpp>
+#include <actor-zeta/base/supervisor.hpp>
+#include <actor-zeta/impl/handler.ipp>
+// clang-format on
+
 #include <iostream>
 
 namespace actor_zeta { namespace base {

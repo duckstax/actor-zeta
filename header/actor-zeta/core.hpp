@@ -1,5 +1,13 @@
 #pragma once
 
+// clang-format off
+#include <actor-zeta/base/address.hpp>
+#include <actor-zeta/base/message.hpp>
+#include <actor-zeta/base/actor.hpp>
+#include <actor-zeta/base/actor_abstract.hpp>
+// clang-format on
+
+#include <actor-zeta/base/basic_actor.hpp>
 #include <actor-zeta/base/address.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/detail/any.hpp>

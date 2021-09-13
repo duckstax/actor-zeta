@@ -1,6 +1,12 @@
 #pragma once
-
 #include <actor-zeta/base/supervisor_abstract.hpp>
+
+// clang-format off
+#pragma once
+#include <actor-zeta/base/address.hpp>
+#include <actor-zeta/base/message.hpp>
+#include <actor-zeta/base/supervisor.hpp>
+// clang-format on
 
 namespace actor_zeta { namespace base {
 

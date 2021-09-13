@@ -2,7 +2,6 @@
 
 #include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
-#include  <actor-zeta/link.hpp>
 
 namespace actor_zeta { namespace base {
     class supervisor_abstract : public communication_module {
