@@ -191,4 +191,12 @@ namespace actor_zeta { namespace base {
         }
     }
 
+    void supervisor_abstract::sync(base::address_t&address){
+        link(*this, address);
+        auto sender = current_message()->sender();
+        if (this != sender.get()) {
+            link(sender, address);
+        }
+    }
+
 }} // namespace actor_zeta::base

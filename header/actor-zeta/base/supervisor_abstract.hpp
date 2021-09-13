@@ -29,11 +29,7 @@ namespace actor_zeta { namespace base {
             auto* actor = new (buffer) Actor(this, std::forward<Args>(args)...);
             auto address = actor->address();
             add_actor_impl(actor);
-            link(*this, address);
-            auto sender = current_message()->sender();
-            if (this != sender.get()) {
-                link(sender, address);
-            }
+            sync(address);
             return address;
         }
 
@@ -48,11 +44,7 @@ namespace actor_zeta { namespace base {
             auto* supervisor = new (buffer) Supervisor(this, std::forward<Args>(args)...);
             auto address = supervisor->address();
             add_supervisor_impl(supervisor);
-            link(*this, address);
-            auto sender = current_message()->sender();
-            if (this != sender.get()) {
-                link(sender, address);
-            }
+            sync(address);
             return address;
         }
 
@@ -74,6 +66,7 @@ namespace actor_zeta { namespace base {
         auto all_view_address() const -> std::set<std::string>;
 
     private:
+        void sync(base::address_t&);
         auto redirect(std::string& type, message* msg) -> void;
         void add_link(address_t&);
         void remove_link(const address_t&);
