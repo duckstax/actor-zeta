@@ -2,8 +2,8 @@
 
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/make_message.hpp>
-#include <actor-zeta/base/supervisor.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
+#include <actor-zeta/base/supervisor.hpp>
 
 namespace actor_zeta {
 
