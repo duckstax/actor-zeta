@@ -9,16 +9,8 @@
 #include <vector>
 
 #include <actor-zeta/core.hpp>
-
-using actor_zeta::abstract_executor;
-using actor_zeta::basic_async_actor;
-using actor_zeta::supervisor;
-
-using actor_zeta::abstract_executor;
-using actor_zeta::executor_t;
-using actor_zeta::work_sharing;
-
-using actor_zeta::make_message;
+#include <actor-zeta/send.hpp>
+#include <actor-zeta/broadcast.hpp>
 
 template<typename Task, typename... Args>
 auto make_task(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
@@ -31,7 +23,7 @@ auto make_task_broadcast(actor_zeta::supervisor& executor_, const std::string& c
     actor_zeta::broadcast(executor_, address, command, std::move(Task(std::forward<Args>(args)...)));
 }
 
-auto thread_pool_deleter = [](abstract_executor* ptr) {
+auto thread_pool_deleter = [](actor_zeta::abstract_executor* ptr) {
     ptr->stop();
     delete ptr;
 };
@@ -41,7 +33,7 @@ class supervisor_lite final : public actor_zeta::supervisor_abstract {
 public:
     explicit supervisor_lite()
         : supervisor_abstract("network")
-        , e_(new executor_t<work_sharing>(
+        , e_(new actor_zeta::executor_t<actor_zeta::work_sharing>(
                  1,
                  100),
              thread_pool_deleter)
@@ -92,7 +84,7 @@ private:
         }
     }
 
-    std::unique_ptr<abstract_executor, decltype(thread_pool_deleter)> e_;
+    std::unique_ptr<actor_zeta::abstract_executor, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor> actors_;
     std::vector<actor_zeta::supervisor> supervisor_;
     std::size_t cursor;
