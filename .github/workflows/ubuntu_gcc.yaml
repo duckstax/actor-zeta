@@ -69,7 +69,6 @@ jobs:
           conan profile update env.CXX=${{ matrix.configuration.COMPILER_CXX}} default
           conan profile update env.CC=${{ matrix.configuration.COMPILER_C}} default
           mkdir -p ${{github.workspace}}/build
-          conan remote add conancenter https://center.conan.io
           conan install ${{github.workspace}}/build/.. -if ${{github.workspace}}/build --build=missing -s build_type=Release
 
       - name: Configure CMake
