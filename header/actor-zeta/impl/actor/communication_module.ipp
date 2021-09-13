@@ -1,14 +1,7 @@
+#pragma once
 #include "detail/string_view.hpp"
 #include <iostream>
 #include <vector>
-
-// clang-format off
-#include <actor-zeta/base/communication_module.hpp>
-#include <actor-zeta/base/handler.hpp>
-#include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/message.hpp>
-#include <actor-zeta/impl/handler.ipp>
-// clang-format on
 
 namespace actor_zeta { namespace base {
 

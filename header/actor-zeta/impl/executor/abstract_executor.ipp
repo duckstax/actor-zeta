@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 
 #include <actor-zeta/executor/abstract_executor.hpp>

@@ -1,15 +1,7 @@
-// clang-format off
-#include <actor-zeta/base/handler.hpp>
-#include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/message.hpp>
-#include <actor-zeta/base/basic_actor.hpp>
-#include <actor-zeta/base/supervisor.hpp>
-#include <actor-zeta/impl/handler.ipp>
-// clang-format on
+#pragma once
 
-#include <actor-zeta/base/actor_abstract.hpp>
 #include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/supervisor_abstract.hpp>
+#include <actor-zeta/base/communication_module.hpp>
 #include <memory>
 
 namespace {
@@ -28,10 +20,6 @@ namespace actor_zeta { namespace base {
         : ptr_(ptr) {
     }
 
-    address_t::~address_t() {
-        ptr_ = nullptr;
-    }
-
     bool address_t::operator!() const noexcept {
         return !(static_cast<bool>(ptr_));
     }
@@ -46,10 +34,6 @@ namespace actor_zeta { namespace base {
 
     auto address_t::type() const -> detail::string_view {
         return ptr_->type();
-    }
-
-    address_t::address_t() noexcept
-        : ptr_() {
     }
 
     address_t::address_t(address_t&& other) noexcept

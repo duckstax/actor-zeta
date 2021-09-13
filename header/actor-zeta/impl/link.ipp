@@ -1,3 +1,5 @@
+#pragma once
+
 #include "actor-zeta/link.hpp"
 
 namespace actor_zeta {

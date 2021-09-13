@@ -133,7 +133,6 @@ public:
     void create(std::string& name) {
         std::cerr << "mdb_t::create : " << name << std::endl;
         spawn_supervisor<database_t>(std::move(name));
-
     }
 
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
@@ -170,13 +169,12 @@ public:
         : supervisor_abstract("mdispatcher")
         , e_(new dummy_executor(1, max_queue)) {
         e_->start();
-        add_handler("create", &mdb_t::create);
+        add_handler("create", &mdispatcher_t::create);
     }
 
     void create(std::string& name) {
         std::cerr << "mdispatcher_t::create : " << name << std::endl;
         spawn_actor<dispatcher_t>(std::move(name));
-
     }
 
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
@@ -211,7 +209,7 @@ auto main() -> int {
     auto mdb = actor_zeta::spawn_supervisor<mdb_t>();
     auto mdispatcher = actor_zeta::spawn_supervisor<mdispatcher_t>();
     actor_zeta::link(mdb,mdispatcher);
-    actor_zeta::send(mdispatcher, actor_zeta::empty_address, "create", std::string("dispatcher"));
+    actor_zeta::send(mdispatcher, actor_zeta::address_t(), "create", std::string("dispatcher"));
     actor_zeta::delegate_send(mdispatcher, "dispatcher", "create_database", std::string("database_test"));
     actor_zeta::delegate_send(mdispatcher, "dispatcher", "create_collection", std::string("database_test"), std::string("collection_test"));
     std::this_thread::sleep_for(sleep_time);
