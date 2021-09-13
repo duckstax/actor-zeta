@@ -21,7 +21,7 @@ namespace actor_zeta { namespace base {
         : public ref_counted {
     public:
         using key_type = detail::string_view;
-        using storage_t = std::unordered_map<key_type, std::unique_ptr<handler>>;
+        using handler_storage_t = std::unordered_map<key_type, std::unique_ptr<handler>>;
 
         communication_module() = delete;
         communication_module(const communication_module&) = delete;
@@ -53,7 +53,7 @@ namespace actor_zeta { namespace base {
         bool on(detail::string_view, handler*);
 
     private:
-        storage_t handlers_;
+        handler_storage_t handlers_;
         const std::string type_;
     };
 

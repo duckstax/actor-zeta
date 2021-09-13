@@ -5,12 +5,12 @@
 #include <vector>
 
 #include <actor-zeta/core.hpp>
+#include <actor-zeta/link.hpp>
 
 using actor_zeta::abstract_executor;
 using actor_zeta::basic_async_actor;
 using actor_zeta::supervisor_abstract;
 
-using actor_zeta::link;
 using actor_zeta::message_ptr;
 
 class dummy_executor final : public abstract_executor {

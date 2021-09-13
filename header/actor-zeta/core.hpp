@@ -8,7 +8,7 @@
 // clang-format on
 
 #include <actor-zeta/base/basic_actor.hpp>
-#include <actor-zeta/base/address.hpp>
+#include <actor-zeta/base/supervisor.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/detail/any.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
@@ -26,6 +26,7 @@ namespace actor_zeta {
     using base::supervisor;
     using base::supervisor_abstract;
     using base::message_ptr;
+    using base::empty_address;
 
     using executor::abstract_executor;
     using executor::executable;

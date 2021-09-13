@@ -5,20 +5,52 @@
 #include <vector>
 
 #include <actor-zeta/core.hpp>
+#include <actor-zeta/send.hpp>
 
-using actor_zeta::abstract_executor;
-using actor_zeta::actor;
-using actor_zeta::basic_async_actor;
-using actor_zeta::delegate_send;
-using actor_zeta::execution_device;
-using actor_zeta::message_ptr;
-using actor_zeta::supervisor_abstract;
+class storage_t final : public actor_zeta::basic_async_actor {
+public:
+    storage_t(actor_zeta::supervisor_abstract* ptr)
+        : actor_zeta::basic_async_actor(ptr, "storage") {
+        add_handler(
+            "update",
+            &storage_t::update);
 
-using actor_zeta::abstract_executor;
-using actor_zeta::executor_t;
-using actor_zeta::work_sharing;
+        add_handler(
+            "find",
+            &storage_t::find);
 
-auto thread_pool_deleter = [](abstract_executor* ptr) {
+        add_handler(
+            "remove",
+            &storage_t::remote);
+
+        add_handler(
+            "status",
+            [this]() {
+                status();
+            });
+    }
+
+    void status() {
+        std::cerr << "status" << std::endl;
+    }
+
+    ~storage_t() override = default;
+
+private:
+    void update(std::string& data) {
+        std::cerr << "update:" << data << std::endl;
+    }
+
+    void find() {
+        std::cerr << "find" << std::endl;
+    }
+
+    void remote() {
+        std::cerr << "remote" << std::endl;
+    }
+};
+
+auto thread_pool_deleter = [](actor_zeta::abstract_executor* ptr) {
     ptr->stop();
     delete ptr;
 };
@@ -28,7 +60,7 @@ class supervisor_lite final : public actor_zeta::supervisor_abstract {
 public:
     explicit supervisor_lite()
         : supervisor_abstract("network")
-        , e_(new executor_t<work_sharing>(
+        , e_(new actor_zeta::executor_t<actor_zeta::work_sharing>(
                  1,
                  100),
              thread_pool_deleter)
@@ -37,8 +69,13 @@ public:
               "sync_contacts",
               "add_link",
               "remove_link",
-              "spawn_actor", "delegate"} {
+              "spawn_actor", "delegate", "create"} {
         e_->start();
+        add_handler("create", &supervisor_lite::create);
+    }
+
+    void create() {
+        spawn_actor<storage_t>();
     }
 
     ~supervisor_lite() override = default;
@@ -79,63 +116,20 @@ private:
         }
     }
 
-    std::unique_ptr<abstract_executor, decltype(thread_pool_deleter)> e_;
+    std::unique_ptr<actor_zeta::abstract_executor, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor> actors_;
     std::vector<actor_zeta::supervisor> supervisor_;
     std::size_t cursor;
     std::unordered_set<actor_zeta::detail::string_view> system_;
 };
 
-class storage_t final : public basic_async_actor {
-public:
-    storage_t(actor_zeta::supervisor_abstract* ptr)
-        : basic_async_actor(ptr, "storage") {
-        add_handler(
-            "update",
-            &storage_t::update);
-
-        add_handler(
-            "find",
-            &storage_t::find);
-
-        add_handler(
-            "remove",
-            &storage_t::remote);
-
-        add_handler(
-            "status",
-            [this]() {
-                status();
-            });
-    }
-
-    void status() {
-        std::cerr << "status" << std::endl;
-    }
-
-    ~storage_t() override = default;
-
-private:
-    void update(std::string& data) {
-        std::cerr << "update:" << data << std::endl;
-    }
-
-    void find() {
-        std::cerr << "find" << std::endl;
-    }
-
-    void remote() {
-        std::cerr << "remote" << std::endl;
-    }
-};
-
 int main() {
     actor_zeta::supervisor dummy_supervisor(new supervisor_lite());
-    actor_zeta::spawn_actor<storage_t>(dummy_supervisor);
-    delegate_send(dummy_supervisor, "storage", "update", std::string("payload"));
-    delegate_send(dummy_supervisor, "storage", "find");
-    delegate_send(dummy_supervisor, "storage", "remove");
-    delegate_send(dummy_supervisor, "storage", "status");
+    actor_zeta::send(dummy_supervisor,actor_zeta::empty_address,"create");
+    actor_zeta::delegate_send(dummy_supervisor, "storage", "update", std::string("payload"));
+    actor_zeta::delegate_send(dummy_supervisor, "storage", "find");
+    actor_zeta::delegate_send(dummy_supervisor, "storage", "remove");
+    actor_zeta::delegate_send(dummy_supervisor, "storage", "status");
 
     std::this_thread::sleep_for(std::chrono::seconds(180));
 

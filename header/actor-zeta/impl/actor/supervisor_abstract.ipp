@@ -150,19 +150,18 @@ namespace actor_zeta { namespace base {
     }
 
     void supervisor_abstract::add_link(address_t& address) {
-        std::cerr << "supervisor_abstract::add_link address: " << address.get() << " " << address.type() << std::endl;
-        std::cerr << "supervisor_abstract::add_link this: " << this << " " << type() << std::endl;
         if (address && this != address.get()) {
             auto name = address.type();
             auto it = contacts_.find(name);
             if (it == contacts_.end()) {
                 auto result = contacts_.emplace(name, storage_contact_t());
                 result.first->second.emplace_back(std::move(address));
+                return ;
             } else {
                 it->second.emplace_back(std::move(address));
+                return ;
             }
         } else {
-            std::cerr << "supervisor_abstract::add_link : ";
             error_sync_contacts_in_supervisor(type(), address.type());
         }
     }
