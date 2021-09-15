@@ -1,7 +1,6 @@
 #pragma once
 
 // clang-format off
-#pragma once
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/address.hpp>
 #include <actor-zeta/base/message.hpp>
@@ -13,8 +12,6 @@
 #include <actor-zeta/base/address.hpp>
 #include <actor-zeta/base/communication_module.hpp>
 #include <memory>
-
-
 
 namespace {
     constexpr static actor_zeta::detail::string_view non_type("non-type");
