@@ -25,6 +25,7 @@ namespace actor_zeta {
     using base::make_handler;
     using base::supervisor;
     using base::supervisor_abstract;
+    using base::message;
     using base::message_ptr;
     using base::empty_address;
 
