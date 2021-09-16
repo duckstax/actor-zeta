@@ -55,6 +55,16 @@ public:
         , e_(ptr)
         , cursor(0)
         , system_{"sync_contacts", "add_link", "remove_link"} {
+        add_handler("create_network",&supervisor_lite::create_network);
+        add_handler("create_storage",&supervisor_lite::create_storage);
+    }
+
+    void create_storage() {
+        spawn_actor<storage_t>();
+    }
+
+    void create_network() {
+        spawn_actor<network_t>();
     }
 
     ~supervisor_lite() override = default;
