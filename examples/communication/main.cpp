@@ -115,11 +115,11 @@ private:
 
 int main() {
     actor_zeta::supervisor supervisor_tmp(new supervisor_lite(new dummy_executor));
-    actor_zeta::send(supervisor_tmp,actor_zeta::empty_address,"create_storage");
-    actor_zeta::send(supervisor_tmp,actor_zeta::empty_address,"create_network");
+    actor_zeta::send(supervisor_tmp,actor_zeta::empty_address(),"create_storage");
+    actor_zeta::send(supervisor_tmp,actor_zeta::empty_address(),"create_network");
     actor_zeta::supervisor supervisor1(new supervisor_lite(new dummy_executor));
     actor_zeta::link(supervisor_tmp, supervisor1);
-    actor_zeta::send(supervisor1,actor_zeta::empty_address,"create_storage");
-    actor_zeta::send(supervisor1,actor_zeta::empty_address,"create_network");
+    actor_zeta::send(supervisor1,actor_zeta::empty_address(),"create_storage");
+    actor_zeta::send(supervisor1,actor_zeta::empty_address(),"create_network");
     return 0;
 }

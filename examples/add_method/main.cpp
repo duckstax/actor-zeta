@@ -94,7 +94,7 @@ private:
 
 int main() {
     actor_zeta::supervisor supervisor(new dummy_supervisor());
-   actor_zeta::send(supervisor,actor_zeta::empty_address,"create");
+   actor_zeta::send(supervisor,actor_zeta::empty_address(),"create");
 
     return 0;
 }

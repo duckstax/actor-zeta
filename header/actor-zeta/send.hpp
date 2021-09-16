@@ -22,7 +22,7 @@ namespace actor_zeta {
                 "delegate",
                 std::move(type),
                 std::move(make_message_ptr(
-                    base::empty_address,
+                    base::empty_address(),
                     std::forward<Args>(args)...))));
     }
 
@@ -34,7 +34,7 @@ namespace actor_zeta {
                 "delegate",
                 std::move(type),
                 std::move(make_message_ptr(
-                    base::empty_address,
+                    base::empty_address(),
                     std::forward<Args>(args)...))));
     }
 

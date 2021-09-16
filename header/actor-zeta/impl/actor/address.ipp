@@ -86,7 +86,7 @@ namespace actor_zeta { namespace base {
         return ptr_;
     }
 
-    auto make_empty_address() -> address_t {
+    auto empty_address() -> address_t {
         static address_t tmp;
         return tmp;
     }

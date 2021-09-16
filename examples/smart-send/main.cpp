@@ -158,7 +158,7 @@ int main() {
     int const actors = 10;
 
     for (auto i = actors - 1; i > 0; --i) {
-        actor_zeta::send(supervisor,actor_zeta::empty_address,"create");
+        actor_zeta::send(supervisor,actor_zeta::empty_address(),"create");
     }
 
     //actor_zeta::spawn_actor<worker_t>(supervisor);
