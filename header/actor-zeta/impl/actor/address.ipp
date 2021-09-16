@@ -21,6 +21,10 @@ namespace actor_zeta { namespace base {
 
     using message_ptr = std::unique_ptr<message>;
 
+    address_t::address_t():ptr_(nullptr)  {
+
+    }
+
     address_t::address_t(actor_abstract* ptr)
         : ptr_(ptr) {
     }
@@ -45,8 +49,7 @@ namespace actor_zeta { namespace base {
         return ptr_->type();
     }
 
-    address_t::address_t(address_t&& other) noexcept
-        : address_t() {
+    address_t::address_t(address_t&& other) noexcept{
         swap(other);
     }
 
@@ -81,6 +84,15 @@ namespace actor_zeta { namespace base {
 
     void* address_t::get() const {
         return ptr_;
+    }
+
+    auto make_empty_address() -> address_t {
+        static address_t tmp;
+        return tmp;
+    }
+
+    address_t::~address_t() noexcept {
+        ptr_= nullptr;
     }
 
 }} // namespace actor_zeta::base

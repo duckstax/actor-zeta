@@ -9,12 +9,12 @@ namespace actor_zeta { namespace base {
     ///
     class address_t final {
     public:
-        constexpr address_t() noexcept =default;
+        address_t() noexcept;
         address_t(address_t&& other) noexcept;
         address_t(const address_t& other);
         address_t& operator=(address_t&& other) noexcept;
         address_t& operator=(const address_t& other);
-        ~address_t() noexcept =default;
+        ~address_t() noexcept;
         explicit address_t(actor_abstract*);
         explicit address_t(supervisor_abstract*);
         address_t(std::nullptr_t) noexcept;
@@ -26,10 +26,11 @@ namespace actor_zeta { namespace base {
         void* get() const;
 
     private:
-        communication_module* ptr_ = nullptr;
+        communication_module* ptr_ ;
     };
 
-    constexpr static  auto  empty_address = address_t();
+    static auto make_empty_address() -> address_t;
+    const static auto empty_address = make_empty_address();
 
     static_assert(std::is_default_constructible<address_t>::value, "");
     static_assert(std::is_move_constructible<address_t>::value, "");
