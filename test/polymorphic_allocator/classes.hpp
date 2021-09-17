@@ -22,7 +22,7 @@ struct destroyable {
 
 int destroyable::count = 0;
 
-struct default_constructible : public std::vector<int> {
+struct default_constructible {
     static int constructed;
     default_constructible()
         : x(42) { ++constructed; }

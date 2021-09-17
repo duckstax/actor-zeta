@@ -4,10 +4,6 @@
 
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
-/*#if __has_include(<bits/uses_allocator.h>)
-#include <bits/uses_allocator.h>
-#else*/
-
 #include <actor-zeta/detail/type_traits.hpp>
 
 #include <cassert>
@@ -15,21 +11,11 @@
 #include <new>
 #include <utility>
 
-//#endif
-
 #endif
 
 namespace actor_zeta { namespace detail { namespace pmr {
 
 #if CPP14_OR_GREATER or CPP11_OR_GREATER
-
-    /*#if __has_include(<bits/uses_allocator.h>)
-
-    // nothing
-
-#else*/
-
-    // uses_allocator
 
     template<class _Tp>
     struct __has_allocator_type_ {
@@ -49,8 +35,6 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
     template<typename Alloc, typename T>
     using is_erased_or_convertible = type_traits::_or_<std::is_convertible<Alloc, T>, std::is_same<T, type_traits::erased_type>>;
-
-    /**/
 
     template<typename T, typename Alloc, typename = type_traits::void_t<>>
     struct uses_allocator_helper
@@ -167,8 +151,6 @@ namespace actor_zeta { namespace detail { namespace pmr {
     void uses_allocator_construct(const Alloc& a, T* ptr, Args&&... args) {
         uses_allocator_construct_impl(use_alloc<T, Alloc, Args...>(a), ptr, std::forward<Args>(args)...);
     }
-
-    //#endif
 
 #endif
 
