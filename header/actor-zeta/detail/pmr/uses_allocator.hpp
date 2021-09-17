@@ -17,20 +17,20 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
 #if CPP14_OR_GREATER or CPP11_OR_GREATER
 
-    template<class _Tp>
-    struct __has_allocator_type_ {
+    template<class T>
+    struct has_allocator_type {
     private:
-        struct __two {
-            char __lx;
-            char __lxx;
+        struct two {
+            char lx;
+            char lxx;
         };
-        template<class _Up>
-        static __two __test(...);
-        template<class _Up>
-        static char __test(typename _Up::allocator_type* = 0);
+        template<class Up>
+        static two test(...);
+        template<class Up>
+        static char test(typename Up::allocator_type* = 0);
 
     public:
-        static const bool value = sizeof(__test<_Tp>(0)) == 1;
+        static const bool value = sizeof(test<T>(0)) == 1;
     };
 
     template<typename Alloc, typename T>
@@ -44,18 +44,18 @@ namespace actor_zeta { namespace detail { namespace pmr {
     struct uses_allocator_helper<T, Alloc, type_traits::void_t<typename T::allocator_type>>
         : is_erased_or_convertible<Alloc, typename T::allocator_type>::type {};
 
-    template<typename _Tp, typename _Alloc,
-             bool = __has_allocator_type_<_Tp>::value>
-    struct __uses_allocator_helper_
+    template<typename T, typename Alloc,
+             bool = has_allocator_type<T>::value>
+    struct uses_allocator_helper_wrapper
         : public std::false_type {};
 
-    template<typename _Tp, typename _Alloc>
-    struct __uses_allocator_helper_<_Tp, _Alloc, true>
-        : uses_allocator_helper<_Tp, _Alloc>::type {};
+    template<typename T, typename Alloc>
+    struct uses_allocator_helper_wrapper<T, Alloc, true>
+        : uses_allocator_helper<T, Alloc>::type {};
 
     template<typename T, typename Alloc>
     struct uses_allocator
-        : __uses_allocator_helper_<T, Alloc>::type {};
+        : uses_allocator_helper_wrapper<T, Alloc>::type {};
 
     struct uses_alloc_base {};
 
@@ -108,10 +108,10 @@ namespace actor_zeta { namespace detail { namespace pmr {
     }
 
     template<
-        typename _Tp,
-        typename _Alloc,
+        typename T,
+        typename Alloc,
         typename... _Args>
-    void use_alloc(const _Alloc&&) = delete;
+    void use_alloc(const Alloc&&) = delete;
 
     template<
         template<typename...> class Predicate,
