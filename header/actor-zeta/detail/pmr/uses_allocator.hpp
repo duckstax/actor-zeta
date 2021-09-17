@@ -4,9 +4,9 @@
 
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
-#if __has_include(<bits/uses_allocator.h>)
+/*#if __has_include(<bits/uses_allocator.h>)
 #include <bits/uses_allocator.h>
-#else
+#else*/
 
 #include <actor-zeta/detail/type_traits.hpp>
 
@@ -15,7 +15,7 @@
 #include <new>
 #include <utility>
 
-#endif
+//#endif
 
 #endif
 
@@ -23,16 +23,16 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
 #if CPP14_OR_GREATER or CPP11_OR_GREATER
 
-#if __has_include(<bits/uses_allocator.h>)
+    /*#if __has_include(<bits/uses_allocator.h>)
 
     // nothing
 
-#else
+#else*/
 
     // uses_allocator
 
     template<class _Tp>
-    struct __has_allocator_type {
+    struct __has_allocator_type_ {
     private:
         struct __two {
             char __lx;
@@ -50,10 +50,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
     template<typename Alloc, typename T>
     using is_erased_or_convertible = type_traits::_or_<std::is_convertible<Alloc, T>, std::is_same<T, type_traits::erased_type>>;
 
-    /*template<typename _Tp, typename _Alloc,
-             bool = __has_allocator_type<_Tp>::value>
-    struct __uses_allocator_helper
-        : public false_type {};*/
+    /**/
 
     template<typename T, typename Alloc, typename = type_traits::void_t<>>
     struct uses_allocator_helper
@@ -63,9 +60,18 @@ namespace actor_zeta { namespace detail { namespace pmr {
     struct uses_allocator_helper<T, Alloc, type_traits::void_t<typename T::allocator_type>>
         : is_erased_or_convertible<Alloc, typename T::allocator_type>::type {};
 
+    template<typename _Tp, typename _Alloc,
+             bool = __has_allocator_type_<_Tp>::value>
+    struct __uses_allocator_helper_
+        : public std::false_type {};
+
+    template<typename _Tp, typename _Alloc>
+    struct __uses_allocator_helper_<_Tp, _Alloc, true>
+        : uses_allocator_helper<_Tp, _Alloc>::type {};
+
     template<typename T, typename Alloc>
     struct uses_allocator
-        : uses_allocator_helper<T, Alloc>::type {};
+        : __uses_allocator_helper_<T, Alloc>::type {};
 
     struct uses_alloc_base {};
 
@@ -162,7 +168,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
         uses_allocator_construct_impl(use_alloc<T, Alloc, Args...>(a), ptr, std::forward<Args>(args)...);
     }
 
-#endif
+    //#endif
 
 #endif
 
