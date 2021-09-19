@@ -58,6 +58,7 @@ namespace actor_zeta { namespace base {
         auto set_current_message(message_ptr) -> void;
         auto current_message_impl() -> message* final;
         auto address_book(detail::string_view) -> address_t;
+        auto address_book(std::string& type) -> address_t;
         auto address_book() -> address_range_t;
         /**
         * debug method
@@ -69,6 +70,7 @@ namespace actor_zeta { namespace base {
         auto redirect(std::string& type, message* msg) -> void;
         void add_link(address_t&);
         void remove_link(const address_t&);
+        //void connect_me_with(std::string&name);
 
         contacts_t contacts_;
         message* current_message_;

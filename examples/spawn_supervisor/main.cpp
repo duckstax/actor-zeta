@@ -23,6 +23,7 @@ using actor_zeta::work_sharing;
 using actor_zeta::make_message;
 
 std::atomic_int count_actor;
+std::atomic_int count_supervisor;
 const int max_queue = 100;
 
 #define TRACE(msg) \
@@ -72,7 +73,7 @@ public:
 
     void create_collection(std::string& name_database, std::string& name_collection) {
         std::cerr << "dispatcher_t::create_collection : "<< "database : " << name_database << " collection : " << name_collection << std::endl;
-        for (auto& i : all_view_address()) {
+        for (const auto& i : all_view_address()) {
             std::cerr << "i : " << i << std::endl;
         }
         auto database = address_book(name_database);
@@ -94,7 +95,15 @@ public:
     database_t(actor_zeta::supervisor_abstract* ptr, std::string name)
         : supervisor_abstract(ptr, std::move(name))
         , e_(ptr->executor()) {
+        add_handler("create", &database_t::create);
+        count_supervisor++;
+    }
 
+    void create(std::string& name) {
+        std::cerr << "database_t::create : " << name << std::endl;
+        auto token = std::move(name);
+        auto database_address =  spawn_actor<collection_t>(token);
+        actor_zeta::link(current_message()->sender(),database_address);
     }
 
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
@@ -128,11 +137,13 @@ public:
         , e_(new dummy_executor(1, max_queue)) {
         e_->start();
         add_handler("create", &mdb_t::create);
+        count_supervisor++;
     }
 
     void create(std::string& name) {
         std::cerr << "mdb_t::create : " << name << std::endl;
-        spawn_supervisor<database_t>(std::move(name));
+        auto database_address =  spawn_supervisor<database_t>(std::move(name));
+        actor_zeta::link(current_message()->sender(),database_address);
     }
 
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
@@ -170,11 +181,14 @@ public:
         , e_(new dummy_executor(1, max_queue)) {
         e_->start();
         add_handler("create", &mdispatcher_t::create);
+        count_supervisor++;
     }
 
     void create(std::string& name) {
         std::cerr << "mdispatcher_t::create : " << name << std::endl;
-        spawn_actor<dispatcher_t>(std::move(name));
+        auto dispather = spawn_actor<dispatcher_t>(std::move(name));
+        auto address_mdb = address_book("mdb");
+        actor_zeta::link(address_mdb,dispather);
     }
 
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
@@ -212,7 +226,8 @@ auto main() -> int {
     actor_zeta::send(mdispatcher, actor_zeta::address_t(), "create", std::string("dispatcher"));
     actor_zeta::delegate_send(mdispatcher, "dispatcher", "create_database", std::string("database_test"));
     actor_zeta::delegate_send(mdispatcher, "dispatcher", "create_collection", std::string("database_test"), std::string("collection_test"));
-    std::this_thread::sleep_for(sleep_time);
-
+  ///  std::this_thread::sleep_for(sleep_time);
+    std::cerr << "Count Actor : " << count_actor << std::endl;
+    std::cerr << "Count SuperVisor : " << count_supervisor << std::endl;
     return 0;
 }

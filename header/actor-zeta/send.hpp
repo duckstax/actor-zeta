@@ -27,6 +27,18 @@ namespace actor_zeta {
     }
 
     template<typename... Args>
+    void delegate_send(const base::supervisor& supervisor, base::address_t type, Args... args) {
+        supervisor->enqueue(
+            make_message(
+                supervisor->address(),
+                "delegate",
+                std::move(type),
+                std::move(make_message_ptr(
+                    base::empty_address(),
+                    std::forward<Args>(args)...))));
+    }
+
+    template<typename... Args>
     void delegate_send(base::address_t& supervisor, std::string type, Args... args) {
         supervisor.enqueue(
             make_message(

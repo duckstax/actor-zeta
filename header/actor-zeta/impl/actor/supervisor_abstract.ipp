@@ -84,6 +84,7 @@ namespace actor_zeta { namespace base {
         add_handler("delegate", &supervisor_abstract::redirect);
         add_handler("add_link", &supervisor_abstract::add_link);
         add_handler("remove_link", &supervisor_abstract::remove_link);
+        ///add_handler("connect_me_with",&supervisor_abstract::connect_me_with);
     }
 
     supervisor_abstract::supervisor_abstract(std::string name)
@@ -92,6 +93,7 @@ namespace actor_zeta { namespace base {
         add_handler("delegate", &supervisor_abstract::redirect);
         add_handler("add_link", &supervisor_abstract::add_link);
         add_handler("remove_link", &supervisor_abstract::remove_link);
+        ///add_handler("connect_me_with",&supervisor_abstract::connect_me_with);
     }
 
     supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string name)
@@ -100,6 +102,7 @@ namespace actor_zeta { namespace base {
         add_handler("delegate", &supervisor_abstract::redirect);
         add_handler("add_link", &supervisor_abstract::add_link);
         add_handler("remove_link", &supervisor_abstract::remove_link);
+        ///add_handler("connect_me_with",&supervisor_abstract::connect_me_with);
     }
     supervisor_abstract::~supervisor_abstract() {}
 
@@ -123,7 +126,7 @@ namespace actor_zeta { namespace base {
         message_ptr tmp(std::move(msg));
         auto type_t = std::move(type);
         tmp->sender() = std::move(address());
-        send(address_book(type_t.c_str()), std::move(tmp));
+        send(address_book(type_t), std::move(tmp));
     }
 
     auto supervisor_abstract::address() noexcept -> address_t {
@@ -139,10 +142,17 @@ namespace actor_zeta { namespace base {
     }
 
     auto supervisor_abstract::address_book(detail::string_view type) -> address_t {
+        address_t tmp;
         auto result = contacts_.find(type);
         if (result != contacts_.end()) {
-            return *(result->second.begin());
+            tmp = *(result->second.begin());
         }
+        return tmp;
+    }
+
+    auto supervisor_abstract::address_book(std::string& type) -> address_t {
+        detail::string_view tmp(type.data(), type.size());
+        return address_book(tmp);
     }
 
     auto supervisor_abstract::address_book() -> address_range_t {
@@ -200,11 +210,22 @@ namespace actor_zeta { namespace base {
     }
 
     void supervisor_abstract::sync(base::address_t&address){
-        link(*this, address);
+        auto address_tmp = address;
+        auto d = address_t(address_tmp);
+        add_link(d);
+        send(address_t(address_tmp), supervisor_abstract::address(),"add_link", supervisor_abstract::address());
         auto sender = current_message()->sender();
-        if (this != sender.get()) {
-            link(sender, address);
+        if (sender && this != sender.get()) {
+            link(sender, address_tmp);
         }
     }
+/*
+    void supervisor_abstract::connect_me_with( std::string& name) {
+        auto address_1 = current_message()->sender();
+        auto token = std::move(name);
+        auto address_2 = address_book(name);
+        link(address_1,address_2);
+    }
+    */
 
 }} // namespace actor_zeta::base
