@@ -10,7 +10,7 @@ TEST_CASE("handler") {
     REQUIRE(dummy_supervisor::constructor_counter == 1);
 
     actor_zeta::send(supervisor_,actor_zeta::empty_address(),"create_test_handlers");
-    REQUIRE(dummy_supervisor::enqueue_base_counter == 2 /*spawn_actor & add_link*/);
+    REQUIRE(dummy_supervisor::enqueue_base_counter == 1 /*add_link*/);
     REQUIRE(dummy_supervisor::add_actor_impl_counter == 1);
     REQUIRE(test_handlers::init_counter == 1);
     REQUIRE(static_cast<dummy_supervisor*>(supervisor_.get())->actors_count() == 1);
@@ -46,7 +46,7 @@ TEST_CASE("handler") {
     REQUIRE(test_handlers::ptr_4_counter == 1);
 
     actor_zeta::send(supervisor_,actor_zeta::empty_address(),"create_storage");
-    REQUIRE(dummy_supervisor::enqueue_base_counter == 4 /*spawn_actor & add_link*/);
+    REQUIRE(dummy_supervisor::enqueue_base_counter == 2 /* add_link*/);
     REQUIRE(dummy_supervisor::add_actor_impl_counter == 2);
     REQUIRE(storage_t::constructor_counter == 1);
     REQUIRE(static_cast<dummy_supervisor*>(supervisor_.get())->actors_count() == 2);
