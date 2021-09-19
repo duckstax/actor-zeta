@@ -46,8 +46,6 @@ namespace actor_zeta { namespace base {
 
         template<typename F>
         auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<std::is_member_function_pointer<F>::value>::type {
-        ///    auto dd =std::is_base_of<typename type_traits::get_callable_trait_t<F>::class_type, decltype(this)>::value;
-         ///   auto d = (std::is_same<typename type_traits::get_callable_trait_t<F>::class_type, std::is_base_of<typename type_traits::get_callable_trait_t<F>::class_type, decltype(this)>::value);
             on(name, make_handler(std::forward<F>(f), static_cast<typename type_traits::get_callable_trait_t<F>::class_type*>(this)));
         }
 
