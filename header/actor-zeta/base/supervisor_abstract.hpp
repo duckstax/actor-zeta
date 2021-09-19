@@ -70,7 +70,6 @@ namespace actor_zeta { namespace base {
         auto redirect(std::string& type, message* msg) -> void;
         void add_link(address_t&);
         void remove_link(const address_t&);
-        //void connect_me_with(std::string&name);
 
         contacts_t contacts_;
         message* current_message_;

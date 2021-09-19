@@ -8,11 +8,6 @@ namespace actor_zeta {
         void link_imp(base::address_t& a1, base::address_t& a2);
     }
 
-/*
-    inline auto connect_me_with(base::address_t& a1, base::address_t& a2,std::string name ) -> void {
-        send(a1,a2,"connect_me_with",std::move(name));
-    }
-*/
    // template<class Actor>
     //void link(basic_async_actor& actor1, basic_async_actor& actor2);
 

@@ -84,7 +84,6 @@ namespace actor_zeta { namespace base {
         add_handler("delegate", &supervisor_abstract::redirect);
         add_handler("add_link", &supervisor_abstract::add_link);
         add_handler("remove_link", &supervisor_abstract::remove_link);
-        ///add_handler("connect_me_with",&supervisor_abstract::connect_me_with);
     }
 
     supervisor_abstract::supervisor_abstract(std::string name)
@@ -93,7 +92,6 @@ namespace actor_zeta { namespace base {
         add_handler("delegate", &supervisor_abstract::redirect);
         add_handler("add_link", &supervisor_abstract::add_link);
         add_handler("remove_link", &supervisor_abstract::remove_link);
-        ///add_handler("connect_me_with",&supervisor_abstract::connect_me_with);
     }
 
     supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string name)
@@ -102,7 +100,6 @@ namespace actor_zeta { namespace base {
         add_handler("delegate", &supervisor_abstract::redirect);
         add_handler("add_link", &supervisor_abstract::add_link);
         add_handler("remove_link", &supervisor_abstract::remove_link);
-        ///add_handler("connect_me_with",&supervisor_abstract::connect_me_with);
     }
     supervisor_abstract::~supervisor_abstract() {}
 
@@ -219,13 +216,5 @@ namespace actor_zeta { namespace base {
             link(sender, address_tmp);
         }
     }
-/*
-    void supervisor_abstract::connect_me_with( std::string& name) {
-        auto address_1 = current_message()->sender();
-        auto token = std::move(name);
-        auto address_2 = address_book(name);
-        link(address_1,address_2);
-    }
-    */
 
 }} // namespace actor_zeta::base
