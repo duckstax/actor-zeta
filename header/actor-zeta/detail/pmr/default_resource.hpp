@@ -10,41 +10,26 @@
 namespace actor_zeta { namespace detail { namespace pmr {
 
 #if CPP17_OR_GREATER
+
 #if __has_include(<memory_resource>)
 
-    inline memory_resource* get_default_resource() noexcept {
-        return std::pmr::get_default_resource();
-    }
+    memory_resource* get_default_resource() noexcept;
 
-    inline memory_resource* set_default_resource(memory_resource* new_res) noexcept {
-        return std::pmr::set_default_resource(new_res);
-    }
+    memory_resource* set_default_resource(memory_resource* new_res) noexcept;
 
-    inline memory_resource* new_delete_resource() noexcept {
-        return std::pmr::new_delete_resource();
-    }
+    memory_resource* new_delete_resource() noexcept;
 
-    inline memory_resource* null_memory_resource() noexcept {
-        return std::pmr::null_memory_resource();
-    }
+    memory_resource* null_memory_resource() noexcept;
 
 #else
 
-    inline memory_resource* get_default_resource() noexcept {
-        return std::experimental::pmr::get_default_resource();
-    }
+    memory_resource* get_default_resource() noexcept;
 
-    inline memory_resource* set_default_resource(memory_resource* new_res) noexcept {
-        return std::experimental::pmr::set_default_resource(new_res);
-    }
+    memory_resource* set_default_resource(memory_resource* new_res) noexcept;
 
-    inline memory_resource* new_delete_resource() noexcept {
-        return std::experimental::pmr::new_delete_resource();
-    }
+    memory_resource* new_delete_resource() noexcept;
 
-    inline memory_resource* null_memory_resource() noexcept {
-        return std::experimental::pmr::null_memory_resource();
-    }
+    memory_resource* null_memory_resource() noexcept;
 
 #endif
 
@@ -160,21 +145,13 @@ namespace actor_zeta { namespace detail { namespace pmr {
         default_memory_resource_t mr;
     };
 
-    inline memory_resource* get_default_resource() noexcept {
-        return default_memory_resource_t::exchange();
-    }
+    memory_resource* get_default_resource() noexcept;
 
-    inline memory_resource* set_default_resource(memory_resource* new_res) noexcept {
-        return default_memory_resource_t::exchange(new_res);
-    }
+    memory_resource* set_default_resource(memory_resource* new_res) noexcept;
 
-    inline memory_resource* new_delete_resource() noexcept {
-        return default_memory_resource_t::exchange();
-    }
+    memory_resource* new_delete_resource() noexcept;
 
-    inline memory_resource* null_memory_resource() noexcept {
-        return null_memory_resource_t::get();
-    }
+    memory_resource* null_memory_resource() noexcept;
 
 #endif
 
