@@ -42,26 +42,29 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
     template<typename T>
     class polymorphic_allocator {
-    private:
-        using default_resource = actor_zeta::detail::pmr::default_resource;
-
     public:
         using value_type = T;
         using pointer = value_type*;
 
         polymorphic_allocator() noexcept
-            : resource_(default_resource::get()) {
-        }
+            : resource_(get_default_resource()) {}
 
-        polymorphic_allocator(memory_resource* ptr)
-            : resource_(ptr) { assert(ptr); }
+        polymorphic_allocator(memory_resource* ptr) noexcept
+            __attribute__((__nonnull__))
+            : resource_(ptr) {}
 
+        polymorphic_allocator(polymorphic_allocator&& other) = default;
+        polymorphic_allocator(polymorphic_allocator& other) = default;
         polymorphic_allocator(const polymorphic_allocator& other) = default;
 
         template<typename _Up>
         polymorphic_allocator(const polymorphic_allocator<_Up>& other) noexcept
             : resource_(other.resource()) {}
 
+        polymorphic_allocator&
+        operator=(polymorphic_allocator&& other) = default;
+        polymorphic_allocator&
+        operator=(polymorphic_allocator& other) = default;
         polymorphic_allocator&
         operator=(const polymorphic_allocator& other) = default;
 

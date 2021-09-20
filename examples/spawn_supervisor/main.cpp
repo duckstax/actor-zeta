@@ -8,9 +8,9 @@
 #include <thread>
 #include <vector>
 
+#include <actor-zeta/core.hpp>
 #include <actor-zeta/link.hpp>
 #include <actor-zeta/spawn.hpp>
-#include <actor-zeta/core.hpp>
 
 using actor_zeta::abstract_executor;
 using actor_zeta::basic_async_actor;

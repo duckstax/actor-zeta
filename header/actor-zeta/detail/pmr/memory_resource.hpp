@@ -30,11 +30,11 @@ namespace actor_zeta { namespace detail { namespace pmr {
     public:
         virtual ~memory_resource() {}
 
-        void* allocate(std::size_t bytes, std::size_t alignment = alignof(std::max_align_t)) {
+        void* allocate(std::size_t bytes, std::size_t alignment = alignof(::max_align_t)) {
             return this->do_allocate(bytes, alignment);
         }
 
-        void deallocate(void* p, std::size_t bytes, std::size_t alignment = alignof(std::max_align_t)) {
+        void deallocate(void* p, std::size_t bytes, std::size_t alignment = alignof(::max_align_t)) {
             return this->do_deallocate(p, bytes, alignment);
         }
 

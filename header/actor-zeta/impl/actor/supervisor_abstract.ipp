@@ -26,42 +26,10 @@ namespace actor_zeta { namespace base {
         std::cerr << "WARNING" << std::endl;
     }
 
-    static constexpr std::size_t DEFAULT_ALIGNMENT{alignof(std::max_align_t)};
-
-    constexpr bool is_pow2(std::size_t n) { return (0 == (n & (n - 1))); }
-
-    constexpr bool is_supported_alignment(std::size_t alignment) { return is_pow2(alignment); }
-
-    template<typename Alloc>
-    void* aligned_allocate(std::size_t bytes, std::size_t alignment, Alloc alloc) {
-        assert(is_pow2(alignment));
-
-        std::size_t padded_allocation_size{bytes + alignment + sizeof(std::ptrdiff_t)};
-
-        char* const original = static_cast<char*>(alloc(padded_allocation_size));
-
-        void* aligned{original + sizeof(std::ptrdiff_t)};
-
-        std::align(alignment, bytes, aligned, padded_allocation_size);
-
-        std::ptrdiff_t offset = static_cast<char*>(aligned) - original;
-
-        *(static_cast<std::ptrdiff_t*>(aligned) - 1) = offset;
-
-        return aligned;
-    }
-
-    template<typename Dealloc>
-    void aligned_deallocate(void* p, std::size_t bytes, std::size_t alignment, Dealloc dealloc) {
-        (void) alignment;
-        (void) bytes;
-
-        std::ptrdiff_t const offset = *(reinterpret_cast<std::ptrdiff_t*>(p) - 1);
-
-        void* const original = static_cast<char*>(p) - offset;
-
-        dealloc(original);
-    }
+    using detail::DEFAULT_ALIGNMENT;
+    using detail::aligned_allocate;
+    using detail::aligned_deallocate;
+    using detail::is_supported_alignment;
 
     class new_delete_resource final : public detail::pmr::memory_resource {
     public:
@@ -77,14 +45,6 @@ namespace actor_zeta { namespace base {
 
         bool do_is_equal(const memory_resource& other) const noexcept override { return &other == this; }
     };
-
-    supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* memory_resource, std::string name)
-        : communication_module(std::move(name))
-        , memory_resource_(memory_resource) {
-        add_handler("delegate", &supervisor_abstract::redirect);
-        add_handler("add_link", &supervisor_abstract::add_link);
-        add_handler("remove_link", &supervisor_abstract::remove_link);
-    }
 
     supervisor_abstract::supervisor_abstract(std::string name)
         : communication_module(std::move(name))
