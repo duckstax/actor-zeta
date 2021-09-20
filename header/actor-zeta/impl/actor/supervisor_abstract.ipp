@@ -46,6 +46,14 @@ namespace actor_zeta { namespace base {
         bool do_is_equal(const memory_resource& other) const noexcept override { return &other == this; }
     };
 
+    supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* mr, std::string name)
+        : communication_module(std::move(name))
+        , memory_resource_(mr) {
+        add_handler("delegate", &supervisor_abstract::redirect);
+        add_handler("add_link", &supervisor_abstract::add_link);
+        add_handler("remove_link", &supervisor_abstract::remove_link);
+    }
+
     supervisor_abstract::supervisor_abstract(std::string name)
         : communication_module(std::move(name))
         , memory_resource_(new new_delete_resource) {
@@ -116,7 +124,17 @@ namespace actor_zeta { namespace base {
         return std::make_pair(contacts_.cbegin(), contacts_.cend());
     }
 
-    void supervisor_abstract::add_link(address_t& address) {
+    void supervisor_abstract::add_link() {
+        auto& address = current_message()->sender();
+        add_link_impl(address);
+    }
+
+    void supervisor_abstract::remove_link() {
+        auto& address = current_message()->sender();
+        remove_link_impl(address);
+    }
+
+    void supervisor_abstract::add_link_impl(address_t& address) {
         if (address && this != address.get()) {
             auto name = address.type();
             auto it = contacts_.find(name);
@@ -133,7 +151,7 @@ namespace actor_zeta { namespace base {
         }
     }
 
-    void supervisor_abstract::remove_link(const address_t& address) {
+    void supervisor_abstract::remove_link_impl(const address_t& address) {
         auto name = address.type();
         auto it = contacts_.find(name);
         if (it == contacts_.end()) {
@@ -169,8 +187,8 @@ namespace actor_zeta { namespace base {
     void supervisor_abstract::sync(base::address_t&address){
         auto address_tmp = address;
         auto d = address_t(address_tmp);
-        add_link(d);
-        send(address_t(address_tmp), supervisor_abstract::address(),"add_link", supervisor_abstract::address());
+        add_link_impl(d);
+        send(address_t(address_tmp), supervisor_abstract::address(),"add_link");
         auto sender = current_message()->sender();
         if (sender && this != sender.get()) {
             link(sender, address_tmp);

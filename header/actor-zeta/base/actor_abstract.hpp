@@ -40,8 +40,10 @@ namespace actor_zeta { namespace base {
         auto all_view_address() const -> std::set<std::string>;
 
     private:
-        void add_link(address_t&);
-        void remove_link(const address_t&);
+        void add_link();
+        void remove_link();
+        void add_link_impl(address_t&);
+        void remove_link_impl(const address_t&);
         std::unordered_map<detail::string_view, address_t> contacts_;
     };
 

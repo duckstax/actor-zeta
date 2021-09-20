@@ -45,7 +45,17 @@ namespace actor_zeta { namespace base {
         return tmp;
     }
 
-    void actor_abstract::add_link(address_t& address) {
+    void actor_abstract::add_link() {
+        auto&address = current_message()->sender();
+        add_link_impl(address);
+    }
+
+    void actor_abstract::remove_link() {
+        auto&address = current_message()->sender();
+        remove_link_impl(address);
+    }
+
+    void actor_abstract::add_link_impl(address_t& address) {
         if (address && this!=address.get()) {
             auto name = address.type();
             contacts_.emplace(name, std::move(address));
@@ -55,7 +65,7 @@ namespace actor_zeta { namespace base {
 
     }
 
-    void actor_abstract::remove_link(const address_t& address) {
+    void actor_abstract::remove_link_impl(const address_t& address) {
         auto it = contacts_.find(address.type());
         if(it != contacts_.end()){
             contacts_.erase(it);

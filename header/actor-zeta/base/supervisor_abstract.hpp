@@ -68,8 +68,11 @@ namespace actor_zeta { namespace base {
     private:
         void sync(base::address_t&);
         auto redirect(std::string& type, message* msg) -> void;
-        void add_link(address_t&);
-        void remove_link(const address_t&);
+        void add_link();
+        void remove_link();
+
+        void add_link_impl(address_t&);
+        void remove_link_impl(const address_t&);
 
         contacts_t contacts_;
         message* current_message_;
