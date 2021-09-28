@@ -37,7 +37,9 @@ namespace actor_zeta { namespace base {
 
     message::message()
         : next(nullptr)
-        , prev(nullptr) {}
+        , prev(nullptr)
+        , sender_(address_t::empty_address())
+    {}
 
     bool message::is_high_priority() const {
         return false;

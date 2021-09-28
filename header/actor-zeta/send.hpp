@@ -22,7 +22,7 @@ namespace actor_zeta {
                 "delegate",
                 std::move(type),
                 std::move(make_message_ptr(
-                    base::empty_address(),
+                    base::address_t::empty_address(),
                     std::forward<Args>(args)...))));
     }
 
@@ -34,7 +34,7 @@ namespace actor_zeta {
                 "delegate",
                 std::move(type),
                 std::move(make_message_ptr(
-                    base::empty_address(),
+                    base::address_t::empty_address(),
                     std::forward<Args>(args)...))));
     }
 
@@ -46,7 +46,7 @@ namespace actor_zeta {
                 "delegate",
                 std::move(type),
                 std::move(make_message_ptr(
-                    base::empty_address(),
+                    base::address_t::empty_address(),
                     std::forward<Args>(args)...))));
     }
 
@@ -72,7 +72,14 @@ namespace actor_zeta {
     }
 
     template<typename... Args>
-    void send(base::address_t address, Args... args) {
+    void send(base::address_t&& address, Args... args) {
+        address.enqueue(
+            make_message(
+                std::forward<Args>(args)...));
+    }
+
+    template<typename... Args>
+    void send(base::address_t& address, Args... args) {
         address.enqueue(
             make_message(
                 std::forward<Args>(args)...));

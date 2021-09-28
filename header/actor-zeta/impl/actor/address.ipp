@@ -27,10 +27,12 @@ namespace actor_zeta { namespace base {
 
     address_t::address_t(actor_abstract* ptr)
         : ptr_(ptr) {
+        assert(ptr != nullptr);
     }
 
     address_t::address_t(supervisor_abstract* ptr)
         : ptr_(ptr) {
+        assert(ptr != nullptr);
     }
 
     bool address_t::operator!() const noexcept {
@@ -73,9 +75,6 @@ namespace actor_zeta { namespace base {
         }
         return *this;
     }
-
-    address_t::address_t(std::nullptr_t) noexcept
-        : address_t() {}
 
     void address_t::swap(address_t& other) {
         using std::swap;

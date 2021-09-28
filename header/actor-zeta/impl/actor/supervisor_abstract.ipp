@@ -26,9 +26,9 @@ namespace actor_zeta { namespace base {
         std::cerr << "WARNING" << std::endl;
     }
 
-    using detail::DEFAULT_ALIGNMENT;
     using detail::aligned_allocate;
     using detail::aligned_deallocate;
+    using detail::DEFAULT_ALIGNMENT;
     using detail::is_supported_alignment;
 
     class new_delete_resource final : public detail::pmr::memory_resource {
@@ -107,7 +107,7 @@ namespace actor_zeta { namespace base {
     }
 
     auto supervisor_abstract::address_book(detail::string_view type) -> address_t {
-        address_t tmp;
+        auto tmp = address_t::empty_address();
         auto result = contacts_.find(type);
         if (result != contacts_.end()) {
             tmp = *(result->second.begin());
@@ -125,26 +125,24 @@ namespace actor_zeta { namespace base {
     }
 
     void supervisor_abstract::add_link() {
-        auto& address = current_message()->sender();
-        add_link_impl(address);
+        add_link_impl(std::move(current_message()->sender()));
     }
 
     void supervisor_abstract::remove_link() {
-        auto& address = current_message()->sender();
-        remove_link_impl(address);
+        remove_link_impl(current_message()->sender());
     }
 
-    void supervisor_abstract::add_link_impl(address_t& address) {
+    void supervisor_abstract::add_link_impl(address_t address) {
         if (address && this != address.get()) {
             auto name = address.type();
             auto it = contacts_.find(name);
             if (it == contacts_.end()) {
                 auto result = contacts_.emplace(name, storage_contact_t());
                 result.first->second.emplace_back(std::move(address));
-                return ;
+                return;
             } else {
                 it->second.emplace_back(std::move(address));
-                return ;
+                return;
             }
         } else {
             error_sync_contacts_in_supervisor(type(), address.type());
@@ -184,12 +182,11 @@ namespace actor_zeta { namespace base {
         }
     }
 
-    void supervisor_abstract::sync(base::address_t&address){
-        auto address_tmp = address;
-        auto d = address_t(address_tmp);
-        add_link_impl(d);
-        send(address_t(address_tmp), supervisor_abstract::address(),"add_link");
-        auto sender = current_message()->sender();
+    void supervisor_abstract::sync(const base::address_t& address) {
+        auto address_tmp(address);
+        add_link_impl(address_t(address));
+        send(address_tmp, supervisor_abstract::address(), "add_link");
+        auto& sender = current_message()->sender();
         if (sender && this != sender.get()) {
             link(sender, address_tmp);
         }

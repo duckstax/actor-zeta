@@ -228,7 +228,7 @@ auto main() -> int {
     auto mdb = actor_zeta::spawn_supervisor<mdb_t>();
     auto mdispatcher = actor_zeta::spawn_supervisor<mdispatcher_t>();
     actor_zeta::link(mdb,mdispatcher);
-    actor_zeta::send(mdispatcher, actor_zeta::address_t(), "create", std::string("dispatcher"));
+    actor_zeta::send(mdispatcher, actor_zeta::address_t::empty_address(), "create", std::string("dispatcher"));
     actor_zeta::delegate_send(mdispatcher, "dispatcher", "create_database", std::string("database_test"));
     actor_zeta::delegate_send(mdispatcher, "dispatcher", "create_collection", std::string("database_test"), std::string("collection_test"));
     actor_zeta::delegate_send(mdispatcher, "dispatcher", "insert", std::string("collection_test"), 1,5);

@@ -125,7 +125,7 @@ private:
 
 int main() {
     actor_zeta::supervisor dummy_supervisor(new supervisor_lite());
-    actor_zeta::send(dummy_supervisor,actor_zeta::empty_address(),"create");
+    actor_zeta::send(dummy_supervisor,actor_zeta::address_t::empty_address(),"create");
     actor_zeta::delegate_send(dummy_supervisor, "storage", "update", std::string("payload"));
     actor_zeta::delegate_send(dummy_supervisor, "storage", "find");
     actor_zeta::delegate_send(dummy_supervisor, "storage", "remove");

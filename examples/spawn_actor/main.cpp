@@ -226,7 +226,7 @@ auto main() -> int {
     int const actors = 1 + sends * 2;
     count = 0;
 
-    actor_zeta::send(supervisor1,actor_zeta::empty_address(),"create_worker");                                     //actor creator, "bot1"
+    actor_zeta::send(supervisor1,actor_zeta::address_t::empty_address(),"create_worker");                                     //actor creator, "bot1"
     actor_zeta::delegate_send(supervisor1, "bot1", "add_link", supervisor2->address()); //link bot-1 with manager-2
 
     for (auto i = sends - 1; i >= 0; --i) {
