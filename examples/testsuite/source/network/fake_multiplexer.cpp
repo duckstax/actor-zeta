@@ -1,5 +1,5 @@
-#include <actor-zeta.hpp>
 #include <cassert>
+#include <header/actor-zeta/core.hpp>
 #include <iostream>
 #include <testsuite/network/fake_multiplexer.hpp>
 

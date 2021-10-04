@@ -1,3 +1,5 @@
+#pragma once
+
 #include <actor-zeta/detail/aligned_allocate.hpp>
 
 #ifdef __GNUC__

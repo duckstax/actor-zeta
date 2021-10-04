@@ -32,7 +32,7 @@ namespace actor_zeta { namespace base {
         void enqueue_base(message_ptr, executor::execution_device*) final;
 
         // Non thread-safe method
-        auto current_message() -> message* override;
+        auto current_message_impl() -> message* override;
 
     private:
         enum class state : int {

@@ -1,7 +1,7 @@
 
 | compiler  | Master | Develop |
 |:---:|:---:|:---:|
-| gcc 5 - 11 | |[![ubuntu](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_gcc.yaml/badge.svg?branch=develop)](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_gcc.yaml) |
+| gcc 4.8.5 - 11 | |[![ubuntu](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_gcc.yaml/badge.svg?branch=develop)](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_gcc.yaml) |
 |clang 3.9 - 10 | |[![ubuntu](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_clang.yaml/badge.svg?branch=develop)](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_clang.yaml)|
 
 actor-zeta
@@ -9,9 +9,24 @@ actor-zeta
 
 actor-zeta is an open source C++11/14/17 virtual actor model implementation featuring lightweight & fast and more.
 
-### Example
+## Release cycle information:
+### 1.0.0a6 : 
+    dynamically adding actors and supervisors 
+    adding polymorph allocator 
+    adding tests
 
-## class method mode 
+### 1.0.0a7 :
+    Getting ready for beta
+    Finishes expanding functionality
+    integrate with polymorph allocator
+
+### 1.0.0b1 :
+    benchmarks 
+    performance tuning
+
+## Example
+
+### class method mode 
 
 ```C++
 

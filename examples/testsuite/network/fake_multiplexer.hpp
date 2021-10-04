@@ -1,11 +1,11 @@
 #pragma once
 
 #include "connection_identifying.hpp"
-#include <actor-zeta.hpp>
 #include <atomic>
 #include <cassert>
 #include <deque>
 #include <functional>
+#include <header/actor-zeta/core.hpp>
 #include <list>
 #include <queue>
 #include <thread>

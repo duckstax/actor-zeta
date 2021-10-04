@@ -1,3 +1,4 @@
+#pragma once
 #include <cassert>
 #include <iostream>
 
@@ -195,7 +196,7 @@ namespace actor_zeta { namespace base {
 
     void cooperative_actor::cleanup() {}
 
-    auto cooperative_actor::current_message() -> message* {
+    auto cooperative_actor::current_message_impl() -> message* {
         return current_message_;
     }
 

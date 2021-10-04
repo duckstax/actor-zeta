@@ -9,18 +9,8 @@
 #include <unordered_set>
 #include <vector>
 
-#include <actor-zeta.hpp>
 #include <actor-zeta/link.hpp>
-
-using actor_zeta::abstract_executor;
-using actor_zeta::basic_async_actor;
-using actor_zeta::supervisor;
-
-using actor_zeta::abstract_executor;
-using actor_zeta::executor_t;
-using actor_zeta::work_sharing;
-
-using actor_zeta::make_message;
+#include <actor-zeta/core.hpp>
 
 std::atomic_int count;
 const int max_queue = 100;
@@ -111,8 +101,8 @@ public:
 
     auto spawn_worker() -> void {
         auto addr = address_book("manager-2");
-        actor_zeta::spawn_actor<worker_t2>(addr, address());
-        actor_zeta::spawn_actor<worker_t3>(addr, address());
+        actor_zeta::send(addr, address(),"create_worker2");
+        actor_zeta::send(addr, address(),"create_worker3");
     }
 
     auto spawn_broadcast(actor_zeta::address_t addr) -> void {
@@ -140,14 +130,29 @@ class supervisor_lite final : public actor_zeta::supervisor_abstract {
 public:
     explicit supervisor_lite(std::string name)
         : supervisor_abstract(std::move(name))
-        , e_(new executor_t<work_sharing>(1, max_queue),
+        , e_(new actor_zeta::executor_t<actor_zeta::work_sharing>(1, max_queue),
              thread_pool_deleter)
         , system_{"add_link",
                   "sync_contacts",
                   "remove_link",
-                  "spawn_actor", "delegate", "spawn_broadcast"} {
+                  "spawn_actor", "delegate", "spawn_broadcast","create_worker2","create_worker3","create_worker"} {
         e_->start();
         add_handler("spawn_broadcast", &supervisor_lite::spawn_broadcast);
+        add_handler("create_worker", &supervisor_lite::create_worker);
+        add_handler("create_worker2", &supervisor_lite::create_worker2);
+        add_handler("create_worker3", &supervisor_lite::create_worker3);
+    }
+
+    void create_worker2() {
+        spawn_actor<worker_t2>();
+    }
+
+    void create_worker3() {
+        spawn_actor<worker_t3>();
+    }
+
+    void create_worker() {
+        spawn_actor<worker_t>();
     }
 
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
@@ -168,7 +173,7 @@ public:
         auto contacts = address_book();
         for (auto it = contacts.first; it != contacts.second; ++it) {
             if (it->first != sender.type()) {
-                broadcast(it->first, make_message(address(), "spawn_broadcast", address(), addr));
+                broadcast(it->first, actor_zeta::make_message(address(), "spawn_broadcast", address(), addr));
             }
         }
     }
@@ -187,7 +192,7 @@ private:
         execute();
     }
 
-    std::unique_ptr<abstract_executor, decltype(thread_pool_deleter)> e_;
+    std::unique_ptr<actor_zeta::abstract_executor, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor> actors_;
     std::vector<actor_zeta::address_t> actors_for_broadcast_;
     std::vector<actor_zeta::supervisor> supervisor_;
@@ -221,7 +226,7 @@ auto main() -> int {
     int const actors = 1 + sends * 2;
     count = 0;
 
-    actor_zeta::spawn_actor<worker_t>(supervisor1);                                     //actor creator, "bot1"
+    actor_zeta::send(supervisor1,actor_zeta::address_t::empty_address(),"create_worker");                                     //actor creator, "bot1"
     actor_zeta::delegate_send(supervisor1, "bot1", "add_link", supervisor2->address()); //link bot-1 with manager-2
 
     for (auto i = sends - 1; i >= 0; --i) {

@@ -1,3 +1,4 @@
+#pragma once
 #include <actor-zeta/detail/string_view.hpp>
 
 #if CPP17_OR_GREATER

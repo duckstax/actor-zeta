@@ -5,7 +5,7 @@
 #include <map>
 #include <vector>
 
-#include <actor-zeta.hpp>
+#include <actor-zeta/core.hpp>
 #include <testsuite/network/fake_multiplexer.hpp>
 
 using actor_zeta::address_t;

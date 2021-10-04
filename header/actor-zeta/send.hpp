@@ -1,10 +1,9 @@
 #pragma once
 
-#include "base/address.hpp"
-#include <actor-zeta/base/supervisor.hpp>
-#include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/make_message.hpp>
+#include <actor-zeta/base/supervisor_abstract.hpp>
+#include <actor-zeta/base/supervisor.hpp>
 
 namespace actor_zeta {
 
@@ -23,7 +22,19 @@ namespace actor_zeta {
                 "delegate",
                 std::move(type),
                 std::move(make_message_ptr(
-                    actor_zeta::address_t(),
+                    base::address_t::empty_address(),
+                    std::forward<Args>(args)...))));
+    }
+
+    template<typename... Args>
+    void delegate_send(const base::supervisor& supervisor, base::address_t type, Args... args) {
+        supervisor->enqueue(
+            make_message(
+                supervisor->address(),
+                "delegate",
+                std::move(type),
+                std::move(make_message_ptr(
+                    base::address_t::empty_address(),
                     std::forward<Args>(args)...))));
     }
 
@@ -35,7 +46,7 @@ namespace actor_zeta {
                 "delegate",
                 std::move(type),
                 std::move(make_message_ptr(
-                    actor_zeta::address_t(),
+                    base::address_t::empty_address(),
                     std::forward<Args>(args)...))));
     }
 
@@ -61,12 +72,19 @@ namespace actor_zeta {
     }
 
     template<typename... Args>
-    void send(base::address_t address, Args... args) {
+    void send(base::address_t&& address, Args... args) {
         address.enqueue(
             make_message(
                 std::forward<Args>(args)...));
     }
 
-    void send(base::address_t address, message_ptr msg);
+    template<typename... Args>
+    void send(base::address_t& address, Args... args) {
+        address.enqueue(
+            make_message(
+                std::forward<Args>(args)...));
+    }
+
+    void send(base::address_t address, base::message_ptr msg);
 
 } // namespace actor_zeta

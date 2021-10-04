@@ -1,3 +1,4 @@
+#pragma once
 #include <actor-zeta/detail/ref_counted.hpp>
 
 namespace actor_zeta {

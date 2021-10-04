@@ -1,3 +1,5 @@
+#pragma once
+
 // clang-format off
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/address.hpp>
@@ -7,9 +9,8 @@
 #include <actor-zeta/impl/handler.ipp>
 // clang-format on
 
-#include <actor-zeta/base/actor_abstract.hpp>
 #include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/supervisor_abstract.hpp>
+#include <actor-zeta/base/communication_module.hpp>
 #include <memory>
 
 namespace {
@@ -20,16 +21,18 @@ namespace actor_zeta { namespace base {
 
     using message_ptr = std::unique_ptr<message>;
 
+    address_t::address_t() noexcept
+        : ptr_(nullptr) {
+    }
+
     address_t::address_t(actor_abstract* ptr)
         : ptr_(ptr) {
+        assert(ptr != nullptr);
     }
 
     address_t::address_t(supervisor_abstract* ptr)
         : ptr_(ptr) {
-    }
-
-    address_t::~address_t() {
-        ptr_ = nullptr;
+        assert(ptr != nullptr);
     }
 
     bool address_t::operator!() const noexcept {
@@ -48,12 +51,7 @@ namespace actor_zeta { namespace base {
         return ptr_->type();
     }
 
-    address_t::address_t() noexcept
-        : ptr_() {
-    }
-
-    address_t::address_t(address_t&& other) noexcept
-        : address_t() {
+    address_t::address_t(address_t&& other) noexcept {
         swap(other);
     }
 
@@ -78,9 +76,6 @@ namespace actor_zeta { namespace base {
         return *this;
     }
 
-    address_t::address_t(std::nullptr_t) noexcept
-        : address_t() {}
-
     void address_t::swap(address_t& other) {
         using std::swap;
         std::swap(ptr_, other.ptr_);
@@ -88,6 +83,10 @@ namespace actor_zeta { namespace base {
 
     void* address_t::get() const {
         return ptr_;
+    }
+
+    address_t::~address_t() noexcept {
+        ptr_ = nullptr;
     }
 
 }} // namespace actor_zeta::base

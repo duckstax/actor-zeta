@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(smart-send)
+project(spawn_supervisor)
 
 add_executable(${PROJECT_NAME} main.cpp)
 
