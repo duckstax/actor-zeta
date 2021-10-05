@@ -55,17 +55,16 @@ namespace actor_zeta { namespace base {
         remove_link_impl(address);
     }
 
-    void actor_abstract::add_link_impl(address_t& address) {
+    void actor_abstract::add_link_impl(address_t address) {
         if (address && this!=address.get()) {
             auto name = address.type();
             contacts_.emplace(name, std::move(address));
         } else {
             error_sync_contacts(type(), address.type());
         }
-
     }
 
-    void actor_abstract::remove_link_impl(const address_t& address) {
+    void actor_abstract::remove_link_impl(const address_t address) {
         auto it = contacts_.find(address.type());
         if(it != contacts_.end()){
             contacts_.erase(it);

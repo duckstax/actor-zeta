@@ -149,7 +149,7 @@ namespace actor_zeta { namespace base {
         }
     }
 
-    void supervisor_abstract::remove_link_impl(const address_t& address) {
+    void supervisor_abstract::remove_link_impl(const address_t address) {
         auto name = address.type();
         auto it = contacts_.find(name);
         if (it == contacts_.end()) {
@@ -182,13 +182,12 @@ namespace actor_zeta { namespace base {
         }
     }
 
-    void supervisor_abstract::sync(const base::address_t& address) {
-        auto address_tmp(address);
-        add_link_impl(address_t(address));
-        send(address_tmp, supervisor_abstract::address(), "add_link");
+    void supervisor_abstract::sync(base::address_t address) {
+        add_link_impl(address);
+        send(address, supervisor_abstract::address(), "add_link");
         auto& sender = current_message()->sender();
         if (sender && this != sender.get()) {
-            link(sender, address_tmp);
+            link(sender, address);
         }
     }
 
