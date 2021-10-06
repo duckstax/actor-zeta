@@ -4,7 +4,7 @@
 
 namespace actor_zeta {
     namespace detail {
-        void link_imp(base::address_t& a1, base::address_t& a2) {
+        void link_imp(base::address_t a1, base::address_t a2) {
             send(a1, a2, "add_link");
             send(a2, a1, "add_link");
         }
@@ -16,7 +16,7 @@ namespace actor_zeta {
         detail::link_imp(a1, a2);
     }
 */
-    void link(base::address_t& actor1, base::address_t& actor2) {
+    void link(base::address_t actor1, base::address_t actor2) {
         detail::link_imp(actor1, actor2);
     }
 }

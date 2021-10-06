@@ -5,7 +5,7 @@
 namespace actor_zeta {
 
     namespace detail {
-        void link_imp(base::address_t& a1, base::address_t& a2);
+        void link_imp(base::address_t a1, base::address_t a2);
     }
 
    // template<class Actor>
@@ -13,24 +13,19 @@ namespace actor_zeta {
 
     template<class Supervisor>
     void link(Supervisor* actor1, Supervisor* actor2) {
-        auto a1 = actor1->address();
-        auto a2 = actor2->address();
-        detail::link_imp(a1, a2);
+        detail::link_imp(actor1->address(), actor2->address());
     }
 
     template<class Supervisor>
     void link(Supervisor& actor1, Supervisor& actor2) {
-        auto a1 = actor1.address();
-        auto a2 = actor2.address();
-        detail::link_imp(a1, a2);
+        detail::link_imp( actor1.address(), actor2.address());
     }
 
     template<class Supervisor>
     void link(Supervisor& actor1, base::address_t& actor2) {
-        auto a1 = actor1.address();
-        detail::link_imp(a1, actor2);
+        detail::link_imp(actor1.address(), actor2);
     }
 
-    void link(base::address_t& actor1, base::address_t& actor2);
+    void link(base::address_t actor1, base::address_t actor2);
 
 } // namespace actor_zeta
