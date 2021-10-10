@@ -1,13 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 set(project key-value-storage)
 
-if (CMAKE_VERSION VERSION_LESS 3.0)
-    PROJECT(${project} CXX)
-else()
-    cmake_policy(SET CMP0048 NEW)
-    PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
-endif()
+cmake_policy(SET CMP0048 NEW)
+PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
 
 include_directories(.)
 

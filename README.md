@@ -1,13 +1,32 @@
-[![Build Status](https://travis-ci.org/cyberduckninja/actor-zeta.svg?branch=master)](https://travis-ci.org/cyberduckninja/actor-zeta)
+
+| compiler  | Master | Develop |
+|:---:|:---:|:---:|
+| gcc 4.8.5 - 11 | |[![ubuntu](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_gcc.yaml/badge.svg?branch=develop)](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_gcc.yaml) |
+|clang 3.9 - 10 | |[![ubuntu](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_clang.yaml/badge.svg?branch=develop)](https://github.com/cyberduckninja/actor-zeta/actions/workflows/ubuntu_clang.yaml)|
 
 actor-zeta
 ========================
 
 actor-zeta is an open source C++11/14/17 virtual actor model implementation featuring lightweight & fast and more.
 
-### Example
+## Release cycle information:
+### 1.0.0a6 : 
+    dynamically adding actors and supervisors 
+    adding polymorph allocator 
+    adding tests
 
-## class method mode 
+### 1.0.0a7 :
+    Getting ready for beta
+    Finishes expanding functionality
+    integrate with polymorph allocator
+
+### 1.0.0b1 :
+    benchmarks 
+    performance tuning
+
+## Example
+
+### class method mode 
 
 ```C++
 
@@ -112,17 +131,4 @@ If you handle multiple dependencies in your project is better to add a *conanfil
 
 ## Dependencies
 
-* CMake >= 2.8
-
-## Supported Compilers
-
-* GCC >= 4.8.5
-* Clang >= 3.3
-* Microsoft Visual Studio >= 2015
-
-## Supported Operating Systems
-
-* Linux
-* Mac OS X
-* FreeBSD 10
-* Windows >= 7 (static builds)
+* CMake >= 3.0
