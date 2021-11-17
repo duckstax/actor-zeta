@@ -49,12 +49,12 @@ namespace benchmark_messages {
     namespace by_args {
 
         template<typename... Args>
-        auto message_arg_tmpl(std::string& name_, Args&&... args);
+        auto message_arg_tmpl(std::string& name_, Args&&... args) -> void;
 
         namespace raw_ptr {
 
             template<typename... Args>
-            auto message_arg_tmpl(std::string& name_, Args&&... args) {
+            auto message_arg_tmpl(std::string& name_, Args&&... args) -> void {
                 auto message = actor_zeta::make_message_ptr(
                     actor_zeta::base::address_t::empty_address(),
                     name_,
@@ -75,7 +75,7 @@ namespace benchmark_messages {
         namespace smart_ptr {
 
             template<typename... Args>
-            auto message_arg_tmpl(std::string& name_, Args&&... args) {
+            auto message_arg_tmpl(std::string& name_, Args&&... args) -> void {
                 auto message = actor_zeta::make_message(
                     actor_zeta::base::address_t::empty_address(),
                     name_,
