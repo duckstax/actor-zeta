@@ -66,7 +66,7 @@ namespace benchmark_messages {
             }
 
             template<typename T, std::size_t... I>
-            auto call_message_arg_tmpl(std::string& name_, T& packed_tuple, actor_zeta::type_traits::index_sequence<I...>) {
+            auto call_message_arg_tmpl(std::string& name_, T& packed_tuple, actor_zeta::type_traits::index_sequence<I...>) -> void {
                 message_arg_tmpl(name_, (std::get<I>(packed_tuple))...);
             }
 
@@ -86,7 +86,7 @@ namespace benchmark_messages {
             }
 
             template<typename T, std::size_t... I>
-            auto call_message_arg_tmpl(std::string& name_, T& packed_tuple, actor_zeta::type_traits::index_sequence<I...>) {
+            auto call_message_arg_tmpl(std::string& name_, T& packed_tuple, actor_zeta::type_traits::index_sequence<I...>) -> void {
                 message_arg_tmpl(name_, (std::get<I>(packed_tuple))...);
             }
 
