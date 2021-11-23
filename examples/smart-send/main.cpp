@@ -97,7 +97,7 @@ public:
               "sync_contacts",
               "add_link",
               "remove_link",
-              "spawn_actor","create"} {
+              "spawn-actor","create"} {
         e_->start();
         add_handler("create", &supervisor_lite::create);
     }
@@ -161,7 +161,7 @@ int main() {
         actor_zeta::send(supervisor,actor_zeta::address_t::empty_address(),"create");
     }
 
-    //actor_zeta::spawn_actor<worker_t>(supervisor);
+    //actor_zeta::spawn-actor<worker_t>(supervisor);
 
     int const task = 10000;
 

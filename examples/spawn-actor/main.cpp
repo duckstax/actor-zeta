@@ -135,7 +135,7 @@ public:
         , system_{"add_link",
                   "sync_contacts",
                   "remove_link",
-                  "spawn_actor", "delegate", "spawn_broadcast","create_worker2","create_worker3","create_worker"} {
+                  "spawn-actor", "delegate", "spawn_broadcast","create_worker2","create_worker3","create_worker"} {
         e_->start();
         add_handler("spawn_broadcast", &supervisor_lite::spawn_broadcast);
         add_handler("create_worker", &supervisor_lite::create_worker);
