@@ -113,7 +113,6 @@ set(HEADER_FILES
         header/actor-zeta/base/message.hpp
 
         header/actor-zeta/forwards.hpp
-        header/actor-zeta/link.hpp
         header/actor-zeta/send.hpp
         header/actor-zeta/core.hpp
         header/actor-zeta/src.hpp

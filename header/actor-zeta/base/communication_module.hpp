@@ -29,15 +29,19 @@ namespace actor_zeta { namespace base {
         ~communication_module() override;
 
         auto type() const -> detail::string_view;
+        auto id() const -> int64_t ;
+        /**
+        * debug method
+        */
         auto message_types() const -> std::set<std::string>;
         auto enqueue(message_ptr) -> void;
         void enqueue(message_ptr, executor::execution_device*);
         auto current_message() -> message*;
 
     protected:
-        communication_module(std::string);
+        communication_module(std::string,int64_t);
         virtual auto current_message_impl() -> message* = 0;
-        virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
+        virtual void enqueue_impl(message_ptr, executor::execution_device*) = 0;
 
         template<class F>
         auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
@@ -55,6 +59,7 @@ namespace actor_zeta { namespace base {
     private:
         handler_storage_t handlers_;
         const std::string type_;
+        const int64_t id_;
     };
 
 }} // namespace actor_zeta::base

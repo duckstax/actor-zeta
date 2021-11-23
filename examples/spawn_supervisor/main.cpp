@@ -60,7 +60,7 @@ auto thread_pool_deleter = [](dummy_executor* ptr) -> void {
 class dispatcher_t final : public actor_zeta::basic_async_actor {
 public:
     explicit dispatcher_t(actor_zeta::supervisor_abstract* ptr,std::string name)
-        : actor_zeta::basic_async_actor(ptr, std::move(name)) {
+        : actor_zeta::basic_async_actor(ptr, std::move(name),0) {
         count_actor++;
         add_handler("create_database", &dispatcher_t::create_database);
         add_handler("create_collection", &dispatcher_t::create_collection);
@@ -85,7 +85,7 @@ public:
 class collection_t final : public actor_zeta::basic_async_actor {
 public:
     collection_t(actor_zeta::supervisor_abstract* ptr, std::string& name)
-        : actor_zeta::basic_async_actor(ptr, std::move(name)) {
+        : actor_zeta::basic_async_actor(ptr, std::move(name),0) {
         count_actor++;
         add_handler("insert",[this](int key, int value){
             std::cerr << "collection_t::insert : key : " <<key <<" value : " << value << std::endl;
@@ -100,7 +100,7 @@ private:
 class database_t final : public actor_zeta::supervisor_abstract {
 public:
     database_t(actor_zeta::supervisor_abstract* ptr, std::string name)
-        : supervisor_abstract(ptr, std::move(name))
+        : supervisor_abstract(ptr, std::move(name),0)
         , e_(ptr->executor()) {
         add_handler("create", &database_t::create);
         count_supervisor++;
@@ -125,7 +125,7 @@ public:
         supervisor_.emplace_back(std::move(t));
     }
 
-    auto enqueue_base(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
         set_current_message(std::move(msg));
         execute();
     }
@@ -139,7 +139,7 @@ private:
 class mdb_t final : public actor_zeta::supervisor_abstract {
 public:
     mdb_t()
-        : supervisor_abstract("mdb")
+        : supervisor_abstract("mdb",0)
         , e_(new dummy_executor(1, max_queue)) {
         e_->start();
         add_handler("create", &mdb_t::create);
@@ -165,7 +165,7 @@ public:
         supervisor_.emplace_back(std::move(t));
     }
 
-    auto enqueue_base(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
         {
             set_current_message(std::move(msg));
             execute();
@@ -182,7 +182,7 @@ private:
 class mdispatcher_t final : public actor_zeta::supervisor_abstract {
 public:
     mdispatcher_t()
-        : supervisor_abstract("mdispatcher")
+        : supervisor_abstract("mdispatcher",0)
         , e_(new dummy_executor(1, max_queue)) {
         e_->start();
         add_handler("create", &mdispatcher_t::create);
@@ -210,7 +210,7 @@ public:
         supervisor_.emplace_back(std::move(t));
     }
 
-    auto enqueue_base(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
         {
             set_current_message(std::move(msg));
             execute();
