@@ -84,7 +84,7 @@ namespace actor_zeta { namespace base {
         , id_(id){}
 
     void communication_module::enqueue(message_ptr msg, executor::execution_device* e) {
-        enqueue_impl(std::move(msg), e);
+        enqueue_base(std::move(msg), e);
     }
 
     auto communication_module::current_message() -> message* {

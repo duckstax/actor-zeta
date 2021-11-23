@@ -81,7 +81,7 @@ public:
 
     }
 
-    void enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) final {
+    void enqueue_base(actor_zeta::message_ptr msg, actor_zeta::execution_device*) final {
         auto msg_ = std::move(msg);
         auto it = system_.find(msg_->command());
         if (it != system_.end()) {

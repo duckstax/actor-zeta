@@ -79,7 +79,7 @@ public:
         supervisor_.emplace_back(std::move(t));
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_base(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
         {
             set_current_message(std::move(msg));
             execute();

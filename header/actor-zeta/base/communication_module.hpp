@@ -41,7 +41,7 @@ namespace actor_zeta { namespace base {
     protected:
         communication_module(std::string,int64_t);
         virtual auto current_message_impl() -> message* = 0;
-        virtual void enqueue_impl(message_ptr, executor::execution_device*) = 0;
+        virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
 
         template<class F>
         auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
