@@ -10,8 +10,6 @@ namespace actor_zeta { namespace base {
     /// @brief Specialization of actor with scheduling functionality
     ///
 
-    using max_throughput_t = std::size_t;
-
     class cooperative_actor
         : public actor_abstract
         , public executor::executable {

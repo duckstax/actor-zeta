@@ -10,7 +10,7 @@
 class storage_t final : public actor_zeta::basic_async_actor {
 public:
     storage_t(actor_zeta::supervisor_abstract* ptr)
-        : actor_zeta::basic_async_actor(ptr, "storage",0) {
+        : actor_zeta::basic_async_actor(ptr, "storage", 0) {
         add_handler(
             "update",
             []() -> void {});
@@ -54,17 +54,17 @@ public:
     void stop() override {}
 };
 
-class dummy_supervisor  final : public actor_zeta::supervisor_abstract {
+class dummy_supervisor final : public actor_zeta::supervisor_abstract {
 public:
     dummy_supervisor()
-        : supervisor_abstract("dummy_supervisor",0)
+        : supervisor_abstract("dummy_supervisor", 0)
         , e_(new dummy_executor(1, 1)) {
         e_->start();
         add_handler("create", &dummy_supervisor::create);
     }
 
     void create() {
-        spawn_actor<storage_t>([this](storage_t* ptr){
+        spawn_actor<storage_t>([this](storage_t* ptr) {
             actors_.emplace_back(ptr);
         });
     }
@@ -88,7 +88,7 @@ private:
 
 int main() {
     actor_zeta::supervisor supervisor(new dummy_supervisor());
-   actor_zeta::send(supervisor,actor_zeta::address_t::empty_address(),"create");
+    actor_zeta::send(supervisor, actor_zeta::address_t::empty_address(), "create");
 
     return 0;
 }

@@ -9,8 +9,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include <actor-zeta/link.hpp>
-#include <actor-zeta/core.hpp>
+#include <actor-zeta.hpp>
 
 std::atomic_int count;
 const int max_queue = 100;
@@ -101,8 +100,8 @@ public:
 
     auto spawn_worker() -> void {
         auto addr = address_book("manager-2");
-        actor_zeta::send(addr, address(),"create_worker2");
-        actor_zeta::send(addr, address(),"create_worker3");
+        actor_zeta::send(addr, address(), "create_worker2");
+        actor_zeta::send(addr, address(), "create_worker3");
     }
 
     auto spawn_broadcast(actor_zeta::address_t addr) -> void {
@@ -135,7 +134,7 @@ public:
         , system_{"add_link",
                   "sync_contacts",
                   "remove_link",
-                  "spawn-actor", "delegate", "spawn_broadcast","create_worker2","create_worker3","create_worker"} {
+                  "spawn-actor", "delegate", "spawn_broadcast", "create_worker2", "create_worker3", "create_worker"} {
         e_->start();
         add_handler("spawn_broadcast", &supervisor_lite::spawn_broadcast);
         add_handler("create_worker", &supervisor_lite::create_worker);
@@ -226,8 +225,8 @@ auto main() -> int {
     int const actors = 1 + sends * 2;
     count = 0;
 
-    actor_zeta::send(supervisor1,actor_zeta::address_t::empty_address(),"create_worker");                                     //actor creator, "bot1"
-    actor_zeta::delegate_send(supervisor1, "bot1", "add_link", supervisor2->address()); //link bot-1 with manager-2
+    actor_zeta::send(supervisor1, actor_zeta::address_t::empty_address(), "create_worker"); //actor creator, "bot1"
+    actor_zeta::delegate_send(supervisor1, "bot1", "add_link", supervisor2->address());     //link bot-1 with manager-2
 
     for (auto i = sends - 1; i >= 0; --i) {
         std::cout << "sending spawn request#" << i << std::endl;

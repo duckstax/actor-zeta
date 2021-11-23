@@ -6,9 +6,9 @@
 namespace actor_zeta { namespace base {
     class supervisor_abstract : public communication_module {
     public:
-        supervisor_abstract(detail::pmr::memory_resource*, std::string,int64_t id);
-        supervisor_abstract(std::string,int64_t id);
-        supervisor_abstract(supervisor_abstract*, std::string,int64_t id);
+        supervisor_abstract(detail::pmr::memory_resource*, std::string, int64_t id);
+        supervisor_abstract(std::string, int64_t);
+        supervisor_abstract(supervisor_abstract*, std::string, int64_t id);
         ~supervisor_abstract() override;
         auto executor() noexcept -> executor::abstract_executor*;
         auto resource() const -> detail::pmr::memory_resource*;
@@ -17,31 +17,31 @@ namespace actor_zeta { namespace base {
     protected:
         template<
             class Actor,
-            class Predicate,
+            class Inserter,
             class... Args,
             class = type_traits::enable_if_t<std::is_base_of<actor_abstract, Actor>::value>>
-        auto spawn_actor(Predicate predicate,Args&&... args) -> address_t {
+        auto spawn_actor(const Inserter& inserter, Args&&... args) -> address_t {
             auto allocate_byte = sizeof(Actor);
             auto allocate_byte_alignof = alignof(Actor);
             void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
             auto* actor = new (buffer) Actor(this, std::forward<Args>(args)...);
             auto address = actor->address();
-            predicate(actor);
+            inserter(actor);
             return address;
         }
 
         template<
             class Supervisor,
-            class Predicate,
+            class Inserter,
             class... Args,
             class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, Supervisor>::value>>
-        auto spawn_supervisor(Predicate predicate,Args&&... args) -> address_t {
+        auto spawn_supervisor(const Inserter& inserter, Args&&... args) -> address_t {
             auto allocate_byte = sizeof(Supervisor);
             auto allocate_byte_alignof = alignof(Supervisor);
             void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
             auto* supervisor = new (buffer) Supervisor(this, std::forward<Args>(args)...);
             auto address = supervisor->address();
-            predicate(supervisor);
+            inserter(supervisor);
             return address;
         }
 

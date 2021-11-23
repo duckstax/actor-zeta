@@ -8,9 +8,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include <actor-zeta/core.hpp>
-#include <actor-zeta/send.hpp>
-#include <actor-zeta/broadcast.hpp>
+#include <actor-zeta.hpp>
 
 template<typename Task, typename... Args>
 auto make_task(actor_zeta::supervisor& executor_, const std::string& command, Args... args) -> void {
@@ -57,14 +55,9 @@ static std::atomic<uint64_t> counter_work_data{0};
 class worker_t final : public actor_zeta::basic_async_actor {
 public:
     explicit worker_t(actor_zeta::supervisor_abstract* ptr)
-        : actor_zeta::basic_async_actor(ptr, "bot") {
-        add_handler(
-            "download",
-            &worker_t::download);
-
-        add_handler(
-            "work_data",
-            &worker_t::work_data);
+        : actor_zeta::basic_async_actor(ptr, "bot", 0) {
+        add_handler("download",&worker_t::download);
+        add_handler("work_data",&worker_t::work_data);
     }
 
     void download(download_data& data) {
@@ -87,7 +80,7 @@ private:
 class supervisor_lite final : public actor_zeta::supervisor_abstract {
 public:
     explicit supervisor_lite()
-        : supervisor_abstract("network")
+        : supervisor_abstract("network", 0)
         , e_(new actor_zeta::executor_t<actor_zeta::work_sharing>(
                  1,
                  100),
@@ -97,26 +90,20 @@ public:
               "sync_contacts",
               "add_link",
               "remove_link",
-              "spawn-actor","create"} {
+              "spawn-actor", "create"} {
         e_->start();
         add_handler("create", &supervisor_lite::create);
     }
 
     void create() {
-        spawn_actor<worker_t>();
+        spawn_actor<worker_t>([this](worker_t* ptr) {
+            actors_.emplace_back(ptr);
+        });
     }
 
     ~supervisor_lite() override = default;
 
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final { return e_.get(); }
-
-    auto add_actor_impl(actor_zeta::actor t) -> void final {
-        actors_.push_back(std::move(t));
-    }
-
-    auto add_supervisor_impl(actor_zeta::supervisor t) -> void final {
-        supervisor_.emplace_back(std::move(t));
-    }
 
     auto enqueue_base(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
         auto msg_ = std::move(msg);
@@ -151,17 +138,14 @@ private:
     std::unordered_set<actor_zeta::detail::string_view> system_;
 };
 
-
 int main() {
-    actor_zeta::supervisor supervisor(new supervisor_lite());
+    auto supervisor = actor_zeta::spawn_supervisor<supervisor_lite>();
 
     int const actors = 10;
 
     for (auto i = actors - 1; i > 0; --i) {
-        actor_zeta::send(supervisor,actor_zeta::address_t::empty_address(),"create");
+        actor_zeta::send(supervisor, actor_zeta::address_t::empty_address(), "create");
     }
-
-    //actor_zeta::spawn-actor<worker_t>(supervisor);
 
     int const task = 10000;
 
