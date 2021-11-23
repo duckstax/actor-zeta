@@ -10,7 +10,7 @@
 class storage_t final : public actor_zeta::basic_async_actor {
 public:
     storage_t(actor_zeta::supervisor_abstract* ptr)
-        : actor_zeta::basic_async_actor(ptr, "storage") {
+        : actor_zeta::basic_async_actor(ptr, "storage",0) {
         add_handler(
             "update",
             []() -> void {});
@@ -57,26 +57,20 @@ public:
 class dummy_supervisor  final : public actor_zeta::supervisor_abstract {
 public:
     dummy_supervisor()
-        : supervisor_abstract("dummy_supervisor")
+        : supervisor_abstract("dummy_supervisor",0)
         , e_(new dummy_executor(1, 1)) {
         e_->start();
         add_handler("create", &dummy_supervisor::create);
     }
 
     void create() {
-        spawn_actor<storage_t>();
+        spawn_actor<storage_t>([this](storage_t* ptr){
+            actors_.emplace_back(ptr);
+        });
     }
 
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
         return e_.get();
-    }
-
-    auto add_actor_impl(actor_zeta::actor t) -> void final {
-        actors_.emplace_back(std::move(t));
-    }
-
-    auto add_supervisor_impl(actor_zeta::supervisor t) -> void final {
-        supervisor_.emplace_back(std::move(t));
     }
 
     auto enqueue_base(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {

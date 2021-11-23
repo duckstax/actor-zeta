@@ -4,8 +4,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include <actor-zeta/core.hpp>
-#include <actor-zeta/link.hpp>
+#include <actor-zeta.hpp>
 
 class dummy_executor final : public actor_zeta::abstract_executor {
 public:
@@ -22,7 +21,7 @@ public:
 class storage_t final : public actor_zeta::basic_async_actor {
 public:
     explicit storage_t(actor_zeta::supervisor_abstract* ptr)
-        : actor_zeta::basic_async_actor(ptr, "storage") {
+        : actor_zeta::basic_async_actor(ptr, "storage",0) {
         add_handler(
             "update",
             []() -> void {});
@@ -45,13 +44,13 @@ public:
     ~network_t() override = default;
 
     explicit network_t(actor_zeta::supervisor_abstract* ptr)
-        : actor_zeta::basic_async_actor(ptr, "network") {}
+        : actor_zeta::basic_async_actor(ptr, "network",0) {}
 };
 
 class supervisor_lite final : public actor_zeta::supervisor_abstract {
 public:
     explicit supervisor_lite(dummy_executor* ptr)
-        : supervisor_abstract("network")
+        : supervisor_abstract("network",0)
         , e_(ptr)
         , cursor(0)
         , system_{"sync_contacts", "add_link", "remove_link"} {
@@ -60,25 +59,21 @@ public:
     }
 
     void create_storage() {
-        spawn_actor<storage_t>();
+        spawn_actor<storage_t>([this](storage_t*ptr){
+            actors_.emplace_back(ptr);
+        });
     }
 
     void create_network() {
-        spawn_actor<network_t>();
+        spawn_actor<network_t>([this](network_t*ptr){
+            actors_.emplace_back(ptr);
+        });
     }
 
     ~supervisor_lite() override = default;
 
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
         return e_;
-    }
-
-    auto add_actor_impl(actor_zeta::actor) -> void override {
-
-    }
-
-    auto add_supervisor_impl(actor_zeta::supervisor) -> void override {
-
     }
 
     void enqueue_base(actor_zeta::message_ptr msg, actor_zeta::execution_device*) final {
@@ -118,7 +113,6 @@ int main() {
     actor_zeta::send(supervisor_tmp,actor_zeta::address_t::empty_address(),"create_storage");
     actor_zeta::send(supervisor_tmp,actor_zeta::address_t::empty_address(),"create_network");
     actor_zeta::supervisor supervisor1(new supervisor_lite(new dummy_executor));
-    actor_zeta::link(supervisor_tmp, supervisor1);
     actor_zeta::send(supervisor1,actor_zeta::address_t::empty_address(),"create_storage");
     actor_zeta::send(supervisor1,actor_zeta::address_t::empty_address(),"create_network");
     return 0;
