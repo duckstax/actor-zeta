@@ -13,7 +13,9 @@ namespace actor_zeta { namespace base {
     /// @brief Abstract concept of an actor
     ///
 
-    class actor_abstract : public communication_module {
+    class actor_abstract
+        : public communication_module
+        , public ref_counted {
     public:
         actor_abstract() = delete;
         ~actor_abstract() override;

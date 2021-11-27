@@ -4,7 +4,9 @@
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
 
 namespace actor_zeta { namespace base {
-    class supervisor_abstract : public communication_module {
+    class supervisor_abstract
+        : public communication_module
+        , public ref_counted {
     public:
         supervisor_abstract(detail::pmr::memory_resource*, std::string, int64_t );
         template<class Supervisor>

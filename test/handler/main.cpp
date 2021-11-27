@@ -7,7 +7,7 @@
 
 TEST_CASE("handler") {
     auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
-    auto supervisor_ = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr,1, 100));
+    auto supervisor_ = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr,1, 100);
 
     REQUIRE(dummy_supervisor::constructor_counter == 1);
 

@@ -17,8 +17,7 @@ namespace actor_zeta { namespace base {
 
     using message_ptr = std::unique_ptr<message>;
 
-    class communication_module
-        : public ref_counted {
+    class communication_module {
     public:
         using key_type = detail::string_view;
         using handler_storage_t = std::unordered_map<key_type, std::unique_ptr<handler>>;
@@ -26,7 +25,7 @@ namespace actor_zeta { namespace base {
         communication_module() = delete;
         communication_module(const communication_module&) = delete;
         communication_module& operator=(const communication_module&) = delete;
-        ~communication_module() override;
+        virtual ~communication_module();
 
         auto type() const -> detail::string_view;
         auto id() const -> int64_t ;
