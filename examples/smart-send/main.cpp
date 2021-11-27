@@ -76,6 +76,18 @@ public:
 
     ~supervisor_lite() override = default;
 
+    template<class... Args>
+    void broadcast_on_worker(std::string command, Args&&... args) {
+        auto msg = actor_zeta::make_message(
+            this->address(),
+            "broadcast",
+            actor_zeta::make_message_ptr(
+                actor_zeta::address_t::empty_address(),
+                command,
+                std::forward<Args>(args)...));
+        enqueue(std::move(msg));
+    }
+
 protected:
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final { return e_.get(); }
 
@@ -87,18 +99,6 @@ protected:
         } else {
             redirect_robin(std::move(msg_));
         }
-    }
-
-    template<class... Args>
-    void broadcast_on_worker(std::string command, Args&&... args) {
-        auto msg = actor_zeta::make_message(
-            this->address(),
-            "broadcast",
-            actor_zeta::make_message_ptr(
-                actor_zeta::address_t::empty_address(),
-                command,
-                std::forward<Args>(args)...));
-        enqueue(std::move(msg));
     }
 
 private:
