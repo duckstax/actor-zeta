@@ -66,7 +66,7 @@ namespace actor_zeta { namespace base {
         return executor::executable_result::awaiting;
     }
 
-    void cooperative_actor::enqueue_base(message_ptr msg, executor::execution_device* e) {
+    void cooperative_actor::enqueue_impl(message_ptr msg, executor::execution_device* e) {
         assert(msg);
         mailbox().enqueue(msg.release());
         if (flags() == static_cast<int>(state::empty)) {

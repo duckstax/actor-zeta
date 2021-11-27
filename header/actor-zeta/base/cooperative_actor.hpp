@@ -29,7 +29,7 @@ namespace actor_zeta { namespace base {
         cooperative_actor(Supervisor* ptr, std::string type ,int64_t actor_id)
             : cooperative_actor(static_cast<supervisor_abstract*>(ptr),std::move(type),actor_id){};
 
-        void enqueue_base(message_ptr, executor::execution_device*) final;
+        void enqueue_impl(message_ptr, executor::execution_device*) final;
 
         // Non thread-safe method
         auto current_message_impl() -> message* override;
