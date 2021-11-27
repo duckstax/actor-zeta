@@ -62,7 +62,7 @@ public:
               "sync_contacts",
               "add_link",
               "remove_link",
-              "spawn-actor", "create"} {
+              "broadcast", "create"} {
         e_->start();
         add_handler("create", &supervisor_lite::create);
         add_handler("broadcast", &supervisor_lite::broadcast_impl);
@@ -71,7 +71,8 @@ public:
     void create() {
         spawn_actor<worker_t>([this](worker_t* ptr) {
             actors_.emplace_back(ptr);
-        },create_counter_worker.fetch_add(1));
+        },
+                              create_counter_worker.fetch_add(1));
     }
 
     ~supervisor_lite() override = default;
@@ -93,7 +94,7 @@ public:
         auto msg = actor_zeta::make_message(
             this->address(),
             "broadcast",
-            actor_zeta::make_message(
+            actor_zeta::make_message_ptr(
                 actor_zeta::address_t::empty_address(),
                 command,
                 std::forward<Args>(args)...));
@@ -102,8 +103,9 @@ public:
 
 private:
     void broadcast_impl(actor_zeta::message* msg) {
-        actor_zeta::message_ptr tmp(std::move(msg));
-        tmp->sender() = std::move(address());
+        actor_zeta::message_ptr tmp(msg);
+        auto address_tmp = address();
+        tmp->sender() = address_tmp;
         for (auto& i : actors_) {
             i->enqueue(actor_zeta::message_ptr(tmp->clone()));
         }
