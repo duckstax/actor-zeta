@@ -25,7 +25,9 @@ namespace actor_zeta { namespace base {
         void intrusive_ptr_release_impl() override;
 
     protected:
-        cooperative_actor(supervisor_abstract*, std::string,int64_t);
+        template<class Supervisor>
+        cooperative_actor(Supervisor* ptr, std::string type ,int64_t actor_id)
+            : cooperative_actor(static_cast<supervisor_abstract*>(ptr),std::move(type),actor_id){};
 
         void enqueue_base(message_ptr, executor::execution_device*) final;
 
@@ -33,6 +35,8 @@ namespace actor_zeta { namespace base {
         auto current_message_impl() -> message* override;
 
     private:
+        cooperative_actor(supervisor_abstract*, std::string,int64_t);
+
         enum class state : int {
             empty = 0x01,
             busy

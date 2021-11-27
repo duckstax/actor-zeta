@@ -17,8 +17,12 @@ actor-zeta is an open source C++11/14/17 virtual actor model implementation feat
 
 ### 1.0.0a7 :
     Getting ready for beta
-    Finishes expanding functionality
+    removed addres book and old api
     integrate with polymorph allocator
+
+### 1.0.0a8 :
+    Getting ready for beta
+    Finishes expanding functionality
 
 ### 1.0.0b1 :
     benchmarks 

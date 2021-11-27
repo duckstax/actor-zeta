@@ -88,7 +88,7 @@ public:
 
 class worker_t final : public actor_zeta::basic_async_actor {
 public:
-    explicit worker_t(actor_zeta::supervisor_abstract* ptr /*, int a, double b*/)
+    explicit worker_t(actor_zeta::supervisor_abstract* ptr, unsigned long i)
         : actor_zeta::basic_async_actor(ptr, "bot1") {
         count++;
         std::cout << address().type() << "(" << address().get() << ")"

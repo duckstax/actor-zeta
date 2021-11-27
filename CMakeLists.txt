@@ -83,7 +83,6 @@ set(HEADER_FILES
         header/actor-zeta/base/actor.hpp
         header/actor-zeta/base/address.hpp
         header/actor-zeta/base/cooperative_actor.hpp
-        header/actor-zeta/base/basic_actor.hpp
         header/actor-zeta/base/communication_module.hpp
         header/actor-zeta/base/handler.hpp
         header/actor-zeta/base/supervisor.hpp
