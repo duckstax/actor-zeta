@@ -118,7 +118,7 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
         source/src.cpp
-        header/actor-zeta/detail/memory_resource.hpp)
+)
 
 find_program(CCACHE_FOUND ccache)
 if (CCACHE_FOUND)
