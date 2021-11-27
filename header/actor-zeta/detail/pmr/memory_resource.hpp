@@ -17,7 +17,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
 #if CPP17_OR_GREATER
 
 #if __has_include(<memory_resource>)
-    using memory_resource = std::pmr::memory_resource;
+    using std::pmr::memory_resource;
 
 #else
     using memory_resource = std::experimental::pmr::memory_resource;
