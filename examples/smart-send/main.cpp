@@ -9,8 +9,7 @@
 #include <vector>
 
 #include <actor-zeta.hpp>
-#include <actor-zeta/detail/pmr/default_resource.hpp>
-#include <actor-zeta/detail/pmr/memory_resource.hpp>
+#include <actor-zeta/detail/memory_resource.hpp>
 
 auto thread_pool_deleter = [](actor_zeta::abstract_executor* ptr) {
     ptr->stop();
@@ -132,7 +131,7 @@ private:
 };
 
 int main() {
-    memory_resource* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
+    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<supervisor_lite>(mr_ptr);
 
     int const actors = 10;

@@ -88,7 +88,6 @@ set(HEADER_FILES
         header/actor-zeta/base/supervisor.hpp
         header/actor-zeta/base/supervisor_abstract.hpp
 
-        header/actor-zeta/detail/pmr/container.hpp
         header/actor-zeta/detail/pmr/memory_resource.hpp
         header/actor-zeta/detail/aligned_allocate.hpp
         header/actor-zeta/detail/any.hpp
@@ -119,7 +118,7 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
         source/src.cpp
-)
+        header/actor-zeta/detail/memory_resource.hpp)
 
 find_program(CCACHE_FOUND ccache)
 if (CCACHE_FOUND)
