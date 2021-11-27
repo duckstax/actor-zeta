@@ -20,7 +20,7 @@ namespace actor_zeta { namespace detail { namespace pmr {
     using std::pmr::memory_resource;
 
 #else
-    using memory_resource = std::experimental::pmr::memory_resource;
+    using std::experimental::pmr::memory_resource;
 
 #endif
 

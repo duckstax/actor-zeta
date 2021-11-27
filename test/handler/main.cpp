@@ -5,7 +5,8 @@
 #include <actor-zeta/send.hpp>
 
 TEST_CASE("handler") {
-    actor_zeta::supervisor supervisor_(new dummy_supervisor(1, 100));
+    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
+    auto supervisor_ = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr,1, 100));
 
     REQUIRE(dummy_supervisor::constructor_counter == 1);
 
