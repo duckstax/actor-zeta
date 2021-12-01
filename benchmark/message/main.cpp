@@ -24,8 +24,8 @@ namespace benchmark_messages {
                     name_);
                 auto tmp = sizeof(*message);
                 delete message;
-                if (tmp > benchmark_messages::message_sz)
-                    benchmark_messages::message_sz = tmp;
+                if (static_cast<int64_t>(tmp) > static_cast<int64_t>(benchmark_messages::message_sz))
+                    benchmark_messages::message_sz = static_cast<int64_t>(tmp);
             }
         }
 
@@ -36,8 +36,8 @@ namespace benchmark_messages {
                     actor_zeta::base::address_t::empty_address(),
                     name_);
                 auto tmp = sizeof(*message);
-                if (tmp > benchmark_messages::message_sz)
-                    benchmark_messages::message_sz = tmp;
+                if (static_cast<int64_t>(tmp) > static_cast<int64_t>(benchmark_messages::message_sz))
+                    benchmark_messages::message_sz = static_cast<int64_t>(tmp);
             }
         }
 
@@ -61,8 +61,8 @@ namespace benchmark_messages {
                     std::forward<Args>(args)...);
                 auto tmp = sizeof(*message);
                 delete message;
-                if (tmp > benchmark_messages::message_sz)
-                    benchmark_messages::message_sz = tmp;
+                if (static_cast<int64_t>(tmp) > static_cast<int64_t>(benchmark_messages::message_sz))
+                    benchmark_messages::message_sz = static_cast<int64_t>(tmp);
             }
 
             template<typename T, std::size_t... I>
@@ -81,8 +81,8 @@ namespace benchmark_messages {
                     name_,
                     std::forward<Args>(args)...);
                 auto tmp = sizeof(*message);
-                if (tmp > benchmark_messages::message_sz)
-                    benchmark_messages::message_sz = tmp;
+                if (static_cast<int64_t>(tmp) > static_cast<int64_t>(benchmark_messages::message_sz))
+                    benchmark_messages::message_sz = static_cast<int64_t>(tmp);
             }
 
             template<typename T, std::size_t... I>
