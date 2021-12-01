@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <list>
 #include <map>
 #include <memory>
 #include <set>
@@ -65,22 +66,32 @@ namespace benchmark_messages {
 
         } // namespace trivial_args
 
-#define DEFINE_TYPE_SEC(append_to_type_seq, revert_type_seq, type_name) \
-    template<typename, typename>                                        \
-    struct append_to_type_seq {};                                       \
-    template<typename T, typename... Ts>                                \
-    struct append_to_type_seq<T, std::tuple<Ts...>> {                   \
-        using type = std::tuple<Ts..., type_name<T>>;                   \
-    };                                                                  \
-    template<typename... Ts>                                            \
-    struct revert_type_seq {                                            \
-        using type = std::tuple<>;                                      \
-    };                                                                  \
-    template<typename T, typename... Ts>                                \
-    struct revert_type_seq<T, Ts...> {                                  \
-        using type = typename append_to_type_seq<                       \
-            T,                                                          \
-            typename revert_type_seq<Ts...>::type>::type;               \
+#define DEFINE_APPEND_TO_TYPE_SEC_1(append_to_type_seq, type_name) \
+    template<typename, typename>                                   \
+    struct append_to_type_seq {};                                  \
+    template<typename T, typename... Ts>                           \
+    struct append_to_type_seq<T, std::tuple<Ts...>> {              \
+        using type = std::tuple<Ts..., type_name<T>>;              \
+    }
+
+#define DEFINE_APPEND_TO_TYPE_SEC_2(append_to_type_seq, type_name) \
+    template<typename, typename>                                   \
+    struct append_to_type_seq {};                                  \
+    template<typename T, typename... Ts>                           \
+    struct append_to_type_seq<T, std::tuple<Ts...>> {              \
+        using type = std::tuple<Ts..., type_name<T, T>>;           \
+    }
+
+#define DEFINE_REVERT_TYPE_SEC(append_to_type_seq, revert_type_seq) \
+    template<typename... Ts>                                        \
+    struct revert_type_seq {                                        \
+        using type = std::tuple<>;                                  \
+    };                                                              \
+    template<typename T, typename... Ts>                            \
+    struct revert_type_seq<T, Ts...> {                              \
+        using type = typename append_to_type_seq<                   \
+            T,                                                      \
+            typename revert_type_seq<Ts...>::type>::type;           \
     }
 
         namespace smart_pointer_args {
@@ -95,7 +106,8 @@ namespace benchmark_messages {
                 }
             };
 
-            DEFINE_TYPE_SEC(append_to_type_seq, revert_type_seq, std::shared_ptr);
+            DEFINE_APPEND_TO_TYPE_SEC_1(append_to_type_seq, std::shared_ptr);
+            DEFINE_REVERT_TYPE_SEC(append_to_type_seq, revert_type_seq);
 
             template<class P, typename... CustomArgs>
             class fixture_t : public benchmark::Fixture {
@@ -122,6 +134,9 @@ namespace benchmark_messages {
             struct construct_vec {};
 
             template<typename... CustomArgs>
+            struct construct_list {};
+
+            template<typename... CustomArgs>
             struct construct_map {};
 
             template<typename... CustomArgs>
@@ -134,7 +149,18 @@ namespace benchmark_messages {
                     for (auto i = 0; i < value; ++i) {
                         vec.push_back(static_cast<T>(value));
                     }
-                    return std::move(vec);
+                    return vec;
+                }
+            };
+
+            template<typename T>
+            struct construct_list<T> {
+                static std::list<T> get(int value) {
+                    std::list<T> list;
+                    for (auto i = 0; i < value; ++i) {
+                        list.emplace_back(static_cast<T>(value));
+                    }
+                    return list;
                 }
             };
 
@@ -145,7 +171,7 @@ namespace benchmark_messages {
                     for (auto i = 0; i < value; ++i) {
                         map[static_cast<T>(value)] = static_cast<T>(value);
                     }
-                    return std::move(map);
+                    return map;
                 }
             };
 
@@ -176,12 +202,21 @@ namespace benchmark_messages {
         static constexpr size_t counter_ = sizeof...(CustomArgs);                               \
     }
 
-            DEFINE_TYPE_SEC(append_to_type_seq_vec, revert_type_seq_vec, std::vector);
-            //DEFINE_TYPE_SEC(append_to_type_seq_map, revert_type_seq_map, std::map);
-            DEFINE_TYPE_SEC(append_to_type_seq_set, revert_type_seq_set, std::set);
+            DEFINE_APPEND_TO_TYPE_SEC_1(append_to_type_seq_vec, std::vector);
+            DEFINE_REVERT_TYPE_SEC(append_to_type_seq_vec, revert_type_seq_vec);
+
+            DEFINE_APPEND_TO_TYPE_SEC_1(append_to_type_seq_list, std::list);
+            DEFINE_REVERT_TYPE_SEC(append_to_type_seq_list, revert_type_seq_list);
+
+            DEFINE_APPEND_TO_TYPE_SEC_2(append_to_type_seq_map, std::map);
+            DEFINE_REVERT_TYPE_SEC(append_to_type_seq_map, revert_type_seq_map);
+
+            DEFINE_APPEND_TO_TYPE_SEC_1(append_to_type_seq_set, std::set);
+            DEFINE_REVERT_TYPE_SEC(append_to_type_seq_set, revert_type_seq_set);
 
             DEFINE_FIXTURE_CLASS(fixture_vec_t, construct_vec, revert_type_seq_vec);
-            //DEFINE_FIXTURE_CLASS(fixture_map_t, construct_map, revert_type_seq_map);
+            DEFINE_FIXTURE_CLASS(fixture_list_t, construct_list, revert_type_seq_list);
+            DEFINE_FIXTURE_CLASS(fixture_map_t, construct_map, revert_type_seq_map);
             DEFINE_FIXTURE_CLASS(fixture_set_t, construct_set, revert_type_seq_set);
 
         } // namespace container_args
