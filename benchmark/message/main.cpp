@@ -354,6 +354,13 @@ namespace benchmark_messages {
 
         } // namespace container_args
 
+        namespace custom_args {
+
+            REGISTER_BENCHMARK_FOR_RAWPTR_ARGS(fixture_t, RawPtrMessage_Args_custom_1, custom_1_t);
+            REGISTER_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_t, SmartPtrMessage_Args_custom_1, custom_1_t);
+
+        } // namespace custom_args
+
     } // namespace by_args
 
     class memory_manager_t : public benchmark::MemoryManager {

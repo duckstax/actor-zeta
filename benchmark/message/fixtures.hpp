@@ -41,6 +41,28 @@ namespace benchmark_messages {
 
     } // namespace by_name
 
+#define DEFINE_FIXTURE_CLASS_1(class_name, construct_name)                                                                                    \
+    template<class P, typename... CustomArgs>                                                                                                 \
+    class class_name : public ::benchmark::Fixture {                                                                                          \
+    public:                                                                                                                                   \
+        virtual void SetUp(const ::benchmark::State& state) final {                                                                           \
+            arguments_ = std::make_tuple(std::forward<CustomArgs>(construct_name<CustomArgs>::get(static_cast<int64_t>(state.range(0))))...); \
+            name_ = "name_";                                                                                                                  \
+        }                                                                                                                                     \
+        virtual void SetUp(::benchmark::State& state) final {                                                                                 \
+            SetUp(state);                                                                                                                     \
+        }                                                                                                                                     \
+        virtual void TearDown(__attribute__((unused)) const ::benchmark::State& state) final {                                                \
+            name_.clear();                                                                                                                    \
+        }                                                                                                                                     \
+        virtual void TearDown(::benchmark::State& state) final {                                                                              \
+            TearDown(state);                                                                                                                  \
+        }                                                                                                                                     \
+        std::string name_;                                                                                                                    \
+        std::tuple<CustomArgs...> arguments_;                                                                                                 \
+        static constexpr size_t counter_ = sizeof...(CustomArgs);                                                                             \
+    }
+
     namespace by_args {
 
         namespace trivial_args {
@@ -55,30 +77,7 @@ namespace benchmark_messages {
                 }
             };
 
-            template<class P, typename... CustomArgs>
-            class fixture_t : public ::benchmark::Fixture {
-            public:
-                virtual void SetUp(const ::benchmark::State& state) final {
-                    arguments_ = std::make_tuple(std::forward<CustomArgs>(construct<CustomArgs>::get(static_cast<int64_t>(state.range(0))))...);
-                    name_ = "name_";
-                }
-
-                virtual void SetUp(::benchmark::State& state) final {
-                    SetUp(state);
-                }
-
-                virtual void TearDown(__attribute__((unused)) const ::benchmark::State& state) final {
-                    name_.clear();
-                }
-
-                virtual void TearDown(::benchmark::State& state) final {
-                    TearDown(state);
-                }
-
-                std::string name_;
-                std::tuple<CustomArgs...> arguments_;
-                static constexpr size_t counter_ = sizeof...(CustomArgs);
-            };
+            DEFINE_FIXTURE_CLASS_1(fixture_t, construct);
 
         } // namespace trivial_args
 
@@ -110,6 +109,28 @@ namespace benchmark_messages {
             typename revert_type_seq<Ts...>::type>::type;           \
     }
 
+#define DEFINE_FIXTURE_CLASS_2(class_name, construct_name, revert_type_seq)                                           \
+    template<class P, typename... CustomArgs>                                                                         \
+    class class_name : public ::benchmark::Fixture {                                                                  \
+    public:                                                                                                           \
+        virtual void SetUp(const ::benchmark::State& state) final {                                                   \
+            arguments_ = std::make_tuple((construct_name<CustomArgs>::get(static_cast<int64_t>(state.range(0))))...); \
+            name_ = "name_";                                                                                          \
+        }                                                                                                             \
+        virtual void SetUp(::benchmark::State& state) final {                                                         \
+            SetUp(state);                                                                                             \
+        }                                                                                                             \
+        virtual void TearDown(__attribute__((unused)) const ::benchmark::State& state) final {                        \
+            name_.clear();                                                                                            \
+        }                                                                                                             \
+        virtual void TearDown(::benchmark::State& state) final {                                                      \
+            TearDown(state);                                                                                          \
+        }                                                                                                             \
+        std::string name_;                                                                                            \
+        typename revert_type_seq<CustomArgs...>::type arguments_;                                                     \
+        static constexpr size_t counter_ = sizeof...(CustomArgs);                                                     \
+    }
+
         namespace smart_pointer_args {
 
             template<typename... CustomArgs>
@@ -125,30 +146,7 @@ namespace benchmark_messages {
             DEFINE_APPEND_TO_TYPE_SEC_1(append_to_type_seq, std::shared_ptr);
             DEFINE_REVERT_TYPE_SEC(append_to_type_seq, revert_type_seq);
 
-            template<class P, typename... CustomArgs>
-            class fixture_t : public ::benchmark::Fixture {
-            public:
-                virtual void SetUp(const ::benchmark::State& state) final {
-                    arguments_ = std::make_tuple((construct<CustomArgs>::get(static_cast<int64_t>(state.range(0))))...);
-                    name_ = "name_";
-                }
-
-                virtual void SetUp(::benchmark::State& state) final {
-                    SetUp(state);
-                }
-
-                virtual void TearDown(__attribute__((unused)) const ::benchmark::State& state) final {
-                    name_.clear();
-                }
-
-                virtual void TearDown(::benchmark::State& state) final {
-                    TearDown(state);
-                }
-
-                std::string name_;
-                typename revert_type_seq<CustomArgs...>::type arguments_;
-                static constexpr size_t counter_ = sizeof...(CustomArgs);
-            };
+            DEFINE_FIXTURE_CLASS_2(fixture_t, construct, revert_type_seq);
 
         } // namespace smart_pointer_args
 
@@ -210,28 +208,6 @@ namespace benchmark_messages {
                 }
             };
 
-#define DEFINE_FIXTURE_CLASS(class_name, construct_name, revert_type_seq)                                             \
-    template<class P, typename... CustomArgs>                                                                         \
-    class class_name : public ::benchmark::Fixture {                                                                  \
-    public:                                                                                                           \
-        virtual void SetUp(const ::benchmark::State& state) final {                                                   \
-            arguments_ = std::make_tuple((construct_name<CustomArgs>::get(static_cast<int64_t>(state.range(0))))...); \
-            name_ = "name_";                                                                                          \
-        }                                                                                                             \
-        virtual void SetUp(::benchmark::State& state) final {                                                         \
-            SetUp(state);                                                                                             \
-        }                                                                                                             \
-        virtual void TearDown(__attribute__((unused)) const ::benchmark::State& state) final {                        \
-            name_.clear();                                                                                            \
-        }                                                                                                             \
-        virtual void TearDown(::benchmark::State& state) final {                                                      \
-            TearDown(state);                                                                                          \
-        }                                                                                                             \
-        std::string name_;                                                                                            \
-        typename revert_type_seq<CustomArgs...>::type arguments_;                                                     \
-        static constexpr size_t counter_ = sizeof...(CustomArgs);                                                     \
-    }
-
             DEFINE_APPEND_TO_TYPE_SEC_1(append_to_type_seq_vec, std::vector);
             DEFINE_REVERT_TYPE_SEC(append_to_type_seq_vec, revert_type_seq_vec);
 
@@ -244,12 +220,54 @@ namespace benchmark_messages {
             DEFINE_APPEND_TO_TYPE_SEC_1(append_to_type_seq_set, std::set);
             DEFINE_REVERT_TYPE_SEC(append_to_type_seq_set, revert_type_seq_set);
 
-            DEFINE_FIXTURE_CLASS(fixture_vec_t, construct_vec, revert_type_seq_vec);
-            DEFINE_FIXTURE_CLASS(fixture_list_t, construct_list, revert_type_seq_list);
-            DEFINE_FIXTURE_CLASS(fixture_map_t, construct_map, revert_type_seq_map);
-            DEFINE_FIXTURE_CLASS(fixture_set_t, construct_set, revert_type_seq_set);
+            DEFINE_FIXTURE_CLASS_2(fixture_vec_t, construct_vec, revert_type_seq_vec);
+            DEFINE_FIXTURE_CLASS_2(fixture_list_t, construct_list, revert_type_seq_list);
+            DEFINE_FIXTURE_CLASS_2(fixture_map_t, construct_map, revert_type_seq_map);
+            DEFINE_FIXTURE_CLASS_2(fixture_set_t, construct_set, revert_type_seq_set);
 
         } // namespace container_args
+
+        namespace custom_args {
+
+            struct custom_1_t {
+                custom_1_t(int64_t value) {
+                    std::string tmp;
+                    for (int64_t i = 0; i < value; ++i) {
+                        tmp += std::to_string(i % 10);
+                        map_[i] = tmp;
+                        vec_.push_back(tmp);
+                    }
+                }
+                custom_1_t() = default;
+                custom_1_t(custom_1_t&) = default;
+                custom_1_t(const custom_1_t&) = default;
+                custom_1_t(custom_1_t&&) = default;
+                ~custom_1_t() = default;
+
+                custom_1_t& operator=(custom_1_t&) = default;
+                custom_1_t& operator=(const custom_1_t&) = default;
+                custom_1_t& operator=(custom_1_t&&) = default;
+
+                std::map<int64_t, std::string> map_;
+                std::vector<std::string> vec_;
+            };
+
+            template<typename... CustomArgs>
+            struct construct {};
+
+            template<typename T>
+            struct construct<T> {
+                static T get(int64_t value) {
+                    return T(value);
+                }
+            };
+
+            DEFINE_APPEND_TO_TYPE_SEC_1(append_to_type_seq, std::shared_ptr);
+            DEFINE_REVERT_TYPE_SEC(append_to_type_seq, revert_type_seq);
+
+            DEFINE_FIXTURE_CLASS_1(fixture_t, construct);
+
+        } // namespace custom_args
 
     } // namespace by_args
 
