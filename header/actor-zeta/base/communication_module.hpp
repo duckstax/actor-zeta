@@ -7,11 +7,12 @@
 #include <unordered_map>
 #include <vector>
 
-#include <actor-zeta/forwards.hpp>
+#include "forwards.hpp"
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/base/handler.hpp>
+#include <actor-zeta/scheduler/execution_unit.hpp>
 
 namespace actor_zeta { namespace base {
 
@@ -31,13 +32,13 @@ namespace actor_zeta { namespace base {
         auto type() const -> detail::string_view;
         auto message_types() const -> std::set<std::string>;
         auto enqueue(message_ptr) -> void;
-        void enqueue(message_ptr, executor::execution_device*);
+        void enqueue(message_ptr, scheduler::execution_unit*);
         auto current_message() -> message*;
 
     protected:
         communication_module(std::string);
         virtual auto current_message_impl() -> message* = 0;
-        virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
+        virtual void enqueue_base(message_ptr, scheduler::execution_unit*) = 0;
 
         template<class F>
         auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {

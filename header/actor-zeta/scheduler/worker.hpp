@@ -4,59 +4,49 @@
 #include <cstddef>
 #include <thread>
 
-#include <actor-zeta/executor/executable.hpp>
-#include <actor-zeta/executor/execution_device.hpp>
+#include "actor-zeta/detail/launch_thread.hpp"
+#include "execution_unit.hpp"
+#include "resumable.hpp"
 
-namespace actor_zeta { namespace executor {
+namespace actor_zeta { namespace scheduler {
 
     template<class Policy>
-    class executor_t;
-    ///
-    /// @brief
-    /// @tparam Policy
-    ///
+    class scheduler;
+
     template<class Policy>
-    class worker final : public execution_device {
+    class worker : public execution_unit {
     public:
-        using job_ptr = executable*;
-        using executor_ptr = executor_t<Policy>*;
+        using job_ptr = resumable*;
+        using schedulerr_ptr = scheduler<Policy>*;
         using policy_data = typename Policy::worker_data;
 
-        worker(size_t worker_id, executor_ptr worker_parent,
+        worker(size_t worker_id, schedulerr_ptr worker_parent,
                const policy_data& init, size_t throughput)
-            : execution_device()
+            : execution_unit(&worker_parent->system())
             , max_throughput_(throughput)
             , id_(worker_id)
             , parent_(worker_parent)
-            , data_(init) {
-        }
+            , data_(init) {}
 
         void start() {
-            ///assert(this_thread_.get_id() == std::thread::id{}); TODO: do not check; see implement asio
-            auto current_worker = this;
-            this_thread_ = std::thread{
-                [current_worker] {
-                    /// TODO: hook
-                    current_worker->run();
-                    /// TODO: hook
-                }};
+            assert(this_thread_.get_id() == std::thread::id{});
+            this_thread_ = detail::launch_thread("worker", [this] { run(); });
         }
 
         worker(const worker&) = delete;
-
         worker& operator=(const worker&) = delete;
 
         void external_enqueue(job_ptr job) {
-            assert(job != nullptr); /// TODO: do not check
+            assert(job != nullptr);
             policy_.external_enqueue(this, job);
         }
 
-        void execute(job_ptr job) override {
-            assert(job != nullptr); /// TODO: do not check
+        void execute_later(job_ptr job) override {
+            assert(job != nullptr);
             policy_.internal_enqueue(this, job);
         }
 
-        executor_ptr parent() {
+        schedulerr_ptr parent() {
             return parent_;
         }
 
@@ -80,25 +70,25 @@ namespace actor_zeta { namespace executor {
         void run() {
             for (;;) {
                 auto job = policy_.dequeue(this);
-                assert(job != nullptr); /// TODO: do not check
+                assert(job != nullptr);
                 policy_.before_resume(this, job);
-                auto res = job->run(this, max_throughput_);
+                auto res = job->resume(this, max_throughput_);
                 policy_.after_resume(this, job);
                 switch (res) {
-                    case executable_result::resume: {
+                    case resume_result::resume: {
                         policy_.resume_job_later(this, job);
                         break;
                     }
-                    case executable_result::done: {
+                    case resume_result::done: {
                         policy_.after_completion(this, job);
                         intrusive_ptr_release(job);
                         break;
                     }
-                    case executable_result::awaiting: {
+                    case resume_result::awaiting: {
                         intrusive_ptr_release(job);
                         break;
                     }
-                    case executable_result::shutdown: {
+                    case resume_result::shutdown: {
                         policy_.after_completion(this, job);
                         policy_.before_shutdown(this);
                         return;
@@ -110,9 +100,9 @@ namespace actor_zeta { namespace executor {
         size_t max_throughput_;
         std::thread this_thread_;
         size_t id_;
-        executor_ptr parent_;
+        schedulerr_ptr parent_;
         policy_data data_;
         Policy policy_;
     };
 
-}} // namespace actor_zeta::executor
+}} // namespace actor_zeta::scheduler

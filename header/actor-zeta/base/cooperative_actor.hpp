@@ -1,9 +1,10 @@
 #pragma once
 
+#include "forwards.hpp"
 #include <actor-zeta/base/actor_abstract.hpp>
 #include <actor-zeta/detail/single_reader_queue.hpp>
-#include <actor-zeta/executor/executable.hpp>
-#include <actor-zeta/forwards.hpp>
+#include <actor-zeta/scheduler/resumable.hpp>
+#include <actor-zeta/clock/clock.hpp>
 
 namespace actor_zeta { namespace base {
     ///
@@ -14,22 +15,19 @@ namespace actor_zeta { namespace base {
 
     class cooperative_actor
         : public actor_abstract
-        , public executor::executable {
+        , public scheduler::resumable {
     public:
         using mailbox_t = detail::single_reader_queue<message>;
 
-        executor::executable_result run(executor::execution_device*, max_throughput_t) final;
-
+        scheduler::resume_result resume(scheduler::execution_unit*, max_throughput_t) final;
         ~cooperative_actor() override;
 
         void intrusive_ptr_add_ref_impl() override;
-
         void intrusive_ptr_release_impl() override;
 
     protected:
         cooperative_actor(supervisor_abstract*, std::string);
-
-        void enqueue_base(message_ptr, executor::execution_device*) final;
+        void enqueue_base(message_ptr, scheduler::execution_unit*) final;
 
         // Non thread-safe method
         auto current_message_impl() -> message* override;
@@ -49,9 +47,7 @@ namespace actor_zeta { namespace base {
         }
 
         void cleanup();
-
         bool consume_from_cache();
-
         void consume(message&);
 
         // message processing -----------------------------------------------------
@@ -60,28 +56,24 @@ namespace actor_zeta { namespace base {
             return mailbox_;
         }
 
-        bool activate(executor::execution_device* ctx);
-
+        bool activate(scheduler::execution_unit* ctx);
         auto reactivate(message& x) -> void;
-
         message_ptr next_message();
-
         bool has_next_message();
-
         void push_to_cache(message_ptr ptr);
-
-        auto context(executor::execution_device*) -> void;
-
-        auto context() const -> executor::execution_device*;
-
+        auto context(scheduler::execution_unit*) -> void;
+        auto context() const -> scheduler::execution_unit*;
         auto supervisor() -> supervisor_abstract*;
 
         // ----------------------------------------------------- message processing
+
+        auto clock() noexcept -> clock::clock_t&;
         supervisor_abstract* supervisor_;
-        executor::execution_device* executor_;
+        scheduler::execution_unit* executor_;
         message* current_message_;
         mailbox_t mailbox_;
         std::atomic<int> flags_;
+
     };
 
     template<class T>

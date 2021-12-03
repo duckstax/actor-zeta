@@ -83,8 +83,8 @@ namespace actor_zeta { namespace base {
         return memory_resource_;
     }
 
-    auto supervisor_abstract::executor() noexcept -> executor::abstract_executor* {
-        return executor_impl();
+    auto supervisor_abstract::scheduler() noexcept -> scheduler::scheduler_abstract_t* {
+        return scheduler_impl();
     }
 
     auto supervisor_abstract::redirect(std::string& type, message* msg) -> void {
@@ -190,6 +190,10 @@ namespace actor_zeta { namespace base {
         if (sender && this != sender.get()) {
             link(sender, address_tmp);
         }
+    }
+
+    auto supervisor_abstract::clock()  noexcept -> clock::clock_t& {
+        return scheduler_impl()->clock();
     }
 
 }} // namespace actor_zeta::base

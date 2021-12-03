@@ -2,6 +2,8 @@
 
 #include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
+#include <actor-zeta/clock/thread_safe_clock.hpp>
+#include "scheduler/scheduler_abstract.hpp"
 
 namespace actor_zeta { namespace base {
     class supervisor_abstract : public communication_module {
@@ -10,11 +12,12 @@ namespace actor_zeta { namespace base {
         supervisor_abstract(std::string);
         supervisor_abstract(supervisor_abstract*, std::string);
         ~supervisor_abstract() override;
-        auto executor() noexcept -> executor::abstract_executor*;
+        auto scheduler() noexcept -> scheduler::scheduler_abstract_t*;
         auto resource() const -> detail::pmr::memory_resource*;
         auto address() noexcept -> address_t;
         auto broadcast(message_ptr) -> void;
         auto broadcast(detail::string_view, message_ptr) -> void;
+        auto clock() noexcept -> clock::clock_t&;
 
     protected:
         template<
@@ -52,7 +55,7 @@ namespace actor_zeta { namespace base {
         using address_range_t = std::pair<contacts_t::const_iterator, contacts_t::const_iterator>;
 
         using communication_module::add_handler;
-        virtual auto executor_impl() noexcept -> executor::abstract_executor* = 0;
+        virtual auto scheduler_impl() noexcept -> scheduler::scheduler_abstract_t* = 0;
         virtual auto add_actor_impl(actor) -> void = 0;
         virtual auto add_supervisor_impl(supervisor) -> void = 0;
         auto set_current_message(message_ptr) -> void;

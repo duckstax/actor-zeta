@@ -12,9 +12,9 @@
 #include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/detail/any.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
-#include <actor-zeta/executor/abstract_executor.hpp>
-#include <actor-zeta/executor/executor.hpp>
-#include <actor-zeta/executor/policy/work_sharing.hpp>
+#include <actor-zeta/scheduler/scheduler_abstract.hpp>
+#include <actor-zeta/scheduler/scheduler.hpp>
+#include <actor-zeta/scheduler/policy/work_sharing.hpp>
 
 namespace actor_zeta {
 
@@ -28,10 +28,9 @@ namespace actor_zeta {
     using base::message;
     using base::message_ptr;
 
-    using executor::abstract_executor;
-    using executor::executable;
-    using executor::execution_device;
-    using executor::executor_t;
-    using executor::work_sharing;
+    using scheduler::scheduler_abstract_t;
+    using scheduler::execution_unit;
+    using scheduler::scheduler_t;
+    using scheduler::work_sharing;
 
 } // namespace actor_zeta

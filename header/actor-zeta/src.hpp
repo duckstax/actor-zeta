@@ -15,15 +15,16 @@
 #include <actor-zeta/impl/actor/supervisor.ipp>
 #include <actor-zeta/impl/actor/supervisor_abstract.ipp>
 
+#include <actor-zeta/impl/clock/clock.ipp>
+#include <actor-zeta/impl/clock/thread_safe_clock.ipp>
+
 #include <actor-zeta/impl/detail/pmr/memory_resource.ipp>
 #include <actor-zeta/impl/detail/aligned_allocate.ipp>
 #include <actor-zeta/impl/detail/ref_counted.ipp>
 #include <actor-zeta/impl/detail/string_view.ipp>
 
-#include <actor-zeta/impl/executor/abstract_executor.ipp>
-#include <actor-zeta/impl/executor/executable.ipp>
-#include <actor-zeta/impl/executor/execution_device.ipp>
-#include <actor-zeta/impl/executor/work_sharing.ipp>
+#include <actor-zeta/impl/scheduler/scheduler_abstract.ipp>
+#include <actor-zeta/impl/scheduler/work_sharing.ipp>
 
 #include <actor-zeta/impl/messaging/message.ipp>
 
