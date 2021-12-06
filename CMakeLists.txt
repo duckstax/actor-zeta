@@ -12,11 +12,13 @@ message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
 option(ALLOW_EXAMPLES "ALLOW EXAMPLES" OFF)
 option(ALLOW_TESTS "ALLOW TESTS" OFF)
+option(ALLOW_BENCHMARK "ALLOW BENCHMARK" OFF)
 option(RTTI_DISABLE "RTTI DISABLE" ON)
 option(EXCEPTIONS_DISABLE "EXCEPTIONS DISABLE" ON)
 
 message(STATUS "ALLOW_EXAMPLES = ${ALLOW_EXAMPLES}")
 message(STATUS "ALLOW_TESTS = ${ALLOW_TESTS}")
+message(STATUS "ALLOW_BENCHMARK = ${ALLOW_BENCHMARK}")
 message(STATUS "RTTI_DISABLE = ${RTTI_DISABLE}")
 message(STATUS "EXCEPTIONS_DISABLE = ${EXCEPTIONS_DISABLE}")
 
@@ -163,6 +165,9 @@ if (ALLOW_TESTS)
     # conan
     #############################################################################################
     enable_testing()
-    #add_subdirectory(test)
+    add_subdirectory(test)
+endif()
+
+if (ALLOW_BENCHMARK)
     add_subdirectory(benchmark)
-endif ()
+endif()
