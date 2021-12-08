@@ -12,6 +12,7 @@ conan profile update settings.compiler.version=${COMPILER_VER} default
 conan profile update env.CXX=${COMPILER_CXX} default
 conan profile update env.CC=${COMPILER_C} default
 mkdir -p ${workspace}/build
+conan remote add -i 0 conancenter https://center.conan.io
 conan install ${workspace}/build/.. -if ${workspace}/build --build=missing -s build_type=Release
 cd ${workspace}/build
 export CC=${COMPILER_C}

@@ -1,5 +1,6 @@
 [requires]
   catch2/2.13.6
+  benchmark/1.6.0
 
 [generators]
   cmake
