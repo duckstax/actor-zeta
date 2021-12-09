@@ -7,15 +7,15 @@
 
 namespace actor_zeta {
 
-    template<typename... Args>
-    void send(base::supervisor& supervisor, Args... args) {
+    template<class Supervisor ,typename... Args>
+    void send(Supervisor& supervisor, Args... args) {
         supervisor->enqueue(
             make_message(
                 std::forward<Args>(args)...));
     }
 
-    template<typename... Args>
-    void send(const base::supervisor& supervisor, Args... args) {
+    template<class Supervisor ,typename... Args>
+    void send(const Supervisor& supervisor, Args... args) {
         supervisor->enqueue(
             make_message(
                 std::forward<Args>(args)...));
