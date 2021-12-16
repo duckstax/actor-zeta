@@ -17,7 +17,9 @@ actor-zeta is an open source C++11/14/17 virtual actor model implementation feat
 
 ### 1.0.0a7 :
     Getting ready for beta
-    removed addres book and old api
+    benchmarks for creation messages
+    removed api address book 
+    added base api timeout
     integrate with polymorph allocator
 
 ### 1.0.0a8 :
@@ -121,14 +123,14 @@ Add the corresponding remote to your conan:
 
 ### Basic setup
 ```bash
-    $ conan install actor-zeta/1.0.0a4@jinncrafters/stable
+    $ conan install actor-zeta/1.0.0a4@duckstax/stable
 ```
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    actor-zeta/1.0.0a4@jinncrafters/stable
+    actor-zeta/1.0.0a4@duckstax/stable
 
     [generators]
     cmake
