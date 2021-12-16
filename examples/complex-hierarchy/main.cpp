@@ -21,7 +21,8 @@ std::atomic_int count_actor{0};
 std::atomic_int count_supervisor{0};
 
 std::atomic_int count_database{0};
-std::atomic_int count_dispather{0};
+std::atomic_int count_collection{0};
+std::atomic_int count_dispatcher{0};
 
 const int max_queue = 100;
 
@@ -58,9 +59,12 @@ public:
         add_handler("create_collection", &dispatcher_t::create_collection);
         add_handler("insert", &dispatcher_t::insert);
         add_handler("add_link",&dispatcher_t::add_link);
+        add_handler("add_address",&dispatcher_t::add_address);
     }
     void insert(std::string& name, int key, int value) {
-        actor_zeta::send(address_book_.at("collection_test"), address(), "insert", std::move(name), key, value);
+        auto collection_name = std::move(name);
+        auto collection = address_book_.at({collection_name.data(),collection_name.size()});
+        actor_zeta::send(collection, address(), "insert", key, value);
     }
 
     void create_database(std::string& name) {
@@ -83,6 +87,13 @@ private:
 
     void add_link() {
         auto& address = current_message()->sender();
+        if (address && this != address.get()) {
+            auto name = address.type();
+            address_book_.emplace(name, std::move(address));
+        }
+    }
+
+    void add_address(actor_zeta::address_t address) {
         if (address && this != address.get()) {
             auto name = address.type();
             address_book_.emplace(name, std::move(address));
@@ -123,7 +134,8 @@ public:
         auto token = std::move(name);
         auto tmp =  spawn_actor<collection_t>([this](collection_t* ptr) {
             actors_.emplace_back(ptr);
-        },token,count_database.fetch_add(1));
+        },token,count_collection.fetch_add(1));
+        actor_zeta::send(current_message()->sender(),address(),"add_address",tmp);
         address_book_.emplace(tmp.type(),tmp);
     }
 
@@ -168,6 +180,7 @@ public:
             supervisor_.emplace_back(ptr);
             std::cerr << "add_supervisor_impl::add_supervisor_impl : " << type << std::endl;
         },std::move(name),count_database.fetch_add(1));
+        actor_zeta::send(current_message()->sender(),address(),"add_address",db);
         address_book_.emplace(db.type(),db);
     }
 
@@ -206,9 +219,8 @@ database_t::database_t(manager_database_t* ptr, std::string name, int64_t id)
 
 class manager_dispatcher_t final : public actor_zeta::cooperative_supervisor<manager_dispatcher_t> {
 public:
-    manager_dispatcher_t(memory_resource* mr,actor_zeta::address_t manager_database)
+    manager_dispatcher_t(memory_resource* mr)
         : cooperative_supervisor(mr, "mdispatcher", 0)
-        , manager_database_(manager_database)
         , e_(new dummy_executor(1, max_queue)) {
         e_->start();
         add_handler("create", &manager_dispatcher_t::create);
@@ -219,12 +231,12 @@ public:
         count_supervisor++;
     }
     void insert( std::string& database,std::string& name, int key, int value) {
-        actor_zeta::send(address_book_.at("mdb"), address(), "insert",std::move(database), std::move(name), key, value);
+        actor_zeta::send(dispathers_[0], address(), "insert",std::move(database), std::move(name), key, value);
     }
 
     void create_database(std::string& name) {
         std::cerr << "dispatcher_t::create_database : " << name << std::endl;
-        actor_zeta::send(manager_database_, address(), "create", std::move(name));
+        actor_zeta::send(dispathers_[0], address(), "create_database", std::move(name));
     }
 
     void create_collection(std::string& name_database, std::string& name_collection) {
@@ -232,8 +244,7 @@ public:
                   << "database : " << name_database
                   << " collection : " << name_collection
                   << std::endl;
-        auto dispatcher = address_book_.at("dispatcher");
-        actor_zeta::send(dispatcher, address(), "create", std::move(name_collection));
+        actor_zeta::send(dispathers_[0], address(), "create_collection", std::move(name_database), std::move(name_collection));
     }
 
     void create(std::string& name) {
@@ -242,9 +253,9 @@ public:
             auto type = ptr->type();
             actors_.emplace_back(ptr);
             std::cerr << "mdispatcher_t::add_actor_impl : " << type << std::endl;
-        },std::move(name),count_dispather.fetch_add(1),manager_database_);
-        actor_zeta::send(manager_database_, dispather,"add_link");
-        address_book_.emplace(dispather.type(),dispather);
+        },std::move(name),count_dispatcher.fetch_add(1),address_book_.at("mdb"));
+        actor_zeta::send(address_book_.at("mdb"), dispather,"add_link");
+        dispathers_.emplace_back(dispather);
     }
 
 protected:
@@ -262,8 +273,8 @@ protected:
 private:
     std::unique_ptr<actor_zeta::abstract_executor> e_;
     std::vector<actor_zeta::actor> actors_;
-    actor_zeta::address_t manager_database_;
     std::unordered_map<actor_zeta::detail::string_view,actor_zeta::address_t> address_book_;
+    std::vector<actor_zeta::address_t> dispathers_;
 
     void add_link() {
         auto& address = current_message()->sender();
@@ -280,20 +291,23 @@ auto main() -> int {
 
     auto* resource = get_default_resource();
     auto manager_database = actor_zeta::spawn_supervisor<manager_database_t>(resource);
-    auto manager_dispatcher = actor_zeta::spawn_supervisor<manager_dispatcher_t>(resource,manager_database->address());
+    auto manager_dispatcher = actor_zeta::spawn_supervisor<manager_dispatcher_t>(resource);
 
     actor_zeta::send(manager_dispatcher, manager_database->address(), "add_link");
-    actor_zeta::send(manager_dispatcher, manager_database->address(), "add_link");
+    actor_zeta::send(manager_database, manager_dispatcher->address(), "add_link");
 
     actor_zeta::send(manager_dispatcher, actor_zeta::address_t::empty_address(), "create", std::string("dispatcher"));
     actor_zeta::send(manager_dispatcher, actor_zeta::address_t::empty_address(), "create_database", std::string("database_test"));
     actor_zeta::send(manager_dispatcher, actor_zeta::address_t::empty_address(), "create_collection", std::string("database_test"), std::string("collection_test"));
-    actor_zeta::send(manager_dispatcher, actor_zeta::address_t::empty_address(), "insert", std::string("database_test"), std::string("collection_test"), 1, 5);
+    actor_zeta::send(manager_dispatcher, actor_zeta::address_t::empty_address(), "insert", std::string("database_test"),std::string("collection_test"), 1, 5);
 
     std::this_thread::sleep_for(sleep_time);
 
     std::cerr << "Count Actor : " << count_actor << std::endl;
     std::cerr << "Count SuperVisor : " << count_supervisor << std::endl;
+    std::cerr << "Count DataBase : " << count_database << std::endl;
+    std::cerr << "Count Collection : " << count_collection << std::endl;
+    std::cerr << "Count Dispatcher : " << count_dispatcher << std::endl;
 
     return 0;
 }
