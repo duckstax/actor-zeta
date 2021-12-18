@@ -4,7 +4,7 @@
 #include <thread>
 #include <vector>
 
-#include "detail/ringbuffer.hpp"
+#include <actor-zeta/detail/ring_buffer.hpp>
 #include <actor-zeta/clock/clock.hpp>
 
 namespace actor_zeta { namespace clock {
@@ -28,7 +28,7 @@ namespace actor_zeta { namespace clock {
     private:
         void schedule_periodically(time_point, handler, duration_type) override;
         void run();
-        detail::ringbuffer<schedule_entry_ptr, buffer_size> queue_;
+        detail::ring_buffer<schedule_entry_ptr, buffer_size> queue_;
         std::thread dispatcher_;
         std::atomic_bool running_{true};
         std::vector<schedule_entry_ptr> tbl_;

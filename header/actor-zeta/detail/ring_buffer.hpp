@@ -8,14 +8,14 @@
 
 namespace actor_zeta { namespace detail {
 
-    // A ringbuffer designed for a single consumer and any number of producers that
+    // A ring_buffer designed for a single consumer and any number of producers that
     // can hold a maximum of `Size - 1` elements.
     template<class T, size_t Size>
-    class ringbuffer {
+    class ring_buffer {
     public:
         using guard_type = std::unique_lock<std::mutex>;
 
-        ringbuffer()
+        ring_buffer()
             : wr_pos_(0)
             , rd_pos_(0) {
             // nop
@@ -128,13 +128,13 @@ namespace actor_zeta { namespace detail {
         // Signals the full condition.
         std::condition_variable cv_full_;
 
-        // Stores the current write position in the ringbuffer.
+        // Stores the current write position in the ring_buffer.
         std::atomic<size_t> wr_pos_;
 
-        // Stores the current read position in the ringbuffer.
+        // Stores the current read position in the ring_buffer.
         std::atomic<size_t> rd_pos_;
 
-        // Stores events in a circular ringbuffer.
+        // Stores events in a circular ring_buffer.
         std::array<T, Size> buf_;
     };
 
