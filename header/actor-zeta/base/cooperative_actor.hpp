@@ -10,8 +10,6 @@ namespace actor_zeta { namespace base {
     /// @brief Specialization of actor with scheduling functionality
     ///
 
-    using max_throughput_t = std::size_t;
-
     class cooperative_actor
         : public actor_abstract
         , public executor::executable {
@@ -27,14 +25,18 @@ namespace actor_zeta { namespace base {
         void intrusive_ptr_release_impl() override;
 
     protected:
-        cooperative_actor(supervisor_abstract*, std::string);
+        template<class Supervisor>
+        cooperative_actor(Supervisor* ptr, std::string type ,int64_t actor_id)
+            : cooperative_actor(static_cast<supervisor_abstract*>(ptr),std::move(type),actor_id){};
 
-        void enqueue_base(message_ptr, executor::execution_device*) final;
+        void enqueue_impl(message_ptr, executor::execution_device*) final;
 
         // Non thread-safe method
         auto current_message_impl() -> message* override;
 
     private:
+        cooperative_actor(supervisor_abstract*, std::string,int64_t);
+
         enum class state : int {
             empty = 0x01,
             busy

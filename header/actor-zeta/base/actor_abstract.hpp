@@ -13,7 +13,9 @@ namespace actor_zeta { namespace base {
     /// @brief Abstract concept of an actor
     ///
 
-    class actor_abstract : public communication_module {
+    class actor_abstract
+        : public communication_module
+        , public ref_counted {
     public:
         actor_abstract() = delete;
         ~actor_abstract() override;
@@ -25,26 +27,12 @@ namespace actor_zeta { namespace base {
 
         auto address() noexcept -> address_t;
     protected:
-        actor_abstract(std::string);
+        actor_abstract(std::string,int64_t);
         // prohibit copies, assignments, and heap allocations
         void* operator new(size_t);
         void* operator new[](size_t);
         actor_abstract(const actor_abstract&) = delete;
         actor_abstract& operator=(const actor_abstract&) = delete;
-
-        auto address_book(detail::string_view) -> address_t;
-        auto address_book(std::string&) -> address_t;
-        /**
-        * debug method
-        */
-        auto all_view_address() const -> std::set<std::string>;
-
-    private:
-        void add_link();
-        void remove_link();
-        void add_link_impl(address_t&);
-        void remove_link_impl(const address_t&);
-        std::unordered_map<detail::string_view, address_t> contacts_;
     };
 
 }} // namespace actor_zeta::base
