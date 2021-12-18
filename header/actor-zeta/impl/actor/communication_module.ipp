@@ -79,14 +79,20 @@ namespace actor_zeta { namespace base {
 
     communication_module::~communication_module() {}
 
-    communication_module::communication_module(std::string type)
-        : type_(std::move(type)) {}
+    communication_module::communication_module(std::string type,int64_t id)
+        : type_(std::move(type))
+        , id_(id){}
 
     void communication_module::enqueue(message_ptr msg, scheduler::execution_unit* e) {
-        enqueue_base(std::move(msg), e);
+        enqueue_impl(std::move(msg), e);
     }
+
     auto communication_module::current_message() -> message* {
         return current_message_impl();
+    }
+
+    auto communication_module::id() const -> int64_t {
+        return id_;
     }
 
 }} // namespace actor_zeta::base

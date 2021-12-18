@@ -2,14 +2,16 @@
 #include <catch2/catch.hpp>
 
 #include "classes.hpp"
-#include <actor-zeta/send.hpp>
+#include <actor-zeta.hpp>
+#include <actor-zeta/detail/memory_resource.hpp>
 
 TEST_CASE("handler") {
-    actor_zeta::supervisor supervisor_(new dummy_supervisor(1, 100));
+    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
+    auto supervisor_ = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr,1, 100);
 
     REQUIRE(dummy_supervisor::constructor_counter == 1);
 
-    actor_zeta::send(supervisor_,actor_zeta::address_t::empty_address(),"create_test_handlers");
+    actor_zeta::send(supervisor_.get(),actor_zeta::address_t::empty_address(),"create_test_handlers");
     REQUIRE(dummy_supervisor::enqueue_base_counter == 1 /*add_link*/);
     REQUIRE(dummy_supervisor::add_actor_impl_counter == 1);
     REQUIRE(test_handlers::init_counter == 1);
@@ -45,7 +47,7 @@ TEST_CASE("handler") {
         test_handlers_names::ptr_4, 1, 2, std::string("test"));
     REQUIRE(test_handlers::ptr_4_counter == 1);
 
-    actor_zeta::send(supervisor_,actor_zeta::address_t::empty_address(),"create_storage");
+    actor_zeta::send(supervisor_.get(),actor_zeta::address_t::empty_address(),"create_storage");
     REQUIRE(dummy_supervisor::enqueue_base_counter == 2 /* add_link*/);
     REQUIRE(dummy_supervisor::add_actor_impl_counter == 2);
     REQUIRE(storage_t::constructor_counter == 1);
