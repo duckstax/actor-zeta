@@ -13,13 +13,10 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
 #if __has_include(<memory_resource>)
 
-    memory_resource* get_default_resource() noexcept;
-
-    memory_resource* set_default_resource(memory_resource* new_res) noexcept;
-
-    memory_resource* new_delete_resource() noexcept;
-
-    memory_resource* null_memory_resource() noexcept;
+    using std::pmr::get_default_resource;
+    using std::pmr::set_default_resource;
+    using std::pmr::new_delete_resource;
+    using std::pmr::null_memory_resource;
 
 #else
 

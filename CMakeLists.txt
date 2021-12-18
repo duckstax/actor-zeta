@@ -85,13 +85,11 @@ set(HEADER_FILES
         header/actor-zeta/base/actor.hpp
         header/actor-zeta/base/address.hpp
         header/actor-zeta/base/cooperative_actor.hpp
-        header/actor-zeta/base/basic_actor.hpp
         header/actor-zeta/base/communication_module.hpp
         header/actor-zeta/base/handler.hpp
         header/actor-zeta/base/supervisor.hpp
         header/actor-zeta/base/supervisor_abstract.hpp
 
-        header/actor-zeta/detail/pmr/container.hpp
         header/actor-zeta/detail/pmr/memory_resource.hpp
         header/actor-zeta/detail/aligned_allocate.hpp
         header/actor-zeta/detail/any.hpp
@@ -115,7 +113,6 @@ set(HEADER_FILES
         header/actor-zeta/base/message.hpp
 
         header/actor-zeta/forwards.hpp
-        header/actor-zeta/link.hpp
         header/actor-zeta/send.hpp
         header/actor-zeta/core.hpp
         header/actor-zeta/src.hpp
