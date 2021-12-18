@@ -49,25 +49,25 @@ namespace actor_zeta { namespace base {
     supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* mr, std::string name)
         : communication_module(std::move(name))
         , memory_resource_(mr) {
-        add_handler("delegate", &supervisor_abstract::redirect);
-        add_handler("add_link", &supervisor_abstract::add_link);
-        add_handler("remove_link", &supervisor_abstract::remove_link);
+        ///add_handler("delegate", &supervisor_abstract::redirect);
+        ///add_handler("add_link", &supervisor_abstract::add_link);
+        ///add_handler("remove_link", &supervisor_abstract::remove_link);
     }
 
     supervisor_abstract::supervisor_abstract(std::string name)
         : communication_module(std::move(name))
         , memory_resource_(new new_delete_resource) {
-        add_handler("delegate", &supervisor_abstract::redirect);
-        add_handler("add_link", &supervisor_abstract::add_link);
-        add_handler("remove_link", &supervisor_abstract::remove_link);
+        ///add_handler("delegate", &supervisor_abstract::redirect);
+        ///add_handler("add_link", &supervisor_abstract::add_link);
+        ///add_handler("remove_link", &supervisor_abstract::remove_link);
     }
 
     supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string name)
         : communication_module(std::move(name))
         , memory_resource_(ptr->resource()) {
-        add_handler("delegate", &supervisor_abstract::redirect);
-        add_handler("add_link", &supervisor_abstract::add_link);
-        add_handler("remove_link", &supervisor_abstract::remove_link);
+        ///add_handler("delegate", &supervisor_abstract::redirect);
+        ///add_handler("add_link", &supervisor_abstract::add_link);
+        //add_handler("remove_link", &supervisor_abstract::remove_link);
     }
     supervisor_abstract::~supervisor_abstract() {}
 

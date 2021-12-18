@@ -25,8 +25,8 @@ namespace actor_zeta { namespace base {
 
     actor_abstract::actor_abstract(std::string type)
         : communication_module(std::move(type)) {
-        add_handler("add_link",&actor_abstract::add_link);
-        add_handler("remove_link",&actor_abstract::remove_link);
+        ///add_handler("add_link",&actor_abstract::add_link);
+        //add_handler("remove_link",&actor_abstract::remove_link);
     }
 
     auto actor_abstract::address_book(detail::string_view name) -> address_t {

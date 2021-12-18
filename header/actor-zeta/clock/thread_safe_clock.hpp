@@ -4,7 +4,7 @@
 #include <thread>
 #include <vector>
 
-#include "detail/ringbuffer.hpp"
+#include <actor-zeta/detail/ringbuffer.hpp>
 #include <actor-zeta/clock/clock.hpp>
 
 namespace actor_zeta { namespace clock {

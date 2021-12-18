@@ -1,10 +1,10 @@
 #pragma once
 
 #include "forwards.hpp"
-#include <actor-zeta/base/actor_abstract.hpp>
 #include <actor-zeta/detail/single_reader_queue.hpp>
 #include <actor-zeta/scheduler/resumable.hpp>
 #include <actor-zeta/clock/clock.hpp>
+#include <actor-zeta/base/behavior.hpp>
 
 namespace actor_zeta { namespace base {
     ///
@@ -73,7 +73,7 @@ namespace actor_zeta { namespace base {
         message* current_message_;
         mailbox_t mailbox_;
         std::atomic<int> flags_;
-
+        behavior_t behavior_;
     };
 
     template<class T>
