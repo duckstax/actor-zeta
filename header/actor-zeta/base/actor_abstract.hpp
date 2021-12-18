@@ -33,9 +33,6 @@ namespace actor_zeta { namespace base {
         void* operator new[](size_t);
         actor_abstract(const actor_abstract&) = delete;
         actor_abstract& operator=(const actor_abstract&) = delete;
-
-    private:
-
     };
 
 }} // namespace actor_zeta::base
