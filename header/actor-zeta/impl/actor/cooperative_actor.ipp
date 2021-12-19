@@ -115,8 +115,8 @@ namespace actor_zeta { namespace base {
 
     cooperative_actor::cooperative_actor(
         supervisor_abstract* supervisor,
-        std::string type,int64_t id)
-        : actor_abstract(std::move(type),id)
+        std::string type, int64_t id)
+        : actor_abstract(std::move(type), id)
         , supervisor_(supervisor) {
         flags(static_cast<int>(state::empty));
         mailbox().try_unblock();

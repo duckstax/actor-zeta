@@ -29,13 +29,13 @@ namespace actor_zeta { namespace base {
     using detail::DEFAULT_ALIGNMENT;
     using detail::is_supported_alignment;
 
-    supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* mr, std::string name,int64_t id)
-        : communication_module(std::move(name),id)
+    supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* mr, std::string name, int64_t id)
+        : communication_module(std::move(name), id)
         , memory_resource_(mr) {
     }
 
-    supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string name,int64_t id)
-        : communication_module(std::move(name),id)
+    supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string name, int64_t id)
+        : communication_module(std::move(name), id)
         , memory_resource_(ptr->resource()) {
     }
 
@@ -61,7 +61,7 @@ namespace actor_zeta { namespace base {
         return address_t(this);
     }
 
-    auto supervisor_abstract::clock()  noexcept -> clock::clock_t& {
+    auto supervisor_abstract::clock() noexcept -> clock::clock_t& {
         return scheduler_impl()->clock();
     }
 

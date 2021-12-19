@@ -41,13 +41,12 @@ public:
     dummy_executor(uint64_t threads, uint64_t throughput)
         : actor_zeta::scheduler_abstract_t(threads, throughput) {}
 
-    void enqueue(actor_zeta::resumable*ptr)override {
+    void enqueue(actor_zeta::resumable* ptr) override {
         ptr->resume(nullptr, max_throughput());
         intrusive_ptr_release(ptr);
     }
 
     actor_zeta::clock::clock_t& clock() noexcept {
-
     }
 
     void start() override {}
@@ -70,7 +69,7 @@ public:
     }
 
 protected:
-    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* {
+    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* override {
         return e_.get();
     }
 

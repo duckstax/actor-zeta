@@ -2,9 +2,9 @@
 
 #include "forwards.hpp"
 #include <actor-zeta/base/actor_abstract.hpp>
+#include <actor-zeta/clock/clock.hpp>
 #include <actor-zeta/detail/single_reader_queue.hpp>
 #include <actor-zeta/scheduler/resumable.hpp>
-#include <actor-zeta/clock/clock.hpp>
 
 namespace actor_zeta { namespace base {
     ///
@@ -24,19 +24,17 @@ namespace actor_zeta { namespace base {
         void intrusive_ptr_release_impl() override;
 
     protected:
-
         template<class Supervisor>
-        cooperative_actor(Supervisor* ptr, std::string type ,int64_t actor_id)
-            : cooperative_actor(static_cast<supervisor_abstract*>(ptr),std::move(type),actor_id){};
+        cooperative_actor(Supervisor* ptr, std::string type, int64_t actor_id)
+            : cooperative_actor(static_cast<supervisor_abstract*>(ptr), std::move(type), actor_id){};
 
         void enqueue_impl(message_ptr, scheduler::execution_unit*) final;
-
 
         // Non thread-safe method
         auto current_message_impl() -> message* override;
 
     private:
-        cooperative_actor(supervisor_abstract*, std::string,int64_t);
+        cooperative_actor(supervisor_abstract*, std::string, int64_t);
 
         enum class state : int {
             empty = 0x01,
@@ -78,7 +76,6 @@ namespace actor_zeta { namespace base {
         message* current_message_;
         mailbox_t mailbox_;
         std::atomic<int> flags_;
-
     };
 
     template<class T>
