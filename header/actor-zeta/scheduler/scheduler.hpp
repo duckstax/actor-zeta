@@ -50,7 +50,6 @@ namespace actor_zeta { namespace scheduler {
             }
 
             clock_.start_dispatch_loop();
-            super::start();
         }
 
         void stop() override {

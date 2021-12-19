@@ -73,7 +73,7 @@ namespace actor_zeta { namespace scheduler {
 
         template<class Coordinator, class UnaryFunction>
         void foreach_central_resumable(Coordinator* self, UnaryFunction f) {
-            auto& queue = d(self).queue;
+            auto& queue = cast(self).queue;
             auto next = [&]() -> resumable* {
                 if (queue.empty()) {
                     return nullptr;
@@ -82,7 +82,7 @@ namespace actor_zeta { namespace scheduler {
                 queue.pop_front();
                 return front;
             };
-            std::unique_lock<std::mutex> guard(d(self).lock);
+            std::unique_lock<std::mutex> guard(cast(self).lock);
             for (auto job = next(); job != nullptr; job = next()) {
                 f(job);
             }

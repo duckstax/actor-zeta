@@ -24,4 +24,8 @@ namespace actor_zeta { namespace clock {
                 }));
     }
 
+    void clock_t::schedule(handler f) {
+        return schedule_periodically(time_point{duration_type{0}}, std::move(f),duration_type{0});
+    }
+
 }} // namespace actor_zeta::clock
