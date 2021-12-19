@@ -22,7 +22,6 @@ namespace actor_zeta { namespace clock {
 
     protected:
         virtual void schedule_periodically(time_point first_run, handler, duration_type period) = 0;
-        void schedule(handler );
         void schedule(time_point , handler );
     };
 

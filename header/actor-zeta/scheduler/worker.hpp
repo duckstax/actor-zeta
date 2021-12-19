@@ -14,7 +14,7 @@ namespace actor_zeta { namespace scheduler {
     class scheduler;
 
     template<class Policy>
-    class worker : public execution_unit {
+    class worker final : public execution_unit {
     public:
         using job_ptr = resumable*;
         using schedulerr_ptr = scheduler<Policy>*;

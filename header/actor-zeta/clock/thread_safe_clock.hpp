@@ -9,11 +9,12 @@
 
 namespace actor_zeta { namespace clock {
 
-    class thread_safe_clock_t : public clock_t {
+    class thread_safe_clock_t final : public clock_t {
     public:
         static constexpr size_t buffer_size = 64;
 
-        struct schedule_entry {
+        struct schedule_entry final {
+            bool done;
             time_point t;
             handler f;
             duration_type period;

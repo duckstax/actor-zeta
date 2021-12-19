@@ -5,18 +5,13 @@
 namespace actor_zeta { namespace clock {
 
     clock_t::~clock_t() {
-        // nop
     }
 
     clock_t::time_point clock_t::now() const noexcept {
         return clock_type::now();
     }
 
-    void clock_t::schedule(handler f) {
-        return schedule_periodically(time_point{duration_type{0}}, std::move(f), duration_type{0});
-    }
-
-    void clock_t::schedule(time_point t, handler  f) {
+    void clock_t::schedule(time_point t, handler f) {
         return schedule_periodically(t, std::move(f), duration_type{0});
     }
 

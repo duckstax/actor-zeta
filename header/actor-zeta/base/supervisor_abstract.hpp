@@ -2,7 +2,7 @@
 
 #include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/clock/thread_safe_clock.hpp>
-#include <actor-zeta/detail/pmr/memory_resource.hpp>
+#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
 
 namespace actor_zeta { namespace base {
@@ -12,9 +12,11 @@ namespace actor_zeta { namespace base {
         , public ref_counted {
     public:
         supervisor_abstract(detail::pmr::memory_resource*, std::string, int64_t);
+
         template<class Supervisor>
         supervisor_abstract(Supervisor* supervisor, std::string type, int64_t actor_id)
             : supervisor_abstract(static_cast<supervisor_abstract*>(supervisor), std::move(type), actor_id) {}
+
         ~supervisor_abstract() override;
         auto scheduler() noexcept -> scheduler::scheduler_abstract_t*;
         auto resource() const -> detail::pmr::memory_resource*;

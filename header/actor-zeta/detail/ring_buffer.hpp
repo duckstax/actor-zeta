@@ -8,109 +8,117 @@
 
 namespace actor_zeta { namespace detail {
 
-    // A ring_buffer designed for a single consumer and any number of producers that
-    // can hold a maximum of `Size - 1` elements.
     template<class T, size_t Size>
-    class ring_buffer {
+    class ring_buffer final {
     public:
         using guard_type = std::unique_lock<std::mutex>;
 
         ring_buffer()
-            : wr_pos_(0)
-            , rd_pos_(0) {
-            // nop
+            : write_pos_(0)
+            , read_pos_(0) {
         }
 
-        void wait_nonempty() {
-            // Double-checked locking to reduce contention on mtx_.
-            if (!empty())
+        void wait_non_empty() {
+            if (!empty()) {
                 return;
+            }
             guard_type guard{mtx_};
-            while (empty())
+            while (empty()) {
                 cv_empty_.wait(guard);
+            }
         }
 
         template<class TimePoint>
-        bool wait_nonempty(TimePoint timeout) {
-            if (!empty())
+        bool wait_non_empty(TimePoint timeout) {
+            if (!empty()) {
                 return true;
+            }
             auto pred = [&] { return !empty(); };
             guard_type guard{mtx_};
             return cv_empty_.wait_until(guard, timeout, pred);
         }
 
         T& front() {
-            // Safe to access without lock, because we assume a single consumer.
-            return buf_[rd_pos_];
+            return buffer_[read_pos_];
         }
 
         void pop_front() {
             guard_type guard{mtx_};
-            auto rp = rd_pos_.load();
-            rd_pos_ = next(rp);
-            // Wakeup a waiting producers if the queue became non-full.
-            if (rp == next(wr_pos_))
+            auto rp = read_pos_.load();
+            read_pos_ = next(rp);
+            if (rp == next(write_pos_)) {
                 cv_full_.notify_all();
+            }
         }
 
         template<class OutputIterator>
         OutputIterator get_all(OutputIterator i) {
-            // No lock needed, again because of single-consumer assumption.
-            auto first = rd_pos_.load();
-            auto last = wr_pos_.load();
+            auto first = read_pos_.load();
+            auto last = write_pos_.load();
             size_t n;
             assert(first != last);
-            // Move buffer content to the output iterator.
+
             if (first < last) {
                 n = last - first;
                 for (auto j = first; j != last; ++j)
-                    *i++ = std::move(buf_[j]);
+                    *i++ = std::move(buffer_[j]);
             } else {
                 n = (Size - first) + last;
-                for (size_t j = first; j != Size; ++j)
-                    *i++ = std::move(buf_[j]);
-                for (size_t j = 0; j != last; ++j)
-                    *i++ = std::move(buf_[j]);
+                for (size_t j = first; j != Size; ++j) {
+                    *i++ = std::move(buffer_[j]);
+                }
+                for (size_t j = 0; j != last; ++j) {
+                    *i++ = std::move(buffer_[j]);
+                }
             }
             guard_type guard{mtx_};
-            rd_pos_ = (first + n) % Size;
-            // Wakeup a waiting producers if the queue became non-full.
-            if (first == next(wr_pos_))
+            read_pos_ = (first + n) % Size;
+
+            if (first == next(write_pos_)) {
                 cv_full_.notify_all();
+            }
+
             return i;
         }
 
-        void push_back(T&& x) {
+        void push_back(T&& arg) {
             guard_type guard{mtx_};
-            while (full())
+            while (full()) {
                 cv_full_.wait(guard);
-            auto wp = wr_pos_.load();
-            buf_[wp] = std::move(x);
-            wr_pos_ = next(wp);
-            if (rd_pos_ == wp)
+            }
+            auto wp = write_pos_.load();
+            buffer_[wp] = std::move(arg);
+            write_pos_ = next(wp);
+            if (read_pos_ == wp) {
                 cv_empty_.notify_all();
+            }
         }
 
-        template<class... Us>
-        void emplace_back(Us&&... xs) {
-            push_back(T{std::forward<Us>(xs)...});
+        template<class... Args>
+        void emplace_back(Args&&... args) {
+            push_back(T{std::forward<Args>(args)...});
         }
 
         bool empty() const noexcept {
-            return rd_pos_ == wr_pos_;
+            return read_pos_ == write_pos_;
         }
 
         bool full() const noexcept {
-            return rd_pos_ == next(wr_pos_);
+            return read_pos_ == next(write_pos_);
         }
 
         size_t size() const noexcept {
-            auto rp = rd_pos_.load();
-            auto wp = wr_pos_.load();
-            if (rp == wp)
+            auto rp = read_pos_.load();
+            auto wp = write_pos_.load();
+
+            if (rp == wp) {
                 return 0;
-            if (rp < wp)
+            }
+
+            if (rp < wp) {
                 return wp - rp;
+            }
+
             return Size - rp + wp;
         }
 
@@ -119,23 +127,12 @@ namespace actor_zeta { namespace detail {
             return (pos + 1) % Size;
         }
 
-        // Guards queue_.
         mutable std::mutex mtx_;
-
-        // Signals the empty condition.
         std::condition_variable cv_empty_;
-
-        // Signals the full condition.
         std::condition_variable cv_full_;
-
-        // Stores the current write position in the ring_buffer.
-        std::atomic<size_t> wr_pos_;
-
-        // Stores the current read position in the ring_buffer.
-        std::atomic<size_t> rd_pos_;
-
-        // Stores events in a circular ring_buffer.
-        std::array<T, Size> buf_;
+        std::atomic<size_t> write_pos_;
+        std::atomic<size_t> read_pos_;
+        std::array<T, Size> buffer_;
     };
 
 }} // namespace actor_zeta::detail
