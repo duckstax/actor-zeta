@@ -33,5 +33,6 @@ namespace actor_zeta {
     using scheduler::execution_unit;
     using scheduler::scheduler_t;
     using scheduler::work_sharing;
+    using scheduler::resumable;
 
 } // namespace actor_zeta

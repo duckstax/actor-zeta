@@ -18,7 +18,7 @@ namespace actor_zeta {
     };
 
     struct resumable {
-        resumable() = default;
+        resumable();
         virtual ~resumable();
         virtual resume_result resume(execution_unit*, max_throughput_t) = 0;
         virtual void intrusive_ptr_add_ref_impl() = 0;

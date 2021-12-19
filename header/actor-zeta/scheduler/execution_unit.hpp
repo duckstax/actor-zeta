@@ -5,7 +5,7 @@
 namespace actor_zeta { namespace scheduler {
 
     struct execution_unit {
-        execution_unit() = default;
+        execution_unit();
         execution_unit(execution_unit&&) = default;
         execution_unit& operator=(execution_unit&&) = default;
         execution_unit(const execution_unit&) = default;

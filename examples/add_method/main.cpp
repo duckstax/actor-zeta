@@ -36,14 +36,18 @@ public:
     ~storage_t() override = default;
 };
 
-class dummy_executor final : public actor_zeta::abstract_executor {
+class dummy_executor final : public actor_zeta::scheduler_abstract_t {
 public:
     dummy_executor(uint64_t threads, uint64_t throughput)
-        : abstract_executor(threads, throughput) {}
+        : actor_zeta::scheduler_abstract_t(threads, throughput) {}
 
-    void execute(actor_zeta::executable* ptr) override {
-        ptr->run(nullptr, max_throughput());
+    void enqueue(actor_zeta::resumable*ptr)override {
+        ptr->resume(nullptr, max_throughput());
         intrusive_ptr_release(ptr);
+    }
+
+    actor_zeta::clock::clock_t& clock() noexcept {
+
     }
 
     void start() override {}
@@ -66,11 +70,11 @@ public:
     }
 
 protected:
-    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
+    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* {
         return e_.get();
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
             execute();
@@ -78,7 +82,7 @@ protected:
     }
 
 private:
-    std::unique_ptr<actor_zeta::abstract_executor> e_;
+    std::unique_ptr<actor_zeta::scheduler_abstract_t> e_;
     std::vector<actor_zeta::actor> actors_;
 };
 
