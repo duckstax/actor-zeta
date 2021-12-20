@@ -90,9 +90,9 @@ int main() {
 
     int const actors = 10;
 
-    supervisor->clock().schedule_message(actor_zeta::clock::clock_t::time_point(std::chrono::seconds(6)),supervisor->address(),actor_zeta::make_message(actor_zeta::address_t::empty_address(),"alarm"));
+    supervisor->clock().schedule_message(supervisor->clock().now()+std::chrono::seconds(60),supervisor->address(),actor_zeta::make_message(actor_zeta::address_t::empty_address(),"alarm"));
 
-    std::this_thread::sleep_for(std::chrono::seconds(60));
+    std::this_thread::sleep_for(std::chrono::seconds(180));
 
     std::cerr << " Finish " << std::endl;
     std::cerr << " Finish Alarm Counter :" << alarm_counter << std::endl;
