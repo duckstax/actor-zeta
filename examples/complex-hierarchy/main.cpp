@@ -28,16 +28,20 @@ const int max_queue = 100;
 
 #define TRACE(msg) { std::cerr << __FILE__ << ":" << __LINE__ << "::" << __func__ << " : " << msg << std::endl; }
 
-class dummy_executor final : public actor_zeta::abstract_executor {
+class dummy_executor final : public actor_zeta::scheduler_abstract_t {
 public:
     dummy_executor(uint64_t threads, uint64_t throughput)
-        : abstract_executor(threads, throughput) {}
+        : scheduler_abstract_t(threads, throughput) {}
 
-    void execute(actor_zeta::executable* ptr) override {
+    void enqueue(actor_zeta::resumable* ptr) override {
         TRACE("execute(actor_zeta::executable* ptr) +++");
-        ptr->run(nullptr, max_throughput());
+        ptr->resume(nullptr, max_throughput());
         intrusive_ptr_release(ptr);
         TRACE("execute(actor_zeta::executable* ptr) ---");
+    }
+
+    actor_zeta::clock::clock_t& clock() noexcept {
+
     }
 
     void start() override {}
@@ -140,17 +144,17 @@ public:
     }
 
 protected:
-    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
+    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final {
         return e_;
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         set_current_message(std::move(msg));
         execute();
     }
 
 private:
-    actor_zeta::abstract_executor* e_;
+    actor_zeta::scheduler_abstract_t* e_;
     std::vector<actor_zeta::actor> actors_;
     std::unordered_map<actor_zeta::detail::string_view,actor_zeta::address_t> address_book_;
     void add_link() {
@@ -185,11 +189,11 @@ public:
     }
 
 protected:
-    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
+    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final {
         return e_.get();
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
             execute();
@@ -197,7 +201,7 @@ protected:
     }
 
 private:
-    std::unique_ptr<actor_zeta::abstract_executor> e_;
+    std::unique_ptr<actor_zeta::scheduler_abstract_t> e_;
     std::vector<actor_zeta::supervisor> supervisor_;
     std::unordered_map<actor_zeta::detail::string_view,actor_zeta::address_t> address_book_;
     void add_link() {
@@ -211,7 +215,7 @@ private:
 
 database_t::database_t(manager_database_t* ptr, std::string name, int64_t id)
     : cooperative_supervisor(ptr, std::move(name), id)
-    , e_(ptr->executor()) {
+    , e_(ptr->scheduler()) {
     add_handler("create", &database_t::create);
     add_handler("add_link",&database_t::add_link);
     count_supervisor++;
@@ -259,11 +263,11 @@ public:
     }
 
 protected:
-    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
+    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final {
         return e_.get();
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
             execute();
@@ -271,7 +275,7 @@ protected:
     }
 
 private:
-    std::unique_ptr<actor_zeta::abstract_executor> e_;
+    std::unique_ptr<actor_zeta::scheduler_abstract_t> e_;
     std::vector<actor_zeta::actor> actors_;
     std::unordered_map<actor_zeta::detail::string_view,actor_zeta::address_t> address_book_;
     std::vector<actor_zeta::address_t> dispathers_;

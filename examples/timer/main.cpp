@@ -35,9 +35,9 @@ public:
                  1,
                  100),
              thread_pool_deleter){
-        e_->start();
         add_handler("broadcast", &supervisor_lite::broadcast_impl);
         add_handler("alarm", &supervisor_lite::alarm);
+        e_->start();
     }
 
     ~supervisor_lite() override = default;
@@ -62,7 +62,8 @@ protected:
     auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final { return e_.get(); }
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
-            local(std::move(msg));
+            set_current_message(std::move(msg));
+            execute();
         }
     }
 
@@ -74,10 +75,6 @@ private:
         for (auto& i : actors_) {
             i->enqueue(actor_zeta::message_ptr(tmp->clone()));
         }
-    }
-    auto local(actor_zeta::message_ptr msg) -> void {
-        set_current_message(std::move(msg));
-        execute();
     }
 
     std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
