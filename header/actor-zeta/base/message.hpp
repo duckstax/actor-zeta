@@ -21,31 +21,18 @@ namespace actor_zeta { namespace base {
     class message final {
     public:
         message();
-
         message(const message&) = delete;
-
         message& operator=(const message&) = delete;
-
         message(message&& other) = default;
-
         message& operator=(message&&) = default;
-
         ~message() = default;
-
         message(address_t /*sender*/, std::string /*name*/);
-
         message(address_t /*sender*/, std::string /*name*/, detail::any /*body*/);
-
         message* next;
-
         message* prev;
-
         auto command() const noexcept -> detail::string_view;
-
         auto sender() & noexcept -> address_t&;
-
         auto sender() && noexcept -> address_t&&;
-
         auto sender() const& noexcept -> address_t const&;
 
         template<typename T>
@@ -61,22 +48,15 @@ namespace actor_zeta { namespace base {
         }
 
         auto body() -> detail::any&;
-
         auto clone() const -> message*;
-
         operator bool();
-
         void swap(message& other) noexcept;
-
         bool is_high_priority() const;
 
     private:
         address_t sender_;
-
         std::string command_;
-
         detail::any body_;
-
         priority priority_ = priority::normal;
     };
 

@@ -17,10 +17,10 @@ namespace actor_zeta { namespace detail { namespace pmr {
 #if CPP17_OR_GREATER
 
 #if __has_include(<memory_resource>)
-    using memory_resource = std::pmr::memory_resource;
+    using std::pmr::memory_resource;
 
 #else
-    using memory_resource = std::experimental::pmr::memory_resource;
+    using std::experimental::pmr::memory_resource;
 
 #endif
 
@@ -30,11 +30,11 @@ namespace actor_zeta { namespace detail { namespace pmr {
     public:
         virtual ~memory_resource() {}
 
-        void* allocate(std::size_t bytes, std::size_t alignment = alignof(std::max_align_t)) {
+        void* allocate(std::size_t bytes, std::size_t alignment = alignof(::max_align_t)) {
             return this->do_allocate(bytes, alignment);
         }
 
-        void deallocate(void* p, std::size_t bytes, std::size_t alignment = alignof(std::max_align_t)) {
+        void deallocate(void* p, std::size_t bytes, std::size_t alignment = alignof(::max_align_t)) {
             return this->do_deallocate(p, bytes, alignment);
         }
 

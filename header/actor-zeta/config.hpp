@@ -101,5 +101,4 @@ namespace actor_zeta {
 #endif
 
 #define DEBUG NDEBUG
-
 } // namespace actor_zeta

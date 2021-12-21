@@ -1,16 +1,101 @@
 #pragma once
 
+#include <cstddef>
+
+#include <actor-zeta/detail/pmr/default_resource.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/detail/pmr/polymorphic_allocator.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
 
-using actor_zeta::detail::pmr::memory_resource;
-using actor_zeta::detail::pmr::polymorphic_allocator;
+#include "test_memory_resource.hpp"
 
-struct x {
+namespace pmr = actor_zeta::detail::pmr;
+using pmr::memory_resource;
+using pmr::polymorphic_allocator;
+
+struct destroyable {
+    static int count;
+    destroyable() { ++count; }
+    ~destroyable() { --count; }
+};
+
+int destroyable::count = 0;
+
+struct default_constructible {
+    static int constructed;
+    default_constructible()
+        : x(42) { ++constructed; }
+    int x{0};
+};
+
+int default_constructible::constructed = 0;
+
+template<class T>
+struct test_harness_t {
+    test_resource_t R;
+    memory_resource* M = &R;
+    polymorphic_allocator<T> A = M;
+    bool constructed = false;
+    T* ptr;
+    test_harness_t()
+        : ptr(A.allocate(1)) {}
+    template<class... Args>
+    void construct(Args&&... args) {
+        A.construct(ptr, std::forward<Args>(args)...);
+        constructed = true;
+    }
+    ~test_harness_t() {
+        if (constructed)
+            A.destroy(ptr);
+        A.deallocate(ptr, 1);
+    }
+};
+
+struct count_copies_t {
+    int count;
+    count_copies_t()
+        : count(0) {}
+    count_copies_t(count_copies_t const& o)
+        : count(o.count + 1) {}
+};
+
+struct count_copies_alloc_v1_t {
+    typedef polymorphic_allocator<char> allocator_type;
+    memory_resource* alloc;
+    int count;
+    count_copies_alloc_v1_t()
+        : alloc(nullptr)
+        , count(0) {}
+    count_copies_alloc_v1_t(
+        std::allocator_arg_t, allocator_type const& a,
+        count_copies_alloc_v1_t const& o)
+        : alloc(a.resource())
+        , count(o.count + 1) {}
+    count_copies_alloc_v1_t(count_copies_alloc_v1_t const& o)
+        : count(o.count + 1) {}
+};
+
+struct count_copies_alloc_v2_t {
+    typedef polymorphic_allocator<char> allocator_type;
+    memory_resource* alloc;
+    int count;
+    count_copies_alloc_v2_t()
+        : alloc(nullptr)
+        , count(0) {}
+    count_copies_alloc_v2_t(
+        count_copies_alloc_v2_t const& o, allocator_type const& a)
+        : alloc(a.resource())
+        , count(o.count + 1) {}
+    count_copies_alloc_v2_t(count_copies_alloc_v2_t const& o)
+        : count(o.count + 1) {}
+};
+
+class x {
+public:
     x() = default;
     x(int value)
         : value_(value) {}
+    ~x() = default;
     int value_ = 0;
 };
 

@@ -7,7 +7,7 @@ TEST_CASE("message") {
     SECTION("simple") {
         message msg;
         REQUIRE(msg.operator bool() == false);
-        message msg_1(address_t(), "1", int(1));
+        message msg_1(address_t::empty_address(), "1", int(1));
         REQUIRE(msg_1.operator bool() == true);
         REQUIRE(msg_1.command() == "1");
         REQUIRE(msg_1.body<int>() == 1);
