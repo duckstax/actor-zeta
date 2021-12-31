@@ -16,14 +16,14 @@ namespace actor_zeta { namespace clock {
     }
 
     void thread_safe_clock_t::run() {
-        auto is_done = [](schedule_entry_ptr& entry) -> bool {
+        auto is_done = [](const schedule_entry_ptr& entry) -> bool {
             if (entry) {
                 return entry->done;
             }
 
             return true;
         };
-        auto by_timeout = [](schedule_entry_ptr& x, schedule_entry_ptr& y) -> bool { return x->t < y->t; };
+        auto by_timeout = [](const schedule_entry_ptr& x, const schedule_entry_ptr& y) -> bool { return x->t < y->t; };
         while (running_) {
             if (tbl_.empty()) {
                 queue_.wait_non_empty();
