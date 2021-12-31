@@ -3,8 +3,6 @@
 
 namespace actor_zeta { namespace scheduler {
 
-    work_sharing::~work_sharing() {
-        // nop
-    }
+    work_sharing::~work_sharing() {}
 
 }} // namespace actor_zeta::scheduler

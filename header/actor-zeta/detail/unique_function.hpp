@@ -71,7 +71,6 @@ namespace actor_zeta { namespace detail {
                                                                             R>::value>::type>
         explicit unique_function(T f)
             : unique_function(make_wrapper(std::move(f))) {
-            // nop
         }
 
         ~unique_function() {
