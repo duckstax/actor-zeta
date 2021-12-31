@@ -123,7 +123,6 @@ namespace actor_zeta { namespace scheduler {
         std::vector<std::unique_ptr<worker_type>> workers_;
         policy_data data_;
         Policy policy_;
-        std::thread timer_;
     };
 
 }} // namespace actor_zeta::scheduler
