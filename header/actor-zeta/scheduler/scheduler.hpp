@@ -8,7 +8,7 @@
 #include <thread>
 #include <vector>
 
-#include <actor-zeta/clock/thread_safe_clock.hpp>
+#include <actor-zeta/clock/clock_thread_safe.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
 #include <actor-zeta/scheduler/worker.hpp>

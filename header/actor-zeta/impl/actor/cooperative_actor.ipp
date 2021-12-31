@@ -125,7 +125,7 @@ namespace actor_zeta { namespace base {
     cooperative_actor::~cooperative_actor() {}
 
     bool cooperative_actor::activate(scheduler::execution_unit* ctx) {
-        //assert(ctx != nullptr);
+        assert(ctx != nullptr);
         if (ctx) {
             context(ctx);
         }

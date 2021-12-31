@@ -1,7 +1,7 @@
 #pragma once
 
 #include <actor-zeta/base/communication_module.hpp>
-#include <actor-zeta/clock/thread_safe_clock.hpp>
+#include <actor-zeta/clock/clock.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
 

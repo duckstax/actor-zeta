@@ -1,19 +1,19 @@
+#define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
+#include <catch2/catch.hpp>
+
 #include <cassert>
 
 #include <chrono>
 #include <iostream>
 #include <memory>
 #include <thread>
-#include <unordered_set>
 #include <vector>
 
 #include <actor-zeta.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 
-auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
-    ptr->stop();
-    delete ptr;
-};
+#include "classes.hpp"
+#include "tooltestsuites/scheduler_test.hpp"
 
 static std::atomic<uint64_t> alarm_counter{0};
 
@@ -23,12 +23,13 @@ class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervis
 public:
     explicit supervisor_lite(memory_resource* ptr)
         : cooperative_supervisor(ptr, "network", 0)
-        , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
-                 1,
-                 100),
-             thread_pool_deleter){
+        , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
         add_handler("alarm", &supervisor_lite::alarm);
-        e_->start();
+        scheduler()->start();
+    }
+
+    auto scheduler_test() noexcept -> actor_zeta::test::scheduler_test_t*  {
+        return executor_.get();
     }
 
     ~supervisor_lite() override = default;
@@ -38,7 +39,7 @@ public:
     }
 
 protected:
-    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final { return e_.get(); }
+    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final { return executor_.get(); }
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
@@ -47,21 +48,17 @@ protected:
     }
 
 private:
-
-    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
+    std::unique_ptr<actor_zeta::test::scheduler_test_t> executor_;
     std::vector<actor_zeta::actor> actors_;
 };
 
-int main() {
+TEST_CASE("timer") {
     auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<supervisor_lite>(mr_ptr);
 
-    supervisor->clock().schedule_message(supervisor->clock().now()+std::chrono::seconds(60),supervisor->address(),actor_zeta::make_message(actor_zeta::address_t::empty_address(),"alarm"));
+    auto time = supervisor->clock().now()+std::chrono::seconds(10);
+    supervisor->clock().schedule_message(time,supervisor->address(),actor_zeta::make_message(actor_zeta::address_t::empty_address(),"alarm"));
+    supervisor->scheduler_test()->advance_time(std::chrono::seconds(10));
 
-    std::this_thread::sleep_for(std::chrono::seconds(180));
-
-    std::cerr << " Finish " << std::endl;
-    std::cerr << " Finish Alarm Counter :" << alarm_counter << std::endl;
-    assert(alarm_counter.load() == 1);
-    return 0;
+    REQUIRE(alarm_counter.load() == 1);
 }

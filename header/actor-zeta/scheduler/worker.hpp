@@ -22,8 +22,7 @@ namespace actor_zeta { namespace scheduler {
 
         worker(size_t worker_id, schedulerr_ptr worker_parent,
                const policy_data& init, size_t throughput)
-            : ///execution_unit(&worker_parent->system())
-            /*,*/ max_throughput_(throughput)
+            : max_throughput_(throughput)
             , id_(worker_id)
             , parent_(worker_parent)
             , data_(init) {}

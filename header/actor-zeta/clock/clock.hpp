@@ -9,6 +9,7 @@
 namespace actor_zeta { namespace clock {
 
     using handler = detail::unique_function<void()>;
+    using timespan = std::chrono::duration<int64_t, std::nano>;
 
     class clock_t {
     public:

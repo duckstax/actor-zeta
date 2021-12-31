@@ -1,5 +1,5 @@
 #pragma once
-#include "actor-zeta/clock/thread_safe_clock.hpp"
+#include "actor-zeta/clock/clock_thread_safe.hpp"
 #include "actor-zeta/detail/launch_thread.hpp"
 
 #include <algorithm>
