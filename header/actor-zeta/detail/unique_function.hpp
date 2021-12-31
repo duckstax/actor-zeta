@@ -3,48 +3,33 @@
 #include <type_traits>
 #include <utility>
 
-namespace actor_zeta {  namespace detail {
+namespace actor_zeta { namespace detail {
 
-    /// A move-only replacement for `std::function`.
     template<class Signature>
     class unique_function;
 
-    template<class R, class... Ts>
-    class unique_function<R(Ts...)> {
+    template<class R, class... Args>
+    class unique_function<R(Args...)> {
     public:
-        // -- member types -----------------------------------------------------------
-
-        /// Function object that dispatches application with a virtual member
-        /// function.
         class wrapper {
         public:
-            virtual ~wrapper() {
-                // nop
-            }
-
-            virtual R operator()(Ts...) = 0;
+            virtual ~wrapper() {}
+            virtual R operator()(Args...) = 0;
         };
 
-        /// Native function pointer.
-        using raw_pointer = R (*)(Ts...);
-
-        /// Pointer to a function wrapper.
+        using raw_pointer = R (*)(Args...);
         using wrapper_pointer = wrapper*;
 
-        // -- factory functions ------------------------------------------------------
-
-        /// Creates a new function object wrapper.
         template<class F>
         static wrapper_pointer make_wrapper(F&& f) {
             class impl final : public wrapper {
             public:
                 impl(F&& fun)
                     : fun_(std::move(fun)) {
-                    // nop
                 }
 
-                R operator()(Ts... xs) override {
-                    return fun_(xs...);
+                R operator()(Args... args) override {
+                    return fun_(args...);
                 }
 
             private:
@@ -53,19 +38,17 @@ namespace actor_zeta {  namespace detail {
             return new impl(std::forward<F>(f));
         }
 
-        // -- constructors, destructors, and assignment operators --------------------
-
         unique_function()
             : holds_wrapper_(false)
             , fptr_(nullptr) {
-            // nop
         }
 
         unique_function(unique_function&& other)
             : holds_wrapper_(other.holds_wrapper_) {
             fptr_ = other.fptr_;
-            if (other.holds_wrapper_)
+            if (other.holds_wrapper_) {
                 other.holds_wrapper_ = false;
+            }
             other.fptr_ = nullptr;
         }
 
@@ -74,19 +57,17 @@ namespace actor_zeta {  namespace detail {
         explicit unique_function(raw_pointer fun)
             : holds_wrapper_(false)
             , fptr_(fun) {
-            // nop
         }
 
         explicit unique_function(wrapper_pointer ptr)
             : holds_wrapper_(true)
             , wptr_(ptr) {
-            // nop
         }
 
         template<
             class T,
             class = typename std::enable_if<
-                !std::is_convertible<T, raw_pointer>::value && std::is_same<decltype((std::declval<T&>())(std::declval<Ts>()...)),
+                !std::is_convertible<T, raw_pointer>::value && std::is_same<decltype((std::declval<T&>())(std::declval<Args>()...)),
                                                                             R>::value>::type>
         explicit unique_function(T f)
             : unique_function(make_wrapper(std::move(f))) {
@@ -96,8 +77,6 @@ namespace actor_zeta {  namespace detail {
         ~unique_function() {
             destroy();
         }
-
-        // -- assignment -------------------------------------------------------------
 
         unique_function& operator=(unique_function&& other) {
             destroy();
@@ -127,29 +106,14 @@ namespace actor_zeta {  namespace detail {
             *this = unique_function{ptr};
         }
 
-        // -- properties -------------------------------------------------------------
-
-        bool is_nullptr() const noexcept {
-            // No type dispatching needed, because the union puts both pointers into
-            // the same memory location.
-            return fptr_ == nullptr;
-        }
-
-        bool holds_wrapper() const noexcept {
-            return holds_wrapper_;
-        }
-
-        // -- operators --------------------------------------------------------------
-
-        R operator()(Ts... xs) {
-            if (holds_wrapper_)
-                return (*wptr_)(std::move(xs)...);
-            return (*fptr_)(std::move(xs)...);
+        R operator()(Args... args) {
+            if (holds_wrapper_) {
+                return (*wptr_)(std::move(args)...);
+            }
+            return (*fptr_)(std::move(args)...);
         }
 
         explicit operator bool() const noexcept {
-            // No type dispatching needed, because the union puts both pointers into
-            // the same memory location.
             return !is_nullptr();
         }
 
@@ -158,15 +122,15 @@ namespace actor_zeta {  namespace detail {
         }
 
     private:
-        // -- destruction ------------------------------------------------------------
-
-        /// Destroys the managed wrapper.
-        void destroy() {
-            if (holds_wrapper_)
-                delete wptr_;
+        bool is_nullptr() const noexcept {
+            return fptr_ == nullptr;
         }
 
-        // -- member variables -------------------------------------------------------
+        void destroy() {
+            if (holds_wrapper_) {
+                delete wptr_;
+            }
+        }
 
         bool holds_wrapper_;
 
@@ -195,4 +159,4 @@ namespace actor_zeta {  namespace detail {
     bool operator!=(std::nullptr_t, const unique_function<T>& x) noexcept {
         return !x.is_nullptr();
     }
-}}
+}} // namespace actor_zeta::detail
