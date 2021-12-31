@@ -15,15 +15,15 @@
 using actor_zeta::detail::pmr::memory_resource;
 class dummy_supervisor;
 
-static std::atomic_int  actor_counter {0};
+static std::atomic_int actor_counter{0};
 
 class storage_t final : public actor_zeta::basic_async_actor {
 public:
     storage_t(dummy_supervisor* ptr)
         : actor_zeta::basic_async_actor(ptr, "storage", 0) {
-        add_handler("update",[]() -> void {});
-        add_handler("find",[]() -> void {});
-        add_handler("remove",[]() -> void {});
+        add_handler("update", []() -> void {});
+        add_handler("find", []() -> void {});
+        add_handler("remove", []() -> void {});
 
         REQUIRE(actor_zeta::detail::string_view("storage") == type());
         auto tmp = message_types();
@@ -37,7 +37,6 @@ public:
     ~storage_t() override = default;
 };
 
-
 class dummy_supervisor final : public actor_zeta::cooperative_supervisor<dummy_supervisor> {
 public:
     dummy_supervisor(memory_resource* ptr)
@@ -47,7 +46,7 @@ public:
         scheduler()->start();
     }
 
-    auto scheduler_test() noexcept -> actor_zeta::test::scheduler_test_t*  {
+    auto scheduler_test() noexcept -> actor_zeta::test::scheduler_test_t* {
         return executor_.get();
     }
 
@@ -79,5 +78,5 @@ TEST_CASE("spawn-actor actor") {
     auto supervisor = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr);
     actor_zeta::send(supervisor.get(), actor_zeta::address_t::empty_address(), "create");
     supervisor->scheduler_test()->run_once();
-    REQUIRE(actor_counter==1);
+    REQUIRE(actor_counter == 1);
 }

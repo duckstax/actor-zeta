@@ -4,15 +4,14 @@
 #include <chrono>
 #include <cstddef>
 #include <deque>
-#include <limits>
 #include <functional>
+#include <limits>
 
-#include "actor-zeta/scheduler/scheduler_abstract.hpp"
-#include "actor-zeta/scheduler/resumable.hpp"
 #include "actor-zeta/base/actor_abstract.hpp"
+#include "actor-zeta/scheduler/resumable.hpp"
+#include "actor-zeta/scheduler/scheduler_abstract.hpp"
 
 #include "clock_test.hpp"
-
 
 namespace actor_zeta { namespace test {
 
@@ -20,13 +19,13 @@ namespace actor_zeta { namespace test {
     public:
         using super = scheduler::scheduler_abstract_t;
 
-        scheduler_test_t( std::size_t num_worker_threads, std::size_t max_throughput);
+        scheduler_test_t(std::size_t num_worker_threads, std::size_t max_throughput);
 
         std::deque<scheduler::resumable*> jobs;
 
         bool run_once();
         size_t run(size_t max_count = std::numeric_limits<size_t>::max());
-        size_t advance_time( clock::clock_t::duration_type);
+        size_t advance_time(clock::clock_t::duration_type);
         clock::clock_t& clock() noexcept override;
 
     protected:
@@ -38,4 +37,4 @@ namespace actor_zeta { namespace test {
         clock_test clock_;
     };
 
-}} // namespace actor_zeta::scheduler
+}} // namespace actor_zeta::test

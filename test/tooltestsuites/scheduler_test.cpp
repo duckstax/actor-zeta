@@ -1,5 +1,7 @@
-#include<actor-zeta/base/address.hpp>
+// clang-format off
+#include <actor-zeta/base/address.hpp>
 #include "scheduler_test.hpp"
+// clang-format on
 
 #include <limits>
 
@@ -23,7 +25,7 @@ namespace actor_zeta { namespace test {
 
     } // namespace
 
-    scheduler_test_t::scheduler_test_t( std::size_t num_worker_threads,
+    scheduler_test_t::scheduler_test_t(std::size_t num_worker_threads,
                                        std::size_t max_throughput)
         : super(num_worker_threads, max_throughput) {
     }
@@ -45,7 +47,7 @@ namespace actor_zeta { namespace test {
     }
 
     bool scheduler_test_t::run_once() {
-        if (jobs.empty()){
+        if (jobs.empty()) {
             return false;
         }
         auto job = jobs.front();
@@ -65,7 +67,6 @@ namespace actor_zeta { namespace test {
         return true;
     }
 
-
     size_t scheduler_test_t::run(size_t max_count) {
         size_t res = 0;
         while (res < max_count && run_once()) {
@@ -74,7 +75,7 @@ namespace actor_zeta { namespace test {
         return res;
     }
 
-    size_t scheduler_test_t::advance_time(clock::clock_t::duration_type time){
+    size_t scheduler_test_t::advance_time(clock::clock_t::duration_type time) {
         return clock_.advance_time(time);
     }
 

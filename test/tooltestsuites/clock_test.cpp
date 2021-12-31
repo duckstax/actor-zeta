@@ -4,7 +4,6 @@
 #include "clock_test.hpp"
 // clang-format on
 
-
 namespace actor_zeta { namespace test {
 
     clock_test::clock_test()

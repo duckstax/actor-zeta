@@ -4,9 +4,7 @@
 #include <cassert>
 
 #include <chrono>
-#include <iostream>
 #include <memory>
-#include <thread>
 #include <vector>
 
 #include <actor-zeta.hpp>
@@ -28,7 +26,7 @@ public:
         scheduler()->start();
     }
 
-    auto scheduler_test() noexcept -> actor_zeta::test::scheduler_test_t*  {
+    auto scheduler_test() noexcept -> actor_zeta::test::scheduler_test_t* {
         return executor_.get();
     }
 
@@ -56,8 +54,8 @@ TEST_CASE("timer") {
     auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<supervisor_lite>(mr_ptr);
 
-    auto time = supervisor->clock().now()+std::chrono::seconds(10);
-    supervisor->clock().schedule_message(time,supervisor->address(),actor_zeta::make_message(actor_zeta::address_t::empty_address(),"alarm"));
+    auto time = supervisor->clock().now() + std::chrono::seconds(10);
+    supervisor->clock().schedule_message(time, supervisor->address(), actor_zeta::make_message(actor_zeta::address_t::empty_address(), "alarm"));
     supervisor->scheduler_test()->advance_time(std::chrono::seconds(10));
 
     REQUIRE(alarm_counter.load() == 1);

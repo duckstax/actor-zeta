@@ -8,7 +8,7 @@ message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-target_link_libraries(${PROJECT_NAME} actor-zeta  tooltestsuites CONAN_PKG::catch2)
+target_link_libraries(${PROJECT_NAME} actor-zeta tooltestsuites CONAN_PKG::catch2)
 
 include(CTest)
 include(Catch)
