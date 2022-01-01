@@ -12,11 +12,13 @@ message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
 option(ALLOW_EXAMPLES "ALLOW EXAMPLES" OFF)
 option(ALLOW_TESTS "ALLOW TESTS" OFF)
+option(ALLOW_BENCHMARK "ALLOW BENCHMARK" OFF)
 option(RTTI_DISABLE "RTTI DISABLE" ON)
 option(EXCEPTIONS_DISABLE "EXCEPTIONS DISABLE" ON)
 
 message(STATUS "ALLOW_EXAMPLES = ${ALLOW_EXAMPLES}")
 message(STATUS "ALLOW_TESTS = ${ALLOW_TESTS}")
+message(STATUS "ALLOW_BENCHMARK = ${ALLOW_BENCHMARK}")
 message(STATUS "RTTI_DISABLE = ${RTTI_DISABLE}")
 message(STATUS "EXCEPTIONS_DISABLE = ${EXCEPTIONS_DISABLE}")
 
@@ -83,14 +85,12 @@ set(HEADER_FILES
         header/actor-zeta/base/actor.hpp
         header/actor-zeta/base/address.hpp
         header/actor-zeta/base/cooperative_actor.hpp
-        header/actor-zeta/base/basic_actor.hpp
         header/actor-zeta/base/communication_module.hpp
         header/actor-zeta/base/handler.hpp
         header/actor-zeta/base/message.hpp
         header/actor-zeta/base/supervisor.hpp
         header/actor-zeta/base/supervisor_abstract.hpp
 
-        header/actor-zeta/detail/pmr/container.hpp
         header/actor-zeta/detail/pmr/memory_resource.hpp
         header/actor-zeta/detail/aligned_allocate.hpp
         header/actor-zeta/detail/any.hpp
@@ -111,7 +111,6 @@ set(HEADER_FILES
         header/actor-zeta/scheduler/scheduler_abstract.hpp
         header/actor-zeta/scheduler/worker.hpp
 
-        header/actor-zeta/link.hpp
         header/actor-zeta/send.hpp
         header/actor-zeta/core.hpp
         header/actor-zeta/src.hpp
@@ -162,4 +161,8 @@ if (ALLOW_TESTS)
     #############################################################################################
     enable_testing()
     add_subdirectory(test)
-endif ()
+endif()
+
+if (ALLOW_BENCHMARK)
+    add_subdirectory(benchmark)
+endif()

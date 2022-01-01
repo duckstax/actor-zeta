@@ -15,26 +15,28 @@ namespace actor_zeta { namespace base {
 
     using message_ptr = std::unique_ptr<message>;
 
-    class communication_module
-        : public ref_counted {
+    class communication_module {
     public:
         communication_module() = delete;
         communication_module(const communication_module&) = delete;
         communication_module& operator=(const communication_module&) = delete;
-        ~communication_module() override;
+        virtual ~communication_module();
 
         auto type() const -> detail::string_view;
+        auto id() const -> int64_t ;
+
         auto enqueue(message_ptr) -> void;
         void enqueue(message_ptr, scheduler::execution_unit*);
         auto current_message() -> message*;
 
     protected:
-        communication_module(std::string);
+        communication_module(std::string,int64_t);
         virtual auto current_message_impl() -> message* = 0;
-        virtual void enqueue_base(message_ptr, scheduler::execution_unit*) = 0;
+        virtual void enqueue_impl(message_ptr, scheduler::execution_unit*) = 0;
 
     private:
         const std::string type_;
+        const int64_t id_;
     };
 
 }} // namespace actor_zeta::base

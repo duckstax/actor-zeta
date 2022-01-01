@@ -24,6 +24,7 @@ namespace actor_zeta {
     using base::basic_async_actor;
     using base::supervisor;
     using base::supervisor_abstract;
+    using base::cooperative_supervisor;
     using base::message;
     using base::message_ptr;
 
@@ -31,5 +32,6 @@ namespace actor_zeta {
     using scheduler::execution_unit;
     using scheduler::scheduler_t;
     using scheduler::work_sharing;
+    using scheduler::resumable;
 
 } // namespace actor_zeta

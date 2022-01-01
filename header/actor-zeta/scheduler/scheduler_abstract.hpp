@@ -17,7 +17,7 @@ namespace actor_zeta { namespace scheduler {
             std::size_t max_throughput);
 
         virtual ~scheduler_abstract_t() = default;
-        virtual void enqueue(resumable* what) = 0;
+        virtual void enqueue(resumable*) = 0;
 
         inline size_t max_throughput() const {
             return max_throughput_;

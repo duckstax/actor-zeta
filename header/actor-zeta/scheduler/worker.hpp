@@ -11,19 +11,18 @@
 namespace actor_zeta { namespace scheduler {
 
     template<class Policy>
-    class scheduler;
+    class scheduler_t;
 
     template<class Policy>
-    class worker : public execution_unit {
+    class worker final : public execution_unit {
     public:
         using job_ptr = resumable*;
-        using schedulerr_ptr = scheduler<Policy>*;
+        using schedulerr_ptr = scheduler_t<Policy>*;
         using policy_data = typename Policy::worker_data;
 
         worker(size_t worker_id, schedulerr_ptr worker_parent,
                const policy_data& init, size_t throughput)
-            : execution_unit(&worker_parent->system())
-            , max_throughput_(throughput)
+            : max_throughput_(throughput)
             , id_(worker_id)
             , parent_(worker_parent)
             , data_(init) {}

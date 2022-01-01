@@ -4,7 +4,11 @@
 
 #include "forwards.hpp"
 
-namespace actor_zeta { namespace scheduler {
+namespace actor_zeta {
+
+    using max_throughput_t = size_t;
+
+    namespace scheduler {
 
     enum class resume_result {
         resume,
@@ -14,9 +18,9 @@ namespace actor_zeta { namespace scheduler {
     };
 
     struct resumable {
-        resumable() = default;
+        resumable();
         virtual ~resumable();
-        virtual resume_result resume(execution_unit*, size_t max_throughput) = 0;
+        virtual resume_result resume(execution_unit*, max_throughput_t) = 0;
         virtual void intrusive_ptr_add_ref_impl() = 0;
         virtual void intrusive_ptr_release_impl() = 0;
     };

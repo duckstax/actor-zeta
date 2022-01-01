@@ -66,7 +66,7 @@ namespace actor_zeta { namespace base {
         return scheduler::resume_result::awaiting;
     }
 
-    void cooperative_actor::enqueue_base(message_ptr msg, scheduler::execution_unit* e) {
+    void cooperative_actor::enqueue_impl(message_ptr msg, scheduler::execution_unit* e) {
         assert(msg);
         mailbox().enqueue(msg.release());
         if (flags() == static_cast<int>(state::empty)) {
@@ -115,8 +115,8 @@ namespace actor_zeta { namespace base {
 
     cooperative_actor::cooperative_actor(
         supervisor_abstract* supervisor,
-        std::string type)
-        : actor_abstract(std::move(type))
+        std::string type, int64_t id)
+        : actor_abstract(std::move(type), id)
         , supervisor_(supervisor) {
         flags(static_cast<int>(state::empty));
         mailbox().try_unblock();
@@ -125,7 +125,7 @@ namespace actor_zeta { namespace base {
     cooperative_actor::~cooperative_actor() {}
 
     bool cooperative_actor::activate(scheduler::execution_unit* ctx) {
-        //assert(ctx != nullptr);
+        assert(ctx != nullptr);
         if (ctx) {
             context(ctx);
         }
@@ -213,7 +213,7 @@ namespace actor_zeta { namespace base {
     auto cooperative_actor::supervisor() -> supervisor_abstract* {
         return supervisor_;
     }
-    auto cooperative_actor::clock() -> clock::clock_t& {
+    auto cooperative_actor::clock() noexcept -> clock::clock_t& {
         return supervisor()->clock();
     }
 

@@ -9,6 +9,7 @@
 namespace actor_zeta { namespace clock {
 
     using handler = detail::unique_function<void()>;
+    using timespan = std::chrono::duration<int64_t, std::nano>;
 
     class clock_t {
     public:
@@ -22,8 +23,8 @@ namespace actor_zeta { namespace clock {
 
     protected:
         virtual void schedule_periodically(time_point first_run, handler, duration_type period) = 0;
-        void schedule(handler );
         void schedule(time_point , handler );
+        void schedule(handler);
     };
 
 }} // namespace actor_zeta::clock
