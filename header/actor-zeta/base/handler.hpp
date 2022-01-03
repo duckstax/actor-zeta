@@ -17,13 +17,13 @@ namespace actor_zeta { namespace base {
     auto  make_helper_base(F&& , ClassPtr* )->action ;
 
     template<typename F>
-    inline auto make_handler(F&& f)-> action {
+    auto make_handler(F&& f)-> action {
         return make_helper_base(std::forward<F>(f));
     }
 
     template<typename F, typename ClassPtr>
-    inline auto make_handler(F&& f, ClassPtr* self) -> action {
-        return nmake_helper_base(std::forward<F>(f), self);
+    auto make_handler(F&& f, ClassPtr* self) -> action {
+        return make_helper_base(std::forward<F>(f), self);
     }
 
 }} // namespace actor_zeta::base

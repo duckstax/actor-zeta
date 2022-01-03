@@ -6,6 +6,7 @@ include_directories(../header/)
 add_subdirectory(tooltestsuites)
 
 add_subdirectory(any)
+add_subdirectory(behavior)
 add_subdirectory(handler)
 add_subdirectory(intrusive_ptr)
 add_subdirectory(memory_resource)

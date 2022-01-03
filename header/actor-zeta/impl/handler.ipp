@@ -40,8 +40,7 @@ namespace actor_zeta { namespace base {
     // clang-format on
     template<typename F,
              class Args = typename type_traits::get_callable_trait<F>::args_types,
-             int Args_size =
-                 type_traits::get_callable_trait<F>::number_of_arguments>
+             int Args_size = type_traits::get_callable_trait<F>::number_of_arguments>
     struct transformer {
         auto operator()(F&& f) -> action {
             return [f](communication_module* ctx) -> void {
@@ -121,12 +120,12 @@ namespace actor_zeta { namespace base {
     };
 
     template<typename F>
-    auto make_helper_base(F&& f)->action {
+    auto make_helper_base(F&& f) -> action {
         return transformer<F>{}(std::forward<F>(f));
     }
 
     template<typename F, typename ClassPtr>
-    auto make_helper_base(F&& f, ClassPtr* self)->action {
+    auto make_helper_base(F&& f, ClassPtr* self) -> action {
         return transformer_for_class<F, ClassPtr>{}(std::forward<F>(f), self);
     }
 

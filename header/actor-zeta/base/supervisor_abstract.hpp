@@ -29,6 +29,8 @@ namespace actor_zeta { namespace base {
         auto set_current_message(message_ptr) -> void;
         auto current_message_impl() -> message* final;
 
+        behavior_container behavior_;
+
     private:
         supervisor_abstract(supervisor_abstract*, std::string, int64_t);
         message* current_message_;
@@ -36,7 +38,8 @@ namespace actor_zeta { namespace base {
     };
 
     template<class Supervisor>
-    class cooperative_supervisor : public supervisor_abstract {
+    class cooperative_supervisor
+        : public supervisor_abstract {
     public:
         using supervisor_abstract::address;
         using supervisor_abstract::resource;
@@ -44,6 +47,14 @@ namespace actor_zeta { namespace base {
         using supervisor_abstract::supervisor_abstract;
 
     protected:
+
+        template<class F>
+        void behavior(const F&f){
+            behavior_t tmp(this);
+            f(tmp);
+            behavior_.assign(std::move(tmp.get()));
+        }
+
         template<
             class Actor,
             class Inserter,

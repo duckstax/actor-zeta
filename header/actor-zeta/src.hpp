@@ -10,6 +10,7 @@
 #include <actor-zeta/impl/actor/actor.ipp>
 #include <actor-zeta/impl/actor/actor_abstract.ipp>
 #include <actor-zeta/impl/actor/address.ipp>
+#include <actor-zeta/impl/actor/behavior.ipp>
 #include <actor-zeta/impl/actor/communication_module.ipp>
 #include <actor-zeta/impl/actor/cooperative_actor.ipp>
 #include <actor-zeta/impl/actor/supervisor.ipp>

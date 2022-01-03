@@ -34,6 +34,8 @@ namespace actor_zeta { namespace base {
         // Non thread-safe method
         auto current_message_impl() -> message* override;
 
+        behavior_container behavior_;
+
     private:
         cooperative_actor(supervisor_abstract*, std::string, int64_t);
 
@@ -77,7 +79,6 @@ namespace actor_zeta { namespace base {
         message* current_message_;
         mailbox_t mailbox_;
         std::atomic<int> flags_;
-        behavior_t behavior_;
     };
 
     template<class T>
