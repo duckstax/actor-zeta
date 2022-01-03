@@ -32,7 +32,7 @@ namespace actor_zeta { namespace base {
         void enqueue_impl(message_ptr, scheduler::execution_unit*) final;
 
         // Non thread-safe method
-        auto current_message_impl() -> message* override;
+        auto current_message_impl() -> message*;
 
         behavior_container behavior_;
 

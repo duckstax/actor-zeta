@@ -24,6 +24,9 @@ namespace actor_zeta {
     using base::supervisor;
     using base::supervisor_abstract;
     using base::cooperative_supervisor;
+    using base::actor_schedule;
+    using base::behavior_t;
+
     using base::message;
     using base::message_ptr;
 

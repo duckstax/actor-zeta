@@ -32,9 +32,6 @@ namespace actor_zeta { namespace base {
         enqueue_impl(std::move(msg), e);
     }
 
-    auto communication_module::current_message() -> message* {
-        return current_message_impl();
-    }
 
     auto communication_module::id() const -> int64_t {
         return id_;

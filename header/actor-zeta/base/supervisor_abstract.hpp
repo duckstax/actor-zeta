@@ -27,7 +27,7 @@ namespace actor_zeta { namespace base {
     protected:
         virtual auto scheduler_impl() noexcept -> scheduler::scheduler_abstract_t* = 0;
         auto set_current_message(message_ptr) -> void;
-        auto current_message_impl() -> message* final;
+        auto current_message_impl() -> message* ;
 
         behavior_container behavior_;
         message* current_message_;

@@ -21,12 +21,15 @@ static std::atomic<uint64_t> create_counter_worker{0};
 
 class supervisor_lite;
 
-class worker_t final : public actor_zeta::basic_async_actor {
+class worker_t final : public actor_zeta::actor_schedule<worker_t> {
 public:
     worker_t(supervisor_lite* ptr, int64_t actor_id)
-        : actor_zeta::basic_async_actor(ptr, "bot", actor_id) {
-        add_handler("download", &worker_t::download);
-        add_handler("work_data", &worker_t::work_data);
+        : actor_zeta::actor_schedule<worker_t>(ptr, "bot", actor_id) {
+
+        behavior([this](actor_zeta::behavior_t&behavior) {
+            add_handler(behavior,"download", &worker_t::download);
+            add_handler(behavior,"work_data", &worker_t::work_data);
+        });
     }
 
     void download(const std::string& url, const std::string& user, const std::string& passwod) {
@@ -61,9 +64,11 @@ public:
               "add_link",
               "remove_link",
               "broadcast", "create"} {
+        behavior([this](actor_zeta::behavior_t&behavior) {
+            add_handler(behavior,"create", &supervisor_lite::create);
+            add_handler(behavior,"broadcast", &supervisor_lite::broadcast_impl);
+        });
         e_->start();
-        add_handler("create", &supervisor_lite::create);
-        add_handler("broadcast", &supervisor_lite::broadcast_impl);
     }
 
     void create() {
@@ -110,7 +115,7 @@ private:
     }
     auto local(actor_zeta::message_ptr msg) -> void {
         set_current_message(std::move(msg));
-        execute();
+        behavior_.execute(this,current_message_);
     }
 
     auto redirect_robin(actor_zeta::message_ptr msg) -> void {

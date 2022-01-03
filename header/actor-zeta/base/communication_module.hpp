@@ -28,11 +28,9 @@ namespace actor_zeta { namespace base {
 
         auto enqueue(message_ptr) -> void;
         void enqueue(message_ptr, scheduler::execution_unit*);
-        auto current_message() -> message*;
 
     protected:
         communication_module(std::string,int64_t);
-        virtual auto current_message_impl() -> message* = 0;
         virtual void enqueue_impl(message_ptr, scheduler::execution_unit*) = 0;
 
     private:

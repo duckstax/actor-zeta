@@ -27,7 +27,11 @@ public:
                  1,
                  100),
              thread_pool_deleter){
-        add_handler("alarm", &supervisor_lite::alarm);
+        behavior(
+            [this](actor_zeta::base::behavior_t& behavior) {
+                add_handler(behavior, "alarm", &supervisor_lite::alarm);
+            });
+
         e_->start();
     }
 
@@ -42,7 +46,7 @@ protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
-            execute();
+            behavior_.execute(this,*current_message_);
         }
     }
 

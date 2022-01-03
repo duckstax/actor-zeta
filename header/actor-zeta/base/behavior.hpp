@@ -14,7 +14,7 @@ namespace actor_zeta { namespace base {
 
     struct behavior_private final {
         using key_type = detail::string_view;
-        using value_type = detail::unique_function<void(communication_module*)>;
+        using value_type = action;
         using handler_storage_t = std::unordered_map<key_type, value_type>;
         handler_storage_t handlers_;
     };
@@ -30,21 +30,21 @@ namespace actor_zeta { namespace base {
         auto message_types() const -> std::set<std::string>;
 
         template<class T>
-        void execute(T* ptr, message& msg) {
-            auto it = handlers_->handlers_.find(msg.command());
+        void execute(T* ptr, message* msg) {
+            auto it = handlers_->handlers_.find(msg->command());
             if (it != handlers_->handlers_.end()) {
-                return it->second(ptr);
+                return it->second(msg);
             }
-            auto sender = msg.sender().type();
+            auto sender = msg->sender().type();
             auto reciever = ptr->type();
-            error_skip(sender, reciever, msg.command());
+            error_skip(sender, reciever, msg->command());
         }
 
     private:
         behavior_private_ptr handlers_;
     };
 
-    class behavior_t  {
+    class behavior_t final  {
     public:
         using value_type = behavior_private::value_type;
         using key_type = behavior_private::key_type;

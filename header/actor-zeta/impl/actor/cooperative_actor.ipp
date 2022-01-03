@@ -179,7 +179,7 @@ namespace actor_zeta { namespace base {
 
     void cooperative_actor::consume(message& x) {
         current_message_ = &x;
-        behavior_.execute(this,*current_message_);
+        behavior_.execute(this,current_message_);
     }
 
     bool cooperative_actor::consume_from_cache() {
