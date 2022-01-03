@@ -43,31 +43,33 @@ namespace actor_zeta { namespace base {
              int Args_size = type_traits::get_callable_trait<F>::number_of_arguments>
     struct transformer {
         auto operator()(F&& f) -> action {
-            return [f](communication_module* ctx) -> void {
-                using call_trait =
-                    type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
-                constexpr int args_size = call_trait::number_of_arguments;
-                apply_impl(f, ctx, type_traits::make_index_sequence<args_size>{});
-            };
+            action tmp([func = std::move(f)](communication_module* ctx) -> void {
+                apply_impl(func, ctx, type_traits::make_index_sequence<Args_size>{});
+            });
+            return tmp;
         }
     };
 
     template<typename F, class Args>
     struct transformer<F, Args, 0> final {
         auto operator()(F&& f) -> action {
-            return [f](communication_module*) -> void { f(); };
+            action tmp([func = std::move(f)](communication_module*) -> void {
+                func();
+            });
+            return tmp;
         }
     };
 
     template<typename F, class Args>
     struct transformer<F, Args, 1> final {
         auto operator()(F&& f) -> action {
-            return [f](communication_module* ctx) -> void {
+            action tmp([func = std::move(f)](communication_module* ctx) -> void {
                 using arg_type = type_traits::type_list_at_t<Args, 0>;
                 using clear_args_type = type_traits::decay_t<arg_type>;
                 auto& tmp = ctx->current_message()->body<clear_args_type>();
-                f(tmp);
-            };
+                func(tmp);
+            });
+            return tmp;
         }
     };
 
@@ -91,41 +93,46 @@ namespace actor_zeta { namespace base {
         int Args_size = type_traits::get_callable_trait<F>::number_of_arguments>
     struct transformer_for_class {
         auto operator()(F&& f, ClassPtr* ptr) -> action {
-            return [f, ptr](communication_module* ctx) -> void {
+            action tmp([func = std::move(f), ptr](communication_module* ctx) -> void {
                 using call_trait = type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
                 constexpr int args_size = call_trait::number_of_arguments;
-                apply_impl_for_class(f, ptr, ctx, type_traits::make_index_sequence<args_size>{});
-            };
+                apply_impl_for_class(func, ptr, ctx, type_traits::make_index_sequence<args_size>{});
+            });
+            return tmp;
         }
     };
 
     template<typename F, typename ClassPtr, class Args>
     struct transformer_for_class<F, ClassPtr, Args, 0> final {
         auto operator()(F&& f, ClassPtr* ptr) -> action {
-            return [f, ptr](communication_module*) -> void { (ptr->*f)(); };
+            action tmp([func = std::move(f), ptr](communication_module*) -> void {
+                (ptr->*func)();
+            });
+            return tmp;
         }
     };
 
     template<typename F, typename ClassPtr, class Args>
     struct transformer_for_class<F, ClassPtr, Args, 1> final {
         auto operator()(F&& f, ClassPtr* ptr) -> action {
-            return [f, ptr](communication_module* arg) -> void {
+            action tmp([func = std::move(f), ptr](communication_module* arg) -> void {
                 using arg_type_0 = type_traits::type_list_at_t<Args, 0>;
                 using decay_arg_type_0 = type_traits::decay_t<arg_type_0>;
                 auto& tmp = arg->current_message()->body<decay_arg_type_0>();
                 using original_arg_type_0 = forward_arg<Args, 0>;
-                (ptr->*f)(std::forward<original_arg_type_0>(static_cast<original_arg_type_0>(tmp)));
-            };
+                (ptr->*func)(std::forward<original_arg_type_0>(static_cast<original_arg_type_0>(tmp)));
+            });
+            return tmp;
         }
     };
 
     template<typename F>
-    auto make_helper_base(F&& f) -> action {
+    auto make_handler(F&& f)-> action {
         return transformer<F>{}(std::forward<F>(f));
     }
 
     template<typename F, typename ClassPtr>
-    auto make_helper_base(F&& f, ClassPtr* self) -> action {
+    auto make_handler(F&& f, ClassPtr* self) -> action {
         return transformer_for_class<F, ClassPtr>{}(std::forward<F>(f), self);
     }
 

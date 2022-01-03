@@ -52,7 +52,7 @@ namespace actor_zeta { namespace base {
         void behavior(const F&f){
             behavior_t tmp(this);
             f(tmp);
-            behavior_.assign(std::move(tmp.get()));
+            behavior_.assign(tmp);
         }
 
         template<

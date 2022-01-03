@@ -24,7 +24,7 @@ public:
     storage_t(dummy_supervisor* ptr)
         : actor_zeta::base::actor_schedule<storage_t>(ptr, "storage", 0) {
 
-        behavior([](actor_zeta::base::behavior_t&behavior){
+        behavior([this](actor_zeta::base::behavior_t&behavior){
             add_handler(behavior,"update", []() -> void {});
             add_handler(behavior,"find", []() -> void {});
             add_handler(behavior,"remove", []() -> void {});
@@ -42,7 +42,7 @@ public:
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr, "dummy_supervisor", 0)
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
         behavior([this](actor_zeta::base::behavior_t& behavior) {
-            add_handler(behavior,"create", &dummy_supervisor::create);
+            add_handler(behavior, "create", &dummy_supervisor::create);
         });
         scheduler()->start();
     }

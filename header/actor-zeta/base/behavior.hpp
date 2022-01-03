@@ -53,7 +53,6 @@ namespace actor_zeta { namespace base {
         behavior_t(Actor*ptr)
             : ptr_(ptr)
             , handlers_(new behavior_private){
-
         }
 
         auto get() -> behavior_private_ptr;
