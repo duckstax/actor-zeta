@@ -7,7 +7,7 @@
 #include <actor-zeta/base/actor_abstract.hpp>
 // clang-format on
 
-#include <actor-zeta/base/basic_actor.hpp>
+#include <actor-zeta/base/actor_schedule.hpp>
 #include <actor-zeta/base/supervisor.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/detail/any.hpp>
@@ -21,7 +21,6 @@ namespace actor_zeta {
     using base::actor;
     using base::actor_abstract;
     using base::address_t;
-    using base::basic_async_actor;
     using base::supervisor;
     using base::supervisor_abstract;
     using base::cooperative_supervisor;

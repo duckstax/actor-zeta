@@ -76,11 +76,11 @@ namespace actor_zeta { namespace base {
     /// class method
     // clang-format off
     template<class F, typename ClassPtr, std::size_t... I>
-    void apply_impl_for_class(F &&f, ClassPtr *ptr, communication_module &ctx, type_traits::index_sequence<I...>) {
+    void apply_impl_for_class(F &&f, ClassPtr *ptr, communication_module *ctx, type_traits::index_sequence<I...>) {
         using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
         using args_type_list = typename call_trait::args_types;
         using Tuple =  type_list_to_tuple_t<args_type_list>;
-        auto &args = ctx.current_message()->body<Tuple>();
+        auto &args = ctx->current_message()->body<Tuple>();
         //(ptr->*f)(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
         (ptr->*f)((std::get<I>(args))...);
     }
@@ -94,9 +94,7 @@ namespace actor_zeta { namespace base {
     struct transformer_for_class {
         auto operator()(F&& f, ClassPtr* ptr) -> action {
             action tmp([func = std::move(f), ptr](communication_module* ctx) -> void {
-                using call_trait = type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
-                constexpr int args_size = call_trait::number_of_arguments;
-                apply_impl_for_class(func, ptr, ctx, type_traits::make_index_sequence<args_size>{});
+                apply_impl_for_class(func, ptr, ctx, type_traits::make_index_sequence<Args_size>{});
             });
             return tmp;
         }

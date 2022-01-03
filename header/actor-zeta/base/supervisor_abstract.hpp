@@ -2,9 +2,9 @@
 
 #include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/clock/clock.hpp>
-#include <actor-zeta/clock/clock_thread_safe.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
+#include <actor-zeta/base/behavior.hpp>
 
 namespace actor_zeta { namespace base {
 
@@ -30,10 +30,10 @@ namespace actor_zeta { namespace base {
         auto current_message_impl() -> message* final;
 
         behavior_container behavior_;
+        message* current_message_;
 
     private:
         supervisor_abstract(supervisor_abstract*, std::string, int64_t);
-        message* current_message_;
         detail::pmr::memory_resource* memory_resource_;
     };
 

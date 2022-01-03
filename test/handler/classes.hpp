@@ -1,11 +1,14 @@
 #pragma once
 
-#include <actor-zeta/core.hpp>
-#include "test/tooltestsuites/scheduler_test.hpp"
 #include <iostream>
 #include <list>
 
-#define TRACE(msg) { std::cout << __FILE__ << ":" << __LINE__ << "::" << __func__ << " : " << msg << std::endl; }
+#include <actor-zeta.hpp>
+#include <actor-zeta/detail/memory_resource.hpp>
+#include "test/tooltestsuites/scheduler_test.hpp"
+
+#define TRACE(msg) \
+    { std::cout << __FILE__ << ":" << __LINE__ << "::" << __func__ << " : " << msg << std::endl; }
 
 class storage_t;
 class test_handlers;
@@ -21,28 +24,24 @@ public:
     static uint64_t enqueue_base_counter;
 
 public:
-    explicit dummy_supervisor(actor_zeta::detail::pmr::memory_resource* mr,uint64_t threads, uint64_t throughput)
-        : actor_zeta::cooperative_supervisor<dummy_supervisor>(mr,"dummy_supervisor",0)
+    dummy_supervisor(actor_zeta::detail::pmr::memory_resource* mr, uint64_t threads, uint64_t throughput)
+        : actor_zeta::cooperative_supervisor<dummy_supervisor>(mr, "dummy_supervisor", 0)
         , executor_(new actor_zeta::test::scheduler_test_t(threads, throughput)) {
+        behavior([this](actor_zeta::base::behavior_t& behavior) {
+            add_handler(behavior, "create_storage", &dummy_supervisor::create_storage);
+            add_handler(behavior, "create_test_handlers", &dummy_supervisor::create_test_handlers);
+        });
         scheduler()->start();
         constructor_counter++;
-
-        add_handler("create_storage",&dummy_supervisor::create_storage);
-        add_handler("create_test_handlers",&dummy_supervisor::create_test_handlers);
     }
 
-
-    auto scheduler_test() noexcept -> actor_zeta::test::scheduler_test_t*  {
+    auto scheduler_test() noexcept -> actor_zeta::test::scheduler_test_t* {
         return executor_.get();
     }
-
 
     void create_storage();
     void create_test_handlers();
     ~dummy_supervisor() override = default;
-
-    void start() {}
-    void stop() {}
 
     auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* override {
         TRACE("+++");
@@ -73,7 +72,7 @@ public:
         TRACE(msg->command());
         enqueue_base_counter++;
         set_current_message(std::move(msg));
-        supervisor_abstract::execute();
+        behavior_.execute(this,*current_message_);
     }
 
 private:
@@ -101,7 +100,7 @@ namespace storage_names {
     static constexpr auto create_table = "create_table";
 } // namespace storage_names
 
-class storage_t final : public actor_zeta::basic_async_actor {
+class storage_t final : public actor_zeta::base::actor_schedule<storage_t> {
 public:
     static uint64_t constructor_counter;
     static uint64_t destructor_counter;
@@ -113,27 +112,29 @@ public:
     static uint64_t create_table_counter;
 
 public:
-    explicit storage_t(dummy_supervisor* ptr)
-        : actor_zeta::basic_async_actor(ptr, storage_names::name,0) {
-        add_handler(
-            storage_names::init,
-            &storage_t::init);
+    storage_t(dummy_supervisor* ptr)
+        : actor_zeta::base::actor_schedule<storage_t>(ptr, storage_names::name, 0) {
+        behavior([this](actor_zeta::base::behavior_t& behavior) {
+            add_handler(
+                behavior, storage_names::init,
+                &storage_t::init);
 
-        add_handler(
-            storage_names::search,
-            &storage_t::search);
+            add_handler(behavior,
+                        storage_names::search,
+                        &storage_t::search);
 
-        add_handler(
-            storage_names::add,
-            &storage_t::add);
+            add_handler(behavior,
+                        storage_names::add,
+                        &storage_t::add);
 
-        add_handler(
-            storage_names::delete_table,
-            &storage_t::delete_table);
+            add_handler(behavior,
+                        storage_names::delete_table,
+                        &storage_t::delete_table);
 
-        add_handler(
-            storage_names::create_table,
-            &storage_t::create_table);
+            add_handler(behavior,
+                        storage_names::create_table,
+                        &storage_t::create_table);
+        });
 
         constructor_counter++;
     }
@@ -201,7 +202,7 @@ namespace test_handlers_names {
     static constexpr auto ptr_4 = "ptr_4";
 } // namespace test_handlers_names
 
-class test_handlers final : public actor_zeta::basic_async_actor {
+class test_handlers final : public actor_zeta::base::actor_schedule<test_handlers> {
 public:
     static uint64_t init_counter;
 
@@ -213,9 +214,11 @@ public:
 
 public:
     test_handlers(dummy_supervisor* ptr)
-        : actor_zeta::basic_async_actor(ptr, test_handlers_names::name,0) {
+        :  actor_zeta::base::actor_schedule<test_handlers>(ptr, test_handlers_names::name, 0) {
         init();
+        behavior([this](actor_zeta::base::behavior_t& behavior) {
         add_handler(
+                behavior,
             test_handlers_names::ptr_0,
             []() {
                 TRACE("+++");
@@ -223,18 +226,21 @@ public:
             });
 
         add_handler(
+            behavior,
             test_handlers_names::ptr_1,
             []() {
                 TRACE("+++");
                 ptr_1_counter++;
             });
         add_handler(
+            behavior,
             test_handlers_names::ptr_2,
             [](int& data) {
                 TRACE("+++");
                 ptr_2_counter++;
             });
         add_handler(
+            behavior,
             test_handlers_names::ptr_3,
             [](int data_1, int& data_2) {
                 TRACE("+++");
@@ -243,12 +249,14 @@ public:
             });
 
         add_handler(
+            behavior,
             test_handlers_names::ptr_4,
             [](int data_1, int& data_2, const std::string& data_3) {
                 TRACE("+++");
                 std::cerr << "ptr_4 : " << data_1 << " : " << data_2 << " : " << data_3 << std::endl;
                 ptr_4_counter++;
             });
+        });
     }
 
     ~test_handlers() override = default;
@@ -269,7 +277,7 @@ uint64_t test_handlers::ptr_3_counter = 0;
 uint64_t test_handlers::ptr_4_counter = 0;
 
 void dummy_supervisor::create_storage() {
-    spawn_actor<storage_t>([this](storage_t* ptr){
+    spawn_actor<storage_t>([this](storage_t* ptr) {
         TRACE("+++");
         actors_.emplace_back(ptr);
         add_actor_impl_counter++;
@@ -277,7 +285,7 @@ void dummy_supervisor::create_storage() {
 }
 
 void dummy_supervisor::create_test_handlers() {
-    spawn_actor<test_handlers>([this](test_handlers* ptr){
+    spawn_actor<test_handlers>([this](test_handlers* ptr) {
         TRACE("+++");
         actors_.emplace_back(ptr);
         add_actor_impl_counter++;

@@ -74,7 +74,7 @@ private:
     std::vector<actor_zeta::actor> actors_;
 };
 
-TEST_CASE("spawn-actor actor") {
+TEST_CASE("behavior simple") {
     auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr);
     actor_zeta::send(supervisor.get(), actor_zeta::address_t::empty_address(), "create");

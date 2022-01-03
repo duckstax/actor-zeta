@@ -9,6 +9,7 @@
 
 #include "forwards.hpp"
 #include <actor-zeta/detail/ref_counted.hpp>
+#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/scheduler/execution_unit.hpp>
 
 namespace actor_zeta { namespace base {

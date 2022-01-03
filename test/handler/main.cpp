@@ -2,8 +2,6 @@
 #include <catch2/catch.hpp>
 
 #include "classes.hpp"
-#include <actor-zeta.hpp>
-#include <actor-zeta/detail/memory_resource.hpp>
 
 TEST_CASE("handler") {
     auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
