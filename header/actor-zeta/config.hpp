@@ -101,4 +101,8 @@ namespace actor_zeta {
 #endif
 
 #define DEBUG NDEBUG
+
+#  define DEPRECATED __attribute__((deprecated))
+#  define DEPRECATED_MSG(msg) __attribute__((deprecated(msg)))
+
 } // namespace actor_zeta

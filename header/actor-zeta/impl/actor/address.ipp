@@ -8,8 +8,6 @@
 #include <actor-zeta/impl/handler.ipp>
 // clang-format on
 
-#include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/communication_module.hpp>
 #include <memory>
 
 namespace {

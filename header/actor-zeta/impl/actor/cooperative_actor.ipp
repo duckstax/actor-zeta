@@ -8,7 +8,7 @@
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
 #include <actor-zeta/scheduler/execution_unit.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
-#include <actor-zeta/base/cooperative_actor.hpp>
+#include <actor-zeta/base/actor_cooperative.hpp>
 // clang-format on
 
 namespace actor_zeta { namespace base {
@@ -19,7 +19,7 @@ namespace actor_zeta { namespace base {
         std::cerr << " WARNING " << std::endl;
     }
 
-    scheduler::resume_result cooperative_actor::resume(scheduler::execution_unit* e, size_t max_throughput) {
+    scheduler::resume_result actor_cooperative_t::resume(scheduler::execution_unit* e, size_t max_throughput) {
         if (!activate(e)) {
             return scheduler::resume_result::done;
         }
@@ -66,7 +66,7 @@ namespace actor_zeta { namespace base {
         return scheduler::resume_result::awaiting;
     }
 
-    void cooperative_actor::enqueue_impl(message_ptr msg, scheduler::execution_unit* e) {
+    void actor_cooperative_t::enqueue_impl(message_ptr msg, scheduler::execution_unit* e) {
         assert(msg);
         mailbox().enqueue(msg.release());
         if (flags() == static_cast<int>(state::empty)) {
@@ -101,19 +101,19 @@ namespace actor_zeta { namespace base {
              */
     }
 
-    void cooperative_actor::intrusive_ptr_add_ref_impl() {
+    void actor_cooperative_t::intrusive_ptr_add_ref_impl() {
         flags(static_cast<int>(state::busy));
         mailbox().try_block();
         ref();
     }
 
-    void cooperative_actor::intrusive_ptr_release_impl() {
+    void actor_cooperative_t::intrusive_ptr_release_impl() {
         flags(static_cast<int>(state::empty));
         mailbox().try_unblock();
         deref();
     }
 
-    cooperative_actor::cooperative_actor(
+    actor_cooperative_t::actor_cooperative_t(
         supervisor_abstract* supervisor,
         std::string type, int64_t id)
         : actor_abstract(std::move(type), id)
@@ -122,9 +122,9 @@ namespace actor_zeta { namespace base {
         mailbox().try_unblock();
     }
 
-    cooperative_actor::~cooperative_actor() {}
+    actor_cooperative_t::~actor_cooperative_t() {}
 
-    bool cooperative_actor::activate(scheduler::execution_unit* ctx) {
+    bool actor_cooperative_t::activate(scheduler::execution_unit* ctx) {
         assert(ctx != nullptr);
         if (ctx) {
             context(ctx);
@@ -132,11 +132,11 @@ namespace actor_zeta { namespace base {
         return true;
     }
 
-    auto cooperative_actor::reactivate(message& x) -> void {
+    auto actor_cooperative_t::reactivate(message& x) -> void {
         consume(x);
     }
 
-    message_ptr cooperative_actor::next_message() {
+    message_ptr actor_cooperative_t::next_message() {
         auto& cache = mailbox().cache();
         auto i = cache.begin();
         auto e = cache.separator();
@@ -157,13 +157,13 @@ namespace actor_zeta { namespace base {
         return result;
     }
 
-    bool cooperative_actor::has_next_message() {
+    bool actor_cooperative_t::has_next_message() {
         auto& mbox = mailbox();
         auto& cache = mbox.cache();
         return cache.begin() != cache.separator() || mbox.can_fetch_more();
     }
 
-    void cooperative_actor::push_to_cache(message_ptr ptr) {
+    void actor_cooperative_t::push_to_cache(message_ptr ptr) {
         assert(ptr != nullptr);
         if (!ptr->is_high_priority()) {
             mailbox().cache().insert(mailbox().cache().end(), ptr.release());
@@ -177,12 +177,12 @@ namespace actor_zeta { namespace base {
         cache.insert(std::partition_point(cache.continuation(), e, high_priority), ptr.release());
     }
 
-    void cooperative_actor::consume(message& x) {
+    void actor_cooperative_t::consume(message& x) {
         current_message_ = &x;
         behavior_.execute(this,current_message_);
     }
 
-    bool cooperative_actor::consume_from_cache() {
+    bool actor_cooperative_t::consume_from_cache() {
         auto& cache = mailbox().cache();
         auto i = cache.continuation();
         auto e = cache.end();
@@ -194,26 +194,26 @@ namespace actor_zeta { namespace base {
         return false;
     }
 
-    void cooperative_actor::cleanup() {}
+    void actor_cooperative_t::cleanup() {}
 
-    auto cooperative_actor::current_message_impl() -> message* {
+    auto actor_cooperative_t::current_message() -> message* {
         return current_message_;
     }
 
-    scheduler::execution_unit* cooperative_actor::context() const {
+    scheduler::execution_unit* actor_cooperative_t::context() const {
         return executor_;
     }
 
-    void cooperative_actor::context(scheduler::execution_unit* e) {
+    void actor_cooperative_t::context(scheduler::execution_unit* e) {
         if (e != nullptr) {
             executor_ = e;
         }
     }
 
-    auto cooperative_actor::supervisor() -> supervisor_abstract* {
+    auto actor_cooperative_t::supervisor() -> supervisor_abstract* {
         return supervisor_;
     }
-    auto cooperative_actor::clock() noexcept -> clock::clock_t& {
+    auto actor_cooperative_t::clock() noexcept -> clock::clock_t& {
         return supervisor()->clock();
     }
 

@@ -30,4 +30,8 @@ namespace actor_zeta { namespace base {
         ptr_.reset();
         return *this;
     }
+
+    actor_abstract* actor::operator->() const noexcept {
+        return static_cast<actor_abstract*>(ptr_.get());
+    }
 }} // namespace actor_zeta::base

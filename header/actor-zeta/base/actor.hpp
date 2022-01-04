@@ -2,8 +2,8 @@
 
 #include "forwards.hpp"
 #include <actor-zeta/detail/intrusive_ptr.hpp>
-#include <actor-zeta/detail/type_list.hpp>
 #include <actor-zeta/detail/string_view.hpp>
+#include <actor-zeta/detail/type_list.hpp>
 
 //smart actor
 namespace actor_zeta { namespace base {
@@ -13,34 +13,28 @@ namespace actor_zeta { namespace base {
     class actor final {
     public:
         actor() = default;
-
         actor(const actor& a) = delete;
-
         actor(actor&& a) = default;
-
         actor& operator=(const actor& a) = delete;
-
         actor& operator=(actor&& a) = default;
-
         actor(std::nullptr_t);
-
         actor& operator=(std::nullptr_t);
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<actor_abstract, T>::value>>
+            class = type_traits::enable_if_t<std::is_base_of<actor_cooperative_t, T>::value>>
         actor(intrusive_ptr<T> ptr)
             : ptr_(std::move(ptr)) {}
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<actor_abstract, T>::value>>
+            class = type_traits::enable_if_t<std::is_base_of<actor_cooperative_t, T>::value>>
         actor(T* ptr)
             : ptr_(ptr) {}
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<actor_abstract, T>::value>>
+            class = type_traits::enable_if_t<std::is_base_of<actor_cooperative_t, T>::value>>
         actor& operator=(intrusive_ptr<T> ptr) {
             actor tmp{std::move(ptr)};
             swap(tmp);
@@ -49,7 +43,7 @@ namespace actor_zeta { namespace base {
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<actor_abstract, T>::value>>
+            class = type_traits::enable_if_t<std::is_base_of<actor_cooperative_t, T>::value>>
         actor& operator=(T* ptr) {
             actor tmp{ptr};
             swap(tmp);
@@ -60,9 +54,7 @@ namespace actor_zeta { namespace base {
 
         ~actor();
 
-        inline actor_abstract* operator->() const noexcept {
-            return ptr_.get();
-        }
+        actor_abstract* operator->() const noexcept;
 
         inline explicit operator bool() const noexcept {
             return static_cast<bool>(ptr_);
@@ -76,8 +68,7 @@ namespace actor_zeta { namespace base {
 
     private:
         void swap(actor&) noexcept;
-
-        intrusive_ptr<actor_abstract> ptr_;
+        intrusive_ptr<actor_cooperative_t> ptr_;
     };
 
     static_assert(std::is_move_constructible<actor>::value, "");

@@ -5,12 +5,7 @@
 #include <iostream>
 #include <set>
 #include <unordered_map>
-/*
-#include <actor-zeta/base/actor_abstract.hpp>
-#include <actor-zeta/base/communication_module.hpp>
-#include <actor-zeta/base/handler.hpp>
-#include <actor-zeta/base/message.hpp>
-*/
+
 namespace actor_zeta { namespace base {
 
     void error_duplicate_handler(detail::string_view error) {
@@ -42,6 +37,26 @@ namespace actor_zeta { namespace base {
             types.emplace(std::string(i.first.begin(), i.first.end()));
         }
         return types;
+    }
+
+    bool behavior_container::on(behavior_t::key_type name, behavior_t::value_type handler) {
+        auto it = handlers_->handlers_.find(name);
+        bool status = false;
+        if (it == handlers_->handlers_.end()) {
+            auto it1 = handlers_->handlers_.emplace(name, std::move(handler));
+            status = it1.second;
+            if (status == false) {
+                error_add_handler(name);
+            }
+        } else {
+            error_duplicate_handler(name);
+        }
+
+        return status;
+    }
+
+    behavior_container::behavior_container():handlers_(new behavior_private) {
+
     }
 
     auto behavior_t::get() -> behavior_private_ptr {

@@ -43,7 +43,7 @@ namespace actor_zeta { namespace base {
              int Args_size = type_traits::get_callable_trait<F>::number_of_arguments>
     struct transformer {
         auto operator()(F&& f) -> action {
-            action tmp([func = std::move(f)](communication_module* ctx) -> void {
+            action tmp([func = std::move(f)](message* ctx) -> void {
                 apply_impl(func, ctx, type_traits::make_index_sequence<Args_size>{});
             });
             return tmp;
@@ -53,7 +53,7 @@ namespace actor_zeta { namespace base {
     template<typename F, class Args>
     struct transformer<F, Args, 0> final {
         auto operator()(F&& f) -> action {
-            action tmp([func = std::move(f)](communication_module*) -> void {
+            action tmp([func = std::move(f)](message*) -> void {
                 func();
             });
             return tmp;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <actor-zeta/detail/string_view.hpp>
 #include "forwards.hpp"
+#include <actor-zeta/detail/string_view.hpp>
 
 namespace actor_zeta { namespace base {
     ///
@@ -29,7 +29,7 @@ namespace actor_zeta { namespace base {
 
     private:
         address_t() noexcept;
-        communication_module* ptr_;
+        actor_abstract* ptr_;
     };
 
     static_assert(!std::is_default_constructible<address_t>::value, "");

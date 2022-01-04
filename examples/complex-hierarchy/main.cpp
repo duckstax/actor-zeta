@@ -26,17 +26,19 @@ std::atomic_int count_dispatcher{0};
 
 const int max_queue = 100;
 
-class dispatcher_t final : public actor_zeta::basic_async_actor {
+class dispatcher_t final : public actor_zeta::actor_schedule<dispatcher_t> {
 public:
     dispatcher_t(manager_dispatcher_t* ptr, std::string name,int64_t id,actor_zeta::address_t manager_database )
-        : actor_zeta::basic_async_actor(ptr, std::move(name), id)
+        : actor_zeta::actor_schedule<dispatcher_t>(ptr, std::move(name), id)
         , manager_database_(manager_database) {
-        count_actor++;
+
         add_handler("create_database", &dispatcher_t::create_database);
         add_handler("create_collection", &dispatcher_t::create_collection);
         add_handler("insert", &dispatcher_t::insert);
         add_handler("add_link",&dispatcher_t::add_link);
         add_handler("add_address",&dispatcher_t::add_address);
+
+        count_actor++;
     }
     void insert(std::string& name, int key, int value) {
         auto collection_name = std::move(name);
@@ -78,10 +80,10 @@ private:
     }
 };
 
-class collection_t final : public actor_zeta::basic_async_actor {
+class collection_t final : public actor_zeta::actor_schedule<collection_t> {
 public:
     collection_t(database_t* ptr, std::string& name,int64_t id)
-        : actor_zeta::basic_async_actor(ptr, std::move(name), id) {
+        : actor_zeta::actor_schedule<collection_t>(ptr, std::move(name), id) {
         count_actor++;
         add_handler("insert", [this](int key, int value) {
             std::cerr << "collection_t::insert : key : " << key << " value : " << value << std::endl;
@@ -123,7 +125,7 @@ protected:
 
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         set_current_message(std::move(msg));
-        execute(this,*current_message());
+        behavior_.execute(this,current_message());
     }
 
 private:
@@ -177,7 +179,7 @@ protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
-            execute(this,*current_message());
+            behavior_.execute(this,current_message());
         }
     }
 
@@ -254,7 +256,7 @@ protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
-            execute(this,*current_message());
+            behavior_.execute(this,current_message());
         }
     }
 

@@ -1,7 +1,10 @@
 #pragma once
 
 #include "forwards.hpp"
+
+#include "actor-zeta/detail/ref_counted.hpp"
 #include <actor-zeta/detail/single_reader_queue.hpp>
+
 #include <actor-zeta/scheduler/resumable.hpp>
 #include <actor-zeta/clock/clock.hpp>
 #include <actor-zeta/base/behavior.hpp>
@@ -12,33 +15,29 @@ namespace actor_zeta { namespace base {
     /// @brief Specialization of actor with scheduling functionality
     ///
 
-    class cooperative_actor
+    class actor_cooperative_t
         : public actor_abstract
+        , public ref_counted
         , public scheduler::resumable {
     public:
         using mailbox_t = detail::single_reader_queue<message>;
 
         scheduler::resume_result resume(scheduler::execution_unit*, max_throughput_t) final;
-        ~cooperative_actor() override;
+        ~actor_cooperative_t() override;
 
         void intrusive_ptr_add_ref_impl() override;
         void intrusive_ptr_release_impl() override;
 
     protected:
-        template<class Supervisor>
-        cooperative_actor(Supervisor* ptr, std::string type, int64_t actor_id)
-            : cooperative_actor(static_cast<supervisor_abstract*>(ptr), std::move(type), actor_id){};
-
+        actor_cooperative_t(supervisor_abstract*, std::string, int64_t);
         void enqueue_impl(message_ptr, scheduler::execution_unit*) final;
 
         // Non thread-safe method
-        auto current_message_impl() -> message*;
+        auto current_message() -> message*;
 
         behavior_container behavior_;
 
     private:
-        cooperative_actor(supervisor_abstract*, std::string, int64_t);
-
         enum class state : int {
             empty = 0x01,
             busy
@@ -82,12 +81,12 @@ namespace actor_zeta { namespace base {
     };
 
     template<class T>
-    auto intrusive_ptr_add_ref(T* ptr) -> typename std::enable_if<std::is_same<T*, cooperative_actor*>::value>::type {
+    auto intrusive_ptr_add_ref(T* ptr) -> typename std::enable_if<std::is_same<T*, actor_cooperative_t*>::value>::type {
         ptr->intrusive_ptr_add_ref_impl();
     }
 
     template<class T>
-    auto intrusive_ptr_release(T* ptr) -> typename std::enable_if<std::is_same<T*, cooperative_actor*>::value>::type {
+    auto intrusive_ptr_release(T* ptr) -> typename std::enable_if<std::is_same<T*, actor_cooperative_t*>::value>::type {
         ptr->intrusive_ptr_release_impl();
     }
 

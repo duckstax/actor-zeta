@@ -11,6 +11,5 @@ namespace actor_zeta { namespace base {
     class handler;
     class supervisor_abstract;
     class supervisor;
-    class communication_module;
-    class cooperative_actor;
+    class actor_cooperative_t;
 }} // namespace actor_zeta::base

@@ -25,7 +25,12 @@ namespace actor_zeta { namespace base {
 
     class behavior_container final {
     public:
-        behavior_container() = default;
+        using value_type = behavior_private::value_type;
+        using key_type = behavior_private::key_type;
+
+        /// ----- deprecated
+        behavior_container();
+        /// ----- deprecated
         auto assign(behavior_t& behavior) -> void;
         auto message_types() const -> std::set<std::string>;
 
@@ -39,7 +44,9 @@ namespace actor_zeta { namespace base {
             auto reciever = ptr->type();
             error_skip(sender, reciever, msg->command());
         }
-
+        /// ----- deprecated
+        bool on(key_type name, value_type handler);
+        /// ----- deprecated
     private:
         behavior_private_ptr handlers_;
     };

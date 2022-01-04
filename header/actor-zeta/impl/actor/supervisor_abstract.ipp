@@ -18,18 +18,18 @@
 namespace actor_zeta { namespace base {
 
     supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* mr, std::string name, int64_t id)
-        : communication_module(std::move(name), id)
+        : actor_abstract(std::move(name), id)
         , memory_resource_(mr) {
     }
 
     supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string name, int64_t id)
-        : communication_module(std::move(name), id)
+        : actor_abstract(std::move(name), id)
         , memory_resource_(ptr->resource()) {
     }
 
     supervisor_abstract::~supervisor_abstract() {}
 
-    auto supervisor_abstract::current_message_impl() -> message* {
+    auto supervisor_abstract::current_message() -> message* {
         return current_message_;
     }
 
@@ -43,10 +43,6 @@ namespace actor_zeta { namespace base {
 
     auto supervisor_abstract::scheduler() noexcept -> scheduler::scheduler_abstract_t* {
         return scheduler_impl();
-    }
-
-    auto supervisor_abstract::address() noexcept -> address_t {
-        return address_t(this);
     }
 
     auto supervisor_abstract::clock() noexcept -> clock::clock_t& {
