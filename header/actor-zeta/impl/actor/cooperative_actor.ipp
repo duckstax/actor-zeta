@@ -69,6 +69,7 @@ namespace actor_zeta { namespace base {
     void actor_cooperative_t::enqueue_impl(message_ptr msg, scheduler::execution_unit* e) {
         assert(msg);
         mailbox().enqueue(msg.release());
+
         if (flags() == static_cast<int>(state::empty)) {
             intrusive_ptr_add_ref(this);
             if (e != nullptr) {

@@ -75,7 +75,7 @@ namespace actor_zeta { namespace base {
             class Actor,
             class Inserter,
             class... Args,
-            class = type_traits::enable_if_t<std::is_base_of<actor_abstract, Actor>::value>>
+            class = type_traits::enable_if_t<std::is_base_of<actor_cooperative_t, Actor>::value>>
         auto spawn_actor(const Inserter& inserter, Args&&... args) -> address_t {
             auto allocate_byte = sizeof(Actor);
             auto allocate_byte_alignof = alignof(Actor);

@@ -69,8 +69,7 @@ public:
     void create() {
         spawn_actor<worker_t>([this](worker_t* ptr) {
             actors_.emplace_back(ptr);
-        },
-                              create_counter_worker.fetch_add(1));
+        },create_counter_worker.fetch_add(1));
     }
 
     ~supervisor_lite() override = default;

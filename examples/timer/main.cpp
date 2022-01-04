@@ -4,7 +4,6 @@
 #include <iostream>
 #include <memory>
 #include <thread>
-#include <unordered_set>
 #include <vector>
 
 #include <actor-zeta.hpp>
@@ -26,11 +25,8 @@ public:
         , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
                  1,
                  100),
-             thread_pool_deleter){
-        behavior(
-            [this](actor_zeta::base::behavior_t& behavior) {
-                add_handler(behavior, "alarm", &supervisor_lite::alarm);
-            });
+             thread_pool_deleter) {
+        add_handler("alarm", &supervisor_lite::alarm);
 
         e_->start();
     }
@@ -46,12 +42,11 @@ protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
-            behavior_.execute(this,*current_message_);
+            behavior_.execute(this, current_message());
         }
     }
 
 private:
-
     std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor> actors_;
 };
@@ -60,7 +55,7 @@ int main() {
     auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<supervisor_lite>(mr_ptr);
 
-    supervisor->clock().schedule_message(supervisor->clock().now()+std::chrono::seconds(60),supervisor->address(),actor_zeta::make_message(actor_zeta::address_t::empty_address(),"alarm"));
+    supervisor->clock().schedule_message(supervisor->clock().now() + std::chrono::seconds(60), supervisor->address(), actor_zeta::make_message(actor_zeta::address_t::empty_address(), "alarm"));
 
     std::this_thread::sleep_for(std::chrono::seconds(180));
 

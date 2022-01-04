@@ -30,7 +30,7 @@ namespace actor_zeta { namespace base {
             class T,
             class = type_traits::enable_if_t<std::is_base_of<actor_cooperative_t, T>::value>>
         actor(T* ptr)
-            : ptr_(ptr) {}
+            : ptr_(ptr,false) {}
 
         template<
             class T,
