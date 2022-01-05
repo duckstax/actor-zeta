@@ -4,6 +4,7 @@
 // clang-format on
 
 #include <limits>
+#include <actor-zeta/scheduler/execution_unit.hpp>
 
 namespace actor_zeta { namespace test {
 

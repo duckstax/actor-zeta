@@ -75,7 +75,7 @@ namespace actor_zeta { namespace base {
                 context(e);
                 context()->execute_later(this);
             } else {
-                supervisor()->executor()->enqueue(this);
+                supervisor()->scheduler()->enqueue(this);
             }
         }
 

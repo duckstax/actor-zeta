@@ -11,8 +11,6 @@
 #include "actor-zeta/scheduler/resumable.hpp"
 #include "actor-zeta/scheduler/scheduler_abstract.hpp"
 
-#include "clock_test.hpp"
-
 namespace actor_zeta { namespace test {
 
     class scheduler_test_t final : public scheduler::scheduler_abstract_t {

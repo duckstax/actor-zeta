@@ -1,5 +1,4 @@
 include_directories(.)
 include_directories(../header/)
-add_subdirectory(add_method)
 add_subdirectory(smart-send)
 add_subdirectory(complex-hierarchy)
