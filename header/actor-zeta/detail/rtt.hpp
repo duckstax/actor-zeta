@@ -298,12 +298,22 @@ namespace actor_zeta { namespace detail {
 
         template<typename T>
         void accommodate(T&& object, char* creation_place) {
-            using raw_type = type_traits::decay_t<T>;
-            new (creation_place) raw_type(std::forward<T>(object));
+            assert(creation_place && "rtt accommodate creation_place");
+#ifndef __EXCEPTIONS_DISABLE__
+            try {
+#endif
+                using raw_type = type_traits::decay_t<T>;
+                new (creation_place) raw_type(std::forward<T>(object));
 
-            const auto new_offset = static_cast<std::size_t>(creation_place - data());
-            m_objects.push_back(management::make_object_info<raw_type>(new_offset));
-            m_volume = new_offset + sizeof(raw_type);
+                const auto new_offset = static_cast<std::size_t>(creation_place - data());
+                m_objects.push_back(management::make_object_info<raw_type>(new_offset));
+                m_volume = new_offset + sizeof(raw_type);
+#ifndef __EXCEPTIONS_DISABLE__
+            } catch (...) {
+                clear();
+                throw;
+            }
+#endif
         }
 
         void destroy_all() {
