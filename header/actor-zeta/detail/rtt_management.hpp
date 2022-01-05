@@ -5,29 +5,37 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <new>
 #include <stdexcept>
 #include <type_traits>
 #include <utility>
 
 #include "type_traits.hpp"
 
-namespace actor_zeta { namespace detail {
+namespace actor_zeta {
+namespace detail {
 
 namespace management {
     template<typename T>
     auto copy(const void* source, void* destination)
         -> type_traits::enable_if_t<
             std::is_copy_constructible<T>::value> {
-        new (destination) T(*static_cast<const T*>(source));
+        assert(destination && "rtt management copy");
+        new (destination) // Construct a `T` object, placing it directly into your
+                          // pre-allocated storage at memory address `destination`.
+            T(*static_cast<const T*>(source));
     }
 
     template<typename T>
-    void move(void* source, void* destination) {
-        new (destination) T(std::move(*static_cast<T*>(source)));
+    void move(const void* source, void* destination) {
+        assert(destination && "rtt management move");
+        new (destination) // Construct a `T` object, placing it directly into your
+                          // pre-allocated storage at memory address `destination`.
+            T(std::move(*static_cast<const T*>(source)));
     }
 
     template<typename T>
-    void destroy(void* object) {
+    void destroy(void* object) noexcept {
         static_cast<T*>(object)->~T();
     }
 
@@ -48,7 +56,7 @@ namespace management {
                 break;
             }
             case operation_t::move: {
-                move<T>(const_cast<void*>(source), destination);
+                move<T>(source, destination);
                 break;
             }
             case operation_t::destroy: {
@@ -70,20 +78,23 @@ namespace management {
     };
 
     template<typename T>
-    object_info_t make_object_info(std::size_t offset) {
+    object_info_t make_object_info(std::size_t offset) noexcept {
         return object_info_t{offset, &manage<T>};
     }
 
-    inline void destroy(const object_info_t& object, std::int8_t* data) {
+    inline void destroy(const object_info_t& object, char* data) {
         object.manage(operation_t::destroy, nullptr, data + object.offset);
     }
 
     template<typename InputIterator>
-    void destroy(InputIterator first, InputIterator last, std::int8_t* data) {
-        std::for_each(first, last,
+    void destroy(InputIterator first, InputIterator last, char* data) {
+        for (auto current = first; current != last; ++current) {
+            destroy(*current, data);
+        }
+        /*std::for_each(first, last,
                       [data](const auto& object) {
                           destroy(object, data);
-                      });
+                      });*/
     }
 
     template<typename ForwardIterator>
@@ -91,15 +102,19 @@ namespace management {
     move(
         ForwardIterator first,
         ForwardIterator last,
-        std::int8_t* source,
-        std::int8_t* destination) {
+        char* source,
+        char* destination) {
         for (auto current = first; current != last; ++current) {
+#ifndef __EXCEPTIONS_DISABLE__
             try {
+#endif
                 current->manage(operation_t::move, source + current->offset, destination + current->offset);
+#ifndef __EXCEPTIONS_DISABLE__
             } catch (...) {
                 destroy(first, current, destination);
                 throw;
             }
+#endif
         }
         destroy(first, last, source);
     }
@@ -109,15 +124,19 @@ namespace management {
     copy(
         ForwardIterator first,
         ForwardIterator last,
-        const std::int8_t* source,
-        std::int8_t* destination) {
+        const char* source,
+        char* destination) {
         for (auto current = first; current != last; ++current) {
+#ifndef __EXCEPTIONS_DISABLE__
             try {
+#endif
                 current->manage(operation_t::copy, source + current->offset, destination + current->offset);
+#ifndef __EXCEPTIONS_DISABLE__
             } catch (...) {
                 destroy(first, current, destination);
                 throw;
             }
+#endif
         }
     }
 

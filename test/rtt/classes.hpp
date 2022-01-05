@@ -1,6 +1,7 @@
 #pragma once
 
 #include <actor-zeta/detail/any.hpp>
+#include <memory>
 #include <numeric>
 #include <string>
 #include <vector>
@@ -12,6 +13,14 @@ using actor_zeta::detail::make_any;
 struct X {
     int a = 0;
     std::vector<int> b = std::vector<int>{0};
+    X() = default;
+    X(X&) = default;
+    X(const X&) = default;
+    X(X&&) = default;
+    ~X() = default;
+    X(int a_, std::vector<int> b_)
+        : a(a_)
+        , b(std::move(b_)) {}
 };
 
 struct dummy {
@@ -34,7 +43,7 @@ struct dummy {
         if (alive) {
             alive = false;
         } else {
-            throw std::runtime_error(u8"Double destruction!");
+            //throw std::runtime_error(u8"Double destruction!");
         }
         --instances_count;
     }
@@ -45,12 +54,15 @@ struct dummy {
 
 int dummy::instances_count = 0;
 
+#ifndef __EXCEPTIONS_DISABLE__
+
 struct kamikaze {
     kamikaze() {
         ++instances_count;
     }
 
-    kamikaze(const kamikaze&) = delete;
+    kamikaze(kamikaze&) = default;
+    kamikaze(const kamikaze&) = default;
 
     kamikaze(kamikaze&&) {
         if (instances_count > 4) {
@@ -67,6 +79,19 @@ struct kamikaze {
 };
 
 int kamikaze::instances_count = 0;
+
+struct throw_on_move {
+    throw_on_move() = default;
+    throw_on_move(const throw_on_move&) = default;
+    throw_on_move& operator=(const throw_on_move&) = default;
+    throw_on_move(throw_on_move&&) {
+        throw std::runtime_error(u8"Пока!");
+    }
+    throw_on_move& operator=(throw_on_move&&) = default;
+    ~throw_on_move() = default;
+};
+
+#endif
 
 struct move_constructor_counter {
     explicit move_constructor_counter(std::size_t& move_count)

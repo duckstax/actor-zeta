@@ -28,6 +28,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         message("Disable C++ exceptions.")
         string(REGEX REPLACE "/EH[a-z]+" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+        add_compile_definitions(__EXCEPTIONS_DISABLE__)
     endif ()
 
     if (RTTI_DISABLE)
@@ -41,6 +42,7 @@ else (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     if (EXCEPTIONS_DISABLE)
         message("Disable C++ exceptions.")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
+        add_compile_definitions(__EXCEPTIONS_DISABLE__)
     endif ()
 
     if (RTTI_DISABLE)
@@ -164,6 +166,7 @@ if (ALLOW_TESTS)
     # conan
     #############################################################################################
     enable_testing()
+    add_compile_definitions(__TESTS_ENABLED__)
     add_subdirectory(test)
 endif()
 
