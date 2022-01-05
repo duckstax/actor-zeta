@@ -13,13 +13,13 @@ namespace actor_zeta { namespace base {
         supervisor_abstract(Supervisor*supervisor, std::string type, int64_t actor_id)
             : supervisor_abstract(static_cast<supervisor_abstract*>(supervisor),std::move(type),actor_id){}
         ~supervisor_abstract() override;
-        auto executor() noexcept -> executor::abstract_executor*;
+        auto executor() noexcept -> scheduler::scheduler_abstract_t*;
         auto resource() const -> detail::pmr::memory_resource*;
         auto address() noexcept -> address_t;
 
     protected:
         using communication_module::add_handler;
-        virtual auto executor_impl() noexcept -> executor::abstract_executor* = 0;
+        virtual auto executor_impl() noexcept -> scheduler::scheduler_abstract_t* = 0;
         auto set_current_message(message_ptr) -> void;
         auto current_message_impl() -> message* final;
 

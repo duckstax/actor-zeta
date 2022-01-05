@@ -3,6 +3,8 @@
 include_directories(.)
 include_directories(../header/)
 
+add_subdirectory(tooltestsuites)
+
 add_subdirectory(any)
 add_subdirectory(handler)
 add_subdirectory(intrusive_ptr)

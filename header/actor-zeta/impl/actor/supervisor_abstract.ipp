@@ -53,7 +53,7 @@ namespace actor_zeta { namespace base {
         return memory_resource_;
     }
 
-    auto supervisor_abstract::executor() noexcept -> executor::abstract_executor* {
+    auto supervisor_abstract::executor() noexcept -> scheduler::scheduler_abstract_t* {
         return executor_impl();
     }
 
