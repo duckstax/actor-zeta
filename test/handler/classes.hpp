@@ -4,8 +4,8 @@
 #include <list>
 
 #include <actor-zeta.hpp>
-#include <actor-zeta/detail/memory_resource.hpp>
 #include "test/tooltestsuites/scheduler_test.hpp"
+#include <actor-zeta/detail/memory_resource.hpp>
 
 #define TRACE(msg) \
     { std::cout << __FILE__ << ":" << __LINE__ << "::" << __func__ << " : " << msg << std::endl; }
@@ -27,10 +27,8 @@ public:
     dummy_supervisor(actor_zeta::detail::pmr::memory_resource* mr, uint64_t threads, uint64_t throughput)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(mr, "dummy_supervisor", 0)
         , executor_(new actor_zeta::test::scheduler_test_t(threads, throughput)) {
-        behavior([this](actor_zeta::base::behavior_t& behavior) {
-            add_handler(behavior, "create_storage", &dummy_supervisor::create_storage);
-            add_handler(behavior, "create_test_handlers", &dummy_supervisor::create_test_handlers);
-        });
+        add_handler("create_storage", &dummy_supervisor::create_storage);
+        add_handler("create_test_handlers", &dummy_supervisor::create_test_handlers);
         scheduler()->start();
         constructor_counter++;
     }
@@ -72,7 +70,7 @@ public:
         TRACE(msg->command());
         enqueue_base_counter++;
         set_current_message(std::move(msg));
-        behavior_.execute(this,*current_message_);
+        behavior_.execute(this, current_message());
     }
 
 private:
@@ -113,28 +111,12 @@ public:
 
 public:
     storage_t(dummy_supervisor* ptr)
-        : actor_zeta::base::actor_schedule<storage_t>(ptr, storage_names::name, 0) {
-        behavior([this](actor_zeta::base::behavior_t& behavior) {
-            add_handler(
-                behavior, storage_names::init,
-                &storage_t::init);
-
-            add_handler(behavior,
-                        storage_names::search,
-                        &storage_t::search);
-
-            add_handler(behavior,
-                        storage_names::add,
-                        &storage_t::add);
-
-            add_handler(behavior,
-                        storage_names::delete_table,
-                        &storage_t::delete_table);
-
-            add_handler(behavior,
-                        storage_names::create_table,
-                        &storage_t::create_table);
-        });
+        : actor_zeta::actor_schedule<storage_t>(ptr, storage_names::name, 0) {
+        add_handler(storage_names::init, &storage_t::init);
+        add_handler(storage_names::search, &storage_t::search);
+        add_handler(storage_names::add, &storage_t::add);
+        add_handler(storage_names::delete_table, &storage_t::delete_table);
+        add_handler(storage_names::create_table, &storage_t::create_table);
 
         constructor_counter++;
     }
@@ -214,11 +196,11 @@ public:
 
 public:
     test_handlers(dummy_supervisor* ptr)
-        :  actor_zeta::base::actor_schedule<test_handlers>(ptr, test_handlers_names::name, 0) {
+        : actor_zeta::actor_schedule<test_handlers>(ptr, test_handlers_names::name, 0) {
         init();
-        behavior([this](actor_zeta::base::behavior_t& behavior) {
+
         add_handler(
-                behavior,
+
             test_handlers_names::ptr_0,
             []() {
                 TRACE("+++");
@@ -226,21 +208,19 @@ public:
             });
 
         add_handler(
-            behavior,
+
             test_handlers_names::ptr_1,
             []() {
                 TRACE("+++");
                 ptr_1_counter++;
             });
         add_handler(
-            behavior,
             test_handlers_names::ptr_2,
             [](int& data) {
                 TRACE("+++");
                 ptr_2_counter++;
             });
         add_handler(
-            behavior,
             test_handlers_names::ptr_3,
             [](int data_1, int& data_2) {
                 TRACE("+++");
@@ -249,14 +229,12 @@ public:
             });
 
         add_handler(
-            behavior,
             test_handlers_names::ptr_4,
             [](int data_1, int& data_2, const std::string& data_3) {
                 TRACE("+++");
                 std::cerr << "ptr_4 : " << data_1 << " : " << data_2 << " : " << data_3 << std::endl;
                 ptr_4_counter++;
             });
-        });
     }
 
     ~test_handlers() override = default;
