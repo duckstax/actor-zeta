@@ -17,6 +17,7 @@
 
 #include <actor-zeta/impl/detail/pmr/memory_resource.ipp>
 #include <actor-zeta/impl/detail/aligned_allocate.ipp>
+#include <actor-zeta/impl/detail/launch_thread.ipp>
 #include <actor-zeta/impl/detail/ref_counted.ipp>
 #include <actor-zeta/impl/detail/string_view.ipp>
 

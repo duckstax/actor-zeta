@@ -26,29 +26,6 @@ std::atomic_int count_dispatcher{0};
 
 const int max_queue = 100;
 
-#define TRACE(msg) { std::cerr << __FILE__ << ":" << __LINE__ << "::" << __func__ << " : " << msg << std::endl; }
-
-class dummy_executor final : public actor_zeta::abstract_executor {
-public:
-    dummy_executor(uint64_t threads, uint64_t throughput)
-        : abstract_executor(threads, throughput) {}
-
-    void execute(actor_zeta::executable* ptr) override {
-        TRACE("execute(actor_zeta::executable* ptr) +++");
-        ptr->run(nullptr, max_throughput());
-        intrusive_ptr_release(ptr);
-        TRACE("execute(actor_zeta::executable* ptr) ---");
-    }
-
-    void start() override {}
-    void stop() override {}
-};
-
-auto thread_pool_deleter = [](dummy_executor* ptr) -> void {
-    ptr->stop();
-    delete ptr;
-};
-
 class dispatcher_t final : public actor_zeta::basic_async_actor {
 public:
     dispatcher_t(manager_dispatcher_t* ptr, std::string name,int64_t id,actor_zeta::address_t manager_database )
@@ -140,17 +117,17 @@ public:
     }
 
 protected:
-    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
+    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final {
         return e_;
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         set_current_message(std::move(msg));
         execute();
     }
 
 private:
-    actor_zeta::abstract_executor* e_;
+    actor_zeta::scheduler_abstract_t* e_;
     std::vector<actor_zeta::actor> actors_;
     std::unordered_map<actor_zeta::detail::string_view,actor_zeta::address_t> address_book_;
     void add_link() {
@@ -162,14 +139,22 @@ private:
     }
 };
 
+auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
+    ptr->stop();
+    delete ptr;
+};
+
 class manager_database_t final : public actor_zeta::cooperative_supervisor<manager_database_t> {
 public:
     manager_database_t(memory_resource* mr)
         : cooperative_supervisor(mr, "mdb", 0)
-        , e_(new dummy_executor(1, max_queue)) {
-        e_->start();
+        , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
+                 1,
+                 100),
+             thread_pool_deleter){
         add_handler("create", &manager_database_t::create);
         add_handler("add_link",&manager_database_t::add_link);
+        e_->start();
         count_supervisor++;
     }
 
@@ -185,11 +170,11 @@ public:
     }
 
 protected:
-    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
+    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final {
         return e_.get();
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
             execute();
@@ -197,7 +182,7 @@ protected:
     }
 
 private:
-    std::unique_ptr<actor_zeta::abstract_executor> e_;
+    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::supervisor> supervisor_;
     std::unordered_map<actor_zeta::detail::string_view,actor_zeta::address_t> address_book_;
     void add_link() {
@@ -211,7 +196,7 @@ private:
 
 database_t::database_t(manager_database_t* ptr, std::string name, int64_t id)
     : cooperative_supervisor(ptr, std::move(name), id)
-    , e_(ptr->executor()) {
+    , e_(ptr->scheduler()) {
     add_handler("create", &database_t::create);
     add_handler("add_link",&database_t::add_link);
     count_supervisor++;
@@ -221,13 +206,16 @@ class manager_dispatcher_t final : public actor_zeta::cooperative_supervisor<man
 public:
     manager_dispatcher_t(memory_resource* mr)
         : cooperative_supervisor(mr, "mdispatcher", 0)
-        , e_(new dummy_executor(1, max_queue)) {
-        e_->start();
+        , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
+                 1,
+                 100),
+             thread_pool_deleter){
         add_handler("create", &manager_dispatcher_t::create);
         add_handler("add_link",&manager_dispatcher_t::add_link);
         add_handler("create_database", &manager_dispatcher_t::create_database);
         add_handler("create_collection", &manager_dispatcher_t::create_collection);
         add_handler("insert", &manager_dispatcher_t::insert);
+        e_->start();
         count_supervisor++;
     }
     void insert( std::string& database,std::string& name, int key, int value) {
@@ -259,11 +247,11 @@ public:
     }
 
 protected:
-    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final {
+    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final {
         return e_.get();
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
             execute();
@@ -271,7 +259,7 @@ protected:
     }
 
 private:
-    std::unique_ptr<actor_zeta::abstract_executor> e_;
+    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor> actors_;
     std::unordered_map<actor_zeta::detail::string_view,actor_zeta::address_t> address_book_;
     std::vector<actor_zeta::address_t> dispathers_;
@@ -286,6 +274,7 @@ private:
 };
 
 static constexpr auto sleep_time = std::chrono::milliseconds(60);
+static constexpr auto sleep_milliseconds_time = std::chrono::milliseconds(10);
 
 auto main() -> int {
 
@@ -294,11 +283,15 @@ auto main() -> int {
     auto manager_dispatcher = actor_zeta::spawn_supervisor<manager_dispatcher_t>(resource);
 
     actor_zeta::send(manager_dispatcher, manager_database->address(), "add_link");
+    std::this_thread::sleep_for(sleep_milliseconds_time);
     actor_zeta::send(manager_database, manager_dispatcher->address(), "add_link");
-
+    std::this_thread::sleep_for(sleep_milliseconds_time);
     actor_zeta::send(manager_dispatcher, actor_zeta::address_t::empty_address(), "create", std::string("dispatcher"));
+    std::this_thread::sleep_for(sleep_milliseconds_time);
     actor_zeta::send(manager_dispatcher, actor_zeta::address_t::empty_address(), "create_database", std::string("database_test"));
+    std::this_thread::sleep_for(sleep_milliseconds_time);
     actor_zeta::send(manager_dispatcher, actor_zeta::address_t::empty_address(), "create_collection", std::string("database_test"), std::string("collection_test"));
+    std::this_thread::sleep_for(sleep_milliseconds_time);
     actor_zeta::send(manager_dispatcher, actor_zeta::address_t::empty_address(), "insert", std::string("database_test"),std::string("collection_test"), 1, 5);
 
     std::this_thread::sleep_for(sleep_time);
