@@ -63,25 +63,11 @@ namespace actor_zeta { namespace detail {
     private:
         using object_info_container_type = std::vector<management::object_info_t>;
 
-        /*template<>
-        struct get_head { using type = void; };
-
-        template<class Head, class... Tail>
-        struct get_head { using type = Head; };*/
-
     public:
         using size_type = typename object_info_container_type::size_type;
 
     public:
-        // this templated ctor may be in conflict with copy/move ctors
-        // https://akrzemi1.wordpress.com/2013/10/10/too-perfect-forwarding/
-        // https://en.cppreference.com/w/cpp/language/sfinae
-        template<typename... Args /*,
-                 typename =
-                     type_traits::enable_if_t<
-                         sizeof...(Args) != 0 ||
-                         not std::is_same<type_traits::decay_t<get_head<Args...>>, rtt>::value>*/
-                 >
+        template<typename... Args>
         explicit rtt(Args&&... args)
             : m_capacity(padded_size<Args...>::value)
             , m_data(m_capacity, 0) {
