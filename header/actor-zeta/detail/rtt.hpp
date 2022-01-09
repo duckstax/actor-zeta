@@ -1,5 +1,6 @@
 #pragma once
 
+#include <actor-zeta/detail/aligned_allocate.hpp>
 #include <actor-zeta/detail/rtt_management.hpp>
 
 #include <algorithm>
@@ -70,7 +71,7 @@ namespace actor_zeta { namespace detail {
         template<typename... Args>
         explicit rtt(Args&&... args)
             : m_capacity(padded_size<Args...>::value)
-            , m_data(m_capacity, 0) {
+            , m_data(std::move(std::unique_ptr<char[]>(new char[m_capacity]))) {
             m_objects.reserve(m_capacity);
 #ifndef __EXCEPTIONS_DISABLE__
             try {
@@ -110,7 +111,7 @@ namespace actor_zeta { namespace detail {
 
         rtt(const rtt& that)
             : m_capacity(that.m_volume)
-            , m_data(m_capacity, 0)
+            , m_data(std::move(std::unique_ptr<char[]>(new char[m_capacity])))
             , m_objects(that.m_objects)
             , m_volume(that.m_volume) {
 #ifndef __EXCEPTIONS_DISABLE__
@@ -134,9 +135,9 @@ namespace actor_zeta { namespace detail {
 #ifndef __EXCEPTIONS_DISABLE__
             try {
 #endif
+                reserve(that.m_volume);
                 management::copy(that.m_objects.begin(), that.m_objects.end(), that.data(), this->data());
                 static_assert(std::is_nothrow_move_assignable<object_info_container_type>::value, "");
-                reserve(that.m_volume);
                 m_objects = that.m_objects;
                 m_volume = that.m_volume;
 #ifndef __EXCEPTIONS_DISABLE__
@@ -244,8 +245,8 @@ namespace actor_zeta { namespace detail {
 #ifndef __EXCEPTIONS_DISABLE__
             try {
 #endif
-                auto new_data = std::vector<char>(new_capacity, 0);
-                management::move(m_objects.begin(), m_objects.end(), data(), new_data.data());
+                auto new_data = std::unique_ptr<char[]>(new char[new_capacity]);
+                management::move(m_objects.begin(), m_objects.end(), data(), new_data.get());
                 std::swap(m_data, new_data);
                 m_capacity = new_capacity;
 #ifndef __EXCEPTIONS_DISABLE__
@@ -257,11 +258,11 @@ namespace actor_zeta { namespace detail {
         }
 
         char* data() {
-            return m_data.data();
+            return m_data.get();
         }
 
         const char* data() const {
-            return m_data.data();
+            return m_data.get();
         }
 
         template<typename T>
@@ -284,7 +285,7 @@ namespace actor_zeta { namespace detail {
         char* try_to_align(const T&) {
             auto space_left = capacity() - volume();
             void* creation_place = data() + volume();
-            auto aligned_place = std::align(alignof(T), sizeof(T), creation_place, space_left);
+            auto aligned_place = align(alignof(T), sizeof(T), creation_place, space_left);
             return static_cast<char*>(aligned_place);
         }
 
@@ -324,7 +325,7 @@ namespace actor_zeta { namespace detail {
         static constexpr auto CAPACITY_INCREASING_FACTOR = std::size_t{2};
 
         std::size_t m_capacity = 0;
-        std::vector<char> m_data;
+        std::unique_ptr<char[]> m_data;
 
         object_info_container_type m_objects;
         std::size_t m_volume = 0;
