@@ -10,9 +10,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 message(STATUS "STANDARD CPP = ${CMAKE_CXX_STANDARD}")
 message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
-option(ALLOW_EXAMPLES "ALLOW EXAMPLES" OFF)
-option(ALLOW_TESTS "ALLOW TESTS" OFF)
-option(ALLOW_BENCHMARK "ALLOW BENCHMARK" OFF)
+option(ALLOW_EXAMPLES "Enable building examples" OFF)
+option(ALLOW_TESTS "Enable building test" OFF)
+option(ALLOW_BENCHMARK "Enable building benchmark" OFF)
 option(RTTI_DISABLE "RTTI DISABLE" ON)
 option(EXCEPTIONS_DISABLE "EXCEPTIONS DISABLE" ON)
 
@@ -90,6 +90,17 @@ set(HEADER_FILES
         header/actor-zeta/base/supervisor.hpp
         header/actor-zeta/base/supervisor_abstract.hpp
 
+        header/actor-zeta/detail/queue/cached_queue.hpp
+        header/actor-zeta/detail/queue/fifo_inbox.hpp
+        header/actor-zeta/detail/queue/forward_iterator.hpp
+        header/actor-zeta/detail/queue/inbox_result.hpp
+        header/actor-zeta/detail/queue/lifo_inbox.hpp
+        header/actor-zeta/detail/queue/new_round_result.hpp
+        header/actor-zeta/detail/queue/singly_linked.hpp
+        header/actor-zeta/detail/queue/task_queue.hpp
+        header/actor-zeta/detail/queue/task_result.hpp
+        header/actor-zeta/detail/queue/fixed_queue.hpp
+
         header/actor-zeta/detail/pmr/memory_resource.hpp
         header/actor-zeta/detail/aligned_allocate.hpp
         header/actor-zeta/detail/any.hpp
@@ -110,12 +121,16 @@ set(HEADER_FILES
         header/actor-zeta/executor/execution_device.hpp
         header/actor-zeta/executor/worker.hpp
 
-        header/actor-zeta/base/message.hpp
+        header/actor-zeta/mail_box/categorized.hpp
+        header/actor-zeta/mail_box/normal_messages.hpp
+        header/actor-zeta/mail_box/urgent_messages.hpp
+        header/actor-zeta/mail_box/message.hpp
 
         header/actor-zeta/forwards.hpp
         header/actor-zeta/send.hpp
         header/actor-zeta/core.hpp
         header/actor-zeta/src.hpp
+        header/actor-zeta.hpp
 )
 
 set(SOURCE_FILES
