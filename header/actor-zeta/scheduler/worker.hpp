@@ -17,10 +17,10 @@ namespace actor_zeta { namespace scheduler {
     class worker final : public execution_unit {
     public:
         using job_ptr = resumable*;
-        using schedulerr_ptr = scheduler_t<Policy>*;
+        using scheduler_ptr = scheduler_t<Policy>*;
         using policy_data = typename Policy::worker_data;
 
-        worker(size_t worker_id, schedulerr_ptr worker_parent,
+        worker(size_t worker_id, scheduler_ptr worker_parent,
                const policy_data& init, size_t throughput)
             : max_throughput_(throughput)
             , id_(worker_id)
@@ -28,10 +28,12 @@ namespace actor_zeta { namespace scheduler {
             , data_(init) {}
 
         void start() {
-            assert(this_thread_.get_id() == std::thread::id{});
+            assert(this_thread_.get_id() == std::thread::id{}); /// TODO: see implement asio
             this_thread_ = detail::launch_thread("worker", [this] { run(); });
         }
 
+        worker(worker&) = delete;
+        worker& operator=(worker&) = delete;
         worker(const worker&) = delete;
         worker& operator=(const worker&) = delete;
 
@@ -45,7 +47,7 @@ namespace actor_zeta { namespace scheduler {
             policy_.internal_enqueue(this, job);
         }
 
-        schedulerr_ptr parent() {
+        scheduler_ptr parent() {
             return parent_;
         }
 
@@ -99,7 +101,7 @@ namespace actor_zeta { namespace scheduler {
         size_t max_throughput_;
         std::thread this_thread_;
         size_t id_;
-        schedulerr_ptr parent_;
+        scheduler_ptr parent_;
         policy_data data_;
         Policy policy_;
     };
