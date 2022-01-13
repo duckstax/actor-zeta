@@ -124,7 +124,6 @@ set(HEADER_FILES
         header/actor-zeta/mail_box/categorized.hpp
         header/actor-zeta/mail_box/normal_messages.hpp
         header/actor-zeta/mail_box/urgent_messages.hpp
-        header/actor-zeta/mail_box/message.hpp
 
         header/actor-zeta/forwards.hpp
         header/actor-zeta/send.hpp
