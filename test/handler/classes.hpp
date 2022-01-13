@@ -1,17 +1,11 @@
 #pragma once
 
-#include "test/tooltestsuites/scheduler_test.hpp"
 #include <actor-zeta/core.hpp>
 #include "test/tooltestsuites/scheduler_test.hpp"
 #include <iostream>
 #include <list>
 
-<<<<<<< HEAD
 #define TRACE(msg) { std::cout << __FILE__ << ":" << __LINE__ << "::" << __func__ << " : " << msg << std::endl; }
-=======
-#define TRACE(msg) \
-    { std::cout << __FILE__ << ":" << __LINE__ << "::" << __func__ << " : " << msg << std::endl; }
->>>>>>> develop
 
 class storage_t;
 class test_handlers;
@@ -26,14 +20,8 @@ public:
     static uint64_t add_supervisor_impl_counter;
     static uint64_t enqueue_base_counter;
 
-public:
-<<<<<<< HEAD
-    explicit dummy_supervisor(actor_zeta::detail::pmr::memory_resource* mr,uint64_t threads, uint64_t throughput)
-        : actor_zeta::cooperative_supervisor<dummy_supervisor>(mr,"dummy_supervisor",0)
-=======
     explicit dummy_supervisor(actor_zeta::detail::pmr::memory_resource* mr, uint64_t threads, uint64_t throughput)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(mr, "dummy_supervisor", 0)
->>>>>>> develop
         , executor_(new actor_zeta::test::scheduler_test_t(threads, throughput)) {
         scheduler()->start();
         constructor_counter++;
@@ -45,12 +33,6 @@ public:
     auto scheduler_test() noexcept -> actor_zeta::test::scheduler_test_t* {
         return executor_.get();
     }
-
-
-    auto scheduler_test() noexcept -> actor_zeta::test::scheduler_test_t*  {
-        return executor_.get();
-    }
-
 
     void create_storage();
     void create_test_handlers();

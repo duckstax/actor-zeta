@@ -3,8 +3,8 @@
 #include "scheduler_test.hpp"
 // clang-format on
 
-#include <limits>
 #include <actor-zeta/scheduler/execution_unit.hpp>
+#include <limits>
 
 namespace actor_zeta { namespace test {
 
@@ -76,11 +76,7 @@ namespace actor_zeta { namespace test {
         return res;
     }
 
-<<<<<<< HEAD
     size_t scheduler_test_t::advance_time(clock::clock_t::duration_type time) {
         return clock_.advance_time(time);
     }
-
-=======
->>>>>>> develop
 }} // namespace actor_zeta::test
