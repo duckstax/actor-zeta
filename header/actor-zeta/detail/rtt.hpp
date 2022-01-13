@@ -41,23 +41,40 @@ namespace actor_zeta { namespace detail {
 #define EXPAND_VARIADIC(expression) \
     dummy({(expression, 0)...})
 
-    template<class...>
-    struct padded_size;
+    template<class... Args>
+    struct getHead;
 
     template<>
-    struct padded_size<> {
-        static constexpr std::size_t value = 0;
+    struct getHead<> {
+        static constexpr size_t align = 0;
+        static constexpr size_t sz = 0;
+        using type = void;
     };
 
-    template<class Head>
-    struct padded_size<Head> {
-        static constexpr std::size_t value = sizeof(Head);
+    template<class T>
+    struct getHead<T> {
+        static constexpr size_t align = alignof(T);
+        static constexpr size_t sz = sizeof(T);
+        using type = T;
     };
 
-    template<class Head, class Mid, class... Tail>
-    struct padded_size<Head, Mid, Tail...> {
-        static constexpr std::size_t value = (sizeof(Head) + alignof(Mid) - 1) / alignof(Mid) * alignof(Mid) + padded_size<Mid, Tail...>::value;
+    template<class T, class... Tail>
+    struct getHead<T, Tail...> {
+        static constexpr size_t align = alignof(T);
+        static constexpr size_t sz = sizeof(T);
+        using type = T;
     };
+
+    template<size_t N>
+    constexpr size_t getSize() {
+        return N;
+    }
+
+    template<size_t N, class Head, class... Args>
+    constexpr size_t getSize() {
+        constexpr size_t sz = (N + alignof(Head) - 1) & -alignof(Head);
+        return getSize<sz, Args...>();
+    }
 
     // run-time tuple
     class rtt final {
@@ -70,7 +87,7 @@ namespace actor_zeta { namespace detail {
     public:
         template<typename... Args>
         explicit rtt(Args&&... args)
-            : m_capacity(padded_size<Args...>::value)
+            : m_capacity(getSize<0, Args...>())
             , m_data(std::move(std::unique_ptr<char[]>(new char[m_capacity]))) {
             m_objects.reserve(m_capacity);
 #ifndef __EXCEPTIONS_DISABLE__
@@ -327,7 +344,7 @@ namespace actor_zeta { namespace detail {
         std::size_t m_capacity = 0;
         std::unique_ptr<char[]> m_data;
 
-        object_info_container_type m_objects;
+        object_info_container_type m_objects; // uptr
         std::size_t m_volume = 0;
     };
 
