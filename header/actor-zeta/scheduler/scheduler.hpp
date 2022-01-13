@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <condition_variable>
 #include <limits>
 #include <memory>
@@ -8,32 +9,25 @@
 #include <vector>
 
 #include <actor-zeta/detail/ref_counted.hpp>
-#include <actor-zeta/executor/abstract_executor.hpp>
-#include <actor-zeta/executor/executable.hpp>
-#include <actor-zeta/executor/worker.hpp>
+#include <actor-zeta/scheduler/scheduler_abstract.hpp>
+#include <actor-zeta/scheduler/worker.hpp>
 
-namespace actor_zeta { namespace executor {
-    /// @brief
-    /// @tparam Policy
-    ///
+namespace actor_zeta { namespace scheduler {
+
     template<class Policy>
-    class executor_t : public abstract_executor {
+    class scheduler_t : public scheduler_abstract_t {
     public:
-        using job_ptr = executable*;
+        using super = scheduler_abstract_t;
         using policy_data = typename Policy::coordinator_data;
         using worker_type = worker<Policy>;
 
-        executor_t(size_t num_worker_threads, size_t max_throughput_param)
-            : abstract_executor(num_worker_threads, max_throughput_param)
+        scheduler_t(size_t num_worker_threads, size_t max_throughput_param)
+            : scheduler_abstract_t(num_worker_threads, max_throughput_param)
             , data_(this) {
         }
 
         worker_type* worker_by_id(size_t x) {
             return workers_[x].get();
-        }
-
-        void execute(job_ptr job) override {
-            policy_.central_enqueue(this, job);
         }
 
         policy_data& data() {
@@ -53,22 +47,20 @@ namespace actor_zeta { namespace executor {
             for (auto& w : workers_) {
                 w->start();
             }
+
         }
 
         void stop() override {
-            /// shutdown workers
-            class shutdown_helper final
-                : public executable
+            class shutdown_helper
+                : public resumable
                 , public ref_counted {
             public:
-                auto run(execution_device* ptr, size_t) -> executable_result override {
+                resume_result resume(execution_unit* ptr, size_t) override {
                     assert(ptr != nullptr);
-                    {
-                        std::unique_lock<std::mutex> guard(mtx);
-                        last_worker = ptr;
-                        cv.notify_all();
-                        return executable_result::shutdown;
-                    }
+                    std::unique_lock<std::mutex> guard(mtx);
+                    last_worker = ptr;
+                    cv.notify_all();
+                    return resume_result::shutdown;
                 }
 
                 void intrusive_ptr_add_ref_impl() override {
@@ -79,33 +71,26 @@ namespace actor_zeta { namespace executor {
                     intrusive_ptr_release(this);
                 }
 
-                shutdown_helper()
-                    : last_worker(nullptr) {}
+                shutdown_helper(): last_worker(nullptr) {}
 
                 std::mutex mtx;
                 std::condition_variable cv;
-                execution_device* last_worker;
+                execution_unit* last_worker;
             };
-
+            // Use a set to keep track of remaining workers.
             shutdown_helper sh;
-
             std::set<worker_type*> alive_workers;
-
             auto num = num_workers();
-
             for (size_t i = 0; i < num; ++i) {
                 alive_workers.insert(worker_by_id(i));
-                sh.ref();
+                sh.ref(); // Make sure reference count is high enough.
             }
-
             while (!alive_workers.empty()) {
                 (*alive_workers.begin())->external_enqueue(&sh);
-
-                { /// lifetime scope of guard
+                { // lifetime scope of guard
                     std::unique_lock<std::mutex> guard(sh.mtx);
                     sh.cv.wait(guard, [&] { return sh.last_worker != nullptr; });
                 }
-
                 alive_workers.erase(static_cast<worker_type*>(sh.last_worker));
                 sh.last_worker = nullptr;
             }
@@ -115,10 +100,15 @@ namespace actor_zeta { namespace executor {
             }
 
             /// run cleanup code for each resumable
-            auto f = cleanup_and_release;
-            for (auto& w : workers_)
+            auto f = &cleanup_and_release;
+            for (auto& w : workers_) {
                 policy_.foreach_resumable(w.get(), f);
+            }
             policy_.foreach_central_resumable(this, f);
+        }
+
+        void enqueue(resumable* ptr) override {
+            policy_.central_enqueue(this, ptr);
         }
 
     private:
@@ -126,4 +116,5 @@ namespace actor_zeta { namespace executor {
         policy_data data_;
         Policy policy_;
     };
-}} // namespace actor_zeta::executor
+
+}} // namespace actor_zeta::scheduler
