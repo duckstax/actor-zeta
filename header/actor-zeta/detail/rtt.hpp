@@ -3,6 +3,8 @@
 #include <actor-zeta/detail/aligned_allocate.hpp>
 #include <actor-zeta/detail/rtt_management.hpp>
 
+#include <iostream>
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -67,13 +69,15 @@ namespace actor_zeta { namespace detail {
 
     template<size_t N>
     constexpr size_t getSize() {
+        std::cout << "N: " << N << std::endl;
         return N;
     }
 
     template<size_t N, class Head, class... Args>
     constexpr size_t getSize() {
-        constexpr size_t sz = (N + alignof(Head) - 1) & -alignof(Head);
-        return getSize<sz, Args...>();
+        std::cout << "N: " << N << std::endl;
+        std::cout << ": " << ((N + alignof(Head) - 1) & -(alignof(Head))) + sizeof(Head) << std::endl;
+        return getSize<((N + alignof(Head) - 1) & -(alignof(Head))) + sizeof(Head), Args...>();
     }
 
     // run-time tuple
@@ -90,6 +94,7 @@ namespace actor_zeta { namespace detail {
             : m_capacity(getSize<0, Args...>())
             , m_data(std::move(std::unique_ptr<char[]>(new char[m_capacity]))) {
             m_objects.reserve(m_capacity);
+            std::cout << "m_capacity: " << m_capacity << std::endl;
 #ifndef __EXCEPTIONS_DISABLE__
             try {
 #endif
