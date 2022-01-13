@@ -5,7 +5,6 @@
 #include <cstddef>
 
 #include <actor-zeta/clock/clock.hpp>
-
 #include "forwards.hpp"
 
 namespace actor_zeta { namespace scheduler {

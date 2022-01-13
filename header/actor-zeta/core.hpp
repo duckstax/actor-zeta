@@ -12,7 +12,6 @@
 #include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/detail/any.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
-#include <actor-zeta/scheduler/scheduler_abstract.hpp>
 #include <actor-zeta/scheduler/scheduler.hpp>
 #include <actor-zeta/scheduler/policy/work_sharing.hpp>
 
@@ -30,9 +29,8 @@ namespace actor_zeta {
     using base::message_ptr;
 
     using scheduler::scheduler_abstract_t;
-    using scheduler::execution_unit;
     using scheduler::scheduler_t;
     using scheduler::work_sharing;
-    using scheduler::resumable;
+    using scheduler::execution_unit;
 
 } // namespace actor_zeta

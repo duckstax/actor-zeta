@@ -11,8 +11,11 @@
 #include "actor-zeta/scheduler/resumable.hpp"
 #include "actor-zeta/scheduler/scheduler_abstract.hpp"
 
+<<<<<<< HEAD
 #include "clock_test.hpp"
 
+=======
+>>>>>>> develop
 namespace actor_zeta { namespace test {
 
     class scheduler_test_t final : public scheduler::scheduler_abstract_t {
@@ -25,16 +28,22 @@ namespace actor_zeta { namespace test {
 
         bool run_once();
         size_t run(size_t max_count = std::numeric_limits<size_t>::max());
+<<<<<<< HEAD
         size_t advance_time(clock::clock_t::duration_type);
         clock::clock_t& clock() noexcept override;
+=======
+>>>>>>> develop
 
     protected:
         void start() override;
         void stop() override;
         void enqueue(scheduler::resumable* ptr) override;
+<<<<<<< HEAD
 
     private:
         clock_test clock_;
+=======
+>>>>>>> develop
     };
 
 }} // namespace actor_zeta::test

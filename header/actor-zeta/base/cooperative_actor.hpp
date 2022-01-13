@@ -59,7 +59,7 @@ namespace actor_zeta { namespace base {
             return mailbox_;
         }
 
-        bool activate(scheduler::execution_unit* ctx);
+        bool activate(scheduler::execution_unit*);
         auto reactivate(message& x) -> void;
         message_ptr next_message();
         bool has_next_message();
