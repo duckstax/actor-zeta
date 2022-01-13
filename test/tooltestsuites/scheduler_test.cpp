@@ -34,7 +34,6 @@ namespace actor_zeta { namespace test {
         : super(num_worker_threads, max_throughput) {
     }
 
-<<<<<<< HEAD
     clock::clock_t& scheduler_test_t::clock() noexcept {
         return clock_;
     }
@@ -46,11 +45,9 @@ namespace actor_zeta { namespace test {
             clock_.trigger_timeouts();
         }
     }
-=======
-    void scheduler_test_t::start() {}
 
+    void scheduler_test_t::start() {}
     void scheduler_test_t::stop() {}
->>>>>>> develop
 
     void scheduler_test_t::enqueue(scheduler::resumable* ptr) {
         jobs.push_back(ptr);
