@@ -46,9 +46,6 @@ namespace actor_zeta { namespace test {
         }
     }
 
-    void scheduler_test_t::start() {}
-    void scheduler_test_t::stop() {}
-
     void scheduler_test_t::enqueue(scheduler::resumable* ptr) {
         jobs.push_back(ptr);
     }
