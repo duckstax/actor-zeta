@@ -7,11 +7,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include <actor-zeta/forwards.hpp>
+#include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/detail/string_view.hpp>
-#include <actor-zeta/base/handler.hpp>
+#include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace base {
 
@@ -26,9 +26,10 @@ namespace actor_zeta { namespace base {
         communication_module(const communication_module&) = delete;
         communication_module& operator=(const communication_module&) = delete;
         virtual ~communication_module();
-
+#ifdef DEBUG
         auto type() const -> detail::string_view;
-        auto id() const -> int64_t ;
+#endif
+        auto id() const -> int64_t;
         /**
         * debug method
         */
@@ -38,7 +39,12 @@ namespace actor_zeta { namespace base {
         auto current_message() -> message*;
 
     protected:
-        communication_module(std::string,int64_t);
+#ifdef DEBUG
+        communication_module(int64_t, std::string);
+#elif
+        communication_module(int64_t);
+#endif
+
         virtual auto current_message_impl() -> message* = 0;
         virtual void enqueue_impl(message_ptr, scheduler::execution_unit*) = 0;
 
@@ -57,7 +63,9 @@ namespace actor_zeta { namespace base {
 
     private:
         handler_storage_t handlers_;
+#ifdef DEBUG
         const std::string type_;
+#endif
         const int64_t id_;
     };
 

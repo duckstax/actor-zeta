@@ -25,18 +25,26 @@ namespace actor_zeta { namespace base {
         void intrusive_ptr_release_impl() override;
 
     protected:
+#ifdef DEBUG
         template<class Supervisor>
-        cooperative_actor(Supervisor* ptr, std::string type ,int64_t actor_id)
-            : cooperative_actor(static_cast<supervisor_abstract*>(ptr),std::move(type),actor_id){};
-
+        cooperative_actor(Supervisor* ptr,int64_t actor_id,std::string type )
+            : cooperative_actor(static_cast<supervisor_abstract*>(ptr),actor_id,std::move(type)){};
+#elif
+        template<class Supervisor>
+        cooperative_actor(Supervisor* ptr, int64_t actor_id)
+            : cooperative_actor(static_cast<supervisor_abstract*>(ptr),actor_id){};
+#endif
         void enqueue_impl(message_ptr, scheduler::execution_unit*) final;
 
         // Non thread-safe method
         auto current_message_impl() -> message* override;
 
     private:
-        cooperative_actor(supervisor_abstract*, std::string,int64_t);
-
+#ifdef  DEBUG
+        cooperative_actor(supervisor_abstract*,int64_t,std::string);
+#elif
+        cooperative_actor(supervisor_abstract*,int64_t);
+#endif
         enum class state : int {
             empty = 0x01,
             busy

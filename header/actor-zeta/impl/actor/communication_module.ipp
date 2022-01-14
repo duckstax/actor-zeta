@@ -72,16 +72,22 @@ namespace actor_zeta { namespace base {
 
         return types;
     }
-
+#ifdef DEBUG
     auto communication_module::type() const -> detail::string_view {
         return detail::string_view(type_.data(), type_.size());
     }
+#endif
 
     communication_module::~communication_module() {}
 
-    communication_module::communication_module(std::string type,int64_t id)
+#ifdef DEBUG
+    communication_module::communication_module(int64_t id, std::string type)
         : type_(std::move(type))
-        , id_(id){}
+        , id_(id) {}
+#elif
+    communication_module::communication_module(int64_t id)
+        : id_(id) {}
+#endif
 
     void communication_module::enqueue(message_ptr msg, scheduler::execution_unit* e) {
         enqueue_impl(std::move(msg), e);

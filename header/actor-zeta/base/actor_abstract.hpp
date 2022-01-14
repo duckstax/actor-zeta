@@ -1,8 +1,8 @@
 #pragma once
 
-#include <actor-zeta/forwards.hpp>
 #include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/detail/string_view.hpp>
+#include <actor-zeta/forwards.hpp>
 
 #include <new>
 #include <unordered_map>
@@ -26,8 +26,13 @@ namespace actor_zeta { namespace base {
         }
 
         auto address() noexcept -> address_t;
+
     protected:
-        actor_abstract(std::string,int64_t);
+#ifdef DEBUG
+        actor_abstract(int64_t, std::string);
+#elif
+        actor_abstract(int64_t);
+#endif
         // prohibit copies, assignments, and heap allocations
         void* operator new(size_t);
         void* operator new[](size_t);

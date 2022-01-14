@@ -10,12 +10,19 @@ namespace actor_zeta { namespace base {
         : public communication_module
         , public ref_counted {
     public:
-        supervisor_abstract(detail::pmr::memory_resource*, std::string, int64_t);
+#ifdef DEBUG
+        supervisor_abstract(detail::pmr::memory_resource*, int64_t,std::string);
 
         template<class Supervisor>
-        supervisor_abstract(Supervisor* supervisor, std::string type, int64_t actor_id)
-            : supervisor_abstract(static_cast<supervisor_abstract*>(supervisor), std::move(type), actor_id) {}
+        supervisor_abstract(Supervisor* supervisor, int64_t actor_id,std::string type)
+            : supervisor_abstract(static_cast<supervisor_abstract*>(supervisor), actor_id,std::move(type)) {}
+#elif
+        supervisor_abstract(detail::pmr::memory_resource*, int64_t);
 
+        template<class Supervisor>
+        supervisor_abstract(Supervisor* supervisor, int64_t actor_id)
+            : supervisor_abstract(static_cast<supervisor_abstract*>(supervisor), actor_id) {}
+#endif
         ~supervisor_abstract() override;
         auto scheduler() noexcept -> scheduler::scheduler_abstract_t*;
         auto resource() const -> detail::pmr::memory_resource*;
@@ -28,7 +35,11 @@ namespace actor_zeta { namespace base {
         auto current_message_impl() -> message* final;
 
     private:
-        supervisor_abstract(supervisor_abstract*, std::string, int64_t);
+#ifdef DEBUG
+        supervisor_abstract(supervisor_abstract*,int64_t,std::string);
+#elif
+        supervisor_abstract(supervisor_abstract*, int64_t);
+#endif
         message* current_message_;
         detail::pmr::memory_resource* memory_resource_;
     };

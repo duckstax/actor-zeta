@@ -23,10 +23,16 @@ namespace actor_zeta { namespace base {
     actor_abstract::~actor_abstract() {
     }
 
-    actor_abstract::actor_abstract(std::string type,int64_t id)
-        : communication_module(std::move(type),id) {
-    }
 
+#ifdef DEBUG
+    actor_abstract::actor_abstract(int64_t id,std::string type)
+        : communication_module(id,std::move(type)) {
+    }
+#elif
+    actor_abstract::actor_abstract(int64_t id)
+        : communication_module(id) {
+    }
+#endif
     auto actor_abstract::address() noexcept -> address_t {
         return address_t(this);
     }
