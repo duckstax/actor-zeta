@@ -43,40 +43,13 @@ namespace actor_zeta { namespace detail {
 #define EXPAND_VARIADIC(expression) \
     dummy({(expression, 0)...})
 
-    template<class... Args>
-    struct getHead;
-
-    template<>
-    struct getHead<> {
-        static constexpr size_t align = 0;
-        static constexpr size_t sz = 0;
-        using type = void;
-    };
-
-    template<class T>
-    struct getHead<T> {
-        static constexpr size_t align = alignof(T);
-        static constexpr size_t sz = sizeof(T);
-        using type = T;
-    };
-
-    template<class T, class... Tail>
-    struct getHead<T, Tail...> {
-        static constexpr size_t align = alignof(T);
-        static constexpr size_t sz = sizeof(T);
-        using type = T;
-    };
-
     template<size_t N>
     constexpr size_t getSize() {
-        std::cout << "N: " << N << std::endl;
         return N;
     }
 
     template<size_t N, class Head, class... Args>
     constexpr size_t getSize() {
-        std::cout << "N: " << N << std::endl;
-        std::cout << ": " << ((N + alignof(Head) - 1) & -(alignof(Head))) + sizeof(Head) << std::endl;
         return getSize<((N + alignof(Head) - 1) & -(alignof(Head))) + sizeof(Head), Args...>();
     }
 
@@ -94,7 +67,6 @@ namespace actor_zeta { namespace detail {
             : m_capacity(getSize<0, Args...>())
             , m_data(std::move(std::unique_ptr<char[]>(new char[m_capacity]))) {
             m_objects.reserve(m_capacity);
-            std::cout << "m_capacity: " << m_capacity << std::endl;
 #ifndef __EXCEPTIONS_DISABLE__
             try {
 #endif

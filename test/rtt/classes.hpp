@@ -1,6 +1,9 @@
 #pragma once
 
 #include <actor-zeta/detail/any.hpp>
+#include <actor-zeta/detail/type_traits.hpp>
+#include <iostream>
+#include <map>
 #include <memory>
 #include <numeric>
 #include <string>
@@ -9,6 +12,39 @@
 using actor_zeta::detail::any;
 using actor_zeta::detail::any_cast;
 using actor_zeta::detail::make_any;
+
+void place(char* data, size_t capacity, size_t volume) {
+    auto space_left = capacity - volume;
+    printf("%s :: data: %p, capacity: %lu, volume: %lu, space_left: %lu\n",
+           __func__, data, capacity, volume, space_left);
+    REQUIRE(space_left == 0);
+}
+
+template<class Head, class... Tail>
+void place(char* data, size_t capacity, size_t volume, __attribute__((unused)) Head head, Tail... tail) {
+    auto space_left = capacity - volume;
+    void* creation_place = data + volume;
+    auto aligned_place = actor_zeta::detail::align(alignof(Head), sizeof(Head), creation_place, space_left);
+    printf("%s :: data: %p, capacity: %lu, volume: %lu, space_left: %lu, creation_place: %p, aligned_place: %p\n",
+           __func__, data, capacity, volume, space_left, creation_place, aligned_place);
+    REQUIRE(aligned_place);
+    const auto new_offset = static_cast<std::size_t>(static_cast<char*>(aligned_place) - data);
+    place(data, capacity, static_cast<size_t>(new_offset + sizeof(Head)), tail...);
+}
+
+template<class... Args>
+void test_getSize(Args... args) {
+    auto m_capacity = actor_zeta::detail::getSize<0, Args...>();
+    std::unique_ptr<char[]> m_data(std::move(std::unique_ptr<char[]>(new char[m_capacity])));
+    place(m_data.get(), m_capacity, 0, args...);
+}
+
+struct align_example_t {
+    char a[3];
+    short int b;
+    long int c;
+    char d[3];
+};
 
 struct X {
     int a = 0;

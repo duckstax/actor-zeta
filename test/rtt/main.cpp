@@ -12,6 +12,155 @@ namespace rtt_test = actor_zeta::detail::rtt_test;
 #endif
 
 TEST_CASE("rt_tuple") {
+    SECTION("test_getSize") {
+        test_getSize(
+            static_cast<int8_t>(3457),
+            static_cast<int64_t>(57),
+            static_cast<int32_t>(45),
+            static_cast<long>(63),
+            static_cast<long long>(6348),
+            static_cast<long double>(6754.9),
+            static_cast<int16_t>(4563),
+            static_cast<float>(5653),
+            static_cast<double>(675.49),
+            static_cast<unsigned long>(45645),
+            static_cast<unsigned long long>(5573),
+            static_cast<char>(57));
+
+        std::map<std::string, std::string> map_strstr;
+        for (int i = 0; i < 1024; ++i) {
+            for (int j = 0; j < 4096; ++j)
+                map_strstr["base64_" + std::to_string(i)].push_back(static_cast<char>(j % 8));
+        }
+
+        test_getSize(
+            map_strstr,
+            static_cast<long long>(6348),
+            static_cast<long double>(6754.9),
+            static_cast<int16_t>(4563),
+            map_strstr,
+            static_cast<float>(5653),
+            static_cast<double>(675.49),
+            map_strstr);
+
+        test_getSize(
+            map_strstr,
+            static_cast<long long>(6348),
+            static_cast<long double>(6754.9),
+            std::string("sekrjghkjsh8"),
+            std::string("slkdjfghlkajshglkjsdfhglkjshglkjhsdflkgjhsdflkgh"),
+            static_cast<int16_t>(4563),
+            map_strstr,
+            std::string("slkdjfghlkajshglkjsddf,ghkjy5o876394673984769834569843589734563465fhglkjshglkjhsdflkgjhsdflkgh"),
+            static_cast<float>(5653),
+            std::string("slkdjfghlkajshglkjsdsfgs3465345634563465fhglkjshglkjhsdflkgjhsdflkgh"),
+            static_cast<double>(675.49),
+            std::string("35673673467345756756856875679659567956"),
+            map_strstr,
+            std::string("slkdjfghlkajshglkjsdfhglkjshglkjhsdflkgjhsdflkgsdfihgshdfgosfogskjfgkshfghsdkfjhgh"));
+
+        test_getSize(
+            align_example_t{},
+            align_example_t{{1, 2, 3}, 15, 12, {6, 7, 8}},
+            align_example_t{{1, 2, 3}, 15, 12, {6, 7, 8}},
+            align_example_t{{1, 2, 3}, 15, 12, {6, 7, 8}},
+            align_example_t{{1, 2, 3}, 15, 12, {6, 7, 8}},
+            align_example_t{{1, 2, 3}, 15, 12, {6, 7, 8}});
+    }
+
+    SECTION("test_getSize many strings") {
+        std::vector<int> idxs;
+        for (int i = 0; i < 1024; ++i) {
+            idxs.push_back(i);
+        }
+
+        auto idx = GENERATE_REF(from_range(idxs));
+        std::string test_str;
+        for (int i = 0; i < idx; ++i)
+            test_str.push_back(static_cast<char>(i % 8));
+
+        test_getSize(
+            test_str);
+
+        test_getSize(
+            test_str,
+            test_str,
+            test_str);
+
+        test_getSize(
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str);
+
+        test_getSize(
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str,
+            test_str);
+    }
+
+    SECTION("test_getSize many maps of string string") {
+        std::vector<int> idxs;
+        for (int i = 0; i < 1024; ++i) {
+            idxs.push_back(i);
+        }
+
+        auto idx = GENERATE_REF(from_range(idxs));
+        std::map<std::string, std::string> test_map;
+        for (int i = 0; i < idx; ++i)
+            test_map[std::to_string(i)] = "kfjhgkjsgkhsha";
+
+        test_getSize(
+            test_map);
+
+        test_getSize(
+            test_map,
+            test_map,
+            test_map);
+
+        test_getSize(
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map);
+
+        test_getSize(
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map,
+            test_map);
+    }
 #ifdef __TESTS_ENABLED__
 
     SECTION("ctors") {
