@@ -38,7 +38,7 @@ public:
 class dummy_supervisor final : public actor_zeta::cooperative_supervisor<dummy_supervisor> {
 public:
     dummy_supervisor(memory_resource* ptr)
-        : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr, "dummy_supervisor", 0)
+        : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr, "dummy_supervisor")
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
         add_handler("create", &dummy_supervisor::create);
         scheduler()->start();
