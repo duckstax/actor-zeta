@@ -5,7 +5,6 @@
 #include <set>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
@@ -16,34 +15,91 @@
 namespace actor_zeta { namespace base {
 
     using message_ptr = std::unique_ptr<message>;
+    using actor_id_t = int64_t;
+    constexpr static actor_id_t invalid_actor_id{-1};
 
     class communication_module {
     public:
         using key_type = detail::string_view;
         using handler_storage_t = std::unordered_map<key_type, std::unique_ptr<handler>>;
 
-        communication_module() = delete;
         communication_module(const communication_module&) = delete;
         communication_module& operator=(const communication_module&) = delete;
-        virtual ~communication_module();
-#ifdef DEBUG
+
+        class id_t {
+        public:
+            id_t() = default;
+
+            explicit id_t(communication_module* impl) noexcept
+                : impl_{impl} {
+            }
+
+            explicit id_t(actor_id_t id) noexcept
+                : impl_{reinterpret_cast<communication_module*>(id)} {
+            }
+
+            bool operator==(id_t const& other) const noexcept {
+                return impl_ == other.impl_;
+            }
+
+            bool operator!=(id_t const& other) const noexcept {
+                return impl_ != other.impl_;
+            }
+
+            bool operator<(id_t const& other) const noexcept {
+                return impl_ < other.impl_;
+            }
+
+            bool operator>(id_t const& other) const noexcept {
+                return other.impl_ < impl_;
+            }
+
+            bool operator<=(id_t const& other) const noexcept {
+                return !(*this > other);
+            }
+
+            bool operator>=(id_t const& other) const noexcept {
+                return !(*this < other);
+            }
+
+            template<typename charT, class traitsT>
+            friend std::basic_ostream<charT, traitsT>&
+            operator<<(std::basic_ostream<charT, traitsT>& os, id_t const& other) {
+                if (nullptr != other.impl_) {
+                    return os << other.impl_;
+                }
+                return os << "{not-valid}";
+            }
+
+            explicit operator bool() const noexcept {
+                return nullptr != impl_;
+            }
+
+            bool operator!() const noexcept {
+                return nullptr == impl_;
+            }
+
+        private:
+            communication_module* impl_{nullptr};
+        };
+
         auto type() const -> detail::string_view;
-#endif
-        auto id() const -> int64_t;
+        auto id() const -> id_t;
+        auto enqueue(message_ptr) -> void;
+        void enqueue(message_ptr, scheduler::execution_unit*);
+
+    protected:
+        virtual ~communication_module();
         /**
         * debug method
         */
         auto message_types() const -> std::set<std::string>;
-        auto enqueue(message_ptr) -> void;
-        void enqueue(message_ptr, scheduler::execution_unit*);
         auto current_message() -> message*;
 
-    protected:
-#ifdef DEBUG
-        communication_module(int64_t, std::string);
-#elif
-        communication_module(int64_t);
-#endif
+        communication_module(actor_id_t , std::string);
+        explicit communication_module(actor_id_t);
+        explicit communication_module(std::string);
+        communication_module();
 
         virtual auto current_message_impl() -> message* = 0;
         virtual void enqueue_impl(message_ptr, scheduler::execution_unit*) = 0;
@@ -63,10 +119,10 @@ namespace actor_zeta { namespace base {
 
     private:
         handler_storage_t handlers_;
+        const actor_id_t id_;
 #ifdef DEBUG
-        const std::string type_;
+             std::string type_;
 #endif
-        const int64_t id_;
     };
 
 }} // namespace actor_zeta::base

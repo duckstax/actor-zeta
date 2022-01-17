@@ -37,14 +37,14 @@ namespace actor_zeta {
 
     template<typename... Args>
     void send(base::address_t&& address, Args... args) {
-        address.enqueue(
+        address->enqueue(
             make_message(
                 std::forward<Args>(args)...));
     }
 
     template<typename... Args>
     void send(base::address_t& address, Args... args) {
-        address.enqueue(
+        address->enqueue(
             make_message(
                 std::forward<Args>(args)...));
     }

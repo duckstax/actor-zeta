@@ -17,9 +17,6 @@ namespace actor_zeta { namespace base {
         : public communication_module
         , public ref_counted {
     public:
-        actor_abstract() = delete;
-        ~actor_abstract() override;
-
         // allow placement new (only)
         void* operator new(std::size_t, void* ptr) {
             return ptr;
@@ -28,16 +25,18 @@ namespace actor_zeta { namespace base {
         auto address() noexcept -> address_t;
 
     protected:
-#ifdef DEBUG
-        actor_abstract(int64_t, std::string);
-#elif
-        actor_abstract(int64_t);
-#endif
         // prohibit copies, assignments, and heap allocations
         void* operator new(size_t);
         void* operator new[](size_t);
         actor_abstract(const actor_abstract&) = delete;
         actor_abstract& operator=(const actor_abstract&) = delete;
+        ~actor_abstract() override;
+
+        actor_abstract(actor_id_t, std::string);
+        actor_abstract(std::string);
+        actor_abstract(actor_id_t);
+        actor_abstract();
+
     };
 
 }} // namespace actor_zeta::base
