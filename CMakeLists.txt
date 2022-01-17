@@ -101,6 +101,7 @@ set(HEADER_FILES
         header/actor-zeta/detail/queue/task_queue.hpp
         header/actor-zeta/detail/queue/task_result.hpp
         header/actor-zeta/detail/queue/fixed_queue.hpp
+        header/actor-zeta/detail/queue/enqueue_result.hpp
 
         header/actor-zeta/detail/pmr/memory_resource.hpp
         header/actor-zeta/detail/aligned_allocate.hpp
@@ -136,7 +137,7 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
         source/src.cpp
-        header/actor-zeta/detail/queue/enqueue_result.hpp)
+    )
 
 find_program(CCACHE_FOUND ccache)
 if (CCACHE_FOUND)
