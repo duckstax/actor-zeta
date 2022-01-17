@@ -18,7 +18,7 @@ static std::atomic_int actor_counter{0};
 class storage_t final : public actor_zeta::basic_async_actor {
 public:
     storage_t(dummy_supervisor* ptr)
-        : actor_zeta::basic_async_actor(ptr, "storage", 0) {
+        : actor_zeta::basic_async_actor(ptr, "storage") {
         add_handler("update", []() -> void {});
         add_handler("find", []() -> void {});
         add_handler("remove", []() -> void {});
