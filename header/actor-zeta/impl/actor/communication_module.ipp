@@ -76,7 +76,7 @@ namespace actor_zeta { namespace base {
     auto communication_module::type() const -> detail::string_view {
 #ifdef DEBUG
         return detail::string_view(type_.data(), type_.size());
-#elif
+#else
         return constexpr static detail::string_view();
 #endif
     }
@@ -86,8 +86,6 @@ namespace actor_zeta { namespace base {
     communication_module::communication_module(std::string type) {
 #ifdef DEBUG
         type_ = std::move(type);
-#elif
-
 #endif
     }
 
