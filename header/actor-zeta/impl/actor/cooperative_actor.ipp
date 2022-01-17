@@ -112,24 +112,14 @@ namespace actor_zeta { namespace base {
         mailbox().try_unblock();
         deref();
     }
-#ifdef DEBUG
+
     cooperative_actor::cooperative_actor(
-        supervisor_abstract* supervisor,
-        int64_t id, std::string type)
-        : actor_abstract(id, std::move(type))
+        supervisor_abstract* supervisor, std::string type)
+        : actor_abstract(std::move(type))
         , supervisor_(supervisor) {
         flags(static_cast<int>(state::empty));
         mailbox().try_unblock();
     }
-#elif
-    cooperative_actor::cooperative_actor(
-        supervisor_abstract* supervisor, int64_t id)
-        : actor_abstract(id)
-        , supervisor_(supervisor) {
-        flags(static_cast<int>(state::empty));
-        mailbox().try_unblock();
-    }
-#endif
 
     cooperative_actor::~cooperative_actor() {}
 

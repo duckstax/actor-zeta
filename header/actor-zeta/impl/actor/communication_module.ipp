@@ -83,29 +83,13 @@ namespace actor_zeta { namespace base {
 
     communication_module::~communication_module() {}
 
-    communication_module::communication_module(int64_t id, std::string type)
-        : id_(id) {
+    communication_module::communication_module(std::string type) {
 #ifdef DEBUG
         type_ = std::move(type);
 #elif
 
 #endif
     }
-
-    communication_module::communication_module(int64_t id)
-        : id_(id) {}
-
-    communication_module::communication_module(std::string type)
-        : id_(invalid_actor_id) {
-#ifdef DEBUG
-        type_ = std::move(type);
-#elif
-
-#endif
-    }
-
-    communication_module::communication_module()
-        : id_(invalid_actor_id) {}
 
     void communication_module::enqueue(message_ptr msg, scheduler::execution_unit* e) {
         enqueue_impl(std::move(msg), e);
@@ -116,11 +100,7 @@ namespace actor_zeta { namespace base {
     }
 
     auto communication_module::id() const -> id_t {
-        if (invalid_actor_id == id_) {
-            return id_t{const_cast<communication_module*>(this)};
-        }
-
-        return id_t{id_};
+        return id_t{const_cast<communication_module*>(this)};
     }
 
 }} // namespace actor_zeta::base

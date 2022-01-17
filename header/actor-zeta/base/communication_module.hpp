@@ -15,27 +15,22 @@
 namespace actor_zeta { namespace base {
 
     using message_ptr = std::unique_ptr<message>;
-    using actor_id_t = int64_t;
-    constexpr static actor_id_t invalid_actor_id{-1};
 
     class communication_module {
     public:
         using key_type = detail::string_view;
         using handler_storage_t = std::unordered_map<key_type, std::unique_ptr<handler>>;
 
+        communication_module() = delete;
         communication_module(const communication_module&) = delete;
         communication_module& operator=(const communication_module&) = delete;
 
-        class id_t {
+        class id_t final {
         public:
             id_t() = default;
 
             explicit id_t(communication_module* impl) noexcept
                 : impl_{impl} {
-            }
-
-            explicit id_t(actor_id_t id) noexcept
-                : impl_{reinterpret_cast<communication_module*>(id)} {
             }
 
             bool operator==(id_t const& other) const noexcept {
@@ -87,6 +82,7 @@ namespace actor_zeta { namespace base {
         auto id() const -> id_t;
         auto enqueue(message_ptr) -> void;
         void enqueue(message_ptr, scheduler::execution_unit*);
+        auto current_message() -> message*;
 
     protected:
         virtual ~communication_module();
@@ -94,12 +90,8 @@ namespace actor_zeta { namespace base {
         * debug method
         */
         auto message_types() const -> std::set<std::string>;
-        auto current_message() -> message*;
 
-        communication_module(actor_id_t , std::string);
-        explicit communication_module(actor_id_t);
-        explicit communication_module(std::string);
-        communication_module();
+        communication_module(std::string);
 
         virtual auto current_message_impl() -> message* = 0;
         virtual void enqueue_impl(message_ptr, scheduler::execution_unit*) = 0;
@@ -119,9 +111,8 @@ namespace actor_zeta { namespace base {
 
     private:
         handler_storage_t handlers_;
-        const actor_id_t id_;
 #ifdef DEBUG
-             std::string type_;
+        std::string type_;
 #endif
     };
 

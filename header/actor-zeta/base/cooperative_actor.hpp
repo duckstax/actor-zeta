@@ -2,8 +2,8 @@
 
 #include <actor-zeta/base/actor_abstract.hpp>
 #include <actor-zeta/detail/single_reader_queue.hpp>
-#include <actor-zeta/scheduler/resumable.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <actor-zeta/scheduler/resumable.hpp>
 
 namespace actor_zeta { namespace base {
     ///
@@ -25,26 +25,17 @@ namespace actor_zeta { namespace base {
         void intrusive_ptr_release_impl() override;
 
     protected:
-#ifdef DEBUG
         template<class Supervisor>
-        cooperative_actor(Supervisor* ptr,int64_t actor_id,std::string type )
-            : cooperative_actor(static_cast<supervisor_abstract*>(ptr),actor_id,std::move(type)){};
-#elif
-        template<class Supervisor>
-        cooperative_actor(Supervisor* ptr, int64_t actor_id)
-            : cooperative_actor(static_cast<supervisor_abstract*>(ptr),actor_id){};
-#endif
+        cooperative_actor(Supervisor* ptr, std::string type)
+            : cooperative_actor(static_cast<supervisor_abstract*>(ptr), std::move(type)){};
+
         void enqueue_impl(message_ptr, scheduler::execution_unit*) final;
 
         // Non thread-safe method
         auto current_message_impl() -> message* override;
 
     private:
-#ifdef  DEBUG
-        cooperative_actor(supervisor_abstract*,int64_t,std::string);
-#elif
-        cooperative_actor(supervisor_abstract*,int64_t);
-#endif
+        cooperative_actor(supervisor_abstract*, std::string);
         enum class state : int {
             empty = 0x01,
             busy

@@ -25,17 +25,14 @@ namespace actor_zeta { namespace base {
         auto address() noexcept -> address_t;
 
     protected:
+        actor_abstract(std::string);
         // prohibit copies, assignments, and heap allocations
         void* operator new(size_t);
         void* operator new[](size_t);
+        actor_abstract() = delete;
         actor_abstract(const actor_abstract&) = delete;
         actor_abstract& operator=(const actor_abstract&) = delete;
         ~actor_abstract() override;
-
-        actor_abstract(actor_id_t, std::string);
-        actor_abstract(std::string);
-        actor_abstract(actor_id_t);
-        actor_abstract();
 
     };
 
