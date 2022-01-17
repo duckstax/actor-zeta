@@ -267,7 +267,7 @@ private:
     void add_link() {
         auto& address = current_message()->sender();
         if (address && this != address.get()) {
-            auto name = address.type();
+            auto name = address->type();
             address_book_.emplace(name, std::move(address));
         }
     }
