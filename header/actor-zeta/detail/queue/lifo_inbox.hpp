@@ -4,9 +4,7 @@
 #include <condition_variable>
 #include <mutex>
 
-#include "caf/config.hpp"
-
-#include "caf/intrusive/inbox_result.hpp"
+#include "inbox_result.hpp"
 
 namespace actor_zeta { namespace detail {
 
@@ -15,20 +13,12 @@ namespace actor_zeta { namespace detail {
     template<class Policy>
     class lifo_inbox {
     public:
-        // -- member types -----------------------------------------------------------
-
         using policy_type = Policy;
-
         using value_type = typename policy_type::mapped_type;
-
         using pointer = value_type*;
-
         using node_type = typename value_type::node_type;
-
         using node_pointer = node_type*;
-
         using unique_pointer = typename policy_type::unique_pointer;
-
         using deleter_type = typename unique_pointer::deleter_type;
 
         // -- static utility functions -----------------------------------------------
@@ -43,7 +33,7 @@ namespace actor_zeta { namespace detail {
         /// Tries to enqueue a new element to the inbox.
         /// @threadsafe
         inbox_result push_front(pointer new_element) noexcept {
-            CAF_ASSERT(new_element != nullptr);
+            assert(new_element != nullptr);
             pointer e = stack_.load();
             auto eof = stack_closed_tag();
             auto blk = reader_blocked_tag();
@@ -77,8 +67,8 @@ namespace actor_zeta { namespace detail {
         /// Queries whether this queue is empty.
         /// @pre `!closed() && !blocked()`
         bool empty() const noexcept {
-            CAF_ASSERT(!closed());
-            CAF_ASSERT(!blocked());
+            assert(!closed());
+            assert(!blocked());
             return stack_.load() == stack_empty_tag();
         }
 
@@ -110,22 +100,22 @@ namespace actor_zeta { namespace detail {
         pointer take_head(pointer new_head) noexcept {
             // This member function should only be used to transition to closed or
             // empty.
-            CAF_ASSERT(new_head == stack_closed_tag() || new_head == stack_empty_tag());
+            assert(new_head == stack_closed_tag() || new_head == stack_empty_tag());
             pointer e = stack_.load();
             // Must not be called on a closed queue.
-            CAF_ASSERT(e != stack_closed_tag());
+            assert(e != stack_closed_tag());
             // Must not be called on a blocked queue unless for setting it to closed,
             // because that would mean an actor accesses its mailbox after blocking its
             // mailbox but before receiving anything.
-            CAF_ASSERT(e != reader_blocked_tag() || new_head == stack_closed_tag());
+            assert(e != reader_blocked_tag() || new_head == stack_closed_tag());
             // We don't assert these conditions again since only the owner is allowed
             // to call this member function, i.e., there's never a race on `take_head`.
             while (e != new_head) {
                 if (stack_.compare_exchange_weak(e, new_head)) {
-                    CAF_ASSERT(e != stack_closed_tag());
+                    assert(e != stack_closed_tag());
                     if (is_empty_or_blocked_tag(e)) {
                         // Sanity check: going from empty/blocked to closed.
-                        CAF_ASSERT(new_head == stack_closed_tag());
+                        assert(new_head == stack_closed_tag());
                         return nullptr;
                     }
                     return e;
@@ -207,7 +197,7 @@ namespace actor_zeta { namespace detail {
 
         template<class Mutex, class CondVar>
         void synchronized_await(Mutex& mtx, CondVar& cv) {
-            CAF_ASSERT(!closed());
+            assert(!closed());
             if (try_block()) {
                 std::unique_lock<Mutex> guard(mtx);
                 while (blocked())
@@ -217,7 +207,7 @@ namespace actor_zeta { namespace detail {
 
         template<class Mutex, class CondVar, class TimePoint>
         bool synchronized_await(Mutex& mtx, CondVar& cv, const TimePoint& timeout) {
-            CAF_ASSERT(!closed());
+            assert(!closed());
             if (try_block()) {
                 std::unique_lock<Mutex> guard(mtx);
                 while (blocked()) {

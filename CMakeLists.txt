@@ -90,6 +90,7 @@ set(HEADER_FILES
         header/actor-zeta/base/supervisor.hpp
         header/actor-zeta/base/supervisor_abstract.hpp
 
+        header/actor-zeta/detail/queue/queue.hpp
         header/actor-zeta/detail/queue/cached_queue.hpp
         header/actor-zeta/detail/queue/fifo_inbox.hpp
         header/actor-zeta/detail/queue/forward_iterator.hpp
@@ -135,7 +136,7 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
         source/src.cpp
-)
+        header/actor-zeta/detail/queue/enqueue_result.hpp)
 
 find_program(CCACHE_FOUND ccache)
 if (CCACHE_FOUND)

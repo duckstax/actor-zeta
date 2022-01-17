@@ -12,29 +12,17 @@ namespace actor_zeta { namespace detail {
     /// A Deficit Round Robin queue with an internal cache for allowing skipping
     /// consumers.
     template<class Policy>
-    class cached_queue { // Note that we do *not* inherit from
-                         // task_queue<Policy>, because the cached queue can no
-                         // longer offer iterator access.
+    class cached_queue {
     public:
-        // -- member types ----------------------------------------------------------
         using policy_type = Policy;
-
         using value_type = typename policy_type::mapped_type;
-
         using node_type = typename value_type::node_type;
-
         using node_pointer = node_type*;
-
         using pointer = value_type*;
-
         using unique_pointer = typename policy_type::unique_pointer;
-
         using deficit_type = typename policy_type::deficit_type;
-
         using task_size_type = typename policy_type::task_size_type;
-
         using list_type = task_queue<policy_type>;
-
         using cache_type = task_queue<policy_type>;
 
         // -- constructors, destructors, and assignment operators -------------------
@@ -96,6 +84,13 @@ namespace actor_zeta { namespace detail {
         template<class F>
         void peek_all(F f) const {
             list_.peek_all(f);
+        }
+
+        /// Tries to find the next element in the queue (excluding cached elements)
+        /// that matches the given predicate.
+        template <class Predicate>
+        pointer find_if(Predicate pred) {
+            return list_.find_if(pred);
         }
 
         // -- modifiers -------------------------------------------------------------
@@ -237,14 +232,8 @@ namespace actor_zeta { namespace detail {
         }
 
     private:
-        // -- member variables ------------------------------------------------------
-        /// Stores current (unskipped) items.
         list_type list_;
-
-        /// Stores the deficit on this queue.
         deficit_type deficit_ = 0;
-
-        /// Stores previously skipped items.
         cache_type cache_;
     };
 

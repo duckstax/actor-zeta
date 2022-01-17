@@ -10,26 +10,16 @@ namespace actor_zeta { namespace detail {
     template<class T>
     class forward_iterator {
     public:
-        // -- member types -----------------------------------------------------------
-
         using difference_type = std::ptrdiff_t;
-
         using value_type = T;
-
         using pointer = value_type*;
-
         using const_pointer = const value_type*;
-
         using reference = value_type&;
-
         using const_reference = const value_type&;
-
         using node_type = typename std::conditional<std::is_const<T>::value,
                                                     const typename T::node_type,
                                                     typename T::node_type>::type;
-
         using node_pointer = node_type*;
-
         using iterator_category = std::forward_iterator_tag;
 
         // -- static utility functions -----------------------------------------------

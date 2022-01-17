@@ -1,22 +1,17 @@
 #pragma once
 
-#include "caf/config.hpp"
-
 #include <atomic>
-#include <condition_variable> // std::cv_status
+#include <condition_variable>
 #include <deque>
 #include <limits>
 #include <list>
 #include <memory>
 #include <mutex>
 
-#include "caf/config.hpp"
-
 #include "inbox_result.hpp"
+#include "enqueue_result.hpp"
 #include "lifo_inbox.hpp"
 #include "new_round_result.hpp"
-
-#include "caf/detail/enqueue_result.hpp"
 
 namespace actor_zeta { namespace detail {
     /// A FIFO inbox that combines an efficient thread-safe LIFO inbox with a FIFO
@@ -24,22 +19,13 @@ namespace actor_zeta { namespace detail {
     template<class Policy>
     class fifo_inbox {
     public:
-        // -- member types -----------------------------------------------------------
-
         using policy_type = Policy;
-
         using queue_type = typename policy_type::queue_type;
-
         using deficit_type = typename policy_type::deficit_type;
-
         using value_type = typename policy_type::mapped_type;
-
         using lifo_inbox_type = lifo_inbox<policy_type>;
-
         using pointer = value_type*;
-
         using unique_pointer = typename queue_type::unique_pointer;
-
         using node_pointer = typename value_type::node_pointer;
 
         // -- constructors, destructors, and assignment operators --------------------
@@ -157,6 +143,13 @@ namespace actor_zeta { namespace detail {
             return queue_.peek();
         }
 
+        /// Tries to find an element in the queue that matches the given predicate.
+        template <class Predicate>
+        pointer find_if(Predicate pred) {
+            fetch_more();
+            return queue_.find_if(pred);
+        }
+
         queue_type& queue() noexcept {
             return queue_;
         }
@@ -199,12 +192,7 @@ namespace actor_zeta { namespace detail {
         }
 
     private:
-        // -- member variables -------------------------------------------------------
-
-        /// Thread-safe LIFO inbox.
         lifo_inbox_type inbox_;
-
-        /// User-facing queue that is constantly resupplied from the inbox.
         queue_type queue_;
     };
 }

@@ -12,30 +12,17 @@ namespace actor_zeta { namespace detail {
     template<class Policy>
     class task_queue {
     public:
-        // -- member types ----------------------------------------------------------
-
         using policy_type = Policy;
-
         using value_type = typename policy_type::mapped_type;
-
         using node_type = typename value_type::node_type;
-
         using node_pointer = node_type*;
-
         using pointer = value_type*;
-
         using const_pointer = const value_type*;
-
         using reference = value_type&;
-
         using const_reference = const value_type&;
-
         using unique_pointer = typename policy_type::unique_pointer;
-
         using task_size_type = typename policy_type::task_size_type;
-
         using iterator = forward_iterator<value_type>;
-
         using const_iterator = forward_iterator<const value_type>;
 
         // -- static utility functions -----------------------------------------------
@@ -121,6 +108,16 @@ namespace actor_zeta { namespace detail {
                 f(*i);
         }
 
+        /// Tries to find the next element in the queue (excluding cached elements)
+        /// that matches the given predicate.
+        template <class Predicate>
+        pointer find_if(Predicate pred) {
+            for (auto i = begin(); i != end(); ++i)
+                if (pred(*i))
+                    return promote(i.ptr);
+            return nullptr;
+        }
+
         // -- modifiers -------------------------------------------------------------
 
         /// Removes all elements from the queue.
@@ -131,7 +128,7 @@ namespace actor_zeta { namespace detail {
 
         /// @private
         void inc_total_task_size(task_size_type x) noexcept {
-            CAF_ASSERT(x > 0);
+            assert(x > 0);
             total_task_size_ += x;
         }
 
@@ -142,7 +139,7 @@ namespace actor_zeta { namespace detail {
 
         /// @private
         void dec_total_task_size(task_size_type x) noexcept {
-            CAF_ASSERT(x > 0);
+            assert(x > 0);
             total_task_size_ -= x;
         }
 
@@ -163,13 +160,13 @@ namespace actor_zeta { namespace detail {
             if (!empty()) {
                 auto ptr = promote(head_.next);
                 auto ts = policy_.task_size(*ptr);
-                CAF_ASSERT(ts > 0);
+                assert(ts > 0);
                 if (ts <= deficit) {
                     deficit -= ts;
                     total_task_size_ -= ts;
                     head_.next = ptr->next;
                     if (total_task_size_ == 0) {
-                        CAF_ASSERT(head_.next == &(tail_));
+                        assert(head_.next == &(tail_));
                         deficit = 0;
                         tail_.next = &(head_);
                     }
@@ -220,7 +217,7 @@ namespace actor_zeta { namespace detail {
 
         /// Returns a pointer to the last element.
         pointer back() noexcept {
-            CAF_ASSERT(head_.next != &tail_);
+            assert(head_.next != &tail_);
             return promote(tail_.next);
         }
 
@@ -229,7 +226,7 @@ namespace actor_zeta { namespace detail {
         /// Appends `ptr` to the queue.
         /// @pre `ptr != nullptr`
         bool push_back(pointer ptr) noexcept {
-            CAF_ASSERT(ptr != nullptr);
+            assert(ptr != nullptr);
             tail_.next->next = ptr;
             tail_.next = ptr;
             ptr->next = &tail_;
@@ -301,7 +298,7 @@ namespace actor_zeta { namespace detail {
         /// @private
         void stop_lifo_append() {
             if (old_last_ != nullptr) {
-                CAF_ASSERT(new_head_ != nullptr);
+                assert(new_head_ != nullptr);
                 old_last_->next = new_head_;
                 old_last_ = nullptr;
             }
@@ -330,24 +327,11 @@ namespace actor_zeta { namespace detail {
         }
 
     protected:
-        // -- member variables ------------------------------------------------------
-
-        /// node element pointing to the first element.
         node_type head_;
-
-        /// node element pointing past the last element.
         node_type tail_;
-
-        /// Stores the total size of all items in the queue.
         task_size_type total_task_size_;
-
-        /// Used for LIFO -> FIFO insertion.
         node_pointer old_last_;
-
-        /// Used for LIFO -> FIFO insertion.
         node_pointer new_head_;
-
-        /// Manipulates instances of T.
         policy_type policy_;
     };
 
