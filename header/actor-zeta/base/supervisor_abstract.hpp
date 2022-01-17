@@ -8,7 +8,8 @@ namespace actor_zeta { namespace base {
 
     class supervisor_abstract
         : public communication_module
-        , public ref_counted {
+        , public ref_counted
+        , public intrusive_behavior_t {
     public:
         supervisor_abstract(detail::pmr::memory_resource*, std::string, int64_t);
 
@@ -22,10 +23,9 @@ namespace actor_zeta { namespace base {
         auto address() noexcept -> address_t;
 
     protected:
-        using communication_module::add_handler;
         virtual auto scheduler_impl() noexcept -> scheduler::scheduler_abstract_t* = 0;
         auto set_current_message(message_ptr) -> void;
-        auto current_message_impl() -> message* final;
+        auto current_message() -> message*;
 
     private:
         supervisor_abstract(supervisor_abstract*, std::string, int64_t);
@@ -42,8 +42,6 @@ namespace actor_zeta { namespace base {
         using supervisor_abstract::supervisor_abstract;
 
     protected:
-        using communication_module::add_handler;
-
         template<
             class Actor,
             class Inserter,

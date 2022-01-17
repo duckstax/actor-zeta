@@ -41,7 +41,7 @@ namespace actor_zeta { namespace base {
 
     supervisor_abstract::~supervisor_abstract() {}
 
-    auto supervisor_abstract::current_message_impl() -> message* {
+    auto supervisor_abstract::current_message() -> message* {
         return current_message_;
     }
 

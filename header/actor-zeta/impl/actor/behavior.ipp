@@ -27,23 +27,11 @@ namespace actor_zeta { namespace base {
         std::cerr << "WARNING" << std::endl;
     }
 
-    auto behavior_container::assign(behavior_t& behavior) -> void {
-        handlers_ = std::move(behavior.get());
-    }
-
-    auto behavior_container::message_types() const -> std::set<std::string> {
-        std::set<std::string> types;
-        for (const auto& i : handlers_->handlers_) {
-            types.emplace(std::string(i.first.begin(), i.first.end()));
-        }
-        return types;
-    }
-
-    bool behavior_container::on(behavior_t::key_type name, behavior_t::value_type handler) {
-        auto it = handlers_->handlers_.find(name);
+    bool intrusive_behavior_t::on(key_type name, value_type handler) {
+        auto it = handlers_.find(name);
         bool status = false;
-        if (it == handlers_->handlers_.end()) {
-            auto it1 = handlers_->handlers_.emplace(name, std::move(handler));
+        if (it == handlers_.end()) {
+            auto it1 = handlers_.emplace(name, std::move(handler));
             status = it1.second;
             if (status == false) {
                 error_add_handler(name);
@@ -55,40 +43,12 @@ namespace actor_zeta { namespace base {
         return status;
     }
 
-    behavior_container::behavior_container():handlers_(new behavior_private) {
-
-    }
-
-    auto behavior_t::get() -> behavior_private_ptr {
-        return std::move(handlers_);
-    }
-
-    auto behavior_t::message_types() const -> std::set<std::string> {
+    auto intrusive_behavior_t::message_types() const -> std::set<std::string> {
         std::set<std::string> types;
-        for (const auto& i : handlers_->handlers_) {
+        for (const auto& i : handlers_) {
             types.emplace(std::string(i.first.begin(), i.first.end()));
         }
         return types;
-    }
-
-    auto behavior_t::ptr() -> void* {
-        return ptr_;
-    }
-
-    bool behavior_t::on(behavior_t::key_type name, behavior_t::value_type handler) {
-        auto it = handlers_->handlers_.find(name);
-        bool status = false;
-        if (it == handlers_->handlers_.end()) {
-            auto it1 = handlers_->handlers_.emplace(name, std::move(handler));
-            status = it1.second;
-            if (status == false) {
-                error_add_handler(name);
-            }
-        } else {
-            error_duplicate_handler(name);
-        }
-
-        return status;
     }
 
 }} // namespace actor_zeta::base

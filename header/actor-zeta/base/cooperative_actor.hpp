@@ -1,9 +1,10 @@
 #pragma once
 
+#include <actor-zeta/forwards.hpp>
 #include <actor-zeta/base/actor_abstract.hpp>
 #include <actor-zeta/detail/single_reader_queue.hpp>
 #include <actor-zeta/scheduler/resumable.hpp>
-#include <actor-zeta/forwards.hpp>
+#include <actor-zeta/base/behavior.hpp>
 
 namespace actor_zeta { namespace base {
     ///
@@ -12,7 +13,8 @@ namespace actor_zeta { namespace base {
 
     class cooperative_actor
         : public actor_abstract
-        , public scheduler::resumable {
+        , public scheduler::resumable
+        , public intrusive_behavior_t {
     public:
         using mailbox_t = detail::single_reader_queue<message>;
 
@@ -32,7 +34,7 @@ namespace actor_zeta { namespace base {
         void enqueue_impl(message_ptr, scheduler::execution_unit*) final;
 
         // Non thread-safe method
-        auto current_message_impl() -> message* override;
+        auto current_message() -> message* ;
 
     private:
         cooperative_actor(supervisor_abstract*, std::string,int64_t);

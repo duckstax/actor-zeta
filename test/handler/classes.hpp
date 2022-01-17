@@ -72,7 +72,7 @@ public:
         TRACE(msg->command());
         enqueue_base_counter++;
         set_current_message(std::move(msg));
-        supervisor_abstract::execute();
+        supervisor_abstract::execute(this,current_message());
     }
 
 private:

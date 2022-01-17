@@ -110,7 +110,7 @@ private:
     }
     auto local(actor_zeta::message_ptr msg) -> void {
         set_current_message(std::move(msg));
-        execute();
+        execute(this,current_message());
     }
 
     auto redirect_robin(actor_zeta::message_ptr msg) -> void {

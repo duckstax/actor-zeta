@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/base/forwards.hpp>
+#include <actor-zeta/forwards.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/type_list.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
