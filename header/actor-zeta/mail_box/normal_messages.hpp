@@ -1,36 +1,24 @@
 #pragma once
 
-#include "caf/fwd.hpp"
-#include "caf/mailbox_element.hpp"
-#include "caf/unit.hpp"
+#include <actor-zeta/forwards.hpp>
+#include <actor-zeta/base/message.hpp>
+#include <actor-zeta/detail/type_list.hpp>
 
 namespace actor_zeta { namespace mail_box {
 
-    /// Configures a cached DRR queue for holding asynchronous messages with
-    /// default priority.
     class normal_messages {
     public:
-        // -- member types -----------------------------------------------------------
-
-        using mapped_type = mailbox_element;
-
+        using mapped_type = base::message;
         using task_size_type = size_t;
-
         using deficit_type = size_t;
-
-        using unique_pointer = mailbox_element_ptr;
-
-        // -- constructors, destructors, and assignment operators --------------------
+        using unique_pointer = base::message_ptr;
 
         normal_messages() = default;
-
         normal_messages(const normal_messages&) = default;
+        auto operator=(const normal_messages&) -> normal_messages& = default;
+        constexpr explicit normal_messages(const type_traits::unit_t&) {}
 
-        normal_messages& operator=(const normal_messages&) = default;
-
-        constexpr normal_messages(unit_t) {}
-
-        static task_size_type task_size(const mailbox_element&) noexcept {
+        static auto task_size(const base::message&) noexcept -> task_size_type {
             return 1;
         }
     };

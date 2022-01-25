@@ -1,29 +1,22 @@
 #pragma once
-#include "actor-zeta/detail/intrusive/"
+#include <actor-zeta/base/message.hpp>
+#include <actor-zeta/detail/queue/cached_queue.hpp>
+#include <actor-zeta/detail/queue/fixed_queue.hpp>
+#include <actor-zeta/mail_box/categorized.hpp>
 
-/// Stores asynchronous messages with default priority.
-using normal_queue = intrusive::drr_cached_queue<policy::normal_messages>;
+namespace actor_zeta {
 
-/// Stores asynchronous messages with hifh priority.
-using urgent_queue = intrusive::drr_cached_queue<policy::urgent_messages>;
+    using normal_queue = detail::cached_queue<mail_box::normal_messages>;
+    using urgent_queue = detail::cached_queue<mail_box::urgent_messages>;
 
+    struct mailbox_policy {
+        using deficit_type = size_t;
+        using mapped_type = base::message;
+        using unique_pointer = base::message_ptr;
+        using queue_type = detail::fixed_queue<mail_box::categorized, urgent_queue, normal_queue>;
+    };
 
+    static constexpr size_t urgent_queue_index = 0;
+    static constexpr size_t normal_queue_index = 1;
 
-/// Configures the FIFO inbox with four nested queues:
-///
-///   1. Default asynchronous messages
-///   2. High-priority asynchronous messages
-
-struct mailbox_policy {
-    using deficit_type = size_t;
-
-    using mapped_type = mailbox_element;
-
-    using unique_pointer = mailbox_element_ptr;
-
-    using queue_type = intrusive::wdrr_fixed_multiplexed_queue<policy::categorized, urgent_queue, normal_queue>;
-};
-
-static constexpr size_t urgent_queue_index = 0;
-
-static constexpr size_t normal_queue_index = 1;
+}
