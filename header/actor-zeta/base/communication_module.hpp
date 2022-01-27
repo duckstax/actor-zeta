@@ -33,14 +33,14 @@ namespace actor_zeta { namespace base {
         * debug method
         */
         auto message_types() const -> std::set<std::string>;
-        auto enqueue(message_ptr) -> void;
-        void enqueue(message_ptr, executor::execution_device*);
+        auto enqueue(message_ptr) -> bool;
+        auto enqueue(message_ptr, executor::execution_device*) -> bool;
         auto current_message() -> message*;
 
     protected:
         communication_module(std::string,int64_t);
         virtual auto current_message_impl() -> message* = 0;
-        virtual void enqueue_impl(message_ptr, executor::execution_device*) = 0;
+        virtual bool enqueue_impl(message_ptr, executor::execution_device*) = 0;
 
         template<class F>
         auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {

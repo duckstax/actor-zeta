@@ -89,7 +89,7 @@ public:
 protected:
     auto executor_impl() noexcept -> actor_zeta::abstract_executor* final { return e_.get(); }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> bool final {
         auto msg_ = std::move(msg);
         auto it = system_.find(msg_->command());
         if (it != system_.end()) {
@@ -97,6 +97,7 @@ protected:
         } else {
             redirect_robin(std::move(msg_));
         }
+        return true;
     }
 
 private:

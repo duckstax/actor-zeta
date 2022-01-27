@@ -144,9 +144,10 @@ protected:
         return e_;
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> bool final {
         set_current_message(std::move(msg));
         execute();
+        return true;
     }
 
 private:
@@ -189,11 +190,12 @@ protected:
         return e_.get();
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> bool final {
         {
             set_current_message(std::move(msg));
             execute();
         }
+        return true;
     }
 
 private:
@@ -263,11 +265,12 @@ protected:
         return e_.get();
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> bool final {
         {
             set_current_message(std::move(msg));
             execute();
         }
+        return true;
     }
 
 private:

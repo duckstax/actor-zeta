@@ -1,9 +1,10 @@
 #pragma once
 
 #include <actor-zeta/base/actor_abstract.hpp>
-#include <actor-zeta/detail/single_reader_queue.hpp>
+#include <actor-zeta/detail/queue/fifo_inbox.hpp>
 #include <actor-zeta/executor/executable.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <actor-zeta/mail_box.hpp>
 
 namespace actor_zeta { namespace base {
     ///
@@ -14,7 +15,7 @@ namespace actor_zeta { namespace base {
         : public actor_abstract
         , public executor::executable {
     public:
-        using mailbox_t = detail::single_reader_queue<message>;
+        using mailbox_t = detail::fifo_inbox<mailbox_policy>;
 
         executor::executable_result run(executor::execution_device*, max_throughput_t) final;
 
@@ -29,7 +30,7 @@ namespace actor_zeta { namespace base {
         cooperative_actor(Supervisor* ptr, std::string type ,int64_t actor_id)
             : cooperative_actor(static_cast<supervisor_abstract*>(ptr),std::move(type),actor_id){};
 
-        void enqueue_impl(message_ptr, executor::execution_device*) final;
+        bool enqueue_impl(message_ptr, executor::execution_device*) final;
 
         // Non thread-safe method
         auto current_message_impl() -> message* override;
@@ -52,7 +53,7 @@ namespace actor_zeta { namespace base {
 
         void cleanup();
 
-        bool consume_from_cache();
+//        bool consume_from_cache();
 
         void consume(message&);
 
@@ -66,11 +67,11 @@ namespace actor_zeta { namespace base {
 
         auto reactivate(message& x) -> void;
 
-        message_ptr next_message();
+//        message_ptr next_message();
 
-        bool has_next_message();
+//        bool has_next_message();
 
-        void push_to_cache(message_ptr ptr);
+//        void push_to_cache(message_ptr ptr);
 
         auto context(executor::execution_device*) -> void;
 

@@ -59,8 +59,8 @@ namespace actor_zeta { namespace base {
         return status;
     }
 
-    void communication_module::enqueue(message_ptr msg) {
-        enqueue(std::move(msg), nullptr);
+    auto communication_module::enqueue(message_ptr msg) -> bool {
+        return enqueue(std::move(msg), nullptr);
     }
 
     auto communication_module::message_types() const -> std::set<std::string> {
@@ -83,8 +83,8 @@ namespace actor_zeta { namespace base {
         : type_(std::move(type))
         , id_(id){}
 
-    void communication_module::enqueue(message_ptr msg, executor::execution_device* e) {
-        enqueue_impl(std::move(msg), e);
+    auto communication_module::enqueue(message_ptr msg, executor::execution_device* e) -> bool {
+        return enqueue_impl(std::move(msg), e);
     }
 
     auto communication_module::current_message() -> message* {

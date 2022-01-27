@@ -80,11 +80,12 @@ public:
         return supervisor_.back();
     }
 
-    void enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) override {
+    bool enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) override {
         TRACE(msg->command());
         enqueue_base_counter++;
         set_current_message(std::move(msg));
         supervisor_abstract::execute();
+        return true;
     }
 
 private:

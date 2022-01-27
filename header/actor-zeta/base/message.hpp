@@ -4,6 +4,7 @@
 
 #include <actor-zeta/detail/any.hpp>
 #include <actor-zeta/detail/string_view.hpp>
+#include <actor-zeta/detail/queue/singly_linked.hpp>
 #include <actor-zeta/forwards.hpp>
 #include <string>
 
@@ -18,7 +19,7 @@ namespace actor_zeta { namespace base {
         high = 0x01
     };
 
-    class message final {
+    class message final : public detail::singly_linked<message> {
     public:
         message();
         message(const message&) = delete;
