@@ -29,7 +29,6 @@ namespace actor_zeta { namespace base {
         ~message() = default;
         message(address_t /*sender*/, std::string /*name*/);
         message(address_t /*sender*/, std::string /*name*/, detail::any /*body*/);
-        message* next;
         message* prev;
         auto command() const noexcept -> detail::string_view;
         auto sender() & noexcept -> address_t&;

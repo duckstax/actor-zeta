@@ -20,50 +20,33 @@ namespace actor_zeta { namespace base {
     }
 
     executor::executable_result cooperative_actor::run(executor::execution_device* e, size_t max_throughput) {
-//        if (!activate(e)) {
-//            return executor::executable_result::done;
-//        }
-//
-//        size_t handled_msgs = 0;
-//
-//        message_ptr ptr;
-//
-//        while (handled_msgs < max_throughput && !mailbox().empty()) {
-//            do {
-//                ptr = next_message();
-//                if (!ptr) {
-//                    if (mailbox().try_block()) {
-//                        return executor::executable_result::awaiting;
-//                    }
-//                }
-//            } while (!ptr);
-//            consume_from_cache();
-//            ++handled_msgs;
-//        }
-//
-//        while (handled_msgs < max_throughput) {
-//            do {
-//                ptr = next_message();
-//                if (!ptr) {
-//                    if (mailbox().try_block()) {
-//                        return executor::executable_result::awaiting;
-//                    }
-//                }
-//            } while (!ptr);
-//            reactivate(*ptr);
-//            ++handled_msgs;
-//        }
-//
-//        while (!ptr) {
-//            ptr = next_message();
-//            push_to_cache(std::move(ptr));
-//        }
-//
-//        if (!has_next_message() && mailbox().try_block()) {
-//            return executor::executable_result::awaiting;
-//        }
-//
-//        return executor::executable_result::awaiting;
+        if (!activate(e)) {
+            return executor::executable_result::done;
+        }
+        static constexpr size_t quantum = 3;
+        size_t handled_msgs = 0;
+        message_ptr ptr;
+
+        auto handle_async = [this, max_throughput, &handled_msgs](message& x) -> detail::task_result {
+            reactivate(x);
+            return ++handled_msgs < max_throughput
+                       ? detail::task_result::resume
+                       : detail::task_result::stop_all;
+        };
+
+        while (handled_msgs < max_throughput) {
+            mailbox().fetch_more();
+            auto prev_handled_msgs = handled_msgs;
+            get_urgent_queue().new_round(quantum * 3, handle_async);
+            get_normal_queue().new_round(quantum, handle_async);
+            if (handled_msgs == prev_handled_msgs && mailbox().try_block()) {
+                return executor::executable_result::awaiting;
+            }
+        }
+        if (mailbox().try_block()) {
+            return executor::executable_result::awaiting;
+        }
+        return executor::executable_result::resume;
     }
 
     bool cooperative_actor::enqueue_impl(message_ptr msg, executor::execution_device* e) {
@@ -79,9 +62,8 @@ namespace actor_zeta { namespace base {
                 }
                 return true;
             }
-            case detail::inbox_result::queue_closed: {
+            case detail::inbox_result::queue_closed:
                 return false;
-            }
             case detail::inbox_result::success:
                 return true;
         }
@@ -124,63 +106,10 @@ namespace actor_zeta { namespace base {
         consume(x);
     }
 
-//    message_ptr cooperative_actor::next_message() {
-//        auto& cache = mailbox().cache();
-//        auto i = cache.begin();
-//        auto e = cache.separator();
-//        if (i == e || !i->is_high_priority()) {
-//            auto hp_pos = i;
-//            auto tmp = mailbox().try_pop();
-//            while (tmp != nullptr) {
-//                cache.insert(tmp->is_high_priority() ? hp_pos : e, tmp);
-//                if (hp_pos == e && !tmp->is_high_priority())
-//                    --hp_pos;
-//                tmp = mailbox().try_pop();
-//            }
-//        }
-//        message_ptr result;
-//        i = cache.begin();
-//        if (i != e)
-//            result.reset(cache.take(i));
-//        return result;
-//    }
-//
-//    bool cooperative_actor::has_next_message() {
-//        auto& mbox = mailbox();
-//        auto& cache = mbox.cache();
-//        return cache.begin() != cache.separator() || mbox.can_fetch_more();
-//    }
-//
-//    void cooperative_actor::push_to_cache(message_ptr ptr) {
-//        assert(ptr != nullptr);
-//        if (!ptr->is_high_priority()) {
-//            mailbox().cache().insert(mailbox().cache().end(), ptr.release());
-//            return;
-//        }
-//        auto high_priority = [](const message& val) {
-//            return val.is_high_priority();
-//        };
-//        auto& cache = mailbox().cache();
-//        auto e = cache.end();
-//        cache.insert(std::partition_point(cache.continuation(), e, high_priority), ptr.release());
-//    }
-
     void cooperative_actor::consume(message& x) {
         current_message_ = &x;
         execute();
     }
-
-//    bool cooperative_actor::consume_from_cache() {
-//        auto& cache = mailbox().cache();
-//        auto i = cache.continuation();
-//        auto e = cache.end();
-//        while (i != e) {
-//            consume(*i);
-//            cache.erase(i);
-//            return true;
-//        }
-//        return false;
-//    }
 
     void cooperative_actor::cleanup() {}
 
@@ -200,6 +129,14 @@ namespace actor_zeta { namespace base {
 
     auto cooperative_actor::supervisor() -> supervisor_abstract* {
         return supervisor_;
+    }
+
+    auto cooperative_actor::get_urgent_queue() -> urgent_queue& {
+        return std::get<urgent_queue_index>(mailbox().queue().queues());
+    }
+
+    auto cooperative_actor::get_normal_queue() -> normal_queue& {
+        return std::get<normal_queue_index>(mailbox().queue().queues());
     }
 
 }} // namespace actor_zeta::base

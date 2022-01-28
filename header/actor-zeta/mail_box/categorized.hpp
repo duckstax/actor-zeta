@@ -34,9 +34,11 @@ namespace actor_zeta { namespace mail_box {
             return x;
         }
 
-//        static auto id_of(const base::message& x) noexcept -> size_t {
-//            return static_cast<size_t>(x.mid.category());
-//        }
+        static auto id_of(const base::message& x) noexcept -> size_t {
+            // todo
+            //return static_cast<size_t>(x.mid.category());
+            return 0;
+        }
     };
 
 }} // namespace actor_zeta::mail_box

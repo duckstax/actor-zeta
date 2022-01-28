@@ -53,8 +53,6 @@ namespace actor_zeta { namespace base {
 
         void cleanup();
 
-//        bool consume_from_cache();
-
         void consume(message&);
 
         // message processing -----------------------------------------------------
@@ -67,17 +65,15 @@ namespace actor_zeta { namespace base {
 
         auto reactivate(message& x) -> void;
 
-//        message_ptr next_message();
-
-//        bool has_next_message();
-
-//        void push_to_cache(message_ptr ptr);
-
         auto context(executor::execution_device*) -> void;
 
         auto context() const -> executor::execution_device*;
 
         auto supervisor() -> supervisor_abstract*;
+
+        auto get_urgent_queue() -> urgent_queue&;
+
+        auto get_normal_queue() -> normal_queue&;
 
         // ----------------------------------------------------- message processing
         supervisor_abstract* supervisor_;
