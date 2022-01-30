@@ -17,16 +17,8 @@ namespace actor_zeta {
         class cooperative_actor;
     } // namespace base
 
-    namespace executor {
-        class work_sharing;
-        template<class T>
-        struct profiled;
-        template<class>
-        class profiled_executor;
-        class abstract_executor;
-        template<class Policy>
-        class executor_t;
-        struct execution_device;
-        struct executable;
-    } // namespace executor
+    namespace scheduler {
+        class execution_unit;
+    }
+
 } // namespace actor_zeta

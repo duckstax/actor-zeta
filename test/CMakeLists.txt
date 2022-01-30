@@ -3,6 +3,8 @@
 include_directories(.)
 include_directories(../header/)
 
+add_subdirectory(tooltestsuites)
+
 add_subdirectory(any)
 add_subdirectory(handler)
 add_subdirectory(intrusive_ptr)
@@ -11,5 +13,5 @@ add_subdirectory(message)
 add_subdirectory(metaprogramming)
 add_subdirectory(polymorphic_allocator)
 add_subdirectory(queue)
-add_subdirectory(spawn)
+add_subdirectory(spawn-actor)
 add_subdirectory(string_view)

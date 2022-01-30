@@ -10,7 +10,7 @@
 #include <actor-zeta.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 
-auto thread_pool_deleter = [](actor_zeta::abstract_executor* ptr) {
+auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
     ptr->stop();
     delete ptr;
 };
@@ -51,7 +51,7 @@ class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervis
 public:
     explicit supervisor_lite(memory_resource* ptr)
         : cooperative_supervisor(ptr, "network", 0)
-        , e_(new actor_zeta::executor_t<actor_zeta::work_sharing>(
+        , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
                  1,
                  100),
              thread_pool_deleter)
@@ -87,9 +87,9 @@ public:
     }
 
 protected:
-    auto executor_impl() noexcept -> actor_zeta::abstract_executor* final { return e_.get(); }
+    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final { return e_.get(); }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_device*) -> bool final {
+    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> bool final {
         auto msg_ = std::move(msg);
         auto it = system_.find(msg_->command());
         if (it != system_.end()) {
@@ -124,7 +124,7 @@ private:
         }
     }
 
-    std::unique_ptr<actor_zeta::abstract_executor, decltype(thread_pool_deleter)> e_;
+    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor> actors_;
     std::size_t cursor;
     std::unordered_set<actor_zeta::detail::string_view> system_;

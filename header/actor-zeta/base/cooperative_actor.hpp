@@ -2,7 +2,7 @@
 
 #include <actor-zeta/base/actor_abstract.hpp>
 #include <actor-zeta/detail/queue/fifo_inbox.hpp>
-#include <actor-zeta/executor/executable.hpp>
+#include <actor-zeta/scheduler/resumable.hpp>
 #include <actor-zeta/forwards.hpp>
 #include <actor-zeta/mail_box.hpp>
 
@@ -13,11 +13,11 @@ namespace actor_zeta { namespace base {
 
     class cooperative_actor
         : public actor_abstract
-        , public executor::executable {
+        , public scheduler::resumable {
     public:
         using mailbox_t = detail::fifo_inbox<mailbox_policy>;
 
-        executor::executable_result run(executor::execution_device*, max_throughput_t) final;
+        scheduler::resume_result resume(scheduler::execution_unit*, max_throughput_t) final;
 
         ~cooperative_actor() override;
 
@@ -30,7 +30,7 @@ namespace actor_zeta { namespace base {
         cooperative_actor(Supervisor* ptr, std::string type ,int64_t actor_id)
             : cooperative_actor(static_cast<supervisor_abstract*>(ptr),std::move(type),actor_id){};
 
-        bool enqueue_impl(message_ptr, executor::execution_device*) final;
+        bool enqueue_impl(message_ptr, scheduler::execution_unit*) final;
 
         // Non thread-safe method
         auto current_message_impl() -> message* override;
@@ -48,13 +48,13 @@ namespace actor_zeta { namespace base {
             return mailbox_;
         }
 
-        bool activate(executor::execution_device* ctx);
+        bool activate(scheduler::execution_unit*);
 
         auto reactivate(message& x) -> void;
 
-        auto context(executor::execution_device*) -> void;
+        auto context(scheduler::execution_unit*) -> void;
 
-        auto context() const -> executor::execution_device*;
+        auto context() const -> scheduler::execution_unit*;
 
         auto supervisor() -> supervisor_abstract*;
 
@@ -64,7 +64,7 @@ namespace actor_zeta { namespace base {
 
         // ----------------------------------------------------- message processing
         supervisor_abstract* supervisor_;
-        executor::execution_device* executor_;
+        scheduler::execution_unit* executor_;
         message* current_message_;
         mailbox_t mailbox_;
     };

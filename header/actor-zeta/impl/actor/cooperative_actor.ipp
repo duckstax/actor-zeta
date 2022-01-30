@@ -5,8 +5,8 @@
 // clang-format off
 #include <actor-zeta/base/address.hpp>
 #include <actor-zeta/base/message.hpp>
-#include <actor-zeta/executor/abstract_executor.hpp>
-#include <actor-zeta/executor/execution_device.hpp>
+#include <actor-zeta/scheduler/scheduler_abstract.hpp>
+#include <actor-zeta/scheduler/execution_unit.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/base/cooperative_actor.hpp>
 // clang-format on
@@ -19,9 +19,9 @@ namespace actor_zeta { namespace base {
         std::cerr << " WARNING " << std::endl;
     }
 
-    executor::executable_result cooperative_actor::run(executor::execution_device* e, size_t max_throughput) {
+    scheduler::resume_result cooperative_actor::resume(scheduler::execution_unit* e, size_t max_throughput) {
         if (!activate(e)) {
-            return executor::executable_result::done;
+            return scheduler::resume_result::done;
         }
         static constexpr size_t quantum = 3;
         size_t handled_msgs = 0;
@@ -40,25 +40,25 @@ namespace actor_zeta { namespace base {
             get_urgent_queue().new_round(quantum * 3, handle_async);
             get_normal_queue().new_round(quantum, handle_async);
             if (handled_msgs == prev_handled_msgs && mailbox().try_block()) {
-                return executor::executable_result::awaiting;
+                return scheduler::resume_result::awaiting;
             }
         }
         if (mailbox().try_block()) {
-            return executor::executable_result::awaiting;
+            return scheduler::resume_result::awaiting;
         }
-        return executor::executable_result::resume;
+        return scheduler::resume_result::resume;
     }
 
-    bool cooperative_actor::enqueue_impl(message_ptr msg, executor::execution_device* e) {
+    bool cooperative_actor::enqueue_impl(message_ptr msg, scheduler::execution_unit* e) {
         assert(msg);
         switch (mailbox().push_back(std::move(msg))) {
             case detail::inbox_result::unblocked_reader: {
                 intrusive_ptr_add_ref(this);
                 if (e != nullptr) {
                     context(e);
-                    context()->execute(this);
+                    context()->execute_later(this);
                 } else {
-                    supervisor()->executor()->execute(this);
+                    supervisor()->scheduler()->enqueue(this);
                 }
                 return true;
             }
@@ -88,7 +88,7 @@ namespace actor_zeta { namespace base {
 
     cooperative_actor::~cooperative_actor() {}
 
-    bool cooperative_actor::activate(executor::execution_device* ctx) {
+    bool cooperative_actor::activate(scheduler::execution_unit* ctx) {
         //assert(ctx != nullptr);
         if (ctx) {
             context(ctx);
@@ -111,11 +111,11 @@ namespace actor_zeta { namespace base {
         return current_message_;
     }
 
-    executor::execution_device* cooperative_actor::context() const {
+    scheduler::execution_unit* cooperative_actor::context() const {
         return executor_;
     }
 
-    void cooperative_actor::context(executor::execution_device* e) {
+    void cooperative_actor::context(scheduler::execution_unit* e) {
         if (e != nullptr) {
             executor_ = e;
         }
