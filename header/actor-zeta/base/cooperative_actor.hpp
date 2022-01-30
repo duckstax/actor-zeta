@@ -38,19 +38,6 @@ namespace actor_zeta { namespace base {
     private:
         cooperative_actor(supervisor_abstract*, std::string,int64_t);
 
-        enum class state : int {
-            empty = 0x01,
-            busy
-        };
-
-        inline int flags() const {
-            return flags_.load(std::memory_order_relaxed);
-        }
-
-        inline void flags(int new_value) {
-            flags_.store(new_value, std::memory_order_relaxed);
-        }
-
         void cleanup();
 
         void consume(message&);
@@ -80,7 +67,6 @@ namespace actor_zeta { namespace base {
         executor::execution_device* executor_;
         message* current_message_;
         mailbox_t mailbox_;
-        std::atomic<int> flags_;
     };
 
     template<class T>

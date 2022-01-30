@@ -62,23 +62,19 @@ namespace actor_zeta { namespace base {
                 }
                 return true;
             }
-            case detail::inbox_result::queue_closed:
-                return false;
             case detail::inbox_result::success:
                 return true;
+            case detail::inbox_result::queue_closed:
+                return false;
         }
         return true;
     }
 
     void cooperative_actor::intrusive_ptr_add_ref_impl() {
-        flags(static_cast<int>(state::busy));
-        mailbox().try_block();
         ref();
     }
 
     void cooperative_actor::intrusive_ptr_release_impl() {
-        flags(static_cast<int>(state::empty));
-        mailbox().try_unblock();
         deref();
     }
 
@@ -88,8 +84,6 @@ namespace actor_zeta { namespace base {
         : actor_abstract(std::move(type),id)
         , supervisor_(supervisor)
         , mailbox_(mail_box::categorized(), mail_box::urgent_messages(), mail_box::normal_messages()) {
-        flags(static_cast<int>(state::empty));
-        mailbox().try_unblock();
     }
 
     cooperative_actor::~cooperative_actor() {}
