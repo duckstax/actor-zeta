@@ -12,6 +12,20 @@ namespace rtt_test = actor_zeta::detail::rtt_test;
 #endif
 
 TEST_CASE("rt_tuple") {
+    SECTION("with_pmr") {
+        actor_zeta::detail::pmr::rtt r(static_cast<int8_t>(3457),
+                                       static_cast<int64_t>(57),
+                                       static_cast<int32_t>(45),
+                                       static_cast<long>(63),
+                                       static_cast<long long>(6348),
+                                       static_cast<long double>(6754.9),
+                                       static_cast<int16_t>(4563),
+                                       static_cast<float>(5653),
+                                       static_cast<double>(675.49),
+                                       static_cast<unsigned long>(45645),
+                                       static_cast<unsigned long long>(5573),
+                                       static_cast<char>(57));
+    }
     SECTION("test_getSize") {
         test_getSize(
             static_cast<int8_t>(3457),
@@ -161,9 +175,11 @@ TEST_CASE("rt_tuple") {
             test_map,
             test_map);
     }
+
 #ifdef __TESTS_ENABLED__
 
     SECTION("ctors") {
+        rtt_test::clear();
         {
             auto templated_rtt_ = rtt(87645);
             REQUIRE(rtt_test::templated_ctor_ == 1);
@@ -275,9 +291,9 @@ TEST_CASE("rt_tuple") {
         rtt_test::clear();
 
         {
-            auto default_rtt_ = rtt();                                           // defaulted (+1)
-            auto copied_rtt_ = rtt(default_rtt_);                                // non-const lvalue
-            auto const_copied_rtt_ = rtt(static_cast<const rtt&>(default_rtt_)); // const lvalue
+            auto default_rtt_ = rtt();                                             // defaulted (+1)
+            auto copied_rtt_ = rtt(default_rtt_);                                  // non-const lvalue
+            auto const_copied_rtt_ = rtt(static_cast<const rtt<>&>(default_rtt_)); // const lvalue
             auto templated_1_rtt_ = rtt(std::vector<int>{1, 2, 3, 4, 5}, 767, 5);
             auto templated_2_rtt_ = rtt(87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5}, 457, 4567);
 
@@ -292,11 +308,11 @@ TEST_CASE("rt_tuple") {
         {
             auto templated_1_rtt_ = rtt(std::vector<int>{1, 2, 3, 4, 5});
             auto templated_2_rtt_ = rtt(87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5});
-            auto default_rtt_ = rtt();                                           // defaulted (+1)
-            auto copied_rtt_ = rtt(default_rtt_);                                // non-const lvalue
-            auto const_copied_rtt_ = rtt(static_cast<const rtt&>(default_rtt_)); // const lvalue
-            auto moved_1_rtt_ = rtt(std::move(default_rtt_));                    // move rvalue
-            auto moved_2_rtt_ = rtt(std::move(templated_1_rtt_));                // move rvalue
+            auto default_rtt_ = rtt();                                             // defaulted (+1)
+            auto copied_rtt_ = rtt(default_rtt_);                                  // non-const lvalue
+            auto const_copied_rtt_ = rtt(static_cast<const rtt<>&>(default_rtt_)); // const lvalue
+            auto moved_1_rtt_ = rtt(std::move(default_rtt_));                      // move rvalue
+            auto moved_2_rtt_ = rtt(std::move(templated_1_rtt_));                  // move rvalue
 
             REQUIRE(rtt_test::templated_ctor_ == 2);
             REQUIRE(rtt_test::copy_ctor_ == 1);
@@ -471,7 +487,7 @@ duckstax/actor-zeta/header/actor-zeta/detail/rtt_management.hpp:20:10: note: can
     }
 
     SECTION("rtt may contain rtt") {
-        rtt t(rtt{1, 2}, rtt{3, 4});
+        rtt t(rtt(1, 2), rtt(3, 4));
         CHECK(t.size() == 2);
     }
 

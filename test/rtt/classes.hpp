@@ -39,6 +39,11 @@ void test_getSize(Args... args) {
     place(m_data.get(), m_capacity, 0, args...);
 }
 
+template<class... Args>
+constexpr size_t local_getSize(Args... args) {
+    return actor_zeta::detail::getSize<0, Args...>();
+}
+
 struct align_example_t {
     char a[3];
     short int b;

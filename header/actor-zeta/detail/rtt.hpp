@@ -1,6 +1,7 @@
 #pragma once
 
 #include <actor-zeta/detail/aligned_allocate.hpp>
+#include <actor-zeta/detail/pmr/polymorphic_allocator.hpp>
 #include <actor-zeta/detail/rtt_management.hpp>
 
 #include <iostream>
@@ -54,7 +55,8 @@ namespace actor_zeta { namespace detail {
     }
 
     // run-time tuple
-    class rtt final {
+    template<typename _Alloc = std::allocator<char>>
+    class rtt final : protected _Alloc {
     private:
         using object_info_container_type = std::vector<management::object_info_t>;
 
@@ -64,8 +66,9 @@ namespace actor_zeta { namespace detail {
     public:
         template<typename... Args>
         explicit rtt(Args&&... args)
-            : m_capacity(getSize<0, Args...>())
-            , m_data(std::move(std::unique_ptr<char[]>(new char[m_capacity]))) {
+            : _Alloc()
+            , m_capacity(getSize<0, Args...>())
+            , m_data(std::move(std::unique_ptr<char[]>(m_capacity > 0 ? _Alloc::allocate(m_capacity) : nullptr))) {
             m_objects.reserve(m_capacity);
 #ifndef __EXCEPTIONS_DISABLE__
             try {
@@ -104,8 +107,9 @@ namespace actor_zeta { namespace detail {
         /* copy ctor and assignment op for const lvalue */
 
         rtt(const rtt& that)
-            : m_capacity(that.m_volume)
-            , m_data(std::move(std::unique_ptr<char[]>(new char[m_capacity])))
+            : _Alloc()
+            , m_capacity(that.m_volume)
+            , m_data(std::move(std::unique_ptr<char[]>(m_capacity > 0 ? _Alloc::allocate(m_capacity) : nullptr)))
             , m_objects(that.m_objects)
             , m_volume(that.m_volume) {
 #ifndef __EXCEPTIONS_DISABLE__
@@ -239,7 +243,7 @@ namespace actor_zeta { namespace detail {
 #ifndef __EXCEPTIONS_DISABLE__
             try {
 #endif
-                auto new_data = std::unique_ptr<char[]>(new char[new_capacity]);
+                auto new_data = std::unique_ptr<char[]>(new_capacity > 0 ? _Alloc::allocate(new_capacity) : nullptr);
                 management::move(m_objects.begin(), m_objects.end(), data(), new_data.get());
                 std::swap(m_data, new_data);
                 m_capacity = new_capacity;
@@ -325,8 +329,15 @@ namespace actor_zeta { namespace detail {
         std::size_t m_volume = 0;
     };
 
-    inline void swap(rtt& left, rtt& right) {
+    template<typename _Alloc = std::allocator<char>>
+    inline void swap(rtt<_Alloc>& left, rtt<_Alloc>& right) {
         left.swap(right);
+    }
+
+    namespace pmr {
+
+        using rtt = actor_zeta::detail::rtt<actor_zeta::detail::pmr::polymorphic_allocator<char>>;
+
     }
 
 }} // namespace actor_zeta::detail
