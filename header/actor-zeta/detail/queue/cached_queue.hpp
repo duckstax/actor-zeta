@@ -1,8 +1,5 @@
 #pragma once
 
-#include <limits>
-#include <utility>
-
 #include "new_round_result.hpp"
 #include "task_queue.hpp"
 #include "task_result.hpp"
@@ -25,75 +22,65 @@ namespace actor_zeta { namespace detail {
         using list_type = task_queue<policy_type>;
         using cache_type = task_queue<policy_type>;
 
-        // -- constructors, destructors, and assignment operators -------------------
-
-        cached_queue(policy_type p)
-            : list_(p)
+        explicit cached_queue(policy_type policy)
+            : list_(policy)
             , deficit_(0)
-            , cache_(std::move(p)) {
-            // nop
-        }
+            , cache_(std::move(policy)) {}
 
-        cached_queue(cached_queue&& other)
+        cached_queue(cached_queue&& other) noexcept
             : list_(std::move(other.list_))
             , deficit_(other.deficit_)
-            , cache_(std::move(other.cache_)) {
-            // nop
-        }
+            , cache_(std::move(other.cache_)) {}
 
-        cached_queue& operator=(cached_queue&& other) {
+        auto operator=(cached_queue&& other) noexcept -> cached_queue& {
             list_ = std::move(other.list_);
             deficit_ = other.deficit_;
             cache_ = std::move(other.cache_);
             return *this;
         }
 
-        // -- observers -------------------------------------------------------------
-
         /// Returns the policy object.
-        policy_type& policy() noexcept {
+        auto policy() noexcept -> policy_type& {
             return list_.policy();
         }
 
         /// Returns the policy object.
-        const policy_type& policy() const noexcept {
+        auto policy() const noexcept -> const policy_type& {
             return list_.policy();
         }
 
-        deficit_type deficit() const {
+        auto deficit() const -> deficit_type {
             return deficit_;
         }
 
         /// Returns the accumulated size of all stored tasks in the list, i.e., tasks
         /// that are not in the cache.
-        task_size_type total_task_size() const {
+        auto total_task_size() const -> task_size_type {
             return list_.total_task_size();
         }
 
         /// Returns whether the queue has no uncached tasks.
-        bool empty() const noexcept {
+        auto empty() const noexcept -> bool {
             return total_task_size() == 0;
         }
 
         /// Peeks at the first element of the list.
-        pointer peek() noexcept {
+        auto peek() noexcept -> pointer {
             return list_.peek();
         }
 
-        /// Applies `f` to each element in the queue, excluding cached elements.
+        /// Applies `func` to each element in the queue, excluding cached elements.
         template<class F>
-        void peek_all(F f) const {
-            list_.peek_all(f);
+        void peek_all(F func) const {
+            list_.peek_all(func);
         }
 
         /// Tries to find the next element in the queue (excluding cached elements)
         /// that matches the given predicate.
         template <class Predicate>
-        pointer find_if(Predicate pred) {
+        auto find_if(Predicate pred) -> pointer {
             return list_.find_if(pred);
         }
-
-        // -- modifiers -------------------------------------------------------------
 
         /// Removes all elements from the queue.
         void clear() {
@@ -101,40 +88,28 @@ namespace actor_zeta { namespace detail {
             cache_.clear();
         }
 
-        void inc_deficit(deficit_type x) noexcept {
-            if (!list_.empty())
-                deficit_ += x;
+        void inc_deficit(deficit_type deficit) noexcept {
+            if (!list_.empty()) {
+                deficit_ += deficit;
+            }
         }
 
         void flush_cache() noexcept {
             list_.prepend(cache_);
         }
 
-        /// @private
-        template<class T>
-        void inc_total_task_size(T&& x) noexcept {
-            list_.inc_total_task_size(std::forward<T>(x));
-        }
-
-        /// @private
-        template<class T>
-        void dec_total_task_size(T&& x) noexcept {
-            list_.dec_total_task_size(std::forward<T>(x));
-        }
-
         /// Takes the first element out of the queue if the deficit allows it and
         /// returns the element.
         /// @private
-        unique_pointer next() noexcept {
+        auto next() noexcept -> unique_pointer {
             return list_.next(deficit_);
         }
 
         /// Takes the first element out of the queue (after flushing the cache)  and
         /// returns it, ignoring the deficit count.
-        unique_pointer take_front() noexcept {
+        auto take_front() noexcept -> unique_pointer {
             flush_cache();
             if (!list_.empty()) {
-                // Don't modify the deficit counter.
                 auto dummy_deficit = std::numeric_limits<deficit_type>::max();
                 return list_.next(dummy_deficit);
             }
@@ -143,30 +118,30 @@ namespace actor_zeta { namespace detail {
 
         /// Consumes items from the queue until the queue is empty, there is not
         /// enough deficit to dequeue the next task or the consumer returns `stop`.
-        /// @returns `true` if `f` consumed at least one item.
+        /// @returns `true` if `func` consumed at least one item.
         template<class F>
-        bool consume(F& f) noexcept(noexcept(f(std::declval<value_type&>()))) {
-            return new_round(0, f).consumed_items > 0;
+        auto consume(F& func) noexcept(noexcept(func(std::declval<value_type&>()))) -> bool {
+            return new_round(0, func).consumed_items > 0;
         }
 
         /// Run a new round with `quantum`, dispatching all tasks to `consumer`.
         template<class F>
-        new_round_result new_round(deficit_type quantum, F& consumer) noexcept(
-            noexcept(consumer(std::declval<value_type&>()))) {
-            if (list_.empty())
+        auto new_round(deficit_type quantum, F& consumer) noexcept(
+            noexcept(consumer(std::declval<value_type&>()))) -> new_round_result {
+            if (list_.empty()) {
                 return {0, false};
+            }
             deficit_ += quantum;
             auto ptr = next();
-            if (ptr == nullptr)
+            if (ptr == nullptr) {
                 return {0, false};
+            }
             size_t consumed = 0;
             do {
                 auto consumer_res = consumer(*ptr);
                 switch (consumer_res) {
                     case task_result::skip:
-                        // Fix deficit counter since we didn't actually use it.
                         deficit_ += policy().task_size(*ptr);
-                        // Push the unconsumed item to the cache.
                         cache_.push_back(ptr.release());
                         if (list_.empty()) {
                             deficit_ = 0;
@@ -193,37 +168,31 @@ namespace actor_zeta { namespace detail {
             return {consumed, false};
         }
 
-        cache_type& cache() noexcept {
+        auto cache() noexcept -> cache_type& {
             return cache_;
         }
 
-        list_type& items() noexcept {
-            return list_;
+        /// Appends `new_element` to the queue.
+        /// @pre `new_element != nullptr`
+        auto push_back(pointer new_element) noexcept -> bool {
+            return list_.push_back(new_element);
         }
 
-        // -- insertion --------------------------------------------------------------
-
-        /// Appends `ptr` to the queue.
-        /// @pre `ptr != nullptr`
-        bool push_back(pointer ptr) noexcept {
-            return list_.push_back(ptr);
+        /// Appends `new_element` to the queue.
+        /// @pre `new_element != nullptr`
+        auto push_back(unique_pointer new_element) noexcept -> bool {
+            return push_back(new_element.release());
         }
 
-        /// Appends `ptr` to the queue.
-        /// @pre `ptr != nullptr`
-        bool push_back(unique_pointer ptr) noexcept {
-            return push_back(ptr.release());
-        }
-
-        /// Creates a new element from `xs...` and appends it.
+        /// Creates a new element from `elements...` and appends it.
         template<class... Ts>
-        bool emplace_back(Ts&&... xs) {
-            return push_back(new value_type(std::forward<Ts>(xs)...));
+        auto emplace_back(Ts&&... elements) -> bool {
+            return push_back(new value_type(std::forward<Ts>(elements)...));
         }
 
         /// @private
-        void lifo_append(node_pointer ptr) {
-            list_.lifo_append(ptr);
+        void lifo_append(node_pointer new_element) {
+            list_.lifo_append(new_element);
         }
 
         /// @private

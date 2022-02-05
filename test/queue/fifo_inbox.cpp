@@ -78,16 +78,16 @@ TEST_CASE("fifo_inbox_tests") {
         fixture fix;
         fix.inbox.close();
         auto res = fix.inbox.push_back(new inode(0));
-        REQUIRE(res == inbox_result::queue_closed);
+        REQUIRE(res == enqueue_result::queue_closed);
     }
 
     SECTION("unblock") {
         fixture fix;
         REQUIRE(fix.inbox.try_block());
         auto res = fix.inbox.push_back(new inode(0));
-        REQUIRE(res == inbox_result::unblocked_reader);
+        REQUIRE(res == enqueue_result::unblocked_reader);
         res = fix.inbox.push_back(new inode(1));
-        REQUIRE(res == inbox_result::success);
+        REQUIRE(res == enqueue_result::success);
         REQUIRE(fix.close_and_fetch() == "01");
     }
 

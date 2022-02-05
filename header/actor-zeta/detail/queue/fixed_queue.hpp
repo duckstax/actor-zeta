@@ -1,9 +1,5 @@
 #pragma once
 
-#include <tuple>
-#include <type_traits>
-#include <utility>
-
 #include "new_round_result.hpp"
 #include "task_result.hpp"
 
@@ -26,63 +22,60 @@ namespace actor_zeta { namespace detail {
 
         static constexpr size_t num_queues = sizeof...(Qs) + 1;
 
-        fixed_queue(policy_type p0, typename Q::policy_type p1,
-                    typename Qs::policy_type... ps)
-            : qs_(std::move(p1), std::move(ps)...)
-            , policy_(std::move(p0)) {
-            // nop
-        }
+        fixed_queue(policy_type policy0, typename Q::policy_type policy1, typename Qs::policy_type... policies)
+            : qs_(std::move(policy1), std::move(policies)...)
+            , policy_(std::move(policy0)) {}
 
-        policy_type& policy() noexcept {
+        auto policy() noexcept -> policy_type& {
             return policy_;
         }
 
-        const policy_type& policy() const noexcept {
+        auto policy() const noexcept -> const policy_type& {
             return policy_;
         }
 
-        bool push_back(value_type* ptr) noexcept {
-            return push_back_recursion<0>(policy_.id_of(*ptr), ptr);
+        auto push_back(value_type* new_element) noexcept -> bool {
+            return push_back_recursion<0>(policy_.id_of(*new_element), new_element);
         }
 
-        bool push_back(unique_pointer ptr) noexcept {
-            return push_back(ptr.release());
+        auto push_back(unique_pointer new_element) noexcept -> bool {
+            return push_back(new_element.release());
         }
 
         template<class... Ts>
-        bool emplace_back(Ts&&... xs) {
-            return push_back(new value_type(std::forward<Ts>(xs)...));
+        auto emplace_back(Ts&&... elements) -> bool {
+            return push_back(new value_type(std::forward<Ts>(elements)...));
         }
 
-        void inc_deficit(deficit_type x) noexcept {
-            inc_deficit_recursion<0>(x);
+        void inc_deficit(deficit_type deficit) noexcept {
+            inc_deficit_recursion<0>(deficit);
         }
 
         /// Run a new round with `quantum`, dispatching all tasks to `consumer`.
         /// @returns `true` if at least one item was consumed, `false` otherwise.
         template<class F>
-        new_round_result new_round(deficit_type quantum, F& f) {
-            return new_round_recursion<0>(quantum, f);
+        auto new_round(deficit_type quantum, F& func) -> new_round_result {
+            return new_round_recursion<0>(quantum, func);
         }
 
-        pointer peek() noexcept {
+        auto peek() noexcept -> pointer {
             return peek_recursion<0>();
         }
 
         /// Tries to find an element in the queue that matches the given predicate.
         template <class Predicate>
-        pointer find_if(Predicate pred) {
+        auto find_if(Predicate pred) -> pointer {
             return find_if_recursion<0>(pred);
         }
 
-        /// Applies `f` to each element in the queue.
+        /// Applies `func` to each element in the queue.
         template<class F>
-        void peek_all(F f) const {
-            return peek_all_recursion<0>(f);
+        void peek_all(F func) const {
+            return peek_all_recursion<0>(func);
         }
 
         /// Returns `true` if all queues are empty, `false` otherwise.
-        bool empty() const noexcept {
+        auto empty() const noexcept -> bool {
             return total_task_size() == 0;
         }
 
@@ -90,17 +83,17 @@ namespace actor_zeta { namespace detail {
             flush_cache_recursion<0>();
         }
 
-        task_size_type total_task_size() const noexcept {
+        auto total_task_size() const noexcept -> task_size_type {
             return total_task_size_recursion<0>();
         }
 
         /// Returns the tuple containing all nested queues.
-        tuple_type& queues() noexcept {
+        auto queues() noexcept -> tuple_type& {
             return qs_;
         }
 
         /// Returns the tuple containing all nested queues.
-        const tuple_type& queues() const noexcept {
+        auto queues() const noexcept -> const tuple_type& {
             return qs_;
         }
 
@@ -113,15 +106,16 @@ namespace actor_zeta { namespace detail {
         }
 
     private:
+        tuple_type qs_;
+        Policy policy_;
+
         template<size_t I>
-        typename std::enable_if<I == num_queues, bool>::type
-        push_back_recursion(size_t, value_type*) noexcept {
+        auto push_back_recursion(size_t, value_type*) noexcept -> typename std::enable_if<I == num_queues, bool>::type {
             return false;
         }
 
         template<size_t I>
-        typename std::enable_if<I != num_queues, bool>::type
-        push_back_recursion(size_t pos, value_type* ptr) noexcept {
+        auto push_back_recursion(size_t pos, value_type* ptr) noexcept -> typename std::enable_if<I != num_queues, bool>::type {
             if (pos == I) {
                 auto& q = std::get<I>(qs_);
                 return q.push_back(ptr);
@@ -144,131 +138,107 @@ namespace actor_zeta { namespace detail {
         };
 
         template<size_t I>
-        typename std::enable_if<I == num_queues, void>::type
-        inc_deficit_recursion(deficit_type) noexcept {
-            // end of recursion
-        }
+        auto inc_deficit_recursion(deficit_type) noexcept -> typename std::enable_if<I == num_queues, void>::type {}
 
         template<size_t I>
-        typename std::enable_if<I != num_queues, void>::type
-        inc_deficit_recursion(deficit_type quantum) noexcept {
+        auto inc_deficit_recursion(deficit_type quantum) noexcept -> typename std::enable_if<I != num_queues, void>::type {
             auto& q = std::get<I>(qs_);
             q.inc_deficit(policy_.quantum(q, quantum));
             inc_deficit_recursion<I + 1>(quantum);
         }
 
         template<size_t I, class F>
-        typename std::enable_if<I == num_queues, new_round_result>::type
-        new_round_recursion(deficit_type, F&) noexcept {
+        auto new_round_recursion(deficit_type, F&) noexcept -> typename std::enable_if<I == num_queues, new_round_result>::type {
             return {0, false};
         }
 
         template<size_t I, class F>
-        typename std::enable_if<I != num_queues, new_round_result>::type
-        new_round_recursion(deficit_type quantum, F& f) {
+        auto new_round_recursion(deficit_type quantum, F& func) -> typename std::enable_if<I != num_queues, new_round_result>::type {
             auto& q = std::get<I>(qs_);
             using q_type = typename std::decay<decltype(q)>::type;
-            new_round_recursion_helper<I, q_type, F> g{q, f};
+            new_round_recursion_helper<I, q_type, F> g{q, func};
             auto res = q.new_round(policy_.quantum(q, quantum), g);
             if (res.stop_all) {
-                // Always increase deficit, even if a previous queue stopped the
-                // consumer preemptively.
                 inc_deficit_recursion<I + 1>(quantum);
                 return res;
             }
-            auto sub = new_round_recursion<I + 1>(quantum, f);
+            auto sub = new_round_recursion<I + 1>(quantum, func);
             return {res.consumed_items + sub.consumed_items, sub.stop_all};
         }
 
         template<size_t I>
-        typename std::enable_if<I == num_queues, pointer>::type peek_recursion() noexcept {
+        auto peek_recursion() noexcept -> typename std::enable_if<I == num_queues, pointer>::type {
             return nullptr;
         }
 
         template<size_t I>
-        typename std::enable_if<I != num_queues, pointer>::type peek_recursion() noexcept {
+        auto peek_recursion() noexcept -> typename std::enable_if<I != num_queues, pointer>::type {
             auto ptr = std::get<I>(qs_).peek();
-            if (ptr != nullptr)
+            if (ptr != nullptr) {
                 return ptr;
+            }
             return peek_recursion<I + 1>();
         }
 
         template <size_t I, class Predicate>
-        typename std::enable_if<I == num_queues, pointer>::type find_if_recursion(Predicate) {
+        auto find_if_recursion(Predicate) -> typename std::enable_if<I == num_queues, pointer>::type {
             return nullptr;
         }
 
         template <size_t I, class Predicate>
-        typename std::enable_if<I != num_queues, pointer>::type
-        find_if_recursion(Predicate pred) {
-            if (auto ptr = std::get<I>(qs_).find_if(pred))
+        auto find_if_recursion(Predicate pred) -> typename std::enable_if<I != num_queues, pointer>::type {
+            if (auto ptr = std::get<I>(qs_).find_if(pred)) {
                 return ptr;
-            else
-                return find_if_recursion<I + 1>(std::move(pred));
+            }
+            return find_if_recursion<I + 1>(std::move(pred));
         }
 
         template<size_t I, class F>
-        typename std::enable_if<I == num_queues, void>::type peek_all_recursion(F&) const {
-            // nop
-        }
+        auto peek_all_recursion(F&) const -> typename std::enable_if<I == num_queues, void>::type {}
 
         template<size_t I, class F>
-        typename std::enable_if<I != num_queues, void>::type peek_all_recursion(F& f) const {
-            std::get<I>(qs_).peek_all(f);
-            peek_all_recursion<I + 1>(f);
+        auto peek_all_recursion(F& func) const -> typename std::enable_if<I != num_queues, void>::type {
+            std::get<I>(qs_).peek_all(func);
+            peek_all_recursion<I + 1>(func);
         }
 
         template<size_t I>
-        typename std::enable_if<I == num_queues, void>::type flush_cache_recursion() noexcept {
-            // nop
-        }
+        auto flush_cache_recursion() noexcept -> typename std::enable_if<I == num_queues, void>::type {}
 
         template<size_t I>
-        typename std::enable_if<I != num_queues, void>::type flush_cache_recursion() noexcept {
+        auto flush_cache_recursion() noexcept -> typename std::enable_if<I != num_queues, void>::type {
             std::get<I>(qs_).flush_cache();
             flush_cache_recursion<I + 1>();
         }
         template<size_t I>
-        typename std::enable_if<I == num_queues, task_size_type>::type
-        total_task_size_recursion() const noexcept {
+        auto total_task_size_recursion() const noexcept -> typename std::enable_if<I == num_queues, task_size_type>::type {
             return 0;
         }
 
         template<size_t I>
-        typename std::enable_if<I != num_queues, task_size_type>::type
-        total_task_size_recursion() const noexcept {
+        auto total_task_size_recursion() const noexcept -> typename std::enable_if<I != num_queues, task_size_type>::type {
             return std::get<I>(qs_).total_task_size() + total_task_size_recursion<I + 1>();
         }
 
         template<size_t I>
-        typename std::enable_if<I == num_queues, void>::type
-        lifo_append_recursion(size_t, pointer) noexcept {
-            // nop
-        }
+        auto lifo_append_recursion(size_t, pointer) noexcept -> typename std::enable_if<I == num_queues, void>::type {}
 
         template<size_t I>
-        typename std::enable_if<I != num_queues, void>::type
-        lifo_append_recursion(size_t i, pointer ptr) noexcept {
-            if (i == I)
+        auto lifo_append_recursion(size_t i, pointer ptr) noexcept -> typename std::enable_if<I != num_queues, void>::type {
+            if (i == I) {
                 std::get<I>(qs_).lifo_append(ptr);
-            else
-                lifo_append_recursion<I + 1>(i, ptr);
+            }
+            lifo_append_recursion<I + 1>(i, ptr);
         }
 
         template<size_t I>
-        typename std::enable_if<I == num_queues, void>::type stop_lifo_append_recursion() noexcept {
-            // nop
-        }
+        auto stop_lifo_append_recursion() noexcept -> typename std::enable_if<I == num_queues, void>::type {}
 
         template<size_t I>
-        typename std::enable_if<I != num_queues, void>::type stop_lifo_append_recursion() noexcept {
+        auto stop_lifo_append_recursion() noexcept -> typename std::enable_if<I != num_queues, void>::type {
             std::get<I>(qs_).stop_lifo_append();
             stop_lifo_append_recursion<I + 1>();
         }
-
-        // -- member variables -------------------------------------------------------
-        tuple_type qs_;
-        Policy policy_;
     };
 
 }} // namespace actor_zeta::detail

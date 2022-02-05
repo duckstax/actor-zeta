@@ -58,9 +58,9 @@ namespace actor_zeta { namespace base {
 
         auto supervisor() -> supervisor_abstract*;
 
-        auto get_urgent_queue() -> urgent_queue&;
+        auto get_high_priority_queue() -> high_priority_queue&;
 
-        auto get_normal_queue() -> normal_queue&;
+        auto get_normal_priority_queue() -> normal_priority_queue&;
 
         // ----------------------------------------------------- message processing
         supervisor_abstract* supervisor_;

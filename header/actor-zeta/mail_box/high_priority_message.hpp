@@ -6,17 +6,17 @@
 
 namespace actor_zeta { namespace mail_box {
 
-    class urgent_messages {
+    class high_priority_message {
     public:
         using mapped_type = base::message;
         using task_size_type = size_t;
         using deficit_type = size_t;
         using unique_pointer = base::message_ptr;
 
-        urgent_messages() = default;
-        urgent_messages(const urgent_messages&) = default;
-        auto operator=(const urgent_messages&) -> urgent_messages& = default;
-        constexpr explicit urgent_messages(const type_traits::unit_t&) {}
+        high_priority_message() = default;
+        high_priority_message(const high_priority_message&) = default;
+        auto operator=(const high_priority_message&) -> high_priority_message& = default;
+        constexpr explicit high_priority_message(const type_traits::unit_t&) {}
 
         static auto task_size(const base::message&) noexcept -> task_size_type {
             return 1;

@@ -37,8 +37,8 @@ namespace actor_zeta { namespace base {
         while (handled_msgs < max_throughput) {
             mailbox().fetch_more();
             auto prev_handled_msgs = handled_msgs;
-            get_urgent_queue().new_round(quantum * 3, handle_async);
-            get_normal_queue().new_round(quantum, handle_async);
+            get_high_priority_queue().new_round(quantum * 3, handle_async);
+            get_normal_priority_queue().new_round(quantum, handle_async);
             if (handled_msgs == prev_handled_msgs && mailbox().try_block()) {
                 return scheduler::resume_result::awaiting;
             }
@@ -52,7 +52,7 @@ namespace actor_zeta { namespace base {
     bool cooperative_actor::enqueue_impl(message_ptr msg, scheduler::execution_unit* e) {
         assert(msg);
         switch (mailbox().push_back(std::move(msg))) {
-            case detail::inbox_result::unblocked_reader: {
+            case detail::enqueue_result::unblocked_reader: {
                 intrusive_ptr_add_ref(this);
                 if (e != nullptr) {
                     context(e);
@@ -62,9 +62,9 @@ namespace actor_zeta { namespace base {
                 }
                 return true;
             }
-            case detail::inbox_result::success:
+            case detail::enqueue_result::success:
                 return true;
-            case detail::inbox_result::queue_closed:
+            case detail::enqueue_result::queue_closed:
                 return false;
         }
         return true;
@@ -83,7 +83,8 @@ namespace actor_zeta { namespace base {
         std::string type,int64_t id)
         : actor_abstract(std::move(type),id)
         , supervisor_(supervisor)
-        , mailbox_(mail_box::categorized(), mail_box::urgent_messages(), mail_box::normal_messages()) {
+        , mailbox_(mail_box::priority_message(), mail_box::high_priority_message(), mail_box::normal_priority_message()) {
+        mailbox().try_block();
     }
 
     cooperative_actor::~cooperative_actor() {}
@@ -125,12 +126,12 @@ namespace actor_zeta { namespace base {
         return supervisor_;
     }
 
-    auto cooperative_actor::get_urgent_queue() -> urgent_queue& {
-        return std::get<urgent_queue_index>(mailbox().queue().queues());
+    auto cooperative_actor::get_high_priority_queue() -> high_priority_queue& {
+        return std::get<high_priority_queue_index>(mailbox().queue().queues());
     }
 
-    auto cooperative_actor::get_normal_queue() -> normal_queue& {
-        return std::get<normal_queue_index>(mailbox().queue().queues());
+    auto cooperative_actor::get_normal_priority_queue() -> normal_priority_queue& {
+        return std::get<normal_priority_queue_index>(mailbox().queue().queues());
     }
 
 }} // namespace actor_zeta::base

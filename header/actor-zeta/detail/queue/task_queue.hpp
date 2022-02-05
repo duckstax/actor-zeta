@@ -1,7 +1,5 @@
 #pragma once
 
-#include <utility>
-
 #include "forward_iterator.hpp"
 
 namespace actor_zeta { namespace detail {
@@ -17,31 +15,23 @@ namespace actor_zeta { namespace detail {
         using node_type = typename value_type::node_type;
         using node_pointer = node_type*;
         using pointer = value_type*;
-        using const_pointer = const value_type*;
-        using reference = value_type&;
-        using const_reference = const value_type&;
         using unique_pointer = typename policy_type::unique_pointer;
         using task_size_type = typename policy_type::task_size_type;
         using iterator = forward_iterator<value_type>;
         using const_iterator = forward_iterator<const value_type>;
 
-        // -- static utility functions -----------------------------------------------
-
-        /// Casts a node type to its value type.
-        static pointer promote(node_pointer ptr) noexcept {
+        static auto promote(node_pointer ptr) noexcept -> pointer {
             return static_cast<pointer>(ptr);
         }
 
-        // -- constructors, destructors, and assignment operators -------------------
-
-        task_queue(policy_type p)
+        explicit task_queue(policy_type policy)
             : old_last_(nullptr)
             , new_head_(nullptr)
-            , policy_(std::move(p)) {
+            , policy_(std::move(policy)) {
             init();
         }
 
-        task_queue(task_queue&& other)
+        task_queue(task_queue&& other) noexcept
             : task_queue(other.policy()) {
             if (other.empty()) {
                 init();
@@ -54,7 +44,7 @@ namespace actor_zeta { namespace detail {
             }
         }
 
-        task_queue& operator=(task_queue&& other) {
+        auto operator=(task_queue&& other) noexcept -> task_queue& {
             deinit();
             if (other.empty()) {
                 init();
@@ -72,53 +62,51 @@ namespace actor_zeta { namespace detail {
             deinit();
         }
 
-        // -- observers -------------------------------------------------------------
-
         /// Returns the policy object.
-        policy_type& policy() noexcept {
+        auto policy() noexcept -> policy_type& {
             return policy_;
         }
 
         /// Returns the policy object.
-        const policy_type& policy() const noexcept {
+        auto policy() const noexcept -> const policy_type& {
             return policy_;
         }
 
         /// Returns the accumulated size of all stored tasks.
-        task_size_type total_task_size() const noexcept {
+        auto total_task_size() const noexcept -> task_size_type {
             return total_task_size_;
         }
 
         /// Returns whether the queue has no elements.
-        bool empty() const noexcept {
+        auto empty() const noexcept -> bool {
             return total_task_size() == 0;
         }
 
-        /// Peeks at the first element in the queue. Returns `nullptr` if the queue is
-        /// empty.
-        pointer peek() noexcept {
+        /// Peeks at the first element in the queue. Returns `nullptr` if the queue is empty.
+        auto peek() noexcept -> pointer {
             auto ptr = head_.next;
             return ptr != &tail_ ? promote(ptr) : nullptr;
         }
 
-        /// Applies `f` to each element in the queue.
+        /// Applies `func` to each element in the queue.
         template<class F>
-        void peek_all(F f) const {
-            for (auto i = begin(); i != end(); ++i)
-                f(*i);
+        void peek_all(F func) const {
+            for (auto i = begin(); i != end(); ++i) {
+                func(*i);
+            }
         }
 
         /// Tries to find the next element in the queue (excluding cached elements)
         /// that matches the given predicate.
         template <class Predicate>
-        pointer find_if(Predicate pred) {
-            for (auto i = begin(); i != end(); ++i)
-                if (pred(*i))
+        auto find_if(Predicate pred) -> pointer {
+            for (auto i = begin(); i != end(); ++i) {
+                if (pred(*i)) {
                     return promote(i.ptr);
+                }
+            }
             return nullptr;
         }
-
-        // -- modifiers -------------------------------------------------------------
 
         /// Removes all elements from the queue.
         void clear() {
@@ -149,21 +137,15 @@ namespace actor_zeta { namespace detail {
         }
 
         /// @private
-        task_size_type next_task_size() const noexcept {
-            auto ptr = head_.next;
-            return ptr != &tail_ ? policy_.task_size(*promote(ptr)) : 0;
-        }
-
-        /// @private
-        unique_pointer next(task_size_type& deficit) noexcept {
+        auto next(task_size_type& deficit) noexcept -> unique_pointer {
             unique_pointer result;
             if (!empty()) {
                 auto ptr = promote(head_.next);
-                auto ts = policy_.task_size(*ptr);
-                assert(ts > 0);
-                if (ts <= deficit) {
-                    deficit -= ts;
-                    total_task_size_ -= ts;
+                auto size = policy_.task_size(*ptr);
+                assert(size > 0);
+                if (size <= deficit) {
+                    deficit -= size;
+                    total_task_size_ -= size;
                     head_.next = ptr->next;
                     if (total_task_size_ == 0) {
                         assert(head_.next == &(tail_));
@@ -176,81 +158,66 @@ namespace actor_zeta { namespace detail {
             return result;
         }
 
-        // -- iterator access --------------------------------------------------------
-
         /// Returns an iterator to the dummy before the first element.
-        iterator begin() noexcept {
+        auto begin() noexcept -> iterator {
             return head_.next;
         }
 
         /// Returns an iterator to the dummy before the first element.
-        const_iterator begin() const noexcept {
-            return head_.next;
-        }
-
-        /// Returns an iterator to the dummy before the first element.
-        const_iterator cbegin() const noexcept {
+        auto begin() const noexcept -> const_iterator {
             return head_.next;
         }
 
         /// Returns a pointer to the dummy past the last element.
-        iterator end() noexcept {
+        auto end() noexcept -> iterator {
             return &tail_;
         }
 
         /// Returns a pointer to the dummy past the last element.
-        const_iterator end() const noexcept {
+        auto end() const noexcept -> const_iterator {
             return &tail_;
         }
-
-        /// Returns a pointer to the dummy past the last element.
-        const_iterator cend() const noexcept {
-            return &tail_;
-        }
-
-        // -- element access ---------------------------------------------------------
 
         /// Returns a pointer to the first element.
-        pointer front() noexcept {
+        auto front() noexcept -> pointer {
             return promote(head_.next);
         }
 
         /// Returns a pointer to the last element.
-        pointer back() noexcept {
+        auto back() noexcept -> pointer {
             assert(head_.next != &tail_);
             return promote(tail_.next);
         }
 
-        // -- insertion --------------------------------------------------------------
-
-        /// Appends `ptr` to the queue.
-        /// @pre `ptr != nullptr`
-        bool push_back(pointer ptr) noexcept {
-            assert(ptr != nullptr);
-            tail_.next->next = ptr;
-            tail_.next = ptr;
-            ptr->next = &tail_;
-            inc_total_task_size(*ptr);
+        /// Appends `new_element` to the queue.
+        /// @pre `new_element != nullptr`
+        auto push_back(pointer new_element) noexcept -> bool {
+            assert(new_element != nullptr);
+            tail_.next->next = new_element;
+            tail_.next = new_element;
+            new_element->next = &tail_;
+            inc_total_task_size(*new_element);
             return true;
         }
 
-        /// Appends `ptr` to the queue.
-        /// @pre `ptr != nullptr`
-        bool push_back(unique_pointer ptr) noexcept {
-            return push_back(ptr.release());
+        /// Appends `new_element` to the queue.
+        /// @pre `new_element != nullptr`
+        auto push_back(unique_pointer new_element) noexcept -> bool {
+            return push_back(new_element.release());
         }
 
-        /// Creates a new element from `xs...` and appends it.
+        /// Creates a new element from `elements...` and appends it.
         template<class... Ts>
-        bool emplace_back(Ts&&... xs) {
-            return push_back(new value_type(std::forward<Ts>(xs)...));
+        auto emplace_back(Ts&&... elements) -> bool {
+            return push_back(new value_type(std::forward<Ts>(elements)...));
         }
 
         /// Transfers all element from `other` to the front of this queue.
         template<class Container>
         void prepend(Container& other) {
-            if (other.empty())
+            if (other.empty()) {
                 return;
+            }
             if (empty()) {
                 *this = std::move(other);
                 return;
@@ -264,8 +231,9 @@ namespace actor_zeta { namespace detail {
         /// Transfers all element from `other` to the back of this queue.
         template<class Container>
         void append(Container& other) {
-            if (other.empty())
+            if (other.empty()) {
                 return;
+            }
             if (empty()) {
                 *this = std::move(other);
                 return;
@@ -304,8 +272,6 @@ namespace actor_zeta { namespace detail {
             }
         }
 
-        // -- construction and destruction helper -----------------------------------
-
         /// Restores a consistent, empty state.
         /// @private
         void init() noexcept {
@@ -321,8 +287,8 @@ namespace actor_zeta { namespace detail {
             for (auto i = head_.next; i != &tail_;) {
                 auto ptr = i;
                 i = i->next;
-                typename unique_pointer::deleter_type d;
-                d(promote(ptr));
+                typename unique_pointer::deleter_type deleter;
+                deleter(promote(ptr));
             }
         }
 

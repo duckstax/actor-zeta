@@ -1,7 +1,5 @@
 #pragma once
 
-#include <utility>
-
 #include "new_round_result.hpp"
 #include "task_queue.hpp"
 #include "task_result.hpp"
@@ -18,26 +16,26 @@ public:
     using typename super::value_type;
     using deficit_type = typename policy_type::deficit_type;
 
-    queue(policy_type p)
-        : super(std::move(p))
+    explicit queue(policy_type policy)
+        : super(std::move(policy))
         , deficit_(0) {}
 
-    queue(queue&& other)
+    queue(queue&& other) noexcept
         : super(std::move(other))
         , deficit_(0) {}
 
-    queue& operator=(queue&& other) {
+    auto operator=(queue&& other) noexcept -> queue& {
         super::operator=(std::move(other));
         return *this;
     }
 
-    deficit_type deficit() const {
+    auto deficit() const -> deficit_type {
         return deficit_;
     }
 
-    void inc_deficit(deficit_type x) noexcept {
+    void inc_deficit(deficit_type deficit) noexcept {
         if (!super::empty()) {
-            deficit_ += x;
+            deficit_ += deficit;
         }
     }
 
@@ -45,24 +43,24 @@ public:
 
     /// Consumes items from the queue until the queue is empty or there is not
     /// enough deficit to dequeue the next task.
-    /// @returns `true` if `f` consumed at least one item.
+    /// @returns `true` if `func` consumed at least one item.
     template <class F>
-    bool consume(F& f) noexcept(noexcept(f(std::declval<value_type&>()))) {
-        auto res = new_round(0, f);
+    auto consume(F& func) noexcept(noexcept(func(std::declval<value_type&>()))) -> bool {
+        auto res = new_round(0, func);
         return res.consumed_items;
     }
 
     /// Takes the first element out of the queue if the deficit allows it and
     /// returns the element.
     /// @private
-    unique_pointer next() noexcept {
+    auto next() noexcept -> unique_pointer {
         return super::next(deficit_);
     }
 
     /// Run a new round with `quantum`, dispatching all tasks to `consumer`.
     /// @returns `true` if at least one item was consumed, `false` otherwise.
     template <class F>
-    new_round_result new_round(deficit_type quantum, F& consumer) {
+    auto new_round(deficit_type quantum, F& consumer) -> new_round_result {
         size_t consumed = 0;
         if (!super::empty()) {
             deficit_ += quantum;

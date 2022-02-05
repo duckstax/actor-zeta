@@ -1,16 +1,10 @@
 #pragma once
 
-#include <cstddef>
-#include <iterator>
-#include <type_traits>
-
 namespace actor_zeta { namespace detail {
 
-    // A forward iterator for intrusive lists.
     template<class T>
     class forward_iterator {
     public:
-        using difference_type = std::ptrdiff_t;
         using value_type = T;
         using pointer = value_type*;
         using const_pointer = const value_type*;
@@ -20,76 +14,61 @@ namespace actor_zeta { namespace detail {
                                                     const typename T::node_type,
                                                     typename T::node_type>::type;
         using node_pointer = node_type*;
-        using iterator_category = std::forward_iterator_tag;
 
-        // -- static utility functions -----------------------------------------------
-
-        /// Casts a node type to its value type.
-        static pointer promote(node_pointer ptr) noexcept {
+        static auto promote(node_pointer ptr) noexcept -> pointer {
             return static_cast<pointer>(ptr);
         }
 
-        // -- member variables -------------------------------------------------------
-
-        node_pointer ptr;
-
-        // -- constructors, destructors, and assignment operators --------------------
-
         constexpr forward_iterator(node_pointer init = nullptr)
-            : ptr(init) {
-            // nop
-        }
+            : ptr(init) {}
 
         forward_iterator(const forward_iterator&) = default;
 
-        forward_iterator& operator=(const forward_iterator&) = default;
+        auto operator=(const forward_iterator&) -> forward_iterator& = default;
 
-        // -- convenience functions --------------------------------------------------
-
-        forward_iterator next() {
+        auto next() -> forward_iterator {
             return ptr->next;
         }
 
-        // -- operators --------------------------------------------------------------
-
-        forward_iterator& operator++() {
+        auto operator++() -> forward_iterator& {
             ptr = ptr->next;
             return *this;
         }
 
-        forward_iterator operator++(int) {
+        auto operator++(int) -> forward_iterator {
             forward_iterator res = *this;
             ptr = ptr->next;
             return res;
         }
 
-        reference operator*() {
+        auto operator*() -> reference {
             return *promote(ptr);
         }
 
-        const_reference operator*() const {
+        auto operator*() const -> const_reference {
             return *promote(ptr);
         }
 
-        pointer operator->() {
+        auto operator->() -> pointer {
             return promote(ptr);
         }
 
-        const_pointer operator->() const {
+        auto operator->() const -> const_pointer {
             return promote(ptr);
         }
+
+        node_pointer ptr;
     };
 
-    /// @relates forward_iterator
+
     template<class T>
-    bool operator==(const forward_iterator<T>& x, const forward_iterator<T>& y) {
+    constexpr auto operator==(const forward_iterator<T>& x, const forward_iterator<T>& y) -> bool {
         return x.ptr == y.ptr;
     }
 
-    /// @relates forward_iterator
     template<class T>
-    bool operator!=(const forward_iterator<T>& x, const forward_iterator<T>& y) {
-        return x.ptr != y.ptr;
+    constexpr auto operator!=(const forward_iterator<T>& x, const forward_iterator<T>& y) -> bool {
+        return !(x == y);
     }
-}
-} // namespace actor_zeta::detail
+
+}} // namespace actor_zeta::detail

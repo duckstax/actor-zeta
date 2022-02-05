@@ -94,7 +94,6 @@ set(HEADER_FILES
         header/actor-zeta/detail/queue/cached_queue.hpp
         header/actor-zeta/detail/queue/fifo_inbox.hpp
         header/actor-zeta/detail/queue/forward_iterator.hpp
-        header/actor-zeta/detail/queue/inbox_result.hpp
         header/actor-zeta/detail/queue/lifo_inbox.hpp
         header/actor-zeta/detail/queue/new_round_result.hpp
         header/actor-zeta/detail/queue/singly_linked.hpp
@@ -121,9 +120,9 @@ set(HEADER_FILES
         header/actor-zeta/scheduler/scheduler_abstract.hpp
         header/actor-zeta/scheduler/worker.hpp
 
-        header/actor-zeta/mail_box/categorized.hpp
-        header/actor-zeta/mail_box/normal_messages.hpp
-        header/actor-zeta/mail_box/urgent_messages.hpp
+        header/actor-zeta/mail_box/priority_message.hpp
+        header/actor-zeta/mail_box/normal_priority_message.hpp
+        header/actor-zeta/mail_box/high_priority_message.hpp
 
         header/actor-zeta/mail_box.hpp
         header/actor-zeta/forwards.hpp

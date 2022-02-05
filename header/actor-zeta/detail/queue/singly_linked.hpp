@@ -9,9 +9,8 @@ namespace actor_zeta { namespace detail {
 
         node_pointer next;
 
-        singly_linked(node_pointer n = nullptr)
-            : next(n) {
-        }
+        explicit singly_linked(node_pointer n = nullptr)
+            : next(n) {}
     };
 
 }} // namespace actor_zeta::detail

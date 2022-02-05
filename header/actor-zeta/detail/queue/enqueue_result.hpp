@@ -1,9 +1,11 @@
 #pragma once
 
-#include "inbox_result.hpp"
-
 namespace actor_zeta { namespace detail {
 
-    using enqueue_result = inbox_result;
+    enum class enqueue_result : uint8_t {
+        success,
+        unblocked_reader,
+        queue_closed
+    };
 
 }} // namespace actor_zeta::detail
