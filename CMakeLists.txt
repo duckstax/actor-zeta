@@ -112,7 +112,12 @@ set(HEADER_FILES
         header/actor-zeta/scheduler/scheduler_abstract.hpp
         header/actor-zeta/scheduler/worker.hpp
 
+        header/actor-zeta/base/priority.hpp
         header/actor-zeta/base/message.hpp
+        header/actor-zeta/base/rtt_message.hpp
+
+        header/actor-zeta/make_message.hpp
+        header/actor-zeta/make_rtt_message.hpp
 
         header/actor-zeta/forwards.hpp
         header/actor-zeta/send.hpp

@@ -10,7 +10,9 @@ else ()
 endif ()
 
 set(SOURCE_FILES main.cpp)
-set(HEADER_FILES fixtures.hpp)
+set(HEADER_FILES
+    fixtures.hpp
+    register_benchmark.hpp)
 
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
 

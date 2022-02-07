@@ -6,7 +6,9 @@ namespace actor_zeta {
 
     namespace base {
         class message;
+        class rtt_message;
         using message_ptr = std::unique_ptr<message>;
+        using rtt_message_ptr = std::unique_ptr<rtt_message>;
         class actor_abstract;
         class actor;
         class address_t;

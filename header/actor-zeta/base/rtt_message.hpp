@@ -3,7 +3,7 @@
 #include <cassert>
 
 #include <actor-zeta/base/priority.hpp>
-#include <actor-zeta/detail/any.hpp>
+#include <actor-zeta/detail/rtt.hpp>
 #include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
 #include <string>
@@ -14,24 +14,24 @@ namespace actor_zeta { namespace base {
     /// @brief
     ///
 
-    class message final {
+    class rtt_message final {
     public:
-        message();
-        message(const message&) = delete;
-        message& operator=(const message&) = delete;
-        message(message&& other) = default;
-        message& operator=(message&&) = default;
-        ~message() = default;
-        message(address_t /*sender*/, std::string /*name*/);
-        message(address_t /*sender*/, std::string /*name*/, detail::any /*body*/);
-        message* next;
-        message* prev;
+        rtt_message();
+        rtt_message(const rtt_message&) = delete;
+        rtt_message& operator=(const rtt_message&) = delete;
+        rtt_message(rtt_message&& other) = default;
+        rtt_message& operator=(rtt_message&&) = default;
+        ~rtt_message() = default;
+        rtt_message(address_t /*sender*/, std::string /*name*/);
+        rtt_message(address_t /*sender*/, std::string /*name*/, detail::rtt /*body*/);
+        rtt_message* next;
+        rtt_message* prev;
         auto command() const noexcept -> detail::string_view;
         auto sender() & noexcept -> address_t&;
         auto sender() && noexcept -> address_t&&;
         auto sender() const& noexcept -> address_t const&;
 
-        template<typename T>
+        /*template<typename T>
         auto body() const -> const T& {
             assert(body_.has_value());
             return detail::any_cast<const T&>(body_);
@@ -41,26 +41,26 @@ namespace actor_zeta { namespace base {
         auto body() -> T& {
             assert(body_.has_value());
             return detail::any_cast<T&>(body_);
-        }
+        }*/
 
-        auto body() -> detail::any&;
-        auto clone() const -> message*;
+        auto body() -> detail::rtt&;
+        auto clone() const -> rtt_message*;
         operator bool();
-        void swap(message& other) noexcept;
+        void swap(rtt_message& other) noexcept;
         bool is_high_priority() const;
 
     private:
         address_t sender_;
         std::string command_;
-        detail::any body_;
+        detail::rtt body_;
         priority priority_ = priority::normal;
     };
 
-    static_assert(std::is_move_constructible<message>::value, "");
-    static_assert(not std::is_copy_constructible<message>::value, "");
+    static_assert(std::is_move_constructible<rtt_message>::value, "");
+    static_assert(not std::is_copy_constructible<rtt_message>::value, "");
 
 }} // namespace actor_zeta::base
 
-inline void swap(actor_zeta::base::message& lhs, actor_zeta::base::message& rhs) noexcept {
+inline void swap(actor_zeta::base::rtt_message& lhs, actor_zeta::base::rtt_message& rhs) noexcept {
     lhs.swap(rhs);
 }

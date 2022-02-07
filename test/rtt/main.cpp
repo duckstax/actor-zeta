@@ -291,9 +291,9 @@ TEST_CASE("rt_tuple") {
         rtt_test::clear();
 
         {
-            auto default_rtt_ = rtt();                                             // defaulted (+1)
-            auto copied_rtt_ = rtt(default_rtt_);                                  // non-const lvalue
-            auto const_copied_rtt_ = rtt(static_cast<const rtt<>&>(default_rtt_)); // const lvalue
+            auto default_rtt_ = rtt();                                           // defaulted (+1)
+            auto copied_rtt_ = rtt(default_rtt_);                                // non-const lvalue
+            auto const_copied_rtt_ = rtt(static_cast<const rtt&>(default_rtt_)); // const lvalue
             auto templated_1_rtt_ = rtt(std::vector<int>{1, 2, 3, 4, 5}, 767, 5);
             auto templated_2_rtt_ = rtt(87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5}, 457, 4567);
 
@@ -308,11 +308,11 @@ TEST_CASE("rt_tuple") {
         {
             auto templated_1_rtt_ = rtt(std::vector<int>{1, 2, 3, 4, 5});
             auto templated_2_rtt_ = rtt(87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5});
-            auto default_rtt_ = rtt();                                             // defaulted (+1)
-            auto copied_rtt_ = rtt(default_rtt_);                                  // non-const lvalue
-            auto const_copied_rtt_ = rtt(static_cast<const rtt<>&>(default_rtt_)); // const lvalue
-            auto moved_1_rtt_ = rtt(std::move(default_rtt_));                      // move rvalue
-            auto moved_2_rtt_ = rtt(std::move(templated_1_rtt_));                  // move rvalue
+            auto default_rtt_ = rtt();                                           // defaulted (+1)
+            auto copied_rtt_ = rtt(default_rtt_);                                // non-const lvalue
+            auto const_copied_rtt_ = rtt(static_cast<const rtt&>(default_rtt_)); // const lvalue
+            auto moved_1_rtt_ = rtt(std::move(default_rtt_));                    // move rvalue
+            auto moved_2_rtt_ = rtt(std::move(templated_1_rtt_));                // move rvalue
 
             REQUIRE(rtt_test::templated_ctor_ == 2);
             REQUIRE(rtt_test::copy_ctor_ == 1);

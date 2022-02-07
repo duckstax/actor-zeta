@@ -39,11 +39,6 @@ namespace actor_zeta { namespace detail {
 
 #endif
 
-    inline void dummy(std::initializer_list<int>) {}
-
-#define EXPAND_VARIADIC(expression) \
-    dummy({(expression, 0)...})
-
     template<size_t N>
     constexpr size_t getSize() {
         return N;
@@ -54,289 +49,300 @@ namespace actor_zeta { namespace detail {
         return getSize<((N + alignof(Head) - 1) & -(alignof(Head))) + sizeof(Head), Args...>();
     }
 
-    // run-time tuple
-    template<typename _Alloc = std::allocator<char>>
-    class rtt final : protected _Alloc {
-    private:
-        using object_info_container_type = std::vector<management::object_info_t>;
+    namespace impl {
 
-    public:
-        using size_type = typename object_info_container_type::size_type;
+        inline void dummy(std::initializer_list<int>) {}
 
-    public:
-        template<typename... Args>
-        explicit rtt(Args&&... args)
-            : _Alloc()
-            , m_capacity(getSize<0, Args...>())
-            , m_data(std::move(std::unique_ptr<char[]>(m_capacity > 0 ? _Alloc::allocate(m_capacity) : nullptr))) {
-            m_objects.reserve(m_capacity);
+#define EXPAND_VARIADIC(expression) \
+    dummy({(expression, 0)...})
+
+        // run-time tuple
+        template<typename _Alloc = std::allocator<char>>
+        class rtt final : protected _Alloc {
+        private:
+            using object_info_container_type = std::vector<management::object_info_t>;
+
+        public:
+            using size_type = typename object_info_container_type::size_type;
+
+        public:
+            template<typename... Args>
+            explicit rtt(Args&&... args)
+                : _Alloc()
+                , m_capacity(getSize<0, Args...>())
+                , m_data(std::move(std::unique_ptr<char[]>(m_capacity > 0 ? _Alloc::allocate(m_capacity) : nullptr))) {
+                m_objects.reserve(m_capacity);
 #ifndef __EXCEPTIONS_DISABLE__
-            try {
+                try {
 #endif
-                EXPAND_VARIADIC(push_back_no_realloc(std::forward<Args>(args)));
+                    EXPAND_VARIADIC(push_back_no_realloc(std::forward<Args>(args)));
 #ifndef __EXCEPTIONS_DISABLE__
-            } catch (...) {
-                clear();
-                throw;
-            }
+                } catch (...) {
+                    clear();
+                    throw;
+                }
 #endif
 #ifdef __TESTS_ENABLED__
-            rtt_test::templated_ctor_++;
+                rtt_test::templated_ctor_++;
 #endif
-        }
+            }
 
-        rtt() = default;
+            rtt() = default;
 
-        /* move ctor and assignment op for rvalue */
+            /* move ctor and assignment op for rvalue */
 
-        rtt(rtt&& that) noexcept
-            : rtt() {
-            this->swap(that);
+            rtt(rtt&& that) noexcept
+                : rtt() {
+                this->swap(that);
 #ifdef __TESTS_ENABLED__
-            rtt_test::move_ctor_++;
+                rtt_test::move_ctor_++;
 #endif
-        }
-
-        rtt& operator=(rtt&& that) noexcept {
-            clear();
-
-            this->swap(that);
-            return *this;
-        }
-
-        /* copy ctor and assignment op for const lvalue */
-
-        rtt(const rtt& that)
-            : _Alloc()
-            , m_capacity(that.m_volume)
-            , m_data(std::move(std::unique_ptr<char[]>(m_capacity > 0 ? _Alloc::allocate(m_capacity) : nullptr)))
-            , m_objects(that.m_objects)
-            , m_volume(that.m_volume) {
-#ifndef __EXCEPTIONS_DISABLE__
-            try {
-#endif
-                management::copy(m_objects.begin(), m_objects.end(), that.data(), this->data());
-#ifndef __EXCEPTIONS_DISABLE__
-            } catch (...) {
-                clear();
-                throw;
             }
+
+            rtt& operator=(rtt&& that) noexcept {
+                clear();
+
+                this->swap(that);
+                return *this;
+            }
+
+            /* copy ctor and assignment op for const lvalue */
+
+            rtt(const rtt& that)
+                : _Alloc()
+                , m_capacity(that.m_volume)
+                , m_data(std::move(std::unique_ptr<char[]>(m_capacity > 0 ? _Alloc::allocate(m_capacity) : nullptr)))
+                , m_objects(that.m_objects)
+                , m_volume(that.m_volume) {
+#ifndef __EXCEPTIONS_DISABLE__
+                try {
+#endif
+                    management::copy(m_objects.begin(), m_objects.end(), that.data(), this->data());
+#ifndef __EXCEPTIONS_DISABLE__
+                } catch (...) {
+                    clear();
+                    throw;
+                }
 #endif
 #ifdef __TESTS_ENABLED__
-            rtt_test::const_copy_ctor_++;
+                rtt_test::const_copy_ctor_++;
 #endif
-        }
-
-        rtt& operator=(const rtt& that) {
-            clear();
-
-#ifndef __EXCEPTIONS_DISABLE__
-            try {
-#endif
-                reserve(that.m_volume);
-                management::copy(that.m_objects.begin(), that.m_objects.end(), that.data(), this->data());
-                static_assert(std::is_nothrow_move_assignable<object_info_container_type>::value, "");
-                m_objects = that.m_objects;
-                m_volume = that.m_volume;
-#ifndef __EXCEPTIONS_DISABLE__
-            } catch (...) {
-                clear();
-                throw;
             }
+
+            rtt& operator=(const rtt& that) {
+                clear();
+
+#ifndef __EXCEPTIONS_DISABLE__
+                try {
+#endif
+                    reserve(that.m_volume);
+                    management::copy(that.m_objects.begin(), that.m_objects.end(), that.data(), this->data());
+                    static_assert(std::is_nothrow_move_assignable<object_info_container_type>::value, "");
+                    m_objects = that.m_objects;
+                    m_volume = that.m_volume;
+#ifndef __EXCEPTIONS_DISABLE__
+                } catch (...) {
+                    clear();
+                    throw;
+                }
 #endif
 
-            return *this;
-        }
+                return *this;
+            }
 
-        /* copy ctor and assignment op for non-const lvalue */
+            /* copy ctor and assignment op for non-const lvalue */
 
-        rtt(rtt& that)
-            : rtt(static_cast<const rtt&>(that)) {
+            rtt(rtt& that)
+                : rtt(static_cast<const rtt&>(that)) {
 #ifdef __TESTS_ENABLED__
-            rtt_test::const_copy_ctor_--;
-            rtt_test::copy_ctor_++;
+                rtt_test::const_copy_ctor_--;
+                rtt_test::copy_ctor_++;
 #endif
-        }
+            }
 
-        rtt& operator=(rtt& that) {
-            return operator=(static_cast<const rtt&>(that));
-        }
+            rtt& operator=(rtt& that) {
+                return operator=(static_cast<const rtt&>(that));
+            }
 
-        ~rtt() {
-            destroy_all();
+            ~rtt() {
+                destroy_all();
 #ifdef __TESTS_ENABLED__
-            rtt_test::dtor_++;
+                rtt_test::dtor_++;
 #endif
-        }
-
-        void swap(rtt& that) {
-            using std::swap;
-
-            swap(this->m_capacity, that.m_capacity);
-            swap(this->m_data, that.m_data);
-            swap(this->m_objects, that.m_objects);
-            swap(this->m_volume, that.m_volume);
-        }
-
-        template<typename T>
-        const T& get(size_type index) const {
-            assert(management::conforms<T>(m_objects[index]));
-            return get_by_offset<T>(offset(index));
-        }
-
-        template<typename T>
-        T& get(size_type index) {
-            assert(management::conforms<T>(m_objects[index]));
-            return get_by_offset<T>(offset(index));
-        }
-
-        size_type offset(size_type index) const {
-            return m_objects[index].offset;
-        }
-
-        template<typename T>
-        const T& get_by_offset(size_type offset) const {
-            return *static_cast<const T*>(static_cast<const void*>(data() + offset));
-        }
-
-        template<typename T>
-        T& get_by_offset(size_type offset) {
-            return *static_cast<T*>(static_cast<void*>(data() + offset)); // this is necessary to use double static_cast here, compile error
-        }
-
-        size_type size() const {
-            return m_objects.size();
-        }
-
-        std::size_t volume() const {
-            return m_volume;
-        }
-
-        std::size_t capacity() const {
-            return m_capacity;
-        }
-
-        bool empty() const {
-            return m_objects.empty();
-        }
-
-    private:
-        void reserve(std::size_t new_capacity) {
-            if (new_capacity > m_capacity) {
-                reallocate(std::max(new_capacity, m_capacity * CAPACITY_INCREASING_FACTOR));
             }
-        }
 
-        void shrink_to_fit() {
-            if (m_capacity > m_volume) {
-                reallocate(m_volume);
+            void swap(rtt& that) {
+                using std::swap;
+
+                swap(this->m_capacity, that.m_capacity);
+                swap(this->m_data, that.m_data);
+                swap(this->m_objects, that.m_objects);
+                swap(this->m_volume, that.m_volume);
             }
-        }
 
-        void clear() {
-            destroy_all();
-            m_volume = 0;
-        }
+            template<typename T>
+            const T& get(size_type index) const {
+                assert(management::conforms<T>(m_objects[index]));
+                return get_by_offset<T>(offset(index));
+            }
 
-        void reallocate(std::size_t new_capacity) {
-            assert(new_capacity >= m_volume);
+            template<typename T>
+            T& get(size_type index) {
+                assert(management::conforms<T>(m_objects[index]));
+                return get_by_offset<T>(offset(index));
+            }
+
+            size_type offset(size_type index) const {
+                return m_objects[index].offset;
+            }
+
+            template<typename T>
+            const T& get_by_offset(size_type offset) const {
+                return *static_cast<const T*>(static_cast<const void*>(data() + offset));
+            }
+
+            template<typename T>
+            T& get_by_offset(size_type offset) {
+                return *static_cast<T*>(static_cast<void*>(data() + offset)); // this is necessary to use double static_cast here, compile error
+            }
+
+            size_type size() const {
+                return m_objects.size();
+            }
+
+            std::size_t volume() const {
+                return m_volume;
+            }
+
+            std::size_t capacity() const {
+                return m_capacity;
+            }
+
+            bool empty() const {
+                return m_objects.empty();
+            }
+
+        private:
+            void reserve(std::size_t new_capacity) {
+                if (new_capacity > m_capacity) {
+                    reallocate(std::max(new_capacity, m_capacity * CAPACITY_INCREASING_FACTOR));
+                }
+            }
+
+            void shrink_to_fit() {
+                if (m_capacity > m_volume) {
+                    reallocate(m_volume);
+                }
+            }
+
+            void clear() {
+                destroy_all();
+                m_volume = 0;
+            }
+
+            void reallocate(std::size_t new_capacity) {
+                assert(new_capacity >= m_volume);
 #ifndef __EXCEPTIONS_DISABLE__
-            try {
+                try {
 #endif
-                auto new_data = std::unique_ptr<char[]>(new_capacity > 0 ? _Alloc::allocate(new_capacity) : nullptr);
-                management::move(m_objects.begin(), m_objects.end(), data(), new_data.get());
-                std::swap(m_data, new_data);
-                m_capacity = new_capacity;
+                    auto new_data = std::unique_ptr<char[]>(new_capacity > 0 ? _Alloc::allocate(new_capacity) : nullptr);
+                    management::move(m_objects.begin(), m_objects.end(), data(), new_data.get());
+                    std::swap(m_data, new_data);
+                    m_capacity = new_capacity;
 #ifndef __EXCEPTIONS_DISABLE__
-            } catch (...) {
-                clear();
-                throw;
-            }
+                } catch (...) {
+                    clear();
+                    throw;
+                }
 #endif
-        }
-
-        char* data() {
-            return m_data.get();
-        }
-
-        const char* data() const {
-            return m_data.get();
-        }
-
-        template<typename T>
-        char* set_up_creation_place(const T& object) {
-            if (auto proposed_creation_place = try_to_align(object)) {
-                return proposed_creation_place;
-            } else {
-                reserve(volume() + sizeof(T) + alignof(T));
-                return force_align(object);
             }
-        }
 
-        template<typename T>
-        void push_back_no_realloc(T&& object) {
-            auto creation_place = force_align(object);
-            accommodate(std::forward<T>(object), creation_place);
-        }
+            char* data() {
+                return m_data.get();
+            }
 
-        template<typename T>
-        char* try_to_align(const T&) {
-            auto space_left = capacity() - volume();
-            void* creation_place = data() + volume();
-            auto aligned_place = align(alignof(T), sizeof(T), creation_place, space_left);
-            return static_cast<char*>(aligned_place);
-        }
+            const char* data() const {
+                return m_data.get();
+            }
 
-        template<typename T>
-        char* force_align(const T& object) {
-            auto creation_place = try_to_align(object);
-            assert(creation_place != nullptr);
+            template<typename T>
+            char* set_up_creation_place(const T& object) {
+                if (auto proposed_creation_place = try_to_align(object)) {
+                    return proposed_creation_place;
+                } else {
+                    reserve(volume() + sizeof(T) + alignof(T));
+                    return force_align(object);
+                }
+            }
 
-            return creation_place;
-        }
+            template<typename T>
+            void push_back_no_realloc(T&& object) {
+                auto creation_place = force_align(object);
+                accommodate(std::forward<T>(object), creation_place);
+            }
 
-        template<typename T>
-        void accommodate(T&& object, char* creation_place) {
-            assert(creation_place && "rtt accommodate creation_place");
+            template<typename T>
+            char* try_to_align(const T&) {
+                auto space_left = capacity() - volume();
+                void* creation_place = data() + volume();
+                auto aligned_place = align(alignof(T), sizeof(T), creation_place, space_left);
+                return static_cast<char*>(aligned_place);
+            }
+
+            template<typename T>
+            char* force_align(const T& object) {
+                auto creation_place = try_to_align(object);
+                assert(creation_place != nullptr);
+
+                return creation_place;
+            }
+
+            template<typename T>
+            void accommodate(T&& object, char* creation_place) {
+                assert(creation_place && "rtt accommodate creation_place");
 #ifndef __EXCEPTIONS_DISABLE__
-            try {
+                try {
 #endif
-                using raw_type = type_traits::decay_t<T>;
-                new (creation_place) raw_type(std::forward<T>(object));
+                    using raw_type = type_traits::decay_t<T>;
+                    new (creation_place) raw_type(std::forward<T>(object));
 
-                const auto new_offset = static_cast<std::size_t>(creation_place - data());
-                m_objects.push_back(management::make_object_info<raw_type>(new_offset));
-                m_volume = new_offset + sizeof(raw_type);
+                    const auto new_offset = static_cast<std::size_t>(creation_place - data());
+                    m_objects.push_back(management::make_object_info<raw_type>(new_offset));
+                    m_volume = new_offset + sizeof(raw_type);
 #ifndef __EXCEPTIONS_DISABLE__
-            } catch (...) {
-                clear();
-                throw;
-            }
+                } catch (...) {
+                    clear();
+                    throw;
+                }
 #endif
+            }
+
+            void destroy_all() {
+                management::destroy(m_objects.begin(), m_objects.end(), data());
+                m_objects.clear();
+            }
+
+            static constexpr auto CAPACITY_INCREASING_FACTOR = std::size_t{2};
+
+            std::size_t m_capacity = 0;
+            std::unique_ptr<char[]> m_data;
+
+            object_info_container_type m_objects; // uptr
+            std::size_t m_volume = 0;
+        };
+
+        template<typename _Alloc = std::allocator<char>>
+        inline void swap(rtt<_Alloc>& left, rtt<_Alloc>& right) {
+            left.swap(right);
         }
 
-        void destroy_all() {
-            management::destroy(m_objects.begin(), m_objects.end(), data());
-            m_objects.clear();
-        }
+    } // namespace impl
 
-        static constexpr auto CAPACITY_INCREASING_FACTOR = std::size_t{2};
-
-        std::size_t m_capacity = 0;
-        std::unique_ptr<char[]> m_data;
-
-        object_info_container_type m_objects; // uptr
-        std::size_t m_volume = 0;
-    };
-
-    template<typename _Alloc = std::allocator<char>>
-    inline void swap(rtt<_Alloc>& left, rtt<_Alloc>& right) {
-        left.swap(right);
-    }
+    using rtt = actor_zeta::detail::impl::rtt<std::allocator<char>>;
 
     namespace pmr {
 
-        using rtt = actor_zeta::detail::rtt<actor_zeta::detail::pmr::polymorphic_allocator<char>>;
+        using rtt = actor_zeta::detail::impl::rtt<actor_zeta::detail::pmr::polymorphic_allocator<char>>;
 
     }
 
