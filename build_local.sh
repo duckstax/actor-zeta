@@ -17,6 +17,6 @@ conan install ${workspace}/build/.. -if ${workspace}/build --build=missing -s bu
 cd ${workspace}/build
 export CC=${COMPILER_C}
 export CXX=${COMPILER_CXX}
-cmake -DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD} -DALLOW_TESTS=ON ..
+cmake -DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DALLOW_BENCHMARK=ON ..
 cmake --build .
 
