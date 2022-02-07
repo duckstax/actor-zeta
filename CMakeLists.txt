@@ -104,15 +104,13 @@ set(HEADER_FILES
         header/actor-zeta/detail/rtt.hpp
         header/actor-zeta/detail/rtt_management.hpp
 
-        header/actor-zeta/executor/policy/profiled.hpp
-        header/actor-zeta/executor/policy/unprofiled.hpp
-        header/actor-zeta/executor/policy/work_sharing.hpp
-        header/actor-zeta/executor/abstract_executor.hpp
-        header/actor-zeta/executor/executor.hpp
-        header/actor-zeta/executor/executable.hpp
-        header/actor-zeta/executor/profiled_executor.hpp
-        header/actor-zeta/executor/execution_device.hpp
-        header/actor-zeta/executor/worker.hpp
+        header/actor-zeta/scheduler/policy/unprofiled.hpp
+        header/actor-zeta/scheduler/policy/work_sharing.hpp
+        header/actor-zeta/scheduler/execution_unit.hpp
+        header/actor-zeta/scheduler/resumable.hpp
+        header/actor-zeta/scheduler/scheduler.hpp
+        header/actor-zeta/scheduler/scheduler_abstract.hpp
+        header/actor-zeta/scheduler/worker.hpp
 
         header/actor-zeta/base/message.hpp
 
