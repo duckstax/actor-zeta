@@ -3,7 +3,7 @@
 // clang-format off
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/message.hpp>
+#include <header/actor-zeta/mailbox/message.hpp>
 #include <actor-zeta/base/supervisor.hpp>
 #include <actor-zeta/impl/handler.ipp>
 // clang-format on
@@ -17,8 +17,6 @@ namespace {
 }
 
 namespace actor_zeta { namespace base {
-
-    using message_ptr = std::unique_ptr<message>;
 
     address_t::address_t() noexcept
         : ptr_(nullptr) {

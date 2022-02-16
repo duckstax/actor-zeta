@@ -13,30 +13,34 @@
 #include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
 
-namespace actor_zeta { namespace base {
+namespace actor_zeta {
+    namespace mailbox {
+        using message_ptr = std::unique_ptr<mailbox::message>;
+    }
 
-    using message_ptr = std::unique_ptr<message>;
+    namespace base {
 
-    class communication_module {
-    public:
-        communication_module() = delete;
-        communication_module(const communication_module&) = delete;
-        communication_module& operator=(const communication_module&) = delete;
+        class communication_module {
+        public:
+            communication_module() = delete;
+            communication_module(const communication_module&) = delete;
+            communication_module& operator=(const communication_module&) = delete;
 
-        auto type() const -> detail::string_view;
-        auto id() const -> int64_t;
-        auto enqueue(message_ptr) -> void;
-        void enqueue(message_ptr, scheduler::execution_unit*);
+            auto type() const -> detail::string_view;
+            auto id() const -> int64_t;
+            auto enqueue(mailbox::message_ptr) -> void;
+            void enqueue(mailbox::message_ptr, scheduler::execution_unit*);
 
-    protected:
-        virtual ~communication_module();
+        protected:
+            virtual ~communication_module();
 
-        communication_module(std::string, int64_t);
-        virtual void enqueue_impl(message_ptr, scheduler::execution_unit*) = 0;
+            communication_module(std::string, int64_t);
+            virtual void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*) = 0;
 
-    private:
-        const std::string type_;
-        const int64_t id_;
-    };
+        private:
+            const std::string type_;
+            const int64_t id_;
+        };
 
-}} // namespace actor_zeta::base
+    } // namespace base
+} // namespace actor_zeta

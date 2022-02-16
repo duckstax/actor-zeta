@@ -5,8 +5,6 @@
 namespace actor_zeta {
 
     namespace base {
-        class message;
-        using message_ptr = std::unique_ptr<message>;
         class actor_abstract;
         class actor;
         class address_t;
@@ -16,6 +14,11 @@ namespace actor_zeta {
         class communication_module;
         class cooperative_actor;
     } // namespace base
+
+    namespace mailbox {
+        class message;
+        using message_ptr = std::unique_ptr<message>;
+    } // namespace mailbox
 
     namespace scheduler {
         class execution_unit;

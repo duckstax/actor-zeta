@@ -2,7 +2,7 @@
 
 // clang-format off
 #include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/message.hpp>
+#include <actor-zeta/mailbox/message.hpp>
 #include <actor-zeta/base/actor.hpp>
 #include <actor-zeta/base/actor_abstract.hpp>
 #include <actor-zeta/base/handler.hpp>
@@ -25,10 +25,11 @@ namespace actor_zeta {
     using base::basic_async_actor;
     using base::cooperative_supervisor;
     using base::make_handler;
-    using base::message;
-    using base::message_ptr;
     using base::supervisor;
     using base::supervisor_abstract;
+
+    using mailbox::message;
+    using mailbox::message_ptr;
 
     using scheduler::execution_unit;
     using scheduler::scheduler_abstract_t;

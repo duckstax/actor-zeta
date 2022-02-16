@@ -3,20 +3,14 @@
 #include <cassert>
 
 #include <actor-zeta/detail/any.hpp>
-#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
-#include <string>
+#include <actor-zeta/mailbox/id.hpp>
 
-namespace actor_zeta { namespace base {
+namespace actor_zeta { namespace mailbox {
 
     ///
     /// @brief
     ///
-
-    enum class priority : int {
-        normal = 0x00,
-        high = 0x01
-    };
 
     class message final {
     public:
@@ -26,14 +20,14 @@ namespace actor_zeta { namespace base {
         message(message&& other) = default;
         message& operator=(message&&) = default;
         ~message() = default;
-        message(address_t /*sender*/, std::string /*name*/);
-        message(address_t /*sender*/, std::string /*name*/, detail::any /*body*/);
+        message(base::address_t /*sender*/, message_id /*name*/);
+        message(base::address_t /*sender*/, message_id /*name*/, detail::any /*body*/);
         message* next;
         message* prev;
-        auto command() const noexcept -> detail::string_view;
-        auto sender() & noexcept -> address_t&;
-        auto sender() && noexcept -> address_t&&;
-        auto sender() const& noexcept -> address_t const&;
+        auto command() const noexcept -> message_id;
+        auto sender() & noexcept -> base::address_t&;
+        auto sender() && noexcept -> base::address_t&&;
+        auto sender() const& noexcept -> base::address_t const&;
 
         template<typename T>
         auto body() const -> const T& {
@@ -54,17 +48,16 @@ namespace actor_zeta { namespace base {
         bool is_high_priority() const;
 
     private:
-        address_t sender_;
-        std::string command_;
+        base::address_t sender_;
+        message_id command_;
         detail::any body_;
-        priority priority_ = priority::normal;
     };
 
     static_assert(std::is_move_constructible<message>::value, "");
     static_assert(not std::is_copy_constructible<message>::value, "");
 
-}} // namespace actor_zeta::base
+}} // namespace actor_zeta::mailbox
 
-inline void swap(actor_zeta::base::message& lhs, actor_zeta::base::message& rhs) noexcept {
+inline void swap(actor_zeta::mailbox::message& lhs, actor_zeta::mailbox::message& rhs) noexcept {
     lhs.swap(rhs);
 }

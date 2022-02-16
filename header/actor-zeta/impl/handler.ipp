@@ -27,7 +27,7 @@ namespace actor_zeta { namespace base {
 
     // clang-format off
     template<class F, std::size_t... I>
-    void apply_impl(F &&f, message *ctx, type_traits::index_sequence<I...>) {
+    void apply_impl(F &&f, mailbox::message *ctx, type_traits::index_sequence<I...>) {
         using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
         constexpr int args_size = call_trait::number_of_arguments;
         using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types, 0, args_size>;
@@ -43,7 +43,7 @@ namespace actor_zeta { namespace base {
              int Args_size = type_traits::get_callable_trait<F>::number_of_arguments>
     struct transformer {
         auto operator()(F&& f) -> action {
-            action tmp([func = std::move(f)](message* ctx) -> void {
+            action tmp([func = std::move(f)](mailbox::message* ctx) -> void {
                 apply_impl(func, ctx, type_traits::make_index_sequence<Args_size>{});
             });
             return tmp;
@@ -53,7 +53,7 @@ namespace actor_zeta { namespace base {
     template<typename F, class Args>
     struct transformer<F, Args, 0> final {
         auto operator()(F&& f) -> action {
-            action tmp([func = std::move(f)](message*) -> void {
+            action tmp([func = std::move(f)](mailbox::message*) -> void {
                 func();
             });
             return tmp;
@@ -63,7 +63,7 @@ namespace actor_zeta { namespace base {
     template<typename F, class Args>
     struct transformer<F, Args, 1> final {
         auto operator()(F&& f) -> action {
-            action tmp([func = std::move(f)](message* ctx) -> void {
+            action tmp([func = std::move(f)](mailbox::message* ctx) -> void {
                 using arg_type = type_traits::type_list_at_t<Args, 0>;
                 using clear_args_type = type_traits::decay_t<arg_type>;
                 auto& tmp = ctx->body<clear_args_type>();
@@ -76,7 +76,7 @@ namespace actor_zeta { namespace base {
     /// class method
     // clang-format off
     template<class F, typename ClassPtr, std::size_t... I>
-    void apply_impl_for_class(F &&f, ClassPtr *ptr, message *ctx, type_traits::index_sequence<I...>) {
+    void apply_impl_for_class(F &&f, ClassPtr *ptr, mailbox::message *ctx, type_traits::index_sequence<I...>) {
         using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
         using args_type_list = typename call_trait::args_types;
         using Tuple =  type_list_to_tuple_t<args_type_list>;
@@ -93,7 +93,7 @@ namespace actor_zeta { namespace base {
         int Args_size = type_traits::get_callable_trait<F>::number_of_arguments>
     struct transformer_for_class {
         auto operator()(F&& f, ClassPtr* ptr) -> action {
-            action tmp([func = std::move(f), ptr](message* ctx) -> void {
+            action tmp([func = std::move(f), ptr](mailbox::message* ctx) -> void {
                 apply_impl_for_class(func, ptr, ctx, type_traits::make_index_sequence<Args_size>{});
             });
             return tmp;
@@ -103,7 +103,7 @@ namespace actor_zeta { namespace base {
     template<typename F, typename ClassPtr, class Args>
     struct transformer_for_class<F, ClassPtr, Args, 0> final {
         auto operator()(F&& f, ClassPtr* ptr) -> action {
-            action tmp([func = std::move(f), ptr](message*) -> void {
+            action tmp([func = std::move(f), ptr](mailbox::message*) -> void {
                 (ptr->*func)();
             });
             return tmp;
@@ -113,7 +113,7 @@ namespace actor_zeta { namespace base {
     template<typename F, typename ClassPtr, class Args>
     struct transformer_for_class<F, ClassPtr, Args, 1> final {
         auto operator()(F&& f, ClassPtr* ptr) -> action {
-            action tmp([func = std::move(f), ptr](message* arg) -> void {
+            action tmp([func = std::move(f), ptr](mailbox::message* arg) -> void {
                 using arg_type_0 = type_traits::type_list_at_t<Args, 0>;
                 using decay_arg_type_0 = type_traits::decay_t<arg_type_0>;
                 auto& tmp = arg->body<decay_arg_type_0>();

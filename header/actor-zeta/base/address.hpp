@@ -20,7 +20,7 @@ namespace actor_zeta { namespace base {
             static address_t tmp;
             return tmp;
         }
-        auto enqueue(message_ptr) noexcept -> void;
+        auto enqueue(mailbox::message_ptr) noexcept -> void;
         auto type() const -> detail::string_view;
         operator bool() const noexcept;
         auto operator!() const noexcept -> bool;

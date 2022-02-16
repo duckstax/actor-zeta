@@ -8,7 +8,7 @@ namespace actor_zeta { namespace base {
     /// @brief Abstract concept of an action
     ///
 
-    using action = detail::unique_function<void(message*)>;
+    using action = detail::unique_function<void(mailbox::message*)>;
 
     template<typename F>
     auto make_handler(F&& f)-> action ;

@@ -16,7 +16,7 @@ namespace actor_zeta { namespace base {
         , public scheduler::resumable
         , public intrusive_behavior_t {
     public:
-        using mailbox_t = detail::single_reader_queue<message>;
+        using mailbox_t = detail::single_reader_queue<mailbox::message>;
 
         scheduler::resume_result resume(scheduler::execution_unit*, max_throughput_t) final;
 
@@ -31,10 +31,10 @@ namespace actor_zeta { namespace base {
         cooperative_actor(Supervisor* ptr, std::string type ,int64_t actor_id)
             : cooperative_actor(static_cast<supervisor_abstract*>(ptr),std::move(type),actor_id){};
 
-        void enqueue_impl(message_ptr, scheduler::execution_unit*) final;
+        void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*) final;
 
         // Non thread-safe method
-        auto current_message() -> message* ;
+        auto current_message() -> mailbox::message* ;
 
     private:
         cooperative_actor(supervisor_abstract*, std::string,int64_t);
@@ -56,7 +56,7 @@ namespace actor_zeta { namespace base {
 
         bool consume_from_cache();
 
-        void consume(message&);
+        void consume(mailbox::message&);
 
         // message processing -----------------------------------------------------
 
@@ -66,13 +66,13 @@ namespace actor_zeta { namespace base {
 
         bool activate(scheduler::execution_unit*);
 
-        auto reactivate(message& x) -> void;
+        auto reactivate(mailbox::message& x) -> void;
 
-        message_ptr next_message();
+        mailbox::message_ptr next_message();
 
         bool has_next_message();
 
-        void push_to_cache(message_ptr ptr);
+        void push_to_cache(mailbox::message_ptr ptr);
 
         auto context(scheduler::execution_unit*) -> void;
 
@@ -83,7 +83,7 @@ namespace actor_zeta { namespace base {
         // ----------------------------------------------------- message processing
         supervisor_abstract* supervisor_;
         scheduler::execution_unit* executor_;
-        message* current_message_;
+        mailbox::message* current_message_;
         mailbox_t mailbox_;
         std::atomic<int> flags_;
     };

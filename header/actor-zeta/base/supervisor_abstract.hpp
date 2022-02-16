@@ -24,12 +24,12 @@ namespace actor_zeta { namespace base {
 
     protected:
         virtual auto scheduler_impl() noexcept -> scheduler::scheduler_abstract_t* = 0;
-        auto set_current_message(message_ptr) -> void;
-        auto current_message() -> message*;
+        auto set_current_message(mailbox::message_ptr) -> void;
+        auto current_message() -> mailbox::message*;
 
     private:
         supervisor_abstract(supervisor_abstract*, std::string, int64_t);
-        message* current_message_;
+        mailbox::message* current_message_;
         detail::pmr::memory_resource* memory_resource_;
     };
 

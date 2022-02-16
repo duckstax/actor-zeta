@@ -3,26 +3,24 @@
 #include <actor-zeta/base/behavior.hpp>
 
 #include <iostream>
-#include <set>
-#include <unordered_map>
 
 namespace actor_zeta { namespace base {
 
-    void error_duplicate_handler(detail::string_view error) {
+    void error_duplicate_handler(mailbox::message_id error) {
         std::cerr << "Duplicate" << '\n';
-        std::cerr << "Handler: " << error << '\n';
+        std::cerr << "Handler: " << error.integer_value() << '\n';
         std::cerr << "Duplicate" << std::endl;
     }
 
-    void error_add_handler(detail::string_view error) {
+    void error_add_handler(mailbox::message_id error) {
         std::cerr << "error add handler" << '\n';
-        std::cerr << "Handler: " << error << '\n';
+        std::cerr << "Handler: " << error.integer_value() << '\n';
         std::cerr << "error add handler" << std::endl;
     }
 
-    void error_skip(detail::string_view sender, detail::string_view reciever, detail::string_view handler) {
+    void error_skip(detail::string_view sender, detail::string_view reciever, mailbox::message_id handler) {
         std::cerr << "WARNING" << '\n';
-        std::cerr << "Skip, can't find handler: " << reciever << "::" << handler;
+        std::cerr << "Skip, can't find handler: " << reciever << "::" << handler.integer_value();
         std::cerr << " sender: " << sender << "\n";
         std::cerr << "WARNING" << std::endl;
     }
@@ -43,10 +41,10 @@ namespace actor_zeta { namespace base {
         return status;
     }
 
-    auto intrusive_behavior_t::message_types() const -> std::set<std::string> {
-        std::set<std::string> types;
+    auto intrusive_behavior_t::message_types() const -> std::unordered_set<mailbox::message_id> {
+        std::unordered_set<mailbox::message_id> types;
         for (const auto& i : handlers_) {
-            types.emplace(std::string(i.first.begin(), i.first.end()));
+            types.emplace(i.first);
         }
         return types;
     }
