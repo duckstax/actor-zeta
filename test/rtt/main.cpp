@@ -12,20 +12,6 @@ namespace rtt_test = actor_zeta::detail::rtt_test;
 #endif
 
 TEST_CASE("rt_tuple") {
-    SECTION("with_pmr") {
-        actor_zeta::detail::pmr::rtt r(static_cast<int8_t>(3457),
-                                       static_cast<int64_t>(57),
-                                       static_cast<int32_t>(45),
-                                       static_cast<long>(63),
-                                       static_cast<long long>(6348),
-                                       static_cast<long double>(6754.9),
-                                       static_cast<int16_t>(4563),
-                                       static_cast<float>(5653),
-                                       static_cast<double>(675.49),
-                                       static_cast<unsigned long>(45645),
-                                       static_cast<unsigned long long>(5573),
-                                       static_cast<char>(57));
-    }
     SECTION("test_getSize") {
         test_getSize(
             static_cast<int8_t>(3457),
@@ -175,7 +161,7 @@ TEST_CASE("rt_tuple") {
             test_map,
             test_map);
     }
-
+#if 0
 #ifdef __TESTS_ENABLED__
 
     SECTION("ctors") {
@@ -324,6 +310,7 @@ TEST_CASE("rt_tuple") {
     }
 
 #endif
+#endif
 
     SECTION("rtt created from an empty set of elements is empty") {
         const auto t = rtt{};
@@ -346,25 +333,25 @@ TEST_CASE("rt_tuple") {
     }
 
     SECTION("rtt created from a non-empty set of elements is not empty ") {
-        const auto t = rtt(42, 3.14);
+        const auto t = rtt(nullptr, 42, 3.14);
         REQUIRE(not t.empty());
     }
 
     SECTION("The size of a rtt created from a non-empty set of elements is equal to the number of these elements ") {
-        const auto t = rtt(std::string("123"), 42, 2.71, false);
+        const auto t = rtt(nullptr, std::string("123"), 42, 2.71, false);
         REQUIRE(t.size() == 4);
     }
 
     SECTION("The volume of a rtt created from a set of elements is equal to the volume of a rtt created by sequential insertion of the same elements into the end of an empty rtt. ") {
-        const auto constructed = rtt(42, 3.14, std::string("123"), true);
+        const auto constructed = rtt(nullptr, 42, 3.14, std::string("123"), true);
 
-        auto pushed_back = rtt{42, 3.14, std::string("123"), true};
+        auto pushed_back = rtt{nullptr, 42, 3.14, std::string("123"), true};
 
         REQUIRE(constructed.volume() == pushed_back.volume());
     }
 
     SECTION("The capacity of a recreation center created from a set of elements is greater than or equal to the volume of this recreation center ") {
-        const auto t = rtt(std::vector<std::size_t>{}, 42, X{}, 3.14);
+        const auto t = rtt(nullptr, std::vector<std::size_t>{}, 42, X{}, 3.14);
         REQUIRE(t.capacity() >= t.volume());
     }
 
@@ -374,12 +361,12 @@ TEST_CASE("rt_tuple") {
         const auto some_struct = X{};
         const auto some_floating = 3.14;
 
-        rtt t(some_vector, some_integer, some_struct, some_floating);
+        rtt t(nullptr, some_vector, some_integer, some_struct, some_floating);
         REQUIRE(t.size() == 4);
     }
 
     SECTION("rtt can be created from an arbitrary set of objects ") {
-        rtt t(std::string("123"), 42, true, X{17, std::vector<int>{1, 2, 3}});
+        rtt t(nullptr, std::string("123"), 42, true, X{17, std::vector<int>{1, 2, 3}});
         REQUIRE(t.size() == 4);
         REQUIRE(t.get<std::string>(0) == std::string("123"));
         REQUIRE(t.get<int>(1) == 42);
@@ -389,21 +376,38 @@ TEST_CASE("rt_tuple") {
     }
 
     SECTION("Arbitrary objects can be inserted at the end of the rtt") {
-        rtt t(X{17, std::vector<int>{1, 2, 3}}, true, std::string("123"));
+        rtt t(nullptr, X{17, std::vector<int>{1, 2, 3}}, true, std::string("123"));
 
-        CHECK(t.size() == 3);
-        CHECK(t.get<X>(0).a == 17);
-        CHECK(t.get<X>(0).b == std::vector<int>{1, 2, 3});
-        CHECK(t.get<bool>(1) == true);
-        CHECK(t.get<std::string>(2) == std::string("123"));
+        REQUIRE(t.size() == 3);
+        REQUIRE(t.get<X>(0).a == 17);
+        REQUIRE(t.get<X>(0).b == std::vector<int>{1, 2, 3});
+        REQUIRE(t.get<bool>(1) == true);
+        REQUIRE(t.get<std::string>(2) == std::string("123"));
     }
 
+    SECTION("Vectors of int8_t") {
+        rtt t(nullptr,
+              std::vector<int8_t>{1, 2, 3, 4, 5, 6, 7, 8},
+              std::vector<int8_t>{1, 2, 3, 4, 5, 6, 7, 8},
+              std::vector<int8_t>{1, 2, 3, 4, 5, 6, 7, 8},
+              std::vector<int8_t>{1, 2, 3, 4, 5, 6, 7, 8},
+              std::vector<int8_t>{1, 2, 3, 4, 5, 6, 7, 8});
+
+        REQUIRE(t.size() == 5);
+        REQUIRE(t.get<std::vector<int8_t>>(0) == std::vector<int8_t>{1, 2, 3, 4, 5, 6, 7, 8});
+        REQUIRE(t.get<std::vector<int8_t>>(1) == std::vector<int8_t>{1, 2, 3, 4, 5, 6, 7, 8});
+        REQUIRE(t.get<std::vector<int8_t>>(2) == std::vector<int8_t>{1, 2, 3, 4, 5, 6, 7, 8});
+        REQUIRE(t.get<std::vector<int8_t>>(3) == std::vector<int8_t>{1, 2, 3, 4, 5, 6, 7, 8});
+        REQUIRE(t.get<std::vector<int8_t>>(4) == std::vector<int8_t>{1, 2, 3, 4, 5, 6, 7, 8});
+    }
+
+#if 0
 #ifndef __EXCEPTIONS_DISABLE__
 
     SECTION("The exception thrown by the inserted object does not result in leaks ") {
         REQUIRE(kamikaze::instances_count == 0);
-        REQUIRE_THROWS_AS(rtt(kamikaze{}, kamikaze{}, kamikaze{}), std::runtime_error);
-        CHECK(kamikaze::instances_count == 0);
+        REQUIRE_THROWS_AS(rtt(nullptr, kamikaze{}, kamikaze{}, kamikaze{}), std::runtime_error);
+        REQUIRE(kamikaze::instances_count == 0);
     }
 
     /*SECTION("Exception when moving internal objects does not result in leaks") {
@@ -417,9 +421,9 @@ TEST_CASE("rt_tuple") {
             REQUIRE(dummy::instances_count == 1);
 
             REQUIRE_THROWS_AS(t.reserve(t.capacity() + 1), std::runtime_error);
-            CHECK(dummy::instances_count == 1);
+            REQUIRE(dummy::instances_count == 1);
         }
-        CHECK(dummy::instances_count == 0);
+        REQUIRE(dummy::instances_count == 0);
     }*/
     /*
 duckstax/actor-zeta/test/rtt/main.cpp:262:36:   required from here
@@ -442,9 +446,9 @@ duckstax/actor-zeta/header/actor-zeta/detail/rtt_management.hpp:20:10: note: can
             REQUIRE(dummy::instances_count == 2);
             rtt copied;
             REQUIRE_THROWS_AS(copied = t, std::runtime_error);
-            CHECK(dummy::instances_count == 2);
+            REQUIRE(dummy::instances_count == 2);
         }
-        CHECK(dummy::instances_count == 0);
+        REQUIRE(dummy::instances_count == 0);
     }
 
     SECTION("Exception during copy assignment of objects stored in the rtt does not lead to leaks") {
@@ -457,224 +461,225 @@ duckstax/actor-zeta/header/actor-zeta/detail/rtt_management.hpp:20:10: note: can
 
             REQUIRE_THROWS_AS(copy = t, std::runtime_error);
         }
-        CHECK(dummy::instances_count == 0);
+        REQUIRE(dummy::instances_count == 0);
     }*/
 
 #endif
+#endif
 
     SECTION("Objects stored in the rtt can be changed externally ") {
-        rtt t(true, std::vector<char>{'a', 'b', 'c'}, 10);
+        rtt t(nullptr, true, std::vector<char>{'a', 'b', 'c'}, 10);
 
         auto& vector = t.get<std::vector<char>>(1);
 
         vector.push_back('q');
-        CHECK(t.get<std::vector<char>>(1) == std::vector<char>{'a', 'b', 'c', 'q'});
+        REQUIRE(t.get<std::vector<char>>(1) == std::vector<char>{'a', 'b', 'c', 'q'});
 
         vector.clear();
-        CHECK(t.get<std::vector<char>>(1).empty());
+        REQUIRE(t.get<std::vector<char>>(1).empty());
     }
 
     SECTION("The rtt transfer constructor transfers elements of one rtt into another, rather than inserting one rtt inside another rtt") {
-        rtt moved(2.71, 3, false);
+        rtt moved(nullptr, 2.71, 3, false);
         rtt constructed(std::move(moved));
-        CHECK(constructed.size() == 3);
+        REQUIRE(constructed.size() == 3);
     }
 
     SECTION("The rtt copy constructor copies the elements of one rtt to another, rather than inserting one rtt inside another rtt") {
-        rtt copied(2.71, 3, false);
+        rtt copied(nullptr, 2.71, 3, false);
         rtt constructed(copied);
-        CHECK(constructed.size() == 3);
+        REQUIRE(constructed.size() == 3);
     }
 
     SECTION("rtt may contain rtt") {
-        rtt t(rtt(1, 2), rtt(3, 4));
-        CHECK(t.size() == 2);
+        rtt t(nullptr, rtt(nullptr, 1, 2), rtt(nullptr, 3, 4));
+        REQUIRE(t.size() == 2);
     }
 
     SECTION("Objects stored in the rtt are transferred when transferring the rtt") {
         REQUIRE(dummy::instances_count == 0);
-        rtt one(dummy{});
+        rtt one(nullptr, dummy{});
         REQUIRE(dummy::instances_count == 1);
 
         rtt another(std::move(one));
-        CHECK(dummy::instances_count == 1);
+        REQUIRE(dummy::instances_count == 1);
 
         one = std::move(another);
-        CHECK(dummy::instances_count == 1);
+        REQUIRE(dummy::instances_count == 1);
     }
 
     SECTION("The rtt copy constructor creates new instances of objects stored in the copied rtt and destroys them when the created rtt copy is destroyed") {
         REQUIRE(dummy::instances_count == 0);
         {
-            rtt initial(dummy{});
+            rtt initial(nullptr, dummy{});
 
             REQUIRE(dummy::instances_count == 1);
             {
                 rtt copy(initial);
-                CHECK(dummy::instances_count == 2);
+                REQUIRE(dummy::instances_count == 2);
             }
-            CHECK(dummy::instances_count == 1);
+            REQUIRE(dummy::instances_count == 1);
         }
-        CHECK(dummy::instances_count == 0);
+        REQUIRE(dummy::instances_count == 0);
     }
 
     SECTION("The operator of the copying assignment of the rtt creates new instances of objects stored in the copied rtt and destroys them when this copy of the rtt is destroyed. ") {
         REQUIRE(dummy::instances_count == 0);
         {
-            rtt initial(dummy{});
+            rtt initial(nullptr, dummy{});
 
             REQUIRE(dummy::instances_count == 1);
             {
-                rtt copy(dummy{});
+                rtt copy(nullptr, dummy{});
                 copy = initial;
-                CHECK(dummy::instances_count == 2);
+                REQUIRE(dummy::instances_count == 2);
             }
-            CHECK(dummy::instances_count == 1);
+            REQUIRE(dummy::instances_count == 1);
         }
-        CHECK(dummy::instances_count == 0);
+        REQUIRE(dummy::instances_count == 0);
     }
 
     SECTION("Objects stored in the rtt are destroyed by copy assignment") {
         REQUIRE(dummy::instances_count == 0);
-        rtt initial(dummy{});
+        rtt initial(nullptr, dummy{});
         REQUIRE(dummy::instances_count == 1);
 
-        rtt other(1, 3.14, true);
+        rtt other(nullptr, 1, 3.14, true);
         initial = other;
-        CHECK(dummy::instances_count == 0);
+        REQUIRE(dummy::instances_count == 0);
     }
 
     SECTION("Objects stored in the rtt are destroyed during transfer assignment") {
         REQUIRE(dummy::instances_count == 0);
-        rtt initial(dummy{});
+        rtt initial(nullptr, dummy{});
         REQUIRE(dummy::instances_count == 1);
 
-        rtt other(1, 3.14, true);
+        rtt other(nullptr, 1, 3.14, true);
         initial = std::move(other);
-        CHECK(dummy::instances_count == 0);
+        REQUIRE(dummy::instances_count == 0);
     }
 
     SECTION("The transfer constructor leaves the portable rtt instance empty") {
-        rtt source(13, 3.14, true);
+        rtt source(nullptr, 13, 3.14, true);
         rtt destination(std::move(source));
-        CHECK(source.empty());
+        REQUIRE(source.empty());
     }
 
     SECTION("The takeover assignment operator leaves the portable copy of the rtt empty") {
-        rtt source(std::string("move me"));
-        rtt destination(std::string("some items here"));
+        rtt source(nullptr, std::string("move me"));
+        rtt destination(nullptr, std::string("some items here"));
         destination = std::move(source);
-        CHECK(source.empty());
+        REQUIRE(source.empty());
     }
 
     SECTION("The size of the rtt source after transfer is equal to zero") {
-        rtt source(13, 3.14, true);
+        rtt source(nullptr, 13, 3.14, true);
         rtt destination(std::move(source));
-        CHECK(source.size() == 0);
+        REQUIRE(source.size() == 0);
     }
 
     SECTION("The size of the rtt-source after carrying assignment is equal to zero ") {
-        rtt source(std::string("move me"));
-        rtt destination(std::string("some items here"));
+        rtt source(nullptr, std::string("move me"));
+        rtt destination(nullptr, std::string("some items here"));
         destination = std::move(source);
-        CHECK(source.size() == 0);
+        REQUIRE(source.size() == 0);
     }
 
     SECTION("The volume of the rtt source after transfer is equal to zero") {
-        rtt source(13, 3.14, true);
-        rtt destination(std::move(source));
-        CHECK(source.volume() == 0);
+        rtt source(nullptr, 13, 3.14, true);
+        rtt destination(nullptr, std::move(source));
+        REQUIRE(source.volume() == 0);
     }
 
     SECTION("The volume of the rtt-source after carrying assignment is equal to zero") {
-        rtt source(std::string("move me"));
-        rtt destination(std::string("some items here"));
+        rtt source(nullptr, std::string("move me"));
+        rtt destination(nullptr, std::string("some items here"));
         destination = std::move(source);
-        CHECK(source.volume() == 0);
+        REQUIRE(source.volume() == 0);
     }
 
     SECTION("Copying a rtt leads to the creation of real copies of the objects stored in it") {
-        rtt initial(std::string("cat"));
+        rtt initial(nullptr, std::string("cat"));
 
         auto copy = rtt(initial);
         REQUIRE(copy.get<std::string>(0) == "cat");
 
         initial.get<std::string>(0).append("harsis");
-        CHECK(copy.get<std::string>(0) == "cat");
+        REQUIRE(copy.get<std::string>(0) == "cat");
     }
 
     SECTION("The copying assignment of the rtt leads to the creation of real copies of the objects stored in it.") {
-        rtt initial(std::vector<std::string>(1, "dog"));
+        rtt initial(nullptr, std::vector<std::string>(1, "dog"));
 
-        rtt copy(std::string("qwerty"));
+        rtt copy(nullptr, std::string("qwerty"));
         copy = initial;
         REQUIRE(copy.get<std::vector<std::string>>(0) == std::vector<std::string>(1, "dog"));
 
         initial.get<std::vector<std::string>>(0).push_back("horse");
-        CHECK(copy.get<std::vector<std::string>>(0) == std::vector<std::string>(1, "dog"));
+        REQUIRE(copy.get<std::vector<std::string>>(0) == std::vector<std::string>(1, "dog"));
     }
 
     SECTION("As a result of copy assignment, the volume of the copy is equal to the volume of the original") {
-        rtt initial(std::string("cat"), 5, 3.14, std::vector<int>{1, 2});
+        rtt initial(nullptr, std::string("cat"), 5, 3.14, std::vector<int>{1, 2});
 
-        rtt copy(true, 2.71);
+        rtt copy(nullptr, true, 2.71);
         copy = initial;
-        CHECK(initial.volume() == copy.volume());
+        REQUIRE(initial.volume() == copy.volume());
     }
 
     SECTION("As a result of copy assignment, the size of the copy is equal to the size of the original") {
-        rtt initial(std::string("cat"), 5, 3.14, std::vector<int>{1, 2});
+        rtt initial(nullptr, std::string("cat"), 5, 3.14, std::vector<int>{1, 2});
 
-        rtt copy(17);
+        rtt copy(nullptr, 17);
         copy = initial;
-        CHECK(initial.size() == copy.size());
+        REQUIRE(initial.size() == copy.size());
     }
 
     SECTION("The result of a copy assignment of an empty rtt is an empty rtt") {
-        rtt initial;
+        rtt initial(nullptr);
 
-        rtt copy(std::string("123"), 'a');
+        rtt copy(nullptr, std::string("123"), 'a');
         copy = initial;
-        CHECK(copy.empty());
+        REQUIRE(copy.empty());
     }
 
     SECTION("Transferring rtt assignment does not lead to leaks") {
         REQUIRE(dummy::instances_count == 0);
         {
-            rtt t(dummy{});
+            rtt t(nullptr, dummy{});
             REQUIRE(dummy::instances_count == 1);
 
-            rtt copy(dummy{});
+            rtt copy(nullptr, dummy{});
             REQUIRE(dummy::instances_count == 2);
 
             copy = std::move(t);
         }
-        CHECK(dummy::instances_count == 0);
+        REQUIRE(dummy::instances_count == 0);
     }
 
     SECTION("Knows how to give references to immutable values by their indentation in the rtt") {
-        const rtt t(std::string("123"), 42, true);
+        const rtt t(nullptr, std::string("123"), 42, true);
         auto int_offset = t.offset(1);
-        CHECK(t.get_by_offset<int>(int_offset) == 42);
+        REQUIRE(t.get_by_offset<int>(int_offset) == 42);
     }
 
     SECTION("Knows how to give links to mutable values by their indentation in rtt") {
         auto old_value = 42;
         auto new_value = 99;
 
-        rtt t(std::string("123"), old_value, true);
+        rtt t(nullptr, std::string("123"), old_value, true);
         auto int_offset = t.offset(1);
 
         REQUIRE(t.get<int>(1) == old_value);
         t.get_by_offset<int>(int_offset) = new_value;
 
-        CHECK(t.get<int>(1) == new_value);
+        REQUIRE(t.get<int>(1) == new_value);
     }
 
     SECTION("swap") {
-        auto t = rtt(1, 3.14);
-        auto u = rtt(std::string("qwe"), true);
+        auto t = rtt(nullptr, 1, 3.14);
+        auto u = rtt(nullptr, std::string("qwe"), true);
 
-        swap(t, u);
+        actor_zeta::detail::swap(t, u);
     }
 }

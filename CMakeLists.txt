@@ -160,7 +160,7 @@ if (ALLOW_EXAMPLES)
     add_subdirectory(examples)
 endif ()
 
-if (ALLOW_TESTS)
+if (ALLOW_TESTS OR ALLOW_BENCHMARK)
     # configuration
     #############################################################################################
     #conan
@@ -168,6 +168,9 @@ if (ALLOW_TESTS)
     conan_basic_setup(TARGETS)
     # conan
     #############################################################################################
+endif()
+
+if (ALLOW_TESTS)
     enable_testing()
     add_compile_definitions(__TESTS_ENABLED__)
     add_subdirectory(test)

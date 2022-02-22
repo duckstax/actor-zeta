@@ -15,9 +15,12 @@ namespace benchmark_messages {
 
     static volatile int64_t message_sz = 0;
 
+    using raw_t = actor_zeta::base::message*;
+    using smart_t = actor_zeta::base::message_ptr;
+
     namespace by_name {
 
-        BENCHMARK_TEMPLATE_DEFINE_F(fixture_t, RawPtrMessage_Name, actor_zeta::base::message*)
+        BENCHMARK_TEMPLATE_DEFINE_F(fixture_t, RawPtrMessage_Name, raw_t)
         (benchmark::State& state) {
             while (state.KeepRunning()) {
                 auto message = actor_zeta::make_message_ptr(
@@ -30,7 +33,7 @@ namespace benchmark_messages {
             }
         }
 
-        BENCHMARK_TEMPLATE_DEFINE_F(fixture_t, SmartPtrMessage_Name, actor_zeta::base::message_ptr)
+        BENCHMARK_TEMPLATE_DEFINE_F(fixture_t, SmartPtrMessage_Name, smart_t)
         (benchmark::State& state) {
             while (state.KeepRunning()) {
                 auto message = actor_zeta::make_message(
@@ -93,8 +96,8 @@ namespace benchmark_messages {
 
         } // namespace smart_ptr
 
-#define REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture, bm_name, type) REGISTER_BENCHMARK_FOR_RAWPTR_ARGS(fixture, bm_name, actor_zeta::base::message*, benchmark_messages::by_args::raw_ptr, type)
-#define REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture, bm_name, type) REGISTER_BENCHMARK_FOR_SMARTPTR_ARGS(fixture, bm_name, actor_zeta::base::message_ptr, benchmark_messages::by_args::smart_ptr, type)
+#define REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture, bm_name, type) REGISTER_BENCHMARK_FOR_RAWPTR_ARGS(fixture, bm_name, raw_t, benchmark_messages::by_args::raw_ptr, type)
+#define REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture, bm_name, type) REGISTER_BENCHMARK_FOR_SMARTPTR_ARGS(fixture, bm_name, smart_t, benchmark_messages::by_args::smart_ptr, type)
 
         namespace trivial_args {
 
@@ -136,7 +139,7 @@ namespace benchmark_messages {
 
         namespace smart_pointer_args {
 
-            REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_t, RawPtrMessage_Args_shared_ptr_int, int);
+            //REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_t, RawPtrMessage_Args_shared_ptr_int, int);
             /*REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_t, RawPtrMessage_Args_shared_ptr_int8, int8_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_t, RawPtrMessage_Args_shared_ptr_int16, int16_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_t, RawPtrMessage_Args_shared_ptr_int32, int32_t);
@@ -153,7 +156,7 @@ namespace benchmark_messages {
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_t, RawPtrMessage_Args_shared_ptr_double, double);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_t, RawPtrMessage_Args_shared_ptr_long_double, long double);*/
 
-            REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_t, SmartPtrMessage_Args_shared_ptr_int, int);
+            //REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_t, SmartPtrMessage_Args_shared_ptr_int, int);
             /*REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_t, SmartPtrMessage_Args_shared_ptr_int8, int8_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_t, SmartPtrMessage_Args_shared_ptr_int16, int16_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_t, SmartPtrMessage_Args_shared_ptr_int32, int32_t);
@@ -174,7 +177,7 @@ namespace benchmark_messages {
 
         namespace container_args {
 
-            REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_vec_t, RawPtrMessage_Args_std_vector_int, int);
+            //REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_vec_t, RawPtrMessage_Args_std_vector_int, int);
             /*REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_vec_t, RawPtrMessage_Args_std_vector_int8, int8_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_vec_t, RawPtrMessage_Args_std_vector_int16, int16_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_vec_t, RawPtrMessage_Args_std_vector_int32, int32_t);
@@ -191,7 +194,7 @@ namespace benchmark_messages {
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_vec_t, RawPtrMessage_Args_std_vector_double, double);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_vec_t, RawPtrMessage_Args_std_vector_long_double, long double);*/
 
-            REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_list_t, RawPtrMessage_Args_std_list_int, int);
+            //REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_list_t, RawPtrMessage_Args_std_list_int, int);
             /*REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_list_t, RawPtrMessage_Args_std_list_int8, int8_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_list_t, RawPtrMessage_Args_std_list_int16, int16_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_list_t, RawPtrMessage_Args_std_list_int32, int32_t);
@@ -208,7 +211,7 @@ namespace benchmark_messages {
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_list_t, RawPtrMessage_Args_std_list_double, double);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_list_t, RawPtrMessage_Args_std_list_long_double, long double);*/
 
-            REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_map_t, RawPtrMessage_Args_std_map_int, int);
+            //REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_map_t, RawPtrMessage_Args_std_map_int, int);
             /*REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_map_t, RawPtrMessage_Args_std_map_int8, int8_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_map_t, RawPtrMessage_Args_std_map_int16, int16_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_map_t, RawPtrMessage_Args_std_map_int32, int32_t);
@@ -225,7 +228,7 @@ namespace benchmark_messages {
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_map_t, RawPtrMessage_Args_std_map_double, double);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_map_t, RawPtrMessage_Args_std_map_long_double, long double);*/
 
-            REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_set_t, RawPtrMessage_Args_std_set_int, int);
+            //REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_set_t, RawPtrMessage_Args_std_set_int, int);
             /*REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_set_t, RawPtrMessage_Args_std_set_int8, int8_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_set_t, RawPtrMessage_Args_std_set_int16, int16_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_set_t, RawPtrMessage_Args_std_set_int32, int32_t);
@@ -242,7 +245,7 @@ namespace benchmark_messages {
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_set_t, RawPtrMessage_Args_std_set_double, double);
             REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_set_t, RawPtrMessage_Args_std_set_long_double, long double);*/
 
-            REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_vec_t, SmartPtrMessage_Args_std_vector_int, int);
+            //REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_vec_t, SmartPtrMessage_Args_std_vector_int, int);
             /*REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_vec_t, SmartPtrMessage_Args_std_vector_int8, int8_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_vec_t, SmartPtrMessage_Args_std_vector_int16, int16_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_vec_t, SmartPtrMessage_Args_std_vector_int32, int32_t);
@@ -259,7 +262,7 @@ namespace benchmark_messages {
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_vec_t, SmartPtrMessage_Args_std_vector_double, double);
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_vec_t, SmartPtrMessage_Args_std_vector_long_double, long double);*/
 
-            REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_list_t, SmartPtrMessage_Args_std_list_int, int);
+            //REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_list_t, SmartPtrMessage_Args_std_list_int, int);
             /*REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_list_t, SmartPtrMessage_Args_std_list_int8, int8_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_list_t, SmartPtrMessage_Args_std_list_int16, int16_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_list_t, SmartPtrMessage_Args_std_list_int32, int32_t);
@@ -276,7 +279,7 @@ namespace benchmark_messages {
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_list_t, SmartPtrMessage_Args_std_list_double, double);
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_list_t, SmartPtrMessage_Args_std_list_long_double, long double);*/
 
-            REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_map_t, SmartPtrMessage_Args_std_map_int, int);
+            //REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_map_t, SmartPtrMessage_Args_std_map_int, int);
             /*REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_map_t, SmartPtrMessage_Args_std_map_int8, int8_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_map_t, SmartPtrMessage_Args_std_map_int16, int16_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_map_t, SmartPtrMessage_Args_std_map_int32, int32_t);
@@ -293,7 +296,7 @@ namespace benchmark_messages {
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_map_t, SmartPtrMessage_Args_std_map_double, double);
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_map_t, SmartPtrMessage_Args_std_map_long_double, long double);*/
 
-            REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_set_t, SmartPtrMessage_Args_std_set_int, int);
+            //REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_set_t, SmartPtrMessage_Args_std_set_int, int);
             /*REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_set_t, SmartPtrMessage_Args_std_set_int8, int8_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_set_t, SmartPtrMessage_Args_std_set_int16, int16_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_set_t, SmartPtrMessage_Args_std_set_int32, int32_t);
@@ -314,8 +317,8 @@ namespace benchmark_messages {
 
         namespace custom_args {
 
-            REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_t, RawPtrMessage_Args_custom_1, custom_1_t);
-            REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_t, SmartPtrMessage_Args_custom_1, custom_1_t);
+            //REGISTER_MESSAGE_BENCHMARK_FOR_RAWPTR_ARGS(fixture_t, RawPtrMessage_Args_custom_1, custom_1_t);
+            //REGISTER_MESSAGE_BENCHMARK_FOR_SMARTPTR_ARGS(fixture_t, SmartPtrMessage_Args_custom_1, custom_1_t);
 
         } // namespace custom_args
 
