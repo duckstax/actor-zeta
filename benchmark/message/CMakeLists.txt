@@ -40,8 +40,7 @@ endif ()
 set(SOURCE_FILES body_tuple.cpp)
 set(HEADER_FILES
     fixtures.hpp
-    register_benchmark.hpp
-    monotonic_resource.hpp)
+    register_benchmark.hpp)
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
 target_link_libraries(${PROJECT_NAME} actor-zeta CONAN_PKG::benchmark)
