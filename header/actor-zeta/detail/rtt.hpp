@@ -23,18 +23,27 @@ namespace actor_zeta { namespace detail {
 
     namespace rtt_test {
 
+        static size_t default_ctor_ = 0;
         static size_t copy_ctor_ = 0;
         static size_t const_copy_ctor_ = 0;
         static size_t move_ctor_ = 0;
         static size_t templated_ctor_ = 0;
         static size_t dtor_ = 0;
 
+        static size_t move_operator_ = 0;
+        static size_t const_copy_operator_ = 0;
+        static size_t copy_operator_ = 0;
+
         inline void clear() {
+            default_ctor_ = 0;
             copy_ctor_ = 0;
             const_copy_ctor_ = 0;
             move_ctor_ = 0;
             templated_ctor_ = 0;
             dtor_ = 0;
+            move_operator_ = 0;
+            const_copy_operator_ = 0;
+            copy_operator_ = 0;
         }
 
     } // namespace rtt_test
@@ -79,8 +88,10 @@ namespace actor_zeta { namespace detail {
 
         class rtt final {
             actor_zeta::detail::pmr::memory_resource* m_memory_resource = nullptr;
+
             std::size_t m_capacity = 0;
             std::size_t m_volume = 0;
+
             void* allocation = nullptr;
             char* m_data = nullptr;
 
@@ -124,6 +135,10 @@ namespace actor_zeta { namespace detail {
                 assert(m_objects);
 
                 EXPAND_VARIADIC(push_back_no_realloc(std::forward<Args>(args)));
+
+#ifdef __TESTS_ENABLED__
+                rtt_test::templated_ctor_++;
+#endif
             }
             rtt()
                 : m_memory_resource(actor_zeta::detail::pmr::get_default_resource())
@@ -132,7 +147,11 @@ namespace actor_zeta { namespace detail {
                 , allocation(nullptr)
                 , m_data(nullptr)
                 , m_objects(nullptr)
-                , m_objects_idx(0) {}
+                , m_objects_idx(0) {
+#ifdef __TESTS_ENABLED__
+                rtt_test::default_ctor_++;
+#endif
+            }
             rtt(rtt&& other)
                 : m_memory_resource(other.m_memory_resource)
                 , m_capacity(other.m_capacity)
@@ -148,6 +167,9 @@ namespace actor_zeta { namespace detail {
                 other.m_data = nullptr;
                 other.m_objects = nullptr;
                 other.m_objects_idx = 0;
+#ifdef __TESTS_ENABLED__
+                rtt_test::move_ctor_++;
+#endif
             }
             rtt(const rtt& other)
                 : m_memory_resource(other.m_memory_resource)
@@ -173,12 +195,23 @@ namespace actor_zeta { namespace detail {
                     std::copy(other.m_objects, other.m_objects + other.m_objects_idx, m_objects);
                     m_objects_idx = other.m_objects_idx;
                 }
+#ifdef __TESTS_ENABLED__
+                rtt_test::const_copy_ctor_++;
+#endif
             }
             rtt(rtt& other)
-                : rtt(static_cast<const rtt&>(other)) {}
+                : rtt(static_cast<const rtt&>(other)) {
+#ifdef __TESTS_ENABLED__
+                rtt_test::const_copy_ctor_--;
+                rtt_test::copy_ctor_++;
+#endif
+            }
 
             ~rtt() {
                 clear();
+#ifdef __TESTS_ENABLED__
+                rtt_test::dtor_++;
+#endif
             }
 
             rtt& operator=(rtt&& other) noexcept {
@@ -199,6 +232,10 @@ namespace actor_zeta { namespace detail {
                 other.m_data = nullptr;
                 other.m_objects = nullptr;
                 other.m_objects_idx = 0;
+
+#ifdef __TESTS_ENABLED__
+                rtt_test::move_operator_++;
+#endif
 
                 return *this;
             }
@@ -223,10 +260,22 @@ namespace actor_zeta { namespace detail {
                     std::copy(other.m_objects, other.m_objects + other.m_objects_idx, m_objects);
                     m_objects_idx = other.m_objects_idx;
                 }
+
+#ifdef __TESTS_ENABLED__
+                rtt_test::const_copy_operator_++;
+#endif
+
                 return *this;
             }
             rtt& operator=(rtt& other) noexcept {
+#ifdef __TESTS_ENABLED__
+                rtt& ret = operator=(static_cast<const rtt&>(other));
+                rtt_test::const_copy_operator_--;
+                rtt_test::copy_operator_++;
+                return ret;
+#else
                 return operator=(static_cast<const rtt&>(other));
+#endif
             }
 
             template<typename T>

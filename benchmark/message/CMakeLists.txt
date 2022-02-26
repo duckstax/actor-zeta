@@ -7,12 +7,14 @@ else ()
     cmake_policy(SET CMP0048 NEW)
     PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
 endif ()
-set(SOURCE_FILES message.cpp)
-set(HEADER_FILES
+set(${PROJECT_NAME}_SOURCES message.cpp)
+set(${PROJECT_NAME}_HEADERS
     fixtures.hpp
     register_benchmark.hpp)
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
+add_executable(${PROJECT_NAME}
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS})
 target_link_libraries(${PROJECT_NAME} actor-zeta CONAN_PKG::benchmark)
 
 set(project benchmark_rtt_message)
@@ -22,12 +24,14 @@ else ()
     cmake_policy(SET CMP0048 NEW)
     PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
 endif ()
-set(SOURCE_FILES rtt_message.cpp)
-set(HEADER_FILES
+set(${PROJECT_NAME}_SOURCES rtt_message.cpp)
+set(${PROJECT_NAME}_HEADERS
     fixtures.hpp
     register_benchmark.hpp)
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
+add_executable(${PROJECT_NAME}
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS})
 target_link_libraries(${PROJECT_NAME} actor-zeta CONAN_PKG::benchmark)
 
 set(project benchmark_body_tuple)
@@ -37,12 +41,14 @@ else ()
     cmake_policy(SET CMP0048 NEW)
     PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
 endif ()
-set(SOURCE_FILES body_tuple.cpp)
-set(HEADER_FILES
+set(${PROJECT_NAME}_SOURCES body_tuple.cpp)
+set(${PROJECT_NAME}_HEADERS
     fixtures.hpp
     register_benchmark.hpp)
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
+add_executable(${PROJECT_NAME}
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS})
 target_link_libraries(${PROJECT_NAME} actor-zeta CONAN_PKG::benchmark)
 
 set(project benchmark_body_rtt)
@@ -52,11 +58,13 @@ else ()
     cmake_policy(SET CMP0048 NEW)
     PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
 endif ()
-set(SOURCE_FILES
+set(${PROJECT_NAME}_SOURCES
     body_rtt.cpp)
-set(HEADER_FILES
+set(${PROJECT_NAME}_HEADERS
     fixtures.hpp
     register_benchmark.hpp)
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
+add_executable(${PROJECT_NAME}
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS})
 target_link_libraries(${PROJECT_NAME} actor-zeta CONAN_PKG::benchmark)

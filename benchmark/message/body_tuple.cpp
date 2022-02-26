@@ -16,14 +16,18 @@ namespace benchmark_messages {
 
         template<typename... Args>
         auto message_arg_tmpl(
-            actor_zeta::detail::pmr::monotonic_resource* mr,
+#if CPP17_OR_GREATER
+            actor_zeta::detail::pmr::monotonic_buffer_resource* mr,
+#endif
             Args&&... args) -> void;
 
         namespace body {
 
             template<typename... Args>
             auto message_arg_tmpl(
-                __attribute__((unused)) actor_zeta::detail::pmr::monotonic_resource* mr,
+#if CPP17_OR_GREATER
+                __attribute__((unused)) actor_zeta::detail::pmr::monotonic_buffer_resource* mr,
+#endif
                 Args&&... args) -> void {
                 auto ptuple = new std::tuple<actor_zeta::type_traits::decay_t<Args>...>{std::forward<Args>(args)...};
                 auto any_tuple = std::move(actor_zeta::detail::any(*ptuple));
@@ -34,9 +38,15 @@ namespace benchmark_messages {
             template<typename T, std::size_t... I>
             auto call_message_arg_tmpl(
                 T& packed_tuple,
-                actor_zeta::detail::pmr::monotonic_resource* mr,
+#if CPP17_OR_GREATER
+                actor_zeta::detail::pmr::monotonic_buffer_resource* mr,
+#endif
                 actor_zeta::type_traits::index_sequence<I...>) -> void {
-                message_arg_tmpl(mr, (std::get<I>(packed_tuple))...);
+                message_arg_tmpl(
+#if CPP17_OR_GREATER
+                    mr,
+#endif
+                    (std::get<I>(packed_tuple))...);
             }
 
         } // namespace body

@@ -161,37 +161,52 @@ TEST_CASE("rt_tuple") {
             test_map,
             test_map);
     }
-#if 0
+
 #ifdef __TESTS_ENABLED__
 
     SECTION("ctors") {
         rtt_test::clear();
         {
-            auto templated_rtt_ = rtt(87645);
+            auto templated_rtt_ = rtt(nullptr, 87645);
+            REQUIRE(rtt_test::default_ctor_ == 0);
             REQUIRE(rtt_test::templated_ctor_ == 1);
             REQUIRE(rtt_test::copy_ctor_ == 0);
             REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 0);
+
+            REQUIRE(rtt_test::move_operator_ == 0);
+            REQUIRE(rtt_test::const_copy_operator_ == 0);
+            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 1);
         rtt_test::clear();
 
         {
-            auto templated_rtt_ = rtt(87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5});
+            auto templated_rtt_ = rtt(nullptr, 87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5});
+            REQUIRE(rtt_test::default_ctor_ == 0);
             REQUIRE(rtt_test::templated_ctor_ == 1);
             REQUIRE(rtt_test::copy_ctor_ == 0);
             REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 0);
+
+            REQUIRE(rtt_test::move_operator_ == 0);
+            REQUIRE(rtt_test::const_copy_operator_ == 0);
+            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 1);
         rtt_test::clear();
 
         {
-            auto default_rtt_ = rtt(); // defaulted (+1)
+            auto default_rtt_ = rtt();
+            REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 0);
             REQUIRE(rtt_test::copy_ctor_ == 0);
             REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 0);
+
+            REQUIRE(rtt_test::move_operator_ == 0);
+            REQUIRE(rtt_test::const_copy_operator_ == 0);
+            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 1);
         rtt_test::clear();
@@ -199,10 +214,15 @@ TEST_CASE("rt_tuple") {
         {
             auto default_rtt_ = rtt();            // defaulted (+1)
             auto copied_rtt_ = rtt(default_rtt_); // non-const lvalue
+            REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 0);
             REQUIRE(rtt_test::copy_ctor_ == 1);
             REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 0);
+
+            REQUIRE(rtt_test::move_operator_ == 0);
+            REQUIRE(rtt_test::const_copy_operator_ == 0);
+            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 2);
         rtt_test::clear();
@@ -210,10 +230,15 @@ TEST_CASE("rt_tuple") {
         {
             const auto default_rtt_ = rtt();            // defaulted (+1)
             auto const_copied_rtt_ = rtt(default_rtt_); // const lvalue
+            REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 0);
             REQUIRE(rtt_test::copy_ctor_ == 0);
             REQUIRE(rtt_test::const_copy_ctor_ == 1);
             REQUIRE(rtt_test::move_ctor_ == 0);
+
+            REQUIRE(rtt_test::move_operator_ == 0);
+            REQUIRE(rtt_test::const_copy_operator_ == 0);
+            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 2);
         rtt_test::clear();
@@ -221,10 +246,15 @@ TEST_CASE("rt_tuple") {
         {
             auto default_rtt_ = rtt();                      // defaulted (+1)
             auto moved_rtt_ = rtt(std::move(default_rtt_)); // move rvalue
+            REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 0);
             REQUIRE(rtt_test::copy_ctor_ == 0);
             REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 1);
+
+            REQUIRE(rtt_test::move_operator_ == 0);
+            REQUIRE(rtt_test::const_copy_operator_ == 0);
+            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 2);
         rtt_test::clear();
@@ -232,30 +262,40 @@ TEST_CASE("rt_tuple") {
         /* many ctors */
 
         {
-            auto default_rtt_ = rtt(); // defaulted (+1)
-            auto templated_1_rtt_ = rtt(std::vector<int>{1, 2, 3, 4, 5}, 767, 5);
-            auto templated_2_rtt_ = rtt(87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5}, 457, 4567);
+            auto default_rtt_ = rtt();
+            auto templated_1_rtt_ = rtt(nullptr, std::vector<int>{1, 2, 3, 4, 5}, 767, 5);
+            auto templated_2_rtt_ = rtt(nullptr, 87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5}, 457, 4567);
 
+            REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 2);
             REQUIRE(rtt_test::copy_ctor_ == 0);
             REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 0);
+
+            REQUIRE(rtt_test::move_operator_ == 0);
+            REQUIRE(rtt_test::const_copy_operator_ == 0);
+            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 3);
         rtt_test::clear();
 
         {
             auto default_rtt_ = rtt(); // defaulted (+1)
-            auto templated_1_rtt_ = rtt(std::vector<int>{1, 2, 3, 4, 5}, 767, 5);
-            auto templated_2_rtt_ = rtt(87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5}, 457, 4567);
+            auto templated_1_rtt_ = rtt(nullptr, std::vector<int>{1, 2, 3, 4, 5}, 767, 5);
+            auto templated_2_rtt_ = rtt(nullptr, 87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5}, 457, 4567);
             auto moved_1_rtt_ = rtt(std::move(templated_1_rtt_)); // move rvalue
             auto moved_2_rtt_ = rtt(std::move(templated_2_rtt_)); // move rvalue
             auto moved_3_rtt_ = rtt(std::move(default_rtt_));     // move rvalue
 
+            REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 2);
             REQUIRE(rtt_test::copy_ctor_ == 0);
             REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 3);
+
+            REQUIRE(rtt_test::move_operator_ == 0);
+            REQUIRE(rtt_test::const_copy_operator_ == 0);
+            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 6);
         rtt_test::clear();
@@ -265,13 +305,18 @@ TEST_CASE("rt_tuple") {
             const auto const_default_rtt_ = rtt();            // const defaulted (+1)
             auto copied_rtt_ = rtt(default_rtt_);             // non-const lvalue
             auto const_copied_rtt_ = rtt(const_default_rtt_); // const lvalue
-            auto templated_1_rtt_ = rtt(std::vector<int>{1, 2, 3, 4, 5}, 767, 5);
-            auto templated_2_rtt_ = rtt(87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5}, 457, 4567);
+            auto templated_1_rtt_ = rtt(nullptr, std::vector<int>{1, 2, 3, 4, 5}, 767, 5);
+            auto templated_2_rtt_ = rtt(nullptr, 87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5}, 457, 4567);
 
+            REQUIRE(rtt_test::default_ctor_ == 2);
             REQUIRE(rtt_test::templated_ctor_ == 2);
             REQUIRE(rtt_test::copy_ctor_ == 1);
             REQUIRE(rtt_test::const_copy_ctor_ == 1);
             REQUIRE(rtt_test::move_ctor_ == 0);
+
+            REQUIRE(rtt_test::move_operator_ == 0);
+            REQUIRE(rtt_test::const_copy_operator_ == 0);
+            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 6);
         rtt_test::clear();
@@ -280,36 +325,62 @@ TEST_CASE("rt_tuple") {
             auto default_rtt_ = rtt();                                           // defaulted (+1)
             auto copied_rtt_ = rtt(default_rtt_);                                // non-const lvalue
             auto const_copied_rtt_ = rtt(static_cast<const rtt&>(default_rtt_)); // const lvalue
-            auto templated_1_rtt_ = rtt(std::vector<int>{1, 2, 3, 4, 5}, 767, 5);
-            auto templated_2_rtt_ = rtt(87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5}, 457, 4567);
+            auto templated_1_rtt_ = rtt(nullptr, std::vector<int>{1, 2, 3, 4, 5}, 767, 5);
+            auto templated_2_rtt_ = rtt(nullptr, 87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5}, 457, 4567);
 
+            REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 2);
             REQUIRE(rtt_test::copy_ctor_ == 1);
             REQUIRE(rtt_test::const_copy_ctor_ == 1);
             REQUIRE(rtt_test::move_ctor_ == 0);
+
+            REQUIRE(rtt_test::move_operator_ == 0);
+            REQUIRE(rtt_test::const_copy_operator_ == 0);
+            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 5);
         rtt_test::clear();
 
         {
-            auto templated_1_rtt_ = rtt(std::vector<int>{1, 2, 3, 4, 5});
-            auto templated_2_rtt_ = rtt(87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5});
+            auto templated_1_rtt_ = rtt(nullptr, std::vector<int>{1, 2, 3, 4, 5});
+            auto templated_2_rtt_ = rtt(nullptr, 87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5});
             auto default_rtt_ = rtt();                                           // defaulted (+1)
             auto copied_rtt_ = rtt(default_rtt_);                                // non-const lvalue
             auto const_copied_rtt_ = rtt(static_cast<const rtt&>(default_rtt_)); // const lvalue
             auto moved_1_rtt_ = rtt(std::move(default_rtt_));                    // move rvalue
             auto moved_2_rtt_ = rtt(std::move(templated_1_rtt_));                // move rvalue
 
+            REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 2);
             REQUIRE(rtt_test::copy_ctor_ == 1);
             REQUIRE(rtt_test::const_copy_ctor_ == 1);
             REQUIRE(rtt_test::move_ctor_ == 2);
+
+            REQUIRE(rtt_test::move_operator_ == 0);
+            REQUIRE(rtt_test::const_copy_operator_ == 0);
+            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 7);
         rtt_test::clear();
+
+        {
+            auto templated_rtt_ = rtt(nullptr, 87645);
+            auto o1 = templated_rtt_;
+            auto o2 = std::move(o1);
+            REQUIRE(rtt_test::default_ctor_ == 0);
+            REQUIRE(rtt_test::templated_ctor_ == 1);
+            REQUIRE(rtt_test::copy_ctor_ == 1);
+            REQUIRE(rtt_test::const_copy_ctor_ == 0);
+            REQUIRE(rtt_test::move_ctor_ == 1);
+
+            REQUIRE(rtt_test::move_operator_ == 0);
+            REQUIRE(rtt_test::const_copy_operator_ == 0);
+            REQUIRE(rtt_test::copy_operator_ == 0);
+        }
+        REQUIRE(rtt_test::dtor_ == 3);
+        rtt_test::clear();
     }
 
-#endif
 #endif
 
     SECTION("rtt created from an empty set of elements is empty") {
