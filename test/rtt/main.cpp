@@ -7,7 +7,7 @@
 
 using actor_zeta::detail::rtt;
 
-#ifdef __TESTS_ENABLED__
+#ifdef __ENABLE_TESTS_MEASUREMENTS__
 namespace rtt_test = actor_zeta::detail::rtt_test;
 #endif
 
@@ -162,7 +162,7 @@ TEST_CASE("rt_tuple") {
             test_map);
     }
 
-#ifdef __TESTS_ENABLED__
+#ifdef __ENABLE_TESTS_MEASUREMENTS__
 
     SECTION("ctors") {
         rtt_test::clear();

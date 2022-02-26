@@ -78,7 +78,7 @@ jobs:
           CC: ${{ matrix.configuration.COMPILER_C}}
           CXX: ${{ matrix.configuration.COMPILER_CXX}}
           BUILD_TYPE: ${{ matrix.profiles }}
-        run: cmake -B ${{github.workspace}}/build -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.profiles }} -DCMAKE_CXX_STANDARD=${{ matrix.configuration.CXX_STANDARD}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DALLOW_BENCHMARK=ON
+        run: cmake -B ${{github.workspace}}/build -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.profiles }} -DCMAKE_CXX_STANDARD=${{ matrix.configuration.CXX_STANDARD}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config ${{ matrix.profiles }}

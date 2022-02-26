@@ -12,12 +12,14 @@ message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
 option(ALLOW_EXAMPLES "ALLOW EXAMPLES" OFF)
 option(ALLOW_TESTS "ALLOW TESTS" OFF)
+option(ENABLE_TESTS_MEASUREMENTS "ENABLE TESTS MEASUREMENTS" OFF)
 option(ALLOW_BENCHMARK "ALLOW BENCHMARK" OFF)
 option(RTTI_DISABLE "RTTI DISABLE" ON)
 option(EXCEPTIONS_DISABLE "EXCEPTIONS DISABLE" ON)
 
 message(STATUS "ALLOW_EXAMPLES = ${ALLOW_EXAMPLES}")
 message(STATUS "ALLOW_TESTS = ${ALLOW_TESTS}")
+message(STATUS "ENABLE_TESTS_MEASUREMENTS = ${ENABLE_TESTS_MEASUREMENTS}")
 message(STATUS "ALLOW_BENCHMARK = ${ALLOW_BENCHMARK}")
 message(STATUS "RTTI_DISABLE = ${RTTI_DISABLE}")
 message(STATUS "EXCEPTIONS_DISABLE = ${EXCEPTIONS_DISABLE}")
@@ -102,7 +104,6 @@ set(HEADER_FILES
         header/actor-zeta/detail/type_list.hpp
         header/actor-zeta/detail/type_traits.hpp
         header/actor-zeta/detail/rtt.hpp
-        header/actor-zeta/detail/rtt_management.hpp
 
         header/actor-zeta/scheduler/policy/unprofiled.hpp
         header/actor-zeta/scheduler/policy/work_sharing.hpp
@@ -156,6 +157,10 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/header
 )
 
+if (ENABLE_TESTS_MEASUREMENTS)
+    add_compile_definitions(__ENABLE_TESTS_MEASUREMENTS__)
+endif()
+
 if (ALLOW_EXAMPLES)
     add_subdirectory(examples)
 endif ()
@@ -172,7 +177,6 @@ endif()
 
 if (ALLOW_TESTS)
     enable_testing()
-    add_compile_definitions(__TESTS_ENABLED__)
     add_subdirectory(test)
 endif()
 
