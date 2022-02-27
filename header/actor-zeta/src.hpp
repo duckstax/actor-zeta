@@ -28,7 +28,6 @@
 #include <actor-zeta/impl/scheduler/scheduler_abstract.ipp>
 
 #include <actor-zeta/impl/messaging/message.ipp>
-#include <actor-zeta/impl/messaging/rtt_message.ipp>
 
 #include <actor-zeta/impl/send.ipp>
 // clang-format on

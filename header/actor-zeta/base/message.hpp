@@ -2,11 +2,12 @@
 
 #include <cassert>
 
+#include <string>
+
 #include <actor-zeta/base/priority.hpp>
-#include <actor-zeta/detail/any.hpp>
+#include <actor-zeta/detail/rtt.hpp>
 #include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
-#include <string>
 
 namespace actor_zeta { namespace base {
 
@@ -23,7 +24,7 @@ namespace actor_zeta { namespace base {
         message& operator=(message&&) = default;
         ~message() = default;
         message(address_t /*sender*/, std::string /*name*/);
-        message(address_t /*sender*/, std::string /*name*/, detail::any /*body*/);
+        message(address_t /*sender*/, std::string /*name*/, detail::rtt /*body*/);
         message* next;
         message* prev;
         auto command() const noexcept -> detail::string_view;
@@ -31,7 +32,7 @@ namespace actor_zeta { namespace base {
         auto sender() && noexcept -> address_t&&;
         auto sender() const& noexcept -> address_t const&;
 
-        template<typename T>
+        /*template<typename T>
         auto body() const -> const T& {
             assert(body_.has_value());
             return detail::any_cast<const T&>(body_);
@@ -41,9 +42,9 @@ namespace actor_zeta { namespace base {
         auto body() -> T& {
             assert(body_.has_value());
             return detail::any_cast<T&>(body_);
-        }
+        }*/
 
-        auto body() -> detail::any&;
+        auto body() -> detail::rtt&;
         auto clone() const -> message*;
         operator bool();
         void swap(message& other) noexcept;
@@ -52,7 +53,7 @@ namespace actor_zeta { namespace base {
     private:
         address_t sender_;
         std::string command_;
-        detail::any body_;
+        detail::rtt body_;
         priority priority_ = priority::normal;
     };
 

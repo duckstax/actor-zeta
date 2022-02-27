@@ -3,6 +3,7 @@
 #include <actor-zeta/detail/aligned_allocate.hpp>
 #include <actor-zeta/detail/pmr/default_resource.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
+#include <actor-zeta/detail/type_list.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
 
 #include <algorithm>
@@ -355,6 +356,12 @@ namespace actor_zeta { namespace detail {
 
     inline void swap(rtt& left, rtt& right) {
         left.swap(right);
+    }
+
+    template<std::size_t I, class List>
+    typename type_traits::type_list_at_t<List, I> get(rtt& r) {
+        return static_cast<typename type_traits::type_list_at_t<List, I>>(
+            r.get<typename type_traits::decay_t<type_traits::type_list_at_t<List, I>>>(I));
     }
 
 }} // namespace actor_zeta::detail

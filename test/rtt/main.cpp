@@ -5,6 +5,9 @@
 
 #include "classes.hpp"
 
+#include <actor-zeta/detail/callable_trait.hpp>
+#include <actor-zeta/detail/type_list.hpp>
+
 using actor_zeta::detail::rtt;
 
 #ifdef __ENABLE_TESTS_MEASUREMENTS__
@@ -12,6 +15,86 @@ namespace rtt_test = actor_zeta::detail::rtt_test;
 #endif
 
 TEST_CASE("rt_tuple") {
+    SECTION("actor_zeta::detail::get f1") {
+        auto f = [](
+                     __attribute__((unused)) int8_t a1,
+                     __attribute__((unused)) int16_t a2,
+                     __attribute__((unused)) char a3,
+                     __attribute__((unused)) std::string a4) {};
+        rtt r(nullptr, int8_t(5), int16_t(10), char(3), std::string("dfkjgksdjgkasdg"));
+        using call_trait = actor_zeta::type_traits::get_callable_trait_t<actor_zeta::type_traits::remove_reference_t<decltype(f)>>;
+        using args_type_list = typename call_trait::args_types;
+        REQUIRE(actor_zeta::detail::get<0, args_type_list>(r) == int8_t(5));
+        REQUIRE(actor_zeta::detail::get<1, args_type_list>(r) == int16_t(10));
+        REQUIRE(actor_zeta::detail::get<2, args_type_list>(r) == char(3));
+        REQUIRE(actor_zeta::detail::get<3, args_type_list>(r) == std::string("dfkjgksdjgkasdg"));
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<0, args_type_list>(r)), int8_t>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<1, args_type_list>(r)), int16_t>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<2, args_type_list>(r)), char>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<3, args_type_list>(r)), std::string>::value);
+    }
+
+    SECTION("actor_zeta::detail::get f2") { // @TODO !!! here is a type_traits mismatch: const type == type !!!
+        auto f = [](
+                     __attribute__((unused)) const int8_t a1,
+                     __attribute__((unused)) const int16_t a2,
+                     __attribute__((unused)) const char a3,
+                     __attribute__((unused)) const std::string a4) {};
+        rtt r(nullptr, int8_t(5), int16_t(10), char(3), std::string("dfkjgksdjgkasdg"));
+        using call_trait = actor_zeta::type_traits::get_callable_trait_t<actor_zeta::type_traits::remove_reference_t<decltype(f)>>;
+        using args_type_list = typename call_trait::args_types;
+        REQUIRE(actor_zeta::detail::get<0, args_type_list>(r) == int8_t(5));
+        REQUIRE(actor_zeta::detail::get<1, args_type_list>(r) == int16_t(10));
+        REQUIRE(actor_zeta::detail::get<2, args_type_list>(r) == char(3));
+        REQUIRE(actor_zeta::detail::get<3, args_type_list>(r) == std::string("dfkjgksdjgkasdg"));
+        REQUIRE(std::is_same<typename actor_zeta::type_traits::type_list_at_t<args_type_list, 0>, int8_t>::value);
+        REQUIRE(std::is_same<typename actor_zeta::type_traits::type_list_at_t<args_type_list, 1>, int16_t>::value);
+        REQUIRE(std::is_same<typename actor_zeta::type_traits::type_list_at_t<args_type_list, 2>, char>::value);
+        REQUIRE(std::is_same<typename actor_zeta::type_traits::type_list_at_t<args_type_list, 3>, std::string>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<0, args_type_list>(r)), int8_t>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<1, args_type_list>(r)), int16_t>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<2, args_type_list>(r)), char>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<3, args_type_list>(r)), std::string>::value);
+    }
+
+    SECTION("actor_zeta::detail::get f3") {
+        auto f = [](
+                     __attribute__((unused)) int8_t& a1,
+                     __attribute__((unused)) int16_t& a2,
+                     __attribute__((unused)) char& a3,
+                     __attribute__((unused)) std::string& a4) {};
+        rtt r(nullptr, int8_t(5), int16_t(10), char(3), std::string("dfkjgksdjgkasdg"));
+        using call_trait = actor_zeta::type_traits::get_callable_trait_t<actor_zeta::type_traits::remove_reference_t<decltype(f)>>;
+        using args_type_list = typename call_trait::args_types;
+        REQUIRE(actor_zeta::detail::get<0, args_type_list>(r) == int8_t(5));
+        REQUIRE(actor_zeta::detail::get<1, args_type_list>(r) == int16_t(10));
+        REQUIRE(actor_zeta::detail::get<2, args_type_list>(r) == char(3));
+        REQUIRE(actor_zeta::detail::get<3, args_type_list>(r) == std::string("dfkjgksdjgkasdg"));
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<0, args_type_list>(r)), int8_t&>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<1, args_type_list>(r)), int16_t&>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<2, args_type_list>(r)), char&>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<3, args_type_list>(r)), std::string&>::value);
+    }
+
+    SECTION("actor_zeta::detail::get f4") {
+        auto f = [](
+                     __attribute__((unused)) const int8_t& a1,
+                     __attribute__((unused)) const int16_t& a2,
+                     __attribute__((unused)) const char& a3,
+                     __attribute__((unused)) const std::string& a4) {};
+        rtt r(nullptr, int8_t(5), int16_t(10), char(3), std::string("dfkjgksdjgkasdg"));
+        using call_trait = actor_zeta::type_traits::get_callable_trait_t<actor_zeta::type_traits::remove_reference_t<decltype(f)>>;
+        using args_type_list = typename call_trait::args_types;
+        REQUIRE(actor_zeta::detail::get<0, args_type_list>(r) == int8_t(5));
+        REQUIRE(actor_zeta::detail::get<1, args_type_list>(r) == int16_t(10));
+        REQUIRE(actor_zeta::detail::get<2, args_type_list>(r) == char(3));
+        REQUIRE(actor_zeta::detail::get<3, args_type_list>(r) == std::string("dfkjgksdjgkasdg"));
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<0, args_type_list>(r)), const int8_t&>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<1, args_type_list>(r)), const int16_t&>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<2, args_type_list>(r)), const char&>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<3, args_type_list>(r)), const std::string&>::value);
+    }
+
     SECTION("test_getSize") {
         test_getSize(
             static_cast<int8_t>(3457),
