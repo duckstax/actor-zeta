@@ -83,52 +83,52 @@ namespace actor_zeta { namespace detail {
             creator_t creator;
         };
 
-        actor_zeta::detail::pmr::memory_resource* m_memory_resource = nullptr;
+        actor_zeta::detail::pmr::memory_resource* memory_resource_ = nullptr;
 
-        std::size_t m_capacity = 0;
-        std::size_t m_volume = 0;
+        std::size_t capacity_ = 0;
+        std::size_t volume_ = 0;
 
         void* allocation = nullptr;
-        char* m_data = nullptr;
+        char* data_ = nullptr;
 
-        objects_t* m_objects = nullptr;
-        std::size_t m_objects_idx = 0;
+        objects_t* objects_ = nullptr;
+        std::size_t objects_idx_ = 0;
 
         auto clear() -> void {
-            auto tmp = m_data;
-            for (std::size_t i = 0; i < m_objects_idx; ++i) {
-                m_objects[i].destroyer(tmp + m_objects[i].offset);
+            auto tmp = data_;
+            for (std::size_t i = 0; i < objects_idx_; ++i) {
+                objects_[i].destroyer(tmp + objects_[i].offset);
             }
-            m_volume = 0;
-            m_objects_idx = 0;
+            volume_ = 0;
+            objects_idx_ = 0;
             if (allocation)
-                m_memory_resource->deallocate(allocation, m_capacity + m_capacity * sizeof(objects_t));
+                memory_resource_->deallocate(allocation, capacity_ + capacity_ * sizeof(objects_t));
             allocation = nullptr;
-            m_data = nullptr;
-            m_objects = nullptr;
-            m_capacity = 0;
+            data_ = nullptr;
+            objects_ = nullptr;
+            capacity_ = 0;
         }
 
     public:
         template<typename... Args>
         explicit rtt(actor_zeta::detail::pmr::memory_resource* memory_resource, Args&&... args)
-            : m_memory_resource(nullptr)
-            , m_capacity(0)
-            , m_volume(0)
+            : memory_resource_(nullptr)
+            , capacity_(0)
+            , volume_(0)
             , allocation(nullptr)
-            , m_data(nullptr)
-            , m_objects(nullptr)
-            , m_objects_idx(0) {
+            , data_(nullptr)
+            , objects_(nullptr)
+            , objects_idx_(0) {
             constexpr std::size_t sz = getSize<0, Args...>();
-            m_memory_resource = memory_resource ? memory_resource : actor_zeta::detail::pmr::get_default_resource();
-            assert(m_memory_resource);
-            m_capacity = sz;
-            allocation = m_memory_resource->allocate(m_capacity + m_capacity * sizeof(objects_t));
+            memory_resource_ = memory_resource ? memory_resource : actor_zeta::detail::pmr::get_default_resource();
+            assert(memory_resource_);
+            capacity_ = sz;
+            allocation = memory_resource_->allocate(capacity_ + capacity_ * sizeof(objects_t));
             assert(allocation);
-            m_data = static_cast<char*>(allocation);
-            assert(m_data);
-            m_objects = static_cast<objects_t*>(static_cast<void*>(m_data + m_capacity));
-            assert(m_objects);
+            data_ = static_cast<char*>(allocation);
+            assert(data_);
+            objects_ = static_cast<objects_t*>(static_cast<void*>(data_ + capacity_));
+            assert(objects_);
 
             EXPAND_VARIADIC(push_back_no_realloc(std::forward<Args>(args)));
 
@@ -137,59 +137,59 @@ namespace actor_zeta { namespace detail {
 #endif
         }
         rtt()
-            : m_memory_resource(actor_zeta::detail::pmr::get_default_resource())
-            , m_capacity(0)
-            , m_volume(0)
+            : memory_resource_(actor_zeta::detail::pmr::get_default_resource())
+            , capacity_(0)
+            , volume_(0)
             , allocation(nullptr)
-            , m_data(nullptr)
-            , m_objects(nullptr)
-            , m_objects_idx(0) {
+            , data_(nullptr)
+            , objects_(nullptr)
+            , objects_idx_(0) {
 #ifdef __ENABLE_TESTS_MEASUREMENTS__
             rtt_test::default_ctor_++;
 #endif
         }
         rtt(rtt&& other)
-            : m_memory_resource(other.m_memory_resource)
-            , m_capacity(other.m_capacity)
-            , m_volume(other.m_volume)
+            : memory_resource_(other.memory_resource_)
+            , capacity_(other.capacity_)
+            , volume_(other.volume_)
             , allocation(other.allocation)
-            , m_data(other.m_data)
-            , m_objects(other.m_objects)
-            , m_objects_idx(other.m_objects_idx) {
-            other.m_memory_resource = nullptr;
-            other.m_capacity = 0;
-            other.m_volume = 0;
+            , data_(other.data_)
+            , objects_(other.objects_)
+            , objects_idx_(other.objects_idx_) {
+            other.memory_resource_ = nullptr;
+            other.capacity_ = 0;
+            other.volume_ = 0;
             other.allocation = nullptr;
-            other.m_data = nullptr;
-            other.m_objects = nullptr;
-            other.m_objects_idx = 0;
+            other.data_ = nullptr;
+            other.objects_ = nullptr;
+            other.objects_idx_ = 0;
 #ifdef __ENABLE_TESTS_MEASUREMENTS__
             rtt_test::move_ctor_++;
 #endif
         }
         rtt(const rtt& other)
-            : m_memory_resource(other.m_memory_resource)
-            , m_capacity(other.m_capacity)
-            , m_volume(other.m_volume)
+            : memory_resource_(other.memory_resource_)
+            , capacity_(other.capacity_)
+            , volume_(other.volume_)
             , allocation(nullptr)
-            , m_data(nullptr)
-            , m_objects(nullptr)
-            , m_objects_idx(0) {
-            if (m_capacity > 0) {
-                allocation = m_memory_resource->allocate(m_capacity + m_capacity * sizeof(objects_t));
+            , data_(nullptr)
+            , objects_(nullptr)
+            , objects_idx_(0) {
+            if (capacity_ > 0) {
+                allocation = memory_resource_->allocate(capacity_ + capacity_ * sizeof(objects_t));
                 assert(allocation);
-                m_data = static_cast<char*>(allocation);
-                assert(m_data);
-                for (std::size_t i = 0; i < other.m_objects_idx; ++i) {
-                    assert(other.m_objects[i].offset < m_capacity);
-                    other.m_objects[i].creator(
-                        static_cast<void*>(m_data + other.m_objects[i].offset),
-                        static_cast<void*>(other.m_data + other.m_objects[i].offset));
+                data_ = static_cast<char*>(allocation);
+                assert(data_);
+                for (std::size_t i = 0; i < other.objects_idx_; ++i) {
+                    assert(other.objects_[i].offset < capacity_);
+                    other.objects_[i].creator(
+                        static_cast<void*>(data_ + other.objects_[i].offset),
+                        static_cast<void*>(other.data_ + other.objects_[i].offset));
                 }
-                m_objects = static_cast<objects_t*>(static_cast<void*>(m_data + m_capacity));
-                assert(m_objects);
-                std::copy(other.m_objects, other.m_objects + other.m_objects_idx, m_objects);
-                m_objects_idx = other.m_objects_idx;
+                objects_ = static_cast<objects_t*>(static_cast<void*>(data_ + capacity_));
+                assert(objects_);
+                std::copy(other.objects_, other.objects_ + other.objects_idx_, objects_);
+                objects_idx_ = other.objects_idx_;
             }
 #ifdef __ENABLE_TESTS_MEASUREMENTS__
             rtt_test::const_copy_ctor_++;
@@ -213,21 +213,21 @@ namespace actor_zeta { namespace detail {
         rtt& operator=(rtt&& other) noexcept {
             clear();
 
-            m_memory_resource = other.m_memory_resource;
-            m_capacity = other.m_capacity;
-            m_volume = other.m_volume;
+            memory_resource_ = other.memory_resource_;
+            capacity_ = other.capacity_;
+            volume_ = other.volume_;
             allocation = other.allocation;
-            m_data = other.m_data;
-            m_objects = other.m_objects;
-            m_objects_idx = other.m_objects_idx;
+            data_ = other.data_;
+            objects_ = other.objects_;
+            objects_idx_ = other.objects_idx_;
 
-            other.m_memory_resource = nullptr;
-            other.m_capacity = 0;
-            other.m_volume = 0;
+            other.memory_resource_ = nullptr;
+            other.capacity_ = 0;
+            other.volume_ = 0;
             other.allocation = nullptr;
-            other.m_data = nullptr;
-            other.m_objects = nullptr;
-            other.m_objects_idx = 0;
+            other.data_ = nullptr;
+            other.objects_ = nullptr;
+            other.objects_idx_ = 0;
 
 #ifdef __ENABLE_TESTS_MEASUREMENTS__
             rtt_test::move_operator_++;
@@ -238,23 +238,23 @@ namespace actor_zeta { namespace detail {
         rtt& operator=(const rtt& other) noexcept {
             clear();
 
-            m_memory_resource = other.m_memory_resource;
-            m_capacity = other.m_capacity;
-            m_volume = other.m_volume;
-            if (m_capacity > 0) {
-                allocation = m_memory_resource->allocate(m_capacity + m_capacity * sizeof(objects_t));
+            memory_resource_ = other.memory_resource_;
+            capacity_ = other.capacity_;
+            volume_ = other.volume_;
+            if (capacity_ > 0) {
+                allocation = memory_resource_->allocate(capacity_ + capacity_ * sizeof(objects_t));
                 assert(allocation);
-                m_data = static_cast<char*>(allocation);
-                assert(m_data);
-                for (std::size_t i = 0; i < other.m_objects_idx; ++i) {
-                    other.m_objects[i].creator(
-                        static_cast<void*>(m_data + other.m_objects[i].offset),
-                        static_cast<void*>(other.m_data + other.m_objects[i].offset));
+                data_ = static_cast<char*>(allocation);
+                assert(data_);
+                for (std::size_t i = 0; i < other.objects_idx_; ++i) {
+                    other.objects_[i].creator(
+                        static_cast<void*>(data_ + other.objects_[i].offset),
+                        static_cast<void*>(other.data_ + other.objects_[i].offset));
                 }
-                m_objects = static_cast<objects_t*>(static_cast<void*>(m_data + m_capacity));
-                assert(m_objects);
-                std::copy(other.m_objects, other.m_objects + other.m_objects_idx, m_objects);
-                m_objects_idx = other.m_objects_idx;
+                objects_ = static_cast<objects_t*>(static_cast<void*>(data_ + capacity_));
+                assert(objects_);
+                std::copy(other.objects_, other.objects_ + other.objects_idx_, objects_);
+                objects_idx_ = other.objects_idx_;
             }
 
 #ifdef __ENABLE_TESTS_MEASUREMENTS__
@@ -276,8 +276,8 @@ namespace actor_zeta { namespace detail {
 
         template<typename T>
         char* try_to_align(const T&) {
-            auto space_left = m_capacity - m_volume;
-            void* creation_place = m_data + m_volume;
+            auto space_left = capacity_ - volume_;
+            void* creation_place = data_ + volume_;
             auto aligned_place = actor_zeta::detail::align(alignof(T), sizeof(T), creation_place, space_left);
             return static_cast<char*>(aligned_place);
         }
@@ -296,21 +296,21 @@ namespace actor_zeta { namespace detail {
 
             using raw_type = actor_zeta::type_traits::decay_t<T>;
             new (creation_place) raw_type(std::forward<T>(object));
-            const auto new_offset = static_cast<std::size_t>(creation_place - m_data);
-            m_objects[m_objects_idx++] = objects_t{new_offset, &destroy<raw_type>, &create<raw_type>};
-            m_volume = new_offset + sizeof(raw_type);
+            const auto new_offset = static_cast<std::size_t>(creation_place - data_);
+            objects_[objects_idx_++] = objects_t{new_offset, &destroy<raw_type>, &create<raw_type>};
+            volume_ = new_offset + sizeof(raw_type);
         }
 
         void swap(rtt& that) {
             using std::swap;
 
-            swap(this->m_memory_resource, that.m_memory_resource);
-            swap(this->m_capacity, that.m_capacity);
-            swap(this->m_volume, that.m_volume);
+            swap(this->memory_resource_, that.memory_resource_);
+            swap(this->capacity_, that.capacity_);
+            swap(this->volume_, that.volume_);
             swap(this->allocation, that.allocation);
-            swap(this->m_data, that.m_data);
-            swap(this->m_objects, that.m_objects);
-            swap(this->m_objects_idx, that.m_objects_idx);
+            swap(this->data_, that.data_);
+            swap(this->objects_, that.objects_);
+            swap(this->objects_idx_, that.objects_idx_);
         }
 
         template<typename T>
@@ -324,33 +324,33 @@ namespace actor_zeta { namespace detail {
         }
 
         std::size_t offset(std::size_t index) const {
-            return m_objects[index].offset;
+            return objects_[index].offset;
         }
 
         template<typename T>
         const T& get_by_offset(std::size_t offset) const {
-            return *static_cast<const T*>(static_cast<const void*>(m_data + offset));
+            return *static_cast<const T*>(static_cast<const void*>(data_ + offset));
         }
 
         template<typename T>
         T& get_by_offset(std::size_t offset) {
-            return *static_cast<T*>(static_cast<void*>(m_data + offset)); // this is necessary to use double static_cast here, compile error
+            return *static_cast<T*>(static_cast<void*>(data_ + offset)); // this is necessary to use double static_cast here, compile error
         }
 
         std::size_t size() const {
-            return m_objects_idx;
+            return objects_idx_;
         }
 
         std::size_t volume() const {
-            return m_volume;
+            return volume_;
         }
 
         std::size_t capacity() const {
-            return m_capacity;
+            return capacity_;
         }
 
         bool empty() const {
-            return m_objects_idx == 0;
+            return objects_idx_ == 0;
         }
     };
 
