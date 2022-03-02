@@ -32,18 +32,6 @@ namespace actor_zeta { namespace base {
         auto sender() && noexcept -> address_t&&;
         auto sender() const& noexcept -> address_t const&;
 
-        /*template<typename T>
-        auto body() const -> const T& {
-            assert(body_.has_value());
-            return detail::any_cast<const T&>(body_);
-        }
-
-        template<typename T>
-        auto body() -> T& {
-            assert(body_.has_value());
-            return detail::any_cast<T&>(body_);
-        }*/
-
         auto body() -> detail::rtt&;
         auto clone() const -> message*;
         operator bool();

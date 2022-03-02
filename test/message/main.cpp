@@ -68,9 +68,9 @@ TEST_CASE("message") {
         v.emplace(std::make_pair(2, message(address_t::empty_address(), "3", rtt(nullptr, std::string("3"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))));
         REQUIRE(v.size() == 3);
         v.clear();
-        v.emplace(std::pair{0, message(address_t::empty_address(), "1", rtt(nullptr, std::string("1"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))});
-        v.emplace(std::pair{1, message(address_t::empty_address(), "2", rtt(nullptr, std::string("2"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))});
-        v.emplace(std::pair{2, message(address_t::empty_address(), "3", rtt(nullptr, std::string("3"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))});
+        v.emplace(std::pair<size_t, message>{0, message(address_t::empty_address(), "1", rtt(nullptr, std::string("1"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))});
+        v.emplace(std::pair<size_t, message>{1, message(address_t::empty_address(), "2", rtt(nullptr, std::string("2"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))});
+        v.emplace(std::pair<size_t, message>{2, message(address_t::empty_address(), "3", rtt(nullptr, std::string("3"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))});
         REQUIRE(v.size() == 3);
         v.clear();
         v.emplace(std::piecewise_construct,
@@ -94,9 +94,9 @@ TEST_CASE("message") {
         v.insert(std::make_pair(2, message(address_t::empty_address(), "3", rtt(nullptr, std::string("3"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))));
         REQUIRE(v.size() == 3);
         v.clear();
-        v.insert(std::pair{0, message(address_t::empty_address(), "1", rtt(nullptr, std::string("1"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))});
-        v.insert(std::pair{1, message(address_t::empty_address(), "2", rtt(nullptr, std::string("2"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))});
-        v.insert(std::pair{2, message(address_t::empty_address(), "3", rtt(nullptr, std::string("3"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))});
+        v.insert(std::pair<size_t, message>{0, message(address_t::empty_address(), "1", rtt(nullptr, std::string("1"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))});
+        v.insert(std::pair<size_t, message>{1, message(address_t::empty_address(), "2", rtt(nullptr, std::string("2"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))});
+        v.insert(std::pair<size_t, message>{2, message(address_t::empty_address(), "3", rtt(nullptr, std::string("3"), static_cast<int>(12), static_cast<int>(14), static_cast<int>(15)))});
         REQUIRE(v.size() == 3);
     }
     SECTION("deque of plain messages") {
