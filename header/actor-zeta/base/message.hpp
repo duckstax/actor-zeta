@@ -17,6 +17,8 @@ namespace actor_zeta { namespace base {
 
     class message final {
     public:
+        // https://github.com/duckstax/actor-zeta/issues/118
+        // @TODO Remove default ctors for actor_zeta::base::message and actor_zeta::detail::rtt (message body) #118
         message();
         message(const message&) = delete;
         message& operator=(const message&) = delete;
