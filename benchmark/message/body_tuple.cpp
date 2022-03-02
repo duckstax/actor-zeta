@@ -57,24 +57,36 @@ namespace benchmark_messages {
 
         namespace trivial_args {
 
-            //REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_int8_t, int8_t);
-            //REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_int16_t, int16_t);
-            //REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_int32_t, int32_t);
-            //REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_int64_t, int64_t);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_int8_t, int8_t);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_int16_t, int16_t);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_int32_t, int32_t);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_int64_t, int64_t);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_int, int);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_long_int, long int);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_long_long_int, long long int);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_unsigned_long_int, unsigned long int);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_unsigned_int, unsigned int);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_unsigned_short, unsigned short);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_short, short);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_long, long);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_long_long, long long);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_double, double);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_long_double, long double);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mem_resource_t, BodyMessage_Args_float, float);
 
         } // namespace trivial_args
 
         namespace container_args {
 
-            //REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_vec_t, BodyMessage_Args_std_vector_int8_t, int8_t);
-            //REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_list_t, BodyMessage_Args_std_list_int8_t, int8_t);
-            //REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_map_t, BodyMessage_Args_std_map_int8_t, int8_t);
-            //REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_set_t, BodyMessage_Args_std_set_int8_t, int8_t);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_vec_t, BodyMessage_Args_std_vector_int8_t, int8_t);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_list_t, BodyMessage_Args_std_list_int8_t, int8_t);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_map_t, BodyMessage_Args_std_map_int8_t, int8_t);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_set_t, BodyMessage_Args_std_set_int8_t, int8_t);
 
-            //REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_vec_t, BodyMessage_Args_std_vector_int16_t, int16_t);
-            //REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_list_t, BodyMessage_Args_std_list_int16_t, int16_t);
-            //REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_map_t, BodyMessage_Args_std_map_int16_t, int16_t);
-            //REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_set_t, BodyMessage_Args_std_set_int16_t, int16_t);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_vec_t, BodyMessage_Args_std_vector_int16_t, int16_t);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_list_t, BodyMessage_Args_std_list_int16_t, int16_t);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_map_t, BodyMessage_Args_std_map_int16_t, int16_t);
+            REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_set_t, BodyMessage_Args_std_set_int16_t, int16_t);
 
             REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_vec_t, BodyMessage_Args_std_vector_int32_t, int32_t);
             REGISTER_MESSAGE_BENCHMARK_FOR_BODY_ARGS(fixture_mr_list_t, BodyMessage_Args_std_list_int32_t, int32_t);
