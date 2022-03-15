@@ -40,13 +40,13 @@ namespace actor_zeta { namespace clock {
             for (auto i = tbl_.begin(); i != tbl_.end() && (*i)->t <= n; ++i) {
                 auto& entry = **i;
                 entry.f();
-                entry.done = true;
                 if (entry.period.count() > 0) {
                     auto next = entry.t + entry.period;
                     while (next <= n) {
                         next += entry.period;
                     }
                 } else {
+                    entry.done = true;
                     i->reset(); // Remove from tbl_ after the for-loop body.
                 }
             }
