@@ -46,7 +46,8 @@ namespace actor_zeta { namespace clock {
                         next += entry.period;
                     }
                 } else {
-                    entry.done = true;// Remove from tbl_ after the for-loop body.
+                    entry.done = true; // Remove from tbl_ after the for-loop body.
+                    ///i->reset();
                 }
             }
             tbl_.erase(std::remove_if(tbl_.begin(), tbl_.end(), is_done), tbl_.end());
