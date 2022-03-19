@@ -45,6 +45,7 @@ namespace actor_zeta { namespace clock {
                     while (next <= n) {
                         next += entry.period;
                     }
+                    entry.t = next;
                 } else {
                     entry.done = true; // Remove from tbl_ after the for-loop body.
                     ///i->reset();
