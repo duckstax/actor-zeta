@@ -15,6 +15,9 @@
 #include <actor-zeta/impl/actor/supervisor.ipp>
 #include <actor-zeta/impl/actor/supervisor_abstract.ipp>
 
+#include <actor-zeta/impl/clock/clock.ipp>
+#include <actor-zeta/impl/clock/thread_safe_clock.ipp>
+
 #include <actor-zeta/impl/detail/pmr/memory_resource.ipp>
 #include <actor-zeta/impl/detail/aligned_allocate.ipp>
 #include <actor-zeta/impl/detail/launch_thread.ipp>
@@ -22,6 +25,7 @@
 #include <actor-zeta/impl/detail/string_view.ipp>
 
 #include <actor-zeta/impl/scheduler/policy/unprofiled.ipp>
+
 #include <actor-zeta/impl/scheduler/policy/work_sharing.ipp>
 #include <actor-zeta/impl/scheduler/execution_unit.ipp>
 #include <actor-zeta/impl/scheduler/resumable.ipp>

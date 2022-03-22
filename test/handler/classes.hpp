@@ -1,12 +1,11 @@
 #pragma once
 
-#include "test/tooltestsuites/scheduler_test.hpp"
 #include <actor-zeta/core.hpp>
+#include "test/tooltestsuites/scheduler_test.hpp"
 #include <iostream>
 #include <list>
 
-#define TRACE(msg) \
-    { std::cout << __FILE__ << ":" << __LINE__ << "::" << __func__ << " : " << msg << std::endl; }
+#define TRACE(msg) { std::cout << __FILE__ << ":" << __LINE__ << "::" << __func__ << " : " << msg << std::endl; }
 
 class storage_t;
 class test_handlers;
@@ -21,7 +20,6 @@ public:
     static uint64_t add_supervisor_impl_counter;
     static uint64_t enqueue_base_counter;
 
-public:
     explicit dummy_supervisor(actor_zeta::detail::pmr::memory_resource* mr, uint64_t threads, uint64_t throughput)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(mr, "dummy_supervisor", 0)
         , executor_(new actor_zeta::test::scheduler_test_t(threads, throughput)) {
