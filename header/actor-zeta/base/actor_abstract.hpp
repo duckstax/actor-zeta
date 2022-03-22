@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/forwards.hpp>
+#include "forwards.hpp"
 #include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/detail/string_view.hpp>
 

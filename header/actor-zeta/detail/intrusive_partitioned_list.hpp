@@ -23,7 +23,6 @@ namespace actor_zeta { namespace detail {
 
             iterator(pointer init = nullptr)
                 : ptr(init) {
-                // nop
             }
 
             iterator(const iterator&) = default;

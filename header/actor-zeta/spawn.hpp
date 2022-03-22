@@ -1,6 +1,6 @@
 #pragma once
 
-#include "actor-zeta/forwards.hpp"
+#include "actor-zeta/base/forwards.hpp"
 #include "actor-zeta/base/address.hpp"
 
 namespace actor_zeta {

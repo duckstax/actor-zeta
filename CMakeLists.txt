@@ -91,6 +91,7 @@ set(HEADER_FILES
         header/actor-zeta/base/cooperative_actor.hpp
         header/actor-zeta/base/communication_module.hpp
         header/actor-zeta/base/handler.hpp
+        header/actor-zeta/base/message.hpp
         header/actor-zeta/base/supervisor.hpp
         header/actor-zeta/base/supervisor_abstract.hpp
 
@@ -101,6 +102,8 @@ set(HEADER_FILES
         header/actor-zeta/detail/intrusive_ptr.hpp
         header/actor-zeta/detail/ref_counted.hpp
         header/actor-zeta/detail/string_view.hpp
+        header/actor-zeta/detail/launch_thread.hpp
+        header/actor-zeta/detail/ignore_unused.hpp
         header/actor-zeta/detail/type_list.hpp
         header/actor-zeta/detail/type_traits.hpp
         header/actor-zeta/detail/rtt.hpp

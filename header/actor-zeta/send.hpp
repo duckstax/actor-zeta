@@ -1,8 +1,9 @@
 #pragma once
 
+#include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/base/supervisor.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
-#include <actor-zeta/forwards.hpp>
+
 #include <actor-zeta/make_message.hpp>
 
 namespace actor_zeta {

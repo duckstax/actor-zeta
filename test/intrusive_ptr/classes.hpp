@@ -9,16 +9,10 @@
 
 using namespace actor_zeta;
 
-template<class T, class... Ts>
-intrusive_ptr<T> make_counted(Ts&&... xs) {
-    return intrusive_ptr<T>(new T(std::forward<Ts>(xs)...), false);
-}
-
 int class0_instances = 0;
 int class1_instances = 0;
 
 class class0;
-
 class class1;
 
 using class0ptr = intrusive_ptr<class0>;

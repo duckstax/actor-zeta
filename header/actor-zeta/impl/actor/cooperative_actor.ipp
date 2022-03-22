@@ -87,7 +87,7 @@ namespace actor_zeta { namespace base {
                         context(e);
                         context()->execute(this);
                     } else {
-                        env().executor().execute(this);
+                        env().scheduler().execute(this);
                     }
                     break;
                 }
@@ -115,8 +115,8 @@ namespace actor_zeta { namespace base {
 
     cooperative_actor::cooperative_actor(
         supervisor_abstract* supervisor,
-        std::string type,int64_t id)
-        : actor_abstract(std::move(type),id)
+        std::string type, int64_t id)
+        : actor_abstract(std::move(type), id)
         , supervisor_(supervisor) {
         flags(static_cast<int>(state::empty));
         mailbox().try_unblock();
@@ -125,7 +125,7 @@ namespace actor_zeta { namespace base {
     cooperative_actor::~cooperative_actor() {}
 
     bool cooperative_actor::activate(scheduler::execution_unit* ctx) {
-        //assert(ctx != nullptr);
+        assert(ctx != nullptr);
         if (ctx) {
             context(ctx);
         }
@@ -212,6 +212,9 @@ namespace actor_zeta { namespace base {
 
     auto cooperative_actor::supervisor() -> supervisor_abstract* {
         return supervisor_;
+    }
+    auto cooperative_actor::clock() noexcept -> clock::clock_t& {
+        return supervisor()->clock();
     }
 
 }} // namespace actor_zeta::base
