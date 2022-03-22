@@ -12,12 +12,14 @@ message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
 option(ALLOW_EXAMPLES "ALLOW EXAMPLES" OFF)
 option(ALLOW_TESTS "ALLOW TESTS" OFF)
+option(ENABLE_TESTS_MEASUREMENTS "ENABLE TESTS MEASUREMENTS" OFF)
 option(ALLOW_BENCHMARK "ALLOW BENCHMARK" OFF)
 option(RTTI_DISABLE "RTTI DISABLE" ON)
 option(EXCEPTIONS_DISABLE "EXCEPTIONS DISABLE" ON)
 
 message(STATUS "ALLOW_EXAMPLES = ${ALLOW_EXAMPLES}")
 message(STATUS "ALLOW_TESTS = ${ALLOW_TESTS}")
+message(STATUS "ENABLE_TESTS_MEASUREMENTS = ${ENABLE_TESTS_MEASUREMENTS}")
 message(STATUS "ALLOW_BENCHMARK = ${ALLOW_BENCHMARK}")
 message(STATUS "RTTI_DISABLE = ${RTTI_DISABLE}")
 message(STATUS "EXCEPTIONS_DISABLE = ${EXCEPTIONS_DISABLE}")
@@ -28,6 +30,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         message("Disable C++ exceptions.")
         string(REGEX REPLACE "/EH[a-z]+" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+        add_compile_definitions(__EXCEPTIONS_DISABLE__)
     endif ()
 
     if (RTTI_DISABLE)
@@ -41,6 +44,7 @@ else (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     if (EXCEPTIONS_DISABLE)
         message("Disable C++ exceptions.")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
+        add_compile_definitions(__EXCEPTIONS_DISABLE__)
     endif ()
 
     if (RTTI_DISABLE)
@@ -87,6 +91,7 @@ set(HEADER_FILES
         header/actor-zeta/base/cooperative_actor.hpp
         header/actor-zeta/base/communication_module.hpp
         header/actor-zeta/base/handler.hpp
+        header/actor-zeta/base/message.hpp
         header/actor-zeta/base/supervisor.hpp
         header/actor-zeta/base/supervisor_abstract.hpp
 
@@ -97,8 +102,11 @@ set(HEADER_FILES
         header/actor-zeta/detail/intrusive_ptr.hpp
         header/actor-zeta/detail/ref_counted.hpp
         header/actor-zeta/detail/string_view.hpp
+        header/actor-zeta/detail/launch_thread.hpp
+        header/actor-zeta/detail/ignore_unused.hpp
         header/actor-zeta/detail/type_list.hpp
         header/actor-zeta/detail/type_traits.hpp
+        header/actor-zeta/detail/rtt.hpp
 
         header/actor-zeta/scheduler/policy/unprofiled.hpp
         header/actor-zeta/scheduler/policy/work_sharing.hpp
@@ -108,7 +116,10 @@ set(HEADER_FILES
         header/actor-zeta/scheduler/scheduler_abstract.hpp
         header/actor-zeta/scheduler/worker.hpp
 
+        header/actor-zeta/base/priority.hpp
         header/actor-zeta/base/message.hpp
+
+        header/actor-zeta/make_message.hpp
 
         header/actor-zeta/forwards.hpp
         header/actor-zeta/send.hpp
@@ -117,7 +128,7 @@ set(HEADER_FILES
 )
 
 set(SOURCE_FILES
-        source/src.cpp
+    source/src.cpp
 )
 
 find_program(CCACHE_FOUND ccache)
@@ -147,11 +158,15 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/header
 )
 
+if (ENABLE_TESTS_MEASUREMENTS)
+    add_compile_definitions(__ENABLE_TESTS_MEASUREMENTS__)
+endif()
+
 if (ALLOW_EXAMPLES)
     add_subdirectory(examples)
 endif ()
 
-if (ALLOW_TESTS)
+if (ALLOW_TESTS OR ALLOW_BENCHMARK)
     # configuration
     #############################################################################################
     #conan
@@ -159,6 +174,9 @@ if (ALLOW_TESTS)
     conan_basic_setup(TARGETS)
     # conan
     #############################################################################################
+endif()
+
+if (ALLOW_TESTS)
     enable_testing()
     add_subdirectory(test)
 endif()

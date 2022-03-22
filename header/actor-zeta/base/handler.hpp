@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include <actor-zeta/forwards.hpp>
+#include "forwards.hpp"
 
 namespace actor_zeta { namespace base {
     ///

@@ -61,4 +61,8 @@ namespace actor_zeta { namespace base {
         return address_t(this);
     }
 
+    auto supervisor_abstract::clock() noexcept -> clock::clock_t& {
+        return scheduler_impl()->clock();
+    }
+
 }} // namespace actor_zeta::base

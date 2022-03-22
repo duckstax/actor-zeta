@@ -54,7 +54,7 @@ TEST_CASE("handler") {
     actor_zeta::send(static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),storage_names::init);
     supervisor_->scheduler_test()->run_once();
     REQUIRE(storage_t::init_counter == 1);
-
+    
     REQUIRE(storage_t::search_counter == 0);
     actor_zeta::send(static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),storage_names::search, std::string("key_1"));
     supervisor_->scheduler_test()->run_once();

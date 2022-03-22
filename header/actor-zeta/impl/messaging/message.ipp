@@ -1,4 +1,5 @@
 #pragma once
+
 #include <utility>
 
 #include <actor-zeta/base/address.hpp>
@@ -15,7 +16,7 @@ namespace actor_zeta { namespace base {
     }
 
     message::operator bool() {
-        return !command_.empty() || bool(sender_) || body_.has_value();
+        return !command_.empty() || bool(sender_) || !body_.empty();
     }
 
     message::message(address_t sender, std::string name)
@@ -23,7 +24,7 @@ namespace actor_zeta { namespace base {
         , command_(std::move(name))
         , body_() {}
 
-    message::message(address_t sender, std::string name, detail::any body)
+    message::message(address_t sender, std::string name, detail::rtt body)
         : sender_(std::move(sender))
         , command_(std::move(name))
         , body_(std::move(body)) {}
@@ -38,15 +39,14 @@ namespace actor_zeta { namespace base {
     message::message()
         : next(nullptr)
         , prev(nullptr)
-        , sender_(address_t::empty_address())
-    {}
+        , sender_(address_t::empty_address()) {}
 
     bool message::is_high_priority() const {
         return false;
     }
 
-    auto message::body() -> detail::any& {
-        assert(body_.has_value());
+    auto message::body() -> detail::rtt& {
+        assert(!body_.empty());
         return body_;
     }
 

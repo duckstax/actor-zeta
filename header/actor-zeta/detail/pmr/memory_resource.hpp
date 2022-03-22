@@ -24,6 +24,8 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
 #endif
 
+    using monotonic_buffer_resource = std::pmr::monotonic_buffer_resource;
+
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
     class memory_resource {

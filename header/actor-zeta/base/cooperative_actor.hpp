@@ -1,8 +1,9 @@
 #pragma once
 
+#include "forwards.hpp"
 #include <actor-zeta/base/actor_abstract.hpp>
+#include <actor-zeta/clock/clock.hpp>
 #include <actor-zeta/detail/single_reader_queue.hpp>
-#include <actor-zeta/forwards.hpp>
 #include <actor-zeta/scheduler/resumable.hpp>
 
 namespace actor_zeta { namespace base {
@@ -17,11 +18,9 @@ namespace actor_zeta { namespace base {
         using mailbox_t = detail::single_reader_queue<message>;
 
         scheduler::resume_result resume(scheduler::execution_unit*, max_throughput_t) final;
-
         ~cooperative_actor() override;
 
         void intrusive_ptr_add_ref_impl() override;
-
         void intrusive_ptr_release_impl() override;
 
     protected:
@@ -36,6 +35,7 @@ namespace actor_zeta { namespace base {
 
     private:
         cooperative_actor(supervisor_abstract*, std::string);
+
         enum class state : int {
             empty = 0x01,
             busy
@@ -50,9 +50,7 @@ namespace actor_zeta { namespace base {
         }
 
         void cleanup();
-
         bool consume_from_cache();
-
         void consume(message&);
 
         // message processing -----------------------------------------------------
@@ -62,22 +60,17 @@ namespace actor_zeta { namespace base {
         }
 
         bool activate(scheduler::execution_unit*);
-
         auto reactivate(message& x) -> void;
-
         message_ptr next_message();
-
         bool has_next_message();
-
         void push_to_cache(message_ptr ptr);
-
         auto context(scheduler::execution_unit*) -> void;
-
         auto context() const -> scheduler::execution_unit*;
-
         auto supervisor() -> supervisor_abstract*;
 
         // ----------------------------------------------------- message processing
+
+        auto clock() noexcept -> clock::clock_t&;
         supervisor_abstract* supervisor_;
         scheduler::execution_unit* executor_;
         message* current_message_;

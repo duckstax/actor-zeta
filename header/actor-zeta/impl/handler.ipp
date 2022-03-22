@@ -2,7 +2,7 @@
 
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/type_list.hpp>
-#include <actor-zeta/forwards.hpp>
+#include <actor-zeta/base/forwards.hpp>
 
 namespace actor_zeta { namespace base {
     // clang-format off
@@ -31,9 +31,8 @@ namespace actor_zeta { namespace base {
         constexpr int args_size = call_trait::number_of_arguments;
         using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types, 0, args_size>;
         using Tuple =  type_list_to_tuple_t<args_type_list>;
-        auto &args = ctx.current_message()->body<Tuple>();
-        ///f(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
-        f((std::get<I>(args))...);
+        auto &args = ctx.current_message()->body();
+        f((actor_zeta::detail::get<I, args_type_list>(args))...);
     }
 
     // clang-format on
@@ -65,8 +64,8 @@ namespace actor_zeta { namespace base {
             return [f](communication_module& ctx) -> void {
                 using arg_type = type_traits::type_list_at_t<Args, 0>;
                 using clear_args_type = type_traits::decay_t<arg_type>;
-                auto& tmp = ctx.current_message()->body<clear_args_type>();
-                f(tmp);
+                auto& tmp = ctx.current_message()->body();
+                f(tmp.get<clear_args_type>(0));
             };
         }
     };
@@ -78,9 +77,8 @@ namespace actor_zeta { namespace base {
         using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
         using args_type_list = typename call_trait::args_types;
         using Tuple =  type_list_to_tuple_t<args_type_list>;
-        auto &args = ctx.current_message()->body<Tuple>();
-        //(ptr->*f)(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
-        (ptr->*f)((std::get<I>(args))...);
+        auto &args = ctx.current_message()->body();
+        (ptr->*f)((actor_zeta::detail::get<I, args_type_list>(args))...);
     }
 
     // clang-format on
@@ -112,9 +110,9 @@ namespace actor_zeta { namespace base {
             return [f, ptr](communication_module& arg) -> void {
                 using arg_type_0 = type_traits::type_list_at_t<Args, 0>;
                 using decay_arg_type_0 = type_traits::decay_t<arg_type_0>;
-                auto& tmp = arg.current_message()->body<decay_arg_type_0>();
+                auto& tmp = arg.current_message()->body();
                 using original_arg_type_0 = forward_arg<Args, 0>;
-                (ptr->*f)(std::forward<original_arg_type_0>(static_cast<original_arg_type_0>(tmp)));
+                (ptr->*f)(std::forward<original_arg_type_0>(static_cast<original_arg_type_0>(tmp.get<decay_arg_type_0>(0))));
             };
         }
     };
