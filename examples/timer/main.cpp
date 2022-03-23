@@ -22,7 +22,7 @@ using actor_zeta::detail::pmr::memory_resource;
 class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
 public:
     explicit supervisor_lite(memory_resource* ptr)
-        : cooperative_supervisor(ptr, "network", 0)
+        : cooperative_supervisor(ptr, "network")
         , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
                  1,
                  100),
