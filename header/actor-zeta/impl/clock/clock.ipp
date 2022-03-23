@@ -20,7 +20,7 @@ namespace actor_zeta { namespace clock {
             t,
             handler(
                 [receiver_tmp= std::move(receiver), content_tmp = std::move(content)]() mutable {
-                    receiver_tmp.enqueue(std::move(content_tmp));
+                    receiver_tmp->enqueue(std::move(content_tmp));
                 }));
     }
 
