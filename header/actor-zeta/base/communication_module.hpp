@@ -5,7 +5,6 @@
 #include <set>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
 #include "forwards.hpp"
 #include <actor-zeta/detail/callable_trait.hpp>
@@ -26,20 +25,75 @@ namespace actor_zeta { namespace base {
         communication_module() = delete;
         communication_module(const communication_module&) = delete;
         communication_module& operator=(const communication_module&) = delete;
-        virtual ~communication_module();
+
+        class id_t final {
+        public:
+            id_t() = default;
+
+            explicit id_t(communication_module* impl) noexcept
+                : impl_{impl} {
+            }
+
+            bool operator==(id_t const& other) const noexcept {
+                return impl_ == other.impl_;
+            }
+
+            bool operator!=(id_t const& other) const noexcept {
+                return impl_ != other.impl_;
+            }
+
+            bool operator<(id_t const& other) const noexcept {
+                return impl_ < other.impl_;
+            }
+
+            bool operator>(id_t const& other) const noexcept {
+                return other.impl_ < impl_;
+            }
+
+            bool operator<=(id_t const& other) const noexcept {
+                return !(*this > other);
+            }
+
+            bool operator>=(id_t const& other) const noexcept {
+                return !(*this < other);
+            }
+
+            template<typename charT, class traitsT>
+            friend std::basic_ostream<charT, traitsT>&
+            operator<<(std::basic_ostream<charT, traitsT>& os, id_t const& other) {
+                if (nullptr != other.impl_) {
+                    return os << other.impl_;
+                }
+                return os << "{not-valid}";
+            }
+
+            explicit operator bool() const noexcept {
+                return nullptr != impl_;
+            }
+
+            bool operator!() const noexcept {
+                return nullptr == impl_;
+            }
+
+        private:
+            communication_module* impl_{nullptr};
+        };
 
         auto type() const -> detail::string_view;
-        auto id() const -> int64_t ;
-        /**
-        * debug method
-        */
-        auto message_types() const -> std::set<std::string>;
+        auto id() const -> id_t;
         auto enqueue(message_ptr) -> void;
         void enqueue(message_ptr, scheduler::execution_unit*);
         auto current_message() -> message*;
 
     protected:
-        communication_module(std::string,int64_t);
+        virtual ~communication_module();
+        /**
+        * debug method
+        */
+        auto message_types() const -> std::set<std::string>;
+
+        communication_module(std::string);
+
         virtual auto current_message_impl() -> message* = 0;
         virtual void enqueue_impl(message_ptr, scheduler::execution_unit*) = 0;
 
@@ -58,8 +112,9 @@ namespace actor_zeta { namespace base {
 
     private:
         handler_storage_t handlers_;
-        const std::string type_;
-        const int64_t id_;
+#ifdef DEBUG
+        std::string type_;
+#endif
     };
 
 }} // namespace actor_zeta::base

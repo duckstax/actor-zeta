@@ -23,8 +23,8 @@ class supervisor_lite;
 
 class worker_t final : public actor_zeta::basic_async_actor {
 public:
-    worker_t(supervisor_lite* ptr, int64_t actor_id)
-        : actor_zeta::basic_async_actor(ptr, "bot", actor_id) {
+    worker_t(supervisor_lite* ptr)
+        : actor_zeta::basic_async_actor(ptr, "bot") {
         add_handler("download", &worker_t::download);
         add_handler("work_data", &worker_t::work_data);
     }
@@ -50,7 +50,7 @@ using actor_zeta::detail::pmr::memory_resource;
 class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
 public:
     explicit supervisor_lite(memory_resource* ptr)
-        : cooperative_supervisor(ptr, "network", 0)
+        : cooperative_supervisor(ptr, "network")
         , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
                  1,
                  100),
@@ -69,7 +69,7 @@ public:
     void create() {
         spawn_actor<worker_t>([this](worker_t* ptr) {
             actors_.emplace_back(ptr);
-        },create_counter_worker.fetch_add(1));
+        });
     }
 
     ~supervisor_lite() override = default;

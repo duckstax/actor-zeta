@@ -42,14 +42,6 @@ namespace actor_zeta { namespace base {
         return static_cast<bool>(ptr_);
     }
 
-    void address_t::enqueue(message_ptr msg) noexcept {
-        ptr_->enqueue(std::move(msg));
-    }
-
-    auto address_t::type() const -> detail::string_view {
-        return ptr_->type();
-    }
-
     address_t::address_t(address_t&& other) noexcept {
         swap(other);
     }

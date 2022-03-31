@@ -25,8 +25,8 @@ namespace actor_zeta { namespace base {
 
     protected:
         template<class Supervisor>
-        cooperative_actor(Supervisor* ptr, std::string type, int64_t actor_id)
-            : cooperative_actor(static_cast<supervisor_abstract*>(ptr), std::move(type), actor_id){};
+        cooperative_actor(Supervisor* ptr, std::string type)
+            : cooperative_actor(static_cast<supervisor_abstract*>(ptr), std::move(type)){};
 
         void enqueue_impl(message_ptr, scheduler::execution_unit*) final;
 
@@ -34,7 +34,7 @@ namespace actor_zeta { namespace base {
         auto current_message_impl() -> message* override;
 
     private:
-        cooperative_actor(supervisor_abstract*, std::string, int64_t);
+        cooperative_actor(supervisor_abstract*, std::string);
 
         enum class state : int {
             empty = 0x01,

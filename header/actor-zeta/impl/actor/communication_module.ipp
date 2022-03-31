@@ -37,7 +37,7 @@ namespace actor_zeta { namespace base {
         if (it != handlers_.end()) {
             return it->second->invoke(*this);
         } else {
-            auto sender = current_message()->sender().type();
+            auto sender = current_message()->sender()->type();
             auto reciever = this->type();
             error_skip(sender, reciever, current_message()->command());
         }
@@ -74,17 +74,20 @@ namespace actor_zeta { namespace base {
     }
 
     auto communication_module::type() const -> detail::string_view {
+#ifdef DEBUG
         return detail::string_view(type_.data(), type_.size());
+#else
+        return constexpr static detail::string_view();
+#endif
     }
 
     communication_module::~communication_module() {}
 
-    communication_module::communication_module(std::string type, int64_t id)
-        : type_(std::move(type))
-        , id_(id) {
-
+    communication_module::communication_module(std::string type) {
+#ifdef DEBUG
+        type_ = std::move(type);
+#endif
     }
-
 
     void communication_module::enqueue(message_ptr msg, scheduler::execution_unit* e) {
         enqueue_impl(std::move(msg), e);
@@ -94,8 +97,8 @@ namespace actor_zeta { namespace base {
         return current_message_impl();
     }
 
-    auto communication_module::id() const -> int64_t {
-        return id_;
+    auto communication_module::id() const -> id_t {
+        return id_t{const_cast<communication_module*>(this)};
     }
 
 }} // namespace actor_zeta::base
