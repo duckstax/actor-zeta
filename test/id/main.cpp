@@ -1,9 +1,9 @@
 #define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
 #include <catch2/catch.hpp>
 
-#include "classes.hpp"
 #include <cassert>
 
+#include <map>
 #include <set>
 #include <string>
 
@@ -14,23 +14,10 @@
 using actor_zeta::detail::pmr::memory_resource;
 class dummy_supervisor;
 
-static std::atomic_int actor_counter{0};
-
 class storage_t final : public actor_zeta::basic_async_actor {
 public:
     storage_t(dummy_supervisor* ptr)
         : actor_zeta::basic_async_actor(ptr, "storage") {
-        add_handler("update", []() -> void {});
-        add_handler("find", []() -> void {});
-        add_handler("remove", []() -> void {});
-
-        REQUIRE(actor_zeta::detail::string_view("storage") == type());
-        auto tmp = message_types();
-        std::set<std::string> control = {"update", "remove", "find"};
-        std::set<std::string> diff;
-        std::set_difference(tmp.begin(), tmp.end(), control.begin(), control.end(), std::inserter(diff, diff.begin()));
-        REQUIRE(diff.empty());
-        actor_counter++;
     }
 
     ~storage_t() override = default;
@@ -51,7 +38,9 @@ public:
 
     void create() {
         spawn_actor<storage_t>([this](storage_t* ptr) {
-            actors_.emplace_back(ptr);
+            REQUIRE(actor_zeta::base::communication_module::id_t(static_cast<actor_zeta::base::communication_module*>(ptr)) == ptr->id());
+            REQUIRE(ids_.find(reinterpret_cast<int64_t>(ptr)) == ids_.end());
+            ids_.insert(reinterpret_cast<int64_t>(ptr));
         });
     }
 
@@ -69,13 +58,14 @@ protected:
 
 private:
     std::unique_ptr<actor_zeta::test::scheduler_test_t> executor_;
-    std::vector<actor_zeta::actor> actors_;
+    std::set<int64_t> ids_;
 };
 
-TEST_CASE("spawn-actor actor") {
+TEST_CASE("actor id match") {
     auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr);
-    actor_zeta::send(supervisor.get(), actor_zeta::address_t::empty_address(), "create");
-    supervisor->scheduler_test()->run_once();
-    REQUIRE(actor_counter == 1);
+    for (auto i = 0; i < 10000000; ++i) {
+        actor_zeta::send(supervisor.get(), actor_zeta::address_t::empty_address(), "create");
+        supervisor->scheduler_test()->run_once();
+    }
 }

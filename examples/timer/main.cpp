@@ -22,11 +22,11 @@ using actor_zeta::detail::pmr::memory_resource;
 class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
 public:
     explicit supervisor_lite(memory_resource* ptr)
-        : cooperative_supervisor(ptr, "network", 0)
+        : cooperative_supervisor(ptr, "network")
         , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
                  1,
                  100),
-             thread_pool_deleter){
+             thread_pool_deleter) {
         add_handler("alarm", &supervisor_lite::alarm);
         e_->start();
     }
@@ -47,7 +47,6 @@ protected:
     }
 
 private:
-
     std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor> actors_;
 };
@@ -56,7 +55,7 @@ int main() {
     auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<supervisor_lite>(mr_ptr);
 
-    supervisor->clock().schedule_message(supervisor->clock().now()+std::chrono::seconds(60),supervisor->address(),actor_zeta::make_message(actor_zeta::address_t::empty_address(),"alarm"));
+    supervisor->clock().schedule_message(supervisor->clock().now() + std::chrono::seconds(60), supervisor->address(), actor_zeta::make_message(actor_zeta::address_t::empty_address(), "alarm"));
 
     std::this_thread::sleep_for(std::chrono::seconds(180));
 

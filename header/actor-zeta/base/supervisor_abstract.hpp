@@ -11,11 +11,11 @@ namespace actor_zeta { namespace base {
         : public communication_module
         , public ref_counted {
     public:
-        supervisor_abstract(detail::pmr::memory_resource*, std::string, int64_t);
+        supervisor_abstract(detail::pmr::memory_resource*, std::string);
 
         template<class Supervisor>
-        supervisor_abstract(Supervisor* supervisor, std::string type, int64_t actor_id)
-            : supervisor_abstract(static_cast<supervisor_abstract*>(supervisor), std::move(type), actor_id) {}
+        supervisor_abstract(Supervisor* supervisor, std::string type)
+            : supervisor_abstract(static_cast<supervisor_abstract*>(supervisor), std::move(type)) {}
 
         ~supervisor_abstract() override;
         auto scheduler() noexcept -> scheduler::scheduler_abstract_t*;
@@ -30,7 +30,8 @@ namespace actor_zeta { namespace base {
         auto current_message_impl() -> message* final;
 
     private:
-        supervisor_abstract(supervisor_abstract*, std::string, int64_t);
+        supervisor_abstract(supervisor_abstract*, std::string);
+
         message* current_message_;
         detail::pmr::memory_resource* memory_resource_;
     };
