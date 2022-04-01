@@ -12,7 +12,6 @@
 #include <actor-zeta/base/basic_actor.hpp>
 #include <actor-zeta/base/supervisor.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
-#include <actor-zeta/detail/any.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/scheduler/policy/work_sharing.hpp>
 #include <actor-zeta/scheduler/scheduler.hpp>
