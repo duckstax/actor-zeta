@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
 #include <catch2/catch.hpp>
 
+#include "classes.hpp"
 #include <cassert>
 
 #include <set>
@@ -18,7 +19,7 @@ static std::atomic_int actor_counter{0};
 class storage_t final : public actor_zeta::basic_async_actor {
 public:
     storage_t(dummy_supervisor* ptr)
-        : actor_zeta::basic_async_actor(ptr, "storage", 0) {
+        : actor_zeta::basic_async_actor(ptr, "storage") {
         add_handler("update", []() -> void {});
         add_handler("find", []() -> void {});
         add_handler("remove", []() -> void {});
@@ -38,7 +39,7 @@ public:
 class dummy_supervisor final : public actor_zeta::cooperative_supervisor<dummy_supervisor> {
 public:
     dummy_supervisor(memory_resource* ptr)
-        : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr, "dummy_supervisor", 0)
+        : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr, "dummy_supervisor")
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
         add_handler("create", &dummy_supervisor::create);
         scheduler()->start();

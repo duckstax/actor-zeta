@@ -1,4 +1,5 @@
 #pragma once
+
 #include <utility>
 
 #include <actor-zeta/base/address.hpp>
@@ -15,7 +16,7 @@ namespace actor_zeta { namespace mailbox {
     }
 
     message::operator bool() {
-        return bool(sender_) || body_.has_value();
+        return /*!command_ ||*/ bool(sender_) || !body_.empty();
     }
 
     message::message(address_t sender, message_id name)
@@ -23,7 +24,8 @@ namespace actor_zeta { namespace mailbox {
         , command_(std::move(name))
         , body_() {}
 
-    message::message(address_t sender, message_id name, detail::any body)
+    message::message(address_t sender, message_id name, detail::rtt body)
+
         : sender_(std::move(sender))
         , command_(std::move(name))
         , body_(std::move(body)) {}
@@ -38,15 +40,14 @@ namespace actor_zeta { namespace mailbox {
     message::message()
         : next(nullptr)
         , prev(nullptr)
-        , sender_(address_t::empty_address())
-    {}
+        , sender_(address_t::empty_address()) {}
 
     bool message::is_high_priority() const {
         return command_.category() == message_id::urgent_message_category;
     }
 
-    auto message::body() -> detail::any& {
-        assert(body_.has_value());
+    auto message::body() -> detail::rtt& {
+        assert(!body_.empty());
         return body_;
     }
 

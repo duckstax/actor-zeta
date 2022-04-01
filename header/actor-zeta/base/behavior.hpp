@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "actor-zeta/forwards.hpp"
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/mailbox/message.hpp>
@@ -25,7 +24,7 @@ namespace actor_zeta { namespace base {
             if (it != handlers_.end()) {
                 return it->second(msg);
             }
-            auto sender = msg->sender().type();
+            auto sender = msg->sender()->type();
             auto reciever = ptr->type();
             error_skip(sender, reciever, msg->command());
         }

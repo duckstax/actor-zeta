@@ -1,12 +1,11 @@
 #pragma once
 
-#include "test/tooltestsuites/scheduler_test.hpp"
 #include <actor-zeta/core.hpp>
+#include "test/tooltestsuites/scheduler_test.hpp"
 #include <iostream>
 #include <list>
 
-#define TRACE(msg) \
-    { std::cout << __FILE__ << ":" << __LINE__ << "::" << __func__ << " : " << msg << std::endl; }
+#define TRACE(msg) { std::cout << __FILE__ << ":" << __LINE__ << "::" << __func__ << " : " << msg << std::endl; }
 
 class storage_t;
 class test_handlers;
@@ -21,9 +20,8 @@ public:
     static uint64_t add_supervisor_impl_counter;
     static uint64_t enqueue_base_counter;
 
-public:
     explicit dummy_supervisor(actor_zeta::detail::pmr::memory_resource* mr, uint64_t threads, uint64_t throughput)
-        : actor_zeta::cooperative_supervisor<dummy_supervisor>(mr, "dummy_supervisor", 0)
+        : actor_zeta::cooperative_supervisor<dummy_supervisor>(mr, "dummy_supervisor")
         , executor_(new actor_zeta::test::scheduler_test_t(threads, throughput)) {
         scheduler()->start();
         constructor_counter++;
@@ -113,7 +111,7 @@ public:
 
 public:
     explicit storage_t(dummy_supervisor* ptr)
-        : actor_zeta::basic_async_actor(ptr, storage_names::name, 0) {
+        : actor_zeta::basic_async_actor(ptr, storage_names::name) {
         add_handler(
             storage_names::init,
             &storage_t::init);
@@ -212,7 +210,7 @@ public:
 
 public:
     test_handlers(dummy_supervisor* ptr)
-        : actor_zeta::basic_async_actor(ptr, test_handlers_names::name, 0) {
+        : actor_zeta::basic_async_actor(ptr,test_handlers_names::name) {
         init();
         add_handler(
             test_handlers_names::ptr_0,

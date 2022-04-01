@@ -8,6 +8,7 @@
 #include <thread>
 #include <vector>
 
+#include <actor-zeta/clock/clock_thread_safe.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
 #include <actor-zeta/scheduler/worker.hpp>
@@ -48,6 +49,7 @@ namespace actor_zeta { namespace scheduler {
                 w->start();
             }
 
+            clock_.start_dispatch_loop();
         }
 
         void stop() override {
@@ -71,7 +73,8 @@ namespace actor_zeta { namespace scheduler {
                     intrusive_ptr_release(this);
                 }
 
-                shutdown_helper(): last_worker(nullptr) {}
+                shutdown_helper()
+                    : last_worker(nullptr) {}
 
                 std::mutex mtx;
                 std::condition_variable cv;
@@ -105,13 +108,19 @@ namespace actor_zeta { namespace scheduler {
                 policy_.foreach_resumable(w.get(), f);
             }
             policy_.foreach_central_resumable(this, f);
+            clock_.stop_dispatch_loop();
         }
 
         void enqueue(resumable* ptr) override {
             policy_.central_enqueue(this, ptr);
         }
 
+        clock::clock_t& clock() noexcept override {
+            return clock_;
+        }
+
     private:
+        clock::thread_safe_clock_t clock_;
         std::vector<std::unique_ptr<worker_type>> workers_;
         policy_data data_;
         Policy policy_;

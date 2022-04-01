@@ -4,6 +4,7 @@
 #include <chrono>
 #include <cstddef>
 
+#include <actor-zeta/clock/clock.hpp>
 #include "forwards.hpp"
 
 namespace actor_zeta { namespace scheduler {
@@ -27,6 +28,7 @@ namespace actor_zeta { namespace scheduler {
 
         virtual void start() = 0;
         virtual void stop() = 0;
+        virtual clock::clock_t& clock() noexcept = 0;
 
     protected:
         std::atomic<size_t> next_worker_;

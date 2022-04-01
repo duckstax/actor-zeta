@@ -1,9 +1,9 @@
 #pragma once
 
-#include <actor-zeta/forwards.hpp>
+
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/type_list.hpp>
-#include <actor-zeta/detail/type_traits.hpp>
+#include <actor-zeta/base/forwards.hpp>
 
 namespace actor_zeta { namespace base {
     // clang-format off
@@ -32,9 +32,9 @@ namespace actor_zeta { namespace base {
         constexpr int args_size = call_trait::number_of_arguments;
         using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types, 0, args_size>;
         using Tuple =  type_list_to_tuple_t<args_type_list>;
-        auto &args = ctx->body<Tuple>();
+        auto &args = ctx->body();
         ///f(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
-        f((std::get<I>(args))...);
+        f((actor_zeta::detail::get<I, args_type_list>(args))...);
     }
 
     // clang-format on
@@ -66,10 +66,9 @@ namespace actor_zeta { namespace base {
             action tmp([func = std::move(f)](mailbox::message* ctx) -> void {
                 using arg_type = type_traits::type_list_at_t<Args, 0>;
                 using clear_args_type = type_traits::decay_t<arg_type>;
-                auto& tmp = ctx->body<clear_args_type>();
-                func(tmp);
+                auto& tmp = ctx->body();
+                func(tmp.get<clear_args_type>(0));
             });
-            return tmp;
         }
     };
 
@@ -80,9 +79,9 @@ namespace actor_zeta { namespace base {
         using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
         using args_type_list = typename call_trait::args_types;
         using Tuple =  type_list_to_tuple_t<args_type_list>;
-        auto &args = ctx->body<Tuple>();
+        auto &args = ctx->body();
         //(ptr->*f)(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
-        (ptr->*f)((std::get<I>(args))...);
+        (ptr->*f)((actor_zeta::detail::get<I, args_type_list>(args))...);
     }
 
     // clang-format on
@@ -116,11 +115,10 @@ namespace actor_zeta { namespace base {
             action tmp([func = std::move(f), ptr](mailbox::message* arg) -> void {
                 using arg_type_0 = type_traits::type_list_at_t<Args, 0>;
                 using decay_arg_type_0 = type_traits::decay_t<arg_type_0>;
-                auto& tmp = arg->body<decay_arg_type_0>();
+                auto& tmp = arg->body();
                 using original_arg_type_0 = forward_arg<Args, 0>;
-                (ptr->*func)(std::forward<original_arg_type_0>(static_cast<original_arg_type_0>(tmp)));
+                (ptr->*func)(std::forward<original_arg_type_0>(static_cast<original_arg_type_0>(tmp.get<decay_arg_type_0>(0))));
             });
-            return tmp;
         }
     };
 

@@ -29,23 +29,23 @@ namespace actor_zeta { namespace base {
     using detail::DEFAULT_ALIGNMENT;
     using detail::is_supported_alignment;
 
-    supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* mr, std::string name, int64_t id)
-        : communication_module(std::move(name), id)
+    supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* mr, std::string type)
+        : communication_module(std::move(type))
         , memory_resource_(mr) {
     }
 
-    supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string name, int64_t id)
-        : communication_module(std::move(name), id)
+    supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string type)
+        : communication_module(std::move(type))
         , memory_resource_(ptr->resource()) {
     }
 
     supervisor_abstract::~supervisor_abstract() {}
 
-    auto supervisor_abstract::current_message() -> message* {
+    auto supervisor_abstract::current_message() -> mailbox::message* {
         return current_message_;
     }
 
-    auto supervisor_abstract::set_current_message(message_ptr msg) -> void {
+    auto supervisor_abstract::set_current_message(mailbox::message_ptr msg) -> void {
         current_message_ = msg.release();
     }
 
@@ -59,6 +59,10 @@ namespace actor_zeta { namespace base {
 
     auto supervisor_abstract::address() noexcept -> address_t {
         return address_t(this);
+    }
+
+    auto supervisor_abstract::clock() noexcept -> clock::clock_t& {
+        return scheduler_impl()->clock();
     }
 
 }} // namespace actor_zeta::base

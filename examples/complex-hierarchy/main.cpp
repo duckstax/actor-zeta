@@ -28,8 +28,8 @@ const int max_queue = 100;
 
 class dispatcher_t final : public actor_zeta::basic_async_actor {
 public:
-    dispatcher_t(manager_dispatcher_t* ptr, std::string name,int64_t id,actor_zeta::address_t manager_database )
-        : actor_zeta::basic_async_actor(ptr, std::move(name), id)
+    dispatcher_t(manager_dispatcher_t* ptr, std::string name,actor_zeta::address_t manager_database )
+        : actor_zeta::basic_async_actor(ptr, std::move(name))
         , manager_database_(manager_database) {
         count_actor++;
         add_handler("create_database", &dispatcher_t::create_database);
@@ -65,14 +65,14 @@ private:
     void add_link() {
         auto& address = current_message()->sender();
         if (address && this != address.get()) {
-            auto name = address.type();
+            auto name = address->type();
             address_book_.emplace(name, std::move(address));
         }
     }
 
     void add_address(actor_zeta::address_t address) {
         if (address && this != address.get()) {
-            auto name = address.type();
+            auto name = address->type();
             address_book_.emplace(name, std::move(address));
         }
     }
@@ -80,8 +80,8 @@ private:
 
 class collection_t final : public actor_zeta::basic_async_actor {
 public:
-    collection_t(database_t* ptr, std::string& name,int64_t id)
-        : actor_zeta::basic_async_actor(ptr, std::move(name), id) {
+    collection_t(database_t* ptr, std::string& name)
+        : actor_zeta::basic_async_actor(ptr, std::move(name)) {
         count_actor++;
         add_handler("insert", [this](int key, int value) {
             std::cerr << "collection_t::insert : key : " << key << " value : " << value << std::endl;
@@ -96,7 +96,7 @@ private:
     void add_link() {
         auto& address = current_message()->sender();
         if (address && this != address.get()) {
-            auto name = address.type();
+            auto name = address->type();
             address_book_.emplace(name, std::move(address));
         }
     }
@@ -104,16 +104,16 @@ private:
 
 class database_t final : public actor_zeta::cooperative_supervisor<database_t> {
 public:
-    database_t(manager_database_t* ptr, std::string name, int64_t id);
+    database_t(manager_database_t* ptr, std::string name);
 
     void create(std::string& name) {
         std::cerr << "database_t::create : " << name << std::endl;
         auto token = std::move(name);
         auto tmp =  spawn_actor<collection_t>([this](collection_t* ptr) {
             actors_.emplace_back(ptr);
-        },token,count_collection.fetch_add(1));
+        },token);
         actor_zeta::send(current_message()->sender(),address(),"add_address",tmp);
-        address_book_.emplace(tmp.type(),tmp);
+        address_book_.emplace(tmp->type(),tmp);
     }
 
 protected:
@@ -133,7 +133,7 @@ private:
     void add_link() {
         auto& address = current_message()->sender();
         if (address && this != address.get()) {
-            auto name = address.type();
+            auto name = address->type();
             address_book_.emplace(name, std::move(address));
         }
     }
@@ -147,7 +147,7 @@ auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
 class manager_database_t final : public actor_zeta::cooperative_supervisor<manager_database_t> {
 public:
     manager_database_t(memory_resource* mr)
-        : cooperative_supervisor(mr, "mdb", 0)
+        : cooperative_supervisor(mr, "mdb")
         , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
                  1,
                  100),
@@ -164,9 +164,9 @@ public:
             auto type = ptr -> type();
             supervisor_.emplace_back(ptr);
             std::cerr << "add_supervisor_impl::add_supervisor_impl : " << type << std::endl;
-        },std::move(name),count_database.fetch_add(1));
+        },std::move(name));
         actor_zeta::send(current_message()->sender(),address(),"add_address",db);
-        address_book_.emplace(db.type(),db);
+        address_book_.emplace(db->type(),db);
     }
 
 protected:
@@ -188,14 +188,14 @@ private:
     void add_link() {
         auto& address = current_message()->sender();
         if (address && this != address.get()) {
-            auto name = address.type();
+            auto name = address->type();
             address_book_.emplace(name, std::move(address));
         }
     }
 };
 
-database_t::database_t(manager_database_t* ptr, std::string name, int64_t id)
-    : cooperative_supervisor(ptr, std::move(name), id)
+database_t::database_t(manager_database_t* ptr, std::string name)
+    : cooperative_supervisor(ptr, std::move(name))
     , e_(ptr->scheduler()) {
     add_handler("create", &database_t::create);
     add_handler("add_link",&database_t::add_link);
@@ -205,7 +205,7 @@ database_t::database_t(manager_database_t* ptr, std::string name, int64_t id)
 class manager_dispatcher_t final : public actor_zeta::cooperative_supervisor<manager_dispatcher_t> {
 public:
     manager_dispatcher_t(memory_resource* mr)
-        : cooperative_supervisor(mr, "mdispatcher", 0)
+        : cooperative_supervisor(mr, "mdispatcher")
         , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
                  1,
                  100),
@@ -241,7 +241,7 @@ public:
             auto type = ptr->type();
             actors_.emplace_back(ptr);
             std::cerr << "mdispatcher_t::add_actor_impl : " << type << std::endl;
-        },std::move(name),count_dispatcher.fetch_add(1),address_book_.at("mdb"));
+        },std::move(name),address_book_.at("mdb"));
         actor_zeta::send(address_book_.at("mdb"), dispather,"add_link");
         dispathers_.emplace_back(dispather);
     }
@@ -267,7 +267,7 @@ private:
     void add_link() {
         auto& address = current_message()->sender();
         if (address && this != address.get()) {
-            auto name = address.type();
+            auto name = address->type();
             address_book_.emplace(name, std::move(address));
         }
     }

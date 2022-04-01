@@ -5,17 +5,18 @@
 #include <set>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
+#include "forwards.hpp"
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/detail/string_view.hpp>
-#include <actor-zeta/forwards.hpp>
+#include <actor-zeta/scheduler/execution_unit.hpp>
 
 namespace actor_zeta {
+
     namespace mailbox {
-        using message_ptr = std::unique_ptr<mailbox::message>;
+        using message_ptr = std::unique_ptr<message>;
     }
 
     namespace base {
@@ -26,20 +27,76 @@ namespace actor_zeta {
             communication_module(const communication_module&) = delete;
             communication_module& operator=(const communication_module&) = delete;
 
+            class id_t final {
+            public:
+                id_t() = default;
+
+                explicit id_t(communication_module* impl) noexcept
+                    : impl_{impl} {
+                }
+
+                bool operator==(id_t const& other) const noexcept {
+                    return impl_ == other.impl_;
+                }
+
+                bool operator!=(id_t const& other) const noexcept {
+                    return impl_ != other.impl_;
+                }
+
+                bool operator<(id_t const& other) const noexcept {
+                    return impl_ < other.impl_;
+                }
+
+                bool operator>(id_t const& other) const noexcept {
+                    return other.impl_ < impl_;
+                }
+
+                bool operator<=(id_t const& other) const noexcept {
+                    return !(*this > other);
+                }
+
+                bool operator>=(id_t const& other) const noexcept {
+                    return !(*this < other);
+                }
+
+                template<typename charT, class traitsT>
+                friend std::basic_ostream<charT, traitsT>&
+                operator<<(std::basic_ostream<charT, traitsT>& os, id_t const& other) {
+                    if (nullptr != other.impl_) {
+                        return os << other.impl_;
+                    }
+                    return os << "{not-valid}";
+                }
+
+                explicit operator bool() const noexcept {
+                    return nullptr != impl_;
+                }
+
+                bool operator!() const noexcept {
+                    return nullptr == impl_;
+                }
+
+            private:
+                communication_module* impl_{nullptr};
+            };
+
             auto type() const -> detail::string_view;
-            auto id() const -> int64_t;
+            auto id() const -> id_t;
             auto enqueue(mailbox::message_ptr) -> void;
             void enqueue(mailbox::message_ptr, scheduler::execution_unit*);
+            auto current_message() -> mailbox::message*;
 
         protected:
             virtual ~communication_module();
+            communication_module(std::string);
 
-            communication_module(std::string, int64_t);
+            virtual auto current_message_impl() -> mailbox::message* = 0;
             virtual void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*) = 0;
 
         private:
-            const std::string type_;
-            const int64_t id_;
+#ifdef DEBUG
+            std::string type_;
+#endif
         };
 
     } // namespace base
