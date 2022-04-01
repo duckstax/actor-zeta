@@ -97,7 +97,6 @@ set(HEADER_FILES
 
         header/actor-zeta/detail/pmr/memory_resource.hpp
         header/actor-zeta/detail/aligned_allocate.hpp
-        header/actor-zeta/detail/any.hpp
         header/actor-zeta/detail/callable_trait.hpp
         header/actor-zeta/detail/intrusive_ptr.hpp
         header/actor-zeta/detail/ref_counted.hpp
