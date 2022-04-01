@@ -27,7 +27,7 @@ public:
         work_data
     };
 
-    worker_t(supervisor_lite* ptr, int64_t actor_id)
+    worker_t(supervisor_lite* ptr)
         : actor_zeta::basic_async_actor(ptr, "bot") {
         add_handler(command_t::download, &worker_t::download);
         add_handler(command_t::work_data, &worker_t::work_data);
@@ -80,14 +80,14 @@ public:
 
     ~supervisor_lite() override = default;
 
-    template<class... Args>
-    void broadcast_on_worker(actor_zeta::mailbox::message_id command, Args&&... args) {
+    template<class Id = uint64_t , class... Args>
+    void broadcast_on_worker(Id id, Args&&... args) {
         auto msg = actor_zeta::make_message(
-            this->address(),
+            address(),
             system_command::broadcast,
             actor_zeta::make_message_ptr(
                 actor_zeta::address_t::empty_address(),
-                command,
+                id,
                 std::forward<Args>(args)...));
         enqueue(std::move(msg));
     }

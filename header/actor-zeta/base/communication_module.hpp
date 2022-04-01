@@ -84,13 +84,11 @@ namespace actor_zeta {
             auto id() const -> id_t;
             auto enqueue(mailbox::message_ptr) -> void;
             void enqueue(mailbox::message_ptr, scheduler::execution_unit*);
-            auto current_message() -> mailbox::message*;
 
         protected:
             virtual ~communication_module();
             communication_module(std::string);
 
-            virtual auto current_message_impl() -> mailbox::message* = 0;
             virtual void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*) = 0;
 
         private:

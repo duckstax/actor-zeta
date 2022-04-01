@@ -25,7 +25,6 @@ namespace actor_zeta { namespace base {
 
     communication_module::~communication_module() {}
 
-
     communication_module::communication_module(std::string type) {
 #ifdef DEBUG
         type_ = std::move(type);
@@ -37,10 +36,6 @@ namespace actor_zeta { namespace base {
 
     void communication_module::enqueue(mailbox::message_ptr msg, scheduler::execution_unit* e) {
         enqueue_impl(std::move(msg), e);
-    }
-
-    auto communication_module::current_message() -> message* {
-        return current_message_impl();
     }
 
     auto communication_module::id() const -> id_t {
