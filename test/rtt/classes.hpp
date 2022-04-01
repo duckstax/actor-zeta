@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/detail/any.hpp>
+
 #include <actor-zeta/detail/type_traits.hpp>
 #include <iostream>
 #include <map>
@@ -9,9 +9,6 @@
 #include <string>
 #include <vector>
 
-using actor_zeta::detail::any;
-using actor_zeta::detail::any_cast;
-using actor_zeta::detail::make_any;
 
 void place(char* data, size_t capacity, size_t volume) {
     auto space_left = capacity - volume;
