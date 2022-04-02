@@ -20,6 +20,7 @@ namespace actor_zeta { namespace base {
 
         template<class T>
         void execute(T* ptr, mailbox::message* msg) {
+            auto id = msg->command();
             auto it = handlers_.find(msg->command());
             if (it != handlers_.end()) {
                 return it->second(msg);

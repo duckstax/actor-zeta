@@ -2,6 +2,9 @@
 
 #include <cassert>
 
+#include <actor-zeta/base/address.hpp>
+
+#include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/mailbox/priority.hpp>
 #include <actor-zeta/detail/rtt.hpp>
 #include <actor-zeta/mailbox/id.hpp>

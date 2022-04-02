@@ -43,7 +43,7 @@ namespace actor_zeta { namespace mailbox {
         , sender_(address_t::empty_address()) {}
 
     bool message::is_high_priority() const {
-        return command_.category() == message_id::urgent_message_category;
+        return command_.priority() == message_id::high_message_priority;
     }
 
     auto message::body() -> detail::rtt& {

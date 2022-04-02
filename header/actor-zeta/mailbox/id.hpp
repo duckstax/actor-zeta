@@ -167,9 +167,7 @@ namespace actor_zeta { namespace mailbox {
 
 namespace std {
 
-    bool operator==(const actor_zeta::mailbox::message_id& lhs, const actor_zeta::mailbox::message_id& rhs) {
-        return lhs == rhs;
-    }
+    bool operator==(const actor_zeta::mailbox::message_id& lhs, const actor_zeta::mailbox::message_id& rhs);
 
     template<>
     struct hash<actor_zeta::mailbox::message_id> {

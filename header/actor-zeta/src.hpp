@@ -32,6 +32,7 @@
 #include <actor-zeta/impl/scheduler/resumable.ipp>
 #include <actor-zeta/impl/scheduler/scheduler_abstract.ipp>
 
+#include <actor-zeta/impl/messaging/id.ipp>
 #include <actor-zeta/impl/messaging/message.ipp>
 
 #include <actor-zeta/impl/make_message.ipp>

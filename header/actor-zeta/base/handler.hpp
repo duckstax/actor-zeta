@@ -1,5 +1,6 @@
 #pragma once
 
+#include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/detail/unique_function.hpp>
 
 namespace actor_zeta { namespace base {
