@@ -17,19 +17,19 @@ namespace actor_zeta { namespace mailbox {
         static constexpr uint64_t answered_flag_mask = 0x4000000000000000;
 
         // The third and fourth bit are used to categorize messages.
-        static constexpr uint64_t category_flag_mask = 0x3000000000000000;
+        static constexpr uint64_t priority_flag_mask = 0x3000000000000000;
 
         /// The trailing 60 bits are used for the actual ID.
         static constexpr uint64_t request_id_mask = 0x0FFFFFFFFFFFFFFF;
 
         /// Identifies one-to-one messages with high priority.
-        static constexpr uint64_t urgent_message_category = 0;
+        static constexpr uint64_t high_message_priority = 0;
 
         /// Identifies one-to-one messages with normal priority.
-        static constexpr uint64_t normal_message_category = 1;
+        static constexpr uint64_t normal_message_priority = 1;
 
         /// Number of bits trailing the category.
-        static constexpr uint64_t category_offset = 60;
+        static constexpr uint64_t priority_offset = 60;
 
         /// Default value for asynchronous messages with normal message category.
         static constexpr uint64_t default_async_value = 0x1000000000000000;
@@ -53,13 +53,13 @@ namespace actor_zeta { namespace mailbox {
         /// Returns the message category, i.e., one of `normal_message_category`,
         /// `upstream_message_category`, `downstream_message_category`, or
         /// `urgent_message_category`.
-        constexpr uint64_t category() const noexcept {
-            return (value_ & category_flag_mask) >> category_offset;
+        constexpr uint64_t priority() const noexcept {
+            return (value_ & priority_flag_mask) >> priority_offset;
         }
 
         /// Returns a new message ID with given category.
-        constexpr message_id with_category(uint64_t x) const noexcept {
-            return message_id{(value_ & ~category_flag_mask) | (x << category_offset)};
+        constexpr message_id with_priority(uint64_t x) const noexcept {
+            return message_id{(value_ & ~priority_flag_mask) | (x << priority_offset)};
         }
 
         /// Returns whether a message is asynchronous, i.e., neither a request, nor a
@@ -84,13 +84,13 @@ namespace actor_zeta { namespace mailbox {
         }
 
         /// Returns whether `category() == urgent_message_category`.
-        constexpr bool is_urgent_message() const noexcept {
-            return category() == urgent_message_category;
+        constexpr bool is_high_message() const noexcept {
+            return priority() == high_message_priority;
         }
 
         /// Returns whether `category() == normal_message_category`.
         constexpr bool is_normal_message() const noexcept {
-            return category() == normal_message_category;
+            return priority() == normal_message_priority;
         }
 
         /// Returns a response ID for the current request or an asynchronous ID with
@@ -98,7 +98,7 @@ namespace actor_zeta { namespace mailbox {
         constexpr message_id response_id() const noexcept {
             return is_request()
                        ? message_id{value_ | response_flag_mask}
-                       : message_id{is_urgent_message() ? 0 : default_async_value};
+                       : message_id{is_high_message() ? 0 : default_async_value};
         }
 
         /// Extracts the request number part of this ID.
@@ -109,7 +109,7 @@ namespace actor_zeta { namespace mailbox {
         /// Returns the same ID but high message priority.
         /// @pre `!is_stream_message()`
         constexpr message_id with_high_priority() const noexcept {
-            return message_id{value_ & ~category_flag_mask};
+            return message_id{value_ & ~priority_flag_mask};
         }
 
         /// Returns the same ID with normal message priority.
@@ -160,14 +160,14 @@ namespace actor_zeta { namespace mailbox {
     /// Generates a `message_id` with given priority.
     /// @relates message_id
     constexpr message_id make_message_id(mailbox::priority p) {
-        return message_id{static_cast<uint64_t>(p) << message_id::category_offset};
+        return message_id{static_cast<uint64_t>(p) << message_id::priority_offset};
     }
 
 }} // namespace actor_zeta::mailbox
 
 namespace std {
 
-    inline bool operator==(const actor_zeta::mailbox::message_id& lhs, const actor_zeta::mailbox::message_id& rhs) {
+    bool operator==(const actor_zeta::mailbox::message_id& lhs, const actor_zeta::mailbox::message_id& rhs) {
         return lhs == rhs;
     }
 
