@@ -15,6 +15,8 @@ auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
     delete ptr;
 };
 
+constexpr  static uint64_t command_alarm = 0;
+
 static std::atomic<uint64_t> alarm_counter{0};
 
 using actor_zeta::detail::pmr::memory_resource;
@@ -27,7 +29,7 @@ public:
                  1,
                  100),
              thread_pool_deleter) {
-        add_handler("alarm", &supervisor_lite::alarm);
+        add_handler(command_alarm, &supervisor_lite::alarm);
         e_->start();
     }
 
@@ -42,7 +44,7 @@ protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
-            execute();
+            execute(this,current_message());
         }
     }
 
@@ -55,7 +57,7 @@ int main() {
     auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<supervisor_lite>(mr_ptr);
 
-    supervisor->clock().schedule_message(supervisor->clock().now() + std::chrono::seconds(60), supervisor->address(), actor_zeta::make_message(actor_zeta::address_t::empty_address(), "alarm"));
+    supervisor->clock().schedule_message(supervisor->clock().now() + std::chrono::seconds(60), supervisor->address(), actor_zeta::make_message(actor_zeta::address_t::empty_address(), command_alarm));
 
     std::this_thread::sleep_for(std::chrono::seconds(180));
 
