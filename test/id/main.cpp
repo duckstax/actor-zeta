@@ -23,12 +23,16 @@ public:
     ~storage_t() override = default;
 };
 
+enum class command_t {
+    create = 0x00
+};
+
 class dummy_supervisor final : public actor_zeta::cooperative_supervisor<dummy_supervisor> {
 public:
     dummy_supervisor(memory_resource* ptr)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr, "dummy_supervisor")
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
-        add_handler("create", &dummy_supervisor::create);
+        add_handler(command_t::create, &dummy_supervisor::create);
         scheduler()->start();
     }
 
@@ -52,7 +56,7 @@ protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
-            execute(this,current_message());
+            execute(this, current_message());
         }
     }
 
@@ -65,7 +69,7 @@ TEST_CASE("actor id match") {
     auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr);
     for (auto i = 0; i < 10000000; ++i) {
-        actor_zeta::send(supervisor.get(), actor_zeta::address_t::empty_address(), "create");
+        actor_zeta::send(supervisor.get(), actor_zeta::address_t::empty_address(), command_t::create);
         supervisor->scheduler_test()->run_once();
     }
 }
