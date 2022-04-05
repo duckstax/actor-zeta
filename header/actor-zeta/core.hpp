@@ -16,6 +16,7 @@
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/scheduler/policy/work_sharing.hpp>
 #include <actor-zeta/scheduler/scheduler.hpp>
+#include <actor-zeta/mailbox/id.hpp>
 
 namespace actor_zeta {
 
@@ -30,6 +31,8 @@ namespace actor_zeta {
 
     using mailbox::message;
     using mailbox::message_ptr;
+    using mailbox::message_id;
+    using mailbox::make_message_id;
 
     using scheduler::execution_unit;
     using scheduler::scheduler_abstract_t;

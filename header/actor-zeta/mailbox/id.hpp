@@ -50,6 +50,10 @@ namespace actor_zeta { namespace mailbox {
             value_ == rhs.value_;
         }
 
+        bool operator==(const message_id& rhs) const {
+            value_ == rhs.value_;
+        }
+
         /// Returns the message category, i.e., one of `normal_message_category`,
         /// `upstream_message_category`, `downstream_message_category`, or
         /// `urgent_message_category`.
