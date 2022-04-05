@@ -28,7 +28,7 @@ namespace actor_zeta { namespace base {
     communication_module::communication_module(std::string type) {
 #ifdef DEBUG
         type_ = std::move(type);
-#elif
+#else
         std::move(type);
 #endif
     }
