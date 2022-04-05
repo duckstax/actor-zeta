@@ -45,6 +45,10 @@ namespace actor_zeta { namespace mailbox {
             value_ == rhs.value_;
         }
 
+        bool operator<(const message_id& rhs) const {
+            value_ < rhs.value_;
+        }
+
         constexpr uint64_t priority() const noexcept {
             return (value_ & priority_flag_mask) >> priority_offset;
         }

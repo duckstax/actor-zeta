@@ -45,6 +45,21 @@ namespace actor_zeta { namespace base {
             on(mailbox::make_message_id(static_cast<uint64_t>(key)), make_handler(std::forward<F>(f), ptr));
         }
 
+        template<class Value>
+        auto add_handler(mailbox::message_id key, Value&& f) -> typename std::enable_if<!std::is_member_function_pointer<Value>::value>::type {
+            on(key, make_handler(std::forward<Value>(f)));
+        }
+
+        template<class Value>
+        auto add_handler(mailbox::message_id key, Value&& f) -> typename std::enable_if<std::is_member_function_pointer<Value>::value>::type {
+            on(key, make_handler(std::forward<Value>(f), static_cast<typename type_traits::get_callable_trait_t<Value>::class_type*>(this)));
+        }
+
+        template<class Actor, typename F>
+        auto add_handler(mailbox::message_id key, Actor* ptr, F&& f) -> void {
+            on(key, make_handler(std::forward<F>(f), ptr));
+        }
+
         auto message_types() const -> std::unordered_set<key_type>;
 
     private:

@@ -8,5 +8,8 @@
 
 namespace actor_zeta {
 
+    auto make_message(base::address_t sender_, mailbox::message_id id) -> mailbox::message_ptr {
+        return mailbox::message_ptr(new mailbox::message(std::move(sender_),id));
+    }
 
 } // namespace actor_zeta
