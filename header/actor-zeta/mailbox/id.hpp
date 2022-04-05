@@ -37,9 +37,9 @@ namespace actor_zeta { namespace mailbox {
         message_id(const message_id&) = default;
         message_id& operator=(const message_id&) = default;
 
-        bool operator==(const message_id& rhs) {
-            value_ == rhs.value_;
-        }
+        ///bool operator==(const message_id& rhs) {
+            ////value_ == rhs.value_;
+        ///}
 
         bool operator==(const message_id& rhs) const {
             value_ == rhs.value_;
@@ -134,7 +134,12 @@ namespace actor_zeta { namespace mailbox {
 
 namespace std {
 
-    bool operator==(const actor_zeta::mailbox::message_id& lhs, const actor_zeta::mailbox::message_id& rhs);
+    ///bool operator==(const actor_zeta::mailbox::message_id& lhs, const actor_zeta::mailbox::message_id& rhs);
+
+
+    ///inline bool operator==(const actor_zeta::mailbox::message_id& lhs, const actor_zeta::mailbox::message_id& rhs) {
+    ///    return lhs.integer_value() == rhs.integer_value();
+    //}
 
     template<>
     struct hash<actor_zeta::mailbox::message_id> {
