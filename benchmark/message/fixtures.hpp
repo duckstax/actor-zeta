@@ -27,7 +27,7 @@ namespace benchmark_messages {
         public:
             virtual void SetUp(const ::benchmark::State& state) final {
                 for (int i = 0; i < state.range(0); ++i) {
-                    name_ += std::to_string(i % 10);
+                    name_ = i % 10;
                 }
             }
 
@@ -36,14 +36,14 @@ namespace benchmark_messages {
             }
 
             virtual void TearDown(__attribute__((unused)) const ::benchmark::State& state) final {
-                name_.clear();
+                name_ = 0;
             }
 
             virtual void TearDown(::benchmark::State& state) final {
                 TearDown(static_cast<const ::benchmark::State&>(state));
             }
 
-            std::string name_;
+            uint64_t name_;
         };
 
     } // namespace by_name
