@@ -41,8 +41,8 @@ namespace actor_zeta { namespace base {
         return status;
     }
 
-    auto intrusive_behavior_t::message_types() const -> std::unordered_set<mailbox::message_id> {
-        std::unordered_set<mailbox::message_id> types;
+    auto intrusive_behavior_t::message_types() const -> std::set<mailbox::message_id> {
+        std::set<mailbox::message_id> types;
         for (const auto& i : handlers_) {
             types.emplace(i.first);
         }

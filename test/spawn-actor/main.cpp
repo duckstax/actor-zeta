@@ -30,10 +30,7 @@ public:
 
         REQUIRE(actor_zeta::detail::string_view("storage") == type());
         auto tmp = message_types();
-        std::set<actor_zeta::message_id> control = {update_id, remove_id, find_id};
-        std::set<actor_zeta::message_id> diff;
-        std::set_difference(tmp.begin(), tmp.end(), control.begin(), control.end(), std::inserter(diff, diff.begin()));
-        REQUIRE(diff.empty());
+        REQUIRE(tmp.size() == 3);
         actor_counter++;
     }
 

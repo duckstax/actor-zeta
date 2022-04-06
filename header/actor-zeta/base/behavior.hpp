@@ -61,7 +61,7 @@ namespace actor_zeta { namespace base {
             on(key, make_handler(std::forward<F>(f), ptr));
         }
 
-        auto message_types() const -> std::unordered_set<key_type>;
+        auto message_types() const -> std::set<key_type>;
 
     private:
         using handler_storage_t = std::unordered_map<key_type, value_type>;
