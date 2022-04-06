@@ -54,18 +54,18 @@ namespace benchmark_messages {
     public:                                                                                                                                   \
         virtual void SetUp(const ::benchmark::State& state) final {                                                                           \
             arguments_ = std::make_tuple(std::forward<CustomArgs>(construct_name<CustomArgs>::get(static_cast<int64_t>(state.range(0))))...); \
-            name_ = "name_";                                                                                                                  \
+            name_ = 0;                                                                                                                        \
         }                                                                                                                                     \
         virtual void SetUp(::benchmark::State& state) final {                                                                                 \
             SetUp(static_cast<const ::benchmark::State&>(state));                                                                             \
         }                                                                                                                                     \
         virtual void TearDown(__attribute__((unused)) const ::benchmark::State& state) final {                                                \
-            name_.clear();                                                                                                                    \
+            name_ = 0;                                                                                                                        \
         }                                                                                                                                     \
         virtual void TearDown(::benchmark::State& state) final {                                                                              \
             TearDown(static_cast<const ::benchmark::State&>(state));                                                                          \
         }                                                                                                                                     \
-        std::string name_;                                                                                                                    \
+        uint64_t name_;                                                                                                                       \
         std::tuple<CustomArgs...> arguments_;                                                                                                 \
         static constexpr size_t counter_ = sizeof...(CustomArgs);                                                                             \
     }
@@ -169,18 +169,18 @@ namespace benchmark_messages {
     public:                                                                                                           \
         virtual void SetUp(const ::benchmark::State& state) final {                                                   \
             arguments_ = std::make_tuple((construct_name<CustomArgs>::get(static_cast<int64_t>(state.range(0))))...); \
-            name_ = "name_";                                                                                          \
+            name_ = 0;                                                                                          \
         }                                                                                                             \
         virtual void SetUp(::benchmark::State& state) final {                                                         \
             SetUp(static_cast<const ::benchmark::State&>(state));                                                     \
         }                                                                                                             \
         virtual void TearDown(__attribute__((unused)) const ::benchmark::State& state) final {                        \
-            name_.clear();                                                                                            \
+            name_ = 0;                                                                                            \
         }                                                                                                             \
         virtual void TearDown(::benchmark::State& state) final {                                                      \
             TearDown(static_cast<const ::benchmark::State&>(state));                                                  \
         }                                                                                                             \
-        std::string name_;                                                                                            \
+        uint64_t name_;                                                                                            \
         typename revert_type_seq<CustomArgs...>::type arguments_;                                                     \
         static constexpr size_t counter_ = sizeof...(CustomArgs);                                                     \
     }
