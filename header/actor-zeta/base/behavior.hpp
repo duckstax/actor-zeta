@@ -32,7 +32,8 @@ namespace actor_zeta { namespace base {
 
         template<class Key, class Value>
         auto add_handler(Key key, Value&& f) -> typename std::enable_if<!std::is_member_function_pointer<Value>::value>::type {
-            on(mailbox::make_message_id(static_cast<uint64_t>(key)), make_handler(std::forward<Value>(f)));
+            auto id = mailbox::make_message_id(static_cast<uint64_t>(key));
+            on(id, make_handler(std::forward<Value>(f)));
         }
 
         template<class Key, class Value>

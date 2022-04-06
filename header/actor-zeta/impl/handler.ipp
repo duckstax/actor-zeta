@@ -69,6 +69,7 @@ namespace actor_zeta { namespace base {
                 auto& tmp = ctx->body();
                 func(tmp.get<clear_args_type>(0));
             });
+            return tmp;
         }
     };
 
@@ -119,6 +120,7 @@ namespace actor_zeta { namespace base {
                 using original_arg_type_0 = forward_arg<Args, 0>;
                 (ptr->*func)(std::forward<original_arg_type_0>(static_cast<original_arg_type_0>(tmp.get<decay_arg_type_0>(0))));
             });
+            return tmp;
         }
     };
 
