@@ -6,8 +6,8 @@
 
 #include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/mailbox/priority.hpp>
-#include <actor-zeta/detail/rtt.hpp>
 #include <actor-zeta/mailbox/id.hpp>
+#include <actor-zeta/detail/rtt.hpp>
 
 namespace actor_zeta { namespace mailbox {
 
@@ -26,7 +26,7 @@ namespace actor_zeta { namespace mailbox {
         message& operator=(message&&) = default;
         ~message() = default;
         message(base::address_t /*sender*/, message_id /*name*/);
-        message(base::address_t /*sender*/, message_id /*name*/, detail::rtt /*body*/);
+        message(base::address_t /*sender*/, message_id /*name*/, actor_zeta::detail::rtt /*body*/);
         message* next;
         message* prev;
         auto command() const noexcept -> message_id;
@@ -34,7 +34,7 @@ namespace actor_zeta { namespace mailbox {
         auto sender() && noexcept -> base::address_t&&;
         auto sender() const& noexcept -> base::address_t const&;
 
-        auto body() -> detail::rtt&;
+        auto body() -> actor_zeta::detail::rtt&;
         auto clone() const -> message*;
         operator bool();
         void swap(message& other) noexcept;
@@ -43,7 +43,7 @@ namespace actor_zeta { namespace mailbox {
     private:
         base::address_t sender_;
         message_id command_;
-        detail::rtt body_;
+        actor_zeta::detail::rtt body_;
     };
 
     static_assert(std::is_move_constructible<message>::value, "");

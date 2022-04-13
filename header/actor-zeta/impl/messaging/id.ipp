@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/impl/messaging/id.ipp>
+#include <actor-zeta/mailbox/id.hpp>
 
 namespace std {
 

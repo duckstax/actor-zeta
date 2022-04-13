@@ -24,7 +24,7 @@ namespace actor_zeta { namespace mailbox {
         , command_(std::move(name))
         , body_() {}
 
-    message::message(address_t sender, message_id name, detail::rtt body)
+    message::message(address_t sender, message_id name, actor_zeta::detail::rtt body)
 
         : sender_(std::move(sender))
         , command_(std::move(name))
@@ -43,10 +43,10 @@ namespace actor_zeta { namespace mailbox {
         , sender_(address_t::empty_address()) {}
 
     bool message::is_high_priority() const {
-        return command_.priority() == message_id::high_message_priority;
+        return command_.priority() == detail::high_message_priority;
     }
 
-    auto message::body() -> detail::rtt& {
+    auto message::body() -> actor_zeta::detail::rtt& {
         assert(!body_.empty());
         return body_;
     }

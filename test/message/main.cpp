@@ -152,7 +152,7 @@ TEST_CASE("message") {
         REQUIRE(msg.operator bool() == false);
         message msg_1(address_t::empty_address(), one, rtt(nullptr, int(1)));
         REQUIRE(msg_1.operator bool() == true);
-        REQUIRE(msg_1.command() == actor_zeta::mailbox::make_message_id(1));
+        REQUIRE(msg_1.command() == actor_zeta::make_message_id(1));
         REQUIRE(msg_1.body().get<int>(0) == 1);
     }
 }

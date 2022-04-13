@@ -8,26 +8,21 @@
 
 namespace actor_zeta { namespace mailbox {
 
+namespace detail {
+    static constexpr uint64_t response_flag_mask = 0x8000000000000000;
+    static constexpr uint64_t answered_flag_mask = 0x4000000000000000;
+    static constexpr uint64_t priority_flag_mask = 0x3000000000000000;
+    static constexpr uint64_t request_id_mask = 0x0FFFFFFFFFFFFFFF;
+    static constexpr uint64_t high_message_priority = 0;
+    static constexpr uint64_t normal_message_priority = 1;
+    static constexpr uint64_t priority_offset = 60;
+    static constexpr uint64_t default_async_value = 0x1000000000000000;
+}
     class message_id final {
     public:
-        static constexpr uint64_t response_flag_mask = 0x8000000000000000;
-
-        static constexpr uint64_t answered_flag_mask = 0x4000000000000000;
-
-        static constexpr uint64_t priority_flag_mask = 0x3000000000000000;
-
-        static constexpr uint64_t request_id_mask = 0x0FFFFFFFFFFFFFFF;
-
-        static constexpr uint64_t high_message_priority = 0;
-
-        static constexpr uint64_t normal_message_priority = 1;
-
-        static constexpr uint64_t priority_offset = 60;
-
-        static constexpr uint64_t default_async_value = 0x1000000000000000;
 
         constexpr message_id()
-            : value_(default_async_value) {
+            : value_(detail::default_async_value) {
         }
 
         constexpr explicit message_id(uint64_t value)
@@ -36,10 +31,6 @@ namespace actor_zeta { namespace mailbox {
 
         message_id(const message_id&) = default;
         message_id& operator=(const message_id&) = default;
-
-        ///bool operator==(const message_id& rhs) {
-            ////value_ == rhs.value_;
-        ///}
 
         bool operator==(const message_id& rhs) const {
             value_ == rhs.value_;
@@ -50,53 +41,53 @@ namespace actor_zeta { namespace mailbox {
         }
 
         constexpr uint64_t priority() const noexcept {
-            return (value_ & priority_flag_mask) >> priority_offset;
+            return (value_ & detail::priority_flag_mask) >> detail::priority_offset;
         }
 
         constexpr message_id with_priority(uint64_t x) const noexcept {
-            return message_id{(value_ & ~priority_flag_mask) | (x << priority_offset)};
+            return message_id{(value_ & ~detail::priority_flag_mask) | (x << detail::priority_offset)};
         }
 
         constexpr bool is_async() const noexcept {
-            return value_ == 0 || value_ == default_async_value;
+            return value_ == 0 || value_ == detail::default_async_value;
         }
 
         constexpr bool is_request() const noexcept {
-            return (value_ & request_id_mask) != 0 && !is_response();
+            return (value_ & detail::request_id_mask) != 0 && !is_response();
         }
 
         constexpr bool is_response() const noexcept {
-            return (value_ & response_flag_mask) != 0;
+            return (value_ & detail::response_flag_mask) != 0;
         }
 
         constexpr bool is_answered() const noexcept {
-            return (value_ & answered_flag_mask) != 0;
+            return (value_ & detail::answered_flag_mask) != 0;
         }
 
         constexpr bool is_high_message() const noexcept {
-            return priority() == high_message_priority;
+            return priority() == detail::high_message_priority;
         }
 
         constexpr bool is_normal_message() const noexcept {
-            return priority() == normal_message_priority;
+            return priority() == detail::normal_message_priority;
         }
 
         constexpr message_id response_id() const noexcept {
             return is_request()
-                       ? message_id{value_ | response_flag_mask}
-                       : message_id{is_high_message() ? 0 : default_async_value};
+                       ? message_id{value_ | detail::response_flag_mask}
+                       : message_id{is_high_message() ? 0 : detail::default_async_value};
         }
 
         constexpr message_id request_id() const noexcept {
-            return message_id{value_ & request_id_mask};
+            return message_id{value_ & detail::request_id_mask};
         }
 
         constexpr message_id with_high_priority() const noexcept {
-            return message_id{value_ & ~priority_flag_mask};
+            return message_id{value_ & ~detail::priority_flag_mask};
         }
 
         constexpr message_id with_normal_priority() const noexcept {
-            return message_id{value_ | default_async_value};
+            return message_id{value_ | detail::default_async_value};
         }
 
         constexpr uint64_t integer_value() const noexcept {
@@ -104,7 +95,7 @@ namespace actor_zeta { namespace mailbox {
         }
 
         void mark_as_answered() noexcept {
-            value_ |= answered_flag_mask;
+            value_ |= detail::answered_flag_mask;
         }
         message_id& operator++() noexcept {
             ++value_;
@@ -117,7 +108,7 @@ namespace actor_zeta { namespace mailbox {
 
     constexpr message_id
     make_message_id(normal_priority_constant, uint64_t value) {
-        return message_id{value | message_id::default_async_value};
+        return message_id{value | detail::default_async_value};
     }
 
     constexpr message_id
@@ -131,19 +122,12 @@ namespace actor_zeta { namespace mailbox {
     }
 
     constexpr message_id make_message_id(mailbox::priority p) {
-        return message_id{static_cast<uint64_t>(p) << message_id::priority_offset};
+        return message_id{static_cast<uint64_t>(p) << detail::priority_offset};
     }
 
 }} // namespace actor_zeta::mailbox
 
 namespace std {
-
-    ///bool operator==(const actor_zeta::mailbox::message_id& lhs, const actor_zeta::mailbox::message_id& rhs);
-
-
-    ///inline bool operator==(const actor_zeta::mailbox::message_id& lhs, const actor_zeta::mailbox::message_id& rhs) {
-    ///    return lhs.integer_value() == rhs.integer_value();
-    //}
 
     template<>
     struct hash<actor_zeta::mailbox::message_id> {
