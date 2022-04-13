@@ -20,7 +20,7 @@ RUN apt update  \
 
 WORKDIR /app
 
-COPY ../. ./.
+COPY ./conanfile.txt ./conanfile.txt
 RUN ls
 
 
@@ -34,10 +34,18 @@ RUN conan profile new default --detect \
     && conan install -if build . --build missing -s build_type=Release -s compiler.libcxx=libstdc++11
     # conan install ${{github.workspace}}/build/.. -if ${{github.workspace}}/build --build=missing -s build_type=Release
 
+COPY ./header ./header
+COPY ./source ./source
+COPY ./test ./test
+COPY ./benchmark ./benchmark
+COPY ./examples ./examples
+COPY ./cmake ./cmake
+COPY ./CMakeLists.txt ./CMakeLists.txt
 WORKDIR ./build
 
-RUN cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DDEV_MODE=ON && \
+RUN ls
+RUN cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON -DDEV_MODE=ON && \
     cmake --build .  --target all
 
-CMD  ctest -C Release --rerun-failed --output-on-failure
+RUN ctest -C Release --output-on-failure #--extra-verbose  #--rerun-failed -R message-id
 
