@@ -4,7 +4,7 @@
 
 // clang-format off
 #include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/message.hpp>
+#include <actor-zeta/mailbox/message.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
 #include <actor-zeta/scheduler/execution_unit.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
@@ -26,7 +26,7 @@ namespace actor_zeta { namespace base {
 
         size_t handled_msgs = 0;
 
-        message_ptr ptr;
+        mailbox::message_ptr ptr;
 
         while (handled_msgs < max_throughput && !mailbox().cache().empty()) {
             do {
@@ -66,7 +66,7 @@ namespace actor_zeta { namespace base {
         return scheduler::resume_result::awaiting;
     }
 
-    void cooperative_actor::enqueue_impl(message_ptr msg, scheduler::execution_unit* e) {
+    void cooperative_actor::enqueue_impl(mailbox::message_ptr msg, scheduler::execution_unit* e) {
         assert(msg);
         mailbox().enqueue(msg.release());
         if (flags() == static_cast<int>(state::empty)) {
@@ -131,11 +131,11 @@ namespace actor_zeta { namespace base {
         return true;
     }
 
-    auto cooperative_actor::reactivate(message& x) -> void {
+    auto cooperative_actor::reactivate(mailbox::message& x) -> void {
         consume(x);
     }
 
-    message_ptr cooperative_actor::next_message() {
+    mailbox::message_ptr cooperative_actor::next_message() {
         auto& cache = mailbox().cache();
         auto i = cache.begin();
         auto e = cache.separator();
@@ -149,7 +149,7 @@ namespace actor_zeta { namespace base {
                 tmp = mailbox().try_pop();
             }
         }
-        message_ptr result;
+        mailbox::message_ptr result;
         i = cache.begin();
         if (i != e)
             result.reset(cache.take(i));
@@ -162,7 +162,7 @@ namespace actor_zeta { namespace base {
         return cache.begin() != cache.separator() || mbox.can_fetch_more();
     }
 
-    void cooperative_actor::push_to_cache(message_ptr ptr) {
+    void cooperative_actor::push_to_cache(mailbox::message_ptr ptr) {
         assert(ptr != nullptr);
         if (!ptr->is_high_priority()) {
             mailbox().cache().insert(mailbox().cache().end(), ptr.release());
@@ -176,9 +176,9 @@ namespace actor_zeta { namespace base {
         cache.insert(std::partition_point(cache.continuation(), e, high_priority), ptr.release());
     }
 
-    void cooperative_actor::consume(message& x) {
+    void cooperative_actor::consume(mailbox::message& x) {
         current_message_ = &x;
-        execute();
+        execute(this,current_message());
     }
 
     bool cooperative_actor::consume_from_cache() {
@@ -195,7 +195,7 @@ namespace actor_zeta { namespace base {
 
     void cooperative_actor::cleanup() {}
 
-    auto cooperative_actor::current_message_impl() -> message* {
+    auto cooperative_actor::current_message() -> mailbox::message* {
         return current_message_;
     }
 

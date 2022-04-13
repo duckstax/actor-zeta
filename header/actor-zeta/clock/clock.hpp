@@ -2,7 +2,7 @@
 
 #include <chrono>
 #include <string>
-#include <actor-zeta/base/message.hpp>
+#include <actor-zeta/mailbox/message.hpp>
 #include <actor-zeta/base/address.hpp>
 #include <actor-zeta/detail/unique_function.hpp>
 
@@ -19,7 +19,7 @@ namespace actor_zeta { namespace clock {
 
         virtual ~clock_t();
         virtual time_point now() const noexcept;
-        void schedule_message(time_point , base::address_t target, base::message_ptr content);
+        void schedule_message(time_point , base::address_t target, mailbox::message_ptr content);
 
     protected:
         virtual void schedule_periodically(time_point first_run, handler, duration_type period) = 0;

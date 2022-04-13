@@ -1,14 +1,20 @@
 #pragma once
 
-#include <actor-zeta/core.hpp>
 #include "test/tooltestsuites/scheduler_test.hpp"
+#include <actor-zeta/core.hpp>
 #include <iostream>
 #include <list>
 
-#define TRACE(msg) { std::cout << __FILE__ << ":" << __LINE__ << "::" << __func__ << " : " << msg << std::endl; }
+#define TRACE(msg) \
+    { std::cout << __FILE__ << ":" << __LINE__ << "::" << __func__ << " : " << msg << std::endl; }
 
 class storage_t;
 class test_handlers;
+
+enum class dummy_supervisor_command : uint64_t {
+    create_storage = 0x00,
+    create_test_handlers
+};
 
 class dummy_supervisor final
     : public actor_zeta::cooperative_supervisor<dummy_supervisor> {
@@ -26,8 +32,8 @@ public:
         scheduler()->start();
         constructor_counter++;
 
-        add_handler("create_storage", &dummy_supervisor::create_storage);
-        add_handler("create_test_handlers", &dummy_supervisor::create_test_handlers);
+        add_handler(dummy_supervisor_command::create_storage, &dummy_supervisor::create_storage);
+        add_handler(dummy_supervisor_command::create_test_handlers, &dummy_supervisor::create_test_handlers);
     }
 
     auto scheduler_test() noexcept -> actor_zeta::test::scheduler_test_t* {
@@ -67,10 +73,9 @@ public:
     }
 
     void enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) override {
-        TRACE(msg->command());
         enqueue_base_counter++;
         set_current_message(std::move(msg));
-        supervisor_abstract::execute();
+        supervisor_abstract::execute(this, current_message());
     }
 
 private:
@@ -89,14 +94,13 @@ uint64_t dummy_supervisor::add_supervisor_impl_counter = 0;
 
 uint64_t dummy_supervisor::enqueue_base_counter = 0;
 
-namespace storage_names {
-    static constexpr auto name = "storage";
-    static constexpr auto init = "init";
-    static constexpr auto search = "search";
-    static constexpr auto add = "add";
-    static constexpr auto delete_table = "delete_table";
-    static constexpr auto create_table = "create_table";
-} // namespace storage_names
+enum class storage_names : uint64_t {
+    init = 0x00,
+    search,
+    add,
+    delete_table,
+    create_table
+};
 
 class storage_t final : public actor_zeta::basic_async_actor {
 public:
@@ -111,7 +115,7 @@ public:
 
 public:
     explicit storage_t(dummy_supervisor* ptr)
-        : actor_zeta::basic_async_actor(ptr, storage_names::name) {
+        : actor_zeta::basic_async_actor(ptr, "storage") {
         add_handler(
             storage_names::init,
             &storage_t::init);
@@ -189,14 +193,13 @@ uint64_t storage_t::add_counter = 0;
 uint64_t storage_t::delete_table_counter = 0;
 uint64_t storage_t::create_table_counter = 0;
 
-namespace test_handlers_names {
-    static constexpr auto name = "test_handlers";
-    static constexpr auto ptr_0 = "ptr_0";
-    static constexpr auto ptr_1 = "ptr_1";
-    static constexpr auto ptr_2 = "ptr_2";
-    static constexpr auto ptr_3 = "ptr_3";
-    static constexpr auto ptr_4 = "ptr_4";
-} // namespace test_handlers_names
+enum class test_handlers_names : uint64_t {
+    ptr_0 = 0x00,
+    ptr_1,
+    ptr_2,
+    ptr_3,
+    ptr_4,
+}; // namespace test_handlers_names
 
 class test_handlers final : public actor_zeta::basic_async_actor {
 public:
@@ -210,7 +213,7 @@ public:
 
 public:
     test_handlers(dummy_supervisor* ptr)
-        : actor_zeta::basic_async_actor(ptr,test_handlers_names::name) {
+        : actor_zeta::basic_async_actor(ptr, "test_handlers") {
         init();
         add_handler(
             test_handlers_names::ptr_0,

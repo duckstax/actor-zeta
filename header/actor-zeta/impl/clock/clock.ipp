@@ -15,17 +15,17 @@ namespace actor_zeta { namespace clock {
         return schedule_periodically(t, std::move(f), duration_type{0});
     }
 
-    void clock_t::schedule_message(time_point t, base::address_t receiver, base::message_ptr content) {
+    void clock_t::schedule_message(time_point t, base::address_t receiver, mailbox::message_ptr content) {
         schedule(
             t,
             handler(
-                [receiver_tmp= std::move(receiver), content_tmp = std::move(content)]() mutable {
+                [receiver_tmp = std::move(receiver), content_tmp = std::move(content)]() mutable {
                     receiver_tmp->enqueue(std::move(content_tmp));
                 }));
     }
 
     void clock_t::schedule(handler f) {
-        return schedule_periodically(time_point{duration_type{0}}, std::move(f),duration_type{0});
+        return schedule_periodically(time_point{duration_type{0}}, std::move(f), duration_type{0});
     }
 
 }} // namespace actor_zeta::clock

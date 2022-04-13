@@ -5,6 +5,7 @@
 #include <actor-zeta/clock/clock.hpp>
 #include <actor-zeta/detail/single_reader_queue.hpp>
 #include <actor-zeta/scheduler/resumable.hpp>
+#include <actor-zeta/base/behavior.hpp>
 
 namespace actor_zeta { namespace base {
     ///
@@ -13,9 +14,10 @@ namespace actor_zeta { namespace base {
 
     class cooperative_actor
         : public actor_abstract
-        , public scheduler::resumable {
+        , public scheduler::resumable
+        , public intrusive_behavior_t {
     public:
-        using mailbox_t = detail::single_reader_queue<message>;
+        using mailbox_t = detail::single_reader_queue<mailbox::message>;
 
         scheduler::resume_result resume(scheduler::execution_unit*, max_throughput_t) final;
         ~cooperative_actor() override;
@@ -28,10 +30,10 @@ namespace actor_zeta { namespace base {
         cooperative_actor(Supervisor* ptr, std::string type)
             : cooperative_actor(static_cast<supervisor_abstract*>(ptr), std::move(type)){};
 
-        void enqueue_impl(message_ptr, scheduler::execution_unit*) final;
+        void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*) final;
 
         // Non thread-safe method
-        auto current_message_impl() -> message* override;
+        auto current_message() -> mailbox::message* ;
 
     private:
         cooperative_actor(supervisor_abstract*, std::string);
@@ -51,7 +53,7 @@ namespace actor_zeta { namespace base {
 
         void cleanup();
         bool consume_from_cache();
-        void consume(message&);
+        void consume(mailbox::message&);
 
         // message processing -----------------------------------------------------
 
@@ -60,10 +62,10 @@ namespace actor_zeta { namespace base {
         }
 
         bool activate(scheduler::execution_unit*);
-        auto reactivate(message& x) -> void;
-        message_ptr next_message();
+        auto reactivate(mailbox::message& x) -> void;
+        mailbox::message_ptr next_message();
         bool has_next_message();
-        void push_to_cache(message_ptr ptr);
+        void push_to_cache(mailbox::message_ptr ptr);
         auto context(scheduler::execution_unit*) -> void;
         auto context() const -> scheduler::execution_unit*;
         auto supervisor() -> supervisor_abstract*;
@@ -73,7 +75,7 @@ namespace actor_zeta { namespace base {
         auto clock() noexcept -> clock::clock_t&;
         supervisor_abstract* supervisor_;
         scheduler::execution_unit* executor_;
-        message* current_message_;
+        mailbox::message* current_message_;
         mailbox_t mailbox_;
         std::atomic<int> flags_;
     };

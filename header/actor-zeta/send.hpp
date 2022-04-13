@@ -50,6 +50,6 @@ namespace actor_zeta {
                 std::forward<Args>(args)...));
     }
 
-    void send(base::address_t address, base::message_ptr msg);
+    void send(base::address_t address, mailbox::message_ptr msg);
 
 } // namespace actor_zeta
