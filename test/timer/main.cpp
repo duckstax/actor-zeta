@@ -17,12 +17,13 @@ static std::atomic<uint64_t> alarm_counter{0};
 
 using actor_zeta::detail::pmr::memory_resource;
 /// non thread safe
+constexpr static auto alarm_id = actor_zeta::make_message_id(0);
 class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
 public:
     explicit supervisor_lite(memory_resource* ptr)
         : cooperative_supervisor(ptr, "network")
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
-        add_handler("alarm", &supervisor_lite::alarm);
+        add_handler(alarm_id, &supervisor_lite::alarm);
         scheduler()->start();
     }
 
@@ -41,7 +42,7 @@ protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
-            execute();
+            execute(this,current_message());
         }
     }
 
@@ -55,7 +56,7 @@ TEST_CASE("timer") {
     auto supervisor = actor_zeta::spawn_supervisor<supervisor_lite>(mr_ptr);
 
     auto time = supervisor->clock().now() + std::chrono::seconds(10);
-    supervisor->clock().schedule_message(time, supervisor->address(), actor_zeta::make_message(actor_zeta::address_t::empty_address(), "alarm"));
+    supervisor->clock().schedule_message(time, supervisor->address(), actor_zeta::make_message(actor_zeta::address_t::empty_address(), alarm_id));
     supervisor->scheduler_test()->advance_time(std::chrono::seconds(10));
 
     REQUIRE(alarm_counter.load() == 1);

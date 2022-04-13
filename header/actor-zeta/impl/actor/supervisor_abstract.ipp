@@ -8,7 +8,7 @@
 // clang-format off
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/message.hpp>
+#include <actor-zeta/mailbox/message.hpp>
 #include <actor-zeta/base/supervisor.hpp>
 #include <actor-zeta/impl/handler.ipp>
 // clang-format on
@@ -41,11 +41,11 @@ namespace actor_zeta { namespace base {
 
     supervisor_abstract::~supervisor_abstract() {}
 
-    auto supervisor_abstract::current_message_impl() -> message* {
+    auto supervisor_abstract::current_message() -> mailbox::message* {
         return current_message_;
     }
 
-    auto supervisor_abstract::set_current_message(message_ptr msg) -> void {
+    auto supervisor_abstract::set_current_message(mailbox::message_ptr msg) -> void {
         current_message_ = msg.release();
     }
 

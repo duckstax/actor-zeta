@@ -7,6 +7,7 @@
 #include <functional>
 #include <limits>
 
+#include <actor-zeta/mailbox/message.hpp>
 #include "actor-zeta/base/actor_abstract.hpp"
 #include "actor-zeta/scheduler/resumable.hpp"
 #include "actor-zeta/scheduler/scheduler_abstract.hpp"

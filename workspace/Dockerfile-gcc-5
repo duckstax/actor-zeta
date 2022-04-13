@@ -1,0 +1,51 @@
+FROM ubuntu:bionic
+
+ENV TZ=America/US
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update  \
+    && apt upgrade -y \
+    && apt install -y \
+        ninja-build \
+        software-properties-common \
+        python3-dev \
+        python3-pip\
+    && apt clean \
+    && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
+    && apt install -y gcc-5 g++-5 gcc-5-base \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100 \
+    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 100 \
+    && rm -rf /var/lib/apt/lists/*  \
+    && pip3 install --no-cache-dir conan==1.45.0 cmake==3.21.0
+
+WORKDIR /app
+
+COPY ./conanfile.txt ./conanfile.txt
+RUN ls
+
+
+RUN conan profile new default --detect \
+    && conan profile update settings.compiler.libcxx=libstdc++11 default\
+    && conan profile update settings.compiler=gcc default \
+    && conan profile update settings.compiler.version=5 default \
+    && conan profile update env.CXX=g++ default \
+    && conan profile update env.CC=gcc default \
+    && conan remote add cyberduckninja http://conan.cyberduckninja.com:9300 \
+    && conan install -if build . --build missing -s build_type=Release -s compiler.libcxx=libstdc++11
+    # conan install ${{github.workspace}}/build/.. -if ${{github.workspace}}/build --build=missing -s build_type=Release
+
+COPY ./header ./header
+COPY ./source ./source
+COPY ./test ./test
+COPY ./benchmark ./benchmark
+COPY ./examples ./examples
+COPY ./cmake ./cmake
+COPY ./CMakeLists.txt ./CMakeLists.txt
+WORKDIR ./build
+
+RUN ls
+RUN cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON -DDEV_MODE=ON && \
+    cmake --build .  --target all
+
+RUN ctest -C Release --output-on-failure #--extra-verbose  #--rerun-failed -R message-id
+

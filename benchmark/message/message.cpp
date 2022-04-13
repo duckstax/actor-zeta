@@ -15,8 +15,8 @@ namespace benchmark_messages {
 
     static volatile int64_t message_sz = 0;
 
-    using raw_t = actor_zeta::base::message*;
-    using smart_t = actor_zeta::base::message_ptr;
+    using raw_t = actor_zeta::mailbox::message*;
+    using smart_t = actor_zeta::mailbox::message_ptr;
 
     namespace by_name {
 
@@ -53,12 +53,12 @@ namespace benchmark_messages {
     namespace by_args {
 
         template<typename... Args>
-        auto message_arg_tmpl(std::string& name_, Args&&... args) -> void;
+        auto message_arg_tmpl(uint64_t  name_, Args&&... args) -> void;
 
         namespace raw_ptr {
 
             template<typename... Args>
-            auto message_arg_tmpl(std::string& name_, Args&&... args) -> void {
+            auto message_arg_tmpl(uint64_t name_, Args&&... args) -> void {
                 auto message = actor_zeta::make_message_ptr(
                     actor_zeta::base::address_t::empty_address(),
                     name_,
@@ -70,7 +70,7 @@ namespace benchmark_messages {
             }
 
             template<typename T, std::size_t... I>
-            auto call_message_arg_tmpl(std::string& name_, T& packed_tuple, actor_zeta::type_traits::index_sequence<I...>) -> void {
+            auto call_message_arg_tmpl(uint64_t  name_, T& packed_tuple, actor_zeta::type_traits::index_sequence<I...>) -> void {
                 message_arg_tmpl(name_, (std::get<I>(packed_tuple))...);
             }
 
@@ -79,7 +79,7 @@ namespace benchmark_messages {
         namespace smart_ptr {
 
             template<typename... Args>
-            auto message_arg_tmpl(std::string& name_, Args&&... args) -> void {
+            auto message_arg_tmpl(uint64_t name_, Args&&... args) -> void {
                 auto message = actor_zeta::make_message(
                     actor_zeta::base::address_t::empty_address(),
                     name_,
@@ -90,7 +90,7 @@ namespace benchmark_messages {
             }
 
             template<typename T, std::size_t... I>
-            auto call_message_arg_tmpl(std::string& name_, T& packed_tuple, actor_zeta::type_traits::index_sequence<I...>) -> void {
+            auto call_message_arg_tmpl(uint64_t name_, T& packed_tuple, actor_zeta::type_traits::index_sequence<I...>) -> void {
                 message_arg_tmpl(name_, (std::get<I>(packed_tuple))...);
             }
 

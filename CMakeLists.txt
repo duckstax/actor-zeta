@@ -91,7 +91,6 @@ set(HEADER_FILES
         header/actor-zeta/base/cooperative_actor.hpp
         header/actor-zeta/base/communication_module.hpp
         header/actor-zeta/base/handler.hpp
-        header/actor-zeta/base/message.hpp
         header/actor-zeta/base/supervisor.hpp
         header/actor-zeta/base/supervisor_abstract.hpp
 
@@ -115,12 +114,11 @@ set(HEADER_FILES
         header/actor-zeta/scheduler/scheduler_abstract.hpp
         header/actor-zeta/scheduler/worker.hpp
 
-        header/actor-zeta/base/priority.hpp
-        header/actor-zeta/base/message.hpp
+        header/actor-zeta/mailbox/id.hpp
+        header/actor-zeta/mailbox/message.hpp
+        header/actor-zeta/mailbox/priority.hpp
 
         header/actor-zeta/make_message.hpp
-
-        header/actor-zeta/forwards.hpp
         header/actor-zeta/send.hpp
         header/actor-zeta/core.hpp
         header/actor-zeta/src.hpp

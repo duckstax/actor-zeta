@@ -2,14 +2,14 @@
 
 #include <cassert>
 
-#include <string>
+#include <actor-zeta/base/address.hpp>
 
-#include "forwards.hpp"
-#include <actor-zeta/base/priority.hpp>
+#include <actor-zeta/base/forwards.hpp>
+#include <actor-zeta/mailbox/priority.hpp>
+#include <actor-zeta/mailbox/id.hpp>
 #include <actor-zeta/detail/rtt.hpp>
-#include <actor-zeta/detail/string_view.hpp>
 
-namespace actor_zeta { namespace base {
+namespace actor_zeta { namespace mailbox {
 
     ///
     /// @brief
@@ -25,33 +25,34 @@ namespace actor_zeta { namespace base {
         message(message&& other) = default;
         message& operator=(message&&) = default;
         ~message() = default;
-        message(address_t /*sender*/, std::string /*name*/);
-        message(address_t /*sender*/, std::string /*name*/, detail::rtt /*body*/);
+        message(base::address_t /*sender*/, message_id /*name*/);
+        message(base::address_t /*sender*/, message_id /*name*/, actor_zeta::detail::rtt /*body*/);
         message* next;
         message* prev;
-        auto command() const noexcept -> detail::string_view;
-        auto sender() & noexcept -> address_t&;
-        auto sender() && noexcept -> address_t&&;
-        auto sender() const& noexcept -> address_t const&;
+        auto command() const noexcept -> message_id;
+        auto sender() & noexcept -> base::address_t&;
+        auto sender() && noexcept -> base::address_t&&;
+        auto sender() const& noexcept -> base::address_t const&;
 
-        auto body() -> detail::rtt&;
+        auto body() -> actor_zeta::detail::rtt&;
         auto clone() const -> message*;
         operator bool();
         void swap(message& other) noexcept;
         bool is_high_priority() const;
 
     private:
-        address_t sender_;
-        std::string command_;
-        detail::rtt body_;
-        priority priority_ = priority::normal;
+        base::address_t sender_;
+        message_id command_;
+        actor_zeta::detail::rtt body_;
     };
 
     static_assert(std::is_move_constructible<message>::value, "");
     static_assert(not std::is_copy_constructible<message>::value, "");
 
-}} // namespace actor_zeta::base
+    using message_ptr = std::unique_ptr<message>;
 
-inline void swap(actor_zeta::base::message& lhs, actor_zeta::base::message& rhs) noexcept {
+}} // namespace actor_zeta::mailbox
+
+inline void swap(actor_zeta::mailbox::message& lhs, actor_zeta::mailbox::message& rhs) noexcept {
     lhs.swap(rhs);
 }
