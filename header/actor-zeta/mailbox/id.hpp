@@ -32,12 +32,12 @@ namespace detail {
         message_id(const message_id&) = default;
         message_id& operator=(const message_id&) = default;
 
-        bool operator==(const message_id& rhs) const {
-            value_ == rhs.value_;
+        constexpr bool operator==(const message_id& rhs) const noexcept {
+            return value_ == rhs.value_;
         }
 
-        bool operator<(const message_id& rhs) const {
-            value_ < rhs.value_;
+        constexpr bool operator<(const message_id& rhs) const noexcept {
+            return value_ < rhs.value_;
         }
 
         constexpr uint64_t priority() const noexcept {
