@@ -18,7 +18,7 @@ namespace actor_zeta { namespace base {
         std::cerr << "error add handler" << std::endl;
     }
 
-    void error_skip(detail::string_view sender, detail::string_view reciever, mailbox::message_id handler) {
+    void error_skip(const std::string& sender, const std::string& reciever, mailbox::message_id handler) {
         std::cerr << "WARNING" << '\n';
         std::cerr << "Skip, can't find handler: " << reciever << "::" << handler.integer_value();
         std::cerr << " sender: " << sender << "\n";

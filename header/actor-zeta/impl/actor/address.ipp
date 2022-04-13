@@ -12,10 +12,6 @@
 #include <actor-zeta/base/communication_module.hpp>
 #include <memory>
 
-namespace {
-    constexpr static actor_zeta::detail::string_view non_type("non-type");
-}
-
 namespace actor_zeta { namespace base {
 
     address_t::address_t() noexcept

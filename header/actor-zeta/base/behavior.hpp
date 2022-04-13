@@ -11,7 +11,7 @@
 
 namespace actor_zeta { namespace base {
 
-    void error_skip(detail::string_view sender, detail::string_view reciever, mailbox::message_id handler) ;
+    void error_skip(const std::string& sender, const std::string& reciever, mailbox::message_id handler) ;
 
     class intrusive_behavior_t   {
     protected:

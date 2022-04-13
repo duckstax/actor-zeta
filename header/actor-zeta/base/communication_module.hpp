@@ -10,7 +10,6 @@
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
-#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/scheduler/execution_unit.hpp>
 
 namespace actor_zeta {
@@ -80,7 +79,7 @@ namespace actor_zeta {
                 communication_module* impl_{nullptr};
             };
 
-            auto type() const -> detail::string_view;
+            auto type() const -> const char* const;
             auto id() const -> id_t;
             auto enqueue(mailbox::message_ptr) -> void;
             void enqueue(mailbox::message_ptr, scheduler::execution_unit*);
