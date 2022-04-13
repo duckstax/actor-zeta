@@ -101,4 +101,12 @@ namespace actor_zeta {
 #endif
 
 #define DEBUG NDEBUG
+
+#ifdef CPP11_OR_GREATER
+#define CXX14_CONSTEXPR
+#elif CPP14_OR_GREATER or CPP17_OR_GREATER CPP20_OR_GREATER
+#define CXX14_CONSTEXPR constexpr
+#endif
+
+
 } // namespace actor_zeta
