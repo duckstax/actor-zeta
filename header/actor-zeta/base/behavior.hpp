@@ -11,7 +11,8 @@
 
 namespace actor_zeta { namespace base {
 
-    void error_skip(const std::string& sender, const std::string& reciever, mailbox::message_id handler) ;
+    void error_skip(const std::string& sender, const std::string& reciever, mailbox::message_id handler);
+    void error_skip(const std::string& reciever, mailbox::message_id handler);
 
     class intrusive_behavior_t   {
     protected:
@@ -25,9 +26,15 @@ namespace actor_zeta { namespace base {
             if (it != handlers_.end()) {
                 return it->second(msg);
             }
-            auto sender = msg->sender()->type();
+
             auto reciever = ptr->type();
-            error_skip(sender, reciever, msg->command());
+            if( msg->sender()){
+                auto sender = msg->sender()->type();
+                error_skip(sender, reciever, msg->command());
+            } else {
+                error_skip(reciever, msg->command());
+            }
+
         }
 
         template<class Key, class Value>

@@ -54,10 +54,7 @@ using actor_zeta::detail::pmr::memory_resource;
 class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
 public:
     enum class system_command : std::uint64_t {
-        sync_contacts = 0x00,
-        add_link,
-        remove_link,
-        broadcast,
+        broadcast = 0x00,
         create
     };
 

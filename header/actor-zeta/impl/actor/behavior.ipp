@@ -25,6 +25,14 @@ namespace actor_zeta { namespace base {
         std::cerr << "WARNING" << std::endl;
     }
 
+
+    void error_skip(const std::string& reciever, mailbox::message_id handler) {
+        std::cerr << "WARNING" << '\n';
+        std::cerr << "Skip, can't find handler: " << reciever << "::" << handler.integer_value();
+        std::cerr << " sender: " << "Not Sender" << "\n";
+        std::cerr << "WARNING" << std::endl;
+    }
+
     bool intrusive_behavior_t::on(key_type name, value_type handler) {
         auto it = handlers_.find(name);
         bool status = false;
