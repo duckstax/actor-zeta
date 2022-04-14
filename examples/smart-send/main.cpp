@@ -124,7 +124,7 @@ int main() {
     int const task = 10000;
 
     for (auto i = task - 1; i > 0; --i) {
-        actor_zeta::send(supervisor.get(), actor_zeta::address_t::empty_address(), worker_t::command_t::download, std::string("fb"), std::string("jack"), std::string("1"));
+        supervisor->broadcast_on_worker(worker_t::command_t::download, std::string("fb"), std::string("jack"), std::string("1"));
     }
 
     for (auto i = task - 1; i > 0; --i) {
