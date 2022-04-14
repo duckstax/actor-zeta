@@ -7,7 +7,6 @@
 #include <vector>
 
 #include <actor-zeta.hpp>
-#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 
 using actor_zeta::detail::pmr::get_default_resource;
@@ -69,7 +68,7 @@ public:
 
 private:
     actor_zeta::address_t manager_database_;
-    std::unordered_map<actor_zeta::detail::string_view,actor_zeta::address_t> address_book_;
+    std::unordered_map<std::string,actor_zeta::address_t> address_book_;
 
     void add_link() {
         auto& address = current_message()->sender();
@@ -101,7 +100,7 @@ public:
 
 private:
     std::unordered_map<int, int> storage_;
-    std::unordered_map<actor_zeta::detail::string_view,actor_zeta::address_t> address_book_;
+    std::unordered_map<std::string,actor_zeta::address_t> address_book_;
     void add_link() {
         auto& address = current_message()->sender();
         if (address && this != address.get()) {
@@ -138,7 +137,7 @@ protected:
 private:
     actor_zeta::scheduler_abstract_t* e_;
     std::vector<actor_zeta::actor> actors_;
-    std::unordered_map<actor_zeta::detail::string_view,actor_zeta::address_t> address_book_;
+    std::unordered_map<std::string,actor_zeta::address_t> address_book_;
     void add_link() {
         auto& address = current_message()->sender();
         if (address && this != address.get()) {
@@ -193,7 +192,7 @@ protected:
 private:
     std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::supervisor> supervisor_;
-    std::unordered_map<actor_zeta::detail::string_view,actor_zeta::address_t> address_book_;
+    std::unordered_map<std::string,actor_zeta::address_t> address_book_;
     void add_link() {
         auto& address = current_message()->sender();
         if (address && this != address.get()) {
@@ -270,7 +269,7 @@ protected:
 private:
     std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor> actors_;
-    std::unordered_map<actor_zeta::detail::string_view,actor_zeta::address_t> address_book_;
+    std::unordered_map<std::string,actor_zeta::address_t> address_book_;
     std::vector<actor_zeta::address_t> dispathers_;
 
     void add_link() {
