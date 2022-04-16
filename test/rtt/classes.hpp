@@ -32,7 +32,7 @@ void place(char* data, size_t capacity, size_t volume, __attribute__((unused)) H
 template<class... Args>
 void test_getSize(Args... args) {
     auto m_capacity = actor_zeta::detail::getSize<0, Args...>();
-    std::unique_ptr<char[]> m_data(std::move(std::unique_ptr<char[]>(new char[m_capacity])));
+    auto m_data(std::unique_ptr<char[]>(new char[m_capacity]));
     place(m_data.get(), m_capacity, 0, args...);
 }
 
