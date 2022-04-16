@@ -239,7 +239,7 @@ public:
 
     template<class U, class... Args>
     void construct(U* p, Args&&... args) {
-        ::new ((void*) p) U(std::forward<Args>(args)...);
+        ::new (static_cast<void*>(p)) U(std::forward<Args>(args)...);
         P->count_construct<Args&&...>(*this, p);
     }
 

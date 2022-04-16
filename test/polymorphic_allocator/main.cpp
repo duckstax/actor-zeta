@@ -586,7 +586,7 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
         typedef default_constructible T;
         typedef std::pair<T, T> P;
         typedef polymorphic_allocator<void> A;
-        P* ptr = (P*) std::malloc(sizeof(P));
+        P* ptr = static_cast<P*>(std::malloc(sizeof(P)));
         A a;
         a.construct(ptr);
         REQUIRE(default_constructible::constructed == 2);
@@ -599,7 +599,7 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
         typedef polymorphic_allocator<double> A;
         {
             A a;
-            REQUIRE(std::is_same<decltype(a.destroy((destroyable*) nullptr)), void>::value);
+            REQUIRE(std::is_same<decltype(a.destroy(static_cast<destroyable*>(nullptr))), void>::value);
         }
         {
             destroyable* ptr = ::new (std::malloc(sizeof(destroyable))) destroyable();
