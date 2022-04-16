@@ -16,7 +16,6 @@ auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
 
 static std::atomic<uint64_t> counter_download_data{0};
 static std::atomic<uint64_t> counter_work_data{0};
-static std::atomic<uint64_t> create_counter_worker{0};
 
 class supervisor_lite;
 
