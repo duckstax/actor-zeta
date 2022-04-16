@@ -37,7 +37,7 @@ void test_getSize(Args... args) {
 }
 
 template<class... Args>
-constexpr size_t local_getSize(Args... args) {
+constexpr size_t local_getSize(Args... /*args*/) {
     return actor_zeta::detail::getSize<0, Args...>();
 }
 

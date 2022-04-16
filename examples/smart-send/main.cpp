@@ -33,12 +33,12 @@ public:
         add_handler(command_t::work_data, &worker_t::work_data);
     }
 
-    void download(const std::string& url, const std::string& user, const std::string& passwod) {
+    void download(const std::string& url, const std::string& /*user*/, const std::string& /*password*/) {
         tmp_ = url;
         counter_download_data++;
     }
 
-    void work_data(const std::string& data, const std::string& operatorName) {
+    void work_data(const std::string& data, const std::string& /*operatorName*/) {
         tmp_ = data;
         counter_work_data++;
     }
