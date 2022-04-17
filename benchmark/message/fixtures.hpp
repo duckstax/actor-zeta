@@ -27,7 +27,7 @@ namespace benchmark_messages {
         public:
             virtual void SetUp(const ::benchmark::State& state) final {
                 for (int i = 0; i < state.range(0); ++i) {
-                    name_ = i % 10;
+                    name_ = static_cast<uint64_t>(i) % 10;
                 }
             }
 

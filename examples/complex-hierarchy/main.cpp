@@ -24,8 +24,6 @@ std::atomic_int count_database{0};
 std::atomic_int count_collection{0};
 std::atomic_int count_dispatcher{0};
 
-const int max_queue = 100;
-
 enum class command_t : uint64_t {
     create,
     create_database,
