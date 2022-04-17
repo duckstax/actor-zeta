@@ -9,7 +9,7 @@
 namespace actor_zeta { namespace detail {
 
     void* align(std::size_t alignment, std::size_t size, void*& ptr, std::size_t& space) {
-#if defined(__GNUC__) && (__GNUC_PREREQ)
+#if defined(__GNUC__) && defined(__GNUC_PREREQ)
 #if __GNUC_PREREQ(5, 0)
         //      If  gcc_version >= 5.0
         return std::align(alignment, size, ptr, space);
