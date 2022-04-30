@@ -30,10 +30,12 @@ namespace actor_zeta { namespace base {
         cooperative_actor(Supervisor* ptr, std::string type)
             : cooperative_actor(static_cast<supervisor_abstract*>(ptr), std::move(type)){};
 
-        void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*) final;
+        void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*);
 
         // Non thread-safe method
         auto current_message() -> mailbox::message* ;
+
+        auto set_current_message(mailbox::message_ptr msg) -> void;
 
     private:
         cooperative_actor(supervisor_abstract*, std::string);

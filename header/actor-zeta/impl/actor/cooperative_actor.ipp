@@ -1,6 +1,6 @@
 #pragma once
+
 #include <cassert>
-#include <iostream>
 
 // clang-format off
 #include <actor-zeta/base/address.hpp>
@@ -197,6 +197,10 @@ namespace actor_zeta { namespace base {
 
     auto cooperative_actor::current_message() -> mailbox::message* {
         return current_message_;
+    }
+
+    auto cooperative_actor::set_current_message(mailbox::message_ptr msg) -> void {
+        current_message_ = msg.release();
     }
 
     scheduler::execution_unit* cooperative_actor::context() const {
