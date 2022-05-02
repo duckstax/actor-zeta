@@ -230,7 +230,7 @@ public:
             });
         add_handler(
             test_handlers_names::ptr_2,
-            [](int& data) {
+            [](int& /*data*/) {
                 TRACE("+++");
                 ptr_2_counter++;
             });

@@ -97,7 +97,7 @@ namespace benchmark_messages {
 
     class memory_manager_t : public benchmark::MemoryManager {
         void Start() BENCHMARK_OVERRIDE {}
-        void Stop(Result* result) BENCHMARK_OVERRIDE {
+        void Stop(Result* /*result*/) BENCHMARK_OVERRIDE {
         }
     };
 
