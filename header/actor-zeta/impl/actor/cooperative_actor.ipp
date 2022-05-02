@@ -212,8 +212,5 @@ namespace actor_zeta { namespace base {
     auto cooperative_actor::supervisor() -> supervisor_abstract* {
         return supervisor_;
     }
-    auto cooperative_actor::clock() noexcept -> clock::clock_t& {
-        return supervisor()->clock();
-    }
 
 }} // namespace actor_zeta::base

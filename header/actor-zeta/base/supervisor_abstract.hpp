@@ -1,7 +1,6 @@
 #pragma once
 
 #include <actor-zeta/base/communication_module.hpp>
-#include <actor-zeta/clock/clock.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
 
@@ -22,7 +21,6 @@ namespace actor_zeta { namespace base {
         auto scheduler() noexcept -> scheduler::scheduler_abstract_t*;
         auto resource() const -> detail::pmr::memory_resource*;
         auto address() noexcept -> address_t;
-        auto clock() noexcept -> clock::clock_t&;
 
     protected:
         virtual auto scheduler_impl() noexcept -> scheduler::scheduler_abstract_t* = 0;

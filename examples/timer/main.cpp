@@ -8,24 +8,54 @@
 #include <vector>
 
 #include <actor-zeta.hpp>
+#include <actor-zeta/clock/clock_thread_safe.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
-
-auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
-    ptr->stop();
-    delete ptr;
-};
 
 constexpr  static uint64_t command_alarm = 0;
 
 static std::atomic<uint64_t> alarm_counter{0};
 
 using actor_zeta::detail::pmr::memory_resource;
+
+template<class Policy>
+class advanced_scheduler_t final : public actor_zeta::scheduler_t<Policy> {
+public:
+    using super = actor_zeta::scheduler_t<Policy>;
+
+    advanced_scheduler_t(size_t num_worker_threads, size_t max_throughput_param)
+        : super(num_worker_threads, max_throughput_param) {}
+
+    void start() override {
+        super::start();
+        clock_.start_dispatch_loop();
+    }
+
+    void stop() override {
+        super::stop();
+        clock_.stop_dispatch_loop();
+    }
+
+    actor_zeta::clock::thread_safe_clock_t& clock() {
+        return clock_;
+    }
+
+private:
+    actor_zeta::clock::thread_safe_clock_t clock_;
+};
+
+using shared_work = advanced_scheduler_t<actor_zeta::work_sharing>;
+
+auto thread_pool_deleter = [](shared_work* ptr) {
+    ptr->stop();
+    delete ptr;
+};
+
 /// non thread safe
 class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
 public:
     explicit supervisor_lite(memory_resource* ptr)
         : cooperative_supervisor(ptr, "network")
-        , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
+        , e_(new shared_work(
                  1,
                  100),
              thread_pool_deleter) {
@@ -39,6 +69,11 @@ public:
         alarm_counter += 1;
     }
 
+    actor_zeta::clock::thread_safe_clock_t& clock() {
+        return e_->clock();
+    }
+
+
 protected:
     auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final { return e_.get(); }
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
@@ -49,7 +84,7 @@ protected:
     }
 
 private:
-    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
+    std::unique_ptr<shared_work, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor> actors_;
 };
 
