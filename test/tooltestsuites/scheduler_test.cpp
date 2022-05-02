@@ -31,7 +31,7 @@ namespace actor_zeta { namespace test {
         : super(num_worker_threads, max_throughput) {
     }
 
-    clock::clock_t& scheduler_test_t::clock() noexcept {
+    clock_test& scheduler_test_t::clock() noexcept {
         return clock_;
     }
 
