@@ -8,19 +8,19 @@
 
 namespace actor_zeta { namespace mailbox {
 
-namespace detail {
-    static constexpr uint64_t response_flag_mask = 0x8000000000000000;
-    static constexpr uint64_t answered_flag_mask = 0x4000000000000000;
-    static constexpr uint64_t priority_flag_mask = 0x3000000000000000;
-    static constexpr uint64_t request_id_mask = 0x0FFFFFFFFFFFFFFF;
-    static constexpr uint64_t high_message_priority = 0;
-    static constexpr uint64_t normal_message_priority = 1;
-    static constexpr uint64_t priority_offset = 60;
-    static constexpr uint64_t default_async_value = 0x1000000000000000;
-}
+    namespace detail {
+        static constexpr uint64_t response_flag_mask = 0x8000000000000000;
+        static constexpr uint64_t answered_flag_mask = 0x4000000000000000;
+        static constexpr uint64_t priority_flag_mask = 0x3000000000000000;
+        static constexpr uint64_t request_id_mask = 0x0FFFFFFFFFFFFFFF;
+        static constexpr uint64_t high_message_priority = 0;
+        static constexpr uint64_t normal_message_priority = 1;
+        static constexpr uint64_t priority_offset = 60;
+        static constexpr uint64_t default_async_value = 0x1000000000000000;
+    } // namespace detail
+
     class message_id final {
     public:
-
         constexpr message_id()
             : value_(detail::default_async_value) {
         }
