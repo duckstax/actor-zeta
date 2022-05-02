@@ -13,7 +13,7 @@
 
 namespace actor_zeta { namespace base {
 
-    static void error_sync_contacts(detail::string_view name, detail::string_view error) {
+    static void error_sync_contacts(const std::string& name, const std::string& error) {
         std::cerr << "WARNING" << '\n';
         std::cerr << "Actor name : " << name << '\n';
         std::cerr << "Not initialization address type:" << error << '\n';

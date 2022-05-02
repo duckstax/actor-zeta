@@ -2,7 +2,6 @@
 
 #include "forwards.hpp"
 #include <actor-zeta/detail/intrusive_ptr.hpp>
-#include <actor-zeta/detail/string_view.hpp>
 
 #include <type_traits>
 
@@ -70,7 +69,7 @@ namespace actor_zeta { namespace base {
             return static_cast<bool>(ptr_);
         }
 
-        auto type() const -> detail::string_view;
+        auto type() const -> const char* const;
 
         inline bool operator!() const noexcept {
             return !ptr_;

@@ -99,7 +99,6 @@ set(HEADER_FILES
         header/actor-zeta/detail/callable_trait.hpp
         header/actor-zeta/detail/intrusive_ptr.hpp
         header/actor-zeta/detail/ref_counted.hpp
-        header/actor-zeta/detail/string_view.hpp
         header/actor-zeta/detail/launch_thread.hpp
         header/actor-zeta/detail/ignore_unused.hpp
         header/actor-zeta/detail/type_list.hpp

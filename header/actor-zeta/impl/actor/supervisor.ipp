@@ -15,7 +15,7 @@ namespace actor_zeta { namespace base {
         return address_t(ptr_.get());
     }
 
-    detail::string_view supervisor::type() const {
+    auto supervisor::type() const -> const char* const {
         return ptr_->type();
     }
 
