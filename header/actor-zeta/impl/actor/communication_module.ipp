@@ -1,5 +1,4 @@
 #pragma once
-#include "detail/string_view.hpp"
 
 // clang-format off
 #include <actor-zeta/base/communication_module.hpp>
@@ -15,11 +14,11 @@ namespace actor_zeta { namespace base {
         enqueue(std::move(msg), nullptr);
     }
 
-    auto communication_module::type() const -> detail::string_view {
+    auto communication_module::type() const -> const char* const {
 #ifdef DEBUG
-        return detail::string_view(type_.data(), type_.size());
+        return type_.data();
 #else
-        return constexpr static detail::string_view();
+        return nullptr;
 #endif
     }
 

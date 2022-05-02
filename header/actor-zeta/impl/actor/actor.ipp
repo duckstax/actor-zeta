@@ -14,7 +14,7 @@ namespace actor_zeta { namespace base {
         return ptr_->address();
     }
 
-    detail::string_view actor::type() const {
+    auto actor::type() const -> const char* const {
         return ptr_->type();
     }
 
