@@ -57,7 +57,7 @@ public:
     }
 
     void create() {
-        spawn_actor<storage_t>([this](storage_t* ptr) {
+        spawn_actor([this](storage_t* ptr) {
             actors_.emplace_back(ptr);
         });
     }

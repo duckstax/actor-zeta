@@ -1,5 +1,6 @@
 #pragma once
 
+#include "actor-zeta/detail/callable_trait.hpp"
 #include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
@@ -43,26 +44,39 @@ namespace actor_zeta { namespace base {
 
     protected:
         template<
-            class Actor,
             class Inserter,
-            class... Args,
-            class = type_traits::enable_if_t<std::is_base_of<actor_abstract, Actor>::value>>
+            class... Args>
         auto spawn_actor(const Inserter& inserter, Args&&... args) -> address_t {
-            auto allocate_byte = sizeof(Actor);
-            auto allocate_byte_alignof = alignof(Actor);
+            using Inserter_remove_reference_t =  type_traits::remove_reference_t<Inserter>;
+            using call_trait =  type_traits::get_callable_trait_t<Inserter_remove_reference_t>;
+            using Actor = type_traits::type_list_at_t<typename call_trait::args_types, 0>;
+            static_assert(std::is_pointer<Actor>::value);
+            using Actor_clear_type = type_traits::decay_t<Actor>;
+            using Actor_not_pointer_type = typename std::remove_pointer<Actor_clear_type>::type;
+            static_assert(std::is_base_of<actor_abstract, Actor_not_pointer_type>::value,"");
+
+            auto allocate_byte = sizeof(Actor_not_pointer_type);
+            auto allocate_byte_alignof = alignof(Actor_not_pointer_type);
             void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
-            auto* actor = new (buffer) Actor(static_cast<Supervisor*>(this), std::forward<Args>(args)...);
+            auto* actor = new (buffer) Actor_not_pointer_type(static_cast<Supervisor*>(this), std::forward<Args>(args)...);
             auto address = actor->address();
             inserter(actor);
             return address;
         }
 
         template<
-            class SupervisorChildren,
             class Inserter,
-            class... Args,
-            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, SupervisorChildren>::value>>
+            class... Args>
         auto spawn_supervisor(const Inserter& inserter, Args&&... args) -> address_t {
+            using Inserter_remove_reference_t =  type_traits::remove_reference_t<Inserter>;
+            using call_trait =  type_traits::get_callable_trait_t<Inserter_remove_reference_t>;
+            using SupervisorChildren = type_traits::type_list_at_t<typename call_trait::args_types, 0>;
+            static_assert(std::is_pointer<SupervisorChildren>::value);
+            using SupervisorChildren_clear_type = type_traits::decay_t<SupervisorChildren>;
+            using SupervisorChildren_not_pointer_type = typename std::remove_pointer<SupervisorChildren_clear_type>::type;
+            static_assert(std::is_base_of<actor_abstract, SupervisorChildren_not_pointer_type>::value,"");
+
+
             auto allocate_byte = sizeof(SupervisorChildren);
             auto allocate_byte_alignof = alignof(SupervisorChildren);
             void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);

@@ -69,7 +69,7 @@ public:
     }
 
     void create() {
-        spawn_actor<worker_t>([this](worker_t* ptr) {
+        spawn_actor([this](worker_t* ptr) {
             actors_.emplace_back(ptr);
         });
     }
