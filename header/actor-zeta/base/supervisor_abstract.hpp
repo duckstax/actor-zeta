@@ -80,7 +80,7 @@ namespace actor_zeta { namespace base {
             auto allocate_byte = sizeof(SupervisorChildren_remove_pointer_type);
             auto allocate_byte_alignof = alignof(SupervisorChildren_remove_pointer_type);
             void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
-            auto* supervisor = new (buffer) SupervisorChildren_remove_pointer_type(static_cast<Supervisor*>(this), std::forward<Args>(args)...);
+            auto* supervisor = new (buffer) SupervisorChildren_remove_pointer_type(std::forward<Args>(args)...);
             auto address = supervisor->address();
             inserter(supervisor);
             return address;

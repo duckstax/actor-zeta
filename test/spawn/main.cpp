@@ -45,10 +45,20 @@ public:
 
 constexpr const static auto create_actor_id = actor_zeta::make_message_id(0);
 constexpr const static auto create_supervisor_id = actor_zeta::make_message_id(1);
-class dummy_supervisor ;
+constexpr const static auto create_supervisor_custom_resource_id = actor_zeta::make_message_id(2);
+
+class dummy_supervisor;
+
 class dummy_supervisor_sub final : public actor_zeta::cooperative_supervisor<dummy_supervisor> {
 public:
     dummy_supervisor_sub(dummy_supervisor* ptr, std::string name)
+        : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr, std::move(name))
+        , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
+        scheduler()->start();
+        supervisor_sub_counter++;
+    }
+
+    dummy_supervisor_sub(memory_resource* ptr, std::string name)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr, std::move(name))
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
         scheduler()->start();
@@ -82,6 +92,7 @@ public:
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
         add_handler(create_actor_id, &dummy_supervisor::create_actor);
         add_handler(create_supervisor_id, &dummy_supervisor::create_supervisor);
+        add_handler(create_supervisor_custom_resource_id, &dummy_supervisor::create_supervisor_custom_resource);
         scheduler()->start();
         supervisor_counter++;
     }
@@ -101,7 +112,15 @@ public:
             [this](dummy_supervisor_sub* ptr) {
                 supervisor_.emplace_back(ptr);
             },
-            std::string("test_name"));
+            this, std::string("test_name"));
+    }
+
+    void create_supervisor_custom_resource() {
+        spawn_supervisor(
+            [this](dummy_supervisor_sub* ptr) {
+                supervisor_.emplace_back(ptr);
+            },
+            actor_zeta::detail::pmr::get_default_resource(), std::string("test_name"));
     }
 
 protected:
@@ -137,6 +156,18 @@ TEST_CASE("spawn supervisor") {
     auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr);
     actor_zeta::send(supervisor.get(), actor_zeta::address_t::empty_address(), create_supervisor_id);
+    supervisor->scheduler_test()->run_once();
+    REQUIRE(supervisor_counter == 1);
+    REQUIRE(supervisor_sub_counter == 1);
+}
+
+TEST_CASE("spawn supervisor custom resource") {
+    supervisor_counter = 0;
+    supervisor_sub_counter = 0;
+    actor_counter = 0;
+    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
+    auto supervisor = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr);
+    actor_zeta::send(supervisor.get(), actor_zeta::address_t::empty_address(), create_supervisor_custom_resource_id);
     supervisor->scheduler_test()->run_once();
     REQUIRE(supervisor_counter == 1);
     REQUIRE(supervisor_sub_counter == 1);
