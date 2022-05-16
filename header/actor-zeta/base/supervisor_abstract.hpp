@@ -43,7 +43,7 @@ namespace actor_zeta { namespace base {
         using supervisor_abstract::supervisor_abstract;
 
     protected:
-        template<
+         template<
             class Inserter,
             class... Args>
         auto spawn_actor(const Inserter& inserter, Args&&... args) -> address_t {
