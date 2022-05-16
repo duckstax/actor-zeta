@@ -47,18 +47,18 @@ namespace actor_zeta { namespace base {
             class Inserter,
             class... Args>
         auto spawn_actor(const Inserter& inserter, Args&&... args) -> address_t {
-            using Inserter_remove_reference_t =  type_traits::remove_reference_t<Inserter>;
-            using call_trait =  type_traits::get_callable_trait_t<Inserter_remove_reference_t>;
+            using Inserter_remove_reference =  type_traits::remove_reference_t<Inserter>;
+            using call_trait =  type_traits::get_callable_trait_t<Inserter_remove_reference>;
             using Actor = type_traits::type_list_at_t<typename call_trait::args_types, 0>;
-            static_assert(std::is_pointer<Actor>::value);
+            static_assert(std::is_pointer<Actor>::value,"not a pointer");
             using Actor_clear_type = type_traits::decay_t<Actor>;
-            using Actor_not_pointer_type = typename std::remove_pointer<Actor_clear_type>::type;
-            static_assert(std::is_base_of<actor_abstract, Actor_not_pointer_type>::value,"");
+            using Actor_remove_pointer_type = typename std::remove_pointer<Actor_clear_type>::type;
+            static_assert(std::is_base_of<actor_abstract, Actor_remove_pointer_type>::value,"not heir");
 
-            auto allocate_byte = sizeof(Actor_not_pointer_type);
-            auto allocate_byte_alignof = alignof(Actor_not_pointer_type);
+            auto allocate_byte = sizeof(Actor_remove_pointer_type);
+            auto allocate_byte_alignof = alignof(Actor_remove_pointer_type);
             void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
-            auto* actor = new (buffer) Actor_not_pointer_type(static_cast<Supervisor*>(this), std::forward<Args>(args)...);
+            auto* actor = new (buffer) Actor_remove_pointer_type(static_cast<Supervisor*>(this), std::forward<Args>(args)...);
             auto address = actor->address();
             inserter(actor);
             return address;
@@ -68,19 +68,19 @@ namespace actor_zeta { namespace base {
             class Inserter,
             class... Args>
         auto spawn_supervisor(const Inserter& inserter, Args&&... args) -> address_t {
-            using Inserter_remove_reference_t =  type_traits::remove_reference_t<Inserter>;
-            using call_trait =  type_traits::get_callable_trait_t<Inserter_remove_reference_t>;
+            using Inserter_remove_reference =  type_traits::remove_reference_t<Inserter>;
+            using call_trait =  type_traits::get_callable_trait_t<Inserter_remove_reference>;
             using SupervisorChildren = type_traits::type_list_at_t<typename call_trait::args_types, 0>;
-            static_assert(std::is_pointer<SupervisorChildren>::value);
+            static_assert(std::is_pointer<SupervisorChildren>::value,"not a pointer");
             using SupervisorChildren_clear_type = type_traits::decay_t<SupervisorChildren>;
-            using SupervisorChildren_not_pointer_type = typename std::remove_pointer<SupervisorChildren_clear_type>::type;
-            static_assert(std::is_base_of<actor_abstract, SupervisorChildren_not_pointer_type>::value,"");
+            using SupervisorChildren_remove_pointer_type = typename std::remove_pointer<SupervisorChildren_clear_type>::type;
+            static_assert(std::is_base_of<supervisor_abstract, SupervisorChildren_remove_pointer_type>::value,"not heir");
 
 
-            auto allocate_byte = sizeof(SupervisorChildren);
-            auto allocate_byte_alignof = alignof(SupervisorChildren);
+            auto allocate_byte = sizeof(SupervisorChildren_remove_pointer_type);
+            auto allocate_byte_alignof = alignof(SupervisorChildren_remove_pointer_type);
             void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
-            auto* supervisor = new (buffer) SupervisorChildren(static_cast<Supervisor*>(this), std::forward<Args>(args)...);
+            auto* supervisor = new (buffer) SupervisorChildren_remove_pointer_type(static_cast<Supervisor*>(this), std::forward<Args>(args)...);
             auto address = supervisor->address();
             inserter(supervisor);
             return address;
