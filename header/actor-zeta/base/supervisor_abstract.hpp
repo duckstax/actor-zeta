@@ -76,7 +76,6 @@ namespace actor_zeta { namespace base {
             using SupervisorChildren_remove_pointer_type = typename std::remove_pointer<SupervisorChildren_clear_type>::type;
             static_assert(std::is_base_of<supervisor_abstract, SupervisorChildren_remove_pointer_type>::value,"not heir");
 
-
             auto allocate_byte = sizeof(SupervisorChildren_remove_pointer_type);
             auto allocate_byte_alignof = alignof(SupervisorChildren_remove_pointer_type);
             void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
