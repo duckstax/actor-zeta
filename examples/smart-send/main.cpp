@@ -53,10 +53,7 @@ using actor_zeta::detail::pmr::memory_resource;
 class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
 public:
     enum class system_command : std::uint64_t {
-        sync_contacts = 0x00,
-        add_link,
-        remove_link,
-        broadcast,
+        broadcast = 0x00,
         create
     };
 
@@ -126,7 +123,7 @@ int main() {
     int const task = 10000;
 
     for (auto i = task - 1; i > 0; --i) {
-        actor_zeta::send(supervisor.get(), actor_zeta::address_t::empty_address(), worker_t::command_t::download, std::string("fb"), std::string("jack"), std::string("1"));
+        supervisor->broadcast_on_worker(worker_t::command_t::download, std::string("fb"), std::string("jack"), std::string("1"));
     }
 
     for (auto i = task - 1; i > 0; --i) {

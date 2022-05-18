@@ -17,7 +17,7 @@
 
 namespace actor_zeta { namespace base {
 
-    static void error_sync_contacts_in_supervisor(detail::string_view name, detail::string_view error) {
+    static void error_sync_contacts_in_supervisor(const std::string& name, const std::string& error) {
         std::cerr << "WARNING" << '\n';
         std::cerr << "Actor name : " << name << '\n';
         std::cerr << "Not initialization address type:" << error << '\n';
@@ -59,10 +59,6 @@ namespace actor_zeta { namespace base {
 
     auto supervisor_abstract::address() noexcept -> address_t {
         return address_t(this);
-    }
-
-    auto supervisor_abstract::clock() noexcept -> clock::clock_t& {
-        return scheduler_impl()->clock();
     }
 
 }} // namespace actor_zeta::base

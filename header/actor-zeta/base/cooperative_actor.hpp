@@ -2,7 +2,6 @@
 
 #include "forwards.hpp"
 #include <actor-zeta/base/actor_abstract.hpp>
-#include <actor-zeta/clock/clock.hpp>
 #include <actor-zeta/detail/single_reader_queue.hpp>
 #include <actor-zeta/scheduler/resumable.hpp>
 #include <actor-zeta/base/behavior.hpp>
@@ -74,7 +73,6 @@ namespace actor_zeta { namespace base {
 
         // ----------------------------------------------------- message processing
 
-        auto clock() noexcept -> clock::clock_t&;
         supervisor_abstract* supervisor_;
         scheduler::execution_unit* executor_;
         mailbox::message* current_message_;
