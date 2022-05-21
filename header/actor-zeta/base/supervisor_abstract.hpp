@@ -1,14 +1,12 @@
 #pragma once
 
-#include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
 
 namespace actor_zeta { namespace base {
 
     class supervisor_abstract
-        : public communication_module
-        , public ref_counted
+        : public actor_abstract
         , public intrusive_behavior_t {
     public:
         supervisor_abstract(detail::pmr::memory_resource*, std::string);

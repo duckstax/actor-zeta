@@ -42,7 +42,7 @@ public:
 
     void create() {
         spawn_actor<storage_t>([this](storage_t* ptr) {
-            REQUIRE(actor_zeta::base::communication_module::id_t(static_cast<actor_zeta::base::communication_module*>(ptr)) == ptr->id());
+            REQUIRE(actor_zeta::base::actor_abstract::id_t(static_cast<actor_zeta::base::actor_abstract*>(ptr)) == ptr->id());
             REQUIRE(ids_.find(reinterpret_cast<int64_t>(ptr)) == ids_.end());
             ids_.insert(reinterpret_cast<int64_t>(ptr));
         });
