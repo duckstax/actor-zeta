@@ -1,10 +1,6 @@
 #pragma once
 
-<<<<<<< 128-changing-signature-of-a-function
-#include "actor-zeta/detail/callable_trait.hpp"
-#include <actor-zeta/base/communication_module.hpp>
-=======
->>>>>>> develop
+#include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
 
