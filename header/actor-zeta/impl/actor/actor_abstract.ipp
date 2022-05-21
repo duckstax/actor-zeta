@@ -8,7 +8,6 @@
 #include <actor-zeta/impl/handler.ipp>
 // clang-format on
 
-
 #include <iostream>
 
 namespace actor_zeta { namespace base {
@@ -23,12 +22,36 @@ namespace actor_zeta { namespace base {
     actor_abstract::~actor_abstract() {
     }
 
-    actor_abstract::actor_abstract(std::string type)
-        : communication_module(std::move(type)) {
-    }
-
     auto actor_abstract::address() noexcept -> address_t {
         return address_t(this);
+    }
+
+    void actor_abstract::enqueue(mailbox::message_ptr msg) {
+        enqueue(std::move(msg), nullptr);
+    }
+
+    auto actor_abstract::type() const -> const char* const {
+#ifdef DEBUG
+        return type_.data();
+#else
+        return nullptr;
+#endif
+    }
+
+    actor_abstract::actor_abstract(std::string type) {
+#ifdef DEBUG
+        type_ = std::move(type);
+#else
+        std::move(type);
+#endif
+    }
+
+    void actor_abstract::enqueue(mailbox::message_ptr msg, scheduler::execution_unit* e) {
+        enqueue_impl(std::move(msg), e);
+    }
+
+    auto actor_abstract::id() const -> id_t {
+        return id_t{const_cast<actor_abstract*>(this)};
     }
 
 }} // namespace actor_zeta::base

@@ -9,7 +9,6 @@
 // clang-format on
 
 #include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/communication_module.hpp>
 #include <memory>
 
 namespace actor_zeta { namespace base {
@@ -66,7 +65,7 @@ namespace actor_zeta { namespace base {
         std::swap(ptr_, other.ptr_);
     }
 
-    void* address_t::get() const {
+    actor_abstract* address_t::get() const {
         return ptr_;
     }
 
