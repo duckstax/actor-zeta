@@ -30,12 +30,12 @@ namespace actor_zeta { namespace base {
     using detail::is_supported_alignment;
 
     supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* mr, std::string type)
-        : communication_module(std::move(type))
+        : actor_abstract(std::move(type))
         , memory_resource_(mr) {
     }
 
     supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string type)
-        : communication_module(std::move(type))
+        : actor_abstract(std::move(type))
         , memory_resource_(ptr->resource()) {
     }
 

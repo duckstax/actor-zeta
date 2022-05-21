@@ -18,18 +18,18 @@ namespace actor_zeta { namespace base {
         explicit address_t(supervisor_abstract*);
         static auto empty_address() -> address_t;
 
-        inline communication_module* operator->() const noexcept {
+        inline actor_abstract* operator->() const noexcept {
             return ptr_;
         }
 
         operator bool() const noexcept;
         auto operator!() const noexcept -> bool;
         void swap(address_t& other);
-        void* get() const;
+        actor_abstract* get() const;
 
     private:
         address_t() noexcept;
-        communication_module* ptr_;
+        actor_abstract* ptr_;
     };
 
     static_assert(!std::is_default_constructible<address_t>::value, "");
