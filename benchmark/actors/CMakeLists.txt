@@ -1,2 +1,2 @@
-add_subdirectory(single_threaded)
+add_subdirectory(singlethreaded)
 add_subdirectory(multithreaded)

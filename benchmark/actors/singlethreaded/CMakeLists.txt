@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-set(project actors_single_threaded_benchmark)
+set(project benchmark_actors_singlethreaded)
 if (CMAKE_VERSION VERSION_LESS 3.0)
     PROJECT(${project} CXX)
 else ()
