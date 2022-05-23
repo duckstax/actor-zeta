@@ -30,10 +30,10 @@ auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
         }                                                                                                                                               \
                                                                                                                                                         \
         void prepare() {                                                                                                                                \
-            auto address_0 = spawn_actor<actor_name>([this](actor_name* ptr) {                                                                          \
+            auto address_0 = spawn_actor([this](actor_name* ptr) {                                                                                      \
                 actors_.emplace(name_t::actor_0, ptr);                                                                                                  \
             });                                                                                                                                         \
-            auto address_1 = spawn_actor<actor_name>([this](actor_name* ptr) {                                                                          \
+            auto address_1 = spawn_actor([this](actor_name* ptr) {                                                                                      \
                 actors_.emplace(name_t::actor_1, ptr);                                                                                                  \
             });                                                                                                                                         \
             address_book_.emplace(name_t::actor_0, std::move(address_0));                                                                               \

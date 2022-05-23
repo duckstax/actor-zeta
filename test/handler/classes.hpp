@@ -269,7 +269,7 @@ uint64_t test_handlers::ptr_3_counter = 0;
 uint64_t test_handlers::ptr_4_counter = 0;
 
 void dummy_supervisor::create_storage() {
-    spawn_actor<storage_t>([this](storage_t* ptr) {
+    spawn_actor([this](storage_t* ptr) {
         TRACE("+++");
         actors_.emplace_back(ptr);
         add_actor_impl_counter++;
@@ -277,7 +277,7 @@ void dummy_supervisor::create_storage() {
 }
 
 void dummy_supervisor::create_test_handlers() {
-    spawn_actor<test_handlers>([this](test_handlers* ptr) {
+    spawn_actor([this](test_handlers* ptr) {
         TRACE("+++");
         actors_.emplace_back(ptr);
         add_actor_impl_counter++;

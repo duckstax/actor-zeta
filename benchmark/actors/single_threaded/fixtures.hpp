@@ -44,6 +44,8 @@ namespace names {
     DEFINE_SUPERVISOR(supervisor, actor);                                                       \
     class fixture : public ::benchmark::Fixture {                                               \
     public:                                                                                     \
+        fixture()                                                                               \
+            : sup_(nullptr, actor_zeta::deleter(nullptr)) {}                                    \
         virtual void SetUp(__attribute__((unused)) const ::benchmark::State& state) final {     \
             auto* resource = actor_zeta::detail::pmr::get_default_resource();                   \
             sup_ = actor_zeta::spawn_supervisor<supervisor>(resource);                          \
@@ -59,7 +61,7 @@ namespace names {
             TearDown(static_cast<const ::benchmark::State&>(state));                            \
         }                                                                                       \
                                                                                                 \
-        std::unique_ptr<supervisor> sup_;                                                       \
+        std::unique_ptr<supervisor, actor_zeta::deleter> sup_;                                  \
     }
 
 #define REGISTER_BENCHMARK(fixture, bm_name) \

@@ -60,8 +60,8 @@ public:
     explicit supervisor_lite(memory_resource* ptr)
         : cooperative_supervisor(ptr, "network")
         , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
-                 1,
-                 100),
+                 2,
+                 1000),
              thread_pool_deleter) {
         e_->start();
         add_handler(system_command::create, &supervisor_lite::create);
@@ -69,7 +69,7 @@ public:
     }
 
     void create() {
-        spawn_actor<worker_t>([this](worker_t* ptr) {
+        spawn_actor([this](worker_t* ptr) {
             actors_.emplace_back(ptr);
         });
     }
