@@ -1,9 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <map>
 #include <memory>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 #include <actor-zeta.hpp>
@@ -16,7 +16,7 @@ struct counter_args_t {
 
 #define DEFINE_ACTOR(actor_name, supervisor_name, ...)                                                                    \
     class actor_name final : public actor_zeta::basic_async_actor {                                                       \
-        std::unordered_map<name_t, actor_zeta::address_t> address_book_;                                                  \
+        std::map<name_t, actor_zeta::address_t> address_book_;                                                            \
         template<size_t... I>                                                                                             \
         auto perform(command_t cmd, actor_zeta::type_traits::index_sequence<I...>) -> void {                              \
             actor_zeta::send(address_book_.begin()->second, address(), cmd, I...);                                        \
