@@ -15,6 +15,7 @@
 
 #include "define_actor.hpp"
 #include "define_supervisor.hpp"
+#include "counters.h"
 
 using actor_zeta::detail::pmr::memory_resource;
 
@@ -41,8 +42,6 @@ namespace names {
     static const std::string supervisor("supervisor");
 
 } // namespace names
-
-std::atomic_int counter_g = 0;
 
 struct sync_t {
     sem_t prodToRoutine;

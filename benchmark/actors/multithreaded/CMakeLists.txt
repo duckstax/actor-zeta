@@ -8,6 +8,7 @@ else ()
     PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
 endif ()
 set(${PROJECT_NAME}_SOURCES
+    counters.cpp
     main.cpp
 )
 set(${PROJECT_NAME}_HEADERS
