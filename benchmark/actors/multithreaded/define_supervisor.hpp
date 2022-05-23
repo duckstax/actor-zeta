@@ -1,9 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <map>
 #include <memory>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 #include <actor-zeta.hpp>
@@ -71,8 +71,8 @@ auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
     private:                                                                                                                                            \
         base_single_t sync_;                                                                                                                            \
         std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;                                                            \
-        std::unordered_map<name_t, actor_zeta::address_t> address_book_;                                                                                \
-        std::unordered_map<name_t, actor_name*> actors_;                                                                                                \
+        std::map<name_t, actor_zeta::address_t> address_book_;                                                                                          \
+        std::map<name_t, actor_name*> actors_;                                                                                                          \
     };                                                                                                                                                  \
     auto set_done(supervisor_name* sup_ptr_)->void {                                                                                                    \
         std::cout << std::this_thread::get_id() << " :: Going to sem done ... .. . " << reinterpret_cast<void*>(sup_ptr_) << std::endl;                 \

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <map>
 #include <memory>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 #include <actor-zeta.hpp>
@@ -34,7 +34,6 @@
         void send() {                                                                                                                                   \
             assert(actors_.size() == 2);                                                                                                                \
             actors_.at(name_t::actor_0)->start();                                                                                                       \
-            /*actor_zeta::send(address_book_.at(name_t::actor_0), address(), command_t::start);*/                                                       \
         }                                                                                                                                               \
                                                                                                                                                         \
     protected:                                                                                                                                          \
@@ -52,6 +51,6 @@
         }                                                                                                                                               \
                                                                                                                                                         \
     private:                                                                                                                                            \
-        std::unordered_map<name_t, actor_zeta::address_t> address_book_;                                                                                \
-        std::unordered_map<name_t, actor_name*> actors_;                                                                                                \
+        std::map<name_t, actor_zeta::address_t> address_book_;                                                                                          \
+        std::map<name_t, actor_name*> actors_;                                                                                                          \
     }
