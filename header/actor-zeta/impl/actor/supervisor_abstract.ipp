@@ -57,8 +57,4 @@ namespace actor_zeta { namespace base {
         return scheduler_impl();
     }
 
-    auto supervisor_abstract::address() noexcept -> address_t {
-        return address_t(this);
-    }
-
 }} // namespace actor_zeta::base
