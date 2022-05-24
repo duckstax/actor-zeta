@@ -29,10 +29,10 @@ jobs:
                 && rm -rf /var/lib/apt/lists/* \
                 && pip3 install --upgrade pip==20.3.4 \
                 && pip3 install --no-cache-dir conan==1.45.0 cmake==3.21.0
-            ls
-            pwd
+             ls
+             pwd
             
-            conan profile new default --detect \
+             conan profile new default --detect \
                && conan profile update settings.compiler.libcxx=libstdc++11 default\
                && conan profile update settings.compiler=gcc default \
                && conan profile update settings.compiler.version=4.9 default \
@@ -42,8 +42,8 @@ jobs:
                && conan install -if build . --build missing -s build_type=Release -s compiler.libcxx=libstdc++11
                # conan install ${{github.workspace}}/build/.. -if ${{github.workspace}}/build --build=missing -s build_type=Release
             
-            cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON -DDEV_MODE=ON && \
-            cmake --build .  --target all
+             cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON -DDEV_MODE=ON && \
+             cmake --build .  --target all
             
-            ctest -C Release --output-on-failure #--extra-verbose  #--rerun-failed -R message-id
+             ctest -C Release --output-on-failure #--extra-verbose  #--rerun-failed -R message-id
 
