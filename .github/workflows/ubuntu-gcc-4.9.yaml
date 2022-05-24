@@ -33,6 +33,7 @@ jobs:
 
       - name: Install conan dependencies
         run: |   
+          ls
           conan profile new default --detect \
               && conan profile update settings.compiler.libcxx=libstdc++11 default\
               && conan profile update settings.compiler=gcc default \
