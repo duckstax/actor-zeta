@@ -44,8 +44,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build library
         run: |
+          ls
           conan install -if build . --build missing -s build_type=Release -s compiler.libcxx=libstdc++11
-          cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON -DDEV_MODE=ON && \
+          cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON -DDEV_MODE=ON
           cmake --build . --parallel  --target all
         working-directory: build/
 
