@@ -34,17 +34,17 @@ jobs:
       - name: Install conan dependencies
         run: |   
           ls
-          conan profile new default --detect \
-              && conan profile update settings.compiler.libcxx=libstdc++11 default\
-              && conan profile update settings.compiler=gcc default \
-              && conan profile update settings.compiler.version=4.9 default \
-              && conan profile update env.CXX=g++ default \
-              && conan profile update env.CC=gcc default \
-              && conan install -if build . --build missing -s build_type=Release -s compiler.libcxx=libstdc++11
+          conan profile new default --detect 
+          conan profile update settings.compiler.libcxx=libstdc++11 default
+          conan profile update settings.compiler=gcc default 
+          conan profile update settings.compiler.version=4.9 default 
+          conan profile update env.CXX=g++ default 
+          conan profile update env.CC=gcc default 
 
       - uses: actions/checkout@v2
       - name: Build library
         run: |
+          conan install -if build . --build missing -s build_type=Release -s compiler.libcxx=libstdc++11
           cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON -DDEV_MODE=ON && \
           cmake --build . --parallel  --target all
         working-directory: build/
