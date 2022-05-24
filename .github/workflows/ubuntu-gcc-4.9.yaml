@@ -31,6 +31,7 @@ jobs:
              && pip3 install --upgrade pip==20.3.4 \
              && pip3 install --no-cache-dir conan==1.45.0 cmake==3.21.0
 
+      - uses: actions/checkout@v2
       - name: Install conan dependencies
         run: |   
           ls
@@ -41,7 +42,6 @@ jobs:
           conan profile update env.CXX=g++ default 
           conan profile update env.CC=gcc default 
 
-      - uses: actions/checkout@v2
       - name: Build library
         run: |
           ls
