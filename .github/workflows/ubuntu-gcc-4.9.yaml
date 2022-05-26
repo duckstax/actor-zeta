@@ -2,11 +2,11 @@
 on: [push]
 
 jobs:
-  build-library:
+  build:
     runs-on: ubuntu-latest
-    needs: [ prepare ]
+    #needs: [ prepare ]
     strategy:
-      fail-fast: false
+      #fail-fast: false
       matrix:
         profiles: [Release, Debug]
         CXX_STANDARD: [11,14]
