@@ -12,6 +12,7 @@ jobs:
 
     container: ubuntu:16.04
     steps:
+      - uses: actions/checkout@v2
       - name: set env
         run: |
           apt update  \
@@ -31,7 +32,6 @@ jobs:
              && pip3 install --upgrade pip==20.3.4 \
              && pip3 install --no-cache-dir conan==1.45.0 cmake==3.21.0
 
-      - uses: actions/checkout@v2
       - name: Install conan dependencies
         run: |   
           ls
@@ -41,11 +41,10 @@ jobs:
           conan profile update settings.compiler.version=4.9 default 
           conan profile update env.CXX=g++ default 
           conan profile update env.CC=gcc default 
+          conan install -if build . --build missing -s build_type=Release -s 
 
       - name: Build library
         run: |
-          ls
-          conan install -if build . --build missing -s build_type=Release -s compiler.libcxx=libstdc++11
           cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON -DDEV_MODE=ON
           cmake --build . --parallel  --target all
         working-directory: build/
