@@ -9,7 +9,7 @@ jobs:
         profiles: [Release, Debug]
         configuration: [
           { "COMPILER_C": "gcc-4.8", "COMPILER":"gcc", "COMPILER_VER":"4.8", "COMPILER_CXX": "g++-4.8", "CXX_STANDARD": 11 },
-          { "COMPILER_C": "gcc-4.9", "COMPILER":"gcc", "COMPILER_VER":"4.9", "COMPILER_CXX": "gcc-4.9", "CXX_STANDARD": 11 },
+          #{ "COMPILER_C": "gcc-4.9", "COMPILER":"gcc", "COMPILER_VER":"4.9", "COMPILER_CXX": "gcc-4.9", "CXX_STANDARD": 11 },
           #{ "COMPILER_C": "gcc-4.8", "COMPILER":"gcc", "COMPILER_VER":"4.8", "COMPILER_CXX": "gcc-4.8", "CXX_STANDARD": 11 },
           #{ "COMPILER_C": "gcc-4.9", "COMPILER":"gcc", "COMPILER_VER":"4.9", "COMPILER_CXX": "g++-4.9", "CXX_STANDARD": 11 },
           #{ "COMPILER_C": "gcc-4.9", "COMPILER":"gcc", "COMPILER_VER":"4.9", "COMPILER_CXX": "g++-4.9", "CXX_STANDARD": 11 },

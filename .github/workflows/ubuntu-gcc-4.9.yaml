@@ -4,11 +4,12 @@ on: [push]
 jobs:
   build-library:
     runs-on: ubuntu-latest
-    #needs: [ prepare ]
-    #strategy:
-    #  fail-fast: false
-    #  matrix:
-    #    PYTHON_VERSION: [ "3.9", "3.10" ]
+    needs: [ prepare ]
+    strategy:
+      fail-fast: false
+      matrix:
+        profiles: [Release, Debug]
+        CXX_STANDARD: [11,14]
 
     container: ubuntu:16.04
     steps:
@@ -34,24 +35,21 @@ jobs:
 
       - name: Install conan dependencies
         run: |   
-          ls
           conan profile new default --detect 
           conan profile update settings.compiler.libcxx=libstdc++11 default
           conan profile update settings.compiler=gcc default 
           conan profile update settings.compiler.version=4.9 default 
           conan profile update env.CXX=g++ default 
           conan profile update env.CC=gcc default 
-          conan install -if build . --build missing -s build_type=Release
+          conan install -if build . --build missing -s build_type=${{ matrix.profiles }}
 
       - name: Build library
         run: |
-          cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON -DDEV_MODE=ON
+          cmake .. -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.profiles }} -DCMAKE_CXX_STANDARD=${{ matrix.CXX_STANDARD}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON -DDEV_MODE=ON
           cmake --build . --parallel  --target all
         working-directory: build/
 
-
-
       - name: Run cmake tests
-        run: ctest -C Release --output-on-failure #--extra-verbose  #--rerun-failed -R message-id
+        run: ctest -C ${{ matrix.profiles }} --rerun-failed --output-on-failure
         working-directory: build/
 
