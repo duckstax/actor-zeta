@@ -79,6 +79,8 @@ namespace actor_zeta { namespace base {
             }
         }
 
+        // @TODO CRITICAL BUG on condition 'flags() != static_cast<int>(state::empty)'
+
         /*
             switch ( mailbox().enqueue(msg.release())) {
                 case detail::enqueue_result::unblocked_reader: {

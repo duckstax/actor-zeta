@@ -7,6 +7,8 @@
  * 
  * This multithreaded benchmark demonstrates CRITICAL BUG in thread synchronization on workers
  * and blocks indefinitly on condition variable wait.
+ * @TODO CRITICAL BUG on condition in cooperative_actor::enqueue_impl: 'flags() != static_cast<int>(state::empty)'
+ * infinite waiting on condition_variable in work_sharing::dequeue
  */
 
 REGISTER_BENCHMARKS(size_t, 2);
