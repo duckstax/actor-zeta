@@ -18,11 +18,13 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
 #if __has_include(<memory_resource>)
     using std::pmr::memory_resource;
+    using std::pmr::monotonic_buffer_resource;
 
 #else
     using std::experimental::pmr::memory_resource;
-
+    using std::experimental::monotonic_buffer_resource;
 #endif
+
 
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 

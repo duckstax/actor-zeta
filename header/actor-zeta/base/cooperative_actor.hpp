@@ -1,10 +1,12 @@
 #pragma once
 
+#include <actor-zeta/base/behavior.hpp>
+#include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/base/actor_abstract.hpp>
+#include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/detail/queue/fifo_inbox.hpp>
+#include <actor-zeta/mailbox.hpp>
 #include <actor-zeta/scheduler/resumable.hpp>
-#include <actor-zeta/forwards.hpp>
-#include <actor-zeta/mail_box.hpp>
 
 namespace actor_zeta { namespace base {
     ///
@@ -13,60 +15,47 @@ namespace actor_zeta { namespace base {
 
     class cooperative_actor
         : public actor_abstract
-        , public scheduler::resumable {
+        , public scheduler::resumable
+        , public intrusive_behavior_t {
     public:
-        using mailbox_t = detail::fifo_inbox<mailbox_policy>;
+        using inbox_t = detail::fifo_inbox<mailbox_policy>;
 
         scheduler::resume_result resume(scheduler::execution_unit*, max_throughput_t) final;
 
         ~cooperative_actor() override;
 
         void intrusive_ptr_add_ref_impl() override;
-
         void intrusive_ptr_release_impl() override;
 
     protected:
         template<class Supervisor>
-        cooperative_actor(Supervisor* ptr, std::string type ,int64_t actor_id)
-            : cooperative_actor(static_cast<supervisor_abstract*>(ptr),std::move(type),actor_id){};
+        cooperative_actor(Supervisor* ptr, std::string type)
+            : cooperative_actor(static_cast<supervisor_abstract*>(ptr), std::move(type)) {};
 
-        bool enqueue_impl(message_ptr, scheduler::execution_unit*) final;
+        void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*);
 
-        // Non thread-safe method
-        auto current_message_impl() -> message* override;
+        auto current_message() -> mailbox::message* ;
+        auto set_current_message(mailbox::message_ptr msg) -> void;
 
     private:
-        cooperative_actor(supervisor_abstract*, std::string,int64_t);
+        cooperative_actor(supervisor_abstract*, std::string);
 
-        void cleanup();
-
-        void consume(message&);
-
-        // message processing -----------------------------------------------------
-
-        inline mailbox_t& mailbox() {
-            return mailbox_;
+        inline inbox_t& inbox() {
+            return inbox_;
         }
 
         bool activate(scheduler::execution_unit*);
-
-        auto reactivate(message& x) -> void;
-
+        auto reactivate(mailbox::message& x) -> void;
         auto context(scheduler::execution_unit*) -> void;
-
         auto context() const -> scheduler::execution_unit*;
-
         auto supervisor() -> supervisor_abstract*;
-
         auto get_high_priority_queue() -> high_priority_queue&;
-
         auto get_normal_priority_queue() -> normal_priority_queue&;
 
-        // ----------------------------------------------------- message processing
         supervisor_abstract* supervisor_;
         scheduler::execution_unit* executor_;
-        message* current_message_;
-        mailbox_t mailbox_;
+        mailbox::message* current_message_;
+        inbox_t inbox_;
     };
 
     template<class T>

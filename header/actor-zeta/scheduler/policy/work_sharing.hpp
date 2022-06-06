@@ -62,6 +62,8 @@ namespace actor_zeta { namespace scheduler {
         resumable* dequeue(Worker* self) {
             auto& parent_data = cast(self->parent());
             std::unique_lock<std::mutex> guard(parent_data.lock);
+            // @TODO CRITICAL BUG on condition in cooperative_actor::enqueue_impl: 'flags() != static_cast<int>(state::empty)'
+            // infinite waiting on condition_variable
             parent_data.cv.wait(guard, [&] { return !parent_data.queue.empty(); });
             resumable* job = parent_data.queue.front();
             parent_data.queue.pop_front();

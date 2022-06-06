@@ -1,6 +1,8 @@
 #pragma once
 
+#if !defined(__APPLE__)
 #include <sys/prctl.h>
+#endif
 
 #include <thread>
 #include <type_traits>

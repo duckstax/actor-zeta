@@ -11,7 +11,7 @@ TEST_CASE("handler") {
 
     REQUIRE(dummy_supervisor::constructor_counter == 1);
 
-    actor_zeta::send(supervisor_.get(),actor_zeta::address_t::empty_address(),"create_test_handlers");
+    actor_zeta::send(supervisor_.get(),actor_zeta::address_t::empty_address(),dummy_supervisor_command::create_test_handlers);
     supervisor_->scheduler_test()->run_once();
     REQUIRE(dummy_supervisor::enqueue_base_counter == 1 /*add_link*/);
     REQUIRE(dummy_supervisor::add_actor_impl_counter == 1);
@@ -43,7 +43,7 @@ TEST_CASE("handler") {
     supervisor_->scheduler_test()->run_once();
     REQUIRE(test_handlers::ptr_4_counter == 1);
 
-    actor_zeta::send(supervisor_.get(),actor_zeta::address_t::empty_address(),"create_storage");
+    actor_zeta::send(supervisor_.get(),actor_zeta::address_t::empty_address(),dummy_supervisor_command::create_storage);
     supervisor_->scheduler_test()->run_once();
     REQUIRE(dummy_supervisor::enqueue_base_counter == 2 /* add_link*/);
     REQUIRE(dummy_supervisor::add_actor_impl_counter == 2);
@@ -54,7 +54,7 @@ TEST_CASE("handler") {
     actor_zeta::send(static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),storage_names::init);
     supervisor_->scheduler_test()->run_once();
     REQUIRE(storage_t::init_counter == 1);
-
+    
     REQUIRE(storage_t::search_counter == 0);
     actor_zeta::send(static_cast<dummy_supervisor*>(supervisor_.get())->last_actor(), supervisor_->address(),storage_names::search, std::string("key_1"));
     supervisor_->scheduler_test()->run_once();

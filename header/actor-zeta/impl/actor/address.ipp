@@ -3,22 +3,15 @@
 // clang-format off
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/message.hpp>
 #include <actor-zeta/base/supervisor.hpp>
+#include <actor-zeta/mailbox/message.hpp>
 #include <actor-zeta/impl/handler.ipp>
 // clang-format on
 
 #include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/communication_module.hpp>
 #include <memory>
 
-namespace {
-    constexpr static actor_zeta::detail::string_view non_type("non-type");
-}
-
 namespace actor_zeta { namespace base {
-
-    using message_ptr = std::unique_ptr<message>;
 
     address_t::address_t() noexcept
         : ptr_(nullptr) {
@@ -40,14 +33,6 @@ namespace actor_zeta { namespace base {
 
     address_t::operator bool() const noexcept {
         return static_cast<bool>(ptr_);
-    }
-
-    void address_t::enqueue(message_ptr msg) noexcept {
-        ptr_->enqueue(std::move(msg));
-    }
-
-    auto address_t::type() const -> detail::string_view {
-        return ptr_->type();
     }
 
     address_t::address_t(address_t&& other) noexcept {
@@ -80,12 +65,17 @@ namespace actor_zeta { namespace base {
         std::swap(ptr_, other.ptr_);
     }
 
-    void* address_t::get() const {
+    actor_abstract* address_t::get() const {
         return ptr_;
     }
 
     address_t::~address_t() noexcept {
         ptr_ = nullptr;
+    }
+
+    auto address_t::empty_address() -> address_t {
+        static address_t tmp;
+        return tmp;
     }
 
 }} // namespace actor_zeta::base

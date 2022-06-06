@@ -1,13 +1,14 @@
 #pragma once
+
 #include <utility>
 
 #include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/message.hpp>
+#include <actor-zeta/mailbox/message.hpp>
 
-namespace actor_zeta { namespace base {
+namespace actor_zeta { namespace mailbox {
 
-    auto message::command() const noexcept -> detail::string_view {
-        return detail::string_view(command_.data(), command_.size());
+    auto message::command() const noexcept -> message_id {
+        return command_;
     }
 
     auto message::clone() const -> message* {
@@ -15,15 +16,16 @@ namespace actor_zeta { namespace base {
     }
 
     message::operator bool() {
-        return !command_.empty() || bool(sender_) || body_.has_value();
+        return /*!command_ ||*/ bool(sender_) || !body_.empty();
     }
 
-    message::message(address_t sender, std::string name)
+    message::message(address_t sender, message_id name)
         : sender_(std::move(sender))
         , command_(std::move(name))
         , body_() {}
 
-    message::message(address_t sender, std::string name, detail::any body)
+    message::message(address_t sender, message_id name, actor_zeta::detail::rtt body)
+
         : sender_(std::move(sender))
         , command_(std::move(name))
         , body_(std::move(body)) {}
@@ -36,28 +38,28 @@ namespace actor_zeta { namespace base {
     }
 
     message::message()
-        : prev(nullptr)
-        , sender_(address_t::empty_address())
-    {}
+        : singly_linked(nullptr)
+        , prev(nullptr)
+        , sender_(address_t::empty_address()) {}
 
     bool message::is_high_priority() const {
-        return false;
+        return command_.priority() == detail::high_message_priority;
     }
 
-    auto message::body() -> detail::any& {
-        assert(body_.has_value());
+    auto message::body() -> actor_zeta::detail::rtt& {
+        assert(!body_.empty());
         return body_;
     }
 
-    auto message::sender() & noexcept -> address_t& {
+    auto message::sender() & noexcept -> base::address_t& {
         return sender_;
     }
 
-    auto message::sender() && noexcept -> address_t&& {
+    auto message::sender() && noexcept -> base::address_t&& {
         return std::move(sender_);
     }
 
-    auto message::sender() const& noexcept -> address_t const& {
+    auto message::sender() const& noexcept -> base::address_t const& {
         return sender_;
     }
 

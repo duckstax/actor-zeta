@@ -207,4 +207,10 @@ namespace actor_zeta {
     intrusive_ptr<T> dynamic_pointer_cast(intrusive_ptr<U> const& r) noexcept {
         return r.template downcast<T>();
     }
+
+    template<class T, class... Ts>
+    intrusive_ptr<T> make_counted(Ts&&... xs) {
+        return intrusive_ptr<T>(new T(std::forward<Ts>(xs)...), false);
+    }
+
 } // namespace actor_zeta

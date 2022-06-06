@@ -1,15 +1,10 @@
 #pragma once
 
-#include <algorithm>
-#include <chrono>
-#include <cstddef>
 #include <deque>
-#include <functional>
-#include <limits>
 
-#include "actor-zeta/base/actor_abstract.hpp"
 #include "actor-zeta/scheduler/resumable.hpp"
 #include "actor-zeta/scheduler/scheduler_abstract.hpp"
+#include "clock_test.hpp"
 
 namespace actor_zeta { namespace test {
 
@@ -23,11 +18,16 @@ namespace actor_zeta { namespace test {
 
         bool run_once();
         size_t run(size_t max_count = std::numeric_limits<size_t>::max());
+        size_t advance_time(clock::clock_t::duration_type);
+        clock_test& clock() noexcept;
 
     protected:
         void start() override;
         void stop() override;
         void enqueue(scheduler::resumable* ptr) override;
+
+    private:
+        clock_test clock_;
     };
 
 }} // namespace actor_zeta::test

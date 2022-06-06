@@ -3,8 +3,8 @@
 #include "scheduler_test.hpp"
 // clang-format on
 
-#include <limits>
 #include <actor-zeta/scheduler/execution_unit.hpp>
+#include <limits>
 
 namespace actor_zeta { namespace test {
 
@@ -31,9 +31,17 @@ namespace actor_zeta { namespace test {
         : super(num_worker_threads, max_throughput) {
     }
 
+    clock_test& scheduler_test_t::clock() noexcept {
+        return clock_;
+    }
+
     void scheduler_test_t::start() {}
 
-    void scheduler_test_t::stop() {}
+    void scheduler_test_t::stop() {
+        while (run() > 0) {
+            clock_.trigger_timeouts();
+        }
+    }
 
     void scheduler_test_t::enqueue(scheduler::resumable* ptr) {
         jobs.push_back(ptr);
@@ -68,4 +76,7 @@ namespace actor_zeta { namespace test {
         return res;
     }
 
+    size_t scheduler_test_t::advance_time(clock::clock_t::duration_type time) {
+        return clock_.advance_time(time);
+    }
 }} // namespace actor_zeta::test

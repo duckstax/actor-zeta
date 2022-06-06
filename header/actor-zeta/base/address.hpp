@@ -1,7 +1,7 @@
 #pragma once
 
-#include <actor-zeta/detail/string_view.hpp>
-#include <actor-zeta/forwards.hpp>
+#include "forwards.hpp"
+#include <type_traits>
 
 namespace actor_zeta { namespace base {
     ///
@@ -16,20 +16,20 @@ namespace actor_zeta { namespace base {
         ~address_t() noexcept;
         explicit address_t(actor_abstract*);
         explicit address_t(supervisor_abstract*);
-        static auto empty_address() -> address_t {
-            static address_t tmp;
-            return tmp;
+        static auto empty_address() -> address_t;
+
+        inline actor_abstract* operator->() const noexcept {
+            return ptr_;
         }
-        auto enqueue(message_ptr) noexcept -> void;
-        auto type() const -> detail::string_view;
+
         operator bool() const noexcept;
         auto operator!() const noexcept -> bool;
         void swap(address_t& other);
-        void* get() const;
+        actor_abstract* get() const;
 
     private:
         address_t() noexcept;
-        communication_module* ptr_;
+        actor_abstract* ptr_;
     };
 
     static_assert(!std::is_default_constructible<address_t>::value, "");

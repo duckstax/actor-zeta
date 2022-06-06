@@ -1,38 +1,102 @@
 #pragma once
 
-#include <actor-zeta/forwards.hpp>
-#include <actor-zeta/base/communication_module.hpp>
-#include <actor-zeta/detail/string_view.hpp>
-
 #include <new>
-#include <unordered_map>
 #include <utility>
+#include <string>
+
+#include "forwards.hpp"
+#include <actor-zeta/scheduler/forwards.hpp>
 
 namespace actor_zeta { namespace base {
     ///
     /// @brief Abstract concept of an actor
     ///
 
-    class actor_abstract
-        : public communication_module
-        , public ref_counted {
+    class actor_abstract : public ref_counted {
     public:
-        actor_abstract() = delete;
-        ~actor_abstract() override;
-
         // allow placement new (only)
         void* operator new(std::size_t, void* ptr) {
             return ptr;
         }
 
         auto address() noexcept -> address_t;
+
+        class id_t final {
+        public:
+            id_t() = default;
+
+            explicit id_t(actor_abstract* impl) noexcept
+                : impl_{impl} {
+            }
+
+            bool operator==(id_t const& other) const noexcept {
+                return impl_ == other.impl_;
+            }
+
+            bool operator!=(id_t const& other) const noexcept {
+                return impl_ != other.impl_;
+            }
+
+            bool operator<(id_t const& other) const noexcept {
+                return impl_ < other.impl_;
+            }
+
+            bool operator>(id_t const& other) const noexcept {
+                return other.impl_ < impl_;
+            }
+
+            bool operator<=(id_t const& other) const noexcept {
+                return !(*this > other);
+            }
+
+            bool operator>=(id_t const& other) const noexcept {
+                return !(*this < other);
+            }
+
+            template<typename charT, class traitsT>
+            friend std::basic_ostream<charT, traitsT>&
+            operator<<(std::basic_ostream<charT, traitsT>& os, id_t const& other) {
+                if (nullptr != other.impl_) {
+                    return os << other.impl_;
+                }
+                return os << "{not-valid}";
+            }
+
+            explicit operator bool() const noexcept {
+                return nullptr != impl_;
+            }
+
+            bool operator!() const noexcept {
+                return nullptr == impl_;
+            }
+
+        private:
+            actor_abstract* impl_{nullptr};
+        };
+
+        auto type() const -> const char* const;
+        auto id() const -> id_t;
+        auto enqueue(mailbox::message_ptr) -> void;
+        void enqueue(mailbox::message_ptr, scheduler::execution_unit*);
+
     protected:
-        actor_abstract(std::string,int64_t);
+
+        actor_abstract(std::string);
         // prohibit copies, assignments, and heap allocations
         void* operator new(size_t);
         void* operator new[](size_t);
+        actor_abstract() = delete;
         actor_abstract(const actor_abstract&) = delete;
         actor_abstract& operator=(const actor_abstract&) = delete;
+        ~actor_abstract() override;
+
+        virtual void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*) = 0;
+
+    private:
+#ifdef DEBUG
+        std::string type_;
+#endif
+
     };
 
 }} // namespace actor_zeta::base
