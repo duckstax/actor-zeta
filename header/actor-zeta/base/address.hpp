@@ -33,8 +33,6 @@ namespace actor_zeta { namespace base {
         actor_abstract* ptr_;
     };
 
-    bool operator==(const address_t& lhs, const address_t& rhs) noexcept;
-
     static_assert(!std::is_default_constructible<address_t>::value, "");
     static_assert(std::is_move_constructible<address_t>::value, "");
     static_assert(std::is_move_assignable<address_t>::value, "");
