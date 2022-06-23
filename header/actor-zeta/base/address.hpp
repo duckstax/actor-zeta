@@ -13,6 +13,7 @@ namespace actor_zeta { namespace base {
         address_t(const address_t& other);
         address_t& operator=(address_t&& other) noexcept;
         address_t& operator=(const address_t& other);
+        bool operator==(const address_t& rhs) noexcept;
         ~address_t() noexcept;
         explicit address_t(actor_abstract*);
         explicit address_t(supervisor_abstract*);
