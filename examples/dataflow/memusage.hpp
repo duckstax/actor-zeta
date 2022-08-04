@@ -58,7 +58,7 @@ namespace sdk {
                 , mem_prev_{0.0, 0.0, 0.0} {}
             ~checker_t() {}
 
-            auto check() {
+            auto check() -> void {
                 auto mem = sdk::memory::memusage();
                 if (mem.rss_memory > memory_limit_mb_) {
                     fprintf(stderr, "!!! MEMORY LIMIT EXCEEDED : %f Mb of %f Mb !!!\n", mem.rss_memory, memory_limit_mb_);

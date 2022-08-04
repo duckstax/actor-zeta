@@ -35,7 +35,7 @@ namespace names {
 
 } // namespace names
 
-std::atomic<int64_t> packets_a = 0;
+std::atomic<int64_t> packets_a(0);
 
 struct data_t {
     std::string data;
