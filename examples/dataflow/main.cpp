@@ -35,11 +35,13 @@ namespace names {
 
 } // namespace names
 
-std::atomic<int64_t> packets_a;
+std::atomic<int64_t> packets_a = 0;
 
 struct data_t {
     std::string data;
     std::chrono::system_clock::time_point time_point;
+    int64_t producer_index;
+    int64_t data_index;
 
     bool empty() const {
         return data.empty();
@@ -55,6 +57,7 @@ class supervisor_test_t;
 class actor_test_t final : public actor_zeta::basic_async_actor {
     supervisor_test_t* sup_ptr_;
     size_t consumer_latency_ms_;
+    std::map<int64_t, int64_t> prev_index_;
     std::map<int, actor_zeta::address_t> address_book_;
 
     auto perform(command_t cmd) -> void {
@@ -64,8 +67,8 @@ class actor_test_t final : public actor_zeta::basic_async_actor {
 public:
     actor_test_t(supervisor_test_t* ptr, size_t consumer_latency_ms)
         : actor_zeta::basic_async_actor(ptr, names::actor)
-        , consumer_latency_ms_(consumer_latency_ms)
-        , sup_ptr_(ptr) {
+        , sup_ptr_(ptr)
+        , consumer_latency_ms_(consumer_latency_ms) {
         add_handler(command_t::add_address, &actor_test_t::add_address);
         add_handler(command_t::process_data, &actor_test_t::process_data);
     }
@@ -82,8 +85,16 @@ public:
     void process_data(data_t&& data) {
         auto ms_dur = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - data.time()).count();
         packets_a--;
-        //if (packets_a.load() > 0)
-            //std::cout << __func__ << " :: packets_a " << packets_a.load() << " OUT >>>" << std::endl;
+        if (packets_a.load() > 0)
+            std::cout << __func__ << " :: packets_a " << packets_a.load() << " OUT >>>" << std::endl;
+        auto it = prev_index_.find(data.producer_index);
+        if (it == prev_index_.end()) {
+            prev_index_[data.producer_index] = data.data_index;
+        } else {
+            //std::cout << std::this_thread::get_id() << " :: " << data.data_index << " :: " << it->second << std::endl;
+            assert(data.data_index - it->second == 1);
+            it->second = data.data_index;
+        }
         //if (ms_dur > 0)
             //std::cout << std::this_thread::get_id() << " :: " << __func__ << " :: ms_dur " << ms_dur << " OUT >>>" << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(consumer_latency_ms_));
@@ -121,13 +132,15 @@ public:
         for (size_t i = 0; i < datasize_; ++i) {
             data.data.push_back(static_cast<char>(i % 255));
         }
+        data.producer_index = idx;
         std::cout << std::this_thread::get_id() << " :: producer #" << idx << " started +++" << std::endl;
-        size_t counter = 0;
+        int64_t counter = 0;
 
         while (running_) {
+            data.data_index = counter;
             for (const auto& addr : address_book_) {
                 packets_a++;
-                data.time_point = std::chrono::system_clock::now();
+                data.time_point = std::chrono::system_clock::now();                
                 actor_zeta::send(addr.second, address(), command_t::process_data, data);
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(producer_latency_ms_));
