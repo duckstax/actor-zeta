@@ -31,7 +31,7 @@ jobs:
              && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 100 \
              && rm -rf /var/lib/apt/lists/* \
              && pip3 install --upgrade pip==20.3.4 \
-             && pip3 install --no-cache-dir conan==1.45.0 cmake==3.21.0
+             && pip3 install --no-cache-dir conan==1.51.0 cmake==3.21.0
 
       - name: Install conan dependencies
         run: |   
