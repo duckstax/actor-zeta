@@ -73,7 +73,10 @@ namespace {
 
     struct fixture {
         inode_policy policy;
-        queue_type queue_{policy, policy, policy, policy};
+        queue_type queue_{policy,
+            high_priority_queue(policy),
+            nested_queue_type(policy),
+            nested_queue_type(policy)};
 
         void fill() {}
 
