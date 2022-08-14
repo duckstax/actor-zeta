@@ -22,8 +22,8 @@ namespace actor_zeta { namespace detail {
 
         static constexpr size_t num_queues = sizeof...(Qs) + 1;
 
-        fixed_queue(policy_type policy0, typename Q::policy_type policy1, typename Qs::policy_type... policies)
-            : qs_(std::move(policy1), std::move(policies)...)
+        fixed_queue(policy_type policy0, Q queue1, Qs... queues/*typename Q::policy_type policy1, typename Qs::policy_type... policies*/)
+            : qs_(std::make_tuple(std::move(queue1), std::move(queues)...))
             , policy_(std::move(policy0)) {}
 
         auto policy() noexcept -> policy_type& {

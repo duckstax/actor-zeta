@@ -16,7 +16,10 @@ namespace actor_zeta { namespace mailbox {
 
         priority_message() = default;
         priority_message(const priority_message&) = default;
+        priority_message(priority_message&) = default;
+        priority_message(priority_message&&) = default;
         auto operator=(const priority_message&) -> priority_message& = default;
+        auto operator=(priority_message&) -> priority_message& = default;
         constexpr explicit priority_message(const type_traits::unit_t&) {}
 
         template<template<class> class Queue>

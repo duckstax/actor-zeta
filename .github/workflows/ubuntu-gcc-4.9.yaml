@@ -19,10 +19,12 @@ jobs:
           apt update  \
              && apt upgrade -y \
              && apt install -y \
+                 build-essential zlib1g-dev wget \
+                 libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev \
                  ninja-build \
                  software-properties-common \
-                 python3-dev \
-                 python3-pip\
+#                 python3-dev \
+#                 python3-pip\
              && apt clean \
              && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
              && apt update  \
@@ -30,8 +32,18 @@ jobs:
              && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 100 \
              && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 100 \
              && rm -rf /var/lib/apt/lists/* \
-             && pip3 install --upgrade pip==20.3.4 \
-             && pip3 install --no-cache-dir conan==1.45.0 cmake==3.21.0
+#             && pip3 install --upgrade pip==20.3.4 \
+#             && pip3 install --no-cache-dir conan==1.45.0 cmake==3.21.0
+#             && cd /opt \
+             && wget https://www.python.org/ftp/python/3.6.3/Python-3.6.3.tgz \
+             && tar -xvf Python-3.6.3.tgz \
+             && cd Python-3.6.3 \
+             && ./configure \
+             && make \
+             && make install \
+             && cd .. \
+             && python3.6 -m pip install --upgrade pip \
+             && python3.6 -m pip install --no-cache-dir conan==1.51.2 cmake==3.21.0
 
       - name: Install conan dependencies
         run: |   

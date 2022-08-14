@@ -21,7 +21,7 @@ namespace actor_zeta { namespace detail {
 
         template<class... Ts>
         explicit fifo_inbox(Ts&&... xs)
-            : queue_(std::forward<Ts>(xs)...) {}
+            : queue_(std::forward<Ts&&>(xs)...) {}
 
         /// Returns an approximation of the current size.
         auto size() noexcept -> size_t {
