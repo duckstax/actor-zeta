@@ -1,8 +1,8 @@
 #pragma once
 
-#include "enqueue_result.hpp"
-#include "lifo_inbox.hpp"
-#include "new_round_result.hpp"
+#include <actor-zeta/detail/queue/enqueue_result.hpp>
+#include <actor-zeta/detail/queue/lifo_inbox.hpp>
+#include <actor-zeta/detail/queue/new_round_result.hpp>
 
 namespace actor_zeta { namespace detail {
     /// A FIFO inbox that combines an efficient thread-safe LIFO inbox with a FIFO
@@ -57,7 +57,7 @@ namespace actor_zeta { namespace detail {
 
         template<class... Ts>
         auto emplace_back(Ts&&... elements) -> enqueue_result {
-            return push_back(new value_type(std::forward<Ts>(elements)...));
+            return push_back(new value_type(std::forward<Ts&&>(elements)...));
         }
 
         /// @cond PRIVATE
@@ -136,40 +136,41 @@ namespace actor_zeta { namespace detail {
             return queue_;
         }
 
-        template<class Mutex, class CondVar>
-        auto synchronized_push_back(Mutex& mtx, CondVar& cond, pointer ptr) -> bool {
-            return inbox_.synchronized_push_front(mtx, cond, ptr);
-        }
-
-        template<class Mutex, class CondVar>
-        auto synchronized_push_back(Mutex& mtx, CondVar& cond, unique_pointer ptr) -> bool {
-            return synchronized_push_back(mtx, cond, ptr.release());
-        }
-
-        template<class Mutex, class CondVar, class... Ts>
-        auto synchronized_emplace_back(Mutex& mtx, CondVar& cond, Ts&&... xs) -> bool {
-            return synchronized_push_back(mtx, cond, new value_type(std::forward<Ts>(xs)...));
-        }
-
-        template<class Mutex, class CondVar>
-        __attribute__((unused)) void synchronized_await(Mutex& mtx, CondVar& cond) {
-            if (queue_.empty()) {
-                inbox_.synchronized_await(mtx, cond);
-                fetch_more();
-            }
-        }
-
-        template<class Mutex, class CondVar, class TimePoint>
-        auto synchronized_await(Mutex& mtx, CondVar& cond, const TimePoint& timeout) -> bool {
-            if (!queue_.empty()) {
-                return true;
-            }
-            if (inbox_.synchronized_await(mtx, cond, timeout)) {
-                fetch_more();
-                return true;
-            }
-            return false;
-        }
+        //// @INFO Commented unused methods
+        //template<class Mutex, class CondVar>
+        //auto synchronized_push_back(Mutex& mtx, CondVar& cond, pointer ptr) -> bool {
+        //    return inbox_.synchronized_push_front(mtx, cond, ptr);
+        //}
+        //
+        //template<class Mutex, class CondVar>
+        //auto synchronized_push_back(Mutex& mtx, CondVar& cond, unique_pointer ptr) -> bool {
+        //    return synchronized_push_back(mtx, cond, ptr.release());
+        //}
+        //
+        //template<class Mutex, class CondVar, class... Ts>
+        //auto synchronized_emplace_back(Mutex& mtx, CondVar& cond, Ts&&... xs) -> bool {
+        //    return synchronized_push_back(mtx, cond, new value_type(std::forward<Ts&&>(xs)...));
+        //}
+        //
+        //template<class Mutex, class CondVar>
+        //__attribute__((unused)) void synchronized_await(Mutex& mtx, CondVar& cond) {
+        //    if (queue_.empty()) {
+        //        inbox_.synchronized_await(mtx, cond);
+        //        fetch_more();
+        //    }
+        //}
+        //
+        //template<class Mutex, class CondVar, class TimePoint>
+        //auto synchronized_await(Mutex& mtx, CondVar& cond, const TimePoint& timeout) -> bool {
+        //    if (!queue_.empty()) {
+        //        return true;
+        //    }
+        //    if (inbox_.synchronized_await(mtx, cond, timeout)) {
+        //        fetch_more();
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
     private:
         lifo_inbox_type inbox_;

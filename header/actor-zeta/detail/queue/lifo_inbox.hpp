@@ -3,7 +3,7 @@
 #include <atomic>
 #include <condition_variable>
 
-#include "enqueue_result.hpp"
+#include <actor-zeta/detail/queue/enqueue_result.hpp>
 
 namespace actor_zeta { namespace detail {
 
@@ -54,7 +54,7 @@ namespace actor_zeta { namespace detail {
         /// @threadsafe
         template<class... Ts>
         auto emplace_front(Ts&&... elements) -> enqueue_result {
-            return push_front(new value_type(std::forward<Ts>(elements)...));
+            return push_front(new value_type(std::forward<Ts&&>(elements)...));
         }
 
         /// Queries whether this queue is empty.
@@ -143,55 +143,56 @@ namespace actor_zeta { namespace detail {
             }
         }
 
-        template<class Mutex, class CondVar>
-        auto synchronized_push_front(Mutex& mtx, CondVar& cond, pointer new_element) -> bool {
-            switch (push_front(new_element)) {
-                default:
-                    return true;
-                case enqueue_result::unblocked_reader: {
-                    std::unique_lock<Mutex> guard(mtx);
-                    cond.notify_one();
-                    return true;
-                }
-                case enqueue_result::queue_closed:
-                    return false;
-            }
-        }
-
-        template<class Mutex, class CondVar>
-        auto synchronized_push_front(Mutex& mtx, CondVar& cond, unique_pointer new_element) -> bool {
-            return synchronized_push_front(mtx, cond, new_element.release());
-        }
-
-        template<class Mutex, class CondVar, class... Ts>
-        auto synchronized_emplace_front(Mutex& mtx, CondVar& cond, Ts&&... elements) -> bool {
-            return synchronized_push_front(mtx, cond, new value_type(std::forward<Ts>(elements)...));
-        }
-
-        template<class Mutex, class CondVar>
-        void synchronized_await(Mutex& mtx, CondVar& cond) {
-            assert(!closed());
-            if (try_block()) {
-                std::unique_lock<Mutex> guard(mtx);
-                while (blocked()) {
-                    cond.wait(guard);
-                }
-            }
-        }
-
-        template<class Mutex, class CondVar, class TimePoint>
-        auto synchronized_await(Mutex& mtx, CondVar& cond, const TimePoint& timeout) -> bool {
-            assert(!closed());
-            if (try_block()) {
-                std::unique_lock<Mutex> guard(mtx);
-                while (blocked()) {
-                    if (cond.wait_until(guard, timeout) == std::cv_status::timeout) {
-                        return !try_unblock();
-                    }
-                }
-            }
-            return true;
-        }
+        //// @INFO Commented unused methods
+        //template<class Mutex, class CondVar>
+        //auto synchronized_push_front(Mutex& mtx, CondVar& cond, pointer new_element) -> bool {
+        //    switch (push_front(new_element)) {
+        //        default:
+        //            return true;
+        //        case enqueue_result::unblocked_reader: {
+        //            std::unique_lock<Mutex> guard(mtx);
+        //            cond.notify_one();
+        //            return true;
+        //        }
+        //        case enqueue_result::queue_closed:
+        //            return false;
+        //    }
+        //}
+        //
+        //template<class Mutex, class CondVar>
+        //auto synchronized_push_front(Mutex& mtx, CondVar& cond, unique_pointer new_element) -> bool {
+        //    return synchronized_push_front(mtx, cond, new_element.release());
+        //}
+        //
+        //template<class Mutex, class CondVar, class... Ts>
+        //auto synchronized_emplace_front(Mutex& mtx, CondVar& cond, Ts&&... elements) -> bool {
+        //    return synchronized_push_front(mtx, cond, new value_type(std::forward<Ts>(elements)...));
+        //}
+        //
+        //template<class Mutex, class CondVar>
+        //void synchronized_await(Mutex& mtx, CondVar& cond) {
+        //    assert(!closed());
+        //    if (try_block()) {
+        //        std::unique_lock<Mutex> guard(mtx);
+        //        while (blocked()) {
+        //            cond.wait(guard);
+        //        }
+        //    }
+        //}
+        //
+        //template<class Mutex, class CondVar, class TimePoint>
+        //auto synchronized_await(Mutex& mtx, CondVar& cond, const TimePoint& timeout) -> bool {
+        //    assert(!closed());
+        //    if (try_block()) {
+        //        std::unique_lock<Mutex> guard(mtx);
+        //        while (blocked()) {
+        //            if (cond.wait_until(guard, timeout) == std::cv_status::timeout) {
+        //                return !try_unblock();
+        //            }
+        //        }
+        //    }
+        //    return true;
+        //}
 
     private:
         static constexpr auto stack_empty_tag() -> pointer {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "new_round_result.hpp"
-#include "task_result.hpp"
+#include <actor-zeta/detail/queue/new_round_result.hpp>
+#include <actor-zeta/detail/queue/task_result.hpp>
 
 namespace actor_zeta { namespace detail {
 
@@ -22,7 +22,7 @@ namespace actor_zeta { namespace detail {
 
         static constexpr size_t num_queues = sizeof...(Qs) + 1;
 
-        fixed_queue(policy_type policy0, Q queue1, Qs... queues/*typename Q::policy_type policy1, typename Qs::policy_type... policies*/)
+        fixed_queue(policy_type policy0, Q queue1, Qs... queues)
             : qs_(std::make_tuple(std::move(queue1), std::move(queues)...))
             , policy_(std::move(policy0)) {}
 
@@ -35,6 +35,8 @@ namespace actor_zeta { namespace detail {
         }
 
         auto push_back(value_type* new_element) noexcept -> bool {
+            // @INFO from mailbox.hpp: static constexpr size_t high_priority_queue_index   = 0;
+            // here high_priority_queue_index is used only
             return push_back_recursion<0>(policy_.id_of(*new_element), new_element);
         }
 
@@ -44,10 +46,12 @@ namespace actor_zeta { namespace detail {
 
         template<class... Ts>
         auto emplace_back(Ts&&... elements) -> bool {
-            return push_back(new value_type(std::forward<Ts>(elements)...));
+            return push_back(new value_type(std::forward<Ts&&>(elements)...));
         }
 
         void inc_deficit(deficit_type deficit) noexcept {
+            // @INFO from mailbox.hpp: static constexpr size_t high_priority_queue_index   = 0;
+            // here high_priority_queue_index is used only
             inc_deficit_recursion<0>(deficit);
         }
 
@@ -55,22 +59,30 @@ namespace actor_zeta { namespace detail {
         /// @returns `true` if at least one item was consumed, `false` otherwise.
         template<class F>
         auto new_round(deficit_type quantum, F& func) -> new_round_result {
+            // @INFO from mailbox.hpp: static constexpr size_t high_priority_queue_index   = 0;
+            // here high_priority_queue_index is used only
             return new_round_recursion<0>(quantum, func);
         }
 
         auto peek() noexcept -> pointer {
+            // @INFO from mailbox.hpp: static constexpr size_t high_priority_queue_index   = 0;
+            // here high_priority_queue_index is used only
             return peek_recursion<0>();
         }
 
         /// Tries to find an element in the queue that matches the given predicate.
         template <class Predicate>
         auto find_if(Predicate pred) -> pointer {
+            // @INFO from mailbox.hpp: static constexpr size_t high_priority_queue_index   = 0;
+            // here high_priority_queue_index is used only
             return find_if_recursion<0>(pred);
         }
 
         /// Applies `func` to each element in the queue.
         template<class F>
         void peek_all(F func) const {
+            // @INFO from mailbox.hpp: static constexpr size_t high_priority_queue_index   = 0;
+            // here high_priority_queue_index is used only
             return peek_all_recursion<0>(func);
         }
 
@@ -80,10 +92,14 @@ namespace actor_zeta { namespace detail {
         }
 
         void flush_cache() noexcept {
+            // @INFO from mailbox.hpp: static constexpr size_t high_priority_queue_index   = 0;
+            // here high_priority_queue_index is used only
             flush_cache_recursion<0>();
         }
 
         auto total_task_size() const noexcept -> task_size_type {
+            // @INFO from mailbox.hpp: static constexpr size_t high_priority_queue_index   = 0;
+            // here high_priority_queue_index is used only
             return total_task_size_recursion<0>();
         }
 
@@ -98,10 +114,14 @@ namespace actor_zeta { namespace detail {
         }
 
         void lifo_append(pointer ptr) noexcept {
+            // @INFO from mailbox.hpp: static constexpr size_t high_priority_queue_index   = 0;
+            // here high_priority_queue_index is used only
             lifo_append_recursion<0>(policy_.id_of(*ptr), ptr);
         }
 
         void stop_lifo_append() noexcept {
+            // @INFO from mailbox.hpp: static constexpr size_t high_priority_queue_index   = 0;
+            // here high_priority_queue_index is used only
             stop_lifo_append_recursion<0>();
         }
 
@@ -131,9 +151,9 @@ namespace actor_zeta { namespace detail {
             auto operator()(Ts&&... xs)
                 -> decltype((std::declval<F&>()) (std::declval<index<I>>(),
                                                   std::declval<Queue&>(),
-                                                  std::forward<Ts>(xs)...)) {
+                                                  std::forward<Ts&&>(xs)...)) {
                 index<I> id;
-                return f(id, q, std::forward<Ts>(xs)...);
+                return f(id, q, std::forward<Ts&&>(xs)...);
             }
         };
 
