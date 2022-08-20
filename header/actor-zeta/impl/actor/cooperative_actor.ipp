@@ -32,7 +32,6 @@ namespace actor_zeta { namespace base {
             inbox().fetch_more();
             auto prev_handled_msgs = handled_msgs;
             get_high_priority_queue().new_round(quantum * 3, handle_async);
-            //// @INFO Commented unused code, only single queue is used for now. @TODO for improvements priority
             get_normal_priority_queue().new_round(quantum, handle_async);
             if (handled_msgs == prev_handled_msgs && inbox().try_block()) {
                 return scheduler::resume_result::awaiting;
