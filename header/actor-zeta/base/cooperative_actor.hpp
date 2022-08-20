@@ -50,7 +50,7 @@ namespace actor_zeta { namespace base {
         auto context() const -> scheduler::execution_unit*;
         auto supervisor() -> supervisor_abstract*;
         auto get_high_priority_queue() -> high_priority_queue&;
-        //auto get_normal_priority_queue() -> normal_priority_queue&;
+        auto get_normal_priority_queue() -> normal_priority_queue&;
 
         supervisor_abstract* supervisor_;
         scheduler::execution_unit* executor_;

@@ -33,7 +33,7 @@ namespace actor_zeta { namespace base {
             auto prev_handled_msgs = handled_msgs;
             get_high_priority_queue().new_round(quantum * 3, handle_async);
             //// @INFO Commented unused code, only single queue is used for now. @TODO for improvements priority
-            //get_normal_priority_queue().new_round(quantum, handle_async);
+            get_normal_priority_queue().new_round(quantum, handle_async);
             if (handled_msgs == prev_handled_msgs && inbox().try_block()) {
                 return scheduler::resume_result::awaiting;
             }
@@ -76,8 +76,8 @@ namespace actor_zeta { namespace base {
         : actor_abstract(std::move(type))
         , supervisor_(supervisor)
         , inbox_(mailbox::priority_message(),
-            high_priority_queue(mailbox::high_priority_message())/*,
-            normal_priority_queue(mailbox::normal_priority_message()*/) {
+            high_priority_queue(mailbox::high_priority_message()),
+            normal_priority_queue(mailbox::normal_priority_message())) {
         inbox().try_block(); //todo: bug
     }
 
@@ -122,9 +122,9 @@ namespace actor_zeta { namespace base {
         return std::get<high_priority_queue_index>(inbox().queue().queues());
     }
 
-    //// @INFO Commented unused code, only single queue is used for now. @TODO for improvements priority
-    //auto cooperative_actor::get_normal_priority_queue() -> normal_priority_queue& {
-    //    return std::get<normal_priority_queue_index>(inbox().queue().queues());
-    //}
+    // @INFO Commented unused code, only single queue is used for now. @TODO for improvements priority
+    auto cooperative_actor::get_normal_priority_queue() -> normal_priority_queue& {
+        return std::get<normal_priority_queue_index>(inbox().queue().queues());
+    }
 
 }} // namespace actor_zeta::base
