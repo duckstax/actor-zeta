@@ -121,7 +121,6 @@ namespace actor_zeta { namespace base {
         return std::get<high_priority_queue_index>(inbox().queue().queues());
     }
 
-    // @INFO Commented unused code, only single queue is used for now. @TODO for improvements priority
     auto cooperative_actor::get_normal_priority_queue() -> normal_priority_queue& {
         return std::get<normal_priority_queue_index>(inbox().queue().queues());
     }
