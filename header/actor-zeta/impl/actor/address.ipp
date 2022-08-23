@@ -78,4 +78,8 @@ namespace actor_zeta { namespace base {
         return tmp;
     }
 
+    bool address_t::operator==(const address_t& rhs) noexcept {
+        return  ptr_ == rhs.ptr_;
+    }
+
 }} // namespace actor_zeta::base
