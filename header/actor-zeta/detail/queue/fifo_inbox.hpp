@@ -136,42 +136,6 @@ namespace actor_zeta { namespace detail {
             return queue_;
         }
 
-        //// @INFO Commented unused methods
-        //template<class Mutex, class CondVar>
-        //auto synchronized_push_back(Mutex& mtx, CondVar& cond, pointer ptr) -> bool {
-        //    return inbox_.synchronized_push_front(mtx, cond, ptr);
-        //}
-        //
-        //template<class Mutex, class CondVar>
-        //auto synchronized_push_back(Mutex& mtx, CondVar& cond, unique_pointer ptr) -> bool {
-        //    return synchronized_push_back(mtx, cond, ptr.release());
-        //}
-        //
-        //template<class Mutex, class CondVar, class... Ts>
-        //auto synchronized_emplace_back(Mutex& mtx, CondVar& cond, Ts&&... xs) -> bool {
-        //    return synchronized_push_back(mtx, cond, new value_type(std::forward<Ts&&>(xs)...));
-        //}
-        //
-        //template<class Mutex, class CondVar>
-        //__attribute__((unused)) void synchronized_await(Mutex& mtx, CondVar& cond) {
-        //    if (queue_.empty()) {
-        //        inbox_.synchronized_await(mtx, cond);
-        //        fetch_more();
-        //    }
-        //}
-        //
-        //template<class Mutex, class CondVar, class TimePoint>
-        //auto synchronized_await(Mutex& mtx, CondVar& cond, const TimePoint& timeout) -> bool {
-        //    if (!queue_.empty()) {
-        //        return true;
-        //    }
-        //    if (inbox_.synchronized_await(mtx, cond, timeout)) {
-        //        fetch_more();
-        //        return true;
-        //    }
-        //    return false;
-        //}
-
     private:
         lifo_inbox_type inbox_;
         queue_type queue_;
