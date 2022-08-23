@@ -219,4 +219,8 @@ namespace actor_zeta { namespace base {
         return supervisor_;
     }
 
+    auto cooperative_actor::resource() const -> detail::pmr::memory_resource* {
+        return supervisor_->resource();
+    }
+
 }} // namespace actor_zeta::base

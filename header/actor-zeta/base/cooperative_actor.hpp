@@ -25,6 +25,7 @@ namespace actor_zeta { namespace base {
         void intrusive_ptr_release_impl() override;
 
     protected:
+        auto resource() const -> detail::pmr::memory_resource*;
         template<class Supervisor>
         cooperative_actor(Supervisor* ptr, std::string type)
             : cooperative_actor(static_cast<supervisor_abstract*>(ptr), std::move(type)){};
