@@ -1,8 +1,8 @@
 #pragma once
 
-#include "new_round_result.hpp"
-#include "task_queue.hpp"
-#include "task_result.hpp"
+#include <actor-zeta/detail/queue/new_round_result.hpp>
+#include <actor-zeta/detail/queue/task_queue.hpp>
+#include <actor-zeta/detail/queue/task_result.hpp>
 
 namespace actor_zeta { namespace detail {
 
@@ -187,7 +187,7 @@ namespace actor_zeta { namespace detail {
         /// Creates a new element from `elements...` and appends it.
         template<class... Ts>
         auto emplace_back(Ts&&... elements) -> bool {
-            return push_back(new value_type(std::forward<Ts>(elements)...));
+            return push_back(new value_type(std::forward<Ts&&>(elements)...));
         }
 
         /// @private

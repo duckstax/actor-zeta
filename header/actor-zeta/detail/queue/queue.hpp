@@ -1,8 +1,8 @@
 #pragma once
 
-#include "new_round_result.hpp"
-#include "task_queue.hpp"
-#include "task_result.hpp"
+#include <actor-zeta/detail/queue/new_round_result.hpp>
+#include <actor-zeta/detail/queue/task_queue.hpp>
+#include <actor-zeta/detail/queue/task_result.hpp>
 
 namespace actor_zeta { namespace detail {
 

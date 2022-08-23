@@ -76,8 +76,7 @@ namespace actor_zeta { namespace base {
         , supervisor_(supervisor)
         , inbox_(mailbox::priority_message(),
             high_priority_queue(mailbox::high_priority_message()),
-            normal_priority_queue(mailbox::normal_priority_message())
-        /*mailbox::high_priority_message(), mailbox::normal_priority_message()*/) {
+            normal_priority_queue(mailbox::normal_priority_message())) {
         inbox().try_block(); //todo: bug
     }
 

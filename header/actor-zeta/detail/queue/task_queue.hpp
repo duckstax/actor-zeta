@@ -1,6 +1,6 @@
 #pragma once
 
-#include "forward_iterator.hpp"
+#include <actor-zeta/detail/queue/forward_iterator.hpp>
 
 namespace actor_zeta { namespace detail {
 

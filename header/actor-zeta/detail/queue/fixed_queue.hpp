@@ -1,7 +1,7 @@
 #pragma once
 
-#include "new_round_result.hpp"
-#include "task_result.hpp"
+#include <actor-zeta/detail/queue/new_round_result.hpp>
+#include <actor-zeta/detail/queue/task_result.hpp>
 
 namespace actor_zeta { namespace detail {
 
@@ -22,7 +22,7 @@ namespace actor_zeta { namespace detail {
 
         static constexpr size_t num_queues = sizeof...(Qs) + 1;
 
-        fixed_queue(policy_type policy0, Q queue1, Qs... queues/*typename Q::policy_type policy1, typename Qs::policy_type... policies*/)
+        fixed_queue(policy_type policy0, Q queue1, Qs... queues)
             : qs_(std::make_tuple(std::move(queue1), std::move(queues)...))
             , policy_(std::move(policy0)) {}
 
@@ -44,7 +44,7 @@ namespace actor_zeta { namespace detail {
 
         template<class... Ts>
         auto emplace_back(Ts&&... elements) -> bool {
-            return push_back(new value_type(std::forward<Ts>(elements)...));
+            return push_back(new value_type(std::forward<Ts&&>(elements)...));
         }
 
         void inc_deficit(deficit_type deficit) noexcept {
@@ -131,9 +131,9 @@ namespace actor_zeta { namespace detail {
             auto operator()(Ts&&... xs)
                 -> decltype((std::declval<F&>()) (std::declval<index<I>>(),
                                                   std::declval<Queue&>(),
-                                                  std::forward<Ts>(xs)...)) {
+                                                  std::forward<Ts&&>(xs)...)) {
                 index<I> id;
-                return f(id, q, std::forward<Ts>(xs)...);
+                return f(id, q, std::forward<Ts&&>(xs)...);
             }
         };
 
