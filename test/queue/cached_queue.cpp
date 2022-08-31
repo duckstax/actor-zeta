@@ -1,7 +1,10 @@
+#define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
 #include <catch2/catch.hpp>
 
-#include <actor-zeta/detail/queue/singly_linked.hpp>
+#define TEST_HAS_NO_EXCEPTIONS
+
 #include <actor-zeta/detail/queue/cached_queue.hpp>
+#include <actor-zeta/detail/queue/singly_linked.hpp>
 
 using namespace actor_zeta::detail;
 
@@ -37,7 +40,7 @@ namespace {
 
         void fill() {}
 
-        template <class T, class... Ts>
+        template<class T, class... Ts>
         void fill(T x, Ts... xs) {
             queue_.emplace_back(x);
             fill(xs...);
@@ -50,9 +53,7 @@ namespace {
 
 } //namespace
 
-
 TEST_CASE("cached_queue_tests") {
-
     SECTION("default_constructed") {
         fixture fix;
         REQUIRE(fix.queue_.empty());
@@ -154,7 +155,7 @@ TEST_CASE("cached_queue_tests") {
         };
         g = [&](inode& x) -> task_result {
             if ((x.value & 0x01) == 0)
-            return task_result::skip;
+                return task_result::skip;
             seq += to_string(x);
             selected = &f;
             return task_result::resume;
@@ -167,31 +168,29 @@ TEST_CASE("cached_queue_tests") {
         REQUIRE(round_result == make_new_round_result(8, false));
         REQUIRE(seq == "21436587");
         REQUIRE(fix.queue_.deficit() == 0);
-        //REQUIRE(deep_to_string(queue_.cache()) == "[9]");
     }
+
+    auto queue_to_string = [](queue_type& q) {
+        std::string str;
+        auto peek_fun = [&str, &q](const inode& x) {
+            if (!str.empty())
+                str += ", ";
+            str += std::to_string(x.value);
+        };
+        q.peek_all(peek_fun);
+        return str;
+    };
 
     SECTION("peek_all") {
         fixture fix;
-        auto queue_to_string = [&] {
-            std::string str;
-            auto peek_fun = [&](const inode& x) {
-                if (!str.empty()) {
-                    str += ", ";
-                }
-                str += std::to_string(x.value);
-            };
-            fix.queue_.peek_all(peek_fun);
-            return str;
-        };
-        REQUIRE(queue_to_string().empty());
+        REQUIRE(queue_to_string(fix.queue_).empty());
         fix.queue_.emplace_back(2);
-        REQUIRE(queue_to_string() == "2");
+        REQUIRE(queue_to_string(fix.queue_) == "2");
         fix.queue_.cache().emplace_back(1);
-        REQUIRE(queue_to_string() == "2");
+        REQUIRE(queue_to_string(fix.queue_) == "2");
         fix.queue_.emplace_back(3);
-        REQUIRE(queue_to_string() == "2, 3");
+        REQUIRE(queue_to_string(fix.queue_) == "2, 3");
         fix.queue_.flush_cache();
-        REQUIRE(queue_to_string() == "1, 2, 3");
+        REQUIRE(queue_to_string(fix.queue_) == "1, 2, 3");
     }
-
 }

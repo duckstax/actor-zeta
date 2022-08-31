@@ -1,4 +1,7 @@
+#define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
 #include <catch2/catch.hpp>
+
+#define TEST_HAS_NO_EXCEPTIONS
 
 #include <actor-zeta/detail/queue/fifo_inbox.hpp>
 #include <actor-zeta/detail/queue/queue.hpp>
@@ -39,7 +42,7 @@ namespace {
 
         void fill() {}
 
-        template <class T, class... Ts>
+        template<class T, class... Ts>
         void fill(T x, Ts... xs) {
             inbox.emplace_back(x);
             fill(xs...);
@@ -59,9 +62,7 @@ namespace {
 
 } // namespace
 
-
 TEST_CASE("fifo_inbox_tests") {
-
     SECTION("default_constructed") {
         fixture fix;
         REQUIRE(fix.inbox.empty());
@@ -90,5 +91,4 @@ TEST_CASE("fifo_inbox_tests") {
         REQUIRE(res == enqueue_result::success);
         REQUIRE(fix.close_and_fetch() == "01");
     }
-
 }
