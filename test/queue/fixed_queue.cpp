@@ -1,4 +1,7 @@
+#define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
 #include <catch2/catch.hpp>
+
+#define TEST_HAS_NO_EXCEPTIONS
 
 #include <actor-zeta/detail/queue/fixed_queue.hpp>
 #include <actor-zeta/detail/queue/queue.hpp>
@@ -35,7 +38,7 @@ namespace {
             return static_cast<size_t>(x.value % 3);
         }
 
-        template <class Queue>
+        template<class Queue>
         auto quantum(const Queue&, deficit_type x) const -> deficit_type {
             return x;
         }
@@ -59,7 +62,7 @@ namespace {
     struct fetch_helper {
         std::string result;
 
-        template <size_t I, class Queue>
+        template<size_t I, class Queue>
         auto operator()(std::integral_constant<size_t, I>, const Queue&, inode& x) -> task_result {
             if (!result.empty()) {
                 result += ',';
@@ -74,13 +77,13 @@ namespace {
     struct fixture {
         inode_policy policy;
         queue_type queue_{policy,
-            high_priority_queue(policy),
-            nested_queue_type(policy),
-            nested_queue_type(policy)};
+                          high_priority_queue(policy),
+                          nested_queue_type(policy),
+                          nested_queue_type(policy)};
 
         void fill() {}
 
-        template <class T, class... Ts>
+        template<class T, class... Ts>
         void fill(T x, Ts... xs) {
             queue_.emplace_back(x);
             fill(xs...);
@@ -108,14 +111,12 @@ namespace {
 
 } // namespace
 
-
 TEST_CASE("fixed_queue_tests") {
-
     SECTION("default_constructed") {
         fixture fix;
         REQUIRE(fix.queue_.empty());
     }
-    
+
     SECTION("new_round") {
         fixture fix;
         fix.fill(1, 2, 3, 4, 5, 6, 7, 8, 9, 12);
@@ -135,7 +136,7 @@ TEST_CASE("fixed_queue_tests") {
         REQUIRE(f.result == "0:12");
         REQUIRE(fix.queue_.empty());
     }
-    
+
     SECTION("priorities") {
         fixture fix;
         fix.queue_.policy().enable_priorities = true;
@@ -147,28 +148,28 @@ TEST_CASE("fixed_queue_tests") {
         REQUIRE(fix.fetch(1000) == "1:7,2:8");
         REQUIRE(fix.queue_.empty());
     }
-    
+
+    auto queue_to_string = [](queue_type& q) {
+        std::string str;
+        auto peek_fun = [&str, &q](const inode& x) {
+            if (!str.empty())
+                str += ", ";
+            str += std::to_string(x.value);
+        };
+        q.peek_all(peek_fun);
+        return str;
+    };
+
     SECTION("peek_all") {
         fixture fix;
-        auto queue_to_string = [&] {
-        std::string str;
-        auto peek_fun = [&](const inode& x) {
-          if (!str.empty())
-            str += ", ";
-          str += std::to_string(x.value);
-        };
-        fix.queue_.peek_all(peek_fun);
-        return str;
-        };
-        REQUIRE(queue_to_string().empty());
+        REQUIRE(queue_to_string(fix.queue_).empty());
         fix.queue_.emplace_back(1);
-        REQUIRE(queue_to_string() == "1");
+        REQUIRE(queue_to_string(fix.queue_) == "1");
         fix.queue_.emplace_back(2);
-        REQUIRE(queue_to_string() == "1, 2");
+        REQUIRE(queue_to_string(fix.queue_) == "1, 2");
         fix.queue_.emplace_back(3);
-        REQUIRE(queue_to_string() == "3, 1, 2");
+        REQUIRE(queue_to_string(fix.queue_) == "3, 1, 2");
         fix.queue_.emplace_back(4);
-        REQUIRE(queue_to_string() == "3, 1, 4, 2");
+        REQUIRE(queue_to_string(fix.queue_) == "3, 1, 4, 2");
     }
-
 }

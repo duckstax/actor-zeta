@@ -52,9 +52,9 @@ namespace actor_zeta { namespace detail {
 
         /// Tries to enqueue a new element to the mailbox.
         /// @threadsafe
-        template<class... Ts>
-        auto emplace_front(Ts&&... elements) -> enqueue_result {
-            return push_front(new value_type(std::forward<Ts&&>(elements)...));
+        template<class... args>
+        auto emplace_front(args&&... elements) -> enqueue_result {
+            return push_front(new value_type(std::forward<args&&>(elements)...));
         }
 
         /// Queries whether this queue is empty.

@@ -207,9 +207,9 @@ namespace actor_zeta { namespace detail {
         }
 
         /// Creates a new element from `elements...` and appends it.
-        template<class... Ts>
-        auto emplace_back(Ts&&... elements) -> bool {
-            return push_back(new value_type(std::forward<Ts>(elements)...));
+        template<class... args>
+        auto emplace_back(args&&... elements) -> bool {
+            return push_back(new value_type(std::forward<args>(elements)...));
         }
 
         /// Transfers all element from `other` to the front of this queue.

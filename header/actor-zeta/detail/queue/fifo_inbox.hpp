@@ -19,9 +19,9 @@ namespace actor_zeta { namespace detail {
         using unique_pointer = typename queue_type::unique_pointer;
         using node_pointer = typename value_type::node_pointer;
 
-        template<class... Ts>
-        explicit fifo_inbox(Ts&&... xs)
-            : queue_(std::forward<Ts&&>(xs)...) {}
+        template<class... args>
+        explicit fifo_inbox(args&&... xs)
+            : queue_(std::forward<args&&>(xs)...) {}
 
         /// Returns an approximation of the current size.
         auto size() noexcept -> size_t {
@@ -55,9 +55,9 @@ namespace actor_zeta { namespace detail {
             return push_back(new_element.release());
         }
 
-        template<class... Ts>
-        auto emplace_back(Ts&&... elements) -> enqueue_result {
-            return push_back(new value_type(std::forward<Ts&&>(elements)...));
+        template<class... args>
+        auto emplace_back(args&&... elements) -> enqueue_result {
+            return push_back(new value_type(std::forward<args&&>(elements)...));
         }
 
         /// @cond PRIVATE
