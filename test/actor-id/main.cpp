@@ -68,7 +68,7 @@ private:
 TEST_CASE("actor id match") {
     auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr);
-    for (auto i = 0; i < 10000000; ++i) {
+    for (auto i = 0; i < 1000; ++i) { //todo: 10000000
         actor_zeta::send(supervisor.get(), actor_zeta::address_t::empty_address(), command_t::create);
         supervisor->scheduler_test()->run_once();
     }

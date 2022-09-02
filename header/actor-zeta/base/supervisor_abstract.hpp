@@ -1,5 +1,6 @@
 #pragma once
 
+#include <actor-zeta/base/behavior.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>

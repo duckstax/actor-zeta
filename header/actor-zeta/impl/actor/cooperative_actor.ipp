@@ -13,120 +13,77 @@
 
 namespace actor_zeta { namespace base {
 
-    inline void error() {
-        std::cerr << " WARNING " << std::endl;
-        std::cerr << " WRONG ADDRESS " << std::endl;
-        std::cerr << " WARNING " << std::endl;
-    }
-
     scheduler::resume_result cooperative_actor::resume(scheduler::execution_unit* e, size_t max_throughput) {
         if (!activate(e)) {
             return scheduler::resume_result::done;
         }
-
+        static constexpr size_t quantum = 3;
         size_t handled_msgs = 0;
+        message_ptr ptr;
 
-        mailbox::message_ptr ptr;
-
-        while (handled_msgs < max_throughput && !mailbox().cache().empty()) {
-            do {
-                ptr = next_message();
-                if (!ptr) {
-                    if (mailbox().try_block()) {
-                        return scheduler::resume_result::awaiting;
-                    }
-                }
-            } while (!ptr);
-            consume_from_cache();
-            ++handled_msgs;
-        }
+        auto handle_async = [this, max_throughput, &handled_msgs](message& x) -> detail::task_result {
+            reactivate(x);
+            return ++handled_msgs < max_throughput
+                       ? detail::task_result::resume
+                       : detail::task_result::stop_all;
+        };
 
         while (handled_msgs < max_throughput) {
-            do {
-                ptr = next_message();
-                if (!ptr) {
-                    if (mailbox().try_block()) {
-                        return scheduler::resume_result::awaiting;
-                    }
-                }
-            } while (!ptr);
-            reactivate(*ptr);
-            ++handled_msgs;
+            inbox().fetch_more();
+            auto prev_handled_msgs = handled_msgs;
+            get_high_priority_queue().new_round(quantum * 3, handle_async);
+            get_normal_priority_queue().new_round(quantum, handle_async);
+            if (handled_msgs == prev_handled_msgs && inbox().try_block()) {
+                return scheduler::resume_result::awaiting;
+            }
         }
-
-        while (!ptr) {
-            ptr = next_message();
-            push_to_cache(std::move(ptr));
-        }
-
-        if (!has_next_message() && mailbox().try_block()) {
+        if (inbox().try_block()) {
             return scheduler::resume_result::awaiting;
         }
-
-        return scheduler::resume_result::awaiting;
+        return scheduler::resume_result::resume;
     }
 
     void cooperative_actor::enqueue_impl(mailbox::message_ptr msg, scheduler::execution_unit* e) {
         assert(msg);
-        mailbox().enqueue(msg.release());
-        if (flags() == static_cast<int>(state::empty)) {
-            intrusive_ptr_add_ref(this);
-            if (e != nullptr) {
-                context(e);
-                context()->execute_later(this);
-            } else {
-                supervisor()->scheduler()->enqueue(this);
+        switch (inbox().push_back(std::move(msg))) {
+            case detail::enqueue_result::unblocked_reader: {
+                intrusive_ptr_add_ref(this);
+                if (e != nullptr) {
+                    context(e);
+                    context()->execute_later(this);
+                } else {
+                    supervisor()->scheduler()->enqueue(this);
+                }
+                break;
             }
+            case detail::enqueue_result::success:
+                break;
+            case detail::enqueue_result::queue_closed:
+                break;
         }
-
-        // @TODO CRITICAL BUG on condition 'flags() != static_cast<int>(state::empty)'
-
-        /*
-            switch ( mailbox().enqueue(msg.release())) {
-                case detail::enqueue_result::unblocked_reader: {
-                    intrusive_ptr_add_ref(this);
-                    if (e != nullptr) {
-                        context(e);
-                        context()->execute(this);
-                    } else {
-                        env().scheduler().execute(this);
-                    }
-                    break;
-                }
-                case detail::enqueue_result::queue_closed: {
-                    assert(false);
-                    break;
-                }
-                case detail::enqueue_result::success:
-                    break;
-            }
-             */
     }
 
     void cooperative_actor::intrusive_ptr_add_ref_impl() {
-        flags(static_cast<int>(state::busy));
-        mailbox().try_block();
         ref();
     }
 
     void cooperative_actor::intrusive_ptr_release_impl() {
-        flags(static_cast<int>(state::empty));
-        mailbox().try_unblock();
         deref();
     }
 
-    cooperative_actor::cooperative_actor(
-        supervisor_abstract* supervisor, std::string type)
+    cooperative_actor::cooperative_actor(supervisor_abstract* supervisor, std::string type)
         : actor_abstract(std::move(type))
-        , supervisor_(supervisor) {
-        flags(static_cast<int>(state::empty));
-        mailbox().try_unblock();
+        , supervisor_(supervisor)
+        , inbox_(mailbox::priority_message(),
+            high_priority_queue(mailbox::high_priority_message()),
+            normal_priority_queue(mailbox::normal_priority_message())) {
+        inbox().try_block(); //todo: bug
     }
 
     cooperative_actor::~cooperative_actor() {}
 
     bool cooperative_actor::activate(scheduler::execution_unit* ctx) {
-        assert(ctx != nullptr);
+        //assert(ctx != nullptr);
         if (ctx) {
             context(ctx);
         }
@@ -134,68 +91,9 @@ namespace actor_zeta { namespace base {
     }
 
     auto cooperative_actor::reactivate(mailbox::message& x) -> void {
-        consume(x);
-    }
-
-    mailbox::message_ptr cooperative_actor::next_message() {
-        auto& cache = mailbox().cache();
-        auto i = cache.begin();
-        auto e = cache.separator();
-        if (i == e || !i->is_high_priority()) {
-            auto hp_pos = i;
-            auto tmp = mailbox().try_pop();
-            while (tmp != nullptr) {
-                cache.insert(tmp->is_high_priority() ? hp_pos : e, tmp);
-                if (hp_pos == e && !tmp->is_high_priority())
-                    --hp_pos;
-                tmp = mailbox().try_pop();
-            }
-        }
-        mailbox::message_ptr result;
-        i = cache.begin();
-        if (i != e)
-            result.reset(cache.take(i));
-        return result;
-    }
-
-    bool cooperative_actor::has_next_message() {
-        auto& mbox = mailbox();
-        auto& cache = mbox.cache();
-        return cache.begin() != cache.separator() || mbox.can_fetch_more();
-    }
-
-    void cooperative_actor::push_to_cache(mailbox::message_ptr ptr) {
-        assert(ptr != nullptr);
-        if (!ptr->is_high_priority()) {
-            mailbox().cache().insert(mailbox().cache().end(), ptr.release());
-            return;
-        }
-        auto high_priority = [](const message& val) {
-            return val.is_high_priority();
-        };
-        auto& cache = mailbox().cache();
-        auto e = cache.end();
-        cache.insert(std::partition_point(cache.continuation(), e, high_priority), ptr.release());
-    }
-
-    void cooperative_actor::consume(mailbox::message& x) {
         current_message_ = &x;
-        execute(this,current_message());
+        execute(this, current_message());
     }
-
-    bool cooperative_actor::consume_from_cache() {
-        auto& cache = mailbox().cache();
-        auto i = cache.continuation();
-        auto e = cache.end();
-        while (i != e) {
-            consume(*i);
-            cache.erase(i);
-            return true;
-        }
-        return false;
-    }
-
-    void cooperative_actor::cleanup() {}
 
     auto cooperative_actor::current_message() -> mailbox::message* {
         return current_message_;
@@ -217,6 +115,14 @@ namespace actor_zeta { namespace base {
 
     auto cooperative_actor::supervisor() -> supervisor_abstract* {
         return supervisor_;
+    }
+
+    auto cooperative_actor::get_high_priority_queue() -> high_priority_queue& {
+        return std::get<high_priority_queue_index>(inbox().queue().queues());
+    }
+
+    auto cooperative_actor::get_normal_priority_queue() -> normal_priority_queue& {
+        return std::get<normal_priority_queue_index>(inbox().queue().queues());
     }
 
 }} // namespace actor_zeta::base

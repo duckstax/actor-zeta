@@ -13,14 +13,14 @@ namespace actor_zeta { namespace type_traits {
         template<class T>
         explicit constexpr unit_t(T&&) noexcept {}
 
-        template<class... Ts>
-        constexpr unit_t operator()(Ts&&...) const noexcept {
+        template<class... args>
+        constexpr unit_t operator()(args&&...) const noexcept {
             return {};
         }
     };
 
     // A list of types.
-    template<class... Ts>
+    template<class... args>
     struct type_list {
         constexpr type_list() = default;
     };
@@ -32,8 +32,8 @@ namespace actor_zeta { namespace type_traits {
         static constexpr bool value = false;
     };
 
-    template<class... Ts>
-    struct is_type_list<type_list<Ts...>> {
+    template<class... args>
+    struct is_type_list<type_list<args...>> {
         static constexpr bool value = true;
     };
 
@@ -43,13 +43,13 @@ namespace actor_zeta { namespace type_traits {
     template<class List>
     struct type_list_size;
 
-    template<class... Ts>
-    struct type_list_size<type_list<Ts...>> {
-        static constexpr size_t value = sizeof...(Ts);
+    template<class... args>
+    struct type_list_size<type_list<args...>> {
+        static constexpr size_t value = sizeof...(args);
     };
 
-    template<class... Ts>
-    constexpr size_t type_list_size<type_list<Ts...>>::value;
+    template<class... args>
+    constexpr size_t type_list_size<type_list<args...>>::value;
 
     // type at(size_t)
 
@@ -87,8 +87,8 @@ namespace actor_zeta { namespace type_traits {
         using type = void;
     };
 
-    template<typename T0, class... Ts>
-    struct tl_head<type_list<T0, Ts...>> {
+    template<typename T0, class... args>
+    struct tl_head<type_list<T0, args...>> {
         using type = T0;
     };
 
@@ -103,9 +103,9 @@ namespace actor_zeta { namespace type_traits {
         using type = type_list<>;
     };
 
-    template<typename T0, class... Ts>
-    struct tl_tail<type_list<T0, Ts...>> {
-        using type = type_list<Ts...>;
+    template<typename T0, class... args>
+    struct tl_tail<type_list<T0, args...>> {
+        using type = type_list<args...>;
     };
 
     template<class List>
@@ -114,33 +114,33 @@ namespace actor_zeta { namespace type_traits {
     template<class List>
     struct tl_size;
 
-    template<class... Ts>
-    struct tl_size<type_list<Ts...>> {
-        static constexpr size_t value = sizeof...(Ts);
+    template<class... args>
+    struct tl_size<type_list<args...>> {
+        static constexpr size_t value = sizeof...(args);
     };
 
-    template<class... Ts>
-    constexpr size_t tl_size<type_list<Ts...>>::value;
+    template<class... args>
+    constexpr size_t tl_size<type_list<args...>>::value;
 
     // list slice(size_t, size_t)
 
-    template<size_t LeftOffset, size_t Remaining, typename PadType, class List, class... Ts>
+    template<size_t LeftOffset, size_t Remaining, typename PadType, class List, class... args>
     struct tl_slice_impl {
         using type = typename tl_slice_impl<LeftOffset - 1, Remaining, PadType,
-                                            tl_tail_t<List>, Ts...>::type;
+                                            tl_tail_t<List>, args...>::type;
     };
 
-    template<size_t Remaining, typename PadType, class List, class... Ts>
-    struct tl_slice_impl<0, Remaining, PadType, List, Ts...> {
+    template<size_t Remaining, typename PadType, class List, class... args>
+    struct tl_slice_impl<0, Remaining, PadType, List, args...> {
         using type =
-            typename tl_slice_impl<0, Remaining - 1, PadType, tl_tail_t<List>, Ts...,
+            typename tl_slice_impl<0, Remaining - 1, PadType, tl_tail_t<List>, args...,
                                    tl_head_t<List>>::type;
     };
 
-    template<size_t Remaining, typename PadType, class... Ts>
-    struct tl_slice_impl<0, Remaining, PadType, empty_type_list, Ts...> {
+    template<size_t Remaining, typename PadType, class... args>
+    struct tl_slice_impl<0, Remaining, PadType, empty_type_list, args...> {
         using type = typename tl_slice_impl<0, Remaining - 1, PadType,
-                                            empty_type_list, Ts..., PadType>::type;
+                                            empty_type_list, args..., PadType>::type;
     };
 
     template<class PadType, class List, class... T>

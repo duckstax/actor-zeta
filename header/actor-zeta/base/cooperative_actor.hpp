@@ -1,10 +1,12 @@
 #pragma once
 
-#include "forwards.hpp"
-#include <actor-zeta/base/actor_abstract.hpp>
-#include <actor-zeta/detail/single_reader_queue.hpp>
-#include <actor-zeta/scheduler/resumable.hpp>
 #include <actor-zeta/base/behavior.hpp>
+#include <actor-zeta/base/forwards.hpp>
+#include <actor-zeta/base/actor_abstract.hpp>
+#include <actor-zeta/base/forwards.hpp>
+#include <actor-zeta/detail/queue/fifo_inbox.hpp>
+#include <actor-zeta/mailbox.hpp>
+#include <actor-zeta/scheduler/resumable.hpp>
 
 namespace actor_zeta { namespace base {
     ///
@@ -16,9 +18,10 @@ namespace actor_zeta { namespace base {
         , public scheduler::resumable
         , public intrusive_behavior_t {
     public:
-        using mailbox_t = detail::single_reader_queue<mailbox::message>;
+        using inbox_t = detail::fifo_inbox<mailbox_policy>;
 
         scheduler::resume_result resume(scheduler::execution_unit*, max_throughput_t) final;
+
         ~cooperative_actor() override;
 
         void intrusive_ptr_add_ref_impl() override;
@@ -27,57 +30,32 @@ namespace actor_zeta { namespace base {
     protected:
         template<class Supervisor>
         cooperative_actor(Supervisor* ptr, std::string type)
-            : cooperative_actor(static_cast<supervisor_abstract*>(ptr), std::move(type)){};
+            : cooperative_actor(static_cast<supervisor_abstract*>(ptr), std::move(type)) {};
 
         void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*);
 
-        // Non thread-safe method
         auto current_message() -> mailbox::message* ;
-
         auto set_current_message(mailbox::message_ptr msg) -> void;
 
     private:
         cooperative_actor(supervisor_abstract*, std::string);
 
-        enum class state : int {
-            empty = 0x01,
-            busy
-        };
-
-        inline int flags() const {
-            return flags_.load(std::memory_order_relaxed);
-        }
-
-        inline void flags(int new_value) {
-            flags_.store(new_value, std::memory_order_relaxed);
-        }
-
-        void cleanup();
-        bool consume_from_cache();
-        void consume(mailbox::message&);
-
-        // message processing -----------------------------------------------------
-
-        inline mailbox_t& mailbox() {
-            return mailbox_;
+        inline inbox_t& inbox() {
+            return inbox_;
         }
 
         bool activate(scheduler::execution_unit*);
         auto reactivate(mailbox::message& x) -> void;
-        mailbox::message_ptr next_message();
-        bool has_next_message();
-        void push_to_cache(mailbox::message_ptr ptr);
         auto context(scheduler::execution_unit*) -> void;
         auto context() const -> scheduler::execution_unit*;
         auto supervisor() -> supervisor_abstract*;
-
-        // ----------------------------------------------------- message processing
+        auto get_high_priority_queue() -> high_priority_queue&;
+        auto get_normal_priority_queue() -> normal_priority_queue&;
 
         supervisor_abstract* supervisor_;
         scheduler::execution_unit* executor_;
         mailbox::message* current_message_;
-        mailbox_t mailbox_;
-        std::atomic<int> flags_;
+        inbox_t inbox_;
     };
 
     template<class T>

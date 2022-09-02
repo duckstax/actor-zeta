@@ -17,13 +17,13 @@ namespace actor_zeta { namespace base {
     template<class List>
     struct type_list_to_tuple;
 
-    template<class... Ts>
-    struct type_list_to_tuple<type_traits::type_list<Ts...>> {
-        using type = std::tuple<type_traits::decay_t<Ts>...>;
+    template<class... args>
+    struct type_list_to_tuple<type_traits::type_list<args...>> {
+        using type = std::tuple<type_traits::decay_t<args>...>;
     };
 
-    template<class... Ts>
-    using type_list_to_tuple_t = typename type_list_to_tuple<Ts...>::type;
+    template<class... args>
+    using type_list_to_tuple_t = typename type_list_to_tuple<args...>::type;
 
     // clang-format off
     template<class F, std::size_t... I>
