@@ -42,9 +42,9 @@ namespace actor_zeta { namespace detail {
             return push_back(new_element.release());
         }
 
-        template<class... Ts>
-        auto emplace_back(Ts&&... elements) -> bool {
-            return push_back(new value_type(std::forward<Ts&&>(elements)...));
+        template<class... args>
+        auto emplace_back(args&&... elements) -> bool {
+            return push_back(new value_type(std::forward<args&&>(elements)...));
         }
 
         void inc_deficit(deficit_type deficit) noexcept {
@@ -127,13 +127,13 @@ namespace actor_zeta { namespace detail {
         struct new_round_recursion_helper {
             Queue& q;
             F& f;
-            template<class... Ts>
-            auto operator()(Ts&&... xs)
+            template<class... args>
+            auto operator()(args&&... xs)
                 -> decltype((std::declval<F&>()) (std::declval<index<I>>(),
                                                   std::declval<Queue&>(),
-                                                  std::forward<Ts&&>(xs)...)) {
+                                                  std::forward<args&&>(xs)...)) {
                 index<I> id;
-                return f(id, q, std::forward<Ts&&>(xs)...);
+                return f(id, q, std::forward<args&&>(xs)...);
             }
         };
 
