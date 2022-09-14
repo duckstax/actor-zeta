@@ -1,5 +1,6 @@
 #pragma once
 
+#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/queue/new_round_result.hpp>
 #include <actor-zeta/detail/queue/task_queue.hpp>
 #include <actor-zeta/detail/queue/task_result.hpp>
@@ -9,7 +10,7 @@ namespace actor_zeta { namespace detail {
     /// A Deficit Round Robin queue with an internal cache for allowing skipping
     /// consumers.
     template<class Policy>
-    class cached_queue {
+    class cached_queue : protected pmr::memory_resource_base {
     public:
         using policy_type = Policy;
         using value_type = typename policy_type::mapped_type;
@@ -22,20 +23,24 @@ namespace actor_zeta { namespace detail {
         using list_type = task_queue<policy_type>;
         using cache_type = task_queue<policy_type>;
 
-        explicit cached_queue(policy_type policy)
-            : list_(policy)
+        explicit cached_queue(pmr::memory_resource* memory_resource, policy_type policy)
+            : pmr::memory_resource_base(memory_resource)
+            , list_(resource(), policy)
             , deficit_(0)
-            , cache_(std::move(policy)) {}
+            , cache_(resource(), std::move(policy)) {}
 
         cached_queue(cached_queue&& other) noexcept
-            : list_(std::move(other.list_))
+            : pmr::memory_resource_base(other.resource())
+            , list_(std::move(other.list_))
             , deficit_(other.deficit_)
             , cache_(std::move(other.cache_)) {}
 
         auto operator=(cached_queue&& other) noexcept -> cached_queue& {
-            list_ = std::move(other.list_);
-            deficit_ = other.deficit_;
-            cache_ = std::move(other.cache_);
+            ~cached_queue();
+            cached_queue(std::move(other));
+//            list_ = std::move(other.list_);
+//            deficit_ = other.deficit_;
+//            cache_ = std::move(other.cache_);
             return *this;
         }
 
@@ -113,7 +118,7 @@ namespace actor_zeta { namespace detail {
                 auto dummy_deficit = std::numeric_limits<deficit_type>::max();
                 return list_.next(dummy_deficit);
             }
-            return nullptr;
+            return {nullptr, pmr::deleter_t(resource())};
         }
 
         /// Consumes items from the queue until the queue is empty, there is not
@@ -124,7 +129,7 @@ namespace actor_zeta { namespace detail {
             return new_round(0, func).consumed_items > 0;
         }
 
-        /// Run a new round with `quantum`, dispatching all tasks to `consumer`.
+        /// Run a next round with `quantum`, dispatching all tasks to `consumer`.
         template<class F>
         auto new_round(deficit_type quantum, F& consumer) noexcept(
             noexcept(consumer(std::declval<value_type&>()))) -> new_round_result {
@@ -184,10 +189,12 @@ namespace actor_zeta { namespace detail {
             return push_back(new_element.release());
         }
 
-        /// Creates a new element from `elements...` and appends it.
+        /// Creates dynamically allocated element from `elements...` and appends it.
         template<class... args>
         auto emplace_back(args&&... elements) -> bool {
-            return push_back(new value_type(std::forward<args&&>(elements)...));
+            auto* value = allocate_ptr<value_type>(std::forward<args&&>(elements)...);
+            assert(value);
+            return push_back(value);
         }
 
         /// @private

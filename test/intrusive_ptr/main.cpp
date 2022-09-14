@@ -4,8 +4,9 @@
 #include "classes.hpp"
 
 TEST_CASE("intrusive_ptr") {
+    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     SECTION("make_counted") {
-        auto p = make_counted<class0>();
+        auto p = make_counted<class0>(mr_ptr);
         REQUIRE(class0_instances == 1);
         REQUIRE(p->unique() == true);
     }
@@ -19,7 +20,7 @@ TEST_CASE("intrusive_ptr") {
 
     SECTION("get_test_rc") {
         class0ptr p1;
-        p1 = get_test_rc();
+        p1 = get_test_rc(mr_ptr);
         class0ptr p2 = p1;
         REQUIRE(class0_instances == 1);
         REQUIRE(p1->unique() == false);
@@ -27,15 +28,15 @@ TEST_CASE("intrusive_ptr") {
 
     SECTION("list") {
         std::vector<class0ptr> pl;
-        pl.push_back(get_test_ptr());
-        pl.push_back(get_test_rc());
-        pl.push_back(pl.front()->create());
+        pl.push_back(get_test_ptr(mr_ptr));
+        pl.push_back(get_test_rc(mr_ptr));
+        pl.push_back(pl.front()->create(mr_ptr));
         REQUIRE(pl.front()->unique());
         REQUIRE(class0_instances == 3);
     }
 
     SECTION("full_test") {
-        auto p1 = make_counted<class0>();
+        auto p1 = make_counted<class0>(mr_ptr);
         REQUIRE(p1->is_subtype() == false);
         REQUIRE(p1->unique() == true);
         REQUIRE(class0_instances == 1);
@@ -45,7 +46,7 @@ TEST_CASE("intrusive_ptr") {
         REQUIRE(p1->unique() == true);
         REQUIRE(class0_instances == 0);
         REQUIRE(class1_instances == 1);
-        auto p2 = make_counted<class1>();
+        auto p2 = make_counted<class1>(mr_ptr);
         p1 = p2;
         REQUIRE(p1->unique() == false);
         REQUIRE(class0_instances == 0);

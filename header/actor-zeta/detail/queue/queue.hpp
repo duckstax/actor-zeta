@@ -16,8 +16,8 @@ public:
     using typename super::value_type;
     using deficit_type = typename policy_type::deficit_type;
 
-    explicit queue(policy_type policy)
-        : super(std::move(policy))
+    explicit queue(pmr::memory_resource* memory_resource, policy_type policy)
+        : super(memory_resource, std::move(policy))
         , deficit_(0) {}
 
     queue(queue&& other) noexcept
@@ -57,7 +57,7 @@ public:
         return super::next(deficit_);
     }
 
-    /// Run a new round with `quantum`, dispatching all tasks to `consumer`.
+    /// Run a next round with `quantum`, dispatching all tasks to `consumer`.
     /// @returns `true` if at least one item was consumed, `false` otherwise.
     template <class F>
     auto new_round(deficit_type quantum, F& consumer) -> new_round_result {

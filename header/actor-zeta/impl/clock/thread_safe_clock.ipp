@@ -6,7 +6,8 @@
 
 namespace actor_zeta { namespace clock {
 
-    thread_safe_clock_t::thread_safe_clock_t() {
+    thread_safe_clock_t::thread_safe_clock_t(detail::pmr::memory_resource* memory_resource)
+     : clock_t(memory_resource) {
         tbl_.reserve(buffer_size * 2);
     }
 
@@ -60,7 +61,7 @@ namespace actor_zeta { namespace clock {
     }
 
     void thread_safe_clock_t::stop_dispatch_loop() {
-        schedule(handler([this]() { running_ = false; }));
+        schedule(handler(resource(), [this]() { running_ = false; }));
         dispatcher_.join();
     }
 

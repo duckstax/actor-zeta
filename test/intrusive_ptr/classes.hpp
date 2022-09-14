@@ -37,8 +37,8 @@ public:
         return subtype_;
     }
 
-    virtual class0ptr create() const {
-        return make_counted<class0>();
+    virtual class0ptr create(detail::pmr::memory_resource* memory_resource) const {
+        return make_counted<class0>(memory_resource);
     }
 
 private:
@@ -56,15 +56,15 @@ public:
         --class1_instances;
     }
 
-    class0ptr create() const override {
-        return make_counted<class1>();
+    class0ptr create(detail::pmr::memory_resource* memory_resource) const override {
+        return make_counted<class1>(memory_resource);
     }
 };
 
-class0ptr get_test_rc() {
-    return make_counted<class0>();
+class0ptr get_test_rc(detail::pmr::memory_resource* memory_resource) {
+    return make_counted<class0>(memory_resource);
 }
 
-class0ptr get_test_ptr() {
-    return get_test_rc();
+class0ptr get_test_ptr(detail::pmr::memory_resource* memory_resource) {
+    return get_test_rc(memory_resource);
 }

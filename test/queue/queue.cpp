@@ -24,7 +24,7 @@ namespace {
         using mapped_type = inode;
         using task_size_type = int;
         using deficit_type = int;
-        using deleter_type = std::default_delete<mapped_type>;
+        using deleter_type = actor_zeta::detail::pmr::deleter_t;
         using unique_pointer = std::unique_ptr<mapped_type, deleter_type>;
 
         static inline auto task_size(const mapped_type& x) -> task_size_type {
@@ -36,7 +36,10 @@ namespace {
 
     struct fixture {
         inode_policy policy;
-        queue_type queue_{policy};
+        queue_type queue_;
+
+        fixture(actor_zeta::detail::pmr::memory_resource* memory_resource)
+            : queue_(memory_resource, policy) {}
 
         void fill() {}
 
@@ -54,8 +57,9 @@ namespace {
 } // namespace
 
 TEST_CASE("queue_test") {
+    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     SECTION("default_constructed") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(fix.queue_.empty());
         REQUIRE(fix.queue_.deficit() == 0);
         REQUIRE(fix.queue_.total_task_size() == 0);
@@ -76,7 +80,7 @@ TEST_CASE("queue_test") {
     };
 
     SECTION("inc_deficit") {
-        fixture fix;
+        fixture fix(mr_ptr);
         fix.queue_.inc_deficit(100);
         REQUIRE(fix.queue_.deficit() == 0);
         fix.fill(1);
@@ -87,7 +91,7 @@ TEST_CASE("queue_test") {
     }
 
     SECTION("new_round") {
-        fixture fix;
+        fixture fix(mr_ptr);
         std::string seq;
         fix.fill(1, 2, 3, 4, 5, 6);
         auto f = [&](inode& x) -> task_result {
@@ -113,7 +117,7 @@ TEST_CASE("queue_test") {
     }
 
     SECTION("next") {
-        fixture fix;
+        fixture fix(mr_ptr);
         std::string seq;
         fix.fill(1, 2, 3, 4, 5, 6);
         auto f = [&](inode& x) -> task_result {
@@ -140,7 +144,7 @@ TEST_CASE("queue_test") {
     }
 
     SECTION("peek_all") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(queue_to_string(fix.queue_).empty());
         fix.queue_.emplace_back(1);
         REQUIRE(queue_to_string(fix.queue_) == "1");

@@ -7,7 +7,8 @@
 namespace actor_zeta { namespace test {
 
     clock_test::clock_test()
-        : current_time(duration_type{1}) {
+        : clock::clock_t(nullptr)
+        , current_time(duration_type{1}) {
     }
 
     void clock_test::schedule_periodically(time_point first_run,

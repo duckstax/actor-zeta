@@ -1,5 +1,6 @@
 #pragma once
 
+#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/queue/enqueue_result.hpp>
 #include <actor-zeta/detail/queue/lifo_inbox.hpp>
 #include <actor-zeta/detail/queue/new_round_result.hpp>
@@ -8,7 +9,7 @@ namespace actor_zeta { namespace detail {
     /// A FIFO inbox that combines an efficient thread-safe LIFO inbox with a FIFO
     /// queue for re-ordering incoming messages.
     template<class Policy>
-    class fifo_inbox {
+    class fifo_inbox : protected pmr::memory_resource_base {
     public:
         using policy_type = Policy;
         using queue_type = typename policy_type::queue_type;
@@ -20,8 +21,10 @@ namespace actor_zeta { namespace detail {
         using node_pointer = typename value_type::node_pointer;
 
         template<class... args>
-        explicit fifo_inbox(args&&... xs)
-            : queue_(std::forward<args&&>(xs)...) {}
+        explicit fifo_inbox(pmr::memory_resource* memory_resource, args&&... xs)
+            : pmr::memory_resource_base(memory_resource)
+            , inbox_(resource())
+            , queue_(resource(), std::forward<args&&>(xs)...) {}
 
         /// Returns an approximation of the current size.
         auto size() noexcept -> size_t {
@@ -40,7 +43,7 @@ namespace actor_zeta { namespace detail {
         }
 
         /// Queries whether this has been marked as blocked, i.e.,
-        /// the owner of the list is waiting for new data.
+        /// the owner of the list is waiting for next data.
         auto blocked() const noexcept -> bool {
             return inbox_.blocked();
         }
@@ -57,7 +60,9 @@ namespace actor_zeta { namespace detail {
 
         template<class... args>
         auto emplace_back(args&&... elements) -> enqueue_result {
-            return push_back(new value_type(std::forward<args&&>(elements)...));
+            auto* value = allocate_ptr<value_type>(std::forward<args&&>(elements)...);
+            assert(value);
+            return push_back(value);
         }
 
         /// @cond PRIVATE
@@ -113,7 +118,7 @@ namespace actor_zeta { namespace detail {
             queue_.stop_lifo_append();
         }
 
-        /// Run a new round with `quantum`, dispatching all tasks to `consumer`.
+        /// Run a next round with `quantum`, dispatching all tasks to `consumer`.
         template<class F>
         auto new_round(deficit_type quantum, F& consumer) -> new_round_result {
             fetch_more();

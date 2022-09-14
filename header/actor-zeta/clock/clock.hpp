@@ -5,6 +5,7 @@
 
 #include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/mailbox/message.hpp>
+#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/unique_function.hpp>
 
 namespace actor_zeta { namespace clock {
@@ -12,12 +13,13 @@ namespace actor_zeta { namespace clock {
     using handler = detail::unique_function<void()>;
     using timespan = std::chrono::duration<int64_t, std::nano>;
 
-    class clock_t {
+    class clock_t : protected detail::pmr::memory_resource_base {
     public:
         using clock_type = std::chrono::steady_clock;
         using time_point = typename clock_type::time_point;
         using duration_type = typename clock_type::duration;
 
+        clock_t(detail::pmr::memory_resource*);
         virtual ~clock_t();
         virtual time_point now() const noexcept;
         void schedule_message(time_point , base::address_t target, mailbox::message_ptr content);

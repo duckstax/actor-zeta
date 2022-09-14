@@ -19,7 +19,7 @@ namespace actor_zeta { namespace base {
         }
         static constexpr size_t quantum = 3;
         size_t handled_msgs = 0;
-        message_ptr ptr;
+        message_ptr ptr{nullptr, detail::pmr::deleter_t(resource())};
 
         auto handle_async = [this, max_throughput, &handled_msgs](message& x) -> detail::task_result {
             reactivate(x);
@@ -73,10 +73,12 @@ namespace actor_zeta { namespace base {
 
     cooperative_actor::cooperative_actor(supervisor_abstract* supervisor, std::string type)
         : actor_abstract(std::move(type))
+        , intrusive_behavior_t(supervisor->resource())
         , supervisor_(supervisor)
-        , inbox_(mailbox::priority_message(),
-            high_priority_queue(mailbox::high_priority_message()),
-            normal_priority_queue(mailbox::normal_priority_message())) {
+        , inbox_(resource(),
+            mailbox::priority_message(),
+            high_priority_queue(resource(), mailbox::high_priority_message()),
+            normal_priority_queue(resource(), mailbox::normal_priority_message())) {
         inbox().try_block(); //todo: bug
     }
 

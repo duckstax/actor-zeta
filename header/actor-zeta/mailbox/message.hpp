@@ -6,6 +6,7 @@
 #include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/mailbox/priority.hpp>
 #include <actor-zeta/mailbox/id.hpp>
+#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/rtt.hpp>
 #include <actor-zeta/detail/queue/singly_linked.hpp>
 
@@ -48,7 +49,7 @@ namespace actor_zeta { namespace mailbox {
     static_assert(std::is_move_constructible<message>::value, "");
     static_assert(not std::is_copy_constructible<message>::value, "");
 
-    using message_ptr = std::unique_ptr<message>;
+    using message_ptr = std::unique_ptr<message, actor_zeta::detail::pmr::deleter_t>;
 
 }} // namespace actor_zeta::mailbox
 

@@ -22,7 +22,7 @@ namespace actor_zeta { namespace clock {
 
         using schedule_entry_ptr = std::unique_ptr<schedule_entry>;
 
-        thread_safe_clock_t();
+        thread_safe_clock_t(detail::pmr::memory_resource*);
         void start_dispatch_loop();
         void stop_dispatch_loop();
 

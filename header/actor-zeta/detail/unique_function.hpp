@@ -3,6 +3,8 @@
 #include <type_traits>
 #include <utility>
 
+#include <actor-zeta/detail/memory_resource.hpp>
+
 namespace actor_zeta { namespace detail {
 
     template<class Signature>
@@ -18,10 +20,10 @@ namespace actor_zeta { namespace detail {
         };
 
         using raw_pointer = R (*)(Args...);
-        using wrapper_pointer = wrapper*;
+        using wrapper_pointer = std::unique_ptr<wrapper, detail::pmr::deleter_t>;
 
         template<class F>
-        static wrapper_pointer make_wrapper(F&& f) {
+        static wrapper_pointer make_wrapper(detail::pmr::memory_resource* memory_resource, F&& f) {
             class impl final : public wrapper {
             public:
                 impl(F&& fun)
@@ -35,7 +37,9 @@ namespace actor_zeta { namespace detail {
             private:
                 F fun_;
             };
-            return new impl(std::forward<F>(f));
+            auto* impl_ptr = detail::pmr::allocate_ptr<impl>(memory_resource, std::forward<F>(f));
+            assert(impl_ptr);
+            return wrapper_pointer{impl_ptr, detail::pmr::deleter_t(memory_resource)};
         }
 
         unique_function()
@@ -61,7 +65,7 @@ namespace actor_zeta { namespace detail {
 
         explicit unique_function(wrapper_pointer ptr)
             : holds_wrapper_(true)
-            , wptr_(ptr) {
+            , wptr_(std::move(ptr)) {
         }
 
         template<
@@ -69,19 +73,19 @@ namespace actor_zeta { namespace detail {
             class = typename std::enable_if<
                 !std::is_convertible<T, raw_pointer>::value && std::is_same<decltype((std::declval<T&>())(std::declval<Args>()...)),
                                                                             R>::value>::type>
-        explicit unique_function(T f)
-            : unique_function(make_wrapper(std::move(f))) {
+        explicit unique_function(detail::pmr::memory_resource* memory_resource, T f)
+            : unique_function(make_wrapper(memory_resource, std::move(f))) {
         }
 
         ~unique_function() {
-            destroy();
+            //destroy();
         }
 
         unique_function& operator=(unique_function&& other) {
-            destroy();
+            //destroy();
             if (other.holds_wrapper_) {
                 holds_wrapper_ = true;
-                wptr_ = other.wptr_;
+                wptr_ = std::move(other.wptr_);
                 other.holds_wrapper_ = false;
                 other.fptr_ = nullptr;
             } else {
@@ -125,11 +129,11 @@ namespace actor_zeta { namespace detail {
             return fptr_ == nullptr;
         }
 
-        void destroy() {
-            if (holds_wrapper_) {
-                delete wptr_;
-            }
-        }
+//        void destroy() {
+//            if (holds_wrapper_) {
+//                delete wptr_;
+//            }
+//        }
 
         bool holds_wrapper_;
 

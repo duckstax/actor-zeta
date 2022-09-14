@@ -2,7 +2,6 @@
 
 #include <actor-zeta/base/behavior.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
-#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
 
 namespace actor_zeta { namespace base {
@@ -18,6 +17,7 @@ namespace actor_zeta { namespace base {
             : supervisor_abstract(static_cast<supervisor_abstract*>(supervisor), std::move(type)) {}
 
         ~supervisor_abstract() override;
+
         auto scheduler() noexcept -> scheduler::scheduler_abstract_t*;
         auto resource() const -> detail::pmr::memory_resource*;
         auto address() noexcept -> address_t;
@@ -29,8 +29,8 @@ namespace actor_zeta { namespace base {
 
     private:
         supervisor_abstract(supervisor_abstract*, std::string);
+
         mailbox::message* current_message_;
-        detail::pmr::memory_resource* memory_resource_;
     };
 
     template<class Supervisor>
@@ -54,10 +54,16 @@ namespace actor_zeta { namespace base {
             using Actor_remove_pointer_type = typename std::remove_pointer<Actor_clear_type>::type;
             static_assert(std::is_base_of<actor_abstract, Actor_remove_pointer_type>::value,"not heir");
 
-            auto allocate_byte = sizeof(Actor_remove_pointer_type);
-            auto allocate_byte_alignof = alignof(Actor_remove_pointer_type);
-            void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
-            auto* actor = new (buffer) Actor_remove_pointer_type(static_cast<Supervisor*>(this), std::forward<Args>(args)...);
+            auto* actor = allocate_ptr<Actor_remove_pointer_type, Args...>(
+                static_cast<Supervisor*>(this),
+                std::forward<Args&&>(args)...);
+            assert(actor);
+
+//            auto allocate_byte = sizeof(Actor_remove_pointer_type);
+//            auto allocate_byte_alignof = alignof(Actor_remove_pointer_type);
+//            void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
+//            auto* actor = new (buffer) Actor_remove_pointer_type(static_cast<Supervisor*>(this), std::forward<Args>(args)...);
+
             auto address = actor->address();
             inserter(actor);
             return address;
@@ -75,10 +81,15 @@ namespace actor_zeta { namespace base {
             using SupervisorChildren_remove_pointer_type = typename std::remove_pointer<SupervisorChildren_clear_type>::type;
             static_assert(std::is_base_of<supervisor_abstract, SupervisorChildren_remove_pointer_type>::value,"not heir");
 
-            auto allocate_byte = sizeof(SupervisorChildren_remove_pointer_type);
-            auto allocate_byte_alignof = alignof(SupervisorChildren_remove_pointer_type);
-            void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
-            auto* supervisor = new (buffer) SupervisorChildren_remove_pointer_type(std::forward<Args>(args)...);
+            auto* supervisor = allocate_ptr<SupervisorChildren_remove_pointer_type, Args...>(
+                std::forward<Args&&>(args)...);
+            assert(supervisor);
+
+//            auto allocate_byte = sizeof(SupervisorChildren_remove_pointer_type);
+//            auto allocate_byte_alignof = alignof(SupervisorChildren_remove_pointer_type);
+//            void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
+//            auto* supervisor = new (buffer) SupervisorChildren_remove_pointer_type(std::forward<Args>(args)...);
+
             auto address = supervisor->address();
             inserter(supervisor);
             return address;

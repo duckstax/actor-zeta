@@ -28,7 +28,7 @@ namespace {
     struct inode_policy {
         using mapped_type = inode;
         using task_size_type = int;
-        using deleter_type = std::default_delete<mapped_type>;
+        using deleter_type = actor_zeta::detail::pmr::deleter_t;
         using unique_pointer = std::unique_ptr<mapped_type, deleter_type>;
 
         static inline auto task_size(const mapped_type& x) -> task_size_type {
@@ -40,7 +40,10 @@ namespace {
 
     struct fixture {
         inode_policy policy;
-        queue_type queue_{policy};
+        queue_type queue_;
+
+        fixture(actor_zeta::detail::pmr::memory_resource* memory_resource)
+            : queue_(memory_resource, policy) {}
 
         void fill(queue_type&) {}
 
@@ -54,8 +57,9 @@ namespace {
 } // namespace
 
 TEST_CASE("task_queue_tests") {
+    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     SECTION("default_constructed") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(fix.queue_.empty());
         REQUIRE(fix.queue_.total_task_size() == 0);
         REQUIRE(fix.queue_.peek() == nullptr);
@@ -74,29 +78,29 @@ TEST_CASE("task_queue_tests") {
     };
 
     SECTION("push_back") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(queue_to_string(fix.queue_).empty());
         fix.queue_.emplace_back(1);
         REQUIRE(queue_to_string(fix.queue_) == "1");
-        fix.queue_.push_back(inode_policy::unique_pointer{new inode(2)});
+        fix.queue_.push_back(inode_policy::unique_pointer{actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 2), actor_zeta::detail::pmr::deleter_t(mr_ptr)});
         REQUIRE(queue_to_string(fix.queue_) == "1, 2");
-        fix.queue_.push_back(new inode(3));
+        fix.queue_.push_back(actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 3));
         REQUIRE(queue_to_string(fix.queue_) == "1, 2, 3");
     }
 
     SECTION("lifo_conversion") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(queue_to_string(fix.queue_).empty());
-        fix.queue_.lifo_append(new inode(3));
+        fix.queue_.lifo_append(actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 3));
         REQUIRE(queue_to_string(fix.queue_) == "3");
-        fix.queue_.lifo_append(new inode(2));
-        fix.queue_.lifo_append(new inode(1));
+        fix.queue_.lifo_append(actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 2));
+        fix.queue_.lifo_append(actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 1));
         fix.queue_.stop_lifo_append();
         REQUIRE(queue_to_string(fix.queue_) == "1, 2, 3");
     }
 
     SECTION("move_construct") {
-        fixture fix;
+        fixture fix(mr_ptr);
         fix.fill(fix.queue_, 1, 2, 3);
         queue_type q2 = std::move(fix.queue_);
         REQUIRE(fix.queue_.empty());
@@ -105,8 +109,8 @@ TEST_CASE("task_queue_tests") {
     }
 
     SECTION("move_assign") {
-        fixture fix;
-        queue_type q2{fix.policy};
+        fixture fix(mr_ptr);
+        queue_type q2(mr_ptr, fix.policy);
         fix.fill(q2, 1, 2, 3);
         fix.queue_ = std::move(q2);
         REQUIRE(q2.empty());
@@ -115,8 +119,8 @@ TEST_CASE("task_queue_tests") {
     }
 
     SECTION("append") {
-        fixture fix;
-        queue_type q2{fix.policy};
+        fixture fix(mr_ptr);
+        queue_type q2(mr_ptr, fix.policy);
         fix.fill(fix.queue_, 1, 2, 3);
         fix.fill(q2, 4, 5, 6);
         fix.queue_.append(q2);
@@ -126,8 +130,8 @@ TEST_CASE("task_queue_tests") {
     }
 
     SECTION("prepend") {
-        fixture fix;
-        queue_type q2{fix.policy};
+        fixture fix(mr_ptr);
+        queue_type q2(mr_ptr, fix.policy);
         fix.fill(fix.queue_, 1, 2, 3);
         fix.fill(q2, 4, 5, 6);
         fix.queue_.prepend(q2);
@@ -137,14 +141,14 @@ TEST_CASE("task_queue_tests") {
     }
 
     SECTION("peek") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(fix.queue_.peek() == nullptr);
         fix.fill(fix.queue_, 1, 2, 3);
         REQUIRE(fix.queue_.peek()->value == 1);
     }
 
     SECTION("task_size") {
-        fixture fix;
+        fixture fix(mr_ptr);
         fix.fill(fix.queue_, 1, 2, 3);
         REQUIRE(fix.queue_.total_task_size() == 6);
         fix.fill(fix.queue_, 4, 5);

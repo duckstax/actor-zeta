@@ -24,15 +24,19 @@ namespace {
         using mapped_type = inode;
         using task_size_type = int;
         using deficit_type = int;
-        using deleter_type = std::default_delete<mapped_type>;
+        using deleter_type = actor_zeta::detail::pmr::deleter_t;
         using unique_pointer = std::unique_ptr<mapped_type, deleter_type>;
     };
 
     using inbox_type = lifo_inbox<inode_policy>;
 
-    struct fixture {
+    struct fixture final : protected actor_zeta::detail::pmr::memory_resource_base {
         inode_policy policy;
         inbox_type inbox;
+
+        fixture(actor_zeta::detail::pmr::memory_resource* memory_resource)
+            : actor_zeta::detail::pmr::memory_resource_base(memory_resource)
+            , inbox(resource()) {}
 
         void fill() {
         }
@@ -45,7 +49,7 @@ namespace {
 
         auto fetch() -> std::string {
             std::string result;
-            inode_policy::unique_pointer ptr{inbox.take_head()};
+            inode_policy::unique_pointer ptr{inbox.take_head(), actor_zeta::detail::pmr::deleter_t(resource())};
             while (ptr != nullptr) {
                 auto next = ptr->next;
                 result += to_string(*ptr);
@@ -68,31 +72,32 @@ namespace {
 } // namespace
 
 TEST_CASE("lifo_inbox_tests") {
+    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     SECTION("default_constructed") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(fix.inbox.empty());
     }
 
     SECTION("push_front") {
-        fixture fix;
+        fixture fix(mr_ptr);
         fix.fill(1, 2, 3);
         REQUIRE(fix.close_and_fetch() == "321");
         REQUIRE(fix.inbox.closed());
     }
 
     SECTION("push_after_close") {
-        fixture fix;
+        fixture fix(mr_ptr);
         fix.inbox.close();
-        auto res = fix.inbox.push_front(new inode(0));
+        auto res = fix.inbox.push_front(actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 0));
         REQUIRE(res == enqueue_result::queue_closed);
     }
 
     SECTION("unblock") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(fix.inbox.try_block());
-        auto res = fix.inbox.push_front(new inode(1));
+        auto res = fix.inbox.push_front(actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 1));
         REQUIRE(res == enqueue_result::unblocked_reader);
-        res = fix.inbox.push_front(new inode(2));
+        res = fix.inbox.push_front(actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 2));
         REQUIRE(res == enqueue_result::success);
         REQUIRE(fix.close_and_fetch() == "21");
     }

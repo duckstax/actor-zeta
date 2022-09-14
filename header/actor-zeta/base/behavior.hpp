@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/mailbox/message.hpp>
@@ -14,10 +15,22 @@ namespace actor_zeta { namespace base {
     void error_skip(const std::string& sender, const std::string& reciever, mailbox::message_id handler);
     void error_skip(const std::string& reciever, mailbox::message_id handler);
 
-    class intrusive_behavior_t   {
+    class intrusive_behavior_t : protected actor_zeta::detail::pmr::memory_resource_base {
     protected:
         using key_type = mailbox::message_id;
         using value_type = action;
+
+        intrusive_behavior_t(actor_zeta::detail::pmr::memory_resource* memory_resource)
+            : actor_zeta::detail::pmr::memory_resource_base(memory_resource) {}
+        virtual ~intrusive_behavior_t() = default;
+
+        intrusive_behavior_t(intrusive_behavior_t&&) = default;
+        intrusive_behavior_t(intrusive_behavior_t&) = default;
+        intrusive_behavior_t(const intrusive_behavior_t&) = default;
+
+        intrusive_behavior_t& operator=(intrusive_behavior_t&&) = default;
+        intrusive_behavior_t& operator=(intrusive_behavior_t&) = default;
+        intrusive_behavior_t& operator=(const intrusive_behavior_t&) = default;
 
         template<class T>
         void execute(T* ptr, mailbox::message* msg) {
@@ -40,32 +53,32 @@ namespace actor_zeta { namespace base {
         template<class Key, class Value>
         auto add_handler(Key key, Value&& f) -> typename std::enable_if<!std::is_member_function_pointer<Value>::value>::type {
             auto id = mailbox::make_message_id(static_cast<uint64_t>(key));
-            on(id, make_handler(std::forward<Value>(f)));
+            on(id, make_handler(resource(), std::forward<Value>(f)));
         }
 
         template<class Key, class Value>
         auto add_handler(Key key, Value&& f) -> typename std::enable_if<std::is_member_function_pointer<Value>::value>::type {
-            on(mailbox::make_message_id(static_cast<uint64_t>(key)), make_handler(std::forward<Value>(f), static_cast<typename type_traits::get_callable_trait_t<Value>::class_type*>(this)));
+            on(mailbox::make_message_id(static_cast<uint64_t>(key)), make_handler(resource(), std::forward<Value>(f), static_cast<typename type_traits::get_callable_trait_t<Value>::class_type*>(this)));
         }
 
         template<class Key, class Actor, typename F>
         auto add_handler(Key key, Actor* ptr, F&& f) -> void {
-            on(mailbox::make_message_id(static_cast<uint64_t>(key)), make_handler(std::forward<F>(f), ptr));
+            on(mailbox::make_message_id(static_cast<uint64_t>(key)), make_handler(resource(), std::forward<F>(f), ptr));
         }
 
         template<class Value>
         auto add_handler(mailbox::message_id key, Value&& f) -> typename std::enable_if<!std::is_member_function_pointer<Value>::value>::type {
-            on(key, make_handler(std::forward<Value>(f)));
+            on(key, make_handler(resource(), std::forward<Value>(f)));
         }
 
         template<class Value>
         auto add_handler(mailbox::message_id key, Value&& f) -> typename std::enable_if<std::is_member_function_pointer<Value>::value>::type {
-            on(key, make_handler(std::forward<Value>(f), static_cast<typename type_traits::get_callable_trait_t<Value>::class_type*>(this)));
+            on(key, make_handler(resource(), std::forward<Value>(f), static_cast<typename type_traits::get_callable_trait_t<Value>::class_type*>(this)));
         }
 
         template<class Actor, typename F>
         auto add_handler(mailbox::message_id key, Actor* ptr, F&& f) -> void {
-            on(key, make_handler(std::forward<F>(f), ptr));
+            on(key, make_handler(resource(), std::forward<F>(f), ptr));
         }
 
         auto message_types() const -> std::set<key_type>;

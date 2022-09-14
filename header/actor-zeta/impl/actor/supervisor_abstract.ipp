@@ -31,12 +31,12 @@ namespace actor_zeta { namespace base {
 
     supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* mr, std::string type)
         : actor_abstract(std::move(type))
-        , memory_resource_(mr) {
+        , intrusive_behavior_t(mr) {
     }
 
     supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string type)
         : actor_abstract(std::move(type))
-        , memory_resource_(ptr->resource()) {
+        , intrusive_behavior_t(ptr->resource()) {
     }
 
     supervisor_abstract::~supervisor_abstract() {}
@@ -49,12 +49,12 @@ namespace actor_zeta { namespace base {
         current_message_ = msg.release();
     }
 
-    auto supervisor_abstract::resource() const -> detail::pmr::memory_resource* {
-        return memory_resource_;
-    }
-
     auto supervisor_abstract::scheduler() noexcept -> scheduler::scheduler_abstract_t* {
         return scheduler_impl();
+    }
+
+    auto supervisor_abstract::resource() const -> detail::pmr::memory_resource* {
+        return  detail::pmr::memory_resource_base::resource();
     }
 
     auto supervisor_abstract::address() noexcept -> address_t {
