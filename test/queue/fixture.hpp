@@ -7,19 +7,6 @@
 
 namespace test {
 
-    struct T {
-        enum { int_t, float_t } type;
-        template <typename Integer,
-                std::enable_if_t<std::is_integral<Integer>::value, bool> = true
-        >
-        T(Integer) : type(int_t) {}
-    
-        template <typename Floating,
-                std::enable_if_t<std::is_floating_point<Floating>::value, bool> = true
-        >
-        T(Floating) : type(float_t) {} // OK
-    };
-
     template<typename Policy_t, typename Queue_t, typename Inode_t, typename _Alloc = std::allocator<Inode_t> >
     struct fixture {
         _Alloc* alloc_;
@@ -122,6 +109,7 @@ namespace test {
         }
     };
 
+#if 0
     template<typename Policy_t, typename Queue_t, typename Inode_t, typename _Alloc = std::allocator<Inode_t> >
     struct fixture_front : public _Alloc {
         Policy_t policy;
@@ -275,5 +263,6 @@ namespace test {
             fill_queue(q, std::forward<Ts&&>(xs)...);
         }
     };
+#endif
 
 }
