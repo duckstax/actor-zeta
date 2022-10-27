@@ -1,5 +1,6 @@
 #pragma once
 
+#include <actor-zeta/detail/unique_ptr.hpp>
 #include <actor-zeta/detail/queue/singly_linked.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 

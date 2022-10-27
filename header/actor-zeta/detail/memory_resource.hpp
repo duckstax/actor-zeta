@@ -55,15 +55,4 @@ namespace actor_zeta { namespace detail { namespace pmr {
         }
     };
 
-    template<typename Tp_, typename _Alloc = std::allocator<Tp_>>
-    class deleter_t final : public std::allocator_traits<_Alloc> {
-    public:
-        void operator()(Tp_* target, std::size_t size = 1) {
-            for (int i = 0; i < size; ++i) {
-                destroy(&target[i]);
-            }
-            deallocate(target, sizeof(Tp_) * size);
-        }
-    };
-
 }}}

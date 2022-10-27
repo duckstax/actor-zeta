@@ -2,7 +2,6 @@
 
 #include <memory>
 
-#include <actor-zeta/detail/unique_ptr.hpp>
 #include <actor-zeta/detail/queue/forward_iterator.hpp>
 
 namespace actor_zeta { namespace detail {
