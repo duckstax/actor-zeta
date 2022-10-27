@@ -85,13 +85,13 @@ include_directories(SYSTEM .)
 include_directories(SYSTEM header)
 
 set(HEADER_FILES
-        header/actor-zeta/base/actor_abstract.hpp
-        header/actor-zeta/base/actor.hpp
-        header/actor-zeta/base/address.hpp
-        header/actor-zeta/base/cooperative_actor.hpp
-        header/actor-zeta/base/handler.hpp
-        header/actor-zeta/base/supervisor.hpp
-        header/actor-zeta/base/supervisor_abstract.hpp
+#        header/actor-zeta/base/actor_abstract.hpp
+#        header/actor-zeta/base/actor.hpp
+#        header/actor-zeta/base/address.hpp
+#        header/actor-zeta/base/cooperative_actor.hpp
+#        header/actor-zeta/base/handler.hpp
+#        header/actor-zeta/base/supervisor.hpp
+#        header/actor-zeta/base/supervisor_abstract.hpp
 
         header/actor-zeta/detail/queue/queue.hpp
         header/actor-zeta/detail/queue/cached_queue.hpp
@@ -116,31 +116,32 @@ set(HEADER_FILES
         header/actor-zeta/detail/type_traits.hpp
         header/actor-zeta/detail/rtt.hpp
 
-        header/actor-zeta/scheduler/policy/unprofiled.hpp
-        header/actor-zeta/scheduler/policy/work_sharing.hpp
-        header/actor-zeta/scheduler/execution_unit.hpp
-        header/actor-zeta/scheduler/resumable.hpp
-        header/actor-zeta/scheduler/scheduler.hpp
-        header/actor-zeta/scheduler/scheduler_abstract.hpp
-        header/actor-zeta/scheduler/worker.hpp
-
-        header/actor-zeta/mailbox/priority_message.hpp
-        header/actor-zeta/mailbox/normal_priority_message.hpp
-        header/actor-zeta/mailbox/high_priority_message.hpp
-        header/actor-zeta/mailbox/id.hpp
-        header/actor-zeta/mailbox/message.hpp
-        header/actor-zeta/mailbox/priority.hpp
-
-        header/actor-zeta/make_message.hpp
-        header/actor-zeta/mailbox.hpp
-        header/actor-zeta/send.hpp
-        header/actor-zeta/core.hpp
-        header/actor-zeta/src.hpp
-        header/actor-zeta.hpp
+#        header/actor-zeta/scheduler/policy/unprofiled.hpp
+#        header/actor-zeta/scheduler/policy/work_sharing.hpp
+#        header/actor-zeta/scheduler/execution_unit.hpp
+#        header/actor-zeta/scheduler/resumable.hpp
+#        header/actor-zeta/scheduler/scheduler.hpp
+#        header/actor-zeta/scheduler/scheduler_abstract.hpp
+#        header/actor-zeta/scheduler/worker.hpp
+#
+#        header/actor-zeta/mailbox/priority_message.hpp
+#        header/actor-zeta/mailbox/normal_priority_message.hpp
+#        header/actor-zeta/mailbox/high_priority_message.hpp
+#        header/actor-zeta/mailbox/id.hpp
+#        header/actor-zeta/mailbox/message.hpp
+#        header/actor-zeta/mailbox/priority.hpp
+#
+#        header/actor-zeta/make_message.hpp
+#        header/actor-zeta/mailbox.hpp
+#        header/actor-zeta/send.hpp
+#        header/actor-zeta/core.hpp
+#        header/actor-zeta/src.hpp
+#        header/actor-zeta.hpp
 )
 
 set(SOURCE_FILES
-    source/src.cpp
+#    source/src.cpp
+    header/actor-zeta/detail/queue/src.cpp
 )
 
 find_program(CCACHE_FOUND ccache)
