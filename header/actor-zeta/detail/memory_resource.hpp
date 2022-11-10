@@ -9,22 +9,22 @@
 namespace actor_zeta { namespace detail { namespace pmr {
 
     template<class Target, class... Args>
-    Target* allocate_ptr(memory_resource* memory_resource, Args&&... args) {
-        assert(memory_resource);
+    Target* allocate_ptr(memory_resource* mr, Args&&... args) {
+        assert(mr);
         auto size = sizeof(Target);
         auto align = alignof(Target);
-        auto* buffer = memory_resource->allocate(size, align);
+        auto* buffer = mr->allocate(size, align);
         auto* target_ptr = new (buffer) Target(std::forward<Args&&>(args)...);
         return target_ptr;
     }
 
     template<class Target>
-    void deallocate_ptr(memory_resource* memory_resource, Target** target) {
-        assert(memory_resource);
+    void deallocate_ptr(memory_resource* mr, Target** target) {
+        assert(mr);
         assert(target);
         if (*target) {
             (*target)->~Target();
-            memory_resource->deallocate(*target, sizeof(Target));
+            mr->deallocate(*target, sizeof(Target));
             *target = nullptr;
         }
     }

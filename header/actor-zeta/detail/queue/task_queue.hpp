@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <actor-zeta/detail/pmr/memory_resource.hpp>
+#include <actor-zeta/detail/pmr/default_resource.hpp>
 #include <actor-zeta/detail/queue/forward_iterator.hpp>
 
 namespace actor_zeta { namespace detail {
@@ -9,9 +11,9 @@ namespace actor_zeta { namespace detail {
     /// A singly-linked FIFO queue for storing tasks of varying size. This queue is
     /// used as a base type for concrete task abstractions such as `drr_queue` and
     /// therefore has no dequeue functions.
-    template<class Policy, typename _Alloc = std::allocator<typename Policy::mapped_type> >
+    template<class Policy>
     class task_queue {
-        _Alloc* allocator_;
+        pmr::memory_resource* mr_;
 
     public:
         using policy_type = Policy;
@@ -29,19 +31,19 @@ namespace actor_zeta { namespace detail {
             return static_cast<pointer>(ptr);
         }
 
-        explicit task_queue(_Alloc* allocator, policy_type policy)
-            : allocator_(allocator)
+        explicit task_queue(pmr::memory_resource* mr, policy_type policy)
+            : mr_(mr ? mr : pmr::get_default_resource())
             , old_last_(nullptr)
             , new_head_(nullptr)
             , policy_(std::move(policy)) {
             init();
         }
 
-        task_queue(task_queue<Policy, _Alloc>&& other) noexcept {
+        task_queue(task_queue<Policy>&& other) noexcept {
             init_from_other(std::move(other));
         }
 
-        auto operator=(task_queue<Policy, _Alloc>&& other) noexcept -> task_queue& {
+        auto operator=(task_queue<Policy>&& other) noexcept -> task_queue& {
             init_from_other(std::move(other));
             return *this;
         }
@@ -126,7 +128,7 @@ namespace actor_zeta { namespace detail {
 
         /// @private
         auto next(task_size_type& deficit) noexcept -> unique_pointer {
-            unique_pointer result{nullptr, deleter_type(allocator_)};
+            unique_pointer result{nullptr, deleter_type(mr_)};
             if (!empty()) {
                 auto ptr = promote(head_.next);
                 auto size = policy_.task_size(*ptr);
@@ -270,8 +272,8 @@ namespace actor_zeta { namespace detail {
             total_task_size_ = 0;
         }
 
-        void init_from_other(task_queue<Policy, _Alloc>&& other) noexcept {
-            allocator_ = other.allocator_;
+        void init_from_other(task_queue<Policy>&& other) noexcept {
+            mr_ = other.mr_;
             old_last_ = nullptr;
             new_head_ = nullptr;
             policy_ = std::move(other.policy_);
@@ -294,7 +296,7 @@ namespace actor_zeta { namespace detail {
             for (auto i = head_.next; i != &tail_;) {
                 auto ptr = i;
                 i = i->next;
-                deleter_type deleter(allocator_);
+                deleter_type deleter(mr_);
                 deleter(promote(ptr));
             }
         }

@@ -23,12 +23,11 @@ namespace tools {
         return std::to_string(x.value);
     }
 
-    template<typename _Alloc>
     struct inode_policy__ {
         using mapped_type = inode;
         using task_size_type = int;
         using deficit_type = int;
-        using deleter_type = actor_zeta::detail::deleter_t<mapped_type, _Alloc>;
+        using deleter_type = actor_zeta::detail::deleter_t<mapped_type>;
         using unique_pointer = std::unique_ptr<mapped_type, deleter_type>;
 
         static inline auto task_size(const mapped_type& x) -> task_size_type {
@@ -36,10 +35,6 @@ namespace tools {
         }
     };
 
-    using allocator_t = std::allocator<inode>;
-    using allocator_pmr_t = actor_zeta::detail::pmr::polymorphic_allocator<inode>;
-
-    using inode_policy = inode_policy__<allocator_t>;
-    using inode_policy_pmr = inode_policy__<allocator_pmr_t>;
+    using inode_policy = inode_policy__;
 
 }

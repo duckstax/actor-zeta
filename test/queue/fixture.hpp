@@ -7,9 +7,9 @@
 
 namespace test {
 
-    template<typename Policy_t, typename Queue_t, typename Inode_t, typename _Alloc = std::allocator<Inode_t> >
+    template<typename Policy_t, typename Queue_t, typename Inode_t>
     struct fixture {
-        _Alloc* alloc_;
+        actor_zeta::detail::pmr::memory_resource* mr_;
         Policy_t policy;
         Queue_t queue_;
 
@@ -19,49 +19,48 @@ namespace test {
 
         template<class... Args>
         auto duplicate(Args&&... args) -> Queue_t {
-            return Queue_t(alloc_, std::forward<Args&&>(args)...);
+            return Queue_t(mr_, std::forward<Args&&>(args)...);
         }
 
+        using mapped_type = typename Policy_t::mapped_type;
         using deleter_type = typename Policy_t::deleter_type;
         using unique_pointer = typename Policy_t::unique_pointer;
 
+        template<class T>
+        mapped_type* allocate(T&& x) {
+            auto ptr = actor_zeta::detail::pmr::allocate_ptr<mapped_type>(mr_, std::forward<T&&>(x));
+            assert(ptr);
+            return ptr;
+        }
+
         template<class... Args>
-        fixture(_Alloc* alloc, Args&&... args)
-            : alloc_(alloc)
-            , queue_(alloc_, std::forward<Args&&>(args)...) {}
+        fixture(actor_zeta::detail::pmr::memory_resource* mr, Args&&... args)
+            : mr_(mr ? mr : actor_zeta::detail::pmr::get_default_resource())
+            , queue_(mr_, std::forward<Args&&>(args)...) {}
 
         void fill() {}
 
         template<class T, class... Args>
         void fill(T&& x, Args&&... xs) {
-            auto ptr = std::allocator_traits<_Alloc>::allocate(*alloc_, sizeof(T));
-            assert(ptr);
-            std::allocator_traits<_Alloc>::construct(*alloc_, ptr, std::forward<T&&>(x));
             queue_.push_back(
-                ptr
+                allocate(std::forward<T&&>(x))
             );
             fill(std::forward<Args&&>(xs)...);
         }
 
-        template<class T>
-        void push_back_single(T&& x) {
-            auto ptr = std::allocator_traits<_Alloc>::allocate(*alloc_, sizeof(T));
-            assert(ptr);
-            std::allocator_traits<_Alloc>::construct(*alloc_, ptr, std::forward<T&&>(x));
-            queue_.push_back(
-                ptr
-            );
-        }
+//        template<class T>
+//        void push_back_single(T&& x) {
+//            queue_.push_back(
+//                allocate(std::forward<T&&>(x));
+//            );
+//        }
 
         void fill_front() {}
 
         template<class T, class... Args>
         void fill_front(T&& x, Args&&... xs) {
-            auto ptr = std::allocator_traits<_Alloc>::allocate(*alloc_, sizeof(T));
-            assert(ptr);
-            std::allocator_traits<_Alloc>::construct(*alloc_, ptr, std::forward<T&&>(x));
             queue_.push_front(
-                ptr
+                allocate(std::forward<T&&>(x))
             );
             fill_front(std::forward<Args&&>(xs)...);
         }
@@ -70,11 +69,8 @@ namespace test {
 
         template<class T, class... Args>
         void lifo_append(T&& x, Args&&... xs) {
-            auto ptr = std::allocator_traits<_Alloc>::allocate(*alloc_, sizeof(T));
-            assert(ptr);
-            std::allocator_traits<_Alloc>::construct(*alloc_, ptr, std::forward<T&&>(x));
             queue_.lifo_append(
-                ptr
+                allocate(std::forward<T&&>(x))
             );
             lifo_append(std::forward<Args&&>(xs)...);
         }
@@ -83,11 +79,10 @@ namespace test {
 
         template<class T, class... Args>
         void fill_unique(T&& x, Args&&... xs) {
-            auto ptr = std::allocator_traits<_Alloc>::allocate(*alloc_, sizeof(T));
+            auto ptr = allocate(std::forward<T&&>(x));
             assert(ptr);
-            std::allocator_traits<_Alloc>::construct(*alloc_, ptr, std::forward<T&&>(x));
             queue_.push_back(
-                unique_pointer{ptr, deleter_type(alloc_)}
+                unique_pointer{ptr, deleter_type(mr_)}
             );
             fill_unique(std::forward<Args&&>(xs)...);
         }
@@ -96,15 +91,9 @@ namespace test {
 
         template<class T, class... Ts>
         void fill_queue(Queue_t& q, T&& x, Ts&&... xs) {
-            auto ptr = std::allocator_traits<_Alloc>::allocate(*alloc_, sizeof(T));
-            assert(ptr);
-            std::allocator_traits<_Alloc>::construct(*alloc_, ptr, std::forward<T&&>(x));
             q.push_back(
-                ptr
+                allocate(std::forward<T&&>(x))
             );
-//            auto* value = actor_zeta::detail::pmr::allocate_ptr<queue_type::value_type>(memory_resource_, std::forward<T&&>(x));
-//            assert(value);
-//            q.push_back(value);
             fill_queue(q, std::forward<Ts&&>(xs)...);
         }
     };

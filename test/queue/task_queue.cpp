@@ -13,21 +13,11 @@
 namespace tools {
 
     using queue_type = actor_zeta::detail::task_queue<inode_policy>;
-    using queue_type_pmr = actor_zeta::detail::task_queue<inode_policy_pmr, allocator_pmr_t>;
 
     struct fixture
-        : public allocator_t
-        , public test::fixture<inode_policy, queue_type, inode, allocator_t> {
-        fixture()
-            : test::fixture<inode_policy, queue_type, inode, allocator_t>(this, policy) {}
-    };
-
-    struct fixture_pmr
-        : public allocator_pmr_t
-        , public test::fixture<inode_policy_pmr, queue_type_pmr, inode, allocator_pmr_t> {
-        fixture_pmr(actor_zeta::detail::pmr::memory_resource* mr = nullptr)
-            : allocator_pmr_t(mr)
-            , test::fixture<inode_policy_pmr, queue_type_pmr, inode, allocator_pmr_t>(this, policy) {}
+        : public test::fixture<inode_policy, queue_type, inode> {
+        fixture(actor_zeta::detail::pmr::memory_resource* mr = actor_zeta::detail::pmr::get_default_resource())
+            : test::fixture<inode_policy, queue_type, inode>(mr, policy) {}
     };
 
 } // namespace tools
@@ -53,7 +43,7 @@ TEST_CASE("task_queue_tests pmr") {
     actor_zeta::detail::pmr::monotonic_buffer_resource pool{std::data(buffer), std::size(buffer)};
 
     SECTION("default_constructed") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         REQUIRE(fix.queue().empty());
         REQUIRE(fix.queue().total_task_size() == 0);
         REQUIRE(fix.queue().peek() == nullptr);
@@ -62,7 +52,7 @@ TEST_CASE("task_queue_tests pmr") {
     }
 
     SECTION("push_back") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         REQUIRE(queue_to_string(fix.queue()).empty());
         fix.fill(1);
         REQUIRE(queue_to_string(fix.queue()) == "1");
@@ -74,7 +64,7 @@ TEST_CASE("task_queue_tests pmr") {
     }
 
     SECTION("lifo_conversion") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         REQUIRE(queue_to_string(fix.queue()).empty());
         fix.lifo_append(3);
         REQUIRE(queue_to_string(fix.queue()) == "3");
@@ -86,7 +76,7 @@ TEST_CASE("task_queue_tests pmr") {
     }
 
     SECTION("move_construct") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         fix.fill(1, 2, 3);
         auto q2 = std::move(fix.queue());
         REQUIRE(fix.queue().empty());
@@ -96,7 +86,7 @@ TEST_CASE("task_queue_tests pmr") {
     }
 
     SECTION("move_assign") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         auto q2 = fix.duplicate(fix.policy);
         fix.fill_queue(q2, 1, 2, 3);
         fix.queue() = std::move(q2);
@@ -107,7 +97,7 @@ TEST_CASE("task_queue_tests pmr") {
     }
 
     SECTION("append") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         auto q2 = fix.duplicate(fix.policy);
         fix.fill(1, 2, 3);
         fix.fill_queue(q2, 4, 5, 6);
@@ -119,7 +109,7 @@ TEST_CASE("task_queue_tests pmr") {
     }
 
     SECTION("prepend") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         auto q2 = fix.duplicate(fix.policy);
         fix.fill(1, 2, 3);
         fix.fill_queue(q2, 4, 5, 6);
@@ -131,7 +121,7 @@ TEST_CASE("task_queue_tests pmr") {
     }
 
     SECTION("peek") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         REQUIRE(fix.queue().peek() == nullptr);
         fix.fill(1, 2, 3);
         REQUIRE(fix.queue().peek()->value == 1);
@@ -139,7 +129,7 @@ TEST_CASE("task_queue_tests pmr") {
     }
 
     SECTION("task_size") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         fix.fill(1, 2, 3);
         REQUIRE(fix.queue().total_task_size() == 6);
         fix.fill(4, 5);
