@@ -6,54 +6,29 @@
 #include <actor-zeta/detail/queue/lifo_inbox.hpp>
 #include <actor-zeta/detail/queue/singly_linked.hpp>
 
+#include "inode.hpp"
+#include "fixture.hpp"
+
 using namespace actor_zeta::detail;
 
-namespace {
+namespace tools {
 
-    struct inode : singly_linked<inode> {
-        int value;
-        explicit inode(int x = 0)
-            : value(x) {}
-    };
+    using queue_type = lifo_inbox<inode_policy>;
 
-    auto to_string(const inode& x) -> std::string {
-        return std::to_string(x.value);
-    }
-
-    struct inode_policy {
-        using mapped_type = inode;
-        using task_size_type = int;
-        using deficit_type = int;
-        using deleter_type = actor_zeta::detail::pmr::deleter_t;
-        using unique_pointer = std::unique_ptr<mapped_type, deleter_type>;
-    };
-
-    using inbox_type = lifo_inbox<inode_policy>;
-
-    struct fixture final : protected actor_zeta::detail::pmr::memory_resource_base {
-        inode_policy policy;
-        inbox_type inbox;
-
-        fixture(actor_zeta::detail::pmr::memory_resource* memory_resource)
-            : actor_zeta::detail::pmr::memory_resource_base(memory_resource)
-            , inbox(resource()) {}
-
-        void fill() {
-        }
-
-        template<class T, class... Ts>
-        void fill(T x, Ts... xs) {
-            inbox.emplace_front(x);
-            fill(xs...);
-        }
+    struct fixture
+        : public test::fixture<inode_policy, queue_type, inode> {
+        actor_zeta::detail::pmr::memory_resource* mr_;
+        fixture(actor_zeta::detail::pmr::memory_resource* mr = actor_zeta::detail::pmr::get_default_resource())
+            : test::fixture<inode_policy, queue_type, inode>(mr)
+            , mr_(mr) {}
 
         auto fetch() -> std::string {
             std::string result;
-            inode_policy::unique_pointer ptr{inbox.take_head(), actor_zeta::detail::pmr::deleter_t(resource())};
+            inode_policy::unique_pointer ptr{queue_.take_head(), inode_policy::deleter_type(mr_)};
             while (ptr != nullptr) {
                 auto next = ptr->next;
                 result += to_string(*ptr);
-                ptr.reset(inbox_type::promote(next));
+                ptr.reset(queue_type::promote(next));
             }
             return result;
         }
@@ -62,42 +37,80 @@ namespace {
             std::string result;
             auto f = [&](inode* x) {
                 result += to_string(*x);
-                delete x;
+                inode_policy::deleter_type deleter(mr_);
+                deleter(x);
             };
-            inbox.close(f);
+            queue_.close(f);
             return result;
         }
     };
 
-} // namespace
+} // namespace tools
 
-TEST_CASE("lifo_inbox_tests") {
-    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
+#if CPP17_OR_GREATER
+TEST_CASE("lifo_inbox_tests pmr") {
+    char buffer[256] = {}; // a small buffer on the stack
+    std::fill_n(std::begin(buffer), std::size(buffer) - 1, '_');
+    std::cout << buffer << '\n';
+
+    actor_zeta::detail::pmr::monotonic_buffer_resource pool{std::data(buffer), std::size(buffer)};
     SECTION("default_constructed") {
-        fixture fix(mr_ptr);
-        REQUIRE(fix.inbox.empty());
+        tools::fixture fix(&pool);
+        REQUIRE(fix.queue_.empty());
     }
 
     SECTION("push_front") {
-        fixture fix(mr_ptr);
-        fix.fill(1, 2, 3);
+        tools::fixture fix(&pool);
+        fix.fill_front(1, 2, 3);
         REQUIRE(fix.close_and_fetch() == "321");
-        REQUIRE(fix.inbox.closed());
+        REQUIRE(fix.queue_.closed());
     }
 
     SECTION("push_after_close") {
-        fixture fix(mr_ptr);
-        fix.inbox.close();
-        auto res = fix.inbox.push_front(actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 0));
+        tools::fixture fix(&pool);
+        fix.queue_.close();
+        auto res = fix.fill_front_single(0);
         REQUIRE(res == enqueue_result::queue_closed);
     }
 
     SECTION("unblock") {
-        fixture fix(mr_ptr);
-        REQUIRE(fix.inbox.try_block());
-        auto res = fix.inbox.push_front(actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 1));
+        tools::fixture fix(&pool);
+        REQUIRE(fix.queue_.try_block());
+        auto res = fix.fill_front_single(1);
         REQUIRE(res == enqueue_result::unblocked_reader);
-        res = fix.inbox.push_front(actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 2));
+        res = fix.fill_front_single(2);
+        REQUIRE(res == enqueue_result::success);
+        REQUIRE(fix.close_and_fetch() == "21");
+    }
+}
+#endif
+
+TEST_CASE("lifo_inbox_tests") {
+    SECTION("default_constructed") {
+        tools::fixture fix;
+        REQUIRE(fix.queue_.empty());
+    }
+
+    SECTION("push_front") {
+        tools::fixture fix;
+        fix.fill_front(1, 2, 3);
+        REQUIRE(fix.close_and_fetch() == "321");
+        REQUIRE(fix.queue_.closed());
+    }
+
+    SECTION("push_after_close") {
+        tools::fixture fix;
+        fix.queue_.close();
+        auto res = fix.fill_front_single(0);
+        REQUIRE(res == enqueue_result::queue_closed);
+    }
+
+    SECTION("unblock") {
+        tools::fixture fix;
+        REQUIRE(fix.queue_.try_block());
+        auto res = fix.fill_front_single(1);
+        REQUIRE(res == enqueue_result::unblocked_reader);
+        res = fix.fill_front_single(2);
         REQUIRE(res == enqueue_result::success);
         REQUIRE(fix.close_and_fetch() == "21");
     }

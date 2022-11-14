@@ -3,9 +3,9 @@
 //#include <actor-zeta/detail/queue/fifo_inbox.hpp>
 //#include <actor-zeta/detail/queue/fixed_queue.hpp>
 //#include <actor-zeta/detail/queue/forward_iterator.hpp>
-//#include <actor-zeta/detail/queue/lifo_inbox.hpp>
+#include <actor-zeta/detail/queue/lifo_inbox.hpp>
 #include <actor-zeta/detail/queue/new_round_result.hpp>
-//#include <actor-zeta/detail/queue/queue.hpp>
+#include <actor-zeta/detail/queue/queue.hpp>
 #include <actor-zeta/detail/queue/singly_linked.hpp>
 #include <actor-zeta/detail/queue/task_queue.hpp>
 #include <actor-zeta/detail/queue/task_result.hpp>

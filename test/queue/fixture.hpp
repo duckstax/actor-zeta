@@ -65,6 +65,13 @@ namespace test {
             fill_front(std::forward<Args&&>(xs)...);
         }
 
+        template<class T>
+        actor_zeta::detail::enqueue_result fill_front_single(T&& x) {
+            return queue_.push_front(
+                allocate(std::forward<T&&>(x))
+            );
+        }
+
         void lifo_append() {}
 
         template<class T, class... Args>

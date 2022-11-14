@@ -11,7 +11,9 @@ namespace actor_zeta { namespace detail {
     /// An intrusive, thread-safe LIFO queue implementation for a single reader
     /// with any number of writers.
     template<class Policy>
-    class lifo_inbox : protected pmr::memory_resource_base {
+    class lifo_inbox {
+        pmr::memory_resource* mr_;
+
     public:
         using policy_type = Policy;
         using value_type = typename policy_type::mapped_type;
@@ -40,7 +42,7 @@ namespace actor_zeta { namespace detail {
                                ? enqueue_result::unblocked_reader
                                : enqueue_result::success;
             }
-            deleter_type deleter(resource());
+            deleter_type deleter(mr_);
             deleter(new_element);
             return enqueue_result::queue_closed;
         }
@@ -53,12 +55,12 @@ namespace actor_zeta { namespace detail {
 
         /// Tries to enqueue a next element to the mailbox.
         /// @threadsafe
-        template<class... args>
-        auto emplace_front(args&&... elements) -> enqueue_result {
-            auto* value = allocate_ptr<value_type>(std::forward<args&&>(elements)...);
-            assert(value);
-            return push_front(value);
-        }
+//        template<class... args>
+//        auto emplace_front(args&&... elements) -> enqueue_result {
+//            auto* value = allocate_ptr<value_type>(std::forward<args&&>(elements)...);
+//            assert(value);
+//            return push_front(value);
+//        }
 
         /// Queries whether this queue is empty.
         /// @pre `!closed() && !blocked()`
@@ -119,7 +121,7 @@ namespace actor_zeta { namespace detail {
         /// Closes this queue and deletes all remaining elements.
         /// @warning Call only from the reader (owner).
         void close() noexcept {
-            deleter_type deleter(resource());
+            deleter_type deleter(mr_);
             close(deleter);
         }
 
@@ -136,8 +138,8 @@ namespace actor_zeta { namespace detail {
             }
         }
 
-        lifo_inbox(pmr::memory_resource* memory_resource) noexcept
-            : pmr::memory_resource_base(memory_resource) {
+        lifo_inbox(pmr::memory_resource* mr) noexcept
+            : mr_(mr) {
             stack_ = stack_empty_tag();
         }
 

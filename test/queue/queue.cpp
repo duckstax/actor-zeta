@@ -11,21 +11,11 @@
 namespace tools {
 
     using queue_type = actor_zeta::detail::queue<inode_policy>;
-    using queue_type_pmr = actor_zeta::detail::queue<inode_policy_pmr, allocator_pmr_t>;
 
     struct fixture
-        : public allocator_t
-        , public test::fixture<inode_policy, queue_type, inode, allocator_t> {
-        fixture()
-            : test::fixture<inode_policy, queue_type, inode, allocator_t>(this, policy) {}
-    };
-
-    struct fixture_pmr
-        : public allocator_pmr_t
-        , public test::fixture<inode_policy_pmr, queue_type_pmr, inode, allocator_pmr_t> {
-        fixture_pmr(actor_zeta::detail::pmr::memory_resource* mr = nullptr)
-            : allocator_pmr_t(mr)
-            , test::fixture<inode_policy_pmr, queue_type_pmr, inode, allocator_pmr_t>(this, policy) {}
+        : public test::fixture<inode_policy, queue_type, inode> {
+        fixture(actor_zeta::detail::pmr::memory_resource* mr = actor_zeta::detail::pmr::get_default_resource())
+            : test::fixture<inode_policy, queue_type, inode>(mr, policy) {}
     };
 
     auto make_new_round_result(size_t consumed_items, bool stop_all) -> actor_zeta::detail::new_round_result {
@@ -55,7 +45,7 @@ TEST_CASE("queue_test pmr") {
     actor_zeta::detail::pmr::monotonic_buffer_resource pool{std::data(buffer), std::size(buffer)};
 
     SECTION("default_constructed") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         REQUIRE(fix.queue().empty());
         REQUIRE(fix.queue().deficit() == 0);
         REQUIRE(fix.queue().total_task_size() == 0);
@@ -66,7 +56,7 @@ TEST_CASE("queue_test pmr") {
     }
 
     SECTION("inc_deficit") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         fix.queue().inc_deficit(100);
         REQUIRE(fix.queue().deficit() == 0);
         fix.fill(1);
@@ -78,7 +68,7 @@ TEST_CASE("queue_test pmr") {
     }
 
     SECTION("new_round") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         std::string seq;
         fix.fill(1, 2, 3, 4, 5, 6);
         auto f = [&](tools::inode& x) -> actor_zeta::detail::task_result {
@@ -105,7 +95,7 @@ TEST_CASE("queue_test pmr") {
     }
 
     SECTION("next") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         std::string seq;
         fix.fill(1, 2, 3, 4, 5, 6);
         auto f = [&](tools::inode& x) -> actor_zeta::detail::task_result {
@@ -133,15 +123,15 @@ TEST_CASE("queue_test pmr") {
     }
 
     SECTION("peek_all") {
-        tools::fixture_pmr fix(&pool);
+        tools::fixture fix(&pool);
         REQUIRE(queue_to_string(fix.queue()).empty());
-        fix.push_back_single(1);
+        fix.fill(1);
         REQUIRE(queue_to_string(fix.queue()) == "1");
-        fix.push_back_single(2);
+        fix.fill(2);
         REQUIRE(queue_to_string(fix.queue()) == "1, 2");
-        fix.push_back_single(3);
+        fix.fill(3);
         REQUIRE(queue_to_string(fix.queue()) == "1, 2, 3");
-        fix.push_back_single(4);
+        fix.fill(4);
         REQUIRE(queue_to_string(fix.queue()) == "1, 2, 3, 4");
         std::cout << "peek_all :: " << buffer << '\n';
     }
@@ -227,13 +217,13 @@ TEST_CASE("queue_test") {
     SECTION("peek_all") {
         tools::fixture fix;
         REQUIRE(queue_to_string(fix.queue()).empty());
-        fix.push_back_single(1);
+        fix.fill(1);
         REQUIRE(queue_to_string(fix.queue()) == "1");
-        fix.push_back_single(2);
+        fix.fill(2);
         REQUIRE(queue_to_string(fix.queue()) == "1, 2");
-        fix.push_back_single(3);
+        fix.fill(3);
         REQUIRE(queue_to_string(fix.queue()) == "1, 2, 3");
-        fix.push_back_single(4);
+        fix.fill(4);
         REQUIRE(queue_to_string(fix.queue()) == "1, 2, 3, 4");
     }
 }

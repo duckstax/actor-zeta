@@ -1,5 +1,6 @@
 #pragma once
 
+#include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/detail/queue/new_round_result.hpp>
 #include <actor-zeta/detail/queue/task_queue.hpp>
 #include <actor-zeta/detail/queue/task_result.hpp>
@@ -7,17 +8,17 @@
 namespace actor_zeta { namespace detail {
 
     /// A Deficit Round Robin queue.
-    template <class Policy, typename _Alloc = std::allocator<typename Policy::mapped_type> >
-    class queue : public task_queue<Policy, _Alloc> {
+    template <class Policy>
+    class queue : public task_queue<Policy> {
     public:
-        using super = task_queue<Policy, _Alloc>;
+        using super = task_queue<Policy>;
         using typename super::policy_type;
         using typename super::unique_pointer;
         using typename super::value_type;
         using deficit_type = typename policy_type::deficit_type;
 
-        explicit queue(_Alloc* allocator, policy_type policy)
-            : super(allocator, std::move(policy))
+        explicit queue(pmr::memory_resource* mr, policy_type policy)
+            : super(mr, std::move(policy))
             , deficit_(0) {}
 
         queue(queue&& other) noexcept
