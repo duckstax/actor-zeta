@@ -9,7 +9,6 @@
 #include <actor-zeta/impl/handler.ipp>
 // clang-format on
 
-#include <actor-zeta/base/basic_actor.hpp>
 #include <actor-zeta/base/supervisor.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
@@ -22,7 +21,6 @@ namespace actor_zeta {
     using base::actor;
     using base::actor_abstract;
     using base::address_t;
-    using base::basic_async_actor;
     using base::cooperative_supervisor;
     using base::make_handler;
     using base::supervisor;
