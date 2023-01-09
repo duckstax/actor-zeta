@@ -12,11 +12,11 @@ namespace actor_zeta { namespace base {
         using allocator_type = detail::pmr::polymorphic_allocator<Target>;
     };
 
-    auto high(traits::inbox_t& inbox) -> high_priority_queue& {
+    inline auto high(traits::inbox_t& inbox) -> high_priority_queue& {
         return std::get<high_priority_queue_index>(inbox.queue().queues());
     }
 
-    auto normal(traits::inbox_t& inbox) -> normal_priority_queue& {
+    inline auto normal(traits::inbox_t& inbox) -> normal_priority_queue& {
         return std::get<normal_priority_queue_index>(inbox.queue().queues());
     }
 

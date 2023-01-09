@@ -1,9 +1,6 @@
 #pragma once
 
-#include <actor-zeta/base/actor_abstract.hpp>
-#include <actor-zeta/base/behavior.hpp>
 #include <actor-zeta/base/forwards.hpp>
-#include <actor-zeta/scheduler/resumable.hpp>
 
 #include <actor-zeta/base/detail/cooperative_actor_classic.hpp>
 #include <actor-zeta/base/detail/cooperative_actor_coroutine.hpp>
@@ -20,8 +17,8 @@ namespace actor_zeta { namespace base {
         ptr->intrusive_ptr_release_impl();
     }
 
-    template<class Target>
-    using basic_actor = cooperative_actor<Target,traits,actor_type::classic>;
+    template<class Supervisor>
+    using basic_actor = cooperative_actor<Supervisor,traits,actor_type::classic>;
 
     template<class Target>
     using basic_experimental_actor = cooperative_actor<Target,traits,actor_type::coroutine>;

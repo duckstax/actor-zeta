@@ -1,15 +1,15 @@
 #pragma once
 
+#include "traits_actor.hpp"
 #include <actor-zeta/base/actor_abstract.hpp>
 #include <actor-zeta/base/behavior.hpp>
 #include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/scheduler/resumable.hpp>
-#include "traits_actor.hpp"
 
 namespace actor_zeta { namespace base {
 
-    template<class Target,class Traits>
-    class cooperative_actor<Target,Traits,actor_type::coroutine>
+    template<class Supervisor, class Traits>
+    class cooperative_actor<Supervisor, Traits, actor_type::coroutine>
         : public actor_abstract
         , public scheduler::resumable
         , public intrusive_behavior_t {
@@ -55,9 +55,14 @@ namespace actor_zeta { namespace base {
         }
 
     protected:
-        template<class Supervisor>
         cooperative_actor(Supervisor* ptr, std::string type)
-            : cooperative_actor(static_cast<supervisor_abstract*>(ptr), std::move(type)){};
+            : actor_abstract(std::move(type))
+            , supervisor_(ptr)
+            , inbox_(mailbox::priority_message(),
+                     high_priority_queue(mailbox::high_priority_message()),
+                     normal_priority_queue(mailbox::normal_priority_message())) {
+            inbox().try_block(); //todo: bug
+        }
 
         template<class T>
         typename Traits::template allocator_type<T> get_allocator() const noexcept {
@@ -88,42 +93,32 @@ namespace actor_zeta { namespace base {
             }
         }
 
-            auto current_message()->mailbox::message* {
-                return current_message_;
+        auto current_message() -> mailbox::message* {
+            return current_message_;
+        }
+
+        auto set_current_message(mailbox::message_ptr msg) -> void {
+            current_message_ = msg.release();
+        }
+
+    private:
+        inline traits::inbox_t& inbox() {
+            return inbox_;
+        }
+
+        bool activate(scheduler::execution_unit* ctx) {
+            //assert(ctx != nullptr);
+            if (ctx) {
+                context(ctx);
             }
-
-            auto set_current_message(mailbox::message_ptr msg)->void {
-                current_message_ = msg.release();
-            }
-
-
-        private:
-            cooperative_actor(supervisor_abstract*, std::string type)
-                : actor_abstract(std::move(type))
-                , supervisor_(supervisor)
-                , inbox_(mailbox::priority_message(),
-                         high_priority_queue(mailbox::high_priority_message()),
-                         normal_priority_queue(mailbox::normal_priority_message())) {
-                inbox().try_block(); //todo: bug
-            }
-
-            inline typename Traits::inbox_t& inbox() {
-                return inbox_;
-            }
-
-            bool activate(scheduler::execution_unit*ctx) {
-                //assert(ctx != nullptr);
-                if (ctx) {
-                    context(ctx);
-                }
-                return true;
-            }
-
+            return true;
+        }
 
         auto reactivate(mailbox::message& x) -> void {
             current_message_ = &x;
             execute(this, current_message());
         }
+
         auto context(scheduler::execution_unit* e) -> void {
             if (e != nullptr) {
                 executor_ = e;

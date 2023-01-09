@@ -8,7 +8,7 @@ namespace actor_zeta { namespace base {
     class handler;
     class supervisor_abstract;
     class supervisor;
-    template<class Target,class Traits,class Type>
+    template<class Supervisor,class Traits,class Type>
     class cooperative_actor;
 
 }} // namespace actor_zeta::base

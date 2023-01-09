@@ -20,7 +20,7 @@ static std::atomic<uint64_t> counter_work_data{0};
 
 class supervisor_lite;
 
-class worker_t final : public actor_zeta::base::basic_actor<worker_t> {
+class worker_t final : public actor_zeta::base::basic_actor<supervisor_lite> {
 public:
     enum class command_t : uint64_t {
         download = 0x00,
@@ -28,7 +28,7 @@ public:
     };
 
     worker_t(supervisor_lite* ptr)
-        : actor_zeta::base::basic_actor<worker_t>(ptr, "bot") {
+        : actor_zeta::base::basic_actor<supervisor_lite>(ptr,"bot")   {
         add_handler(command_t::download, &worker_t::download);
         add_handler(command_t::work_data, &worker_t::work_data);
     }
