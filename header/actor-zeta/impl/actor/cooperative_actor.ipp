@@ -19,7 +19,7 @@ namespace actor_zeta { namespace base {
         }
         static constexpr size_t quantum = 3;
         size_t handled_msgs = 0;
-        message_ptr ptr{nullptr, detail::pmr::deleter_t(resource())};
+        message_ptr ptr{nullptr, detail::deleter_t<mailbox::message>(resource())};
 
         auto handle_async = [this, max_throughput, &handled_msgs](message& x) -> detail::task_result {
             reactivate(x);

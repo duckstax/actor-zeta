@@ -12,18 +12,24 @@ namespace actor_zeta { namespace detail {
 
     template<class R, class... Args>
     class unique_function<R(Args...)> {
-    public:
+        detail::pmr::memory_resource* memory_resource_ = nullptr;
+
+        /***
+         * @brief class wrapper
+         **/
         class wrapper {
         public:
             virtual ~wrapper() {}
             virtual R operator()(Args...) = 0;
+
+            virtual void destroy(detail::pmr::memory_resource* memory_resource, void* ptr) = 0;
         };
 
         using raw_pointer = R (*)(Args...);
-        using wrapper_pointer = std::unique_ptr<wrapper, detail::pmr::deleter_t>;
+        using wrapper_pointer = wrapper*;
 
         template<class F>
-        static wrapper_pointer make_wrapper(detail::pmr::memory_resource* memory_resource, F&& f) {
+        class wrapper_maker_t {
             class impl final : public wrapper {
             public:
                 impl(F&& fun)
@@ -34,14 +40,26 @@ namespace actor_zeta { namespace detail {
                     return fun_(args...);
                 }
 
+                void destroy(detail::pmr::memory_resource* memory_resource, void* ptr) {
+                    assert(ptr);
+//                    printf("%s %p\n", __func__, ptr);
+                    detail::pmr::deallocate_ptr<impl>(memory_resource, reinterpret_cast<impl**>(&ptr));
+                }
+
             private:
                 F fun_;
             };
-            auto* impl_ptr = detail::pmr::allocate_ptr<impl>(memory_resource, std::forward<F>(f));
-            assert(impl_ptr);
-            return wrapper_pointer{impl_ptr, detail::pmr::deleter_t(memory_resource)};
-        }
 
+        public:
+            static wrapper_pointer make_wrapper(detail::pmr::memory_resource* memory_resource, F&& f) { 
+                auto* impl_ptr = detail::pmr::allocate_ptr<impl>(memory_resource, std::forward<F>(f));
+//                printf("%s sizeof(impl) = %d, alignof(impl) = %d\n", __func__, sizeof(impl), alignof(impl));
+                assert(impl_ptr);
+                return wrapper_pointer{impl_ptr};
+            }
+        };
+
+    public:
         unique_function()
             : holds_wrapper_(false)
             , fptr_(nullptr) {
@@ -59,13 +77,15 @@ namespace actor_zeta { namespace detail {
         unique_function(const unique_function&) = delete;
 
         explicit unique_function(raw_pointer fun)
-            : holds_wrapper_(false)
+            : memory_resource_(nullptr)
+            , holds_wrapper_(false)
             , fptr_(fun) {
         }
 
-        explicit unique_function(wrapper_pointer ptr)
-            : holds_wrapper_(true)
-            , wptr_(std::move(ptr)) {
+        explicit unique_function(detail::pmr::memory_resource* memory_resource, wrapper_pointer ptr)
+            : memory_resource_(memory_resource)
+            , holds_wrapper_(true)
+            , wptr_(ptr) {
         }
 
         template<
@@ -74,18 +94,42 @@ namespace actor_zeta { namespace detail {
                 !std::is_convertible<T, raw_pointer>::value && std::is_same<decltype((std::declval<T&>())(std::declval<Args>()...)),
                                                                             R>::value>::type>
         explicit unique_function(detail::pmr::memory_resource* memory_resource, T f)
-            : unique_function(make_wrapper(memory_resource, std::move(f))) {
+            : unique_function(memory_resource, wrapper_maker_t<T>::make_wrapper(memory_resource, std::move(f))) {
         }
 
         ~unique_function() {
-            //destroy();
+            destroy();
+        }
+
+        /**
+         * 
+         * @brief test_same_decltype [static]
+         * 
+         * @details for tests only
+         * 
+         **/
+        template<class T>
+        static bool test_same_decltype(T f) {
+            return std::is_same<decltype((std::declval<T&>())(std::declval<Args>()...)), R>::value;
+        }
+
+        /**
+         * 
+         * @brief test_convertible [static]
+         * 
+         * @details for tests only
+         * 
+         **/
+        template<class T>
+        static bool test_convertible(T f) {
+            return !std::is_convertible<T, raw_pointer>::value;
         }
 
         unique_function& operator=(unique_function&& other) {
-            //destroy();
+            destroy();
             if (other.holds_wrapper_) {
                 holds_wrapper_ = true;
-                wptr_ = std::move(other.wptr_);
+                wptr_ = other.wptr_;
                 other.holds_wrapper_ = false;
                 other.fptr_ = nullptr;
             } else {
@@ -129,11 +173,11 @@ namespace actor_zeta { namespace detail {
             return fptr_ == nullptr;
         }
 
-//        void destroy() {
-//            if (holds_wrapper_) {
-//                delete wptr_;
-//            }
-//        }
+        void destroy() {
+            if (holds_wrapper_) {
+                wptr_->destroy(memory_resource_, wptr_);
+            }
+        }
 
         bool holds_wrapper_;
 
@@ -162,4 +206,5 @@ namespace actor_zeta { namespace detail {
     bool operator!=(std::nullptr_t, const unique_function<T>& x) noexcept {
         return !x.is_nullptr();
     }
+
 }} // namespace actor_zeta::detail

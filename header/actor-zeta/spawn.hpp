@@ -25,7 +25,7 @@ namespace actor_zeta {
         class ChildrenSupervisor,
         class... Args,
         class = type_traits::enable_if_t<std::is_base_of<base::supervisor_abstract, ChildrenSupervisor>::value>>
-    auto spawn_supervisor(ParentSupervisor* ptr, Args&&... args) -> std::unique_ptr<ChildrenSupervisor, detail::pmr::deleter_t> {
+    auto spawn_supervisor(ParentSupervisor* ptr, Args&&... args) -> std::unique_ptr<ChildrenSupervisor, detail::deleter_t<ChildrenSupervisor>> {
         auto* supervisor = detail::pmr::allocate_ptr<ChildrenSupervisor, Args...>(
             ptr->resource(),
             ptr, std::forward<Args&&>(args)...);
@@ -36,14 +36,14 @@ namespace actor_zeta {
 //        void* buffer = ptr()->allocate(allocate_byte, allocate_byte_alignof);
 //        auto* supervisor = new (buffer) ChildrenSupervisor(ptr, std::forward<Args>(args)...);
 
-        return {supervisor, detail::pmr::deleter_t(ptr())};
+        return {supervisor, detail::deleter_t<ChildrenSupervisor>(ptr->resource())};
     }
 
     template<
         class ChildrenSupervisor,
         class... Args,
         class = type_traits::enable_if_t<std::is_base_of<base::supervisor_abstract, ChildrenSupervisor>::value>>
-    auto spawn_supervisor(actor_zeta::detail::pmr::memory_resource* ptr, Args&&... args) -> std::unique_ptr<ChildrenSupervisor, detail::pmr::deleter_t> {
+    auto spawn_supervisor(actor_zeta::detail::pmr::memory_resource* ptr, Args&&... args) -> std::unique_ptr<ChildrenSupervisor, detail::deleter_t<ChildrenSupervisor>> {
         auto* supervisor = detail::pmr::allocate_ptr<ChildrenSupervisor, Args...>(
             ptr, std::forward<Args&&>(args)...);
         assert(supervisor);
@@ -52,7 +52,7 @@ namespace actor_zeta {
 //        void* buffer = ptr->allocate(allocate_byte, allocate_byte_alignof);
 //        auto* supervisor = new (buffer) ChildrenSupervisor(ptr, std::forward<Args>(args)...);
 
-        return {supervisor, detail::pmr::deleter_t(ptr)};
+        return {supervisor, detail::deleter_t<ChildrenSupervisor>(ptr)};
     }
 
 } // namespace actor_zeta

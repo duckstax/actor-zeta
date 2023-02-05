@@ -8,6 +8,7 @@
 #include <actor-zeta/mailbox/id.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/rtt.hpp>
+#include <actor-zeta/detail/unique_ptr.hpp>
 #include <actor-zeta/detail/queue/singly_linked.hpp>
 
 namespace actor_zeta { namespace mailbox {
@@ -20,7 +21,7 @@ namespace actor_zeta { namespace mailbox {
     public:
         // https://github.com/duckstax/actor-zeta/issues/118
         // @TODO Remove default ctors for actor_zeta::base::message and actor_zeta::detail::rtt (message body) #118
-        message();
+//        message();
         message(const message&) = delete;
         message& operator=(const message&) = delete;
         message(message&& other) = default;
@@ -35,7 +36,6 @@ namespace actor_zeta { namespace mailbox {
         auto sender() const& noexcept -> base::address_t const&;
 
         auto body() -> actor_zeta::detail::rtt&;
-        auto clone() const -> message*;
         operator bool();
         void swap(message& other) noexcept;
         bool is_high_priority() const;
@@ -49,7 +49,7 @@ namespace actor_zeta { namespace mailbox {
     static_assert(std::is_move_constructible<message>::value, "");
     static_assert(not std::is_copy_constructible<message>::value, "");
 
-    using message_ptr = std::unique_ptr<message, actor_zeta::detail::pmr::deleter_t>;
+    using message_ptr = std::unique_ptr<message, actor_zeta::detail::deleter_t<message>>;
 
 }} // namespace actor_zeta::mailbox
 

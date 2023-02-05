@@ -51,11 +51,12 @@ namespace actor_zeta {
             detail::pmr::memory_resource* memory_resource,
             base::address_t sender_,
             T name) -> mailbox::message_ptr {
-        auto* message = detail::pmr::allocate_ptr<mailbox::message>(
+        using msgtype_t = mailbox::message;
+        auto* message = detail::pmr::allocate_ptr<msgtype_t>(
             memory_resource,
             std::move(sender_), mailbox::make_message_id(static_cast<uint64_t>(name)));
         assert(message);
-        return {message, detail::pmr::deleter_t(memory_resource)};
+        return {message, detail::deleter_t<msgtype_t>(memory_resource)};
     }
 
     template<class T, typename Arg>
@@ -64,13 +65,14 @@ namespace actor_zeta {
             base::address_t sender_, 
             T name,
             Arg&& arg) -> mailbox::message_ptr {
-        auto* message = detail::pmr::allocate_ptr<mailbox::message>(
+        using msgtype_t = mailbox::message;
+        auto* message = detail::pmr::allocate_ptr<msgtype_t>(
             memory_resource,
             std::move(sender_),
             mailbox::make_message_id(static_cast<uint64_t>(name)),
             std::move(detail::rtt(nullptr, std::forward<type_traits::decay_t<Arg>>(arg))));
         assert(message);
-        return {message, detail::pmr::deleter_t(memory_resource)};
+        return {message, detail::deleter_t<msgtype_t>(memory_resource)};
     }
 
     template<class T, typename... Args>
@@ -79,13 +81,14 @@ namespace actor_zeta {
             base::address_t sender_,
             T name,
             Args&&... args) -> mailbox::message_ptr {
-        auto* message = detail::pmr::allocate_ptr<mailbox::message>(
+        using msgtype_t = mailbox::message;
+        auto* message = detail::pmr::allocate_ptr<msgtype_t>(
             memory_resource,
             std::move(sender_),
             mailbox::make_message_id(static_cast<uint64_t>(name)),
             std::move(detail::rtt(nullptr, std::forward<Args&&>(args)...)));
         assert(message);
-        return {message, detail::pmr::deleter_t(memory_resource)};
+        return {message, detail::deleter_t<msgtype_t>(memory_resource)};
     }
 
     auto make_message(
@@ -98,13 +101,14 @@ namespace actor_zeta {
             detail::pmr::memory_resource* memory_resource,
             base::address_t sender_,
             mailbox::message_id id, Arg&& arg) -> mailbox::message_ptr {
-        auto* message = detail::pmr::allocate_ptr<mailbox::message>(
+        using msgtype_t = mailbox::message;
+        auto* message = detail::pmr::allocate_ptr<msgtype_t>(
             memory_resource,
             std::move(sender_),
             id,
             std::move(detail::rtt(nullptr, std::forward<type_traits::decay_t<Arg>>(arg))));
         assert(message);
-        return {message, detail::pmr::deleter_t(memory_resource)};
+        return {message, detail::deleter_t<msgtype_t>(memory_resource)};
     }
 
     template<typename... Args>
@@ -112,13 +116,14 @@ namespace actor_zeta {
             detail::pmr::memory_resource* memory_resource,
             base::address_t sender_,
             mailbox::message_id id, Args&&... args) -> mailbox::message_ptr {
-        auto* message = detail::pmr::allocate_ptr<mailbox::message>(
+        using msgtype_t = mailbox::message;
+        auto* message = detail::pmr::allocate_ptr<msgtype_t>(
             memory_resource,
             std::move(sender_),
             id,
             std::move(detail::rtt(nullptr, std::forward<Args>(args)...)));
         assert(message);
-        return {message, detail::pmr::deleter_t(memory_resource)};
+        return {message, detail::deleter_t<msgtype_t>(memory_resource)};
     }
 
 } // namespace actor_zeta
