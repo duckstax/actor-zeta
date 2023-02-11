@@ -43,7 +43,7 @@ jobs:
              && make install \
              && cd .. \
              && python3.6 -m pip install --upgrade pip \
-             && python3.6 -m pip install --no-cache-dir conan==1.51.2 cmake==3.21.0
+             && python3.6 -m pip install --no-cache-dir conan==1.53 cmake==3.21.0
 
       - name: Install conan dependencies
         run: |   
