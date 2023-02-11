@@ -18,12 +18,10 @@
 
 namespace actor_zeta {
 
-    using base::actor;
     using base::actor_abstract;
     using base::address_t;
     using base::cooperative_supervisor;
     using base::make_handler;
-    using base::supervisor;
     using base::supervisor_abstract;
 
     using mailbox::message;
