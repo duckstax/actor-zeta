@@ -3,10 +3,8 @@
 namespace actor_zeta { namespace base {
 
     class actor_abstract;
-    class actor;
     class address_t;
     class supervisor_abstract;
-    class supervisor;
     template<class Actor, class Traits,class Type>
     class cooperative_actor;
 
