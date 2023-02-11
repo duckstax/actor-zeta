@@ -3,7 +3,6 @@
 #include <actor-zeta/base/forwards.hpp>
 
 #include <actor-zeta/base/detail/cooperative_actor_classic.hpp>
-#include <actor-zeta/base/detail/cooperative_actor_coroutine.hpp>
 
 namespace actor_zeta { namespace base {
 
@@ -17,11 +16,8 @@ namespace actor_zeta { namespace base {
         ptr->intrusive_ptr_release_impl();
     }
 
-    template<class Supervisor>
-    using basic_actor = cooperative_actor<Supervisor,traits,actor_type::classic>;
-
-    template<class Target>
-    using basic_experimental_actor = cooperative_actor<Target,traits,actor_type::coroutine>;
+    template<class Actor>
+    using basic_actor = cooperative_actor<Actor,traits,actor_type::classic>;
 
 }} // namespace actor_zeta::base
 

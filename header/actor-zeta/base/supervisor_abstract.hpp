@@ -8,18 +8,17 @@
 namespace actor_zeta { namespace base {
 
     class supervisor_abstract
-        : public actor_abstract
-        , public intrusive_behavior_t {
+        : public actor_abstract {
     public:
-        supervisor_abstract(detail::pmr::memory_resource*, std::string);
+        supervisor_abstract(detail::pmr::memory_resource*);
 
         template<class Supervisor>
-        supervisor_abstract(Supervisor* supervisor, std::string type)
-            : supervisor_abstract(static_cast<supervisor_abstract*>(supervisor), std::move(type)) {}
+        supervisor_abstract(Supervisor* supervisor)
+            : supervisor_abstract(static_cast<supervisor_abstract*>(supervisor)) {}
 
         ~supervisor_abstract() override;
         auto scheduler() noexcept -> scheduler::scheduler_abstract_t*;
-        auto resource() const -> detail::pmr::memory_resource*;
+        auto resource() const noexcept-> detail::pmr::memory_resource*;
         auto address() noexcept -> address_t;
 
     protected:
@@ -28,7 +27,7 @@ namespace actor_zeta { namespace base {
         auto current_message() -> mailbox::message*;
 
     private:
-        supervisor_abstract(supervisor_abstract*, std::string);
+        supervisor_abstract(supervisor_abstract*);
         mailbox::message* current_message_;
         detail::pmr::memory_resource* memory_resource_;
     };

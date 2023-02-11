@@ -74,28 +74,24 @@ namespace actor_zeta { namespace base {
             actor_abstract* impl_{nullptr};
         };
 
-        auto type() const -> const char* const;
+        auto type() const noexcept -> const char* const;
         auto id() const -> id_t;
         auto enqueue(mailbox::message_ptr) -> void;
         void enqueue(mailbox::message_ptr, scheduler::execution_unit*);
 
     protected:
-
-        actor_abstract(std::string);
         // prohibit copies, assignments, and heap allocations
         void* operator new(size_t);
         void* operator new[](size_t);
-        actor_abstract() = delete;
+        actor_abstract() = default;///delete;
         actor_abstract(const actor_abstract&) = delete;
         actor_abstract& operator=(const actor_abstract&) = delete;
         ~actor_abstract() override;
 
         virtual void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*) = 0;
+        virtual auto type_impl()  const noexcept -> const char* const = 0;
 
     private:
-#ifdef DEBUG
-        std::string type_;
-#endif
 
     };
 

@@ -29,13 +29,13 @@ namespace actor_zeta { namespace base {
     using detail::DEFAULT_ALIGNMENT;
     using detail::is_supported_alignment;
 
-    supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* mr, std::string type)
-        : actor_abstract(std::move(type))
+    supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* mr)
+        : actor_abstract()
         , memory_resource_(mr) {
     }
 
-    supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr, std::string type)
-        : actor_abstract(std::move(type))
+    supervisor_abstract::supervisor_abstract(supervisor_abstract* ptr)
+        : actor_abstract()
         , memory_resource_(ptr->resource()) {
     }
 
@@ -49,7 +49,7 @@ namespace actor_zeta { namespace base {
         current_message_ = msg.release();
     }
 
-    auto supervisor_abstract::resource() const -> detail::pmr::memory_resource* {
+    auto supervisor_abstract::resource() const noexcept -> detail::pmr::memory_resource* {
         return memory_resource_;
     }
 
