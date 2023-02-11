@@ -70,7 +70,7 @@ namespace actor_zeta { namespace base {
             inbox().try_block(); //todo: bug
         }
 
-        auto type_impl() const noexcept -> const char* const final {
+        auto type_impl() /*const*/ noexcept -> const char* const final {
             return self()->make_type();
         }
 
@@ -178,10 +178,11 @@ namespace actor_zeta { namespace base {
             }
 
             auto& behavior = stack_.back();
-            auto result = behavior(this, x);
-            if (result) {
-                return; ///invoke_message_result::consumed;
-            }
+            behavior(self(), current_message_);
+            ///auto result = behavior(self(), x);
+            ///if (result) {
+            ///    return; ///invoke_message_result::consumed;
+            ///}
         }
 
         auto context(scheduler::execution_unit* e) -> void {

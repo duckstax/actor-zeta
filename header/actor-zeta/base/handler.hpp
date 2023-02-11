@@ -33,6 +33,6 @@ namespace actor_zeta { namespace base {
     auto make_handler(F&& f)-> action ;
 
     template<typename ClassPtr,typename F>
-    auto make_handler(ClassPtr*,F&& ) -> action ;
+    auto make_handler(ClassPtr*self,F&& f ) -> action ;
 
 }} // namespace actor_zeta::base

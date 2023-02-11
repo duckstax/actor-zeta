@@ -94,7 +94,7 @@ namespace actor_zeta { namespace base {
     struct transformer_for_class {
         auto operator()(ClassPtr* ptr, F&& f) -> action {
             action tmp([func = std::move(f), ptr](mailbox::message* ctx) -> void {
-                apply_impl_for_class(func, ptr, ctx, type_traits::make_index_sequence<Args_size>{});
+                apply_impl_for_class(ptr,func, ctx, type_traits::make_index_sequence<Args_size>{});
             });
             return tmp;
         }
@@ -135,7 +135,7 @@ namespace actor_zeta { namespace base {
         return transformer<F>{}(std::forward<F>(f));
     }
 
-    template<typename F, typename ClassPtr>
+    template<typename ClassPtr,typename F>
     auto make_handler(ClassPtr* self, F&& f) -> action {
         return transformer_for_class<ClassPtr, F>{}(self, std::forward<F>(f));
     }

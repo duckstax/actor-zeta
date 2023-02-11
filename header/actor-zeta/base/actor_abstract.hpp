@@ -74,7 +74,7 @@ namespace actor_zeta { namespace base {
             actor_abstract* impl_{nullptr};
         };
 
-        auto type() const noexcept -> const char* const;
+        auto type() /*const*/ noexcept -> const char* const;
         auto id() const -> id_t;
         auto enqueue(mailbox::message_ptr) -> void;
         void enqueue(mailbox::message_ptr, scheduler::execution_unit*);
@@ -89,7 +89,7 @@ namespace actor_zeta { namespace base {
         ~actor_abstract() override;
 
         virtual void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*) = 0;
-        virtual auto type_impl()  const noexcept -> const char* const = 0;
+        virtual auto type_impl()  /*const*/ noexcept -> const char* const = 0;
 
     private:
 

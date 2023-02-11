@@ -35,7 +35,7 @@ namespace actor_zeta { namespace base {
         template<class T>
         void operator()(T* ptr, mailbox::message* msg) {
             assert(msg->command() == id_);
-            handler_(ptr, msg);
+            handler_(msg);
             auto reciever = ptr->type();
             if (msg->sender()) {
                 auto sender = msg->sender()->type();
