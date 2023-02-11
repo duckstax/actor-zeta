@@ -18,7 +18,7 @@ auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
 static std::atomic<uint64_t> counter_download_data{0};
 static std::atomic<uint64_t> counter_work_data{0};
 
-class supervisor_lite {};
+class supervisor_lite  final : public actor_zeta::cooperative_supervisor<supervisor_lite> {};
 
 class worker_t final : public actor_zeta::base::basic_actor<worker_t> {
 public:
@@ -66,7 +66,7 @@ private:
     std::string tmp_;
 };
 
-using actor_zeta::detail::pmr::memory_resource;
+///using actor_zeta::detail::pmr::memory_resource;
 /// non thread safe
 /*
 class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
