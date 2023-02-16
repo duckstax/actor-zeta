@@ -27,13 +27,17 @@ public:
     static uint64_t enqueue_base_counter;
 
     explicit dummy_supervisor(actor_zeta::detail::pmr::memory_resource* mr, uint64_t threads, uint64_t throughput)
-        : actor_zeta::cooperative_supervisor<dummy_supervisor>(mr, "dummy_supervisor")
+        : actor_zeta::cooperative_supervisor<dummy_supervisor>(mr)
         , executor_(new actor_zeta::test::scheduler_test_t(threads, throughput)) {
         scheduler()->start();
         constructor_counter++;
 
         add_handler(dummy_supervisor_command::create_storage, &dummy_supervisor::create_storage);
         add_handler(dummy_supervisor_command::create_test_handlers, &dummy_supervisor::create_test_handlers);
+    }
+
+    auto make_type() const noexcept -> const char* const override {
+        return "dummy_supervisor";
     }
 
     auto scheduler_test() noexcept -> actor_zeta::test::scheduler_test_t* {
@@ -80,8 +84,8 @@ public:
 
 private:
     std::unique_ptr<actor_zeta::test::scheduler_test_t> executor_;
-    std::list<actor_zeta::actor> actors_;
-    std::list<actor_zeta::supervisor> supervisor_;
+    std::list<actor_zeta::intrusive_ptr<actor_zeta::actor_abstract>> actors_;
+    std::list<actor_zeta::intrusive_ptr<actor_zeta::supervisor_abstract>> supervisor_;
 };
 
 uint64_t dummy_supervisor::constructor_counter = 0;
@@ -102,7 +106,7 @@ enum class storage_names : uint64_t {
     create_table
 };
 
-class storage_t final : public actor_zeta::basic_async_actor {
+class storage_t final : public actor_zeta::basic_actor<storage_t> {
 public:
     static uint64_t constructor_counter;
     static uint64_t destructor_counter;
@@ -115,7 +119,7 @@ public:
 
 public:
     explicit storage_t(dummy_supervisor* ptr)
-        : actor_zeta::basic_async_actor(ptr, "storage") {
+        : actor_zeta::basic_async_actor(ptr) {
         add_handler(
             storage_names::init,
             &storage_t::init);
@@ -137,6 +141,10 @@ public:
             &storage_t::create_table);
 
         constructor_counter++;
+    }
+
+    auto make_type() const noexcept -> const char* const {
+        return "storage";
     }
 
     ~storage_t() override {
@@ -201,7 +209,7 @@ enum class test_handlers_names : uint64_t {
     ptr_4,
 }; // namespace test_handlers_names
 
-class test_handlers final : public actor_zeta::basic_async_actor {
+class test_handlers final : public actor_zeta::basic_actor<test_handlers> {
 public:
     static uint64_t init_counter;
 
@@ -213,7 +221,7 @@ public:
 
 public:
     test_handlers(dummy_supervisor* ptr)
-        : actor_zeta::basic_async_actor(ptr, "test_handlers") {
+        : actor_zeta::basic_async_actor(ptr) {
         init();
         add_handler(
             test_handlers_names::ptr_0,
@@ -249,6 +257,10 @@ public:
                 std::cerr << "ptr_4 : " << data_1 << " : " << data_2 << " : " << data_3 << std::endl;
                 ptr_4_counter++;
             });
+    }
+
+    auto make_type() const noexcept -> const char* const {
+        return "test_handlers";
     }
 
     ~test_handlers() override = default;

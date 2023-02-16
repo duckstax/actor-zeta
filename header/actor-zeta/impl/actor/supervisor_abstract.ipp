@@ -3,13 +3,11 @@
 #include <actor-zeta/base/supervisor_abstract.hpp>
 // clang-format on
 /// ------------------------------------------------
-#include <actor-zeta/base/actor.hpp>
 
 // clang-format off
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/address.hpp>
 #include <actor-zeta/mailbox/message.hpp>
-#include <actor-zeta/base/supervisor.hpp>
 #include <actor-zeta/impl/handler.ipp>
 // clang-format on
 

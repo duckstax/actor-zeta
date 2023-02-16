@@ -5,7 +5,6 @@
 #include <actor-zeta/base/actor_abstract.hpp>
 #include <actor-zeta/base/behavior.hpp>
 #include <actor-zeta/base/forwards.hpp>
-///#include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/scheduler/resumable.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
 
@@ -22,9 +21,9 @@ namespace actor_zeta { namespace base {
             }
             static constexpr size_t quantum = 3;
             size_t handled_msgs = 0;
-            message_ptr ptr;
+            mailbox::message_ptr ptr;
 
-            auto handle_async = [this, max_throughput, &handled_msgs](message& x) -> detail::task_result {
+            auto handle_async = [this, max_throughput, &handled_msgs](mailbox::message& x) -> detail::task_result {
                 reactivate(x);
                 return ++handled_msgs < max_throughput
                            ? detail::task_result::resume

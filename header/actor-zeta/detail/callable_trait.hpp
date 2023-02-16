@@ -65,7 +65,6 @@ namespace actor_zeta { namespace type_traits {
              bool HasApplyOp = has_apply_operator<T>::value>
     struct get_callable_trait_helper {
         using type = callable_trait<T>;
-        using class_type = typename type::class_type;
         using result_type = typename type::result_type;
         using args_types = typename type::args_types;
         using fun_type = typename type::fun_type;
@@ -76,6 +75,7 @@ namespace actor_zeta { namespace type_traits {
     template<class T>
     struct get_callable_trait_helper<T, false, true> {
         using type = callable_trait<decltype(&T::operator())>;
+        using class_type = typename type::class_type;
         using result_type = typename type::result_type;
         using args_types = typename type::args_types;
         using fun_type = typename type::fun_type;

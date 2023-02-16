@@ -7,6 +7,7 @@ add_subdirectory(tooltestsuites)
 
 add_subdirectory(handler)
 add_subdirectory(actor-id)
+add_subdirectory(behavior)
 add_subdirectory(intrusive_ptr)
 add_subdirectory(memory_resource)
 add_subdirectory(message)

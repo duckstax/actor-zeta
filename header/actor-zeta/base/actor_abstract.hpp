@@ -6,6 +6,8 @@
 
 #include "forwards.hpp"
 #include <actor-zeta/scheduler/forwards.hpp>
+#include "actor-zeta/detail/intrusive_ptr.hpp"
+#include "actor-zeta/detail/ref_counted.hpp"
 
 namespace actor_zeta { namespace base {
     ///
@@ -94,5 +96,7 @@ namespace actor_zeta { namespace base {
     private:
 
     };
+
+    using actor_t = intrusive_ptr<actor_abstract>;
 
 }} // namespace actor_zeta::base

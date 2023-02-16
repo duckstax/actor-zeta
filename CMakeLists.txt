@@ -86,11 +86,9 @@ include_directories(SYSTEM header)
 
 set(HEADER_FILES
         header/actor-zeta/base/actor_abstract.hpp
-        header/actor-zeta/base/actor.hpp
         header/actor-zeta/base/address.hpp
         header/actor-zeta/base/cooperative_actor.hpp
         header/actor-zeta/base/handler.hpp
-        header/actor-zeta/base/supervisor.hpp
         header/actor-zeta/base/supervisor_abstract.hpp
 
         header/actor-zeta/detail/queue/queue.hpp

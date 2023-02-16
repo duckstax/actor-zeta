@@ -1,14 +1,11 @@
 #pragma once
 
 #include <actor-zeta/base/forwards.hpp>
-#include <actor-zeta/base/supervisor.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/make_message.hpp>
 #include <actor-zeta/detail/intrusive_ptr.hpp>
 
 namespace actor_zeta {
-
-    using actor_t = intrusive_ptr<actor_abstract>;
 
     template<class Supervisor, typename... Args>
     void send(Supervisor& supervisor, Args... args) {
@@ -25,14 +22,14 @@ namespace actor_zeta {
     }
 
     template<typename... Args>
-    void send(actor_t& actor, Args... args) {
+    void send(base::actor_t& actor, Args... args) {
         actor->enqueue(
             make_message(
                 std::forward<Args>(args)...));
     }
 
     template<typename... Args>
-    void send(actor_t&& actor, Args... args) {
+    void send(base::actor_t&& actor, Args... args) {
         actor->enqueue(
             make_message(
                 std::forward<Args>(args)...));

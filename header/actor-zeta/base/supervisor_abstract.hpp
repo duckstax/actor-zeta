@@ -1,5 +1,6 @@
 #pragma once
 
+#include "actor-zeta/detail/intrusive_ptr.hpp"
 #include <actor-zeta/base/behavior.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
@@ -41,6 +42,11 @@ namespace actor_zeta { namespace base {
         using supervisor_abstract::supervisor_abstract;
 
     protected:
+
+        auto type_impl()  /*const*/ noexcept -> const char* const final {
+            return self()->make_type();
+        }
+
          template<
             class Inserter,
             class... Args>
@@ -82,6 +88,18 @@ namespace actor_zeta { namespace base {
             inserter(supervisor);
             return address;
         }
+    private:
+
+        auto self() noexcept -> Supervisor* {
+            return static_cast<Supervisor*>(this);
+        }
+
+        auto self() const noexcept -> Supervisor* {
+            return static_cast<Supervisor*>(this);
+        }
     };
+
+    template<class T>
+    using supervisor_t = intrusive_ptr<cooperative_supervisor<T>>;
 
 }} // namespace actor_zeta::base

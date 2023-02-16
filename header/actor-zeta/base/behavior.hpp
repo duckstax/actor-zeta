@@ -32,17 +32,9 @@ namespace actor_zeta { namespace base {
             return bool(handler_);
         }
 
-        template<class T>
-        void operator()(T* ptr, mailbox::message* msg) {
+        void operator()(mailbox::message* msg) {
             assert(msg->command() == id_);
             handler_(msg);
-            auto reciever = ptr->type();
-            if (msg->sender()) {
-                auto sender = msg->sender()->type();
-                error_skip(sender, reciever, msg->command());
-            } else {
-                error_skip(reciever, msg->command());
-            }
         }
 
         void assign(id name, action handler) {
@@ -68,6 +60,12 @@ namespace actor_zeta { namespace base {
     }
 
     template<class Value>
+    behavior_t& behavior(behavior_t& instance, Value&& f) {
+        instance.assign(mailbox::message_id{}, make_handler(std::forward<Value>(f)));
+        return instance;
+    }
+
+    template<class Value>
     behavior_t behavior(actor_zeta::detail::pmr::memory_resource*resource, Value&& f) {
         behavior_t instance(resource);
         instance.assign(mailbox::message_id{}, make_handler(std::forward<Value>(f)));
@@ -79,6 +77,18 @@ namespace actor_zeta { namespace base {
         behavior_t instance(resource);
         instance.assign(mailbox::message_id{}, make_handler(ptr,std::forward<F>(f)));
         return instance;
+    }
+
+    template<class T>
+    void invoke(behavior_t& instance,T* ptr, mailbox::message* msg) {
+        instance(msg);
+        auto reciever = ptr->type();
+        if (msg->sender()) {
+            auto sender = msg->sender()->type();
+            error_skip(sender, reciever, msg->command());
+        } else {
+            error_skip(reciever, msg->command());
+        }
     }
 
 }} // namespace actor_zeta::base
