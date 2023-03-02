@@ -11,7 +11,6 @@
 #include <benchmark/benchmark.h>
 
 #include <actor-zeta.hpp>
-#include <actor-zeta/detail/memory_resource.hpp>
 
 #include "define_actor.hpp"
 #include "define_supervisor.hpp"

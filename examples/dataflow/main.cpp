@@ -15,8 +15,6 @@
 #include "memusage.hpp"
 
 #include <actor-zeta.hpp>
-#include <actor-zeta/detail/memory_resource.hpp>
-#include <actor-zeta/detail/type_traits.hpp>
 
 using actor_zeta::detail::pmr::memory_resource;
 

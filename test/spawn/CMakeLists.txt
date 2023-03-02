@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.0)
-
 PROJECT(spawn CXX)
 set(SOURCE_FILES main.cpp)
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")

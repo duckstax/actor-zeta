@@ -1,6 +1,5 @@
-cmake_minimum_required(VERSION 3.0)
+PROJECT(life-cycle CXX)
 
-PROJECT(spawn-actor CXX)
 set(SOURCE_FILES main.cpp)
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

@@ -8,16 +8,15 @@
 #include <string>
 
 #include <actor-zeta.hpp>
-#include <actor-zeta/detail/memory_resource.hpp>
 #include <test/tooltestsuites/scheduler_test.hpp>
 
 using actor_zeta::detail::pmr::memory_resource;
 class dummy_supervisor;
 
-class storage_t final : public actor_zeta::basic_async_actor {
+class storage_t final : public actor_zeta::basic_actor<storage_t> {
 public:
     storage_t(dummy_supervisor* ptr)
-        : actor_zeta::basic_async_actor(ptr, "storage") {
+        : actor_zeta::basic_actor<storage_t>(ptr, "storage") {
     }
 
     ~storage_t() override = default;

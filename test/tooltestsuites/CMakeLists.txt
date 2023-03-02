@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.0)
-
 PROJECT(tooltestsuites LANGUAGES CXX)
 
 set(SOURCE_FILES scheduler_test.cpp clock_test.cpp)

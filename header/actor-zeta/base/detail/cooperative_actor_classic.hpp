@@ -13,7 +13,7 @@ namespace actor_zeta { namespace base {
     template<class Actor, class Traits>
     class cooperative_actor<Actor, Traits, actor_type::classic>
         : public actor_abstract
-        , public scheduler::resumable {
+        , private scheduler::resumable {
     public:
         scheduler::resume_result resume(scheduler::execution_unit* e, size_t max_throughput) final {
             if (!activate(e)) {
@@ -58,7 +58,7 @@ namespace actor_zeta { namespace base {
     protected:
         template<
             class Supervisor,
-            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, Supervisor>::value>>
+            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, Supervisor>::value>>// todo: check Supervisoar is a pointer
         cooperative_actor(Supervisor* ptr)
             : actor_abstract()
             , supervisor_([](supervisor_abstract*ptr) { assert(ptr);return ptr; }(static_cast<supervisor_abstract*>(ptr)))
@@ -174,14 +174,11 @@ namespace actor_zeta { namespace base {
             if (stack_.empty()) {
                 stack_.emplace_back(std::move(self()->make_behavior()));
             } else {
+                ///todo: coroutine support
             }
 
             auto& behavior = stack_.back();
-            behavior(self(), current_message_);
-            ///auto result = behavior(self(), x);
-            ///if (result) {
-            ///    return; ///invoke_message_result::consumed;
-            ///}
+            invoke(behavior,self(), current_message_);
         }
 
         auto context(scheduler::execution_unit* e) -> void {

@@ -13,14 +13,14 @@ namespace actor_zeta { namespace base {
     }
 
     void error_add_handler(mailbox::message_id error) {
-        std::cerr << "error add handler" << '\n';
+        std::cerr << "error add life-cycle" << '\n';
         std::cerr << "Handler: " << error.integer_value() << '\n';
-        std::cerr << "error add handler" << std::endl;
+        std::cerr << "error add life-cycle" << std::endl;
     }
 
     void error_skip(const std::string& sender, const std::string& reciever, mailbox::message_id handler) {
         std::cerr << "WARNING" << '\n';
-        std::cerr << "Skip, can't find handler: " << reciever << "::" << handler.integer_value();
+        std::cerr << "Skip, can't find life-cycle: " << reciever << "::" << handler.integer_value();
         std::cerr << " sender: " << sender << "\n";
         std::cerr << "WARNING" << std::endl;
     }
@@ -28,16 +28,16 @@ namespace actor_zeta { namespace base {
 
     void error_skip(const std::string& reciever, mailbox::message_id handler) {
         std::cerr << "WARNING" << '\n';
-        std::cerr << "Skip, can't find handler: " << reciever << "::" << handler.integer_value();
+        std::cerr << "Skip, can't find life-cycle: " << reciever << "::" << handler.integer_value();
         std::cerr << " sender: " << "Not Sender" << "\n";
         std::cerr << "WARNING" << std::endl;
     }
 /*
-    bool intrusive_behavior_t::on(key_type name, value_type handler) {
+    bool intrusive_behavior_t::on(key_type name, value_type life-cycle) {
         auto it = handlers_.find(name);
         bool status = false;
         if (it == handlers_.end()) {
-            auto it1 = handlers_.emplace(name, std::move(handler));
+            auto it1 = handlers_.emplace(name, std::move(life-cycle));
             status = it1.second;
             if (status == false) {
                 error_add_handler(name);

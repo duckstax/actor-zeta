@@ -9,34 +9,11 @@ actor-zeta
 
 actor-zeta is an open source C++11/14/17 virtual actor model implementation featuring lightweight & fast and more.
 
-## Release cycle information:
-### 1.0.0a6 : 
-    dynamically adding actors and supervisors 
-    adding polymorph allocator 
-    adding tests
-
-### 1.0.0a7 :
-    Getting ready for beta
-    benchmarks for creation messages
-    removed api address book 
-    added base api timeout
-    integrate with polymorph allocator
-
-### 1.0.0a8 :
-    Getting ready for beta
-    Finishes expanding functionality
-
-### 1.0.0b1 :
-    benchmarks 
-    performance tuning
-
 ## Example
-
-### class method mode 
 
 ```C++
 
-#include <actor-zeta/core.hpp>
+#include <actor-zeta.hpp>
 
 using actor_zeta::basic_async_actor;
 
@@ -81,56 +58,24 @@ private:
 
 ```
 
-## lambda mode
-
-```C++
-
-#include <actor-zeta/core.hpp>
-
-using actor_zeta::basic_async_actor;
-
-class storage_t final : public basic_async_actor {
-public:
-    storage_t() : basic_async_actor(nullptr, "storage") {
-        add_handler(
-                "update",
-                [](storage_t & /*ctx*/, query_t& query) -> void {}
-        );
-
-        add_handler(
-                "find",
-                [](storage_t & /*ctx*/, query_t& query) -> void {}
-        );
-
-        add_handler(
-                "remove",
-                [](storage_t & /*ctx*/, query_t& query) -> void {}
-        );
-    }
-
-    ~storage_t() override = default;
-};
-
-```
-
 ## For Users
 
 Add the corresponding remote to your conan:
 
 ```bash
-    conan remote add jinncrafters https://api.bintray.com/conan/jinncrafters/conan
+    conan remote add duckstax http://conan.duckstax.com
 ```
 
 ### Basic setup
 ```bash
-    $ conan install actor-zeta/1.0.0a4@duckstax/stable
+    $ conan install actor-zeta/1.0.0a7@duckstax/stable
 ```
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    actor-zeta/1.0.0a4@duckstax/stable
+    actor-zeta/1.0.0a7@duckstax/stable
 
     [generators]
     cmake

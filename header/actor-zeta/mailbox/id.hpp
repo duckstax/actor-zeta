@@ -78,6 +78,10 @@ namespace actor_zeta { namespace mailbox {
             return *this;
         }
 
+        constexpr operator uint64_t() const noexcept{
+            return value_;
+        }
+
     private:
         uint64_t value_;
     };
@@ -99,6 +103,11 @@ namespace actor_zeta { namespace mailbox {
 
     constexpr message_id make_message_id(mailbox::priority p) {
         return message_id{static_cast<uint64_t>(p) << detail::priority_offset};
+    }
+
+    template<class Target>
+    constexpr message_id make_message_id(Target t) {
+        return make_message_id(static_cast<uint64_t>(t));
     }
 
 }} // namespace actor_zeta::mailbox

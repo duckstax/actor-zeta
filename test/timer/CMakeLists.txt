@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.0)
-
 PROJECT(test-timer CXX)
 
 set(SOURCE_FILES main.cpp)

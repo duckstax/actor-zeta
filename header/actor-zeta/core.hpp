@@ -25,6 +25,8 @@ namespace actor_zeta {
     using base::basic_actor;
     using base::behavior_t;
     using base::behavior;
+    using base::actor_t;
+    using base::supervisor_t;
 
     using mailbox::message;
     using mailbox::message_ptr;
@@ -40,14 +42,14 @@ namespace actor_zeta {
     template<
         class T,
         class = type_traits::enable_if_t<std::is_base_of<actor_abstract, T>::value>>
-    intrusive_ptr<actor_abstract> make_actor(intrusive_ptr<T> ptr){
+    actor_t make_actor(intrusive_ptr<T> ptr){
 
     }
 
     template<
         class T,
         class = type_traits::enable_if_t<std::is_base_of<actor_abstract, T>::value>>
-    intrusive_ptr<actor_abstract> make_actor(T* ptr){
+    actor_t make_actor(T* ptr){
 
     }
 
@@ -55,14 +57,14 @@ namespace actor_zeta {
     template<
         class T,
         class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
-    intrusive_ptr<supervisor_abstract> make_supervisor(intrusive_ptr<T> ptr){
+    supervisor_t make_supervisor(intrusive_ptr<T> ptr){
 
     }
 
     template<
         class T,
         class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
-    intrusive_ptr<supervisor_abstract> make_supervisor(T* ptr){
+    supervisor_t make_supervisor(T* ptr){
 
     }
 

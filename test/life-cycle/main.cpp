@@ -3,9 +3,8 @@
 
 #include "classes.hpp"
 #include <actor-zeta.hpp>
-#include <actor-zeta/detail/memory_resource.hpp>
 
-TEST_CASE("handler") {
+TEST_CASE("life-cycle") {
     auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     auto supervisor_ = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr,1, 100);
 
@@ -13,7 +12,7 @@ TEST_CASE("handler") {
 
     actor_zeta::send(supervisor_.get(),actor_zeta::address_t::empty_address(),dummy_supervisor_command::create_test_handlers);
     supervisor_->scheduler_test()->run_once();
-    REQUIRE(dummy_supervisor::enqueue_base_counter == 1 /*add_link*/);
+    REQUIRE(dummy_supervisor::enqueue_base_counter == 1);
     REQUIRE(dummy_supervisor::add_actor_impl_counter == 1);
     REQUIRE(test_handlers::init_counter == 1);
     REQUIRE(static_cast<dummy_supervisor*>(supervisor_.get())->actors_count() == 1);

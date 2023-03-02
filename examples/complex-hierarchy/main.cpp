@@ -7,8 +7,6 @@
 #include <vector>
 
 #include <actor-zeta.hpp>
-#include <actor-zeta/detail/string_view.hpp>
-#include <actor-zeta/detail/memory_resource.hpp>
 
 using actor_zeta::detail::pmr::get_default_resource;
 using actor_zeta::detail::pmr::memory_resource;

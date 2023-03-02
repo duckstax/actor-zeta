@@ -7,7 +7,6 @@
 #include <vector>
 
 #include <actor-zeta.hpp>
-#include <actor-zeta/detail/memory_resource.hpp>
 #include "tooltestsuites/scheduler_test.hpp"
 #include "tooltestsuites/clock_test.hpp"
 

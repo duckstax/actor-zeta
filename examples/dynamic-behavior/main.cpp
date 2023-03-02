@@ -7,8 +7,6 @@
 #include <vector>
 
 #include <actor-zeta.hpp>
-#include <actor-zeta/detail/memory_resource.hpp>
-#include <actor-zeta/base/cooperative_actor.hpp>
 
 auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
     ptr->stop();

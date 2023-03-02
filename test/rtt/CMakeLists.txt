@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.0)
-
 cmake_policy(SET CMP0048 NEW)
 PROJECT(rtt_tests VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
 

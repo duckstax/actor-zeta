@@ -1,46 +1,147 @@
 #define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
 #include <catch2/catch.hpp>
 
-
 #include <actor-zeta.hpp>
+#include <actor-zeta/core.hpp>
 
-static int free_function_arg_0_counter = 0 ;
-static int free_function_arg_2_counter = 0 ;
+static int free_function_args_0_counter = 0;
+static int free_function_args_1_counter = 0;
+static int free_function_args_n_counter = 0;
 
-void free_function_arg_0() {
-    free_function_arg_0_counter = 1;
-    REQUIRE(free_function_arg_0_counter == 1);
+void free_function_args_0() {
+    free_function_args_0_counter = 1;
 }
 
-void free_function_arg_2(int arg_0, int arg_1){
-    free_function_arg_2_counter = 1;
-    REQUIRE(arg_0 == 21);
+void free_function_args_1(int arg_0) {
+    free_function_args_1_counter = 1;
+    REQUIRE(arg_0 == 42);
+}
+
+void free_function_args_n(const std::string& arg_0, int arg_1) {
+    free_function_args_n_counter = 1;
+    REQUIRE(arg_0 == "42");
     REQUIRE(arg_1 == 42);
-    REQUIRE(free_function_arg_2_counter == 1);
 }
 
 enum class size_args : uint64_t {
     args_0 = 0x00,
     args_1,
-    args_2,
-    args_3,
-    args_4
+    args_n
+};
+
+class class_method final {
+public:
+    int args_0_counter{0};
+    int args_1_counter{0};
+    int args_n_counter{0};
+    class_method() = default;
+    void class_method_args_0() {
+        args_0_counter = 1;
+    }
+
+    void class_method_args_1(int arg_0) {
+        args_1_counter = 1;
+        REQUIRE(arg_0 == 42);
+    }
+
+    void class_method_args_n(const std::string& arg_0, int arg_1) {
+        args_n_counter = 1;
+        REQUIRE(arg_0 == "42");
+        REQUIRE(arg_1 == 42);
+    }
 };
 
 TEST_CASE("behavior") {
     SECTION("free function arg 0") {
         actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
-        actor_zeta::behavior_t free_function(resource);
-        actor_zeta::behavior(free_function, size_args::args_0, free_function_arg_0);
+        actor_zeta::behavior_t function(resource);
+        actor_zeta::behavior(function, size_args::args_0, free_function_args_0);
         auto msg = actor_zeta::make_message(actor_zeta::address_t::empty_address(), size_args::args_0);
-        free_function(msg.get());
+        function(msg.get());
+        REQUIRE(free_function_args_0_counter == 1);
     }
 
-    SECTION("free function arg 2") {
+    SECTION("free function arg 1") {
+        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::behavior_t function(resource);
+        actor_zeta::behavior(function, size_args::args_1, free_function_args_1);
+        auto msg = actor_zeta::make_message(actor_zeta::address_t::empty_address(), size_args::args_1, 42);
+        function(msg.get());
+        REQUIRE(free_function_args_1_counter == 1);
+    }
+
+    SECTION("free function args n") {
+        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::behavior_t function(resource);
+        actor_zeta::behavior(function, size_args::args_n, free_function_args_n);
+        auto msg = actor_zeta::make_message(actor_zeta::address_t::empty_address(), size_args::args_n, std::string("42"), 42);
+        function(msg.get());
+        REQUIRE(free_function_args_n_counter == 1);
+    }
+
+    SECTION("lambda arg 0") {
         actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
         actor_zeta::behavior_t free_function(resource);
-        actor_zeta::behavior(free_function, size_args::args_2, free_function_arg_2);
-        auto msg = actor_zeta::make_message(actor_zeta::address_t::empty_address(), size_args::args_2, 21, 42);
+        int args_checker = 0;
+        actor_zeta::behavior(free_function, size_args::args_0, [&args_checker]() {
+            args_checker = 1;
+        });
+        auto msg = actor_zeta::make_message(actor_zeta::address_t::empty_address(), size_args::args_0);
         free_function(msg.get());
+        REQUIRE(args_checker == 1);
+    }
+
+    SECTION("lambda arg 1") {
+        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::behavior_t free_function(resource);
+        int args_checker = 0;
+        actor_zeta::behavior(free_function, size_args::args_1, [&args_checker]() {
+            args_checker = 1;
+        });
+        auto msg = actor_zeta::make_message(actor_zeta::address_t::empty_address(), size_args::args_1, 42);
+        free_function(msg.get());
+        REQUIRE(args_checker == 1);
+    }
+
+    SECTION("lambda args n") {
+        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::behavior_t free_function(resource);
+        int args_checker = 0;
+        actor_zeta::behavior(free_function, size_args::args_n, [&args_checker]() {
+            args_checker = 1;
+        });
+        auto msg = actor_zeta::make_message(actor_zeta::address_t::empty_address(), size_args::args_n, std::string("42"), 42);
+        free_function(msg.get());
+        REQUIRE(args_checker == 1);
+    }
+
+    SECTION("class method arg 0") {
+        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::behavior_t function(resource);
+        class_method class_method;
+        actor_zeta::behavior(function, size_args::args_0, &class_method, &class_method::class_method_args_0);
+        auto msg = actor_zeta::make_message(actor_zeta::address_t::empty_address(), size_args::args_0);
+        function(msg.get());
+        REQUIRE(class_method.args_0_counter == 1);
+    }
+
+    SECTION("class method arg 1") {
+        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::behavior_t function(resource);
+        class_method class_method;
+        actor_zeta::behavior(function, size_args::args_1, &class_method, &class_method::class_method_args_1);
+        auto msg = actor_zeta::make_message(actor_zeta::address_t::empty_address(), size_args::args_1, 42);
+        function(msg.get());
+        REQUIRE(class_method.args_1_counter == 1);
+    }
+
+    SECTION("class method args n") {
+        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::behavior_t function(resource);
+        class_method class_method;
+        actor_zeta::behavior(function, size_args::args_n, &class_method, &class_method::class_method_args_n);
+        auto msg = actor_zeta::make_message(actor_zeta::address_t::empty_address(), size_args::args_n, std::string("42"), 42);
+        function(msg.get());
+        REQUIRE(class_method.args_n_counter == 1);
     }
 }

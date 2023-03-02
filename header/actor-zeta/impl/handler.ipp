@@ -104,7 +104,7 @@ namespace actor_zeta { namespace base {
         typename ClassPtr,
         typename F,
         class Args>
-    struct transformer_for_class<F, ClassPtr, Args, 0> final {
+    struct transformer_for_class<ClassPtr,F, Args, 0> final {
         auto operator()(ClassPtr* ptr, F&& f) -> action {
             action tmp([func = std::move(f), ptr](mailbox::message*) -> void {
                 (ptr->*func)();
@@ -117,7 +117,7 @@ namespace actor_zeta { namespace base {
         typename ClassPtr,
         typename F,
         class Args>
-    struct transformer_for_class<F, ClassPtr, Args, 1> final {
+    struct transformer_for_class<ClassPtr,F, Args, 1> final {
         auto operator()(ClassPtr* ptr, F&& f) -> action {
             action tmp([func = std::move(f), ptr](mailbox::message* arg) -> void {
                 using arg_type_0 = type_traits::type_list_at_t<Args, 0>;

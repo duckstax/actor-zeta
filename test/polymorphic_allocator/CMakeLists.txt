@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.0)
-
 PROJECT(polymorphic_allocator CXX)
 
 set(SOURCE_FILES main.cpp)

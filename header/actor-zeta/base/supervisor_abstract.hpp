@@ -11,18 +11,18 @@ namespace actor_zeta { namespace base {
     class supervisor_abstract
         : public actor_abstract {
     public:
-        supervisor_abstract(detail::pmr::memory_resource*);
-
-        template<class Supervisor>
-        supervisor_abstract(Supervisor* supervisor)
-            : supervisor_abstract(static_cast<supervisor_abstract*>(supervisor)) {}
-
         ~supervisor_abstract() override;
         auto scheduler() noexcept -> scheduler::scheduler_abstract_t*;
         auto resource() const noexcept-> detail::pmr::memory_resource*;
         auto address() noexcept -> address_t;
 
     protected:
+        supervisor_abstract(detail::pmr::memory_resource*);
+
+        template<class Supervisor>
+        supervisor_abstract(Supervisor* supervisor)
+            : supervisor_abstract(static_cast<supervisor_abstract*>(supervisor)) {}
+
         virtual auto scheduler_impl() noexcept -> scheduler::scheduler_abstract_t* = 0;
         auto set_current_message(mailbox::message_ptr) -> void;
         auto current_message() -> mailbox::message*;
@@ -37,9 +37,11 @@ namespace actor_zeta { namespace base {
     class cooperative_supervisor : public supervisor_abstract {
     public:
         using supervisor_abstract::address;
+    protected:
         using supervisor_abstract::resource;
         using supervisor_abstract::scheduler;
         using supervisor_abstract::supervisor_abstract;
+        using supervisor_abstract::set_current_message;
 
     protected:
 
@@ -99,7 +101,7 @@ namespace actor_zeta { namespace base {
         }
     };
 
-    template<class T>
-    using supervisor_t = intrusive_ptr<cooperative_supervisor<T>>;
+
+    using supervisor_t = intrusive_ptr<supervisor_abstract>;
 
 }} // namespace actor_zeta::base
