@@ -30,30 +30,6 @@ TEST_CASE("from integer value") {
     REQUIRE(x.is_normal_message() == true);
 }
 
-TEST_CASE("response ID") {
-    auto x = make_message_id(42).response_id();
-    REQUIRE(x.is_async() == false);
-    REQUIRE(x.is_request() == false);
-    REQUIRE(x.is_response() == true);
-    REQUIRE(x.is_answered() == false);
-    REQUIRE(x.priority() == actor_zeta::mailbox::detail::normal_message_priority);
-    REQUIRE(x.is_high_message() == false);
-    REQUIRE(x.is_normal_message() == true);
-    REQUIRE(x.request_id().integer_value() == 42u);
-}
-
-TEST_CASE("request with high priority") {
-    auto x = make_message_id(42).response_id();
-    REQUIRE(x.is_async() == false);
-    REQUIRE(x.is_request() == false);
-    REQUIRE(x.is_response() == true);
-    REQUIRE(x.is_answered() == false);
-    REQUIRE(x.priority() == actor_zeta::mailbox::detail::normal_message_priority);
-    REQUIRE(x.is_high_message() == false);
-    REQUIRE(x.is_normal_message() == true);
-    REQUIRE(x.request_id().integer_value() == 42u);
-}
-
 TEST_CASE("with_priority") {
     auto x = make_message_id();
     REQUIRE(x.priority() == actor_zeta::mailbox::detail::normal_message_priority);

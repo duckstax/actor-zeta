@@ -1,5 +1,6 @@
 #pragma once
 
+#include <actor-zeta/mailbox/id.hpp>
 #include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
@@ -63,6 +64,13 @@ namespace actor_zeta { namespace base {
         instance.assign(mailbox::make_message_id(static_cast<uint64_t>(key)), make_handler(std::forward<Value>(f)));
         return instance;
     }
+
+    template<class Value>
+    behavior_t& behavior(behavior_t& instance, mailbox::message_id key, Value&& f) {
+        instance.assign(key, make_handler(std::forward<Value>(f)));
+        return instance;
+    }
+
 
     template<class Key,class Actor, typename F>
     behavior_t& behavior(behavior_t& instance, Key key, Actor* ptr, F&& f) {
