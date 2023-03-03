@@ -83,10 +83,13 @@ class dummy_supervisor final : public actor_zeta::cooperative_supervisor<dummy_s
 public:
     dummy_supervisor(memory_resource* ptr)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr)
+        , create_actor_(resource())
+    , create_supervisor_(resource())
+    ,create_supervisor_custom_resource_(resource())
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
-        add_handler(create_actor_id, &dummy_supervisor::create_actor);
-        add_handler(create_supervisor_id, &dummy_supervisor::create_supervisor);
-        add_handler(create_supervisor_custom_resource_id, &dummy_supervisor::create_supervisor_custom_resource);
+        actor_zeta::behavior(create_actor_,create_actor_id, this, &dummy_supervisor::create_actor);
+        actor_zeta::behavior(create_supervisor_,create_supervisor_id,this, &dummy_supervisor::create_supervisor);
+        actor_zeta::behavior(create_supervisor_custom_resource_,create_supervisor_custom_resource_id,this, &dummy_supervisor::create_supervisor_custom_resource);
         scheduler()->start();
         supervisor_counter++;
     }
@@ -126,7 +129,20 @@ protected:
         return actor_zeta::behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
-
+                switch (msg->command()) {
+                    case create_actor_id: {
+                        create_actor_(msg);
+                        break;
+                    }
+                    case create_supervisor_id: {
+                        create_supervisor_(msg);
+                        break;
+                    }
+                    case create_supervisor_custom_resource_id: {
+                        create_supervisor_custom_resource_(msg);
+                        break;
+                    }
+                }
             });
     }
 
@@ -142,6 +158,9 @@ protected:
     }
 
 private:
+    actor_zeta::behavior_t create_actor_;
+    actor_zeta::behavior_t create_supervisor_;
+    actor_zeta::behavior_t create_supervisor_custom_resource_;
     std::unique_ptr<actor_zeta::test::scheduler_test_t> executor_;
     std::vector<actor_zeta::actor_t> actors_;
     std::vector<actor_zeta::supervisor_t> supervisor_;
@@ -170,7 +189,7 @@ public:
     }
 
     ~storage_t() override = default;
-protected:
+
     actor_zeta::behavior_t make_behavior() {
         return actor_zeta::behavior(
             resource(),
