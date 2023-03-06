@@ -4,7 +4,7 @@
 #include "classes.hpp"
 
 TEST_CASE("timer") {
-    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
+    auto* mr_ptr = actor_zeta::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<supervisor_lite>(mr_ptr);
 
     auto& clock = supervisor->clock();

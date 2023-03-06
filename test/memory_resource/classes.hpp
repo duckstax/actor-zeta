@@ -1,8 +1,8 @@
 #pragma once
 
-#include <actor-zeta/detail/pmr/memory_resource.hpp>
+#include <actor-zeta.hpp>
 
-using actor_zeta::detail::pmr::memory_resource;
+using actor_zeta::pmr::memory_resource;
 
 class derived_from_memory_resource
     : public memory_resource {

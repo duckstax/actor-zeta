@@ -13,7 +13,7 @@
 #include "define_actor.hpp"
 #include "define_supervisor.hpp"
 
-using actor_zeta::detail::pmr::memory_resource;
+using actor_zeta::pmr::memory_resource;
 
 enum class command_t : uint64_t {
     add_link,
@@ -46,7 +46,7 @@ namespace names {
         fixture()                                                                               \
             : sup_(nullptr, actor_zeta::deleter(nullptr)) {}                                    \
         virtual void SetUp(__attribute__((unused)) const ::benchmark::State& state) final {     \
-            auto* resource = actor_zeta::detail::pmr::get_default_resource();                   \
+            auto* resource = actor_zeta::pmr::get_default_resource();                   \
             sup_ = actor_zeta::spawn_supervisor<supervisor>(resource);                          \
             actor_zeta::send(sup_, actor_zeta::address_t::empty_address(), command_t::prepare); \
         }                                                                                       \

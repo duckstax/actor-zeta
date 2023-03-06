@@ -53,7 +53,7 @@ public:
 
 TEST_CASE("behavior") {
     SECTION("free function arg 0") {
-        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::pmr::memory_resource* resource = actor_zeta::pmr::get_default_resource();
         actor_zeta::behavior_t function(resource);
         actor_zeta::behavior(function, size_args::args_0, free_function_args_0);
         auto msg = actor_zeta::make_message(actor_zeta::address_t::empty_address(), size_args::args_0);
@@ -62,7 +62,7 @@ TEST_CASE("behavior") {
     }
 
     SECTION("free function arg 1") {
-        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::pmr::memory_resource* resource = actor_zeta::pmr::get_default_resource();
         actor_zeta::behavior_t function(resource);
         actor_zeta::behavior(function, size_args::args_1, free_function_args_1);
         auto msg = actor_zeta::make_message(actor_zeta::address_t::empty_address(), size_args::args_1, 42);
@@ -71,7 +71,7 @@ TEST_CASE("behavior") {
     }
 
     SECTION("free function args n") {
-        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::pmr::memory_resource* resource = actor_zeta::pmr::get_default_resource();
         actor_zeta::behavior_t function(resource);
         actor_zeta::behavior(function, size_args::args_n, free_function_args_n);
         auto msg = actor_zeta::make_message(actor_zeta::address_t::empty_address(), size_args::args_n, std::string("42"), 42);
@@ -80,7 +80,7 @@ TEST_CASE("behavior") {
     }
 
     SECTION("lambda arg 0") {
-        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::pmr::memory_resource* resource = actor_zeta::pmr::get_default_resource();
         actor_zeta::behavior_t free_function(resource);
         int args_checker = 0;
         actor_zeta::behavior(free_function, size_args::args_0, [&args_checker]() {
@@ -92,7 +92,7 @@ TEST_CASE("behavior") {
     }
 
     SECTION("lambda arg 1") {
-        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::pmr::memory_resource* resource = actor_zeta::pmr::get_default_resource();
         actor_zeta::behavior_t free_function(resource);
         int args_checker = 0;
         actor_zeta::behavior(free_function, size_args::args_1, [&args_checker]() {
@@ -104,7 +104,7 @@ TEST_CASE("behavior") {
     }
 
     SECTION("lambda args n") {
-        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::pmr::memory_resource* resource = actor_zeta::pmr::get_default_resource();
         actor_zeta::behavior_t free_function(resource);
         int args_checker = 0;
         actor_zeta::behavior(free_function, size_args::args_n, [&args_checker]() {
@@ -116,7 +116,7 @@ TEST_CASE("behavior") {
     }
 
     SECTION("class method arg 0") {
-        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::pmr::memory_resource* resource = actor_zeta::pmr::get_default_resource();
         actor_zeta::behavior_t function(resource);
         class_method class_method;
         actor_zeta::behavior(function, size_args::args_0, &class_method, &class_method::class_method_args_0);
@@ -126,7 +126,7 @@ TEST_CASE("behavior") {
     }
 
     SECTION("class method arg 1") {
-        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::pmr::memory_resource* resource = actor_zeta::pmr::get_default_resource();
         actor_zeta::behavior_t function(resource);
         class_method class_method;
         actor_zeta::behavior(function, size_args::args_1, &class_method, &class_method::class_method_args_1);
@@ -136,7 +136,7 @@ TEST_CASE("behavior") {
     }
 
     SECTION("class method args n") {
-        actor_zeta::detail::pmr::memory_resource* resource = actor_zeta::detail::pmr::get_default_resource();
+        actor_zeta::pmr::memory_resource* resource = actor_zeta::pmr::get_default_resource();
         actor_zeta::behavior_t function(resource);
         class_method class_method;
         actor_zeta::behavior(function, size_args::args_n, &class_method, &class_method::class_method_args_n);

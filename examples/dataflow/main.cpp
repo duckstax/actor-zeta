@@ -16,7 +16,7 @@
 
 #include <actor-zeta.hpp>
 
-using actor_zeta::detail::pmr::memory_resource;
+using actor_zeta::pmr::memory_resource;
 
 enum class command_t : uint64_t {
     add_link,
@@ -305,7 +305,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    auto* resource = actor_zeta::detail::pmr::get_default_resource();
+    auto* resource = actor_zeta::pmr::get_default_resource();
     auto sup_ = actor_zeta::spawn_supervisor<supervisor_test_t>(
         resource,
         args_set.at(args::count_actors),

@@ -17,7 +17,7 @@ namespace actor_zeta { namespace detail {
         hfsm& operator=(const hfsm&) = delete;
         hfsm() = delete;
 
-        hfsm(actor_zeta::detail::pmr::memory_resource* resource) {
+        hfsm(actor_zeta::pmr::memory_resource* resource) {
         }
 
         void pop_back() {

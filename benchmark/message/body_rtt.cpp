@@ -18,7 +18,7 @@ namespace benchmark_messages {
         template<typename... Args>
         auto message_arg_tmpl(
 #if CPP17_OR_GREATER
-            actor_zeta::detail::pmr::monotonic_buffer_resource* mr,
+            actor_zeta::pmr::monotonic_buffer_resource* mr,
 #endif
             Args&&... args) -> void;
 
@@ -27,7 +27,7 @@ namespace benchmark_messages {
             template<typename... Args>
             auto message_arg_tmpl(
 #if CPP17_OR_GREATER
-                __attribute__((unused)) actor_zeta::detail::pmr::monotonic_buffer_resource* mr,
+                __attribute__((unused)) actor_zeta::pmr::monotonic_buffer_resource* mr,
 #endif
                 Args&&... args) -> void {
                 actor_zeta::detail::rtt rtt_tuple(nullptr, std::forward<Args>(args)...);
@@ -37,7 +37,7 @@ namespace benchmark_messages {
             auto call_message_arg_tmpl(
                 T& packed_tuple,
 #if CPP17_OR_GREATER
-                actor_zeta::detail::pmr::monotonic_buffer_resource* mr,
+                actor_zeta::pmr::monotonic_buffer_resource* mr,
 #endif
                 actor_zeta::type_traits::index_sequence<I...>) -> void {
                 message_arg_tmpl(

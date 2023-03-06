@@ -10,7 +10,7 @@
 #include <actor-zeta.hpp>
 #include <test/tooltestsuites/scheduler_test.hpp>
 
-using actor_zeta::detail::pmr::memory_resource;
+using actor_zeta::pmr::memory_resource;
 class dummy_supervisor;
 class storage_t;
 
@@ -101,7 +101,7 @@ void dummy_supervisor::create() {
 }
 
 TEST_CASE("actor id match") {
-    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
+    auto* mr_ptr = actor_zeta::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr);
     for (auto i = 0; i < 1000; ++i) { //todo: 10000000
         actor_zeta::send(supervisor.get(), actor_zeta::address_t::empty_address(), command_t::create);

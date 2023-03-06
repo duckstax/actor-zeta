@@ -10,12 +10,10 @@
 #include <actor-zeta.hpp>
 #include <actor-zeta/clock/clock_thread_safe.hpp>
 
-
 constexpr  static uint64_t command_alarm = 0;
-
 static std::atomic<uint64_t> alarm_counter{0};
 
-using actor_zeta::detail::pmr::memory_resource;
+using actor_zeta::pmr::memory_resource;
 
 template<class Policy>
 class advanced_scheduler_t final : public actor_zeta::scheduler_t<Policy> {
@@ -53,14 +51,19 @@ auto thread_pool_deleter = [](shared_work* ptr) {
 /// non thread safe
 class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
 public:
-    explicit supervisor_lite(memory_resource* ptr)
-        : cooperative_supervisor(ptr, "network")
+    supervisor_lite(memory_resource* ptr)
+        :  actor_zeta::cooperative_supervisor<supervisor_lite>(ptr)\
+        , alarm_(resource())
         , e_(new shared_work(
                  1,
                  100),
              thread_pool_deleter) {
-        add_handler(command_alarm, &supervisor_lite::alarm);
+        actor_zeta::behavior(alarm_,command_alarm,this, &supervisor_lite::alarm);
         e_->start();
+    }
+
+    auto make_type() /*const*/ noexcept -> const char* const {
+        return "supervisor_lite";
     }
 
     ~supervisor_lite() override = default;
@@ -75,21 +78,36 @@ public:
 
 
 protected:
+    actor_zeta::behavior_t make_behavior()  {
+        return actor_zeta::behavior(
+            resource(),
+            [this](actor_zeta::message* msg) -> void {
+                switch (msg->command()) {
+                    case command_alarm: {
+                        alarm_(msg);
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+            });
+    }
     auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final { return e_.get(); }
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
-            execute(this,current_message());
+            make_behavior()(current_message());
         }
     }
 
 private:
+    actor_zeta::behavior_t alarm_;
     std::unique_ptr<shared_work, decltype(thread_pool_deleter)> e_;
-    std::vector<actor_zeta::actor> actors_;
 };
 
 int main() {
-    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
+    auto* mr_ptr = actor_zeta::pmr::get_default_resource();
     auto supervisor = actor_zeta::spawn_supervisor<supervisor_lite>(mr_ptr);
 
     supervisor->clock().schedule_message(supervisor->clock().now() + std::chrono::seconds(60), supervisor->address(), actor_zeta::make_message(actor_zeta::address_t::empty_address(), command_alarm));

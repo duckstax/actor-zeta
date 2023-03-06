@@ -1,8 +1,7 @@
 #pragma once
 
 #include <actor-zeta/detail/aligned_allocate.hpp>
-#include <actor-zeta/detail/pmr/default_resource.hpp>
-#include <actor-zeta/detail/pmr/memory_resource.hpp>
+#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/type_list.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
 
@@ -83,7 +82,7 @@ namespace actor_zeta { namespace detail {
             creator_t creator;
         };
 
-        actor_zeta::detail::pmr::memory_resource* memory_resource_ = nullptr;
+        actor_zeta::pmr::memory_resource* memory_resource_ = nullptr;
 
         std::size_t capacity_ = 0;
         std::size_t volume_ = 0;
@@ -111,7 +110,7 @@ namespace actor_zeta { namespace detail {
 
     public:
         template<typename... Args>
-        explicit rtt(actor_zeta::detail::pmr::memory_resource* memory_resource, Args&&... args)
+        explicit rtt(actor_zeta::pmr::memory_resource* memory_resource, Args&&... args)
             : memory_resource_(nullptr)
             , capacity_(0)
             , volume_(0)
@@ -120,7 +119,7 @@ namespace actor_zeta { namespace detail {
             , objects_(nullptr)
             , objects_idx_(0) {
             constexpr std::size_t sz = getSize<0, Args...>();
-            memory_resource_ = memory_resource ? memory_resource : actor_zeta::detail::pmr::get_default_resource();
+            memory_resource_ = memory_resource ? memory_resource : actor_zeta::pmr::get_default_resource();
             assert(memory_resource_);
             capacity_ = sz;
             allocation = memory_resource_->allocate(capacity_ + capacity_ * sizeof(objects_t));
@@ -139,7 +138,7 @@ namespace actor_zeta { namespace detail {
         // https://github.com/duckstax/actor-zeta/issues/118
         // @TODO Remove default ctors for actor_zeta::base::message and actor_zeta::detail::rtt (message body) #118
         rtt()
-            : memory_resource_(actor_zeta::detail::pmr::get_default_resource())
+            : memory_resource_(actor_zeta::pmr::get_default_resource())
             , capacity_(0)
             , volume_(0)
             , allocation(nullptr)

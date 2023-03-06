@@ -12,7 +12,7 @@
 
 static std::atomic<uint64_t> alarm_counter{0};
 
-using actor_zeta::detail::pmr::memory_resource;
+using actor_zeta::pmr::memory_resource;
 /// non thread safe
 constexpr static auto alarm_id = actor_zeta::make_message_id(0);
 

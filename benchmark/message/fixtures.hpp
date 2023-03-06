@@ -84,7 +84,7 @@ namespace benchmark_messages {
 #define DEFINE_FIXTURE_CLASS_MEM_RESOURCE_1(class_name, construct_name)                                                                       \
     template<class P, typename... CustomArgs>                                                                                                 \
     class class_name : public ::benchmark::Fixture {                                                                                          \
-        using monotonic_buffer_resource = actor_zeta::detail::pmr::monotonic_buffer_resource;                                                 \
+        using monotonic_buffer_resource = actor_zeta::pmr::monotonic_buffer_resource;                                                 \
                                                                                                                                               \
     public:                                                                                                                                   \
         virtual void                                                                                                                          \
@@ -189,7 +189,7 @@ namespace benchmark_messages {
 #define DEFINE_FIXTURE_CLASS_MEM_RESOURCE_2(class_name, construct_name, revert_type_seq)                              \
     template<class P, typename... CustomArgs>                                                                         \
     class class_name : public ::benchmark::Fixture {                                                                  \
-        using monotonic_buffer_resource = actor_zeta::detail::pmr::monotonic_buffer_resource;                         \
+        using monotonic_buffer_resource = actor_zeta::pmr::monotonic_buffer_resource;                         \
                                                                                                                       \
     public:                                                                                                           \
         virtual void                                                                                                  \
