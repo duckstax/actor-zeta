@@ -4,25 +4,32 @@
 #include <condition_variable>
 #include <limits>
 #include <memory>
-#include <set>
 #include <thread>
-#include <vector>
 
+#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
 #include <actor-zeta/scheduler/worker.hpp>
 
 namespace actor_zeta { namespace scheduler {
 
-    template<class Policy>
+    template<class Policy, class actor_traits>
     class scheduler_t : public scheduler_abstract_t {
+        actor_zeta::detail::pmr::memory_resource* mr_;
+
     public:
         using super = scheduler_abstract_t;
         using policy_data = typename Policy::coordinator_data;
-        using worker_type = worker<Policy>;
+        using worker_type = worker<Policy, actor_traits>;
+        using deleter_type = typename actor_traits::template deleter_type<worker_type>;
+        using unique_pointer = typename actor_traits::template unique_ptr_type<worker_type>;
+        using vector_type = typename actor_traits::template vector_type<unique_pointer>;
+        using set_type = typename actor_traits::template set_type<worker_type*>;
 
-        scheduler_t(size_t num_worker_threads, size_t max_throughput_param)
+        scheduler_t(actor_zeta::detail::pmr::memory_resource* mr, size_t num_worker_threads, size_t max_throughput_param)
             : scheduler_abstract_t(num_worker_threads, max_throughput_param)
+            , mr_(mr)
+            , workers_(mr)
             , data_(this) {
         }
 
@@ -41,7 +48,11 @@ namespace actor_zeta { namespace scheduler {
             workers_.reserve(num);
 
             for (size_t i = 0; i < num; ++i) {
-                workers_.emplace_back(new worker_type(i, this, init, max_throughput_));
+                workers_.emplace_back(
+                    unique_pointer{
+                        actor_zeta::detail::pmr::allocate_ptr<worker_type>(mr_, i, this, init, max_throughput_),
+                        deleter_type(mr_)
+                    });
             }
 
             for (auto& w : workers_) {
@@ -79,7 +90,7 @@ namespace actor_zeta { namespace scheduler {
             };
             // Use a set to keep track of remaining workers.
             shutdown_helper sh;
-            std::set<worker_type*> alive_workers;
+            set_type alive_workers{mr_};
             auto num = num_workers();
             for (size_t i = 0; i < num; ++i) {
                 alive_workers.insert(worker_by_id(i));
@@ -100,7 +111,11 @@ namespace actor_zeta { namespace scheduler {
             }
 
             /// run cleanup code for each resumable
-            auto f = &cleanup_and_release;
+//            auto f = &cleanup_and_release<actor_traits>;
+            auto cln = cleaner_t<actor_traits>(mr_);
+            auto f = [&cln](resumable* r) {
+                cln.cleanup_and_release(r);
+            };
             for (auto& w : workers_) {
                 policy_.foreach_resumable(w.get(), f);
             }
@@ -112,7 +127,7 @@ namespace actor_zeta { namespace scheduler {
         }
 
     private:
-        std::vector<std::unique_ptr<worker_type>> workers_;
+        vector_type workers_;
         policy_data data_;
         Policy policy_;
     };

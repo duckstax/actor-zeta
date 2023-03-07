@@ -17,6 +17,7 @@
 #include <actor-zeta.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
+#include <actor-zeta/base/actor_traits.hpp>
 
 using actor_zeta::detail::pmr::memory_resource;
 
@@ -28,17 +29,19 @@ enum class command_t : uint64_t {
     process_data,
 };
 
+using actor_traits = actor_zeta::base::actor_traits<actor_zeta::base::actor_type_e::PMR>;
+
 namespace names {
 
-    static const std::string actor("storage");
-    static const std::string supervisor("supervisor");
+    static const auto actor = "storage";
+    static const auto supervisor = "supervisor";
 
 } // namespace names
 
 std::atomic<int64_t> packets_a(0);
 
 struct data_t {
-    std::string data;
+    actor_traits::string_type data;
     std::chrono::system_clock::time_point time_point;
     int64_t producer_index;
     int64_t data_index;
@@ -54,21 +57,33 @@ struct data_t {
 
 class supervisor_test_t;
 
-class actor_test_t final : public actor_zeta::basic_async_actor {
+/**
+ * @class actor_test_t
+ * @brief
+ *
+ */
+class actor_test_t final : public actor_zeta::basic_async_actor<actor_traits> {
+    actor_zeta::detail::pmr::memory_resource* mr_;
+
     supervisor_test_t* sup_ptr_;
+
     size_t consumer_latency_ms_;
-    std::map<int64_t, int64_t> prev_index_;
-    std::map<int, actor_zeta::address_t> address_book_;
+
+    actor_traits::map_type<int64_t, int64_t> prev_index_;
+    actor_traits::map_type<int, actor_zeta::address_t> address_book_;
 
     auto perform(command_t cmd) -> void {
-        actor_zeta::send(address_book_.begin()->second, address(), cmd);
+        actor_zeta::send(mr_, address_book_.begin()->second, address(), cmd);
     }
 
 public:
-    actor_test_t(supervisor_test_t* ptr, size_t consumer_latency_ms)
-        : actor_zeta::basic_async_actor(ptr, names::actor)
+    actor_test_t(actor_zeta::detail::pmr::memory_resource* mr, supervisor_test_t* ptr, actor_traits::string_type name, size_t consumer_latency_ms)
+        : actor_zeta::basic_async_actor<actor_traits>(ptr, name)
+        , mr_(mr)
         , sup_ptr_(ptr)
-        , consumer_latency_ms_(consumer_latency_ms) {
+        , consumer_latency_ms_(consumer_latency_ms)
+        , prev_index_(mr_)
+        , address_book_(mr_) {
         add_handler(command_t::add_address, &actor_test_t::add_address);
         add_handler(command_t::process_data, &actor_test_t::process_data);
     }
@@ -84,9 +99,9 @@ public:
 
     void process_data(data_t&& data) {
         auto ms_dur = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - data.time()).count();
-        packets_a--;
-        if (packets_a.load() > 0)
-            std::cout << __func__ << " :: packets_a " << packets_a.load() << " OUT >>>" << std::endl;
+//        auto counter = packets_a.fetch_sub(1);
+//        if (counter > 1)
+//            std::cout << __func__ << " :: packets_a " << counter << " OUT >>>" << std::endl;
         auto it = prev_index_.find(data.producer_index);
         if (it == prev_index_.end()) {
             prev_index_[data.producer_index] = data.data_index;
@@ -106,8 +121,14 @@ auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
     delete ptr;
 };
 
-class supervisor_test_t final : public actor_zeta::cooperative_supervisor<supervisor_test_t> {
-public:
+/**
+ * @class supervisor_test_t
+ * @brief
+ *
+ */
+class supervisor_test_t final : public actor_zeta::base::cooperative_supervisor<actor_traits, supervisor_test_t> {
+    actor_traits::memory_resource_ptr mr_;
+
     size_t count_actors_;
     size_t count_producers_;
     size_t datasize_;
@@ -121,14 +142,18 @@ public:
 
     void memchecker() const {
         sdk::memory::checker_t checker(memory_limit_mb_, true);
+        std::cout << std::this_thread::get_id() << " :: memchecker started +++" << std::endl;
         while (running_) {
             checker.check();
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
+        std::cout << std::this_thread::get_id() << " :: memchecker stopped ---" << std::endl;
     }
 
     void producer(size_t idx) {
+        pthread_setname_np(pthread_self(), "producer");
         data_t data;
+        data.data = actor_traits::string_type(mr_);
         for (size_t i = 0; i < datasize_; ++i) {
             data.data.push_back(static_cast<char>(i % 255));
         }
@@ -139,9 +164,9 @@ public:
         while (running_) {
             data.data_index = counter;
             for (const auto& addr : address_book_) {
-                packets_a++;
+//                packets_a++;
                 data.time_point = std::chrono::system_clock::now();                
-                actor_zeta::send(addr.second, address(), command_t::process_data, data);
+                actor_zeta::send(mr_, addr.second, address(), command_t::process_data, data);
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(producer_latency_ms_));
             }
@@ -150,18 +175,33 @@ public:
         std::cout << std::this_thread::get_id() << " :: producer #" << idx << " stopped ---" << std::endl;
     }
 
+    class deleter_t final {
+        actor_zeta::detail::pmr::memory_resource* mr_;
+
+    public:
+        deleter_t(actor_zeta::detail::pmr::memory_resource* mr)
+            : mr_(mr ? mr : actor_zeta::detail::pmr::get_default_resource()) { assert(mr_); }
+
+        void operator()(actor_zeta::scheduler_abstract_t* ptr) {
+            ptr->stop();
+            actor_zeta::detail::pmr::deallocate_ptr(mr_, &ptr);
+        }
+    };
+
 public:
     supervisor_test_t(
-        memory_resource* ptr,
-        size_t count_actors,
-        size_t count_producers,
-        size_t datasize,
-        size_t num_worker_threads,
-        size_t max_throughput_param,
-        size_t producer_latency_ms,
-        size_t consumer_latency_ms,
-        size_t memory_limit_mb)
-        : actor_zeta::cooperative_supervisor<supervisor_test_t>(ptr, names::supervisor)
+        actor_traits::memory_resource_ptr mr,
+        actor_traits::string_type name,
+        std::size_t count_actors,
+        std::size_t count_producers,
+        std::size_t datasize,
+        std::size_t num_worker_threads,
+        std::size_t max_throughput_param,
+        std::size_t producer_latency_ms,
+        std::size_t consumer_latency_ms,
+        std::size_t memory_limit_mb)
+        : actor_zeta::base::cooperative_supervisor<actor_traits, supervisor_test_t>(mr, name)
+        , mr_(mr)
         , count_actors_(count_actors)
         , count_producers_(count_producers)
         , datasize_(datasize)
@@ -169,20 +209,29 @@ public:
         , consumer_latency_ms_(consumer_latency_ms)
         , memory_limit_mb_(memory_limit_mb)
         , running_(true)
-        , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
-                 num_worker_threads,
-                 max_throughput_param),
-             thread_pool_deleter) {
+        , e_(actor_zeta::detail::pmr::allocate_ptr<actor_zeta::scheduler_t<actor_zeta::work_sharing, actor_traits>>(
+                mr_,
+                mr_,
+                num_worker_threads,
+                max_throughput_param),
+             deleter_t(mr_))
+        , address_book_(mr_)
+        , actors_(mr_)
+        , producers_(mr_)
+    {
         e_->start();
     }
+    virtual ~supervisor_test_t() = default;
 
     void prepare() {
+        actor_traits::string_type name{mr_};
+        name.assign("storage");
         for (auto i = 1; i <= count_actors_; ++i) {
             auto addr = spawn_actor([this, i](actor_test_t* ptr) {
                 actors_.emplace(i, ptr);
-            }, consumer_latency_ms_);
+            }, mr_, this, name, consumer_latency_ms_);
             address_book_.emplace(i, std::move(addr));
-            actor_zeta::send(address_book_.at(i), address(), command_t::add_address, address(), 0);
+            actor_zeta::send(mr_, address_book_.at(i), address(), command_t::add_address, address(), 0);
         }
     }
 
@@ -202,6 +251,7 @@ public:
         for (auto& producer : producers_) {
             producer.join();
         }
+        producers_.clear();
         memchecker_thread_.join();
     }
 
@@ -215,16 +265,17 @@ protected:
             auto ptr = msg.get();
             set_current_message(std::move(msg));
             execute(this, current_message());
-            delete ptr;
+            auto deleter = actor_zeta::message_ptr::deleter_type(mr_);
+            deleter(ptr);
         }
     }
 
 private:
-    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
-    std::map<int, actor_zeta::address_t> address_book_;
-    std::map<int, actor_test_t*> actors_;
+    std::unique_ptr<actor_zeta::scheduler_abstract_t, deleter_t> e_;
+    actor_traits::map_type<int, actor_zeta::address_t> address_book_;
+    actor_traits::map_type<int, actor_test_t*> actors_;
     std::thread memchecker_thread_;
-    std::vector<std::thread> producers_;
+    actor_traits::vector_type<std::thread> producers_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -268,6 +319,7 @@ namespace args {
 }
 
 int main(int argc, char** argv) {
+    pthread_setname_np(pthread_self(), "main");
 
     std::map<std::string, size_t> args_set = {{
         {args::count_actors, args::count_actors_default},
@@ -308,8 +360,11 @@ int main(int argc, char** argv) {
     }
 
     auto* resource = actor_zeta::detail::pmr::get_default_resource();
-    auto sup_ = actor_zeta::spawn_supervisor<supervisor_test_t>(
-        resource,
+    actor_traits::string_type sup_name{resource};
+    sup_name.assign("supervisor");
+
+    auto sup_ = actor_zeta::spawn_supervisor<actor_traits, supervisor_test_t>(
+        resource, sup_name,
         args_set.at(args::count_actors),
         args_set.at(args::count_producers),
         args_set.at(args::datasize),
@@ -338,17 +393,18 @@ int main(int argc, char** argv) {
         //exit(signal_num);
     };
 
-    signal(SIGINT, signal_handler);
-    signal(SIGTERM, signal_handler);
-    signal(SIGQUIT, signal_handler);
-
-    signal(SIGPIPE, signal_ignore);
-
-    signal(SIGABRT, signal_backtrace);
-    signal(SIGSEGV, signal_backtrace);
+    //signal(SIGINT, signal_handler);
+    //signal(SIGTERM, signal_handler);
+    //signal(SIGQUIT, signal_handler);
+//
+    //signal(SIGPIPE, signal_ignore);
+//
+    //signal(SIGABRT, signal_backtrace);
+    //signal(SIGSEGV, signal_backtrace);
 
     sup_->start();
-    sup_->wait();
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    sup_->stop();
 
     return 0;
 }

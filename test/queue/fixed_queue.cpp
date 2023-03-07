@@ -27,7 +27,7 @@ namespace {
         using mapped_type = inode;
         using task_size_type = int;
         using deficit_type = int;
-        using deleter_type = std::default_delete<mapped_type>;
+        using deleter_type = actor_zeta::detail::pmr::deleter_t;
         using unique_pointer = std::unique_ptr<mapped_type, deleter_type>;
 
         static inline auto task_size(const mapped_type&) -> task_size_type {
@@ -76,10 +76,15 @@ namespace {
 
     struct fixture {
         inode_policy policy;
-        queue_type queue_{policy,
-                          high_priority_queue(policy),
-                          nested_queue_type(policy),
-                          nested_queue_type(policy)};
+        queue_type queue_;
+
+        fixture(actor_zeta::detail::pmr::memory_resource* memory_resource)
+            : queue_(
+                memory_resource,
+                policy,
+                high_priority_queue(memory_resource, policy),
+                nested_queue_type(memory_resource, policy),
+                nested_queue_type(memory_resource, policy)) {}
 
         void fill() {}
 
@@ -112,13 +117,14 @@ namespace {
 } // namespace
 
 TEST_CASE("fixed_queue_tests") {
+    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     SECTION("default_constructed") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(fix.queue_.empty());
     }
 
     SECTION("new_round") {
-        fixture fix;
+        fixture fix(mr_ptr);
         fix.fill(1, 2, 3, 4, 5, 6, 7, 8, 9, 12);
         fetch_helper f;
         auto round_result = fix.queue_.new_round(2, f);
@@ -138,7 +144,7 @@ TEST_CASE("fixed_queue_tests") {
     }
 
     SECTION("priorities") {
-        fixture fix;
+        fixture fix(mr_ptr);
         fix.queue_.policy().enable_priorities = true;
         fix.fill(1, 2, 3, 4, 5, 6, 7, 8, 9);
         REQUIRE(fix.fetch(1) == "0:3,0:6,1:1,2:2");
@@ -161,7 +167,7 @@ TEST_CASE("fixed_queue_tests") {
     };
 
     SECTION("peek_all") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(queue_to_string(fix.queue_).empty());
         fix.queue_.emplace_back(1);
         REQUIRE(queue_to_string(fix.queue_) == "1");

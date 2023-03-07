@@ -93,17 +93,17 @@ set(HEADER_FILES
         header/actor-zeta/base/supervisor.hpp
         header/actor-zeta/base/supervisor_abstract.hpp
 
-        header/actor-zeta/detail/queue/queue.hpp
         header/actor-zeta/detail/queue/cached_queue.hpp
+        header/actor-zeta/detail/queue/enqueue_result.hpp
         header/actor-zeta/detail/queue/fifo_inbox.hpp
+        header/actor-zeta/detail/queue/fixed_queue.hpp
         header/actor-zeta/detail/queue/forward_iterator.hpp
         header/actor-zeta/detail/queue/lifo_inbox.hpp
         header/actor-zeta/detail/queue/new_round_result.hpp
+        header/actor-zeta/detail/queue/queue.hpp
         header/actor-zeta/detail/queue/singly_linked.hpp
         header/actor-zeta/detail/queue/task_queue.hpp
         header/actor-zeta/detail/queue/task_result.hpp
-        header/actor-zeta/detail/queue/fixed_queue.hpp
-        header/actor-zeta/detail/queue/enqueue_result.hpp
 
         header/actor-zeta/detail/pmr/memory_resource.hpp
         header/actor-zeta/detail/aligned_allocate.hpp
@@ -141,6 +141,7 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
     source/src.cpp
+#    header/actor-zeta/detail/queue/src.cpp
 )
 
 find_program(CCACHE_FOUND ccache)

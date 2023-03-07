@@ -5,6 +5,7 @@
 
 #include <utility>
 
+#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
 
@@ -209,8 +210,10 @@ namespace actor_zeta {
     }
 
     template<class T, class... args>
-    intrusive_ptr<T> make_counted(args&&... xs) {
-        return intrusive_ptr<T>(new T(std::forward<args>(xs)...), false);
+    intrusive_ptr<T> make_counted(detail::pmr::memory_resource* memory_resource, args&&... xs) {
+        auto* ptr = detail::pmr::allocate_ptr<T>(memory_resource, std::forward<args&&>(xs)...);
+        assert(ptr);
+        return intrusive_ptr<T>(ptr, false);
     }
 
 } // namespace actor_zeta

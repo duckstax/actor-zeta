@@ -6,6 +6,9 @@
 
 namespace actor_zeta { namespace clock {
 
+    clock_t::clock_t(detail::pmr::memory_resource* memory_resource)
+        : detail::pmr::memory_resource_base(memory_resource) {}
+
     clock_t::~clock_t() {
     }
 
@@ -21,6 +24,7 @@ namespace actor_zeta { namespace clock {
         schedule(
             t,
             handler(
+                resource(),
                 [receiver_tmp = std::move(receiver), content_tmp = std::move(content)]() mutable {
                     receiver_tmp->enqueue(std::move(content_tmp));
                 }));

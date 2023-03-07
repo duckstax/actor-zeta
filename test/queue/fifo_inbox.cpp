@@ -25,7 +25,7 @@ namespace {
         using mapped_type = inode;
         using task_size_type = int;
         using deficit_type = int;
-        using deleter_type = std::default_delete<mapped_type>;
+        using deleter_type = actor_zeta::detail::pmr::deleter_t;
         using unique_pointer = std::unique_ptr<mapped_type, deleter_type>;
         using queue_type = queue<inode_policy>;
 
@@ -38,7 +38,10 @@ namespace {
 
     struct fixture {
         inode_policy policy;
-        inbox_type inbox{policy};
+        inbox_type inbox;
+
+        fixture(actor_zeta::detail::pmr::memory_resource* memory_resource)
+            : inbox(memory_resource, policy) {}
 
         void fill() {}
 
@@ -63,31 +66,32 @@ namespace {
 } // namespace
 
 TEST_CASE("fifo_inbox_tests") {
+    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     SECTION("default_constructed") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(fix.inbox.empty());
     }
 
     SECTION("push_front") {
-        fixture fix;
+        fixture fix(mr_ptr);
         fix.fill(1, 2, 3);
         REQUIRE(fix.close_and_fetch() == "123");
         REQUIRE(fix.inbox.closed());
     }
 
     SECTION("push_after_close") {
-        fixture fix;
+        fixture fix(mr_ptr);
         fix.inbox.close();
-        auto res = fix.inbox.push_back(new inode(0));
+        auto res = fix.inbox.push_back(actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 0));
         REQUIRE(res == enqueue_result::queue_closed);
     }
 
     SECTION("unblock") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(fix.inbox.try_block());
-        auto res = fix.inbox.push_back(new inode(0));
+        auto res = fix.inbox.push_back(actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 0));
         REQUIRE(res == enqueue_result::unblocked_reader);
-        res = fix.inbox.push_back(new inode(1));
+        res = fix.inbox.push_back(actor_zeta::detail::pmr::allocate_ptr<inode>(mr_ptr, 1));
         REQUIRE(res == enqueue_result::success);
         REQUIRE(fix.close_and_fetch() == "01");
     }

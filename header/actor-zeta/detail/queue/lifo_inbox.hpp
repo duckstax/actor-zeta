@@ -3,6 +3,7 @@
 #include <atomic>
 #include <condition_variable>
 
+#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/queue/enqueue_result.hpp>
 
 namespace actor_zeta { namespace detail {
@@ -11,6 +12,8 @@ namespace actor_zeta { namespace detail {
     /// with any number of writers.
     template<class Policy>
     class lifo_inbox {
+        pmr::memory_resource* mr_;
+
     public:
         using policy_type = Policy;
         using value_type = typename policy_type::mapped_type;
@@ -25,7 +28,7 @@ namespace actor_zeta { namespace detail {
             return static_cast<pointer>(ptr);
         }
 
-        /// Tries to enqueue a new element to the inbox.
+        /// Tries to enqueue a next element to the inbox.
         /// @threadsafe
         auto push_front(pointer new_element) noexcept -> enqueue_result {
             assert(new_element != nullptr);
@@ -39,23 +42,25 @@ namespace actor_zeta { namespace detail {
                                ? enqueue_result::unblocked_reader
                                : enqueue_result::success;
             }
-            deleter_type deleter;
+            deleter_type deleter(mr_);
             deleter(new_element);
             return enqueue_result::queue_closed;
         }
 
-        /// Tries to enqueue a new element to the inbox.
+        /// Tries to enqueue a next element to the inbox.
         /// @threadsafe
         auto push_front(unique_pointer new_element) noexcept -> enqueue_result {
             return push_front(new_element.release());
         }
 
-        /// Tries to enqueue a new element to the mailbox.
+        /// Tries to enqueue a next element to the mailbox.
         /// @threadsafe
-        template<class... args>
-        auto emplace_front(args&&... elements) -> enqueue_result {
-            return push_front(new value_type(std::forward<args&&>(elements)...));
-        }
+//        template<class... args>
+//        auto emplace_front(args&&... elements) -> enqueue_result {
+//            auto* value = allocate_ptr<value_type>(std::forward<args&&>(elements)...);
+//            assert(value);
+//            return push_front(value);
+//        }
 
         /// Queries whether this queue is empty.
         /// @pre `!closed() && !blocked()`
@@ -71,7 +76,7 @@ namespace actor_zeta { namespace detail {
         }
 
         /// Queries whether this has been marked as blocked, i.e.,
-        /// the owner of the list is waiting for new data.
+        /// the owner of the list is waiting for next data.
         auto blocked() const noexcept -> bool {
             return stack_.load() == reader_blocked_tag();
         }
@@ -116,7 +121,7 @@ namespace actor_zeta { namespace detail {
         /// Closes this queue and deletes all remaining elements.
         /// @warning Call only from the reader (owner).
         void close() noexcept {
-            deleter_type deleter;
+            deleter_type deleter(mr_);
             close(deleter);
         }
 
@@ -133,7 +138,8 @@ namespace actor_zeta { namespace detail {
             }
         }
 
-        lifo_inbox() noexcept {
+        lifo_inbox(pmr::memory_resource* mr) noexcept
+            : mr_(mr) {
             stack_ = stack_empty_tag();
         }
 

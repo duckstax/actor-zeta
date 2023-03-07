@@ -1,5 +1,9 @@
 #pragma once
 
+#include <memory>
+
+#include <actor-zeta/detail/pmr/memory_resource.hpp>
+#include <actor-zeta/detail/pmr/default_resource.hpp>
 #include <actor-zeta/detail/queue/forward_iterator.hpp>
 
 namespace actor_zeta { namespace detail {
@@ -9,6 +13,8 @@ namespace actor_zeta { namespace detail {
     /// therefore has no dequeue functions.
     template<class Policy>
     class task_queue {
+        pmr::memory_resource* mr_;
+
     public:
         using policy_type = Policy;
         using value_type = typename policy_type::mapped_type;
@@ -16,6 +22,7 @@ namespace actor_zeta { namespace detail {
         using node_pointer = node_type*;
         using pointer = value_type*;
         using unique_pointer = typename policy_type::unique_pointer;
+        using deleter_type = typename unique_pointer::deleter_type;
         using task_size_type = typename policy_type::task_size_type;
         using iterator = forward_iterator<value_type>;
         using const_iterator = forward_iterator<const value_type>;
@@ -24,37 +31,20 @@ namespace actor_zeta { namespace detail {
             return static_cast<pointer>(ptr);
         }
 
-        explicit task_queue(policy_type policy)
-            : old_last_(nullptr)
+        explicit task_queue(pmr::memory_resource* mr, policy_type policy)
+            : mr_(mr ? mr : pmr::get_default_resource())
+            , old_last_(nullptr)
             , new_head_(nullptr)
             , policy_(std::move(policy)) {
             init();
         }
 
-        task_queue(task_queue&& other) noexcept
-            : task_queue(other.policy()) {
-            if (other.empty()) {
-                init();
-            } else {
-                head_.next = other.head_.next;
-                tail_.next = other.tail_.next;
-                tail_.next->next = &tail_;
-                total_task_size_ = other.total_task_size_;
-                other.init();
-            }
+        task_queue(task_queue<Policy>&& other) noexcept {
+            init_from_other(std::move(other));
         }
 
-        auto operator=(task_queue&& other) noexcept -> task_queue& {
-            deinit();
-            if (other.empty()) {
-                init();
-            } else {
-                head_.next = other.head_.next;
-                tail_.next = other.tail_.next;
-                tail_.next->next = &tail_;
-                total_task_size_ = other.total_task_size_;
-                other.init();
-            }
+        auto operator=(task_queue<Policy>&& other) noexcept -> task_queue& {
+            init_from_other(std::move(other));
             return *this;
         }
 
@@ -138,7 +128,7 @@ namespace actor_zeta { namespace detail {
 
         /// @private
         auto next(task_size_type& deficit) noexcept -> unique_pointer {
-            unique_pointer result;
+            unique_pointer result{nullptr, deleter_type(mr_)};
             if (!empty()) {
                 auto ptr = promote(head_.next);
                 auto size = policy_.task_size(*ptr);
@@ -206,11 +196,13 @@ namespace actor_zeta { namespace detail {
             return push_back(new_element.release());
         }
 
-        /// Creates a new element from `elements...` and appends it.
-        template<class... args>
-        auto emplace_back(args&&... elements) -> bool {
-            return push_back(new value_type(std::forward<args>(elements)...));
-        }
+        /// Creates a next element from `elements...` and appends it.
+//        template<class... args>
+//        auto emplace_back(args&&... elements) -> bool {
+//            auto* value = allocate_ptr<value_type>(std::forward<args&&>(elements)...);
+//            assert(value);
+//            return push_back(value);
+//        }
 
         /// Transfers all element from `other` to the front of this queue.
         template<class Container>
@@ -280,6 +272,23 @@ namespace actor_zeta { namespace detail {
             total_task_size_ = 0;
         }
 
+        void init_from_other(task_queue<Policy>&& other) noexcept {
+            mr_ = other.mr_;
+            old_last_ = nullptr;
+            new_head_ = nullptr;
+            policy_ = std::move(other.policy_);
+            init();
+            if (other.empty()) {
+                init();
+            } else {
+                head_.next = other.head_.next;
+                tail_.next = other.tail_.next;
+                tail_.next->next = &tail_;
+                total_task_size_ = other.total_task_size_;
+                other.init();
+            }
+        }
+
         /// Deletes all elements.
         /// @warning leaves the queue in an invalid state until calling `init` again.
         /// @private
@@ -287,7 +296,7 @@ namespace actor_zeta { namespace detail {
             for (auto i = head_.next; i != &tail_;) {
                 auto ptr = i;
                 i = i->next;
-                typename unique_pointer::deleter_type deleter;
+                deleter_type deleter(mr_);
                 deleter(promote(ptr));
             }
         }

@@ -11,20 +11,16 @@ namespace actor_zeta { namespace mailbox {
         return command_;
     }
 
-    auto message::clone() const -> message* {
-        return new message(sender_, command_, body_);
-    }
-
     message::operator bool() {
         return /*!command_ ||*/ bool(sender_) || !body_.empty();
     }
 
-    message::message(address_t sender, message_id name)
+    message::message(actor_zeta::base::address_t sender, message_id name)
         : sender_(std::move(sender))
         , command_(std::move(name))
         , body_() {}
 
-    message::message(address_t sender, message_id name, actor_zeta::detail::rtt body)
+    message::message(actor_zeta::base::address_t sender, message_id name, actor_zeta::detail::rtt body)
 
         : sender_(std::move(sender))
         , command_(std::move(name))
@@ -37,10 +33,10 @@ namespace actor_zeta { namespace mailbox {
         swap(body_, other.body_);
     }
 
-    message::message()
-        : singly_linked(nullptr)
-        , prev(nullptr)
-        , sender_(address_t::empty_address()) {}
+//    message::message()
+//        : singly_linked(nullptr)
+//        , prev(nullptr)
+//        , sender_(actor_zeta::base::address_t::empty_address()) {}
 
     bool message::is_high_priority() const {
         return command_.priority() == detail::high_message_priority;

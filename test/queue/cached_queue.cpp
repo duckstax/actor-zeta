@@ -24,7 +24,7 @@ namespace {
         using mapped_type = inode;
         using task_size_type = int;
         using deficit_type = int;
-        using deleter_type = std::default_delete<mapped_type>;
+        using deleter_type = actor_zeta::detail::pmr::deleter_t;
         using unique_pointer = std::unique_ptr<mapped_type, deleter_type>;
 
         static inline auto task_size(const mapped_type&) noexcept -> task_size_type {
@@ -36,7 +36,10 @@ namespace {
 
     struct fixture {
         inode_policy policy;
-        queue_type queue_{policy};
+        queue_type queue_;
+
+        fixture(actor_zeta::detail::pmr::memory_resource* memory_resource)
+            : queue_(memory_resource, policy) {}
 
         void fill() {}
 
@@ -54,8 +57,9 @@ namespace {
 } //namespace
 
 TEST_CASE("cached_queue_tests") {
+    auto* mr_ptr = actor_zeta::detail::pmr::get_default_resource();
     SECTION("default_constructed") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(fix.queue_.empty());
         REQUIRE(fix.queue_.deficit() == 0);
         REQUIRE(fix.queue_.total_task_size() == 0);
@@ -79,7 +83,7 @@ TEST_CASE("cached_queue_tests") {
             gseq += to_string(x);
             return task_result::resume;
         };
-        fixture fix;
+        fixture fix(mr_ptr);
         fix.fill(1, 2, 3, 4, 5, 6, 7, 8, 9);
         auto round_result = fix.queue_.new_round(3, f);
         REQUIRE(round_result == make_new_round_result(3, false));
@@ -100,7 +104,7 @@ TEST_CASE("cached_queue_tests") {
             seq += to_string(x);
             return task_result::resume;
         };
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(fix.queue_.new_round(10, f) == make_new_round_result(0, false));
         fix.fill(1, 3, 5);
         REQUIRE(fix.queue_.new_round(10, f) == make_new_round_result(0, false));
@@ -116,7 +120,7 @@ TEST_CASE("cached_queue_tests") {
     }
 
     SECTION("take_front") {
-        fixture fix;
+        fixture fix(mr_ptr);
         std::string seq;
         fix.fill(1, 2, 3, 4, 5, 6);
         auto f = [&](inode& x) -> task_result {
@@ -139,7 +143,7 @@ TEST_CASE("cached_queue_tests") {
     }
 
     SECTION("alternating_consumer") {
-        fixture fix;
+        fixture fix(mr_ptr);
         using fun_type = std::function<task_result(inode&)>;
         fun_type f;
         fun_type g;
@@ -182,7 +186,7 @@ TEST_CASE("cached_queue_tests") {
     };
 
     SECTION("peek_all") {
-        fixture fix;
+        fixture fix(mr_ptr);
         REQUIRE(queue_to_string(fix.queue_).empty());
         fix.queue_.emplace_back(2);
         REQUIRE(queue_to_string(fix.queue_) == "2");

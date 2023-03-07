@@ -1,5 +1,6 @@
 #pragma once
 
+#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/queue/new_round_result.hpp>
 #include <actor-zeta/detail/queue/task_result.hpp>
 
@@ -7,7 +8,7 @@ namespace actor_zeta { namespace detail {
 
     /// A work queue that internally multiplexes any number of DRR queues.
     template<class Policy, class Q, class... Qs>
-    class fixed_queue {
+    class fixed_queue : protected pmr::memory_resource_base {
     public:
         using tuple_type = std::tuple<Q, Qs...>;
         using policy_type = Policy;
@@ -22,8 +23,9 @@ namespace actor_zeta { namespace detail {
 
         static constexpr size_t num_queues = sizeof...(Qs) + 1;
 
-        fixed_queue(policy_type policy0, Q queue1, Qs... queues)
-            : qs_(std::make_tuple(std::move(queue1), std::move(queues)...))
+        fixed_queue(pmr::memory_resource* memory_resource, policy_type policy0, Q queue1, Qs... queues)
+            : pmr::memory_resource_base(memory_resource)
+            , qs_(std::make_tuple(std::move(queue1), std::move(queues)...))
             , policy_(std::move(policy0)) {}
 
         auto policy() noexcept -> policy_type& {
@@ -44,14 +46,16 @@ namespace actor_zeta { namespace detail {
 
         template<class... args>
         auto emplace_back(args&&... elements) -> bool {
-            return push_back(new value_type(std::forward<args&&>(elements)...));
+            auto* value = allocate_ptr<value_type>(std::forward<args&&>(elements)...);
+            assert(value);
+            return push_back(value);
         }
 
         void inc_deficit(deficit_type deficit) noexcept {
             inc_deficit_recursion<0>(deficit);
         }
 
-        /// Run a new round with `quantum`, dispatching all tasks to `consumer`.
+        /// Run a next round with `quantum`, dispatching all tasks to `consumer`.
         /// @returns `true` if at least one item was consumed, `false` otherwise.
         template<class F>
         auto new_round(deficit_type quantum, F& func) -> new_round_result {

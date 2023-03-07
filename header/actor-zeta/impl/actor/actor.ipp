@@ -8,6 +8,7 @@
 // clang-format on
 
 namespace actor_zeta { namespace base {
+
     actor::~actor() {}
 
     address_t actor::address() const noexcept {
@@ -30,4 +31,5 @@ namespace actor_zeta { namespace base {
         ptr_.reset();
         return *this;
     }
+
 }} // namespace actor_zeta::base
