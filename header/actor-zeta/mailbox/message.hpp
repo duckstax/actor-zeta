@@ -3,7 +3,6 @@
 #include <cassert>
 
 #include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/mailbox/priority.hpp>
 #include <actor-zeta/mailbox/id.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
@@ -13,10 +12,11 @@
 
 namespace actor_zeta { namespace mailbox {
 
-    ///
-    /// @brief
-    ///
-
+    /**
+     * @class message
+     * @brief
+     *
+     */
     class message final : public actor_zeta::detail::singly_linked<message> {
     public:
         // https://github.com/duckstax/actor-zeta/issues/118
@@ -27,13 +27,13 @@ namespace actor_zeta { namespace mailbox {
         message(message&& other) = default;
         message& operator=(message&&) = default;
         ~message() = default;
-        message(base::address_t /*sender*/, message_id /*name*/);
-        message(base::address_t /*sender*/, message_id /*name*/, actor_zeta::detail::rtt /*body*/);
+        message(actor_zeta::base::address_t /*sender*/, message_id /*name*/);
+        message(actor_zeta::base::address_t /*sender*/, message_id /*name*/, actor_zeta::detail::rtt /*body*/);
         message* prev;
         auto command() const noexcept -> message_id;
-        auto sender() & noexcept -> base::address_t&;
-        auto sender() && noexcept -> base::address_t&&;
-        auto sender() const& noexcept -> base::address_t const&;
+        auto sender() & noexcept -> actor_zeta::base::address_t&;
+        auto sender() && noexcept -> actor_zeta::base::address_t&&;
+        auto sender() const& noexcept -> actor_zeta::base::address_t const&;
 
         auto body() -> actor_zeta::detail::rtt&;
         operator bool();
@@ -41,7 +41,7 @@ namespace actor_zeta { namespace mailbox {
         bool is_high_priority() const;
 
     private:
-        base::address_t sender_;
+        actor_zeta::base::address_t sender_;
         message_id command_;
         actor_zeta::detail::rtt body_;
     };

@@ -118,7 +118,7 @@ namespace actor_zeta { namespace detail {
                 auto dummy_deficit = std::numeric_limits<deficit_type>::max();
                 return list_.next(dummy_deficit);
             }
-            return {nullptr, deleter_t(resource())};
+            return {nullptr, deleter_t<value_type>(resource())};
         }
 
         /// Consumes items from the queue until the queue is empty, there is not

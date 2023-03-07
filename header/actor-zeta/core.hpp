@@ -23,10 +23,16 @@ namespace actor_zeta {
     using base::actor_abstract;
     using base::address_t;
     using base::basic_async_actor;
-    using base::cooperative_supervisor;
+
+//    template<typename actor_traits>
+//    using cooperative_supervisor = base::cooperative_supervisor<actor_traits>;
+
     using base::make_handler;
-    using base::supervisor;
-    using base::supervisor_abstract;
+//    template<typename actor_traits>
+//    using supervisor = base::supervisor<actor_traits>;
+
+    //template<typename actor_traits>
+    //using supervisor_abstract = base::supervisor_abstract<actor_traits>;
 
     using mailbox::message;
     using mailbox::message_ptr;

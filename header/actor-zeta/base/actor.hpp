@@ -1,14 +1,17 @@
 #pragma once
 
-#include <actor-zeta/base/forwards.hpp>
+//#include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/detail/intrusive_ptr.hpp>
 #include <actor-zeta/detail/type_list.hpp>
 
 //smart actor
 namespace actor_zeta { namespace base {
-    ///
-    /// @brief An Actor's entity container
-    ///
+
+    /**
+     * @class actor
+     * @brief An Actor's entity container
+     *
+     */
     class actor final {
     public:
         actor() = default;
@@ -81,4 +84,5 @@ namespace actor_zeta { namespace base {
 
     static_assert(std::is_move_constructible<actor>::value, "");
     static_assert(not std::is_copy_constructible<actor>::value, "");
+
 }} // namespace actor_zeta::base

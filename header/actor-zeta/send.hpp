@@ -1,6 +1,5 @@
 #pragma once
 
-#include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/base/supervisor.hpp>
 #include <actor-zeta/base/supervisor_abstract.hpp>
 

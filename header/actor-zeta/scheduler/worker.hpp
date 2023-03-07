@@ -10,14 +10,14 @@
 
 namespace actor_zeta { namespace scheduler {
 
-    template<class Policy>
+    template<class Policy, class actor_traits>
     class scheduler_t;
 
-    template<class Policy>
+    template<class Policy, class actor_traits>
     class worker final : public execution_unit {
     public:
         using job_ptr = resumable*;
-        using scheduler_ptr = scheduler_t<Policy>*;
+        using scheduler_ptr = scheduler_t<Policy, actor_traits>*;
         using policy_data = typename Policy::worker_data;
 
         worker(size_t worker_id, scheduler_ptr worker_parent,

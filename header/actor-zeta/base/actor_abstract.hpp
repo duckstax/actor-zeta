@@ -4,14 +4,20 @@
 #include <utility>
 #include <string>
 
-#include "forwards.hpp"
+#include <actor-zeta/detail/ref_counted.hpp>
+#include <actor-zeta/mailbox/message.hpp>
 #include <actor-zeta/scheduler/forwards.hpp>
 
 namespace actor_zeta { namespace base {
-    ///
-    /// @brief Abstract concept of an actor
-    ///
 
+    class address_t;
+
+    /**
+     * @class actor_abstract
+     *
+     * @brief Abstract concept of an actor
+     *
+     */
     class actor_abstract : public ref_counted {
     public:
         // allow placement new (only)
@@ -81,21 +87,25 @@ namespace actor_zeta { namespace base {
 
     protected:
 
-        actor_abstract(std::string);
+        actor_abstract(
+//#ifdef DEBUG
+//            std::string type
+//#endif
+        );
         // prohibit copies, assignments, and heap allocations
         void* operator new(size_t);
         void* operator new[](size_t);
-        actor_abstract() = delete;
+        //actor_abstract() = delete;
         actor_abstract(const actor_abstract&) = delete;
         actor_abstract& operator=(const actor_abstract&) = delete;
-        ~actor_abstract() override;
+        ~actor_abstract() override {}
 
         virtual void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*) = 0;
 
-    private:
-#ifdef DEBUG
-        std::string type_;
-#endif
+//    private:
+//#ifdef DEBUG
+//        std::string type_;
+//#endif
 
     };
 

@@ -11,18 +11,18 @@ TEST_CASE("unique_function") {
 
     SECTION("ctor enable_if") {
 
-        auto l1 = [](int a, int b, int c) {};
-        auto l2 = [](int a, int b, int c) {};
+        auto l1 = [](int, int, int) {};
+        auto l2 = [](int, int, int) {};
 
         // test case as in header/actor-zeta/impl/handler.ipp
-        REQUIRE(action::test_same_decltype([f = std::move(l1)](actor_zeta::mailbox::message* msg) -> void {}));
-        REQUIRE(action::test_convertible([f = std::move(l2)](actor_zeta::mailbox::message* msg) -> void {}));
+        REQUIRE(action::test_same_decltype([f = std::move(l1)](actor_zeta::mailbox::message*) -> void {}));
+        REQUIRE(action::test_convertible([f = std::move(l2)](actor_zeta::mailbox::message*) -> void {}));
     }
     
     SECTION("ctor") {
         for (int i = 0; i < 1024 * 1024; ++i) {
-            auto l1 = [](int a, int b, int c) {};
-            action tmp(mr_ptr, [f = std::move(l1)](actor_zeta::mailbox::message* msg) -> void {});
+            auto l1 = [](int, int, int) {};
+            action tmp(mr_ptr, [f = std::move(l1)](actor_zeta::mailbox::message*) -> void {});
         }
     }
 }
@@ -37,18 +37,18 @@ TEST_CASE("unique_function pmr") {
 
     SECTION("ctor enable_if") {
 
-        auto l1 = [](int a, int b, int c) {};
-        auto l2 = [](int a, int b, int c) {};
+        auto l1 = [](int, int, int) {};
+        auto l2 = [](int, int, int) {};
 
         // test case as in header/actor-zeta/impl/handler.ipp
-        REQUIRE(action::test_same_decltype([f = std::move(l1)](actor_zeta::mailbox::message* msg) -> void {}));
-        REQUIRE(action::test_convertible([f = std::move(l2)](actor_zeta::mailbox::message* msg) -> void {}));
+        REQUIRE(action::test_same_decltype([f = std::move(l1)](actor_zeta::mailbox::message*) -> void {}));
+        REQUIRE(action::test_convertible([f = std::move(l2)](actor_zeta::mailbox::message*) -> void {}));
     }
     
     SECTION("ctor") {
         for (int i = 0; i < 1024 * 1024; ++i) {
-            auto l1 = [](int a, int b, int c) {};
-            action tmp(&pool, [f = std::move(l1)](actor_zeta::mailbox::message* msg) -> void {});
+            auto l1 = [](int, int, int) {};
+            action tmp(&pool, [f = std::move(l1)](actor_zeta::mailbox::message*) -> void {});
         }
     }
 }

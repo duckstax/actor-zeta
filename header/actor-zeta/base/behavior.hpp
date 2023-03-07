@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <set>
 #include <unordered_map>
 #include <unordered_set>
@@ -12,16 +13,52 @@
 
 namespace actor_zeta { namespace base {
 
-    void error_skip(const std::string& sender, const std::string& reciever, mailbox::message_id handler);
-    void error_skip(const std::string& reciever, mailbox::message_id handler);
+    /**
+     * @brief
+     *
+     * @param sender
+     * @param reciever
+     * @param handler
+     */
+    inline void error_skip(const char* sender, const char* reciever, mailbox::message_id handler) {
+        fprintf(stderr,
+            "WARNING >>>\nSkip, can't find handler: '%s' :: %llu\nsender: '%s'\nWARNING <<<\n",
+            reciever, handler.integer_value(), sender);
+    }
+    /**
+     * @brief
+     *
+     * @param reciever
+     * @param handler
+     */
+    inline void error_skip(const char* reciever, mailbox::message_id handler) {
+        fprintf(stderr,
+            "WARNING >>>\nSkip, can't find handler: '%s' :: %llu\nsender: no-sender\nWARNING <<<\n",
+            reciever, handler.integer_value());
+    }
 
-    class intrusive_behavior_t : protected actor_zeta::detail::pmr::memory_resource_base {
+    /**
+     * @class intrusive_behavior_t
+     * @brief
+     *
+     * @tparam actor_traits
+     */
+    template<typename actor_traits>
+    class intrusive_behavior_t {
+        using memory_resource_ptr = typename actor_traits::memory_resource_ptr;
+
+        memory_resource_ptr memory_resource_ = nullptr;
+
     protected:
         using key_type = mailbox::message_id;
         using value_type = action;
 
-        intrusive_behavior_t(actor_zeta::detail::pmr::memory_resource* memory_resource)
-            : actor_zeta::detail::pmr::memory_resource_base(memory_resource) {}
+        inline auto resource() const -> memory_resource_ptr {
+            return memory_resource_;
+        }
+
+        intrusive_behavior_t(memory_resource_ptr mr)
+            : memory_resource_(mr ? mr : actor_zeta::detail::pmr::get_default_resource()) { assert(resource()); }
         virtual ~intrusive_behavior_t() = default;
 
         intrusive_behavior_t(intrusive_behavior_t&&) = default;
@@ -81,12 +118,48 @@ namespace actor_zeta { namespace base {
             on(key, make_handler(resource(), std::forward<F>(f), ptr));
         }
 
-        auto message_types() const -> std::set<key_type>;
+        auto message_types() const -> typename actor_traits::template set_type<key_type>;
 
     private:
-        using handler_storage_t = std::unordered_map<key_type, value_type>;
+        using handler_storage_t = typename actor_traits::template unordered_map_type<key_type, value_type>;
         bool on(key_type name, value_type handler);
         handler_storage_t handlers_;
     };
+
+    inline void error_duplicate_handler(mailbox::message_id error) {
+        fprintf(stderr,
+            "Duplicate\nHandler: %llu\nDuplicate\n", error.integer_value());
+    }
+
+    inline void error_add_handler(mailbox::message_id error) {
+        fprintf(stderr,
+            "Error add handler\nHandler: %llu\nError add handler\n", error.integer_value());
+    }
+
+    template<typename actor_traits>
+    bool intrusive_behavior_t<actor_traits>::on(key_type name, value_type handler) {
+        auto it = handlers_.find(name);
+        bool status = false;
+        if (it == handlers_.end()) {
+            auto it1 = handlers_.emplace(name, std::move(handler));
+            status = it1.second;
+            if (status == false) {
+                error_add_handler(name);
+            }
+        } else {
+            error_duplicate_handler(name);
+        }
+
+        return status;
+    }
+
+    template<typename actor_traits>
+    auto intrusive_behavior_t<actor_traits>::message_types() const -> typename actor_traits::template set_type<key_type> {
+        typename actor_traits::template set_type<key_type> types{resource()};
+        for (const auto& i : handlers_) {
+            types.emplace(i.first);
+        }
+        return types;
+    }
 
 }} // namespace actor_zeta::base

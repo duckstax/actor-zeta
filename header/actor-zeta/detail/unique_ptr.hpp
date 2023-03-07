@@ -15,10 +15,8 @@ namespace actor_zeta { namespace detail {
             assert(target);
             for (int i = 0; i < size; ++i) {
                 target[i].~Tp_();
-                //std::allocator_traits<_Alloc>::destroy(*allocator_, &target[i]);
             }
             pmr::deallocate_ptr(mr_, &target);
-            //std::allocator_traits<_Alloc>::deallocate(*allocator_, target, sizeof(Tp_) * size);
         }
     };
 
