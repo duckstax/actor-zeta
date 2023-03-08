@@ -79,9 +79,9 @@ namespace actor_zeta { namespace base {
         return instance;
     }
 
-    template<class Value>
-    behavior_t& behavior(behavior_t& instance, Value&& f) {
-        instance.assign(mailbox::message_id{}, make_handler(std::forward<Value>(f)));
+    template<class F>
+    behavior_t& behavior(behavior_t& instance, F&& f) {
+        instance.assign(mailbox::message_id{},std::move(action(std::forward<F>(f))));
         return instance;
     }
 //// todo: rename behavior
