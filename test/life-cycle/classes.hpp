@@ -70,7 +70,7 @@ public:
     void start() {}
     void stop() {}
 
-    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* override {
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* {
         TRACE("+++");
         executor_impl_counter++;
         return executor_.get();

@@ -13,7 +13,7 @@ namespace actor_zeta { namespace base {
     public:
         ~supervisor_abstract() override;
         auto scheduler() noexcept -> scheduler::scheduler_abstract_t*;
-        auto resource() const noexcept-> detail::pmr::memory_resource*;
+        auto resource() const noexcept -> detail::pmr::memory_resource*;
         auto address() noexcept -> address_t;
 
     protected:
@@ -37,30 +37,25 @@ namespace actor_zeta { namespace base {
     class cooperative_supervisor : public supervisor_abstract {
     public:
         using supervisor_abstract::address;
+
     protected:
         using supervisor_abstract::resource;
         using supervisor_abstract::scheduler;
-        using supervisor_abstract::supervisor_abstract;
         using supervisor_abstract::set_current_message;
+        using supervisor_abstract::supervisor_abstract;
 
     protected:
-
-        auto type_impl()  const noexcept -> const char* const final {
-            auto const *ptr = static_cast<const Supervisor*>(this);
-            return ptr->make_type();
-        }
-
-         template<
+        template<
             class Inserter,
             class... Args>
         auto spawn_actor(const Inserter& inserter, Args&&... args) -> address_t {
-            using Inserter_remove_reference =  type_traits::remove_reference_t<Inserter>;
-            using call_trait =  type_traits::get_callable_trait_t<Inserter_remove_reference>;
+            using Inserter_remove_reference = type_traits::remove_reference_t<Inserter>;
+            using call_trait = type_traits::get_callable_trait_t<Inserter_remove_reference>;
             using Actor = type_traits::type_list_at_t<typename call_trait::args_types, 0>;
-            static_assert(std::is_pointer<Actor>::value,"not a pointer");
+            static_assert(std::is_pointer<Actor>::value, "not a pointer");
             using Actor_clear_type = type_traits::decay_t<Actor>;
             using Actor_remove_pointer_type = typename std::remove_pointer<Actor_clear_type>::type;
-            static_assert(std::is_base_of<actor_abstract, Actor_remove_pointer_type>::value,"not heir");
+            static_assert(std::is_base_of<actor_abstract, Actor_remove_pointer_type>::value, "not heir");
 
             auto allocate_byte = sizeof(Actor_remove_pointer_type);
             auto allocate_byte_alignof = alignof(Actor_remove_pointer_type);
@@ -75,13 +70,13 @@ namespace actor_zeta { namespace base {
             class Inserter,
             class... Args>
         auto spawn_supervisor(const Inserter& inserter, Args&&... args) -> address_t {
-            using Inserter_remove_reference =  type_traits::remove_reference_t<Inserter>;
-            using call_trait =  type_traits::get_callable_trait_t<Inserter_remove_reference>;
+            using Inserter_remove_reference = type_traits::remove_reference_t<Inserter>;
+            using call_trait = type_traits::get_callable_trait_t<Inserter_remove_reference>;
             using SupervisorChildren = type_traits::type_list_at_t<typename call_trait::args_types, 0>;
-            static_assert(std::is_pointer<SupervisorChildren>::value,"not a pointer");
+            static_assert(std::is_pointer<SupervisorChildren>::value, "not a pointer");
             using SupervisorChildren_clear_type = type_traits::decay_t<SupervisorChildren>;
             using SupervisorChildren_remove_pointer_type = typename std::remove_pointer<SupervisorChildren_clear_type>::type;
-            static_assert(std::is_base_of<supervisor_abstract, SupervisorChildren_remove_pointer_type>::value,"not heir");
+            static_assert(std::is_base_of<supervisor_abstract, SupervisorChildren_remove_pointer_type>::value, "not heir");
 
             auto allocate_byte = sizeof(SupervisorChildren_remove_pointer_type);
             auto allocate_byte_alignof = alignof(SupervisorChildren_remove_pointer_type);
@@ -91,7 +86,16 @@ namespace actor_zeta { namespace base {
             inserter(supervisor);
             return address;
         }
+
     private:
+        auto scheduler_impl() noexcept -> scheduler::scheduler_abstract_t* final {
+            return self()->make_scheduler();
+        }
+
+        auto type_impl() const noexcept -> const char* const final {
+            auto const* ptr = static_cast<const Supervisor*>(this);
+            return ptr->make_type();
+        }
 
         auto self() noexcept -> Supervisor* {
             return static_cast<Supervisor*>(this);
@@ -101,7 +105,6 @@ namespace actor_zeta { namespace base {
             return static_cast<Supervisor*>(this);
         }
     };
-
 
     using supervisor_t = intrusive_ptr<supervisor_abstract>;
 

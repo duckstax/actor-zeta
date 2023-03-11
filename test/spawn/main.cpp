@@ -63,7 +63,7 @@ protected:
             });
     }
 
-    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* override {
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t*  {
         return executor_.get();
     }
 
@@ -124,6 +124,10 @@ public:
         return "dummy_supervisor";
     }
 
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* {
+        return executor_.get();
+    }
+
 protected:
     actor_zeta::behavior_t make_behavior() {
         return actor_zeta::behavior(
@@ -144,10 +148,6 @@ protected:
                     }
                 }
             });
-    }
-
-    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* override {
-        return executor_.get();
     }
 
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {

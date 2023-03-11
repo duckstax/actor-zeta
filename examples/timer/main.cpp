@@ -93,7 +93,7 @@ protected:
                 }
             });
     }
-    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final { return e_.get(); }
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* final { return e_.get(); }
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));

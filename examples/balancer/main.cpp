@@ -71,7 +71,7 @@ public:
     }
 
 protected:
-    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* final {
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* final {
         return e_;
     }
 
