@@ -31,7 +31,7 @@ public:
         : cooperative_supervisor<supervisor_lite>(ptr)
         , create_(resource())
         , broadcast_(resource())
-        , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(2, 1000), thread_pool_deleter){
+        , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(2, 1000), thread_pool_deleter) {
         actor_zeta::behavior(create_, system_command::create, this, &supervisor_lite::create);
         actor_zeta::behavior(broadcast_, system_command::broadcast, this, &supervisor_lite::broadcast_impl);
         e_->start();
@@ -78,9 +78,9 @@ public:
         enqueue(std::move(msg));
     }
 
-protected:
     auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* { return e_.get(); }
 
+protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         set_current_message(std::move(msg));
         make_behavior()(current_message());

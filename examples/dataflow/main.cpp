@@ -91,7 +91,7 @@ public:
             data.data_index = counter;
             for (const auto& addr : address_book_) {
                 packets_a++;
-                data.time_point = std::chrono::system_clock::now();                
+                data.time_point = std::chrono::system_clock::now();
                 actor_zeta::send(addr.second, address(), command_t::process_data, data);
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(producer_latency_ms_));
@@ -132,7 +132,8 @@ public:
         for (auto i = 1; i <= count_actors_; ++i) {
             auto addr = spawn_actor([this, i](actor_test_t* ptr) {
                 actors_.emplace(i, ptr);
-            }, consumer_latency_ms_);
+            },
+                                    consumer_latency_ms_);
             address_book_.emplace(i, std::move(addr));
             actor_zeta::send(address_book_.at(i), address(), command_t::add_address, address(), 0);
         }
@@ -160,18 +161,18 @@ public:
     auto make_type() const noexcept -> const char* const {
         return name_.c_str();
     }
-protected:
 
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* {
+        return e_.get();
+    }
+
+protected:
     actor_zeta::behavior_t make_behavior() {
         return actor_zeta::behavior(
             resource(),
             [](actor_zeta::message* msg) -> void {
-                    std::cerr<< msg->command() << std::endl;
+                std::cerr << msg->command() << std::endl;
             });
-    }
-
-    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* override {
-        return e_.get();
     }
 
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
@@ -210,8 +211,8 @@ public:
         , process_data_(resource())
         , sup_ptr_(ptr)
         , consumer_latency_ms_(consumer_latency_ms) {
-        actor_zeta::behavior(add_address_,command_t::add_address,this, &actor_test_t::add_address);
-        actor_zeta::behavior(process_data_,command_t::process_data,this, &actor_test_t::process_data);
+        actor_zeta::behavior(add_address_, command_t::add_address, this, &actor_test_t::add_address);
+        actor_zeta::behavior(process_data_, command_t::process_data, this, &actor_test_t::process_data);
     }
 
     auto make_type() const noexcept -> const char* const {
@@ -261,6 +262,7 @@ public:
         //std::cout << std::this_thread::get_id() << " :: " << __func__ << " :: ms_dur " << ms_dur << " OUT >>>" << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(consumer_latency_ms_));
     }
+
 private:
     const std::string name_;
     actor_zeta::behavior_t add_address_;
@@ -305,20 +307,17 @@ namespace args {
 
     const size_t memory_limit_mb_default = 4 * 1024;
 
-}
+} // namespace args
 
 int main(int argc, char** argv) {
-
-    std::map<std::string, size_t> args_set = {{
-        {args::count_actors, args::count_actors_default},
-        {args::count_producers, args::count_producers_default},
-        {args::datasize, args::datasize_default},
-        {args::num_worker_threads, args::num_worker_threads_default},
-        {args::max_throughput_param, args::max_throughput_param_default},
-        {args::producer_latency_ms, args::producer_latency_ms_default},
-        {args::consumer_latency_ms, args::consumer_latency_ms_default},
-        {args::memory_limit_mb, args::memory_limit_mb_default}
-    }};
+    std::map<std::string, size_t> args_set = {{{args::count_actors, args::count_actors_default},
+                                               {args::count_producers, args::count_producers_default},
+                                               {args::datasize, args::datasize_default},
+                                               {args::num_worker_threads, args::num_worker_threads_default},
+                                               {args::max_throughput_param, args::max_throughput_param_default},
+                                               {args::producer_latency_ms, args::producer_latency_ms_default},
+                                               {args::consumer_latency_ms, args::consumer_latency_ms_default},
+                                               {args::memory_limit_mb, args::memory_limit_mb_default}}};
 
     auto print_help = [&args_set]() {
         for (auto& arg : args_set) {
