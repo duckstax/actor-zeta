@@ -10,7 +10,7 @@
 #include <actor-zeta.hpp>
 #include <actor-zeta/clock/clock_thread_safe.hpp>
 
-constexpr  static uint64_t command_alarm = 0;
+constexpr static uint64_t command_alarm = 0;
 static std::atomic<uint64_t> alarm_counter{0};
 
 using actor_zeta::pmr::memory_resource;
@@ -52,13 +52,13 @@ auto thread_pool_deleter = [](shared_work* ptr) {
 class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
 public:
     supervisor_lite(memory_resource* ptr)
-        :  actor_zeta::cooperative_supervisor<supervisor_lite>(ptr)\
+        : actor_zeta::cooperative_supervisor<supervisor_lite>(ptr)
         , alarm_(resource())
         , e_(new shared_work(
                  1,
                  100),
              thread_pool_deleter) {
-        actor_zeta::behavior(alarm_,command_alarm,this, &supervisor_lite::alarm);
+        actor_zeta::behavior(alarm_, command_alarm, this, &supervisor_lite::alarm);
         e_->start();
     }
 
@@ -76,9 +76,10 @@ public:
         return e_->clock();
     }
 
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* { return e_.get(); }
 
 protected:
-    actor_zeta::behavior_t make_behavior()  {
+    actor_zeta::behavior_t make_behavior() {
         return actor_zeta::behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
@@ -93,7 +94,6 @@ protected:
                 }
             });
     }
-    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* final { return e_.get(); }
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
