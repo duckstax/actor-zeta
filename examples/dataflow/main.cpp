@@ -157,7 +157,7 @@ public:
         memchecker_thread_.join();
     }
 
-    auto make_type() /*const*/ noexcept -> const char* const {
+    auto make_type() const noexcept -> const char* const {
         return name_.c_str();
     }
 protected:
@@ -214,7 +214,7 @@ public:
         actor_zeta::behavior(process_data_,command_t::process_data,this, &actor_test_t::process_data);
     }
 
-    auto make_type() /*const*/ noexcept -> const char* const {
+    auto make_type() const noexcept -> const char* const {
         return name_.c_str();
     }
 

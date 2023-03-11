@@ -69,8 +69,9 @@ namespace actor_zeta { namespace base {
             inbox().try_block(); //todo: bug
         }
 
-        auto type_impl() /*const*/ noexcept -> const char* const final {
-            return self()->make_type();
+        auto type_impl() const noexcept -> const char* const final {
+            auto const *ptr = static_cast<const Actor*>(this);
+            return ptr->make_type();
         }
 
         template<class T>

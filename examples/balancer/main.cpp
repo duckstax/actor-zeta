@@ -32,9 +32,8 @@ enum class collection_method : uint64_t {
 
 class collection_t final : public actor_zeta::cooperative_supervisor<collection_t> {
 public:
-    collection_t(actor_zeta::pmr::memory_resource * resource, std::string name)
+    collection_t(actor_zeta::pmr::memory_resource * resource)
         : actor_zeta::cooperative_supervisor<collection_t>(resource)
-        , name_(std::move(name))
         , balancer_(resource){
         actor_zeta::behavior(balancer_, [this](actor_zeta::message* msg) -> void {
             auto index = cursor_ % actors_.size();
@@ -48,7 +47,7 @@ public:
         });
     }
 
-    auto make_type() /*const*/ noexcept -> const char* const {
+    auto make_type() const noexcept -> const char* const {
         return "collection";
     }
 
@@ -82,7 +81,6 @@ protected:
     }
 
 private:
-    const std::string name_;
     actor_zeta::behavior_t balancer_;
     actor_zeta::scheduler_abstract_t* e_;
     uint32_t  cursor_ = 0;
@@ -96,7 +94,7 @@ public:
 
     }
 
-    auto make_type() /*const*/ noexcept -> const char* const {
+    auto make_type() const noexcept -> const char* const {
         return "collection";
     }
 
@@ -126,18 +124,11 @@ static constexpr auto sleep_milliseconds_time = std::chrono::milliseconds(10);
 auto main() -> int {
 
     auto* resource = actor_zeta::pmr::get_default_resource();
-
-    actor_zeta::send(manager_dispatcher, manager_database->address(), "add_link");
-    std::this_thread::sleep_for(sleep_milliseconds_time);
-    actor_zeta::send(manager_database, manager_dispatcher->address(), "add_link");
-    std::this_thread::sleep_for(sleep_milliseconds_time);
-    actor_zeta::send(manager_dispatcher, actor_zeta::address_t::empty_address(), "create", std::string("dispatcher"));
-    std::this_thread::sleep_for(sleep_milliseconds_time);
-    actor_zeta::send(manager_dispatcher, actor_zeta::address_t::empty_address(), "create_database", std::string("database_test"));
-    std::this_thread::sleep_for(sleep_milliseconds_time);
-    actor_zeta::send(manager_dispatcher, actor_zeta::address_t::empty_address(), "create_collection", std::string("database_test"), std::string("collection_test"));
-    std::this_thread::sleep_for(sleep_milliseconds_time);
-    actor_zeta::send(manager_dispatcher, actor_zeta::address_t::empty_address(), "insert", std::string("database_test"),std::string("collection_test"), 1, 5);
+    auto collection =  actor_zeta::spawn<collection_t>(resource);
+    collection->create();
+    collection->create();
+    collection->create();
+    actor_zeta::send(*collection, actor_zeta::address_t::empty_address(), "insert", std::string("database_test"),std::string("collection_test"), 1, 5);
 
     std::this_thread::sleep_for(sleep_time);
 

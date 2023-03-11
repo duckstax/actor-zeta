@@ -38,7 +38,7 @@ public:
         actor_zeta::behavior(create_test_handlers_, dummy_supervisor_command::create_test_handlers, this, &dummy_supervisor::create_test_handlers);
     }
 
-    auto make_type() /*const*/ noexcept -> const char* const {
+    auto make_type() const noexcept -> const char* const {
         return "dummy_supervisor";
     }
 

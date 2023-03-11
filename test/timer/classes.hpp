@@ -33,7 +33,7 @@ public:
     ~supervisor_lite() override = default;
 
 
-    auto make_type() /*const*/ noexcept -> const char* const {
+    auto make_type() const noexcept -> const char* const {
         return "supervisor_lite";
     }
 

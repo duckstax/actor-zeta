@@ -43,7 +43,7 @@ public:
         });
     }
 
-    auto make_type() /*const*/ noexcept -> const char* const {
+    auto make_type() const noexcept -> const char* const {
         return "network";
     }
 
@@ -133,7 +133,7 @@ public:
             });
     }
 
-    auto make_type() /*const*/ noexcept -> const char* const {
+    auto make_type() const noexcept -> const char* const {
         return "worker_t";
     }
 
