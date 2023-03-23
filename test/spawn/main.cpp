@@ -30,19 +30,20 @@ class storage_t;
 
 class dummy_supervisor_sub final : public actor_zeta::cooperative_supervisor<dummy_supervisor> {
 public:
-    dummy_supervisor_sub(dummy_supervisor* ptr, std::string name)
+    dummy_supervisor_sub(dummy_supervisor* ptr)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr)
-        , name_(std::move(name))
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
-        scheduler()->start();
+        ///auto * ptr_sheduler = scheduler();
+        ///ptr_sheduler->start();
+        executor_->start();
         supervisor_sub_counter++;
     }
 
-    dummy_supervisor_sub(memory_resource* ptr, std::string name)
+    dummy_supervisor_sub(memory_resource* ptr)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr)
-        , name_(std::move(name))
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
-        scheduler()->start();
+        ///scheduler()->start();
+        executor_->start();
         supervisor_sub_counter++;
     }
 
@@ -51,7 +52,11 @@ public:
     }
 
     auto make_type() const noexcept -> const char* const {
-        return name_.c_str();
+        return "dummy_supervisor_sub";
+    }
+
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t*  {
+        return executor_.get();
     }
 
 protected:
@@ -63,10 +68,6 @@ protected:
             });
     }
 
-    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t*  {
-        return executor_.get();
-    }
-
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
@@ -75,7 +76,6 @@ protected:
     }
 
 private:
-    const std::string  name_;
     std::unique_ptr<actor_zeta::test::scheduler_test_t> executor_;
 };
 
@@ -108,16 +108,14 @@ public:
         spawn_supervisor(
             [this](dummy_supervisor_sub* ptr) {
                 supervisor_.emplace_back(ptr);
-            },
-            this, std::string("test_name"));
+            },this);
     }
 
     void create_supervisor_custom_resource() {
         spawn_supervisor(
             [this](dummy_supervisor_sub* ptr) {
                 supervisor_.emplace_back(ptr);
-            },
-            actor_zeta::pmr::get_default_resource(), std::string("test_name"));
+            },resource());
     }
 
     auto make_type() const noexcept -> const char* const {

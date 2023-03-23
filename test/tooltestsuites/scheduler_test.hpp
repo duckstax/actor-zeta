@@ -21,9 +21,10 @@ namespace actor_zeta { namespace test {
         size_t advance_time(clock::clock_t::duration_type);
         clock_test& clock() noexcept;
 
-    protected:
+    ///protected:
         void start() override;
         void stop() override;
+    protected:
         void enqueue(scheduler::resumable* ptr) override;
 
     private:
