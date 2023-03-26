@@ -37,12 +37,13 @@ public:
         return "supervisor_lite";
     }
 
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* { return executor_.get(); }
+
 protected:
 
     void alarm() {
         alarm_counter += 1;
     }
-
 
     actor_zeta::behavior_t make_behavior() {
         return actor_zeta::behavior(
@@ -57,7 +58,6 @@ protected:
             });
     }
 
-    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* { return executor_.get(); }
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
