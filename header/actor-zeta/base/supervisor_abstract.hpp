@@ -29,7 +29,7 @@ namespace actor_zeta { namespace base {
 
     private:
         supervisor_abstract(supervisor_abstract*);
-        mailbox::message* current_message_;
+        mailbox::message_ptr current_message_;
         detail::pmr::memory_resource* memory_resource_;
     };
 

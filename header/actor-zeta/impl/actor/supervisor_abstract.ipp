@@ -40,11 +40,11 @@ namespace actor_zeta { namespace base {
     supervisor_abstract::~supervisor_abstract() {}
 
     auto supervisor_abstract::current_message() -> mailbox::message* {
-        return current_message_;
+        return current_message_.get();
     }
 
     auto supervisor_abstract::set_current_message(mailbox::message_ptr msg) -> void {
-        current_message_ = msg.release();
+        current_message_ = std::move(msg);
     }
 
     auto supervisor_abstract::resource() const noexcept -> detail::pmr::memory_resource* {
