@@ -37,10 +37,9 @@ namespace actor_zeta { namespace base {
     class cooperative_supervisor : public supervisor_abstract {
     public:
         using supervisor_abstract::address;
-
-    protected:
         using supervisor_abstract::resource;
         using supervisor_abstract::scheduler;
+    protected:
         using supervisor_abstract::set_current_message;
         using supervisor_abstract::supervisor_abstract;
 

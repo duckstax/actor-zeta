@@ -1,0 +1,54 @@
+FROM ubuntu:16.04
+
+ENV TZ=America/US
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update && apt upgrade -y
+RUN apt install -y build-essential curl tar checkinstall libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev openssl
+RUN mkdir -p $HOME/opt \
+    && cd $HOME/opt \
+    && curl -O https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz \
+    && tar -xzf Python-3.6.4.tgz  \
+    && cd Python-3.6.4/ \
+    && ./configure --enable-shared --enable-optimizations --prefix=/usr/local LDFLAGS="-Wl,--rpath=/usr/local/lib" \
+    && make altinstall
+
+RUN python3.6 -m  pip install --no-cache-dir conan==1.59.0 cmake==3.21.0
+
+RUN apt install -y software-properties-common
+RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test
+RUN apt install -y gcc-4.8 g++-4.8 ninja-build  \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 100 \
+    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 100 \
+     && apt clean \
+    && rm -rf /var/lib/apt/lists/* \
+
+WORKDIR /app
+
+COPY ./conanfile.txt ./conanfile.txt
+
+RUN conan profile new default --detect \
+    && conan profile update settings.compiler.libcxx=libstdc++11 default\
+    && conan profile update settings.compiler=gcc default \
+    && conan profile update settings.compiler.version=4.8 default \
+    && conan profile update env.CXX=g++ default \
+    && conan profile update env.CC=gcc default \
+    && conan remote add cyberduckninja http://conan.cyberduckninja.com:9300 \
+    && conan install -if build . --build missing -s build_type=Release -s compiler.libcxx=libstdc++11
+    # conan install ${{github.workspace}}/build/.. -if ${{github.workspace}}/build --build=missing -s build_type=Release
+
+COPY ./header ./header
+COPY ./source ./source
+COPY ./test ./test
+COPY ./benchmark ./benchmark
+COPY ./examples ./examples
+COPY ./cmake ./cmake
+COPY ./CMakeLists.txt ./CMakeLists.txt
+WORKDIR ./build
+
+RUN ls
+RUN cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON -DDEV_MODE=ON && \
+    cmake --build .  --target all
+
+RUN ctest -C Release --output-on-failure #--extra-verbose  #--rerun-failed -R message-id
+
