@@ -24,7 +24,7 @@ public:
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr)
         , create_(resource())
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
-        actor_zeta::behavior(create_,command_t::create,this, &dummy_supervisor::create);
+        actor_zeta::make_behavior(create_,command_t::create,this, &dummy_supervisor::create);
         scheduler()->start();
     }
 
@@ -45,8 +45,8 @@ public:
 
 protected:
 
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command()) {
@@ -60,7 +60,7 @@ protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
-            make_behavior()(current_message());
+            behavior()(current_message());
         }
     }
 
@@ -81,8 +81,8 @@ public:
         return "storage";
     }
 
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
 

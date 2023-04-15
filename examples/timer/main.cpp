@@ -58,7 +58,7 @@ public:
                  1,
                  100),
              thread_pool_deleter) {
-        actor_zeta::behavior(alarm_, command_alarm, this, &supervisor_lite::alarm);
+        actor_zeta::make_behavior(alarm_, command_alarm, this, &supervisor_lite::alarm);
         e_->start();
     }
 
@@ -79,8 +79,8 @@ public:
     auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* { return e_.get(); }
 
 protected:
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command()) {
@@ -97,7 +97,7 @@ protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
-            make_behavior()(current_message());
+            behavior()(current_message());
         }
     }
 

@@ -163,7 +163,7 @@ namespace actor_zeta { namespace base {
         }
 
         bool activate(scheduler::execution_unit* ctx) {
-            //assert(ctx != nullptr);
+            assert(ctx != nullptr);
             if (ctx) {
                 context(ctx);
             }
@@ -173,7 +173,7 @@ namespace actor_zeta { namespace base {
         auto reactivate(mailbox::message& x) -> void {
             current_message_ = &x;
             if (stack_.empty()) {
-                stack_.emplace_back(std::move(self()->make_behavior()));
+                stack_.emplace_back(std::move(self()->behavior()));
             } else {
                 ///todo: coroutine support
             }

@@ -32,8 +32,8 @@ public:
         , create_(resource())
         , broadcast_(resource())
         , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(2, 1000), thread_pool_deleter) {
-        actor_zeta::behavior(create_, system_command::create, this, &supervisor_lite::create);
-        actor_zeta::behavior(broadcast_, system_command::broadcast, this, &supervisor_lite::broadcast_impl);
+        actor_zeta::make_behavior(create_, system_command::create, this, &supervisor_lite::create);
+        actor_zeta::make_behavior(broadcast_, system_command::broadcast, this, &supervisor_lite::broadcast_impl);
         e_->start();
     }
 
@@ -47,8 +47,8 @@ public:
         return "network";
     }
 
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command()) {
@@ -83,7 +83,7 @@ public:
 protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         set_current_message(std::move(msg));
-        make_behavior()(current_message());
+        behavior()(current_message());
     }
 
 private:
@@ -112,12 +112,12 @@ public:
         : actor_zeta::basic_actor<worker_t>(ptr)
         , download_(resource())
         , work_data_(resource()) {
-        actor_zeta::behavior(download_, command_t::download, this, &worker_t::download);
-        actor_zeta::behavior(work_data_, command_t::work_data, this, &worker_t::work_data);
+        actor_zeta::make_behavior(download_, command_t::download, this, &worker_t::download);
+        actor_zeta::make_behavior(work_data_, command_t::work_data, this, &worker_t::work_data);
     }
 
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command()) {

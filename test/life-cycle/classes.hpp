@@ -34,16 +34,16 @@ public:
         scheduler()->start();
         constructor_counter++;
 
-        actor_zeta::behavior(create_storage_, dummy_supervisor_command::create_storage, this, &dummy_supervisor::create_storage);
-        actor_zeta::behavior(create_test_handlers_, dummy_supervisor_command::create_test_handlers, this, &dummy_supervisor::create_test_handlers);
+        actor_zeta::make_behavior(create_storage_, dummy_supervisor_command::create_storage, this, &dummy_supervisor::create_storage);
+        actor_zeta::make_behavior(create_test_handlers_, dummy_supervisor_command::create_test_handlers, this, &dummy_supervisor::create_test_handlers);
     }
 
     auto make_type() const noexcept -> const char* const {
         return "dummy_supervisor";
     }
 
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command()) {
@@ -98,7 +98,7 @@ public:
     void enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) override {
         enqueue_base_counter++;
         set_current_message(std::move(msg));
-        make_behavior()(current_message());
+        behavior()(current_message());
     }
 
 private:
@@ -146,30 +146,30 @@ public:
         , add_(resource())
         , delete_table_(resource())
         , create_table_(resource()) {
-        actor_zeta::behavior(
+        actor_zeta::make_behavior(
             init_,
             storage_names::init, this,
             &storage_t::init);
 
-        actor_zeta::behavior(
+        actor_zeta::make_behavior(
             search_,
             storage_names::search,
             this,
             &storage_t::search);
 
-        actor_zeta::behavior(
+        actor_zeta::make_behavior(
             add_,
             storage_names::add,
             this,
             &storage_t::add);
 
-        actor_zeta::behavior(
+        actor_zeta::make_behavior(
             delete_table_,
             storage_names::delete_table,
             this,
             &storage_t::delete_table);
 
-        actor_zeta::behavior(
+        actor_zeta::make_behavior(
             create_table_,
             storage_names::create_table,
             this,
@@ -182,8 +182,8 @@ public:
         return "storage";
     }
 
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command().integer_value()) {
@@ -298,7 +298,7 @@ public:
         , ptr_3_(resource())
         , ptr_4_(resource()) {
         init();
-        actor_zeta::behavior(
+        actor_zeta::make_behavior(
             ptr_0_,
             test_handlers_names::ptr_0,
             []() {
@@ -306,21 +306,21 @@ public:
                 ptr_0_counter++;
             });
 
-        actor_zeta::behavior(
+        actor_zeta::make_behavior(
             ptr_1_,
             test_handlers_names::ptr_1,
             []() {
                 TRACE("+++");
                 ptr_1_counter++;
             });
-        actor_zeta::behavior(
+        actor_zeta::make_behavior(
             ptr_2_,
             test_handlers_names::ptr_2,
             [](int&) {
                 TRACE("+++");
                 ptr_2_counter++;
             });
-        actor_zeta::behavior(
+        actor_zeta::make_behavior(
             ptr_3_,
             test_handlers_names::ptr_3,
             [](int data_1, int& data_2) {
@@ -329,7 +329,7 @@ public:
                 ptr_3_counter++;
             });
 
-        actor_zeta::behavior(
+        actor_zeta::make_behavior(
             ptr_4_,
             test_handlers_names::ptr_4,
             [](int data_1, int& data_2, const std::string& data_3) {
@@ -343,8 +343,8 @@ public:
         return "test_handlers";
     }
 
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command().integer_value()) {

@@ -22,7 +22,7 @@ public:
         : cooperative_supervisor(ptr)
         , alarm_(resource())
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
-        actor_zeta::behavior(alarm_,alarm_id,this, &supervisor_lite::alarm);
+        actor_zeta::make_behavior(alarm_,alarm_id,this, &supervisor_lite::alarm);
         scheduler()->start();
     }
 
@@ -45,8 +45,8 @@ protected:
         alarm_counter += 1;
     }
 
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command()) {
@@ -61,7 +61,7 @@ protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
-            make_behavior()(current_message());
+            behavior()(current_message());
         }
     }
 

@@ -24,7 +24,7 @@ namespace actor_zeta {
     using base::supervisor_abstract;
     using base::basic_actor;
     using base::behavior_t;
-    using base::behavior;
+    using base::make_behavior;
     using base::actor_t;
     using base::supervisor_t;
 
@@ -38,7 +38,7 @@ namespace actor_zeta {
     using scheduler::scheduler_t;
     using scheduler::work_sharing;
 
-
+/*
     template<
         class T,
         class = type_traits::enable_if_t<std::is_base_of<actor_abstract, T>::value>>
@@ -67,5 +67,5 @@ namespace actor_zeta {
     supervisor_t make_supervisor(T* ptr){
 
     }
-
+*/
 } // namespace actor_zeta

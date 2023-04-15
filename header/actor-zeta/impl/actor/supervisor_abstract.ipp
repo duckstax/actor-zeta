@@ -15,13 +15,6 @@
 
 namespace actor_zeta { namespace base {
 
-    static void error_sync_contacts_in_supervisor(const std::string& name, const std::string& error) {
-        std::cerr << "WARNING" << '\n';
-        std::cerr << "Actor name : " << name << '\n';
-        std::cerr << "Not initialization address type:" << error << '\n';
-        std::cerr << "WARNING" << std::endl;
-    }
-
     using detail::aligned_allocate;
     using detail::aligned_deallocate;
     using detail::DEFAULT_ALIGNMENT;
@@ -39,11 +32,11 @@ namespace actor_zeta { namespace base {
 
     supervisor_abstract::~supervisor_abstract() {}
 
-    auto supervisor_abstract::current_message() -> mailbox::message* {
+    auto supervisor_abstract::current_message() noexcept -> mailbox::message* {
         return current_message_.get();
     }
 
-    auto supervisor_abstract::set_current_message(mailbox::message_ptr msg) -> void {
+    auto supervisor_abstract::set_current_message(mailbox::message_ptr msg) noexcept -> void {
         current_message_ = std::move(msg);
     }
 
@@ -57,6 +50,9 @@ namespace actor_zeta { namespace base {
 
     auto supervisor_abstract::address() noexcept -> address_t {
         return address_t(this);
+    }
+    auto supervisor_abstract::current_message_own() noexcept -> mailbox::message_ptr {
+        return std::move(current_message_);
     }
 
 }} // namespace actor_zeta::base

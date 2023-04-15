@@ -9,12 +9,13 @@
 
 #include <actor-zeta.hpp>
 
-std::atomic_int count_actor{0};
-std::atomic_int count_supervisor{0};
 
-std::atomic_int count_database{0};
+std::atomic_int count_collection_part{0};
 std::atomic_int count_collection{0};
-std::atomic_int count_dispatcher{0};
+std::atomic_int count_balancer{0};
+std::atomic_int count_insert{0};
+std::atomic_int count_find{0};
+
 
 auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
     ptr->stop();
@@ -32,13 +33,10 @@ enum class collection_method : uint64_t {
 
 class collection_t final : public actor_zeta::cooperative_supervisor<collection_t> {
 public:
-    collection_t(actor_zeta::pmr::memory_resource* resource)
+    collection_t(actor_zeta::pmr::memory_resource* resource,actor_zeta::scheduler_abstract_t*scheduler)
         : actor_zeta::cooperative_supervisor<collection_t>(resource)
-        , balancer_(resource) {
-        actor_zeta::behavior(balancer_, [this](actor_zeta::message* msg) -> void {
-            auto index = cursor_ % actors_.size();
-            ///actors_[index]->enqueue(msg);
-        });
+        ,  e_(scheduler){
+        ++count_collection;
     }
 
     void create() {
@@ -51,8 +49,8 @@ public:
         return "collection";
     }
 
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command()) {
@@ -60,7 +58,10 @@ public:
                     case actor_zeta::make_message_id(collection_method::remove):
                     case actor_zeta::make_message_id(collection_method::update):
                     case actor_zeta::make_message_id(collection_method::find): {
-                        balancer_(msg);
+                        auto index = cursor_ % actors_.size();
+                        actors_[index]->enqueue(current_message_own());
+                        ++cursor_;
+                        ++count_balancer;
                         break;
                     }
                     default: {
@@ -77,11 +78,10 @@ public:
 protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         set_current_message(std::move(msg));
-        make_behavior()(current_message());
+        behavior()(current_message());
     }
 
 private:
-    actor_zeta::behavior_t balancer_;
     actor_zeta::scheduler_abstract_t* e_;
     uint32_t cursor_ = 0;
     std::vector<actor_zeta::actor_t> actors_;
@@ -95,28 +95,31 @@ public:
         , remove_(resource())
         , update_(resource())
         , find_(resource()) {
-        actor_zeta::behavior(insert_, collection_method::insert, [this](std::string& key, std::string& value) -> void {
+        actor_zeta::make_behavior(insert_, collection_method::insert, [this](std::string& key, std::string& value) -> void {
             data_.emplace(key, value);
+            std::cerr << id() << " " << key << " " << value << std::endl;
+            ++count_insert;
         });
 
-        actor_zeta::behavior(remove_, collection_method::remove, [this](std::string& key) -> void {
+        actor_zeta::make_behavior(remove_, collection_method::remove, [this](std::string& key) -> void {
             data_.erase(key);
         });
 
-        actor_zeta::behavior(update_, collection_method::update, [this](std::string& key, std::string& value) -> void {
+        actor_zeta::make_behavior(update_, collection_method::update, [this](std::string& key, std::string& value) -> void {
             data_[key] = value;
         });
-        actor_zeta::behavior(find_, collection_method::find, [this](std::string& key) -> std::string {
+        actor_zeta::make_behavior(find_, collection_method::find, [this](std::string& key) -> std::string {
             return data_[key];
         });
+        ++count_collection_part;
     }
 
     auto make_type() const noexcept -> const char* const {
         return "collection";
     }
 
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command()) {
@@ -152,19 +155,25 @@ static constexpr auto sleep_time = std::chrono::milliseconds(60);
 
 auto main() -> int {
     auto* resource = actor_zeta::pmr::get_default_resource();
-    auto collection = actor_zeta::spawn_supervisor<collection_t>(resource);
+    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)>scheduler(
+        new actor_zeta::scheduler_t<actor_zeta::work_sharing>(1, 100),
+        thread_pool_deleter);
+    auto collection = actor_zeta::spawn_supervisor<collection_t>(resource,scheduler.get());
     collection->create();
     collection->create();
     collection->create();
-   /// actor_zeta::send(*collection, actor_zeta::address_t::empty_address(), collection_method::insert, std::string("1"), std::string("5"));
+   actor_zeta::send(collection, actor_zeta::address_t::empty_address(), collection_method::insert, std::string("1"), std::string("5"));
+   actor_zeta::send(collection, actor_zeta::address_t::empty_address(), collection_method::insert, std::string("1"), std::string("5"));
+   actor_zeta::send(collection, actor_zeta::address_t::empty_address(), collection_method::insert, std::string("1"), std::string("5"));
+
+   scheduler->start();
 
     std::this_thread::sleep_for(sleep_time);
 
-    std::cerr << "Count Actor : " << count_actor << std::endl;
-    std::cerr << "Count SuperVisor : " << count_supervisor << std::endl;
-    std::cerr << "Count DataBase : " << count_database << std::endl;
     std::cerr << "Count Collection : " << count_collection << std::endl;
-    std::cerr << "Count Dispatcher : " << count_dispatcher << std::endl;
+    std::cerr << "Count Collection Part : " << count_collection_part << std::endl;
+    std::cerr << "Count Balancer : " << count_balancer << std::endl;
+    std::cerr << "Count Insert : " << count_balancer << std::endl;
 
     return 0;
 }

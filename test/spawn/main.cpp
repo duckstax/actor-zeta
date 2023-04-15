@@ -60,10 +60,10 @@ public:
     }
 
 protected:
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
-            [this](actor_zeta::message* msg) -> void {
+            [](actor_zeta::message*) -> void {
 
             });
     }
@@ -71,7 +71,7 @@ protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
-            make_behavior()(current_message());
+            behavior()(current_message());
         }
     }
 
@@ -87,9 +87,9 @@ public:
     , create_supervisor_(resource())
     ,create_supervisor_custom_resource_(resource())
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
-        actor_zeta::behavior(create_actor_,create_actor_id, this, &dummy_supervisor::create_actor);
-        actor_zeta::behavior(create_supervisor_,create_supervisor_id,this, &dummy_supervisor::create_supervisor);
-        actor_zeta::behavior(create_supervisor_custom_resource_,create_supervisor_custom_resource_id,this, &dummy_supervisor::create_supervisor_custom_resource);
+        actor_zeta::make_behavior(create_actor_,create_actor_id, this, &dummy_supervisor::create_actor);
+        actor_zeta::make_behavior(create_supervisor_,create_supervisor_id,this, &dummy_supervisor::create_supervisor);
+        actor_zeta::make_behavior(create_supervisor_custom_resource_,create_supervisor_custom_resource_id,this, &dummy_supervisor::create_supervisor_custom_resource);
         scheduler()->start();
         supervisor_counter++;
     }
@@ -127,8 +127,8 @@ public:
     }
 
 protected:
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command()) {
@@ -151,7 +151,7 @@ protected:
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             set_current_message(std::move(msg));
-            make_behavior()(current_message());
+            behavior()(current_message());
         }
     }
 
@@ -174,9 +174,9 @@ public:
         , find_(resource())
         , remove_(resource()) {
 
-        actor_zeta::behavior(update_,update_id, []() -> void {});
-        actor_zeta::behavior(find_,find_id, []() -> void {});
-        actor_zeta::behavior(remove_,remove_id, []() -> void {});
+        actor_zeta::make_behavior(update_,update_id, []() -> void {});
+        actor_zeta::make_behavior(find_,find_id, []() -> void {});
+        actor_zeta::make_behavior(remove_,remove_id, []() -> void {});
 
         REQUIRE(std::string("storage") == type());
         actor_counter++;
@@ -188,8 +188,8 @@ public:
 
     ~storage_t() override = default;
 
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command()) {

@@ -167,8 +167,8 @@ public:
     }
 
 protected:
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [](actor_zeta::message* msg) -> void {
                 std::cerr << msg->command() << std::endl;
@@ -179,7 +179,7 @@ protected:
         {
             auto ptr = msg.get();
             set_current_message(std::move(msg));
-            make_behavior()(current_message());
+            behavior()(current_message());
             delete ptr;
         }
     }
@@ -211,16 +211,16 @@ public:
         , process_data_(resource())
         , sup_ptr_(ptr)
         , consumer_latency_ms_(consumer_latency_ms) {
-        actor_zeta::behavior(add_address_, command_t::add_address, this, &actor_test_t::add_address);
-        actor_zeta::behavior(process_data_, command_t::process_data, this, &actor_test_t::process_data);
+        actor_zeta::make_behavior(add_address_, command_t::add_address, this, &actor_test_t::add_address);
+        actor_zeta::make_behavior(process_data_, command_t::process_data, this, &actor_test_t::process_data);
     }
 
     auto make_type() const noexcept -> const char* const {
         return name_.c_str();
     }
 
-    actor_zeta::behavior_t make_behavior() {
-        return actor_zeta::behavior(
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
             resource(),
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command()) {
