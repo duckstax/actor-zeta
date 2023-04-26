@@ -1,6 +1,5 @@
 #pragma once
 
-#include <actor-zeta/mailbox/id.hpp>
 #include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
@@ -25,16 +24,12 @@ namespace actor_zeta { namespace base {
 
         behavior_t() = delete;
         behavior_t(const behavior_t&) = delete;
-        behavior_t&operator=(const behavior_t&) = delete;
+        behavior_t& operator=(const behavior_t&) = delete;
 
-        behavior_t( behavior_t&&) = default;
-        behavior_t&operator=(behavior_t&&) = default;
+        behavior_t(behavior_t&&) = default;
+        behavior_t& operator=(behavior_t&&) = default;
 
-        explicit behavior_t(actor_zeta::pmr::memory_resource* resource) {
-
-        }
-
-        behavior_t(actor_zeta::pmr::memory_resource* resource,id name, action handler) {
+        behavior_t(actor_zeta::pmr::memory_resource* resource, id name, action handler) {
             ///assert(id_.integer_value() == mailbox::detail::default_async_value);
             id_ = name;
             handler_ = std::move(handler);
@@ -59,44 +54,39 @@ namespace actor_zeta { namespace base {
         action handler_;
     };
 
-    template<class Key,class Value>
-    behavior_t& make_behavior(behavior_t& instance, Key key, Value&& f) {
-        instance.assign(mailbox::make_message_id(static_cast<uint64_t>(key)), make_handler(std::forward<Value>(f)));
-        return instance;
+    template<class Key, class Value>
+    behavior_t make_behavior(actor_zeta::pmr::memory_resource* resource, Key key, Value&& f) {
+        return {resource, mailbox::make_message_id(static_cast<uint64_t>(key)), make_handler(std::forward<Value>(f))};
     }
 
     template<class Value>
-    behavior_t& make_behavior(behavior_t& instance, mailbox::message_id key, Value&& f) {
-        instance.assign(key, make_handler(std::forward<Value>(f)));
-        return instance;
+    behavior_t make_behavior(actor_zeta::pmr::memory_resource* resource, mailbox::message_id key, Value&& f) {
+        return {resource, key, make_handler(std::forward<Value>(f))};
     }
 
-
-    template<class Key,class Actor, typename F>
-    behavior_t& make_behavior(behavior_t& instance, Key key, Actor* ptr, F&& f) {
-        auto id =static_cast<uint64_t>(key);
-        instance.assign(mailbox::make_message_id(id), make_handler(ptr,std::forward<F>(f)));
-        return instance;
+    template<class Key, class Actor, typename F>
+    behavior_t make_behavior(actor_zeta::pmr::memory_resource* resource, Key key, Actor* ptr, F&& f) {
+        auto id = static_cast<uint64_t>(key);
+        return {resource, mailbox::make_message_id(id), make_handler(ptr, std::forward<F>(f))};
     }
 
     template<class F>
-    behavior_t& make_behavior(behavior_t& instance, F&& f) {
-        instance.assign(mailbox::message_id{},std::move(action(std::forward<F>(f))));
-        return instance;
+    behavior_t make_behavior(actor_zeta::pmr::memory_resource* resource, F&& f) {
+        return {resource, mailbox::message_id{}, std::move(action(std::forward<F>(f)))};
     }
-//// todo: rename behavior
-    template<class F>
+    //// todo: rename behavior
+    /*template<class F>
     behavior_t make_behavior(actor_zeta::pmr::memory_resource*resource, F&& f) {
         return {resource,mailbox::message_id{}, std::move(action(std::forward<F>(f)))};
-    }
-/*
+    }*/
+    /*
     template<class Actor, typename Value>
     behavior_t behavior(actor_zeta::pmr::memory_resource*resource, Actor* ptr, Value&& f) {
         return {resource,mailbox::message_id{}, ptr,std::forward<Value>(f)};
     }
 */
     template<class T>
-    void invoke(behavior_t& instance,T* ptr, mailbox::message* msg) {
+    void invoke(behavior_t& instance, T* ptr, mailbox::message* msg) {
         instance(msg);
         /// todo: add error handling
         /*

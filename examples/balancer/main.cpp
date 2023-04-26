@@ -9,13 +9,11 @@
 
 #include <actor-zeta.hpp>
 
-
 std::atomic_int count_collection_part{0};
 std::atomic_int count_collection{0};
 std::atomic_int count_balancer{0};
 std::atomic_int count_insert{0};
 std::atomic_int count_find{0};
-
 
 auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
     ptr->stop();
@@ -33,9 +31,9 @@ enum class collection_method : uint64_t {
 
 class collection_t final : public actor_zeta::cooperative_supervisor<collection_t> {
 public:
-    collection_t(actor_zeta::pmr::memory_resource* resource,actor_zeta::scheduler_abstract_t*scheduler)
+    collection_t(actor_zeta::pmr::memory_resource* resource, actor_zeta::scheduler_abstract_t* scheduler)
         : actor_zeta::cooperative_supervisor<collection_t>(resource)
-        ,  e_(scheduler){
+        , e_(scheduler) {
         ++count_collection;
     }
 
@@ -91,26 +89,20 @@ class collection_part_t final : public actor_zeta::basic_actor<collection_part_t
 public:
     collection_part_t(collection_t* ptr)
         : actor_zeta::basic_actor<collection_part_t>(ptr)
-        , insert_(resource())
-        , remove_(resource())
-        , update_(resource())
-        , find_(resource()) {
-        actor_zeta::make_behavior(insert_, collection_method::insert, [this](std::string& key, std::string& value) -> void {
+        , insert_(actor_zeta::make_behavior(resource(), collection_method::insert, [this](std::string& key, std::string& value) -> void {
             data_.emplace(key, value);
             std::cerr << id() << " " << key << " " << value << std::endl;
             ++count_insert;
-        });
-
-        actor_zeta::make_behavior(remove_, collection_method::remove, [this](std::string& key) -> void {
+        }))
+        , remove_(actor_zeta::make_behavior(resource(), collection_method::remove, [this](std::string& key) -> void {
             data_.erase(key);
-        });
-
-        actor_zeta::make_behavior(update_, collection_method::update, [this](std::string& key, std::string& value) -> void {
+        }))
+        , update_(actor_zeta::make_behavior(resource(), collection_method::update, [this](std::string& key, std::string& value) -> void {
             data_[key] = value;
-        });
-        actor_zeta::make_behavior(find_, collection_method::find, [this](std::string& key) -> std::string {
+        }))
+        , find_(actor_zeta::make_behavior(resource(), collection_method::find, [this](std::string& key) -> std::string {
             return data_[key];
-        });
+        })) {
         ++count_collection_part;
     }
 
@@ -155,18 +147,18 @@ static constexpr auto sleep_time = std::chrono::milliseconds(60);
 
 auto main() -> int {
     auto* resource = actor_zeta::pmr::get_default_resource();
-    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)>scheduler(
+    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> scheduler(
         new actor_zeta::scheduler_t<actor_zeta::work_sharing>(1, 100),
         thread_pool_deleter);
-    auto collection = actor_zeta::spawn_supervisor<collection_t>(resource,scheduler.get());
+    auto collection = actor_zeta::spawn_supervisor<collection_t>(resource, scheduler.get());
     collection->create();
     collection->create();
     collection->create();
-   actor_zeta::send(collection, actor_zeta::address_t::empty_address(), collection_method::insert, std::string("1"), std::string("5"));
-   actor_zeta::send(collection, actor_zeta::address_t::empty_address(), collection_method::insert, std::string("1"), std::string("5"));
-   actor_zeta::send(collection, actor_zeta::address_t::empty_address(), collection_method::insert, std::string("1"), std::string("5"));
+    actor_zeta::send(collection, actor_zeta::address_t::empty_address(), collection_method::insert, std::string("1"), std::string("5"));
+    actor_zeta::send(collection, actor_zeta::address_t::empty_address(), collection_method::insert, std::string("1"), std::string("5"));
+    actor_zeta::send(collection, actor_zeta::address_t::empty_address(), collection_method::insert, std::string("1"), std::string("5"));
 
-   scheduler->start();
+    scheduler->start();
 
     std::this_thread::sleep_for(sleep_time);
 
