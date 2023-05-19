@@ -85,18 +85,19 @@ jobs:
           #conan install ${{github.workspace}}/build/.. -if ${{github.workspace}}/build --build=missing -s build_type=Release
           mkdir -p build
           conan install conanfile.txt -if build --build=missing -s build_type=Release
+          ls build
 
       - name: Configure CMake
         env:
           CC: ${{ matrix.configuration.COMPILER_C}}
           CXX: ${{ matrix.configuration.COMPILER_CXX}}
           BUILD_TYPE: ${{ matrix.profiles }}
-        run: cmake -B ${{github.workspace}}/build -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.profiles }} -DCMAKE_CXX_STANDARD=${{ matrix.configuration.CXX_STANDARD}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON
+        run: cmake -B  build -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.profiles }} -DCMAKE_CXX_STANDARD=${{ matrix.configuration.CXX_STANDARD}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON
 
       - name: Build
-        run: cmake --build ${{github.workspace}}/build --config ${{ matrix.profiles }}
+        run: cmake --build build --config ${{ matrix.profiles }}
 
       - name: Test
-        working-directory: ${{github.workspace}}/build
+        working-directory: build
         run: ctest -C ${{env.BUILD_TYPE}} --rerun-failed --output-on-failure
       
