@@ -20,9 +20,8 @@ class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervis
 public:
     explicit supervisor_lite(memory_resource* ptr)
         : cooperative_supervisor(ptr)
-        , alarm_(resource())
+        , alarm_(actor_zeta::make_behavior(resource(), alarm_id, this, &supervisor_lite::alarm);)
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
-        actor_zeta::make_behavior(alarm_,alarm_id,this, &supervisor_lite::alarm);
         scheduler()->start();
     }
 
@@ -32,7 +31,6 @@ public:
 
     ~supervisor_lite() override = default;
 
-
     auto make_type() const noexcept -> const char* const {
         return "supervisor_lite";
     }
@@ -40,7 +38,6 @@ public:
     auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* { return executor_.get(); }
 
 protected:
-
     void alarm() {
         alarm_counter += 1;
     }

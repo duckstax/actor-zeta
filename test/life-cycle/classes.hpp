@@ -28,14 +28,11 @@ public:
 
     explicit dummy_supervisor(actor_zeta::pmr::memory_resource* mr, uint64_t threads, uint64_t throughput)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(mr)
-        , create_storage_(resource())
-        , create_test_handlers_(resource())
+        , create_storage_(actor_zeta::make_behavior(resource(), dummy_supervisor_command::create_storage, this, &dummy_supervisor::create_storage))
+        , create_test_handlers_(actor_zeta::make_behavior(resource(), dummy_supervisor_command::create_test_handlers, this, &dummy_supervisor::create_test_handlers))
         , executor_(new actor_zeta::test::scheduler_test_t(threads, throughput)) {
         scheduler()->start();
         constructor_counter++;
-
-        actor_zeta::make_behavior(create_storage_, dummy_supervisor_command::create_storage, this, &dummy_supervisor::create_storage);
-        actor_zeta::make_behavior(create_test_handlers_, dummy_supervisor_command::create_test_handlers, this, &dummy_supervisor::create_test_handlers);
     }
 
     auto make_type() const noexcept -> const char* const {
@@ -141,40 +138,30 @@ public:
 public:
     explicit storage_t(dummy_supervisor* ptr)
         : actor_zeta::basic_actor<storage_t>(ptr)
-        , init_(resource())
-        , search_(resource())
-        , add_(resource())
-        , delete_table_(resource())
-        , create_table_(resource()) {
-        actor_zeta::make_behavior(
-            init_,
-            storage_names::init, this,
-            &storage_t::init);
-
-        actor_zeta::make_behavior(
-            search_,
-            storage_names::search,
-            this,
-            &storage_t::search);
-
-        actor_zeta::make_behavior(
-            add_,
-            storage_names::add,
-            this,
-            &storage_t::add);
-
-        actor_zeta::make_behavior(
-            delete_table_,
-            storage_names::delete_table,
-            this,
-            &storage_t::delete_table);
-
-        actor_zeta::make_behavior(
-            create_table_,
-            storage_names::create_table,
-            this,
-            &storage_t::create_table);
-
+        , init_(actor_zeta::make_behavior(
+              resource(),
+              storage_names::init, this,
+              &storage_t::init))
+        , search_(actor_zeta::make_behavior(
+              resource(),
+              storage_names::search,
+              this,
+              &storage_t::search))
+        , add_(actor_zeta::make_behavior(
+              resource(),
+              storage_names::add,
+              this,
+              &storage_t::add))
+        , delete_table_(actor_zeta::make_behavior(
+              resource(),
+              storage_names::delete_table,
+              this,
+              &storage_t::delete_table))
+        , create_table_(actor_zeta::make_behavior(
+              resource(),
+              storage_names::create_table,
+              this,
+              &storage_t::create_table)) {
         constructor_counter++;
     }
 
@@ -292,51 +279,44 @@ public:
 public:
     test_handlers(dummy_supervisor* ptr)
         : actor_zeta::basic_actor<test_handlers>(ptr)
-        , ptr_0_(resource())
-        , ptr_1_(resource())
-        , ptr_2_(resource())
-        , ptr_3_(resource())
-        , ptr_4_(resource()) {
+        , ptr_0_(actor_zeta::make_behavior(
+              resource(),
+              test_handlers_names::ptr_0,
+              []() {
+                  TRACE("+++");
+                  ptr_0_counter++;
+              }))
+        , ptr_1_(actor_zeta::make_behavior(
+              resource(),
+              test_handlers_names::ptr_1,
+              []() {
+                  TRACE("+++");
+                  ptr_1_counter++;
+              }))
+        , ptr_2_(actor_zeta::make_behavior(
+              resource(),
+              test_handlers_names::ptr_2,
+              [](int&) {
+                  TRACE("+++");
+                  ptr_2_counter++;
+              }))
+        , ptr_3_(actor_zeta::make_behavior(
+              resource(),
+              test_handlers_names::ptr_3,
+              [](int data_1, int& data_2) {
+                  TRACE("+++");
+                  std::cerr << "ptr_3 : " << data_1 << " : " << data_2 << std::endl;
+                  ptr_3_counter++;
+              }))
+        , ptr_4_(actor_zeta::make_behavior(
+              resource(),
+              test_handlers_names::ptr_4,
+              [](int data_1, int& data_2, const std::string& data_3) {
+                  TRACE("+++");
+                  std::cerr << "ptr_4 : " << data_1 << " : " << data_2 << " : " << data_3 << std::endl;
+                  ptr_4_counter++;
+              })) {
         init();
-        actor_zeta::make_behavior(
-            ptr_0_,
-            test_handlers_names::ptr_0,
-            []() {
-                TRACE("+++");
-                ptr_0_counter++;
-            });
-
-        actor_zeta::make_behavior(
-            ptr_1_,
-            test_handlers_names::ptr_1,
-            []() {
-                TRACE("+++");
-                ptr_1_counter++;
-            });
-        actor_zeta::make_behavior(
-            ptr_2_,
-            test_handlers_names::ptr_2,
-            [](int&) {
-                TRACE("+++");
-                ptr_2_counter++;
-            });
-        actor_zeta::make_behavior(
-            ptr_3_,
-            test_handlers_names::ptr_3,
-            [](int data_1, int& data_2) {
-                TRACE("+++");
-                std::cerr << "ptr_3 : " << data_1 << " : " << data_2 << std::endl;
-                ptr_3_counter++;
-            });
-
-        actor_zeta::make_behavior(
-            ptr_4_,
-            test_handlers_names::ptr_4,
-            [](int data_1, int& data_2, const std::string& data_3) {
-                TRACE("+++");
-                std::cerr << "ptr_4 : " << data_1 << " : " << data_2 << " : " << data_3 << std::endl;
-                ptr_4_counter++;
-            });
     }
 
     auto make_type() const noexcept -> const char* const {

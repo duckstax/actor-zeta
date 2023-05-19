@@ -55,7 +55,7 @@ public:
         return "dummy_supervisor_sub";
     }
 
-    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t*  {
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* {
         return executor_.get();
     }
 
@@ -83,13 +83,10 @@ class dummy_supervisor final : public actor_zeta::cooperative_supervisor<dummy_s
 public:
     dummy_supervisor(memory_resource* ptr)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr)
-        , create_actor_(resource())
-    , create_supervisor_(resource())
-    ,create_supervisor_custom_resource_(resource())
+        , create_actor_(actor_zeta::make_behavior(resource(), create_actor_id, this, &dummy_supervisor::create_actor))
+        , create_supervisor_(actor_zeta::make_behavior(resource(), create_supervisor_id, this, &dummy_supervisor::create_supervisor))
+        , create_supervisor_custom_resource_(actor_zeta::make_behavior(resource(), create_supervisor_custom_resource_id, this, &dummy_supervisor::create_supervisor_custom_resource))
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
-        actor_zeta::make_behavior(create_actor_,create_actor_id, this, &dummy_supervisor::create_actor);
-        actor_zeta::make_behavior(create_supervisor_,create_supervisor_id,this, &dummy_supervisor::create_supervisor);
-        actor_zeta::make_behavior(create_supervisor_custom_resource_,create_supervisor_custom_resource_id,this, &dummy_supervisor::create_supervisor_custom_resource);
         scheduler()->start();
         supervisor_counter++;
     }
@@ -108,14 +105,16 @@ public:
         spawn_supervisor(
             [this](dummy_supervisor_sub* ptr) {
                 supervisor_.emplace_back(ptr);
-            },this);
+            },
+            this);
     }
 
     void create_supervisor_custom_resource() {
         spawn_supervisor(
             [this](dummy_supervisor_sub* ptr) {
                 supervisor_.emplace_back(ptr);
-            },resource());
+            },
+            resource());
     }
 
     auto make_type() const noexcept -> const char* const {
@@ -164,20 +163,13 @@ private:
     std::vector<actor_zeta::supervisor_t> supervisor_;
 };
 
-
-
 class storage_t final : public actor_zeta::basic_actor<storage_t> {
 public:
     storage_t(dummy_supervisor* ptr)
         : actor_zeta::basic_actor<storage_t>(ptr)
-        , update_(resource())
-        , find_(resource())
-        , remove_(resource()) {
-
-        actor_zeta::make_behavior(update_,update_id, []() -> void {});
-        actor_zeta::make_behavior(find_,find_id, []() -> void {});
-        actor_zeta::make_behavior(remove_,remove_id, []() -> void {});
-
+        , update_(actor_zeta::make_behavior(resource(), update_id, []() -> void {}))
+        , find_(actor_zeta::make_behavior(resource(), find_id, []() -> void {}))
+        , remove_(actor_zeta::make_behavior(resource(), remove_id, []() -> void {})) {
         REQUIRE(std::string("storage") == type());
         actor_counter++;
     }
@@ -208,6 +200,7 @@ public:
                 }
             });
     }
+
 private:
     actor_zeta::behavior_t update_;
     actor_zeta::behavior_t find_;

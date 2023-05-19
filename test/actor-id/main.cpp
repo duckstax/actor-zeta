@@ -22,9 +22,8 @@ class dummy_supervisor final : public actor_zeta::cooperative_supervisor<dummy_s
 public:
     dummy_supervisor(memory_resource* ptr)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr)
-        , create_(resource())
+        , create_( actor_zeta::make_behavior(resource(),command_t::create,this, &dummy_supervisor::create))
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
-        actor_zeta::make_behavior(create_,command_t::create,this, &dummy_supervisor::create);
         scheduler()->start();
     }
 
