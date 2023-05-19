@@ -207,12 +207,10 @@ public:
     actor_test_t(supervisor_test_t* ptr, size_t consumer_latency_ms)
         : actor_zeta::basic_actor<actor_test_t>(ptr)
         , name_(names::actor)
-        , add_address_(resource())
-        , process_data_(resource())
+        , add_address_(actor_zeta::make_behavior(resource(), command_t::add_address, this, &actor_test_t::add_address))
+        , process_data_(actor_zeta::make_behavior(resource(), command_t::process_data, this, &actor_test_t::process_data))
         , sup_ptr_(ptr)
         , consumer_latency_ms_(consumer_latency_ms) {
-        actor_zeta::make_behavior(add_address_, command_t::add_address, this, &actor_test_t::add_address);
-        actor_zeta::make_behavior(process_data_, command_t::process_data, this, &actor_test_t::process_data);
     }
 
     auto make_type() const noexcept -> const char* const {
