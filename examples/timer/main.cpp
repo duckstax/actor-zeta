@@ -53,12 +53,11 @@ class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervis
 public:
     supervisor_lite(memory_resource* ptr)
         : actor_zeta::cooperative_supervisor<supervisor_lite>(ptr)
-        , alarm_(resource())
+        , alarm_( actor_zeta::make_behavior(resource(), command_alarm, this, &supervisor_lite::alarm))
         , e_(new shared_work(
                  1,
                  100),
              thread_pool_deleter) {
-        actor_zeta::make_behavior(alarm_, command_alarm, this, &supervisor_lite::alarm);
         e_->start();
     }
 
