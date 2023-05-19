@@ -18,8 +18,7 @@ jobs:
       - name: set env
         run: |
           apt update
-          apt upgrade -y 
-          apt install -y 
+          apt install -y \
                  build-essential zlib1g-dev wget \
                  libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev \
                  ninja-build \
