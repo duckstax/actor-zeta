@@ -78,7 +78,8 @@ jobs:
           pwd
           ls
           #conan install ${{github.workspace}}/build/.. -if ${{github.workspace}}/build --build=missing -s build_type=Release
-          conan install .. -if ${{github.workspace}}/build --build=missing -s build_type=Release
+          mkdir -p build
+          conan install conanfile.txt -if build --build=missing -s build_type=Release
 
       - name: Configure CMake
         env:
