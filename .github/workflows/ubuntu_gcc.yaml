@@ -69,6 +69,7 @@ jobs:
       - name: Install system dependencies
         run: |
           apt-get install ninja-build
+          pip3 install --upgrade pip
           pip3 install --no-cache-dir conan==1.59 cmake 
 
       - name: Install conan dependencies
