@@ -29,11 +29,9 @@ public:
 
     supervisor_lite(memory_resource* ptr)
         : cooperative_supervisor<supervisor_lite>(ptr)
-        , create_(resource())
-        , broadcast_(resource())
+        , create_( actor_zeta::make_behavior(resource(), system_command::create, this, &supervisor_lite::create))
+        , broadcast_( actor_zeta::make_behavior(resource(), system_command::broadcast, this, &supervisor_lite::broadcast_impl))
         , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(2, 1000), thread_pool_deleter) {
-        actor_zeta::make_behavior(create_, system_command::create, this, &supervisor_lite::create);
-        actor_zeta::make_behavior(broadcast_, system_command::broadcast, this, &supervisor_lite::broadcast_impl);
         e_->start();
     }
 
@@ -110,10 +108,8 @@ public:
 
     worker_t(supervisor_lite* ptr)
         : actor_zeta::basic_actor<worker_t>(ptr)
-        , download_(resource())
-        , work_data_(resource()) {
-        actor_zeta::make_behavior(download_, command_t::download, this, &worker_t::download);
-        actor_zeta::make_behavior(work_data_, command_t::work_data, this, &worker_t::work_data);
+        , download_( actor_zeta::make_behavior(resource(), command_t::download, this, &worker_t::download))
+        , work_data_(actor_zeta::make_behavior(resource(), command_t::work_data, this, &worker_t::work_data)) {
     }
 
     actor_zeta::behavior_t behavior() {
