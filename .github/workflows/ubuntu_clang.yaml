@@ -86,7 +86,7 @@ jobs:
       - name: Install compiler
         run: |
           bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
-          apt-get install  ${{ matrix.configuration.PACKAGE}} 
+          apt-get install -y  ${{ matrix.configuration.PACKAGE}} 
 
       - name: Install conan dependencies
         run: |
