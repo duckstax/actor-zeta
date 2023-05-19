@@ -20,7 +20,7 @@ class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervis
 public:
     explicit supervisor_lite(memory_resource* ptr)
         : cooperative_supervisor(ptr)
-        , alarm_(actor_zeta::make_behavior(resource(), alarm_id, this, &supervisor_lite::alarm);)
+        , alarm_(actor_zeta::make_behavior(resource(), alarm_id, this, &supervisor_lite::alarm))
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
         scheduler()->start();
     }
