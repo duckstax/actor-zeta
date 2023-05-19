@@ -24,8 +24,7 @@ jobs:
                  ninja-build \
                  software-properties-common 
           apt clean 
-          add-apt-repository -y ppa:ubuntu-toolchain-r/test 
-          apt update  
+          add-apt-repository -y ppa:ubuntu-toolchain-r/test  
           apt install -y gcc-4.9 g++-4.9  
           update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 100 
           update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 100 
