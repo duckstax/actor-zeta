@@ -65,7 +65,11 @@ jobs:
           add-apt-repository ppa:ubuntu-toolchain-r/test
           apt-get install -y ninja-build ${{ matrix.configuration.COMPILER_C}} ${{ matrix.configuration.COMPILER_CXX}} python3-pip python3 python3-dev python3-setuptools
           update-alternatives --install /usr/bin/gcc gcc /usr/bin/${{ matrix.configuration.COMPILER_C}} 60 --slave /usr/bin/g++ g++ /usr/bin/${{ matrix.configuration.COMPILER_CXX}}
-          pip3 install --no-cache-dir conan==1.59
+
+      - name: Install system dependencies
+        run: |
+          apt-get install ninja-build
+          pip3 install --no-cache-dir conan==1.59 cmake 
 
       - name: Install conan dependencies
         run: |
