@@ -56,7 +56,7 @@ jobs:
           { "PACKAGE":"clang-10", "COMPILER":"clang", "COMPILER_VER":"10", "COMPILER_C": "clang-10","COMPILER_CXX": "clang++-10","BUILD_TYPE": "Release","CXX_STANDARD": 14 , "cmake_params": "-DRTTI_DISABLE=OFF" },
           { "PACKAGE":"clang-10", "COMPILER":"clang", "COMPILER_VER":"10", "COMPILER_C": "clang-10","COMPILER_CXX": "clang++-10","BUILD_TYPE": "Debug","CXX_STANDARD": 14 , "cmake_params": "-DRTTI_DISABLE=OFF" },
           { "PACKAGE":"clang-10", "COMPILER":"clang", "COMPILER_VER":"10", "COMPILER_C": "clang-10","COMPILER_CXX": "clang++-10","BUILD_TYPE": "Release","CXX_STANDARD": 17 , "cmake_params": "-DRTTI_DISABLE=OFF" },
-          { "PACKAGE":"clang-10", "COMPILER":"clang", "COMPILER_VER":"10", "COMPILER_C": "clang-10","COMPILER_CXX": "clang++-10","BUILD_TYPE": "Debug","CXX_STANDARD": 17, , "cmake_params": "-DRTTI_DISABLE=OFF" },
+          { "PACKAGE":"clang-10", "COMPILER":"clang", "COMPILER_VER":"10", "COMPILER_C": "clang-10","COMPILER_CXX": "clang++-10","BUILD_TYPE": "Debug","CXX_STANDARD": 17, "cmake_params": "-DRTTI_DISABLE=OFF" },
           #{ "PACKAGE":"clang-11", "COMPILER":"clang", "COMPILER_VER":"11", "COMPILER_C": "clang-11","COMPILER_CXX": "clang++-11","BUILD_TYPE": "Release","CXX_STANDARD": 11 },
           #{ "PACKAGE":"clang-11", "COMPILER":"clang", "COMPILER_VER":"11", "COMPILER_C": "clang-11","COMPILER_CXX": "clang++-11","BUILD_TYPE": "Debug","CXX_STANDARD": 11 },
           #{ "PACKAGE":"clang-11", "COMPILER":"clang", "COMPILER_VER":"11", "COMPILER_C": "clang-11","COMPILER_CXX": "clang++-11","BUILD_TYPE": "Release","CXX_STANDARD": 14 },
