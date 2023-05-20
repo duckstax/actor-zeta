@@ -8,9 +8,8 @@ namespace actor_zeta { namespace detail { namespace pmr {
 #if CPP17_OR_GREATER
 
 #if __has_include(<memory_resource>)
-
+#elif __has_include(<experimental/memory_resource>)
 #else
-
     memory_resource* get_default_resource() noexcept {
         return std::experimental::pmr::get_default_resource();
     }

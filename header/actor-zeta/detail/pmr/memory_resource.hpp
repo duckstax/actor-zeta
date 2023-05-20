@@ -22,7 +22,6 @@ namespace actor_zeta { namespace detail { namespace pmr {
     using std::experimental::pmr::memory_resource;
 #endif
 
-
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
     class memory_resource {
