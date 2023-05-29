@@ -9,7 +9,7 @@
 #include <tuple>
 #include <utility>
 
-#if CPP17_OR_GREATER && __has_include(<memory_resource>)
+#if CPP17_OR_GREATER && defined __has_include  && __has_include(<memory_resource>)
 #include <memory_resource>
 #else
 #include "emulate_tuple_cat_result.hpp"
@@ -21,11 +21,9 @@
 
 namespace actor_zeta { namespace detail { namespace pmr {
 
-#if CPP17_OR_GREATER && __has_include(<memory_resource>)
-
+#if CPP17_OR_GREATER && defined __has_include  && __has_include(<memory_resource>)
     template<class T>
     using polymorphic_allocator = std::pmr::polymorphic_allocator<T>;
-
 #else
 
     template<typename T>

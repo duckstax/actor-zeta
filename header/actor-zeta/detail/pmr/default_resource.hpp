@@ -9,7 +9,7 @@
 
 namespace actor_zeta { namespace detail { namespace pmr {
 
-#if CPP17_OR_GREATER && __has_include(<memory_resource>)
+#if CPP17_OR_GREATER && defined __has_include  && __has_include(<memory_resource>)
     using std::pmr::get_default_resource;
     using std::pmr::set_default_resource;
     using std::pmr::new_delete_resource;
