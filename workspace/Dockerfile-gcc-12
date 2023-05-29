@@ -17,13 +17,13 @@ WORKDIR /app
 
 COPY ./conanfile.txt ./conanfile.txt
 
-RUN pip3 install --no-cache-dir conan pytest==6.2.5 cmake && \
+RUN pip3 install --no-cache-dir conan==1.60.0 pytest==6.2.5 cmake && \
     conan user && \
     conan profile new default --detect --force && \
     conan profile update settings.compiler.libcxx=libstdc++11 default && \
     conan config set general.parallel_download=$(nproc) && \
     conan config set general.cpu_count=$(nproc) && \
-    conan remote add duckstax http://conan.duckstax.com:9300
+    conan install -if build . --build missing -s build_type=Release -s compiler.libcxx=libstdc++11
 
 COPY ./header ./header
 COPY ./source ./source

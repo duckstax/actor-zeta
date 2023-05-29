@@ -2,10 +2,6 @@
 
 #include <actor-zeta/config.hpp>
 
-#if CPP17_OR_GREATER
-
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
-
 #include <actor-zeta/detail/type_traits.hpp>
 
 #include <cassert>
@@ -15,13 +11,7 @@
 #include <tuple>
 #include <utility>
 
-#endif
-
 namespace actor_zeta { namespace detail { namespace pmr {
-
-#if CPP17_OR_GREATER
-
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
     template<std::size_t i, typename _Tp>
     using tuple_element_t = typename std::tuple_element<i, _Tp>::type;
@@ -69,7 +59,5 @@ namespace actor_zeta { namespace detail { namespace pmr {
     struct tuple_cat_result {
         using type = typename combine_tuples<typename make_tuple<Args>::type...>::type;
     };
-
-#endif
 
 }}} // namespace actor_zeta::detail::pmr

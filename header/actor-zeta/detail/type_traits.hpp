@@ -117,6 +117,9 @@ namespace actor_zeta { namespace type_traits {
 
 #endif
 
+    template<typename _Tp>
+    using remove_cvref_t = typename std::remove_cv<typename std::remove_reference<_Tp>::type>::type; // C++ 20
+
     template<typename...>
     struct _or_;
 
