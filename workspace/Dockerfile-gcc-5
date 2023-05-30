@@ -16,7 +16,7 @@ RUN apt update  \
     && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100 \
     && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 100 \
     && rm -rf /var/lib/apt/lists/*  \
-    && pip3 install --no-cache-dir conan==1.45.0 cmake==3.21.0
+    && pip3 install --no-cache-dir conan==1.60.0 cmake==3.21.0
 
 WORKDIR /app
 

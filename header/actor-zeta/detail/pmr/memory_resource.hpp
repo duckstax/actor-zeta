@@ -4,14 +4,18 @@
 #include <cstddef>
 #include <cstdio>
 
-#if CPP17_OR_GREATER && defined __has_include  && __has_include(<memory_resource>)
+#if CPP17_OR_GREATER && defined __has_include
+#if __has_include(<memory_resource>)
 #include <memory_resource>
+#endif
 #endif
 
 namespace actor_zeta { namespace detail { namespace pmr {
 
-#if CPP17_OR_GREATER && defined __has_include  && __has_include(<memory_resource>)
+#if CPP17_OR_GREATER && defined __has_include
+#if __has_include(<memory_resource>)
     using std::pmr::memory_resource;
+#endif
 #else
 
     class memory_resource {

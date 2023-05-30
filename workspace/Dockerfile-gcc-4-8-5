@@ -13,7 +13,8 @@ RUN mkdir -p $HOME/opt \
     && ./configure --enable-shared --enable-optimizations --prefix=/usr/local LDFLAGS="-Wl,--rpath=/usr/local/lib" \
     && make altinstall
 
-RUN python3.6 -m  pip install --no-cache-dir conan==1.59.0 cmake==3.21.0
+RUN python3.6 -m pip install --upgrade pip
+RUN python3.6 -m pip install --no-cache-dir scikit-build pytest==6.2.5 conan==1.59.0 cmake==3.21.0
 
 RUN apt install -y software-properties-common
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test
