@@ -9,7 +9,7 @@
 
 #include "test_memory_resource.hpp"
 
-namespace pmr = actor_zeta::detail::pmr;
+namespace pmr = actor_zeta::pmr;
 using pmr::memory_resource;
 using pmr::polymorphic_allocator;
 

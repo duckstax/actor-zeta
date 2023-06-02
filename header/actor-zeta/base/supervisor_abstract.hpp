@@ -13,11 +13,11 @@ namespace actor_zeta { namespace base {
     public:
         ~supervisor_abstract() override;
         auto scheduler() noexcept -> scheduler::scheduler_abstract_t*;
-        auto resource() const noexcept -> detail::pmr::memory_resource*;
+        auto resource() const noexcept -> pmr::memory_resource*;
         auto address() noexcept -> address_t;
 
     protected:
-        supervisor_abstract(detail::pmr::memory_resource*);
+        supervisor_abstract(pmr::memory_resource*);
 
         template<class Supervisor>
         supervisor_abstract(Supervisor* supervisor)
@@ -31,7 +31,7 @@ namespace actor_zeta { namespace base {
     private:
         supervisor_abstract(supervisor_abstract*);
         mailbox::message_ptr current_message_;
-        detail::pmr::memory_resource* memory_resource_;
+        pmr::memory_resource* memory_resource_;
     };
 
     template<class Supervisor>

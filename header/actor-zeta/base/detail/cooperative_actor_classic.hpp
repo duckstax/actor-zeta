@@ -79,7 +79,7 @@ namespace actor_zeta { namespace base {
             return Traits::template allocator_type<T>(supervisor().resource());
         }
 
-        detail::pmr::memory_resource* resource() const noexcept {
+        pmr::memory_resource* resource() const noexcept {
             return supervisor()->resource();
         }
 

@@ -9,26 +9,13 @@
 #include <tuple>
 #include <utility>
 
-#if CPP17_OR_GREATER && defined __has_include
-#if __has_include(<memory_resource>)
-#include <memory_resource>
-#endif
-#else
 #include "emulate_tuple_cat_result.hpp"
 #include <actor-zeta/detail/pmr/default_resource.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/detail/pmr/uses_allocator.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
-#endif
 
-namespace actor_zeta { namespace detail { namespace pmr {
-
-#if CPP17_OR_GREATER && defined __has_include
-#if __has_include(<memory_resource>)
-    template<class T>
-    using polymorphic_allocator = std::pmr::polymorphic_allocator<T>;
-#endif
-#else
+namespace actor_zeta { namespace pmr {
 
     template<typename T>
     class polymorphic_allocator {
@@ -186,6 +173,4 @@ namespace actor_zeta { namespace detail { namespace pmr {
     operator!=(const polymorphic_allocator<T1>& a, const polymorphic_allocator<T2>& b) noexcept {
         return !(a == b);
     }
-
-#endif
-}}} // namespace actor_zeta::detail::pmr
+}} // namespace actor_zeta::pmr

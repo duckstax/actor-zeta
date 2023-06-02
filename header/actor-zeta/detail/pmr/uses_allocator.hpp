@@ -1,9 +1,5 @@
 #pragma once
 
-#if CPP17_OR_GREATER
-
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
-
 #include <actor-zeta/detail/type_traits.hpp>
 
 #include <cassert>
@@ -11,11 +7,8 @@
 #include <new>
 #include <utility>
 
-#endif
 
-namespace actor_zeta { namespace detail { namespace pmr {
-
-#if CPP14_OR_GREATER or CPP11_OR_GREATER
+namespace actor_zeta { namespace pmr {
 
     template<class T>
     struct has_allocator_type {
@@ -152,6 +145,4 @@ namespace actor_zeta { namespace detail { namespace pmr {
         uses_allocator_construct_impl(use_alloc<T, Alloc, Args...>(a), ptr, std::forward<Args>(args)...);
     }
 
-#endif
-
-}}} // namespace actor_zeta::detail::pmr
+}} // namespace actor_zeta::detail::pmr

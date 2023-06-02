@@ -4,19 +4,7 @@
 #include <cstddef>
 #include <cstdio>
 
-#if CPP17_OR_GREATER && defined __has_include
-#if __has_include(<memory_resource>)
-#include <memory_resource>
-#endif
-#endif
-
-namespace actor_zeta { namespace detail { namespace pmr {
-
-#if CPP17_OR_GREATER && defined __has_include
-#if __has_include(<memory_resource>)
-    using std::pmr::memory_resource;
-#endif
-#else
+namespace actor_zeta { namespace pmr {
 
     class memory_resource {
     public:
@@ -50,6 +38,5 @@ namespace actor_zeta { namespace detail { namespace pmr {
         return !(a == b);
     }
 
-#endif
 
-}}} // namespace actor_zeta::detail::pmr
+}} // namespace actor_zeta::detail::pmr

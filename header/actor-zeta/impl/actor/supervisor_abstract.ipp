@@ -20,7 +20,7 @@ namespace actor_zeta { namespace base {
     using detail::DEFAULT_ALIGNMENT;
     using detail::is_supported_alignment;
 
-    supervisor_abstract::supervisor_abstract(detail::pmr::memory_resource* mr)
+    supervisor_abstract::supervisor_abstract(pmr::memory_resource* mr)
         : actor_abstract()
         , memory_resource_(mr) {
     }
@@ -40,7 +40,7 @@ namespace actor_zeta { namespace base {
         current_message_ = std::move(msg);
     }
 
-    auto supervisor_abstract::resource() const noexcept -> detail::pmr::memory_resource* {
+    auto supervisor_abstract::resource() const noexcept -> pmr::memory_resource* {
         return memory_resource_;
     }
 

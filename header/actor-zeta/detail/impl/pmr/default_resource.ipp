@@ -3,11 +3,7 @@
 #include <actor-zeta/detail/aligned_allocate.hpp>
 #include <actor-zeta/detail/pmr/default_resource.hpp>
 
-namespace actor_zeta { namespace detail { namespace pmr {
-
-#if CPP17_OR_GREATER
-
-#else
+namespace actor_zeta { namespace pmr {
 
 #ifndef WEAK_CONSTINIT
 #ifndef NO_DESTROY
@@ -107,6 +103,4 @@ namespace actor_zeta { namespace detail { namespace pmr {
         return null_memory_resource_t::get();
     }
 
-#endif
-
-}}} // namespace actor_zeta::detail::pmr
+}} // namespace actor_zeta::detail::pmr

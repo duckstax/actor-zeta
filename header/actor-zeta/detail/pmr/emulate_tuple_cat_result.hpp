@@ -11,7 +11,7 @@
 #include <tuple>
 #include <utility>
 
-namespace actor_zeta { namespace detail { namespace pmr {
+namespace actor_zeta { namespace pmr {
 
     template<std::size_t i, typename _Tp>
     using tuple_element_t = typename std::tuple_element<i, _Tp>::type;
@@ -60,4 +60,4 @@ namespace actor_zeta { namespace detail { namespace pmr {
         using type = typename combine_tuples<typename make_tuple<Args>::type...>::type;
     };
 
-}}} // namespace actor_zeta::detail::pmr
+}} // namespace actor_zeta::detail::pmr
