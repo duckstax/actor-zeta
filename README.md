@@ -58,6 +58,16 @@ private:
 
 ```
 
+### Header-Only
+
+To use as header-only; that is, to eliminate the requirement to
+link a program to a static or dynamic library, simply
+place the following line in exactly one new or existing source
+file in your project.
+```
+#include <actor-zeta/src.hpp>
+```
+
 ## For Users
 
 Add the corresponding remote to your conan:
