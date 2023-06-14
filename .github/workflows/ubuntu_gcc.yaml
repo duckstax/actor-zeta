@@ -47,3 +47,26 @@ jobs:
             --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.configuration.TOOLCHAIN_VERSION}}
 
           update-alternatives --config gcc
+
+      - name: Configure CMake
+        env:
+          CC: gcc-${{matrix.configuration.TOOLCHAIN_VERSION}}
+          CXX: g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
+          BUILD_TYPE: ${{matrix.build_type}}
+          CXX_STANDARD: ${{matrix.cxx_standard}}
+        run: |
+          mkdir -p build
+          cmake -B build -GNinja \
+            -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+            -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \
+            -DCMAKE_C_COMPILER=${CC} \
+            -DCMAKE_CXX_COMPILER=${CXX} \
+            -DALLOW_EXAMPLES=OFF \
+            -DALLOW_TESTS=ON \
+            -DENABLE_TESTS_MEASUREMENTS=ON \
+            -DALLOW_BENCHMARK=OFF \
+            -DEXCEPTIONS_DISABLE=ON \
+            -DRTTI_DISABLE=ON
+
+      - name: Build
+        run: cmake --build build
