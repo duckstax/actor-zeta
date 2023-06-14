@@ -3,16 +3,20 @@ ARG UBUNTU_VERSION
 FROM ubuntu:${UBUNTU_VERSION}
 
 ARG TOOLCHAIN_VERSION
+ARG PYINSTALL_SCRIPT
 
 ENV DEBIAN_FRONTEND noninteractive
+
+ADD $PYINSTALL_SCRIPT ./pyinstall.sh
 
 RUN apt update && apt-get install -y \
     software-properties-common ca-certificates \
     ninja-build \
-    python3-pip python3 python3-dev python3-setuptools \
     zlib1g-dev wget
 
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test
+
+RUN bash ./pyinstall.sh $(cat /etc/os-release | grep -a UBUNTU_CODENAME | sed -e 's/UBUNTU_CODENAME=//g')
 
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install --no-cache-dir conan==1.59 cmake
