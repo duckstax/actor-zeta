@@ -96,3 +96,7 @@ jobs:
 
       - name: Build
         run: cmake --build build
+
+      - name: Test
+        working-directory: build
+        run: ctest --rerun-failed --output-on-failure
