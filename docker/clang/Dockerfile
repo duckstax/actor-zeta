@@ -5,6 +5,8 @@ FROM ubuntu:${UBUNTU_VERSION}
 ARG UBUNTU_RELEASE
 ARG TOOLCHAIN_VERSION
 
+ENV DEBIAN_FRONTEND noninteractive
+
 RUN apt update && apt-get install -y \
     software-properties-common ca-certificates \
     ninja-build \
