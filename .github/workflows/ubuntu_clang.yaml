@@ -61,10 +61,9 @@ jobs:
           CXX: clang++-${{matrix.configuration.LLVM_TOOLCHAIN}}
           BUILD_TYPE: ${{matrix.build_type}}
           CXX_STANDARD: ${{matrix.cxx_standard}}
-          BUILD_DIR: build
         run: |
-          mkdir -p ${BUILD_DIR}
-          cmake -B ${BUILD_DIR} -GNinja \
+          mkdir -p build
+          cmake -B build -GNinja \
             -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
             -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \
             -DCMAKE_C_COMPILER=${CC} \
@@ -77,4 +76,4 @@ jobs:
             -DRTTI_DISABLE=ON
 
       - name: Build
-        run: cmake --build ${BUILD_DIR}
+        run: cmake --build build
