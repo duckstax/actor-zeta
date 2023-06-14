@@ -71,10 +71,8 @@ namespace actor_zeta { namespace type_traits {
 
 #endif
 
-#if CPP17_OR_GREATER and defined(__has_include)
-#if __has_include(<memory_resource>)
-#endif
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+#if HAVE_STD_PMR==1
+#else
 
     template<bool v>
     using bool_constant = std::integral_constant<bool, v>;

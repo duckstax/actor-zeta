@@ -3,32 +3,49 @@
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    container:
-      image: ubuntu:18.04
     strategy:
       matrix:
         cxx_standard: [11, 14, 17]
         build_type: ["Release", "Debug"]
         configuration: [
-          {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"5.0"},
-          {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"6.0"},
-          {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"7"},
-          {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"8"},
-          {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"9"},
-          {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"10"},
-          {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"11"},
-          {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"12"},
-          {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"13"},
-          {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"14"},
-          {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"15"},
-          {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"16"}
+          {"UBUNTU_VERSION":"18.04", "UBUNTU_RELEASE":"bionic", "TOOLCHAIN_VERSION":"5.0"},
+          {"UBUNTU_VERSION":"18.04", "UBUNTU_RELEASE":"bionic", "TOOLCHAIN_VERSION":"6.0"},
+          {"UBUNTU_VERSION":"18.04", "UBUNTU_RELEASE":"bionic", "TOOLCHAIN_VERSION":"7"},
+          {"UBUNTU_VERSION":"18.04", "UBUNTU_RELEASE":"bionic", "TOOLCHAIN_VERSION":"8"},
+          {"UBUNTU_VERSION":"18.04", "UBUNTU_RELEASE":"bionic", "TOOLCHAIN_VERSION":"9"},
+          {"UBUNTU_VERSION":"18.04", "UBUNTU_RELEASE":"bionic", "TOOLCHAIN_VERSION":"10"},
+          {"UBUNTU_VERSION":"18.04", "UBUNTU_RELEASE":"bionic", "TOOLCHAIN_VERSION":"11"},
+          {"UBUNTU_VERSION":"18.04", "UBUNTU_RELEASE":"bionic", "TOOLCHAIN_VERSION":"12"},
+          {"UBUNTU_VERSION":"18.04", "UBUNTU_RELEASE":"bionic", "TOOLCHAIN_VERSION":"13"},
+          {"UBUNTU_VERSION":"18.04", "UBUNTU_RELEASE":"bionic", "TOOLCHAIN_VERSION":"14"},
+          {"UBUNTU_VERSION":"18.04", "UBUNTU_RELEASE":"bionic", "TOOLCHAIN_VERSION":"15"},
+          {"UBUNTU_VERSION":"18.04", "UBUNTU_RELEASE":"bionic", "TOOLCHAIN_VERSION":"16"},
+
+          {"UBUNTU_VERSION":"20.04", "UBUNTU_RELEASE":"focal", "TOOLCHAIN_VERSION":"9"},
+          {"UBUNTU_VERSION":"20.04", "UBUNTU_RELEASE":"focal", "TOOLCHAIN_VERSION":"10"},
+          {"UBUNTU_VERSION":"20.04", "UBUNTU_RELEASE":"focal", "TOOLCHAIN_VERSION":"11"},
+          {"UBUNTU_VERSION":"20.04", "UBUNTU_RELEASE":"focal", "TOOLCHAIN_VERSION":"12"},
+          {"UBUNTU_VERSION":"20.04", "UBUNTU_RELEASE":"focal", "TOOLCHAIN_VERSION":"13"},
+          {"UBUNTU_VERSION":"20.04", "UBUNTU_RELEASE":"focal", "TOOLCHAIN_VERSION":"14"},
+          {"UBUNTU_VERSION":"20.04", "UBUNTU_RELEASE":"focal", "TOOLCHAIN_VERSION":"15"},
+          {"UBUNTU_VERSION":"20.04", "UBUNTU_RELEASE":"focal", "TOOLCHAIN_VERSION":"16"},
+
+          {"UBUNTU_VERSION":"22.04", "UBUNTU_RELEASE":"jammy", "TOOLCHAIN_VERSION":"13"},
+          {"UBUNTU_VERSION":"22.04", "UBUNTU_RELEASE":"jammy", "TOOLCHAIN_VERSION":"14"},
+          {"UBUNTU_VERSION":"22.04", "UBUNTU_RELEASE":"jammy", "TOOLCHAIN_VERSION":"15"},
+          {"UBUNTU_VERSION":"22.04", "UBUNTU_RELEASE":"jammy", "TOOLCHAIN_VERSION":"16"}
         ]
+
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Install system dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
           apt update && apt-get install -y \
             software-properties-common ca-certificates \
@@ -43,8 +60,8 @@ jobs:
       - name: Install compiler
         run: |
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-          add-apt-repository "deb http://apt.llvm.org/${{matrix.configuration.UBUNTU_RELEASE}}/ llvm-toolchain-${{matrix.configuration.UBUNTU_RELEASE}}-${{matrix.configuration.LLVM_TOOLCHAIN}} main"
-          wget https://apt.llvm.org/${{matrix.configuration.UBUNTU_RELEASE}}/dists/llvm-toolchain-${{matrix.configuration.UBUNTU_RELEASE}}-${{matrix.configuration.LLVM_TOOLCHAIN}}/main/binary-amd64/Packages
+          add-apt-repository "deb http://apt.llvm.org/${{matrix.configuration.UBUNTU_RELEASE}}/ llvm-toolchain-${{matrix.configuration.UBUNTU_RELEASE}}-${{matrix.configuration.TOOLCHAIN_VERSION}} main"
+          wget https://apt.llvm.org/${{matrix.configuration.UBUNTU_RELEASE}}/dists/llvm-toolchain-${{matrix.configuration.UBUNTU_RELEASE}}-${{matrix.configuration.TOOLCHAIN_VERSION}}/main/binary-amd64/Packages
           cat Packages \
             | grep -Po "^Package: [a-zA-Z0-9-.\+ ]+$" \
             | sed -e 's/Package:/ /g' \
@@ -59,8 +76,8 @@ jobs:
 
       - name: Configure CMake
         env:
-          CC: clang-${{matrix.configuration.LLVM_TOOLCHAIN}}
-          CXX: clang++-${{matrix.configuration.LLVM_TOOLCHAIN}}
+          CC: clang-${{matrix.configuration.TOOLCHAIN_VERSION}}
+          CXX: clang++-${{matrix.configuration.TOOLCHAIN_VERSION}}
           BUILD_TYPE: ${{matrix.build_type}}
           CXX_STANDARD: ${{matrix.cxx_standard}}
         run: |

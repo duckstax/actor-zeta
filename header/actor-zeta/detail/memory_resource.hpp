@@ -2,22 +2,18 @@
 
 #include <actor-zeta/config.hpp>
 
-#if CPP17_OR_GREATER and defined(__has_include)
-#if __has_include(<memory_resource>)
-#include <memory_resource>
-namespace actor_zeta { namespace pmr {
-    using std::pmr::memory_resource;
-}} // namespace actor_zeta::pmr
-#endif
-#elif CPP14_OR_GREATER || CPP11_OR_GREATER
-// clang-format off
-#include <actor-zeta/detail/pmr/memory_resource.hpp>
-// clang-format on
-#endif
+#if HAVE_STD_PMR==1
 
-#if CPP17_OR_GREATER and defined(__has_include)
-#if __has_include(<memory_resource>)
+#include <memory_resource>
+
 namespace actor_zeta { namespace pmr {
+
+    using std::pmr::memory_resource;
+
+}} // namespace actor_zeta::pmr
+
+namespace actor_zeta { namespace pmr {
+
     template<class T>
     using polymorphic_allocator = std::pmr::polymorphic_allocator<T>;
 
@@ -25,9 +21,16 @@ namespace actor_zeta { namespace pmr {
     using std::pmr::new_delete_resource;
     using std::pmr::null_memory_resource;
     using std::pmr::set_default_resource;
+
 }} // namespace actor_zeta::pmr
-#endif
-#elif CPP14_OR_GREATER || CPP11_OR_GREATER
+
+#else
+
+// clang-format off
+#include <actor-zeta/detail/pmr/memory_resource.hpp>
+// clang-format on
+
 #include <actor-zeta/detail/pmr/default_resource.hpp>
 #include <actor-zeta/detail/pmr/polymorphic_allocator.hpp>
+
 #endif

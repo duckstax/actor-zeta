@@ -1,9 +1,7 @@
 #pragma once
 
-#if CPP17_OR_GREATER and defined(__has_include)
-#if __has_include(<memory_resource>)
-#endif
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+#if HAVE_STD_PMR==1
+#else
 
 #include <actor-zeta/detail/type_traits.hpp>
 
@@ -16,10 +14,8 @@
 
 namespace actor_zeta { namespace pmr {
 
-#if CPP17_OR_GREATER and defined(__has_include)
-#if __has_include(<memory_resource>)
-#endif
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+#if HAVE_STD_PMR==1
+#else
 
     template<class T>
     struct has_allocator_type {
