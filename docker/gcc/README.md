@@ -3,6 +3,8 @@ Local build Docker image for:`ubuntu`, according to https://releases.ubuntu.com/
 * `18.04`
     * GNU GCC `4.8`, `5`, `6`, `7`, `8`
 * `20.04`
+    * GNU GCC `7`, `8`, `9`, `10`
+* `22.04`
     * GNU GCC `9`, `10`, `11`, `12`
 
 * `export TOOLCHAIN_VERSION=5`
