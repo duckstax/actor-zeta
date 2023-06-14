@@ -4,7 +4,18 @@
 #include <cstddef>
 #include <cstdio>
 
+#if CPP17_OR_GREATER and __has_include(<memory_resource>)
+#include <memory_resource>
+#endif
+
 namespace actor_zeta { namespace pmr {
+
+#if CPP17_OR_GREATER and __has_include(<memory_resource>)
+
+    using std::pmr::memory_resource;
+    using std::pmr::monotonic_buffer_resource;
+
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
     class memory_resource {
     public:
@@ -38,5 +49,6 @@ namespace actor_zeta { namespace pmr {
         return !(a == b);
     }
 
+#endif
 
 }} // namespace actor_zeta::detail::pmr

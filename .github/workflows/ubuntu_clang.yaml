@@ -8,6 +8,8 @@ jobs:
       image: ubuntu:18.04
     strategy:
       matrix:
+        cxx_standard: [11, 14, 17]
+        build_type: ["Release", "Debug"]
         configuration: [
           {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"5.0"},
           {"UBUNTU_RELEASE":"bionic", "LLVM_TOOLCHAIN":"6.0"},
@@ -52,3 +54,27 @@ jobs:
             | sed -e 's/[\.a-zA-Z0-9-]*polly[\.a-zA-Z0-9-]*$/ /g' > pkglist
 
           apt update && apt-get install -y $(cat pkglist)
+
+      - name: Configure CMake
+        env:
+          CC: clang-${{matrix.configuration.LLVM_TOOLCHAIN}}
+          CXX: clang++-${{matrix.configuration.LLVM_TOOLCHAIN}}
+          BUILD_TYPE: ${{matrix.build_type}}
+          CXX_STANDARD: ${{matrix.cxx_standard}}
+          BUILD_DIR: build
+        run: |
+          mkdir -p ${BUILD_DIR}
+          cmake -B ${BUILD_DIR} -GNinja \
+            -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+            -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \
+            -DCMAKE_C_COMPILER=${CC} \
+            -DCMAKE_CXX_COMPILER=${CXX} \
+            -DALLOW_EXAMPLES=OFF \
+            -DALLOW_TESTS=ON \
+            -DENABLE_TESTS_MEASUREMENTS=ON \
+            -DALLOW_BENCHMARK=OFF \
+            -DEXCEPTIONS_DISABLE=ON \
+            -DRTTI_DISABLE=ON
+
+      - name: Build
+        run: cmake --build ${BUILD_DIR}

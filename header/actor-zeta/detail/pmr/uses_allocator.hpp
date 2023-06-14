@@ -1,5 +1,8 @@
 #pragma once
 
+#if CPP17_OR_GREATER and __has_include(<memory_resource>)
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+
 #include <actor-zeta/detail/type_traits.hpp>
 
 #include <cassert>
@@ -7,8 +10,12 @@
 #include <new>
 #include <utility>
 
+#endif
 
 namespace actor_zeta { namespace pmr {
+
+#if CPP17_OR_GREATER and __has_include(<memory_resource>)
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
     template<class T>
     struct has_allocator_type {
@@ -27,14 +34,14 @@ namespace actor_zeta { namespace pmr {
     };
 
     template<typename Alloc, typename T>
-    using is_erased_or_convertible = type_traits::_or_<std::is_convertible<Alloc, T>, std::is_same<T, type_traits::erased_type>>;
+    using is_erased_or_convertible = actor_zeta::type_traits::_or_<std::is_convertible<Alloc, T>, std::is_same<T, actor_zeta::type_traits::erased_type>>;
 
-    template<typename T, typename Alloc, typename = type_traits::void_t<>>
+    template<typename T, typename Alloc, typename = actor_zeta::type_traits::void_t<>>
     struct uses_allocator_helper
         : std::false_type {};
 
     template<typename T, typename Alloc>
-    struct uses_allocator_helper<T, Alloc, type_traits::void_t<typename T::allocator_type>>
+    struct uses_allocator_helper<T, Alloc, actor_zeta::type_traits::void_t<typename T::allocator_type>>
         : is_erased_or_convertible<Alloc, typename T::allocator_type>::type {};
 
     template<typename T, typename Alloc,
@@ -70,11 +77,11 @@ namespace actor_zeta { namespace pmr {
     template<typename T, typename Alloc, typename... Args>
     struct uses_alloc<true, T, Alloc, Args...>
         : std::conditional<
-              std::is_constructible<T, type_traits::allocator_arg_t, const Alloc&, Args...>::value,
+              std::is_constructible<T, actor_zeta::type_traits::allocator_arg_t, const Alloc&, Args...>::value,
               uses_alloc_1<Alloc>,
               uses_alloc_2<Alloc>>::type {
-        static_assert(type_traits::_or_<
-                          std::is_constructible<T, type_traits::allocator_arg_t, const Alloc&, Args...>,
+        static_assert(actor_zeta::type_traits::_or_<
+                          std::is_constructible<T, actor_zeta::type_traits::allocator_arg_t, const Alloc&, Args...>,
                           std::is_constructible<T, Args..., const Alloc&>>::value,
                       "construction with an allocator must be possible"
                       " if uses_allocator is true");
@@ -113,7 +120,7 @@ namespace actor_zeta { namespace pmr {
         typename... Args>
     struct is_uses_allocator_predicate
         : std::conditional<uses_allocator<T, Alloc>::value,
-                           type_traits::_or_<Predicate<T, type_traits::allocator_arg_t, Alloc, Args...>,
+                           actor_zeta::type_traits::_or_<Predicate<T, actor_zeta::type_traits::allocator_arg_t, Alloc, Args...>,
                                              Predicate<T, Args..., Alloc>>,
                            Predicate<T, Args...>>::type {};
 
@@ -132,7 +139,7 @@ namespace actor_zeta { namespace pmr {
 
     template<typename T, typename Alloc, typename... Args>
     void uses_allocator_construct_impl(uses_alloc_1<Alloc> a, T* ptr, Args&&... args) {
-        ::new ((void*) ptr) T(type_traits::allocator_arg, *a.a_, std::forward<Args>(args)...);
+        ::new ((void*) ptr) T(actor_zeta::type_traits::allocator_arg, *a.a_, std::forward<Args>(args)...);
     }
 
     template<typename T, typename Alloc, typename... Args>
@@ -144,5 +151,7 @@ namespace actor_zeta { namespace pmr {
     void uses_allocator_construct(const Alloc& a, T* ptr, Args&&... args) {
         uses_allocator_construct_impl(use_alloc<T, Alloc, Args...>(a), ptr, std::forward<Args>(args)...);
     }
+
+#endif
 
 }} // namespace actor_zeta::detail::pmr

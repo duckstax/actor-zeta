@@ -5,6 +5,26 @@
 
 namespace actor_zeta { namespace pmr {
 
+#if CPP17_OR_GREATER and __has_include(<memory_resource>)
+
+    memory_resource* get_default_resource() noexcept {
+        return std::pmr::get_default_resource();
+    }
+
+    memory_resource* set_default_resource(memory_resource* new_res) noexcept {
+        return std::pmr::set_default_resource(new_res);
+    }
+
+    memory_resource* new_delete_resource() noexcept {
+        return std::pmr::new_delete_resource();
+    }
+
+    memory_resource* null_memory_resource() noexcept {
+        return std::pmr::null_memory_resource();
+    }
+
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+
 #ifndef WEAK_CONSTINIT
 #ifndef NO_DESTROY
     REQUIRE_CONST_INIT
@@ -102,5 +122,7 @@ namespace actor_zeta { namespace pmr {
     memory_resource* null_memory_resource() noexcept {
         return null_memory_resource_t::get();
     }
+
+#endif
 
 }} // namespace actor_zeta::detail::pmr

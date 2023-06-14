@@ -71,7 +71,7 @@ namespace actor_zeta { namespace type_traits {
 
 #endif
 
-#if CPP17_OR_GREATER
+#if CPP17_OR_GREATER and __has_include(<memory_resource>)
 
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 

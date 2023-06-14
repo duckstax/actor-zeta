@@ -9,13 +9,22 @@
 #include <tuple>
 #include <utility>
 
-#include "emulate_tuple_cat_result.hpp"
+#if CPP17_OR_GREATER and __has_include(<memory_resource>)
+#include <memory_resource>
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 #include <actor-zeta/detail/pmr/default_resource.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/detail/pmr/uses_allocator.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
+#endif
 
 namespace actor_zeta { namespace pmr {
+
+#if CPP17_OR_GREATER and __has_include(<memory_resource>)
+    template<class T>
+    using polymorphic_allocator = std::pmr::polymorphic_allocator<T>;
+
+#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
     template<typename T>
     class polymorphic_allocator {
@@ -65,15 +74,15 @@ namespace actor_zeta { namespace pmr {
             typename... Args2>
         void
         construct(std::pair<T1, T2>* p, std::piecewise_construct_t, std::tuple<Args1...> x, std::tuple<Args2...> y) {
-            memory_resource* const resource = this->resource();
-            auto x_use_tag = use_alloc<T1, memory_resource*, Args1...>(resource);
-            auto y_use_tag = use_alloc<T2, memory_resource*, Args2...>(resource);
+            actor_zeta::pmr::memory_resource* const resource = this->resource();
+            auto x_use_tag = use_alloc<T1, actor_zeta::pmr::memory_resource*, Args1...>(resource);
+            auto y_use_tag = use_alloc<T2, actor_zeta::pmr::memory_resource*, Args2...>(resource);
             ///std::__use_alloc
 
             ::new (p) std::pair<T1, T2>(
                 std::piecewise_construct,
-                construct_(x_use_tag, x),
-                construct_(y_use_tag, y));
+                construct_(x_use_tag, std::move(x)),
+                construct_(y_use_tag, std::move(y)));
         }
 
         template<typename T1, typename T2>
@@ -143,23 +152,33 @@ namespace actor_zeta { namespace pmr {
 
         template<typename Tuple>
         Tuple&&
-        construct_(uses_alloc_0, Tuple& t) {
+        construct_(uses_alloc_0, Tuple&& t) {
             return std::move(t);
         }
 
         template<typename... Args>
         constexpr auto
-        construct_(uses_alloc1_ ua, std::tuple<Args...>& t) -> typename tuple_cat_result<Args...>::type {
-            return std::tuple_cat(std::make_tuple(type_traits::allocator_arg, *(ua.a_)), std::move(t));
+        construct_(uses_alloc1_ ua, std::tuple<Args...>&& t)
+#if CPP17_OR_GREATER or CPP14_OR_GREATER
+#elif CPP11_OR_GREATER
+            -> std::tuple<actor_zeta::type_traits::allocator_arg_t, actor_zeta::pmr::memory_resource*, Args...>
+#endif
+        {
+            return std::tuple_cat(std::make_tuple(actor_zeta::type_traits::allocator_arg, *(ua.a_)), std::move(t));
         }
 
         template<typename... Args>
         constexpr auto
-        construct_(uses_alloc2_ ua, std::tuple<Args...>& t) -> typename tuple_cat_result<Args...>::type {
+        construct_(uses_alloc2_ ua, std::tuple<Args...>&& t)
+#if CPP17_OR_GREATER or CPP14_OR_GREATER
+#elif CPP11_OR_GREATER
+            -> std::tuple<Args..., actor_zeta::pmr::memory_resource*>
+#endif
+        {
             return std::tuple_cat(std::move(t), std::make_tuple(*(ua.a_)));
         }
 
-        memory_resource* resource_;
+        actor_zeta::pmr::memory_resource* resource_;
     };
 
     template<class T1, class T2>
@@ -173,4 +192,6 @@ namespace actor_zeta { namespace pmr {
     operator!=(const polymorphic_allocator<T1>& a, const polymorphic_allocator<T2>& b) noexcept {
         return !(a == b);
     }
+
+#endif
 }} // namespace actor_zeta::pmr
