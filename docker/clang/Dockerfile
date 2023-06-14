@@ -3,7 +3,7 @@ ARG UBUNTU_VERSION
 FROM ubuntu:${UBUNTU_VERSION}
 
 ARG UBUNTU_RELEASE
-ARG LLVM_TOOLCHAIN
+ARG TOOLCHAIN_VERSION
 
 RUN apt update && apt-get install -y \
     software-properties-common ca-certificates \
@@ -17,9 +17,9 @@ RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install --no-cache-dir conan==1.59 cmake
 
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-RUN add-apt-repository "deb http://apt.llvm.org/${UBUNTU_RELEASE}/ llvm-toolchain-${UBUNTU_RELEASE}-${LLVM_TOOLCHAIN} main"
+RUN add-apt-repository "deb http://apt.llvm.org/${UBUNTU_RELEASE}/ llvm-toolchain-${UBUNTU_RELEASE}-${TOOLCHAIN_VERSION} main"
 
-RUN wget https://apt.llvm.org/${UBUNTU_RELEASE}/dists/llvm-toolchain-${UBUNTU_RELEASE}-${LLVM_TOOLCHAIN}/main/binary-amd64/Packages
+RUN wget https://apt.llvm.org/${UBUNTU_RELEASE}/dists/llvm-toolchain-${UBUNTU_RELEASE}-${TOOLCHAIN_VERSION}/main/binary-amd64/Packages
 RUN cat Packages \
     | grep -Po "^Package: [a-zA-Z0-9-.\+ ]+$" \
     | sed -e 's/Package:/ /g' \
