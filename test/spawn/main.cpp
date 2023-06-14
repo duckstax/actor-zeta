@@ -10,7 +10,6 @@
 #include <actor-zeta.hpp>
 #include <test/tooltestsuites/scheduler_test.hpp>
 
-using actor_zeta::pmr::memory_resource;
 class dummy_supervisor;
 
 static std::atomic_int actor_counter{0};
@@ -39,7 +38,7 @@ public:
         supervisor_sub_counter++;
     }
 
-    dummy_supervisor_sub(memory_resource* ptr)
+    dummy_supervisor_sub(actor_zeta::pmr::memory_resource* ptr)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr)
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
         ///scheduler()->start();
@@ -81,7 +80,7 @@ private:
 
 class dummy_supervisor final : public actor_zeta::cooperative_supervisor<dummy_supervisor> {
 public:
-    dummy_supervisor(memory_resource* ptr)
+    dummy_supervisor(actor_zeta::pmr::memory_resource* ptr)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr)
         , create_actor_(actor_zeta::make_behavior(resource(), create_actor_id, this, &dummy_supervisor::create_actor))
         , create_supervisor_(actor_zeta::make_behavior(resource(), create_supervisor_id, this, &dummy_supervisor::create_supervisor))

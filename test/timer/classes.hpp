@@ -6,19 +6,18 @@
 #include <memory>
 #include <vector>
 
-#include "tooltestsuites/clock_test.hpp"
-#include "tooltestsuites/scheduler_test.hpp"
+#include "test/tooltestsuites/clock_test.hpp"
+#include "test/tooltestsuites/scheduler_test.hpp"
 #include <actor-zeta.hpp>
 
 static std::atomic<uint64_t> alarm_counter{0};
 
-using actor_zeta::pmr::memory_resource;
 /// non thread safe
 constexpr static auto alarm_id = actor_zeta::make_message_id(0);
 
 class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
 public:
-    explicit supervisor_lite(memory_resource* ptr)
+    explicit supervisor_lite(actor_zeta::pmr::memory_resource* ptr)
         : cooperative_supervisor(ptr)
         , alarm_(actor_zeta::make_behavior(resource(), alarm_id, this, &supervisor_lite::alarm))
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {

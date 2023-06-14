@@ -2,10 +2,8 @@
 
 #include <actor-zeta.hpp>
 
-using actor_zeta::pmr::memory_resource;
-
 class derived_from_memory_resource
-    : public memory_resource {
+    : public actor_zeta::pmr::memory_resource {
 public:
     explicit derived_from_memory_resource(unsigned i = 0u)
         : id(i) {}
@@ -26,7 +24,7 @@ public:
         do_deallocate_alignment = alignment;
     }
 
-    virtual bool do_is_equal(const memory_resource& other) const noexcept {
+    virtual bool do_is_equal(const actor_zeta::pmr::memory_resource& other) const noexcept {
         do_is_equal_called = true;
         do_is_equal_other = &other;
         return static_cast<const derived_from_memory_resource&>(other).id == this->id;
@@ -63,7 +61,7 @@ public:
     mutable std::size_t do_deallocate_alignment;
 
     mutable bool do_is_equal_called;
-    mutable const memory_resource* do_is_equal_other;
+    mutable const actor_zeta::pmr::memory_resource* do_is_equal_other;
 };
 
 bool derived_from_memory_resource::destructor_called = false;

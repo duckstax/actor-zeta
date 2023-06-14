@@ -1,100 +1,196 @@
 ##### cached_queue ################################################################################
-PROJECT(cached_queue CXX)
+PROJECT(tests_cached_queue CXX)
 
-set(${PROJECT_NAME}_SOURCE_FILES
-    cached_queue.cpp
+file(GLOB ${PROJECT_NAME}_HEADERS
+    ./*.hpp
+    ./*.h
+)
+
+file(GLOB ${PROJECT_NAME}_SOURCES
+    ./cached_queue.cpp
 )
 
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
 
-add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCE_FILES})
+add_executable(${PROJECT_NAME}
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS})
 
-target_link_libraries(${PROJECT_NAME} actor-zeta CONAN_PKG::catch2)
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC ${REQ_LLVM_LIBRARIES}
+    )
+endif() #--------------------------------------------------------------------------- Clang
+
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC actor-zeta
+    PUBLIC CONAN_PKG::catch2
+)
 
 include(CTest)
 include(Catch)
 catch_discover_tests(${PROJECT_NAME})
 
 ##### fifo_inbox ##################################################################################
-PROJECT(fifo_inbox CXX)
+PROJECT(tests_fifo_inbox CXX)
 
-set(${PROJECT_NAME}_SOURCE_FILES
-    fifo_inbox.cpp
+file(GLOB ${PROJECT_NAME}_HEADERS
+    ./*.hpp
+    ./*.h
+)
+
+file(GLOB ${PROJECT_NAME}_SOURCES
+    ./fifo_inbox.cpp
 )
 
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
 
-add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCE_FILES})
+add_executable(${PROJECT_NAME}
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS})
 
-target_link_libraries(${PROJECT_NAME} actor-zeta CONAN_PKG::catch2)
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC ${REQ_LLVM_LIBRARIES}
+    )
+endif() #--------------------------------------------------------------------------- Clang
+
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC actor-zeta
+    PUBLIC CONAN_PKG::catch2
+)
 
 include(CTest)
 include(Catch)
 catch_discover_tests(${PROJECT_NAME})
 
 ##### fixed_queue #################################################################################
-PROJECT(fixed_queue CXX)
+PROJECT(tests_fixed_queue CXX)
 
-set(${PROJECT_NAME}_SOURCE_FILES
-    fixed_queue.cpp
+file(GLOB ${PROJECT_NAME}_HEADERS
+    ./*.hpp
+    ./*.h
+)
+
+file(GLOB ${PROJECT_NAME}_SOURCES
+    ./fixed_queue.cpp
 )
 
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
 
-add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCE_FILES})
+add_executable(${PROJECT_NAME}
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS})
 
-target_link_libraries(${PROJECT_NAME} actor-zeta CONAN_PKG::catch2)
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC ${REQ_LLVM_LIBRARIES}
+    )
+endif() #--------------------------------------------------------------------------- Clang
+
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC actor-zeta
+    PUBLIC CONAN_PKG::catch2
+)
 
 include(CTest)
 include(Catch)
 catch_discover_tests(${PROJECT_NAME})
 
 ##### lifo_inbox ##################################################################################
-PROJECT(lifo_inbox CXX)
+PROJECT(tests_lifo_inbox CXX)
 
-set(${PROJECT_NAME}_SOURCE_FILES
-    lifo_inbox.cpp
+file(GLOB ${PROJECT_NAME}_HEADERS
+    ./*.hpp
+    ./*.h
+)
+
+file(GLOB ${PROJECT_NAME}_SOURCES
+    ./lifo_inbox.cpp
 )
 
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
 
-add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCE_FILES})
+add_executable(${PROJECT_NAME}
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS})
 
-target_link_libraries(${PROJECT_NAME} actor-zeta CONAN_PKG::catch2)
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC ${REQ_LLVM_LIBRARIES}
+    )
+endif() #--------------------------------------------------------------------------- Clang
+
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC actor-zeta
+    PUBLIC CONAN_PKG::catch2
+)
 
 include(CTest)
 include(Catch)
 catch_discover_tests(${PROJECT_NAME})
 
 ##### queue #######################################################################################
-PROJECT(queue CXX)
+PROJECT(tests_queue CXX)
 
-set(${PROJECT_NAME}_SOURCE_FILES
-    queue.cpp
+file(GLOB ${PROJECT_NAME}_HEADERS
+    ./*.hpp
+    ./*.h
+)
+
+file(GLOB ${PROJECT_NAME}_SOURCES
+    ./queue.cpp
 )
 
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
 
-add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCE_FILES})
+add_executable(${PROJECT_NAME}
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS})
 
-target_link_libraries(${PROJECT_NAME} actor-zeta CONAN_PKG::catch2)
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC ${REQ_LLVM_LIBRARIES}
+    )
+endif() #--------------------------------------------------------------------------- Clang
+
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC actor-zeta
+    PUBLIC CONAN_PKG::catch2
+)
 
 include(CTest)
 include(Catch)
 catch_discover_tests(${PROJECT_NAME})
 
 ##### task_queue ##################################################################################
-PROJECT(task_queue CXX)
+PROJECT(tests_task_queue CXX)
 
-set(${PROJECT_NAME}_SOURCE_FILES
-    task_queue.cpp
+file(GLOB ${PROJECT_NAME}_HEADERS
+    ./*.hpp
+    ./*.h
+)
+
+file(GLOB ${PROJECT_NAME}_SOURCES
+    ./task_queue.cpp
 )
 
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
 
-add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCE_FILES})
+add_executable(${PROJECT_NAME}
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS})
 
-target_link_libraries(${PROJECT_NAME} actor-zeta CONAN_PKG::catch2)
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC ${REQ_LLVM_LIBRARIES}
+    )
+endif() #--------------------------------------------------------------------------- Clang
+
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC actor-zeta
+    PUBLIC CONAN_PKG::catch2
+)
 
 include(CTest)
 include(Catch)

@@ -1,6 +1,24 @@
 PROJECT(tooltestsuites LANGUAGES CXX)
 
-set(SOURCE_FILES scheduler_test.cpp clock_test.cpp)
+file(GLOB ${PROJECT_NAME}_HEADERS
+    ./*.hpp
+    ./*.h
+)
 
-add_library(${PROJECT_NAME} ${SOURCE_FILES})
-target_link_libraries(${project} actor-zeta)
+file(GLOB ${PROJECT_NAME}_SOURCES
+    ./*.cpp
+)
+
+add_library(${PROJECT_NAME}
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS})
+
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC ${REQ_LLVM_LIBRARIES}
+    )
+endif() #--------------------------------------------------------------------------- Clang
+
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC actor-zeta
+)

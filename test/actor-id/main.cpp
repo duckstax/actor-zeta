@@ -8,7 +8,7 @@
 #include <string>
 
 #include <actor-zeta.hpp>
-#include <test/tooltestsuites/scheduler_test.hpp>
+#include "test/tooltestsuites/scheduler_test.hpp"
 
 using actor_zeta::pmr::memory_resource;
 class dummy_supervisor;

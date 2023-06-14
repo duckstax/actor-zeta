@@ -1,4 +1,4 @@
-PROJECT(polymorphic_allocator CXX)
+PROJECT(tests_polymorphic_allocator CXX)
 
 file(GLOB ${PROJECT_NAME}_HEADERS
     ./*.hpp
