@@ -20,7 +20,7 @@ jobs:
         ]
         exclude:
           - cxx_standard: 17
-            configuration.TOOLCHAIN_VERSION: "4.8"
+            configuration: {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"4.8"}
 
     runs-on: ubuntu-latest
     container:
