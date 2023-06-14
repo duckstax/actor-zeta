@@ -179,6 +179,7 @@ if (CONAN_EXPERIMENTAL_INCLUDE)
 endif ()
 include(conan.cmake)
 
+# https://docs.conan.io/1/reference/config_files/settings.yml.html#c-standard-libraries-aka-compiler-libcxx
 #conan_cmake_autodetect(CONAN_SETTINGS)
 set(CONAN_SETTINGS "build_type=${CMAKE_BUILD_TYPE};compiler.libcxx=${LIBCXX};compiler.cppstd=${CMAKE_CXX_STANDARD}")
 
