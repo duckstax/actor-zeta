@@ -18,7 +18,11 @@ jobs:
           {"UBUNTU_VERSION":"20.04", "TOOLCHAIN_VERSION":"11"},
           {"UBUNTU_VERSION":"20.04", "TOOLCHAIN_VERSION":"12"}
         ]
-    runs-on: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
+
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
+
     steps:
       - uses: actions/checkout@v2
 
