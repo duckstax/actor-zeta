@@ -83,6 +83,22 @@ struct count_copies_alloc_v1_t {
         count_copies_alloc_v1_t::count++;
         printf("%s :: %d\n", __func__, count_copies_alloc_v1_t::count);
     }
+    count_copies_alloc_v1_t(
+        allocator_type const& a,
+        count_copies_alloc_v1_t const& o)
+        : alloc(a.resource()) {
+        copied = true;
+        count_copies_alloc_v1_t::count++;
+        printf("%s :: %d\n", __func__, count_copies_alloc_v1_t::count);
+    }
+    count_copies_alloc_v1_t(
+        count_copies_alloc_v1_t const& o,
+        allocator_type const& a)
+        : alloc(a.resource()) {
+        copied = true;
+        count_copies_alloc_v1_t::count++;
+        printf("%s :: %d\n", __func__, count_copies_alloc_v1_t::count);
+    }
     count_copies_alloc_v1_t(count_copies_alloc_v1_t const& o) {
         copied = true;
         count_copies_alloc_v1_t::count++;
