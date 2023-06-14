@@ -110,9 +110,11 @@ message(STATUS "Find CLANG_LIBCPP=${CLANG_LIBCPP}")
 message(STATUS "Find CLANG_LIBCPP_ABI=${CLANG_LIBCPP_ABI}")
 ### https://stackoverflow.com/questions/43662736/cmake-switch-between-clang-g-and-libc-libstdc
 if (${CLANG_LIBCPP} MATCHES "CLANG_LIBCPP-NOTFOUND")
+    set(LIBCXX "libstdc++11")
 else()
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+    set(LIBCXX "libc++")
 endif()
 
 if (${CLANG_LIBCPP_ABI} MATCHES "CLANG_LIBCPP_ABI-NOTFOUND")
@@ -158,10 +160,17 @@ if (CONAN_EXPERIMENTAL_INCLUDE)
 endif ()
 include(conan.cmake)
 
+#conan_cmake_autodetect(CONAN_SETTINGS)
+
+set(CONAN_SETTINGS "build_type=${CMAKE_BUILD_TYPE};compiler.libcxx=${LIBCXX};compiler.cppstd=${CMAKE_CXX_STANDARD}")
+
+message(STATUS "CONAN_SETTINGS: ${CONAN_SETTINGS}")
+
 conan_cmake_run(REQUIRES
     catch2/2.13.6
 #    benchmark/1.6.2
     BASIC_SETUP CMAKE_TARGETS
+    SETTINGS ${CONAN_SETTINGS}
     ENV CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER}
     BUILD missing
 )
