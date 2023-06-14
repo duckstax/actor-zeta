@@ -27,6 +27,8 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install system dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
           apt update && apt-get install -y \
             software-properties-common ca-certificates \
