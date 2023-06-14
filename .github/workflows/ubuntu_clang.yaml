@@ -51,6 +51,7 @@ jobs:
             | sed -e 's/[+\.a-zA-Z0-9-]*wasm[+\.a-zA-Z0-9-]*$/ /g' \
             | sed -e 's/[+\.a-zA-Z0-9-]*-tools$/ /g' \
             | sed -e 's/[+\.a-zA-Z0-9-]*polly[+\.a-zA-Z0-9-]*$/ /g' \
+            | sed -e 's/[+\.a-zA-Z0-9-]*python[+\.a-zA-Z0-9-]*$/ /g' \
             > pkglist
 
           cat pkglist
