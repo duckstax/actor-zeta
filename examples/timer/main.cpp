@@ -13,8 +13,6 @@
 constexpr static uint64_t command_alarm = 0;
 static std::atomic<uint64_t> alarm_counter{0};
 
-using actor_zeta::pmr::memory_resource;
-
 template<class Policy>
 class advanced_scheduler_t final : public actor_zeta::scheduler_t<Policy> {
 public:
@@ -51,7 +49,7 @@ auto thread_pool_deleter = [](shared_work* ptr) {
 /// non thread safe
 class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
 public:
-    supervisor_lite(memory_resource* ptr)
+    supervisor_lite(actor_zeta::pmr::memory_resource* ptr)
         : actor_zeta::cooperative_supervisor<supervisor_lite>(ptr)
         , alarm_( actor_zeta::make_behavior(resource(), command_alarm, this, &supervisor_lite::alarm))
         , e_(new shared_work(

@@ -16,8 +16,6 @@
 
 #include <actor-zeta.hpp>
 
-using actor_zeta::pmr::memory_resource;
-
 enum class command_t : uint64_t {
     add_link,
     add_address,
@@ -103,7 +101,7 @@ public:
 
 public:
     supervisor_test_t(
-        memory_resource* ptr,
+        actor_zeta::pmr::memory_resource* ptr,
         size_t count_actors,
         size_t count_producers,
         size_t datasize,

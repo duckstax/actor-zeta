@@ -11,7 +11,7 @@ ADD $PYINSTALL_SCRIPT ./pyinstall.sh
 
 RUN apt update && apt-get install -y \
     software-properties-common ca-certificates \
-    ninja-build \
+    ninja-build make \
     zlib1g-dev wget
 
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test
