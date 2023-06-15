@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt update && apt-get install -y \
     software-properties-common ca-certificates \
-    ninja-build \
+    ninja-build make \
     python3-pip python3 python3-dev python3-setuptools \
     zlib1g-dev wget
 

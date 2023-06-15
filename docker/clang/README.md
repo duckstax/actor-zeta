@@ -9,7 +9,7 @@ Local build Docker image for:`ubuntu`, according to https://releases.ubuntu.com/
 
 Example Docker build:
 
-* `export TOOLCHAIN_VERSION=16`
-* `export UBUNTU_VERSION=20.04`
-* `export UBUNTU_RELEASE=focal`
+* `export TOOLCHAIN_VERSION=6.0`
+* `export UBUNTU_VERSION=18.04`
+* `export UBUNTU_RELEASE=bionic`
 * `docker build -f Dockerfile -t llvm_clang:${TOOLCHAIN_VERSION} --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} --build-arg UBUNTU_RELEASE=${UBUNTU_RELEASE} --build-arg TOOLCHAIN_VERSION=${TOOLCHAIN_VERSION} .`
