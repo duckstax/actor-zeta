@@ -15,7 +15,7 @@
 
 namespace benchmark_messages {
 
-#if CPP17_OR_GREATER
+#if HAVE_STD_PMR==1
     std::unique_ptr<unsigned char[]> buffer = std::make_unique<unsigned char[]>(static_cast<size_t>(1073741824) * 1);
     std::unique_ptr<unsigned char[]> backup = std::make_unique<unsigned char[]>(static_cast<size_t>(1073741824) * 2);
 #endif
@@ -80,7 +80,7 @@ namespace benchmark_messages {
         return getSize<((N + alignof(Head) - 1) & -(alignof(Head))) + sizeof(Head), Args...>();
     }
 
-#if CPP17_OR_GREATER
+#if HAVE_STD_PMR==1
 #define DEFINE_FIXTURE_CLASS_MEM_RESOURCE_1(class_name, construct_name)                                                                       \
     template<class P, typename... CustomArgs>                                                                                                 \
     class class_name : public ::benchmark::Fixture {                                                                                          \
@@ -185,7 +185,7 @@ namespace benchmark_messages {
         static constexpr size_t counter_ = sizeof...(CustomArgs);                                                     \
     }
 
-#if CPP17_OR_GREATER
+#if HAVE_STD_PMR==1
 #define DEFINE_FIXTURE_CLASS_MEM_RESOURCE_2(class_name, construct_name, revert_type_seq)                              \
     template<class P, typename... CustomArgs>                                                                         \
     class class_name : public ::benchmark::Fixture {                                                                  \

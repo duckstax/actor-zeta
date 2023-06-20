@@ -13,7 +13,7 @@ namespace benchmark_messages {
     }                                                                                                               \
     BENCHMARK_REGISTER_F(fixture, bm_name)->DenseRange(0, 32, 8)
 
-#if CPP17_OR_GREATER
+#if HAVE_STD_PMR==1
 #define REGISTER_MEMR_BENCHMARK(fixture, bm_name, p, ns, ...)                                                    \
     BENCHMARK_TEMPLATE_DEFINE_F(fixture, bm_name, p, __VA_ARGS__)                                                \
     (benchmark::State & state) {                                                                                 \

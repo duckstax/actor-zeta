@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include <actor-zeta/config.hpp>
 #include <actor-zeta/make_message.hpp>
 
 #include "fixtures.hpp"
