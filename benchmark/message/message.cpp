@@ -324,12 +324,12 @@ namespace benchmark_messages {
 
     } // namespace by_args
 
-    class memory_manager_t : public benchmark::MemoryManager {
-        void Start() BENCHMARK_OVERRIDE {}
-        void Stop(Result* result) BENCHMARK_OVERRIDE {
-            result->max_bytes_used = message_sz;
-        }
-    };
+//    class memory_manager_t : public benchmark::MemoryManager {
+//        void Start() BENCHMARK_OVERRIDE {}
+//        void Stop(Result* result) BENCHMARK_OVERRIDE {
+//            result->max_bytes_used = message_sz;
+//        }
+//    };
 
 } // namespace benchmark_messages
 
@@ -338,8 +338,8 @@ int main(int argc, char** argv) {
     benchmark::Initialize(&argc, argv);
     if (benchmark::ReportUnrecognizedArguments(argc, argv))
         return 1;
-    std::unique_ptr<benchmark::MemoryManager> mm(new benchmark_messages::memory_manager_t());
-    benchmark::RegisterMemoryManager(mm.get());
+//    std::unique_ptr<benchmark::MemoryManager> mm(new benchmark_messages::memory_manager_t());
+//    benchmark::RegisterMemoryManager(mm.get());
     benchmark::RunSpecifiedBenchmarks();
     benchmark::Shutdown();
     benchmark::RegisterMemoryManager(nullptr);
