@@ -29,3 +29,6 @@ RUN update-alternatives \
     --slave /usr/bin/g++ g++ /usr/bin/g++-${TOOLCHAIN_VERSION} \
     --slave /usr/bin/gcov gcov /usr/bin/gcov-${TOOLCHAIN_VERSION}
 RUN update-alternatives --config gcc
+
+ENV CC gcc-${TOOLCHAIN_VERSION}
+ENV CXX g++-${TOOLCHAIN_VERSION}

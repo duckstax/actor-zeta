@@ -32,3 +32,6 @@ RUN cat Packages \
     > pkglist
 RUN cat pkglist
 RUN apt update && apt-get install -y $(cat pkglist)
+
+ENV CC clang-${TOOLCHAIN_VERSION}
+ENV CXX clang++-${TOOLCHAIN_VERSION}
