@@ -10,8 +10,8 @@ TEST_CASE("memory.resource.eq") {
     SECTION("equal.pass") {
         // check return types
         {
-            memory_resource const* mr1(nullptr);
-            memory_resource const* mr2(nullptr);
+            actor_zeta::pmr::memory_resource const* mr1(nullptr);
+            actor_zeta::pmr::memory_resource const* mr2(nullptr);
             REQUIRE(std::is_same<decltype(*mr1 == *mr2), bool>::value);
             REQUIRE(noexcept(*mr1 == *mr2));
         }
@@ -19,8 +19,8 @@ TEST_CASE("memory.resource.eq") {
         {
             test_resource_t r1(1);
             test_resource_t r2(1);
-            memory_resource const& mr1 = r1;
-            memory_resource const& mr2 = r2;
+            actor_zeta::pmr::memory_resource const& mr1 = r1;
+            actor_zeta::pmr::memory_resource const& mr2 = r2;
             REQUIRE(mr1 == mr2);
             REQUIRE(r1.check_is_equal_called_eq(1));
             REQUIRE(r2.check_is_equal_called_eq(0));
@@ -31,8 +31,8 @@ TEST_CASE("memory.resource.eq") {
         // equal same object
         {
             test_resource_t r1(1);
-            memory_resource const& mr1 = r1;
-            memory_resource const& mr2 = r1;
+            actor_zeta::pmr::memory_resource const& mr1 = r1;
+            actor_zeta::pmr::memory_resource const& mr2 = r1;
             REQUIRE(mr1 == mr2);
             REQUIRE(r1.check_is_equal_called_eq(0));
             REQUIRE(mr2 == mr1);
@@ -42,8 +42,8 @@ TEST_CASE("memory.resource.eq") {
         {
             test_resource_t r1(1);
             test_resource_t r2(2);
-            memory_resource const& mr1 = r1;
-            memory_resource const& mr2 = r2;
+            actor_zeta::pmr::memory_resource const& mr1 = r1;
+            actor_zeta::pmr::memory_resource const& mr2 = r2;
             REQUIRE(!(mr1 == mr2));
             REQUIRE(r1.check_is_equal_called_eq(1));
             REQUIRE(r2.check_is_equal_called_eq(0));
@@ -56,8 +56,8 @@ TEST_CASE("memory.resource.eq") {
     SECTION("not_equal.pass") {
         // check return types
         {
-            memory_resource const* mr1(nullptr);
-            memory_resource const* mr2(nullptr);
+            actor_zeta::pmr::memory_resource const* mr1(nullptr);
+            actor_zeta::pmr::memory_resource const* mr2(nullptr);
             REQUIRE(std::is_same<decltype(*mr1 != *mr2), bool>::value);
             REQUIRE(noexcept(*mr1 != *mr2));
         }
@@ -65,8 +65,8 @@ TEST_CASE("memory.resource.eq") {
         {
             test_resource_t r1(1);
             test_resource_t r2(2);
-            memory_resource const& mr1 = r1;
-            memory_resource const& mr2 = r2;
+            actor_zeta::pmr::memory_resource const& mr1 = r1;
+            actor_zeta::pmr::memory_resource const& mr2 = r2;
             REQUIRE(mr1 != mr2);
             REQUIRE(r1.check_is_equal_called_eq(1));
             REQUIRE(r2.check_is_equal_called_eq(0));
@@ -78,8 +78,8 @@ TEST_CASE("memory.resource.eq") {
         {
             test_resource_t r1(1);
             test_resource_t r2(1);
-            memory_resource const& mr1 = r1;
-            memory_resource const& mr2 = r2;
+            actor_zeta::pmr::memory_resource const& mr1 = r1;
+            actor_zeta::pmr::memory_resource const& mr2 = r2;
             REQUIRE(!(mr1 != mr2));
             REQUIRE(r1.check_is_equal_called_eq(1));
             REQUIRE(r2.check_is_equal_called_eq(0));
@@ -90,8 +90,8 @@ TEST_CASE("memory.resource.eq") {
         // equal same object
         {
             test_resource_t r1(1);
-            memory_resource const& mr1 = r1;
-            memory_resource const& mr2 = r1;
+            actor_zeta::pmr::memory_resource const& mr1 = r1;
+            actor_zeta::pmr::memory_resource const& mr2 = r1;
             REQUIRE(!(mr1 != mr2));
             REQUIRE(r1.check_is_equal_called_eq(0));
             REQUIRE(!(mr2 != mr1));
@@ -104,7 +104,7 @@ TEST_CASE("memory.resource.public") {
     SECTION("allocate.pass") {
         test_resource_t R(42);
         auto& P = R.get_controller();
-        memory_resource& M = R;
+        actor_zeta::pmr::memory_resource& M = R;
         {
             REQUIRE(std::is_same<decltype(M.allocate(0, 0)), void*>::value);
             REQUIRE(std::is_same<decltype(M.allocate(0)), void*>::value);
@@ -130,7 +130,7 @@ TEST_CASE("memory.resource.public") {
             test_resource_t R2;
             auto& P = R2.get_controller();
             P.throw_on_alloc = true;
-            memory_resource& M2 = R2;
+            actor_zeta::pmr::memory_resource& M2 = R2;
             try {
                 M2.allocate(42);
                 REQUIRE(false);
@@ -146,7 +146,7 @@ TEST_CASE("memory.resource.public") {
     SECTION("deallocate.pass") {
         null_resource_t R(42);
         auto& P = R.get_controller();
-        memory_resource& M = R;
+        actor_zeta::pmr::memory_resource& M = R;
         {
             REQUIRE(std::is_same<decltype(M.deallocate(nullptr, 0, 0)), void>::value);
             REQUIRE(std::is_same<decltype(M.deallocate(nullptr, 0)), void>::value);
@@ -172,15 +172,15 @@ TEST_CASE("memory.resource.public") {
     }
 
     SECTION("dtor.pass") {
-        REQUIRE(std::has_virtual_destructor<memory_resource>::value);
-        REQUIRE(std::is_nothrow_destructible<memory_resource>::value);
-        REQUIRE(std::is_abstract<memory_resource>::value);
+        REQUIRE(std::has_virtual_destructor<actor_zeta::pmr::memory_resource>::value);
+        REQUIRE(std::is_nothrow_destructible<actor_zeta::pmr::memory_resource>::value);
+        REQUIRE(std::is_abstract<actor_zeta::pmr::memory_resource>::value);
         // Check that the destructor of `test_resource_t` is called when
         // it is deleted as a pointer to `memory_resource`
         {
             using TR = test_resource_t;
             TR::reset_statics();
-            memory_resource* M = new TR(42);
+            actor_zeta::pmr::memory_resource* M = new TR(42);
             REQUIRE(TR::resource_alive == 1);
             REQUIRE(TR::resource_constructed == 1);
             REQUIRE(TR::resource_destructed == 0);
@@ -193,17 +193,17 @@ TEST_CASE("memory.resource.public") {
 
     SECTION("is_equal.pass") {
         {
-            memory_resource const* r1 = nullptr;
-            memory_resource const* r2 = nullptr;
+            actor_zeta::pmr::memory_resource const* r1 = nullptr;
+            actor_zeta::pmr::memory_resource const* r2 = nullptr;
             REQUIRE(noexcept(r1->is_equal(*r2)));
         }
         {
             test_resource1_t R1(1);
             auto& P1 = R1.get_controller();
-            memory_resource const& M1 = R1;
+            actor_zeta::pmr::memory_resource const& M1 = R1;
             test_resource2_t R2(1);
             auto& P2 = R2.get_controller();
-            memory_resource const& M2 = R2;
+            actor_zeta::pmr::memory_resource const& M2 = R2;
             REQUIRE(M1.is_equal(M2) == false);
             REQUIRE(P1.check_is_equal_called_eq(1));
             REQUIRE(P2.check_is_equal_called_eq(0));
@@ -214,10 +214,10 @@ TEST_CASE("memory.resource.public") {
         {
             test_resource1_t R1(1);
             auto& P1 = R1.get_controller();
-            memory_resource const& M1 = R1;
+            actor_zeta::pmr::memory_resource const& M1 = R1;
             test_resource1_t R2(2);
             auto& P2 = R2.get_controller();
-            memory_resource const& M2 = R2;
+            actor_zeta::pmr::memory_resource const& M2 = R2;
             REQUIRE(M1.is_equal(M2) == false);
             REQUIRE(P1.check_is_equal_called_eq(1));
             REQUIRE(P2.check_is_equal_called_eq(0));
@@ -228,10 +228,10 @@ TEST_CASE("memory.resource.public") {
         {
             test_resource1_t R1(1);
             auto& P1 = R1.get_controller();
-            memory_resource const& M1 = R1;
+            actor_zeta::pmr::memory_resource const& M1 = R1;
             test_resource1_t R2(1);
             auto& P2 = R2.get_controller();
-            memory_resource const& M2 = R2;
+            actor_zeta::pmr::memory_resource const& M2 = R2;
             REQUIRE(M1.is_equal(M2) == true);
             REQUIRE(P1.check_is_equal_called_eq(1));
             REQUIRE(P2.check_is_equal_called_eq(0));
@@ -242,7 +242,6 @@ TEST_CASE("memory.resource.public") {
     }
 }
 
-#if CPP17_OR_GREATER
 TEST_CASE("construct_piecewise_pair.pass") {
     SECTION("1") {
         using T = count_copies_t;
@@ -253,10 +252,15 @@ TEST_CASE("construct_piecewise_pair.pass") {
         std::tuple<U> t2;
 
         test_harness_t<P> h;
+
+        test_resource_t R;
+        actor_zeta::pmr::memory_resource* M = &R;
+        //auto x_use_tag = actor_zeta::pmr::use_alloc<T, actor_zeta::pmr::memory_resource*, T>(M);
+        //auto y_use_tag = actor_zeta::pmr::use_alloc<U, actor_zeta::pmr::memory_resource*, U>(M);
         h.construct(std::piecewise_construct, t1, t2);
         P const& p = *h.ptr;
-        REQUIRE(p.first.count == 2);
-        REQUIRE(p.second.count == 2);
+        REQUIRE(h.ptr->first.count == 1);
+        REQUIRE(h.ptr->second.count == 1);
         REQUIRE(p.second.alloc == h.M);
     }
 
@@ -271,9 +275,9 @@ TEST_CASE("construct_piecewise_pair.pass") {
         test_harness_t<P> h;
         h.construct(std::piecewise_construct, std::move(t1), std::move(t2));
         P const& p = *h.ptr;
-        REQUIRE(p.first.count == 2);
+        REQUIRE(p.first.count == 1);
         REQUIRE(p.first.alloc == h.M);
-        REQUIRE(p.second.count == 2);
+        REQUIRE(p.second.count == 1);
         REQUIRE(p.second.alloc == h.M);
     }
 
@@ -288,9 +292,9 @@ TEST_CASE("construct_piecewise_pair.pass") {
         test_harness_t<P> h;
         h.construct(std::piecewise_construct, std::move(t1), std::move(t2));
         P const& p = *h.ptr;
-        REQUIRE(p.first.count == 2);
+        REQUIRE(p.first.count == 1);
         REQUIRE(p.first.alloc == h.M);
-        REQUIRE(p.second.count == 2);
+        REQUIRE(p.second.count == 1);
         REQUIRE(p.second.alloc == h.M);
     }
 
@@ -305,12 +309,11 @@ TEST_CASE("construct_piecewise_pair.pass") {
         test_harness_t<P> h;
         h.construct(std::piecewise_construct, t1, t2);
         P const& p = *h.ptr;
-        REQUIRE(p.first.count == 2);
+        REQUIRE(p.first.count == 1);
         REQUIRE(p.first.alloc == h.M);
-        REQUIRE(p.second.count == 2);
+        REQUIRE(p.second.count == 1);
     }
 }
-#endif
 
 TEST_CASE("memory.polymorphic.allocator.ctor") {
     /*SECTION("assign.pass") { // fails on gcc-11, gcc, 11, g++-11, Debug, 17
@@ -327,34 +330,34 @@ TEST_CASE("memory.polymorphic.allocator.ctor") {
         }
         // copy
         {
-            A1 const a(reinterpret_cast<memory_resource*>(42));
+            A1 const a(reinterpret_cast<actor_zeta::pmr::memory_resource*>(42));
             A1 const a2(a);
             REQUIRE(a.resource() == a2.resource());
         }
         // move
         {
-            A1 a(reinterpret_cast<memory_resource*>(42));
+            A1 a(reinterpret_cast<actor_zeta::pmr::memory_resource*>(42));
             A1 a2(std::move(a));
             REQUIRE(a.resource() == a2.resource());
-            REQUIRE(a2.resource() == reinterpret_cast<memory_resource*>(42));
+            REQUIRE(a2.resource() == reinterpret_cast<actor_zeta::pmr::memory_resource*>(42));
         }
     }
 
     SECTION("default.pass") {
         {
-            REQUIRE(std::is_nothrow_default_constructible<polymorphic_allocator<void>>::value);
+            REQUIRE(std::is_nothrow_default_constructible<actor_zeta::pmr::polymorphic_allocator<void>>::value);
         }
         {
             // test that the allocator gets its resource from get_default_resource
             test_resource_t R1(42);
-            pmr::set_default_resource(&R1);
-            typedef polymorphic_allocator<void> A;
+            actor_zeta::pmr::set_default_resource(&R1);
+            typedef actor_zeta::pmr::polymorphic_allocator<void> A;
             A const a;
             REQUIRE(a.resource() == &R1);
-            pmr::set_default_resource(nullptr);
+            actor_zeta::pmr::set_default_resource(nullptr);
             A const a2;
             REQUIRE(a.resource() == &R1);
-            REQUIRE(a2.resource() == pmr::new_delete_resource());
+            REQUIRE(a2.resource() == actor_zeta::pmr::new_delete_resource());
         }
     }
 
@@ -362,7 +365,7 @@ TEST_CASE("memory.polymorphic.allocator.ctor") {
         {
             typedef polymorphic_allocator<void> A;
             REQUIRE(std::is_convertible<decltype(nullptr), A>::value);
-            REQUIRE(std::is_convertible<memory_resource*, A>::value);
+            REQUIRE(std::is_convertible<actor_zeta::pmr::memory_resource*, A>::value);
         }
         {
             typedef polymorphic_allocator<void> A;
@@ -383,16 +386,16 @@ TEST_CASE("memory.polymorphic.allocator.ctor") {
         }
         // copy other type
         {
-            A1 const a(reinterpret_cast<memory_resource*>(42));
+            A1 const a(reinterpret_cast<actor_zeta::pmr::memory_resource*>(42));
             A2 const a2(a);
             REQUIRE(a.resource() == a2.resource());
-            REQUIRE(a2.resource() == reinterpret_cast<memory_resource*>(42));
+            REQUIRE(a2.resource() == reinterpret_cast<actor_zeta::pmr::memory_resource*>(42));
         }
         {
-            A1 a(reinterpret_cast<memory_resource*>(42));
+            A1 a(reinterpret_cast<actor_zeta::pmr::memory_resource*>(42));
             A2 const a2(std::move(a));
             REQUIRE(a.resource() == a2.resource());
-            REQUIRE(a2.resource() == reinterpret_cast<memory_resource*>(42));
+            REQUIRE(a2.resource() == reinterpret_cast<actor_zeta::pmr::memory_resource*>(42));
         }
     }
 }
@@ -486,8 +489,8 @@ TEST_CASE("memory.polymorphic.allocator.eq") {
     }
 
     SECTION("not_equal.pass") {
-        typedef polymorphic_allocator<void> A1;
-        typedef polymorphic_allocator<int> A2;
+        typedef actor_zeta::pmr::polymorphic_allocator<void> A1;
+        typedef actor_zeta::pmr::polymorphic_allocator<int> A2;
         // check return types
         {
             A1 const a1;
@@ -554,7 +557,7 @@ template<size_t S, size_t Align>
 void testForSizeAndAlign() {
     using T = typename std::aligned_storage<S, Align>::type;
     test_resource_t R;
-    polymorphic_allocator<T> a(&R);
+    actor_zeta::pmr::polymorphic_allocator<T> a(&R);
     for (std::size_t N = 1; N <= 5; ++N) {
         auto ret = a.allocate(N);
         REQUIRE(R.check_alloc(ret, N * sizeof(T), alignof(T)));
@@ -585,7 +588,7 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
     SECTION("construct_pair.pass") {
         typedef default_constructible T;
         typedef std::pair<T, T> P;
-        typedef polymorphic_allocator<void> A;
+        typedef actor_zeta::pmr::polymorphic_allocator<void> A;
         P* ptr = static_cast<P*>(std::malloc(sizeof(P)));
         A a;
         a.construct(ptr);
@@ -614,10 +617,10 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
         typedef polymorphic_allocator<void> A;
         {
             A const a;
-            REQUIRE(std::is_same<decltype(a.resource()), memory_resource*>::value);
+            REQUIRE(std::is_same<decltype(a.resource()), actor_zeta::pmr::memory_resource*>::value);
         }
         {
-            memory_resource* mptr = reinterpret_cast<memory_resource*>(42);
+            actor_zeta::pmr::memory_resource* mptr = reinterpret_cast<actor_zeta::pmr::memory_resource*>(42);
             A const a(mptr);
             REQUIRE(a.resource() == mptr);
         }
@@ -628,14 +631,14 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
         }
         {
             A const a;
-            REQUIRE(a.resource() == pmr::get_default_resource());
+            REQUIRE(a.resource() == actor_zeta::pmr::get_default_resource());
         }
         {
-            memory_resource* mptr = reinterpret_cast<memory_resource*>(42);
-            pmr::set_default_resource(mptr);
+            actor_zeta::pmr::memory_resource* mptr = reinterpret_cast<actor_zeta::pmr::memory_resource*>(42);
+            actor_zeta::pmr::set_default_resource(mptr);
             A const a;
             REQUIRE(a.resource() == mptr);
-            REQUIRE(a.resource() == pmr::get_default_resource());
+            REQUIRE(a.resource() == actor_zeta::pmr::get_default_resource());
         }
     }
 
@@ -646,30 +649,30 @@ TEST_CASE("memory.polymorphic.allocator.mem") {
             REQUIRE(std::is_same<decltype(a.select_on_container_copy_construction()), A>::value);
         }
         {
-            memory_resource* mptr = reinterpret_cast<memory_resource*>(42);
+            actor_zeta::pmr::memory_resource* mptr = reinterpret_cast<actor_zeta::pmr::memory_resource*>(42);
             A const a(mptr);
             REQUIRE(a.resource() == mptr);
             A const other = a.select_on_container_copy_construction();
-            REQUIRE(other.resource() == pmr::get_default_resource());
+            REQUIRE(other.resource() == actor_zeta::pmr::get_default_resource());
             REQUIRE(a.resource() == mptr);
         }
         {
-            memory_resource* mptr = reinterpret_cast<memory_resource*>(42);
-            pmr::set_default_resource(mptr);
+            actor_zeta::pmr::memory_resource* mptr = reinterpret_cast<actor_zeta::pmr::memory_resource*>(42);
+            actor_zeta::pmr::set_default_resource(mptr);
             A const a;
-            REQUIRE(a.resource() == pmr::get_default_resource());
+            REQUIRE(a.resource() == actor_zeta::pmr::get_default_resource());
             A const other = a.select_on_container_copy_construction();
-            REQUIRE(other.resource() == pmr::get_default_resource());
+            REQUIRE(other.resource() == actor_zeta::pmr::get_default_resource());
             REQUIRE(other.resource() == mptr);
-            REQUIRE(a.resource() == pmr::get_default_resource());
+            REQUIRE(a.resource() == actor_zeta::pmr::get_default_resource());
         }
         {
-            memory_resource* mptr = reinterpret_cast<memory_resource*>(42);
-            pmr::set_default_resource(mptr);
+            actor_zeta::pmr::memory_resource* mptr = reinterpret_cast<actor_zeta::pmr::memory_resource*>(42);
+            actor_zeta::pmr::set_default_resource(mptr);
             A const a(nullptr);
             REQUIRE(a.resource() == nullptr);
             A const other = a.select_on_container_copy_construction();
-            REQUIRE(other.resource() == pmr::get_default_resource());
+            REQUIRE(other.resource() == actor_zeta::pmr::get_default_resource());
             REQUIRE(other.resource() == mptr);
             REQUIRE(a.resource() == nullptr);
         }
@@ -680,7 +683,7 @@ TEST_CASE("polymorphic_allocator") {
     REQUIRE(std::is_destructible<test_type>{});
     REQUIRE(std::is_copy_constructible<test_type>{});
     ///REQUIRE(std::is_copy_assignable<test_type>{}); ///TODO: hack
-    REQUIRE(std::is_constructible<test_type, memory_resource*>{});
+    REQUIRE(std::is_constructible<test_type, actor_zeta::pmr::memory_resource*>{});
     REQUIRE(!std::is_polymorphic<test_type>{});
 #if CPP17_OR_GREATER or CPP14_OR_GREATER
     REQUIRE(!std::is_final<test_type>{});

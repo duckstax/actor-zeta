@@ -6,7 +6,7 @@
 TEST_CASE("memory_resource") {
     SECTION("derived_from_memory_resource allocate") {
         derived_from_memory_resource d;
-        memory_resource& mr = d;
+        actor_zeta::pmr::memory_resource& mr = d;
 
         d.reset();
         REQUIRE(d.do_allocate_called == false);
@@ -21,7 +21,7 @@ TEST_CASE("memory_resource") {
 
     SECTION("derived_from_memory_resource deallocate") {
         derived_from_memory_resource d;
-        memory_resource& mr = d;
+        actor_zeta::pmr::memory_resource& mr = d;
 
         d.reset();
         REQUIRE(d.do_deallocate_called == false);
@@ -47,7 +47,7 @@ TEST_CASE("memory_resource") {
 
     SECTION("derived_from_memory_resource reset is_equal") {
         derived_from_memory_resource d;
-        memory_resource& mr = d;
+        actor_zeta::pmr::memory_resource& mr = d;
 
         d.reset();
         REQUIRE(d.do_is_equal_called == false);
@@ -60,7 +60,7 @@ TEST_CASE("memory_resource") {
 
     SECTION("derived_from_memory_resource reset is_equal other") {
         derived_from_memory_resource d;
-        memory_resource& mr = d;
+        actor_zeta::pmr::memory_resource& mr = d;
 
         d.reset();
         REQUIRE(d.do_is_equal_called == false);
@@ -73,7 +73,7 @@ TEST_CASE("memory_resource") {
         derived_from_memory_resource d2(1);
         d.reset();
         d2.reset();
-        memory_resource& mr2 = d2;
+        actor_zeta::pmr::memory_resource& mr2 = d2;
         REQUIRE((mr == mr2) == false);
         REQUIRE(d.do_is_equal_called == true);
         REQUIRE(d.do_is_equal_other == &d2);
@@ -81,7 +81,7 @@ TEST_CASE("memory_resource") {
 
     SECTION("derived_from_memory_resource all") {
         derived_from_memory_resource d;
-        memory_resource& mr = d;
+        actor_zeta::pmr::memory_resource& mr = d;
 
         d.reset();
         REQUIRE(d.do_is_equal_called == false);
@@ -94,7 +94,7 @@ TEST_CASE("memory_resource") {
         derived_from_memory_resource d2(1);
         d.reset();
         d2.reset();
-        memory_resource& mr2 = d2;
+        actor_zeta::pmr::memory_resource& mr2 = d2;
         REQUIRE((mr != mr2) == true);
         REQUIRE(d.do_is_equal_called == true);
         REQUIRE(d.do_is_equal_other == &d2);

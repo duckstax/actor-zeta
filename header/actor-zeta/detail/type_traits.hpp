@@ -71,9 +71,8 @@ namespace actor_zeta { namespace type_traits {
 
 #endif
 
-#if CPP17_OR_GREATER
-
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+#if HAVE_STD_PMR==1
+#else
 
     template<bool v>
     using bool_constant = std::integral_constant<bool, v>;
@@ -116,6 +115,9 @@ namespace actor_zeta { namespace type_traits {
     using remove_cvref_t = typename std::remove_cv<typename std::remove_reference<_Tp>::type>::type;
 
 #endif
+
+    template<typename _Tp>
+    using remove_cvref_t = typename std::remove_cv<typename std::remove_reference<_Tp>::type>::type; // C++ 20
 
     template<typename...>
     struct _or_;

@@ -9,10 +9,8 @@
 namespace actor_zeta { namespace mailbox {
 
     namespace detail {
-        static constexpr uint64_t response_flag_mask = 0x8000000000000000;
         static constexpr uint64_t answered_flag_mask = 0x4000000000000000;
         static constexpr uint64_t priority_flag_mask = 0x3000000000000000;
-        static constexpr uint64_t request_id_mask = 0x0FFFFFFFFFFFFFFF;
         static constexpr uint64_t high_message_priority = 0;
         static constexpr uint64_t normal_message_priority = 1;
         static constexpr uint64_t priority_offset = 60;
@@ -48,18 +46,6 @@ namespace actor_zeta { namespace mailbox {
             return message_id{(value_ & ~detail::priority_flag_mask) | (x << detail::priority_offset)};
         }
 
-        constexpr bool is_async() const noexcept {
-            return value_ == 0 || value_ == detail::default_async_value;
-        }
-
-        constexpr bool is_request() const noexcept {
-            return (value_ & detail::request_id_mask) != 0 && !is_response();
-        }
-
-        constexpr bool is_response() const noexcept {
-            return (value_ & detail::response_flag_mask) != 0;
-        }
-
         constexpr bool is_answered() const noexcept {
             return (value_ & detail::answered_flag_mask) != 0;
         }
@@ -70,16 +56,6 @@ namespace actor_zeta { namespace mailbox {
 
         constexpr bool is_normal_message() const noexcept {
             return priority() == detail::normal_message_priority;
-        }
-
-        constexpr message_id response_id() const noexcept {
-            return is_request()
-                       ? message_id{value_ | detail::response_flag_mask}
-                       : message_id{is_high_message() ? 0 : detail::default_async_value};
-        }
-
-        constexpr message_id request_id() const noexcept {
-            return message_id{value_ & detail::request_id_mask};
         }
 
         constexpr message_id with_high_priority() const noexcept {
@@ -100,6 +76,10 @@ namespace actor_zeta { namespace mailbox {
         message_id& operator++() noexcept {
             ++value_;
             return *this;
+        }
+
+        constexpr operator uint64_t() const noexcept{
+            return value_;
         }
 
     private:
@@ -123,6 +103,11 @@ namespace actor_zeta { namespace mailbox {
 
     constexpr message_id make_message_id(mailbox::priority p) {
         return message_id{static_cast<uint64_t>(p) << detail::priority_offset};
+    }
+
+    template<class Target>
+    constexpr message_id make_message_id(Target t) {
+        return make_message_id(static_cast<uint64_t>(t));
     }
 
 }} // namespace actor_zeta::mailbox

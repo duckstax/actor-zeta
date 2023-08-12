@@ -1,21 +1,28 @@
 cmake_minimum_required(VERSION 3.0)
 
-PROJECT(actor-zeta CXX)
+PROJECT(actor-zeta LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 11 CACHE STRING "The C++ standard whose features are requested.")
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
+message(STATUS "CMAKE_CXX_COMPILER_ID = ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "CMAKE_C_COMPILER_ID = ${CMAKE_C_COMPILER_ID}")
 message(STATUS "STANDARD CPP = ${CMAKE_CXX_STANDARD}")
 message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
-option(ALLOW_EXAMPLES "ALLOW EXAMPLES" OFF)
-option(ALLOW_TESTS "ALLOW TESTS" OFF)
-option(ENABLE_TESTS_MEASUREMENTS "ENABLE TESTS MEASUREMENTS" OFF)
-option(ALLOW_BENCHMARK "ALLOW BENCHMARK" OFF)
-option(RTTI_DISABLE "RTTI DISABLE" ON)
-option(EXCEPTIONS_DISABLE "EXCEPTIONS DISABLE" ON)
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
+    list(APPEND CMAKE_MODULE_PATH "${LLVM_DIR}")
+endif() #--------------------------------------------------------------------------- Clang
+
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "The C++ standard whose features are requested.")
+set(CMAKE_CXX_STANDARD_REQUIRED     ON)
+set(CMAKE_CXX_EXTENSIONS            OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS   ON)
+
+option(ALLOW_EXAMPLES               "ALLOW EXAMPLES"            OFF)
+option(ALLOW_TESTS                  "ALLOW TESTS"               OFF)
+option(ENABLE_TESTS_MEASUREMENTS    "ENABLE TESTS MEASUREMENTS" OFF)
+option(ALLOW_BENCHMARK              "ALLOW BENCHMARK"           OFF)
+option(RTTI_DISABLE                 "RTTI DISABLE"              ON)
+option(EXCEPTIONS_DISABLE           "EXCEPTIONS DISABLE"        ON)
 
 message(STATUS "ALLOW_EXAMPLES = ${ALLOW_EXAMPLES}")
 message(STATUS "ALLOW_TESTS = ${ALLOW_TESTS}")
@@ -24,171 +31,179 @@ message(STATUS "ALLOW_BENCHMARK = ${ALLOW_BENCHMARK}")
 message(STATUS "RTTI_DISABLE = ${RTTI_DISABLE}")
 message(STATUS "EXCEPTIONS_DISABLE = ${EXCEPTIONS_DISABLE}")
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+if (NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Debug CACHE
+      STRING "Build type (default Debug):" FORCE)
+endif()
 
-    if (EXCEPTIONS_DISABLE)
-        message("Disable C++ exceptions.")
-        string(REGEX REPLACE "/EH[a-z]+" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
-        add_compile_definitions(__EXCEPTIONS_DISABLE__)
-    endif ()
+add_compile_options(
+  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:DEBUG>>:-fno-rtti;-Wall>"
+  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:RELEASE>>:-fno-rtti;-Wall>"
+)
 
-    if (RTTI_DISABLE)
-        message("Disable RTTI.")
-        string(REGEX REPLACE "/GR" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
-    endif ()
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+    ############## LLVM CONFIGURATION #################
+    # https://github.com/nsumner/llvm-demo Example LLVM Build
 
-else (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    # LLVM_DIR must be set to the prefix of /share/llvm/cmake via commandline
+    find_package(LLVM REQUIRED CONFIG)
+    message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+    message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 
-    if (EXCEPTIONS_DISABLE)
-        message("Disable C++ exceptions.")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
-        add_compile_definitions(__EXCEPTIONS_DISABLE__)
-    endif ()
+    # We incorporate the CMake features provided by LLVM:
+    list(APPEND CMAKE_MODULE_PATH "${LLVM_CMAKE_DIR}")
+    include(AddLLVM)
 
-    if (RTTI_DISABLE)
-        message("Disable RTTI.")
-        string(REGEX REPLACE "-frtti" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
-    endif ()
-
-endif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-
-
-if ((CMAKE_CXX_COMPILER_ID MATCHES "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
-    add_compile_options(
-            -Wall
-            -Wextra
-            -Wpedantic
-
-            -Wcast-align
-            -Wcast-qual
-            -Wconversion
-            -Wctor-dtor-privacy
-            -Wenum-compare
-            -Wfloat-equal
-            -Wnon-virtual-dtor
-            -Wold-style-cast
-            -Woverloaded-virtual
-            -Wredundant-decls
-            -Wsign-conversion
-            -Wsign-promo
+    message("LLVM STATUS:
+        Definitions ${LLVM_DEFINITIONS}
+        Includes    ${LLVM_INCLUDE_DIRS}
+        Libraries   ${LLVM_LIBRARY_DIRS}
+        Targets     ${LLVM_TARGETS_TO_BUILD}
+        CXX         ${CMAKE_CXX_COMPILER}
+        C           ${CMAKE_C_COMPILER}"
     )
-elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    add_compile_options(/W4 /WX)
-endif ()
 
-include(cmake/clang_tools.cmake)
+    # Now set the LLVM header and library paths:
+    include_directories(
+        ${LLVM_INCLUDE_DIRS}
+        ${LLVM_INCLUDE_DIRS}/c++/v1
+        ${CMAKE_CURRENT_SOURCE_DIR}/
+        ${CMAKE_CURRENT_SOURCE_DIR}/header)
 
-include_directories(SYSTEM .)
-include_directories(SYSTEM header)
+    link_directories(${LLVM_LIBRARY_DIRS})
+    add_definitions(${LLVM_DEFINITIONS})
 
-set(HEADER_FILES
-        header/actor-zeta/base/actor_abstract.hpp
-        header/actor-zeta/base/actor.hpp
-        header/actor-zeta/base/address.hpp
-        header/actor-zeta/base/cooperative_actor.hpp
-        header/actor-zeta/base/handler.hpp
-        header/actor-zeta/base/supervisor.hpp
-        header/actor-zeta/base/supervisor_abstract.hpp
+else() #---------------------------------------------------------------------------- GNU
+    include_directories(
+        ${CMAKE_CURRENT_SOURCE_DIR}/
+        ${CMAKE_CURRENT_SOURCE_DIR}/header)
+endif() #--------------------------------------------------------------------------- Clang
 
-        header/actor-zeta/detail/queue/queue.hpp
-        header/actor-zeta/detail/queue/cached_queue.hpp
-        header/actor-zeta/detail/queue/fifo_inbox.hpp
-        header/actor-zeta/detail/queue/forward_iterator.hpp
-        header/actor-zeta/detail/queue/lifo_inbox.hpp
-        header/actor-zeta/detail/queue/new_round_result.hpp
-        header/actor-zeta/detail/queue/singly_linked.hpp
-        header/actor-zeta/detail/queue/task_queue.hpp
-        header/actor-zeta/detail/queue/task_result.hpp
-        header/actor-zeta/detail/queue/fixed_queue.hpp
-        header/actor-zeta/detail/queue/enqueue_result.hpp
+############## FINAL PROJECT CONFIG #################
 
-        header/actor-zeta/detail/pmr/memory_resource.hpp
-        header/actor-zeta/detail/aligned_allocate.hpp
-        header/actor-zeta/detail/callable_trait.hpp
-        header/actor-zeta/detail/intrusive_ptr.hpp
-        header/actor-zeta/detail/ref_counted.hpp
-        header/actor-zeta/detail/launch_thread.hpp
-        header/actor-zeta/detail/ignore_unused.hpp
-        header/actor-zeta/detail/type_list.hpp
-        header/actor-zeta/detail/type_traits.hpp
-        header/actor-zeta/detail/rtt.hpp
+file(GLOB ${PROJECT_NAME}_HEADERS
+    header/actor-zeta/base/*.hpp
+    header/actor-zeta/base/*.h
 
-        header/actor-zeta/scheduler/policy/unprofiled.hpp
-        header/actor-zeta/scheduler/policy/work_sharing.hpp
-        header/actor-zeta/scheduler/execution_unit.hpp
-        header/actor-zeta/scheduler/resumable.hpp
-        header/actor-zeta/scheduler/scheduler.hpp
-        header/actor-zeta/scheduler/scheduler_abstract.hpp
-        header/actor-zeta/scheduler/worker.hpp
+    header/actor-zeta/detail/queue/*.hpp
+    header/actor-zeta/detail/queue/*.h
 
-        header/actor-zeta/mailbox/priority_message.hpp
-        header/actor-zeta/mailbox/normal_priority_message.hpp
-        header/actor-zeta/mailbox/high_priority_message.hpp
-        header/actor-zeta/mailbox/id.hpp
-        header/actor-zeta/mailbox/message.hpp
-        header/actor-zeta/mailbox/priority.hpp
+    header/actor-zeta/detail/pmr/*.hpp
+    header/actor-zeta/detail/pmr/*.h
 
-        header/actor-zeta/make_message.hpp
-        header/actor-zeta/mailbox.hpp
-        header/actor-zeta/send.hpp
-        header/actor-zeta/core.hpp
-        header/actor-zeta/src.hpp
-        header/actor-zeta.hpp
+    header/actor-zeta/detail/*.hpp
+    header/actor-zeta/detail/*.h
+
+    header/actor-zeta/scheduler/policy/*.hpp
+    header/actor-zeta/scheduler/policy/*.h
+
+    header/actor-zeta/scheduler/*.hpp
+    header/actor-zeta/scheduler/*.h
+
+    header/actor-zeta/mailbox/*.hpp
+    header/actor-zeta/mailbox/*.h
+
+    header/actor-zeta/*.hpp
+    header/actor-zeta/*.h
+
+    header/*.hpp
+    header/*.h
 )
 
-set(SOURCE_FILES
-    source/src.cpp
-)
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+    find_library(CLANG_LIBCPP
+        NAMES libc++ c++
+        HINTS ${LLVM_LIBRARY_DIRS})
 
-find_program(CCACHE_FOUND ccache)
-if (CCACHE_FOUND)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-endif (CCACHE_FOUND)
+    find_library(CLANG_LIBCPP_ABI
+        NAMES libc++abi c++abi
+        HINTS ${LLVM_LIBRARY_DIRS})
 
-find_package(Threads)
+    message(STATUS "Find CLANG_LIBCPP=${CLANG_LIBCPP}")
+    message(STATUS "Find CLANG_LIBCPP_ABI=${CLANG_LIBCPP_ABI}")
+    ### https://stackoverflow.com/questions/43662736/cmake-switch-between-clang-g-and-libc-libstdc
+    if (${CLANG_LIBCPP} MATCHES "CLANG_LIBCPP-NOTFOUND")
+        set(LIBCXX "libstdc++11")
+    else()
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+        set(LIBCXX "libc++")
+    endif()
+
+    if (${CLANG_LIBCPP_ABI} MATCHES "CLANG_LIBCPP_ABI-NOTFOUND")
+    else()
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lc++abi")
+    endif()
+
+else() #---------------------------------------------------------------------------- GNU
+    set(LIBCXX "libstdc++11")
+endif() #--------------------------------------------------------------------------- Clang
 
 add_library(
-        ${PROJECT_NAME}
-        ${SOURCE_FILES}
-        ${HEADER_FILES}
+    ${PROJECT_NAME}
+    source/src.cpp
+    ${${PROJECT_NAME}_HEADERS}
 )
 
-target_link_libraries(
-        ${PROJECT_NAME}
-        PUBLIC
-        ${CMAKE_THREAD_LIBS_INIT}
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+    ### https://stackoverflow.com/questions/62926242/how-to-link-all-llvm-libraries-in-cmake
+    execute_process(COMMAND llvm-config --libs all
+                    OUTPUT_VARIABLE REQ_LLVM_LIBRARIES)
+
+    #llvm_map_components_to_libnames(REQ_LLVM_LIBRARIES
+    #  ${LLVM_TARGETS_TO_BUILD}
+    #  core asmparser linker bitreader bitwriter irreader
+    #  target mc support native
+    #  all #all-targets amdgpu amdgpuasmparser amdgpucodegen amdgpudesc amdgpudisassembler amdgpuinfo amdgpuutils analysis arm armasmparser armcodegen armdesc armdisassembler arminfo armutils asmparser asmprinter avr avrasmparser avrcodegen avrdesc avrdisassembler avrinfo binaryformat bitreader bitstreamreader bitwriter bpf bpfasmparser bpfcodegen bpfdesc bpfdisassembler bpfinfo cfguard codegen core coroutines coverage debuginfocodeview debuginfodwarf debuginfogsym debuginfomsf debuginfopdb demangle dlltooldriver dwarflinker engine executionengine frontendopenmp fuzzmutate globalisel hexagon hexagonasmparser hexagoncodegen hexagondesc hexagondisassembler hexagoninfo instcombine instrumentation interpreter ipo irreader jitlink lanai lanaiasmparser lanaicodegen lanaidesc lanaidisassembler lanaiinfo libdriver lineeditor linker lto mc mca mcdisassembler mcjit mcparser mips mipsasmparser mipscodegen mipsdesc mipsdisassembler mipsinfo mirparser msp430 msp430asmparser msp430codegen msp430desc msp430disassembler msp430info native nativecodegen nvptx nvptxcodegen nvptxdesc nvptxinfo objcarcopts object objectyaml option orcerror orcjit passes perfjitevents powerpc powerpcasmparser powerpccodegen powerpcdesc powerpcdisassembler powerpcinfo profiledata remarks riscv riscvasmparser riscvcodegen riscvdesc riscvdisassembler riscvinfo riscvutils runtimedyld scalaropts selectiondag sparc sparcasmparser sparccodegen sparcdesc sparcdisassembler sparcinfo support symbolize systemz systemzasmparser systemzcodegen systemzdesc systemzdisassembler systemzinfo tablegen target textapi transformutils vectorize webassembly webassemblyasmparser webassemblycodegen webassemblydesc webassemblydisassembler webassemblyinfo windowsmanifest x86 x86asmparser x86codegen x86desc x86disassembler x86info x86utils xcore xcorecodegen xcoredesc xcoredisassembler xcoreinfo xray
+    #)
+
+    target_link_libraries(${PROJECT_NAME}
+        INTERFACE ${REQ_LLVM_LIBRARIES}
+    )
+endif() #--------------------------------------------------------------------------- Clang
+
+find_package(Threads REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC
+    ${CMAKE_THREAD_LIBS_INIT}
+    ${CMAKE_DL_LIBS}
 )
 
-target_include_directories(
-        ${PROJECT_NAME}
-        PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/header/actor-zeta
-        ${CMAKE_CURRENT_SOURCE_DIR}/header
+#################################################################
+
+# configuration
+#############################################################################################
+#conan
+
+if (CONAN_EXPERIMENTAL_INCLUDE)
+    set(CONAN_SYSTEM_INCLUDES "On")
+endif ()
+include(conan.cmake)
+
+# https://docs.conan.io/1/reference/config_files/settings.yml.html#c-standard-libraries-aka-compiler-libcxx
+#conan_cmake_autodetect(CONAN_SETTINGS)
+set(CONAN_SETTINGS "build_type=${CMAKE_BUILD_TYPE};compiler.libcxx=${LIBCXX};compiler.cppstd=${CMAKE_CXX_STANDARD}")
+
+message(STATUS "CONAN_SETTINGS: ${CONAN_SETTINGS}")
+
+conan_cmake_run(REQUIRES
+    catch2/2.13.6
+    benchmark/1.8.0
+    BASIC_SETUP CMAKE_TARGETS
+    SETTINGS ${CONAN_SETTINGS}
+    ENV CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER}
+    BUILD missing
 )
 
-if (ENABLE_TESTS_MEASUREMENTS)
-    add_compile_definitions(__ENABLE_TESTS_MEASUREMENTS__)
-endif()
+# configuration
+#############################################################################################
+#conan
 
 if (ALLOW_EXAMPLES)
     add_subdirectory(examples)
 endif ()
 
-if (ALLOW_TESTS OR ALLOW_BENCHMARK)
-    # configuration
-    #############################################################################################
-    #conan
-    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-    conan_basic_setup(TARGETS)
-    # conan
-    #############################################################################################
-endif()
-
 if (ALLOW_TESTS)
+    include(CTest)
     enable_testing()
     add_subdirectory(test)
 endif()

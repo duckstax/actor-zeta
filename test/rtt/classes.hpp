@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <actor-zeta/detail/type_traits.hpp>
 #include <iostream>
 #include <map>
@@ -8,7 +7,6 @@
 #include <numeric>
 #include <string>
 #include <vector>
-
 
 void place(char* data, size_t capacity, size_t volume) {
     auto space_left = capacity - volume;

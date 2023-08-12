@@ -1,79 +1,103 @@
 #pragma once
 
-#include <set>
-#include <unordered_map>
-#include <unordered_set>
-
-#include <actor-zeta/detail/callable_trait.hpp>
+#include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/base/handler.hpp>
-#include <actor-zeta/mailbox/message.hpp>
+#include <actor-zeta/detail/callable_trait.hpp>
+#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/mailbox/id.hpp>
+#include <actor-zeta/mailbox/message.hpp>
 
 namespace actor_zeta { namespace base {
 
     void error_skip(const std::string& sender, const std::string& reciever, mailbox::message_id handler);
     void error_skip(const std::string& reciever, mailbox::message_id handler);
 
-    class intrusive_behavior_t   {
-    protected:
-        using key_type = mailbox::message_id;
-        using value_type = action;
+    struct keep_behavior_t final {
+        constexpr keep_behavior_t() noexcept {}
+    };
 
-        template<class T>
-        void execute(T* ptr, mailbox::message* msg) {
-            auto id = msg->command();
-            auto it = handlers_.find(msg->command());
-            if (it != handlers_.end()) {
-                return it->second(msg);
-            }
+    constexpr keep_behavior_t skip_behavior = keep_behavior_t{};
 
-            auto reciever = ptr->type();
-            if( msg->sender()){
-                auto sender = msg->sender()->type();
-                error_skip(sender, reciever, msg->command());
-            } else {
-                error_skip(reciever, msg->command());
-            }
+    class behavior_t final {
+    public:
+        using id = mailbox::message_id;
 
+        behavior_t() = delete;
+        behavior_t(const behavior_t&) = delete;
+        behavior_t& operator=(const behavior_t&) = delete;
+
+        behavior_t(behavior_t&&) = default;
+        behavior_t& operator=(behavior_t&&) = default;
+
+        behavior_t(actor_zeta::pmr::memory_resource* resource, id name, action handler) {
+            ///assert(id_.integer_value() == mailbox::detail::default_async_value);
+            id_ = name;
+            handler_ = std::move(handler);
         }
 
-        template<class Key, class Value>
-        auto add_handler(Key key, Value&& f) -> typename std::enable_if<!std::is_member_function_pointer<Value>::value>::type {
-            auto id = mailbox::make_message_id(static_cast<uint64_t>(key));
-            on(id, make_handler(std::forward<Value>(f)));
+        explicit operator bool() {
+            return bool(handler_);
         }
 
-        template<class Key, class Value>
-        auto add_handler(Key key, Value&& f) -> typename std::enable_if<std::is_member_function_pointer<Value>::value>::type {
-            on(mailbox::make_message_id(static_cast<uint64_t>(key)), make_handler(std::forward<Value>(f), static_cast<typename type_traits::get_callable_trait_t<Value>::class_type*>(this)));
+        void operator()(mailbox::message* msg) {
+            ///assert(msg->command() == id_);
+            handler_(msg);
         }
 
-        template<class Key, class Actor, typename F>
-        auto add_handler(Key key, Actor* ptr, F&& f) -> void {
-            on(mailbox::make_message_id(static_cast<uint64_t>(key)), make_handler(std::forward<F>(f), ptr));
+        void assign(id name, action handler) {
+            id_ = name;
+            handler_ = std::move(handler);
         }
-
-        template<class Value>
-        auto add_handler(mailbox::message_id key, Value&& f) -> typename std::enable_if<!std::is_member_function_pointer<Value>::value>::type {
-            on(key, make_handler(std::forward<Value>(f)));
-        }
-
-        template<class Value>
-        auto add_handler(mailbox::message_id key, Value&& f) -> typename std::enable_if<std::is_member_function_pointer<Value>::value>::type {
-            on(key, make_handler(std::forward<Value>(f), static_cast<typename type_traits::get_callable_trait_t<Value>::class_type*>(this)));
-        }
-
-        template<class Actor, typename F>
-        auto add_handler(mailbox::message_id key, Actor* ptr, F&& f) -> void {
-            on(key, make_handler(std::forward<F>(f), ptr));
-        }
-
-        auto message_types() const -> std::set<key_type>;
 
     private:
-        using handler_storage_t = std::unordered_map<key_type, value_type>;
-        bool on(key_type name, value_type handler);
-        handler_storage_t handlers_;
+        id id_{mailbox::detail::default_async_value};
+        action handler_;
     };
+
+    template<class Key, class Value>
+    behavior_t make_behavior(actor_zeta::pmr::memory_resource* resource, Key key, Value&& f) {
+        return {resource, mailbox::make_message_id(static_cast<uint64_t>(key)), make_handler(std::forward<Value>(f))};
+    }
+
+    template<class Value>
+    behavior_t make_behavior(actor_zeta::pmr::memory_resource* resource, mailbox::message_id key, Value&& f) {
+        return {resource, key, make_handler(std::forward<Value>(f))};
+    }
+
+    template<class Key, class Actor, typename F>
+    behavior_t make_behavior(actor_zeta::pmr::memory_resource* resource, Key key, Actor* ptr, F&& f) {
+        auto id = static_cast<uint64_t>(key);
+        return {resource, mailbox::make_message_id(id), make_handler(ptr, std::forward<F>(f))};
+    }
+
+    template<class F>
+    behavior_t make_behavior(actor_zeta::pmr::memory_resource* resource, F&& f) {
+        return {resource, mailbox::message_id{}, std::move(action(std::forward<F>(f)))};
+    }
+    //// todo: rename behavior
+    /*template<class F>
+    behavior_t make_behavior(actor_zeta::pmr::memory_resource*resource, F&& f) {
+        return {resource,mailbox::message_id{}, std::move(action(std::forward<F>(f)))};
+    }*/
+    /*
+    template<class Actor, typename Value>
+    behavior_t behavior(actor_zeta::pmr::memory_resource*resource, Actor* ptr, Value&& f) {
+        return {resource,mailbox::message_id{}, ptr,std::forward<Value>(f)};
+    }
+*/
+    template<class T>
+    void invoke(behavior_t& instance, T* ptr, mailbox::message* msg) {
+        instance(msg);
+        /// todo: add error handling
+        /*
+        auto reciever = ptr->type();
+        if (msg->sender()) {
+            auto sender = msg->sender()->type();
+            error_skip(sender, reciever, msg->command());
+        } else {
+            error_skip(reciever, msg->command());
+        }
+         */
+    }
 
 }} // namespace actor_zeta::base

@@ -9,10 +9,6 @@
 
 #include "test_memory_resource.hpp"
 
-namespace pmr = actor_zeta::detail::pmr;
-using pmr::memory_resource;
-using pmr::polymorphic_allocator;
-
 struct destroyable {
     static int count;
     destroyable() { ++count; }
@@ -33,8 +29,8 @@ int default_constructible::constructed = 0;
 template<class T>
 struct test_harness_t {
     test_resource_t R;
-    memory_resource* M = &R;
-    polymorphic_allocator<T> A = M;
+    actor_zeta::pmr::memory_resource* M = &R;
+    actor_zeta::pmr::polymorphic_allocator<T> A = M;
     bool constructed = false;
     T* ptr;
     test_harness_t()
@@ -52,43 +48,98 @@ struct test_harness_t {
 };
 
 struct count_copies_t {
-    int count;
-    count_copies_t()
-        : count(0) {}
-    count_copies_t(count_copies_t const& o)
-        : count(o.count + 1) {}
+    static int count;
+    bool copied = false;
+    count_copies_t() {}
+    count_copies_t(count_copies_t const& o) {
+        count_copies_t::count++;
+        copied = true;
+        printf("%s :: %d\n", __func__, count_copies_t::count);
+    }
+    ~count_copies_t() {
+        if (copied) {
+            count_copies_t::count--;
+        }
+        printf("~%s :: %d\n", __func__, count_copies_t::count);
+    }
 };
+
+int count_copies_t::count = 0;
 
 struct count_copies_alloc_v1_t {
-    typedef polymorphic_allocator<char> allocator_type;
-    memory_resource* alloc;
-    int count;
+    typedef actor_zeta::pmr::polymorphic_allocator<char> allocator_type;
+    actor_zeta::pmr::memory_resource* alloc;
+    static int count;
+    bool copied = false;
     count_copies_alloc_v1_t()
-        : alloc(nullptr)
-        , count(0) {}
+        : alloc(nullptr) {
+        printf("%s :: %d\n", __func__, count_copies_alloc_v1_t::count);
+    }
     count_copies_alloc_v1_t(
-        std::allocator_arg_t, allocator_type const& a,
+        actor_zeta::type_traits::allocator_arg_t, allocator_type const& a,
         count_copies_alloc_v1_t const& o)
-        : alloc(a.resource())
-        , count(o.count + 1) {}
-    count_copies_alloc_v1_t(count_copies_alloc_v1_t const& o)
-        : count(o.count + 1) {}
+        : alloc(a.resource()) {
+        copied = true;
+        count_copies_alloc_v1_t::count++;
+        printf("%s :: %d\n", __func__, count_copies_alloc_v1_t::count);
+    }
+    count_copies_alloc_v1_t(
+        allocator_type const& a,
+        count_copies_alloc_v1_t const& o)
+        : alloc(a.resource()) {
+        copied = true;
+        count_copies_alloc_v1_t::count++;
+        printf("%s :: %d\n", __func__, count_copies_alloc_v1_t::count);
+    }
+    count_copies_alloc_v1_t(
+        count_copies_alloc_v1_t const& o,
+        allocator_type const& a)
+        : alloc(a.resource()) {
+        copied = true;
+        count_copies_alloc_v1_t::count++;
+        printf("%s :: %d\n", __func__, count_copies_alloc_v1_t::count);
+    }
+    count_copies_alloc_v1_t(count_copies_alloc_v1_t const& o) {
+        copied = true;
+        count_copies_alloc_v1_t::count++;
+        printf("%s :: %d\n", __func__, count_copies_alloc_v1_t::count);
+    }
+    ~count_copies_alloc_v1_t() {
+        if (copied) {
+            count_copies_alloc_v1_t::count--;
+        }
+        printf("~%s :: %d\n", __func__, count_copies_alloc_v1_t::count);
+    }
 };
 
+int count_copies_alloc_v1_t::count = 0;
+
 struct count_copies_alloc_v2_t {
-    typedef polymorphic_allocator<char> allocator_type;
-    memory_resource* alloc;
-    int count;
+    typedef actor_zeta::pmr::polymorphic_allocator<char> allocator_type;
+    actor_zeta::pmr::memory_resource* alloc;
+    static int count;
+    bool copied = false;
     count_copies_alloc_v2_t()
-        : alloc(nullptr)
-        , count(0) {}
+        : alloc(nullptr) {
+    }
     count_copies_alloc_v2_t(
         count_copies_alloc_v2_t const& o, allocator_type const& a)
-        : alloc(a.resource())
-        , count(o.count + 1) {}
-    count_copies_alloc_v2_t(count_copies_alloc_v2_t const& o)
-        : count(o.count + 1) {}
+        : alloc(a.resource()) {
+        copied = true;
+        count_copies_alloc_v2_t::count++;
+    }
+    count_copies_alloc_v2_t(count_copies_alloc_v2_t const& o) {
+        copied = true;
+        count_copies_alloc_v2_t::count++;
+    }
+    ~count_copies_alloc_v2_t() {
+        if (copied) {
+            count_copies_alloc_v2_t::count--;
+        }
+    }
 };
+
+int count_copies_alloc_v2_t::count = 0;
 
 class x {
 public:
@@ -99,10 +150,10 @@ public:
     int value_ = 0;
 };
 
-using test_type = polymorphic_allocator<x>;
+using test_type = actor_zeta::pmr::polymorphic_allocator<x>;
 
 class derived_from_memory_resource
-    : public memory_resource {
+    : public actor_zeta::pmr::memory_resource {
 public:
     explicit derived_from_memory_resource(unsigned i = 0u)
         : id(i) {}
@@ -123,7 +174,7 @@ public:
         do_deallocate_alignment = alignment;
     }
 
-    virtual bool do_is_equal(const memory_resource& other) const noexcept {
+    virtual bool do_is_equal(const actor_zeta::pmr::memory_resource& other) const noexcept {
         do_is_equal_called = true;
         do_is_equal_other = &other;
         return static_cast<const derived_from_memory_resource&>(other).id == this->id;
@@ -160,7 +211,7 @@ public:
     mutable std::size_t do_deallocate_alignment;
 
     mutable bool do_is_equal_called;
-    mutable const memory_resource* do_is_equal_other;
+    mutable const actor_zeta::pmr::memory_resource* do_is_equal_other;
 };
 
 bool derived_from_memory_resource::destructor_called = false;

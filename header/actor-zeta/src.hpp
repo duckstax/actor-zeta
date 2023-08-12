@@ -7,12 +7,10 @@
 #include <actor-zeta/detail/impl/pmr/default_resource.ipp>
 #include <actor-zeta/detail/pmr/polymorphic_allocator.hpp>
 
-#include <actor-zeta/impl/actor/actor.ipp>
 #include <actor-zeta/impl/actor/actor_abstract.ipp>
 #include <actor-zeta/impl/actor/address.ipp>
 #include <actor-zeta/impl/actor/behavior.ipp>
 #include <actor-zeta/impl/actor/cooperative_actor.ipp>
-#include <actor-zeta/impl/actor/supervisor.ipp>
 #include <actor-zeta/impl/actor/supervisor_abstract.ipp>
 
 #include <actor-zeta/impl/clock/clock.ipp>

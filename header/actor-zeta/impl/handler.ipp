@@ -1,9 +1,8 @@
 #pragma once
 
-
+#include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/type_list.hpp>
-#include <actor-zeta/base/forwards.hpp>
 
 namespace actor_zeta { namespace base {
     // clang-format off
@@ -31,17 +30,62 @@ namespace actor_zeta { namespace base {
         using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
         constexpr int args_size = call_trait::number_of_arguments;
         using args_type_list = type_traits::tl_slice_t<typename call_trait::args_types, 0, args_size>;
-        using Tuple =  type_list_to_tuple_t<args_type_list>;
+       /// using Tuple =  type_list_to_tuple_t<args_type_list>;
         auto &args = ctx->body();
         ///f(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
         f((actor_zeta::detail::get<I, args_type_list>(args))...);
     }
 
     // clang-format on
+
+    template <typename Fun>
+    struct is_fun_ptr: std::integral_constant<
+              bool,
+              std::is_pointer<Fun>::value && std::is_function<typename std::remove_pointer<Fun>::type>::value>
+    {
+    };
+
     template<typename F,
              class Args = typename type_traits::get_callable_trait<F>::args_types,
-             int Args_size = type_traits::get_callable_trait<F>::number_of_arguments>
-    struct transformer {
+             int Args_size = type_traits::get_callable_trait<F>::number_of_arguments,
+             bool method = is_fun_ptr<F>::value>
+    struct transformer ;
+
+    template<typename F,class Args , int Args_size >
+    struct transformer<F, Args,Args_size, false> {
+        auto operator()(F&& f) -> action {
+            action tmp([func = type_traits::decay_t<F>(f)](mailbox::message* ctx) -> void {
+                apply_impl(func, ctx, type_traits::make_index_sequence<Args_size>{});
+            });
+            return tmp;
+        }
+    };
+
+    template<typename F, class Args>
+    struct transformer<F, Args,0, false> final {
+        auto operator()(F&& f) -> action {
+            action tmp([func = type_traits::decay_t<F>(f)](mailbox::message*) -> void {
+                func();
+            });
+            return tmp;
+        }
+    };
+
+    template<typename F, class Args>
+    struct transformer<F, Args, 1,false> final {
+        auto operator()(F&& f) -> action {
+            action tmp([func = type_traits::decay_t<F>(f)](mailbox::message* ctx) -> void {
+                using arg_type = type_traits::type_list_at_t<Args, 0>;
+                using clear_args_type = type_traits::decay_t<arg_type>;
+                auto& tmp = ctx->body();
+                func(tmp.get<clear_args_type>(0));
+            });
+            return tmp;
+        }
+    };
+
+    template<typename F,class Args , int Args_size >
+    struct transformer<F, Args,Args_size, true> {
         auto operator()(F&& f) -> action {
             action tmp([func = std::move(f)](mailbox::message* ctx) -> void {
                 apply_impl(func, ctx, type_traits::make_index_sequence<Args_size>{});
@@ -51,7 +95,7 @@ namespace actor_zeta { namespace base {
     };
 
     template<typename F, class Args>
-    struct transformer<F, Args, 0> final {
+    struct transformer<F, Args,0, true> final {
         auto operator()(F&& f) -> action {
             action tmp([func = std::move(f)](mailbox::message*) -> void {
                 func();
@@ -61,7 +105,7 @@ namespace actor_zeta { namespace base {
     };
 
     template<typename F, class Args>
-    struct transformer<F, Args, 1> final {
+    struct transformer<F, Args, 1,true> final {
         auto operator()(F&& f) -> action {
             action tmp([func = std::move(f)](mailbox::message* ctx) -> void {
                 using arg_type = type_traits::type_list_at_t<Args, 0>;
@@ -75,11 +119,12 @@ namespace actor_zeta { namespace base {
 
     /// class method
     // clang-format off
-    template<class F, typename ClassPtr, std::size_t... I>
-    void apply_impl_for_class(F &&f, ClassPtr *ptr, mailbox::message *ctx, type_traits::index_sequence<I...>) {
+    template< typename ClassPtr, class F, std::size_t... I>
+    void apply_impl_for_class(ClassPtr *ptr,F &&f, mailbox::message *ctx, type_traits::index_sequence<I...>) {
         using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
         using args_type_list = typename call_trait::args_types;
-        using Tuple =  type_list_to_tuple_t<args_type_list>;
+        using result_type = typename call_trait::result_type;
+        ///using Tuple =  type_list_to_tuple_t<args_type_list>;
         auto &args = ctx->body();
         //(ptr->*f)(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
         (ptr->*f)((actor_zeta::detail::get<I, args_type_list>(args))...);
@@ -87,22 +132,25 @@ namespace actor_zeta { namespace base {
 
     // clang-format on
     template<
-        typename F,
         typename ClassPtr,
+        typename F,
         class Args = typename type_traits::get_callable_trait<F>::args_types,
         int Args_size = type_traits::get_callable_trait<F>::number_of_arguments>
     struct transformer_for_class {
-        auto operator()(F&& f, ClassPtr* ptr) -> action {
+        auto operator()(ClassPtr* ptr, F&& f) -> action {
             action tmp([func = std::move(f), ptr](mailbox::message* ctx) -> void {
-                apply_impl_for_class(func, ptr, ctx, type_traits::make_index_sequence<Args_size>{});
+                apply_impl_for_class(ptr,func, ctx, type_traits::make_index_sequence<Args_size>{});
             });
             return tmp;
         }
     };
 
-    template<typename F, typename ClassPtr, class Args>
-    struct transformer_for_class<F, ClassPtr, Args, 0> final {
-        auto operator()(F&& f, ClassPtr* ptr) -> action {
+    template<
+        typename ClassPtr,
+        typename F,
+        class Args>
+    struct transformer_for_class<ClassPtr,F, Args, 0> final {
+        auto operator()(ClassPtr* ptr, F&& f) -> action {
             action tmp([func = std::move(f), ptr](mailbox::message*) -> void {
                 (ptr->*func)();
             });
@@ -110,9 +158,12 @@ namespace actor_zeta { namespace base {
         }
     };
 
-    template<typename F, typename ClassPtr, class Args>
-    struct transformer_for_class<F, ClassPtr, Args, 1> final {
-        auto operator()(F&& f, ClassPtr* ptr) -> action {
+    template<
+        typename ClassPtr,
+        typename F,
+        class Args>
+    struct transformer_for_class<ClassPtr,F, Args, 1> final {
+        auto operator()(ClassPtr* ptr, F&& f) -> action {
             action tmp([func = std::move(f), ptr](mailbox::message* arg) -> void {
                 using arg_type_0 = type_traits::type_list_at_t<Args, 0>;
                 using decay_arg_type_0 = type_traits::decay_t<arg_type_0>;
@@ -125,13 +176,13 @@ namespace actor_zeta { namespace base {
     };
 
     template<typename F>
-    auto make_handler(F&& f)-> action {
+    auto make_handler(F&& f) -> action {
         return transformer<F>{}(std::forward<F>(f));
     }
 
-    template<typename F, typename ClassPtr>
-    auto make_handler(F&& f, ClassPtr* self) -> action {
-        return transformer_for_class<F, ClassPtr>{}(std::forward<F>(f), self);
+    template<typename ClassPtr,typename F>
+    auto make_handler(ClassPtr* self, F&& f) -> action {
+        return transformer_for_class<ClassPtr, F>{}(self, std::forward<F>(f));
     }
 
 }} // namespace actor_zeta::base

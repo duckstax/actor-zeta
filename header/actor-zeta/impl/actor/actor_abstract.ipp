@@ -30,21 +30,10 @@ namespace actor_zeta { namespace base {
         enqueue(std::move(msg), nullptr);
     }
 
-    auto actor_abstract::type() const -> const char* const {
-#ifdef DEBUG
-        return type_.data();
-#else
-        return nullptr;
-#endif
+    auto actor_abstract::type() const noexcept -> const char* const {
+        return type_impl();
     }
 
-    actor_abstract::actor_abstract(std::string type) {
-#ifdef DEBUG
-        type_ = std::move(type);
-#else
-        std::move(type);
-#endif
-    }
 
     void actor_abstract::enqueue(mailbox::message_ptr msg, scheduler::execution_unit* e) {
         enqueue_impl(std::move(msg), e);

@@ -15,10 +15,6 @@
 #include "memusage.hpp"
 
 #include <actor-zeta.hpp>
-#include <actor-zeta/detail/memory_resource.hpp>
-#include <actor-zeta/detail/type_traits.hpp>
-
-using actor_zeta::detail::pmr::memory_resource;
 
 enum class command_t : uint64_t {
     add_link,
@@ -52,59 +48,12 @@ struct data_t {
     }
 };
 
-class supervisor_test_t;
-
-class actor_test_t final : public actor_zeta::basic_async_actor {
-    supervisor_test_t* sup_ptr_;
-    size_t consumer_latency_ms_;
-    std::map<int64_t, int64_t> prev_index_;
-    std::map<int, actor_zeta::address_t> address_book_;
-
-    auto perform(command_t cmd) -> void {
-        actor_zeta::send(address_book_.begin()->second, address(), cmd);
-    }
-
-public:
-    actor_test_t(supervisor_test_t* ptr, size_t consumer_latency_ms)
-        : actor_zeta::basic_async_actor(ptr, names::actor)
-        , sup_ptr_(ptr)
-        , consumer_latency_ms_(consumer_latency_ms) {
-        add_handler(command_t::add_address, &actor_test_t::add_address);
-        add_handler(command_t::process_data, &actor_test_t::process_data);
-    }
-
-    ~actor_test_t() override = default;
-
-    void add_address(actor_zeta::address_t address, int name) {
-        if (address && this != address.get()) {
-            address_book_.emplace(name, std::move(address));
-            std::cout << "Add address " << name << std::endl;
-        }
-    }
-
-    void process_data(data_t&& data) {
-        auto ms_dur = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - data.time()).count();
-        packets_a--;
-        if (packets_a.load() > 0)
-            std::cout << __func__ << " :: packets_a " << packets_a.load() << " OUT >>>" << std::endl;
-        auto it = prev_index_.find(data.producer_index);
-        if (it == prev_index_.end()) {
-            prev_index_[data.producer_index] = data.data_index;
-        } else {
-            //std::cout << std::this_thread::get_id() << " :: " << data.data_index << " :: " << it->second << std::endl;
-            assert(data.data_index - it->second == 1);
-            it->second = data.data_index;
-        }
-        //if (ms_dur > 0)
-            //std::cout << std::this_thread::get_id() << " :: " << __func__ << " :: ms_dur " << ms_dur << " OUT >>>" << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(consumer_latency_ms_));
-    }
-};
-
 auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
     ptr->stop();
     delete ptr;
 };
+
+class actor_test_t;
 
 class supervisor_test_t final : public actor_zeta::cooperative_supervisor<supervisor_test_t> {
 public:
@@ -140,7 +89,7 @@ public:
             data.data_index = counter;
             for (const auto& addr : address_book_) {
                 packets_a++;
-                data.time_point = std::chrono::system_clock::now();                
+                data.time_point = std::chrono::system_clock::now();
                 actor_zeta::send(addr.second, address(), command_t::process_data, data);
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(producer_latency_ms_));
@@ -152,7 +101,7 @@ public:
 
 public:
     supervisor_test_t(
-        memory_resource* ptr,
+        actor_zeta::pmr::memory_resource* ptr,
         size_t count_actors,
         size_t count_producers,
         size_t datasize,
@@ -161,7 +110,7 @@ public:
         size_t producer_latency_ms,
         size_t consumer_latency_ms,
         size_t memory_limit_mb)
-        : actor_zeta::cooperative_supervisor<supervisor_test_t>(ptr, names::supervisor)
+        : actor_zeta::cooperative_supervisor<supervisor_test_t>(ptr)
         , count_actors_(count_actors)
         , count_producers_(count_producers)
         , datasize_(datasize)
@@ -169,6 +118,7 @@ public:
         , consumer_latency_ms_(consumer_latency_ms)
         , memory_limit_mb_(memory_limit_mb)
         , running_(true)
+        , name_(names::supervisor)
         , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(
                  num_worker_threads,
                  max_throughput_param),
@@ -180,7 +130,8 @@ public:
         for (auto i = 1; i <= count_actors_; ++i) {
             auto addr = spawn_actor([this, i](actor_test_t* ptr) {
                 actors_.emplace(i, ptr);
-            }, consumer_latency_ms_);
+            },
+                                    consumer_latency_ms_);
             address_book_.emplace(i, std::move(addr));
             actor_zeta::send(address_book_.at(i), address(), command_t::add_address, address(), 0);
         }
@@ -205,26 +156,113 @@ public:
         memchecker_thread_.join();
     }
 
-protected:
-    auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* override {
+    auto make_type() const noexcept -> const char* const {
+        return name_.c_str();
+    }
+
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* {
         return e_.get();
+    }
+
+protected:
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
+            resource(),
+            [](actor_zeta::message* msg) -> void {
+                std::cerr << msg->command() << std::endl;
+            });
     }
 
     auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
         {
             auto ptr = msg.get();
             set_current_message(std::move(msg));
-            execute(this, current_message());
+            behavior()(current_message());
             delete ptr;
         }
     }
 
 private:
+    const std::string name_;
     std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
     std::map<int, actor_zeta::address_t> address_book_;
     std::map<int, actor_test_t*> actors_;
     std::thread memchecker_thread_;
     std::vector<std::thread> producers_;
+};
+
+class actor_test_t final : public actor_zeta::basic_actor<actor_test_t> {
+    supervisor_test_t* sup_ptr_;
+    size_t consumer_latency_ms_;
+    std::map<int64_t, int64_t> prev_index_;
+    std::map<int, actor_zeta::address_t> address_book_;
+
+    auto perform(command_t cmd) -> void {
+        actor_zeta::send(address_book_.begin()->second, address(), cmd);
+    }
+
+public:
+    actor_test_t(supervisor_test_t* ptr, size_t consumer_latency_ms)
+        : actor_zeta::basic_actor<actor_test_t>(ptr)
+        , name_(names::actor)
+        , add_address_(actor_zeta::make_behavior(resource(), command_t::add_address, this, &actor_test_t::add_address))
+        , process_data_(actor_zeta::make_behavior(resource(), command_t::process_data, this, &actor_test_t::process_data))
+        , sup_ptr_(ptr)
+        , consumer_latency_ms_(consumer_latency_ms) {
+    }
+
+    auto make_type() const noexcept -> const char* const {
+        return name_.c_str();
+    }
+
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
+            resource(),
+            [this](actor_zeta::message* msg) -> void {
+                switch (msg->command()) {
+                    case actor_zeta::make_message_id(command_t::add_address): {
+                        add_address_(msg);
+                        break;
+                    }
+                    case actor_zeta::make_message_id(command_t::process_data): {
+                        process_data_(msg);
+                        break;
+                    }
+                }
+            });
+    }
+
+    ~actor_test_t() override = default;
+
+    void add_address(actor_zeta::address_t address, int name) {
+        if (address && this != address.get()) {
+            address_book_.emplace(name, std::move(address));
+            std::cout << "Add address " << name << std::endl;
+        }
+    }
+
+    void process_data(data_t&& data) {
+        auto ms_dur = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - data.time()).count();
+        packets_a--;
+        if (packets_a.load() > 0)
+            std::cout << __func__ << " :: packets_a " << packets_a.load() << " OUT >>>" << std::endl;
+        auto it = prev_index_.find(data.producer_index);
+        if (it == prev_index_.end()) {
+            prev_index_[data.producer_index] = data.data_index;
+        } else {
+            //std::cout << std::this_thread::get_id() << " :: " << data.data_index << " :: " << it->second << std::endl;
+            assert(data.data_index - it->second == 1);
+            it->second = data.data_index;
+        }
+        //if (ms_dur > 0)
+        //std::cout << std::this_thread::get_id() << " :: " << __func__ << " :: ms_dur " << ms_dur << " OUT >>>" << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(consumer_latency_ms_));
+    }
+
+private:
+    const std::string name_;
+    actor_zeta::behavior_t add_address_;
+    actor_zeta::behavior_t process_data_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -265,20 +303,17 @@ namespace args {
 
     const size_t memory_limit_mb_default = 4 * 1024;
 
-}
+} // namespace args
 
 int main(int argc, char** argv) {
-
-    std::map<std::string, size_t> args_set = {{
-        {args::count_actors, args::count_actors_default},
-        {args::count_producers, args::count_producers_default},
-        {args::datasize, args::datasize_default},
-        {args::num_worker_threads, args::num_worker_threads_default},
-        {args::max_throughput_param, args::max_throughput_param_default},
-        {args::producer_latency_ms, args::producer_latency_ms_default},
-        {args::consumer_latency_ms, args::consumer_latency_ms_default},
-        {args::memory_limit_mb, args::memory_limit_mb_default}
-    }};
+    std::map<std::string, size_t> args_set = {{{args::count_actors, args::count_actors_default},
+                                               {args::count_producers, args::count_producers_default},
+                                               {args::datasize, args::datasize_default},
+                                               {args::num_worker_threads, args::num_worker_threads_default},
+                                               {args::max_throughput_param, args::max_throughput_param_default},
+                                               {args::producer_latency_ms, args::producer_latency_ms_default},
+                                               {args::consumer_latency_ms, args::consumer_latency_ms_default},
+                                               {args::memory_limit_mb, args::memory_limit_mb_default}}};
 
     auto print_help = [&args_set]() {
         for (auto& arg : args_set) {
@@ -307,7 +342,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    auto* resource = actor_zeta::detail::pmr::get_default_resource();
+    auto* resource = actor_zeta::pmr::get_default_resource();
     auto sup_ = actor_zeta::spawn_supervisor<supervisor_test_t>(
         resource,
         args_set.at(args::count_actors),
