@@ -3,13 +3,11 @@
 // clang-format off
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/address.hpp>
-#include <header/actor-zeta/mailbox/message.hpp>
-#include <actor-zeta/base/supervisor.hpp>
+#include <actor-zeta/mailbox/message.hpp>
 #include <actor-zeta/impl/handler.ipp>
 // clang-format on
 
 #include <actor-zeta/base/address.hpp>
-#include <actor-zeta/base/communication_module.hpp>
 #include <memory>
 
 namespace actor_zeta { namespace base {
@@ -66,7 +64,7 @@ namespace actor_zeta { namespace base {
         std::swap(ptr_, other.ptr_);
     }
 
-    void* address_t::get() const {
+    actor_abstract* address_t::get() const {
         return ptr_;
     }
 
@@ -77,6 +75,10 @@ namespace actor_zeta { namespace base {
     auto address_t::empty_address() -> address_t {
         static address_t tmp;
         return tmp;
+    }
+
+    bool address_t::operator==(const address_t& rhs) noexcept {
+        return  ptr_ == rhs.ptr_;
     }
 
 }} // namespace actor_zeta::base

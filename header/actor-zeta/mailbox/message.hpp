@@ -3,11 +3,11 @@
 #include <cassert>
 
 #include <actor-zeta/base/address.hpp>
-
 #include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/mailbox/priority.hpp>
 #include <actor-zeta/mailbox/id.hpp>
 #include <actor-zeta/detail/rtt.hpp>
+#include <actor-zeta/detail/queue/singly_linked.hpp>
 
 namespace actor_zeta { namespace mailbox {
 
@@ -15,7 +15,7 @@ namespace actor_zeta { namespace mailbox {
     /// @brief
     ///
 
-    class message final {
+    class message final : public actor_zeta::detail::singly_linked<message> {
     public:
         // https://github.com/duckstax/actor-zeta/issues/118
         // @TODO Remove default ctors for actor_zeta::base::message and actor_zeta::detail::rtt (message body) #118
@@ -27,7 +27,6 @@ namespace actor_zeta { namespace mailbox {
         ~message() = default;
         message(base::address_t /*sender*/, message_id /*name*/);
         message(base::address_t /*sender*/, message_id /*name*/, actor_zeta::detail::rtt /*body*/);
-        message* next;
         message* prev;
         auto command() const noexcept -> message_id;
         auto sender() & noexcept -> base::address_t&;

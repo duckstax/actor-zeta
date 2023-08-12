@@ -47,6 +47,7 @@ namespace actor_zeta { namespace scheduler {
             for (auto& w : workers_) {
                 w->start();
             }
+
         }
 
         void stop() override {
@@ -70,8 +71,7 @@ namespace actor_zeta { namespace scheduler {
                     intrusive_ptr_release(this);
                 }
 
-                shutdown_helper()
-                    : last_worker(nullptr) {}
+                shutdown_helper(): last_worker(nullptr) {}
 
                 std::mutex mtx;
                 std::condition_variable cv;

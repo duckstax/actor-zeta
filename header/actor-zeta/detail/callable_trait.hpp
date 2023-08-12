@@ -9,7 +9,6 @@ namespace actor_zeta { namespace type_traits {
     template<class Functor>
     struct callable_trait;
 
-    // good ol' function
     template<class R, class... Args>
     struct callable_trait<R(Args...)> {
         using result_type = R;
@@ -18,48 +17,37 @@ namespace actor_zeta { namespace type_traits {
         using fun_type = std::function<R(Args...)>;
         static constexpr size_t number_of_arguments = type_list_size<args_types>::value;
     };
-    /*
-        // member noexcept const function pointer
-        template <class C, typename R, class... Ts>
-        struct callable_trait<R (C::*)(Ts...) const noexcept>: callable_trait<R(Ts...)> {};
 
-// member noexcept function pointer
-        template <class C, typename R, class... Ts>
-        struct callable_trait<R (C::*)(Ts...) noexcept> : callable_trait<R(Ts...)> {};
-
-// member const function pointer
-        template <class C, typename R, class... Ts>
-        struct callable_trait<R (C::*)(Ts...) const> : callable_trait<R (Ts...)> {};
-
-// member function pointer
-        template <class C, typename R, class... Ts>
-        struct callable_trait<R (C::*)(Ts...)> : callable_trait<R (Ts...)> {};
-
-// good ol' noexcept function pointer
-        template <class R, class... Ts>
-        struct callable_trait<R (*)(Ts...) noexcept> : callable_trait<R(Ts...)> {};
-
-// good ol' function pointer
-        template <class R, class... Ts>
-        struct callable_trait<R (*)(Ts...)> : callable_trait<R (Ts...)> {};
-*/
-
-    // member const function pointer
-    template<class C, typename R, class... Ts>
-    struct callable_trait<R (C::*)(Ts...) const> : callable_trait<R(Ts...)> {
+    template<class C, typename R, class... Args>
+    struct callable_trait<R (C::*)(Args...) const noexcept>
+        : callable_trait<R(Args...)> {
         using class_type = C;
     };
 
-    // member function pointer
-    template<class C, typename R, class... Ts>
-    struct callable_trait<R (C::*)(Ts...)> : callable_trait<R(Ts...)> {
+    template<class C, typename R, class... Args>
+    struct callable_trait<R (C::*)(Args...) noexcept> : callable_trait<R(Args...)> {
         using class_type = C;
     };
 
-    // good ol' function pointer
-    template<class R, class... Ts>
-    struct callable_trait<R (*)(Ts...)> : callable_trait<R(Ts...)> {};
+#if CPP17_OR_GREATER
+    template<class C, typename R, class... Args>
+    struct callable_trait<R (C::*)(Args...) const> : callable_trait<R(Args...)> {
+        using class_type = C;
+    };
 
+    template<class C, typename R, class... Args>
+    struct callable_trait<R (C::*)(Args...)> : callable_trait<R(Args...)> {
+        using class_type = C;
+    };
+#endif
+
+    template<class R, class... Args>
+    struct callable_trait<R (*)(Args...) noexcept> : callable_trait<R(Args...)> {};
+
+#if CPP17_OR_GREATER
+    template<class R, class... Args>
+    struct callable_trait<R (*)(Args...)> : callable_trait<R(Args...)> {};
+#endif
     template<class T>
     struct has_apply_operator final {
         template<class U>
@@ -72,13 +60,11 @@ namespace actor_zeta { namespace type_traits {
         static constexpr bool value = type::value;
     };
 
-    // matches (IsFun || IsMemberFun)
     template<class T,
              bool IsFun = std::is_function<T>::value || std::is_function<typename std::remove_pointer<T>::type>::value || std::is_member_function_pointer<T>::value,
              bool HasApplyOp = has_apply_operator<T>::value>
     struct get_callable_trait_helper {
         using type = callable_trait<T>;
-        using class_type = typename type::class_type;
         using result_type = typename type::result_type;
         using args_types = typename type::args_types;
         using fun_type = typename type::fun_type;
@@ -86,10 +72,10 @@ namespace actor_zeta { namespace type_traits {
         static constexpr size_t number_of_arguments = tl_size<args_types>::value;
     };
 
-    // assume functor providing operator()
     template<class T>
     struct get_callable_trait_helper<T, false, true> {
         using type = callable_trait<decltype(&T::operator())>;
+        using class_type = typename type::class_type;
         using result_type = typename type::result_type;
         using args_types = typename type::args_types;
         using fun_type = typename type::fun_type;
@@ -117,10 +103,10 @@ namespace actor_zeta { namespace type_traits {
         static constexpr bool value = std::is_same<bool, result_type>::value;
     };
 
-    template<class F, class... Ts>
+    template<class F, class... args>
     struct is_callable_with final {
         template<class U>
-        static auto sfinae(U*) -> decltype((std::declval<U&>()) (std::declval<Ts>()...), std::true_type());
+        static auto sfinae(U*) -> decltype((std::declval<U&>()) (std::declval<args>()...), std::true_type());
 
         template<class U>
         static auto sfinae(...) -> std::false_type;

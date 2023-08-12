@@ -1,0 +1,60 @@
+#on: [push, pull_request]
+#on: [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:16.04
+    #needs: [ prepare ]
+    strategy:
+      #fail-fast: false
+      matrix:
+        profiles: [ Release, Debug ]
+        CXX_STANDARD: [ 11,14 ]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: set env
+        run: |
+          apt update
+          apt install -y \
+                 build-essential zlib1g-dev wget \
+                 libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev \
+                 ninja-build \
+                 software-properties-common 
+          apt clean 
+          add-apt-repository -y ppa:ubuntu-toolchain-r/test  
+          apt install -y gcc-4.9 g++-4.9  
+          update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 100 
+          update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 100 
+          rm -rf /var/lib/apt/lists/* 
+          wget https://www.python.org/ftp/python/3.6.3/Python-3.6.3.tgz 
+          tar -xvf Python-3.6.3.tgz 
+          cd Python-3.6.3 
+          ./configure \
+             && make \
+             && make install \
+             && cd .. \
+             && python3.6 -m pip install --upgrade pip \
+             && python3.6 -m pip install --no-cache-dir conan==1.59 cmake
+
+      - name: Install conan dependencies
+        run: |
+          conan profile new default --detect 
+          conan profile update settings.compiler.libcxx=libstdc++11 default
+          conan profile update settings.compiler=gcc default 
+          conan profile update settings.compiler.version=4.9 default 
+          conan profile update env.CXX=g++ default 
+          conan profile update env.CC=gcc default 
+          conan install -if build . --build missing -s build_type=${{ matrix.profiles }}
+
+      - name: Build library
+        run: |
+          cmake .. -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.profiles }} -DCMAKE_CXX_STANDARD=${{ matrix.CXX_STANDARD}} -DALLOW_EXAMPLES=ON -DALLOW_TESTS=ON -DENABLE_TESTS_MEASUREMENTS=OFF -DALLOW_BENCHMARK=ON -DDEV_MODE=ON
+          cmake --build . --parallel  --target all
+        working-directory: build/
+
+      - name: Run cmake tests
+        run: ctest -C ${{ matrix.profiles }} --rerun-failed --output-on-failure
+        working-directory: build/

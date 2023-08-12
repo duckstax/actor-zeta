@@ -32,7 +32,7 @@ namespace actor_zeta { namespace base {
         std::cerr << " sender: " << "Not Sender" << "\n";
         std::cerr << "WARNING" << std::endl;
     }
-
+/*
     bool intrusive_behavior_t::on(key_type name, value_type handler) {
         auto it = handlers_.find(name);
         bool status = false;
@@ -56,5 +56,5 @@ namespace actor_zeta { namespace base {
         }
         return types;
     }
-
+*/
 }} // namespace actor_zeta::base

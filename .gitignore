@@ -62,7 +62,6 @@ fabric.properties
 .idea
 .vscode
 CMakeCache.txt
-conan.cmake
 conan.lock
 conanbuildinfo.cmake
 conanbuildinfo.txt

@@ -5,6 +5,7 @@
 #include <memory>
 #include <tuple>
 
+#include <actor-zeta/config.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/detail/rtt.hpp>
 
@@ -17,8 +18,8 @@ namespace benchmark_messages {
 
         template<typename... Args>
         auto message_arg_tmpl(
-#if CPP17_OR_GREATER
-            actor_zeta::detail::pmr::monotonic_buffer_resource* mr,
+#if HAVE_STD_PMR==1
+            actor_zeta::pmr::monotonic_buffer_resource* mr,
 #endif
             Args&&... args) -> void;
 
@@ -26,8 +27,8 @@ namespace benchmark_messages {
 
             template<typename... Args>
             auto message_arg_tmpl(
-#if CPP17_OR_GREATER
-                __attribute__((unused)) actor_zeta::detail::pmr::monotonic_buffer_resource* mr,
+#if HAVE_STD_PMR==1
+                __attribute__((unused)) actor_zeta::pmr::monotonic_buffer_resource* mr,
 #endif
                 Args&&... args) -> void {
                 actor_zeta::detail::rtt rtt_tuple(nullptr, std::forward<Args>(args)...);
@@ -36,12 +37,12 @@ namespace benchmark_messages {
             template<typename T, std::size_t... I>
             auto call_message_arg_tmpl(
                 T& packed_tuple,
-#if CPP17_OR_GREATER
-                actor_zeta::detail::pmr::monotonic_buffer_resource* mr,
+#if HAVE_STD_PMR==1
+                actor_zeta::pmr::monotonic_buffer_resource* mr,
 #endif
                 actor_zeta::type_traits::index_sequence<I...>) -> void {
                 message_arg_tmpl(
-#if CPP17_OR_GREATER
+#if HAVE_STD_PMR==1
                     mr,
 #endif
                     (std::get<I>(packed_tuple))...);
@@ -95,11 +96,11 @@ namespace benchmark_messages {
 
     } // namespace by_args
 
-    class memory_manager_t : public benchmark::MemoryManager {
-        void Start() BENCHMARK_OVERRIDE {}
-        void Stop(Result* /*result*/) BENCHMARK_OVERRIDE {
-        }
-    };
+//    class memory_manager_t : public benchmark::MemoryManager {
+//        void Start() BENCHMARK_OVERRIDE {}
+//        void Stop(Result* /*result*/) BENCHMARK_OVERRIDE {
+//        }
+//    };
 
 } // namespace benchmark_messages
 
@@ -108,8 +109,8 @@ int main(int argc, char** argv) {
     benchmark::Initialize(&argc, argv);
     if (benchmark::ReportUnrecognizedArguments(argc, argv))
         return 1;
-    std::unique_ptr<benchmark::MemoryManager> mm(new benchmark_messages::memory_manager_t());
-    benchmark::RegisterMemoryManager(mm.get());
+//    std::unique_ptr<benchmark::MemoryManager> mm(new benchmark_messages::memory_manager_t());
+//    benchmark::RegisterMemoryManager(mm.get());
     benchmark::RunSpecifiedBenchmarks();
     benchmark::Shutdown();
     benchmark::RegisterMemoryManager(nullptr);

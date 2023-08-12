@@ -1,14 +1,30 @@
-cmake_minimum_required(VERSION 3.0)
+PROJECT(tests_polymorphic_allocator CXX)
 
-PROJECT(polymorphic_allocator CXX)
+file(GLOB ${PROJECT_NAME}_HEADERS
+    ./*.hpp
+    ./*.h
+)
 
-set(SOURCE_FILES main.cpp)
+file(GLOB ${PROJECT_NAME}_SOURCES
+    ./*.cpp
+)
 
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+add_executable(${PROJECT_NAME}
+    ${${PROJECT_NAME}_SOURCES}
+    ${${PROJECT_NAME}_HEADERS})
 
-target_link_libraries(${PROJECT_NAME} actor-zeta CONAN_PKG::catch2)
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC ${REQ_LLVM_LIBRARIES}
+    )
+endif() #--------------------------------------------------------------------------- Clang
+
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC actor-zeta
+    PUBLIC CONAN_PKG::catch2
+)
 
 include(CTest)
 include(Catch)

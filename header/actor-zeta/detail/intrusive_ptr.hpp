@@ -208,9 +208,9 @@ namespace actor_zeta {
         return r.template downcast<T>();
     }
 
-    template<class T, class... Ts>
-    intrusive_ptr<T> make_counted(Ts&&... xs) {
-        return intrusive_ptr<T>(new T(std::forward<Ts>(xs)...), false);
+    template<class T, class... args>
+    intrusive_ptr<T> make_counted(args&&... xs) {
+        return intrusive_ptr<T>(new T(std::forward<args>(xs)...), false);
     }
 
 } // namespace actor_zeta

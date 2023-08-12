@@ -38,7 +38,7 @@ namespace actor_zeta { namespace mailbox {
     }
 
     message::message()
-        : next(nullptr)
+        : singly_linked(nullptr)
         , prev(nullptr)
         , sender_(address_t::empty_address()) {}
 

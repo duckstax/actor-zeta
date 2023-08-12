@@ -4,29 +4,20 @@
 #include <cstddef>
 #include <cstdio>
 
-#if CPP17_OR_GREATER
-#if __has_include(<memory_resource>)
+#if HAVE_STD_PMR==1
+
 #include <memory_resource>
-#elif __has_include(<experimental/memory_resource>)
-#include <experimental/memory_resource>
-#endif
+
 #endif
 
-namespace actor_zeta { namespace detail { namespace pmr {
+namespace actor_zeta { namespace pmr {
 
-#if CPP17_OR_GREATER
+#if HAVE_STD_PMR==1
 
-#if __has_include(<memory_resource>)
     using std::pmr::memory_resource;
+    using std::pmr::monotonic_buffer_resource;
 
 #else
-    using std::experimental::pmr::memory_resource;
-
-#endif
-
-    using monotonic_buffer_resource = std::pmr::monotonic_buffer_resource;
-
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
     class memory_resource {
     public:
@@ -62,4 +53,4 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
 #endif
 
-}}} // namespace actor_zeta::detail::pmr
+}} // namespace actor_zeta::detail::pmr

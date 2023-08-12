@@ -2,7 +2,7 @@
 
 namespace actor_zeta { namespace scheduler {
     class work_sharing;
-    class resumable;
+    struct resumable;
     struct execution_unit;
     class scheduler_abstract_t;
     template<class Policy>

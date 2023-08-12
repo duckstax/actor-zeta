@@ -3,33 +3,16 @@
 #include <actor-zeta/detail/aligned_allocate.hpp>
 #include <actor-zeta/detail/pmr/default_resource.hpp>
 
-namespace actor_zeta { namespace detail { namespace pmr {
+namespace actor_zeta { namespace pmr {
 
-#if CPP17_OR_GREATER
+#if HAVE_STD_PMR==1
 
-#if __has_include(<memory_resource>)
+    using std::pmr::get_default_resource;
+    using std::pmr::set_default_resource;
+    using std::pmr::new_delete_resource;
+    using std::pmr::null_memory_resource;
 
 #else
-
-    memory_resource* get_default_resource() noexcept {
-        return std::experimental::pmr::get_default_resource();
-    }
-
-    memory_resource* set_default_resource(memory_resource* new_res) noexcept {
-        return std::experimental::pmr::set_default_resource(new_res);
-    }
-
-    memory_resource* new_delete_resource() noexcept {
-        return std::experimental::pmr::new_delete_resource();
-    }
-
-    memory_resource* null_memory_resource() noexcept {
-        return std::experimental::pmr::null_memory_resource();
-    }
-
-#endif
-
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
 #ifndef WEAK_CONSTINIT
 #ifndef NO_DESTROY
@@ -131,4 +114,4 @@ namespace actor_zeta { namespace detail { namespace pmr {
 
 #endif
 
-}}} // namespace actor_zeta::detail::pmr
+}} // namespace actor_zeta::detail::pmr
