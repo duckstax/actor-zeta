@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.0)
+
 set(project benchmark_actors_multithreaded)
 if (CMAKE_VERSION VERSION_LESS 3.0)
     PROJECT(${project} CXX)

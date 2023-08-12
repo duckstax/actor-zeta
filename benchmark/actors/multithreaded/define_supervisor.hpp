@@ -55,7 +55,7 @@ auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
         }                                                                                                                                               \
                                                                                                                                                         \
     protected:                                                                                                                                          \
-        auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* override {                                                                  \
+        auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* override {                                                                  \
             return e_.get();                                                                                                                            \
         }                                                                                                                                               \
                                                                                                                                                         \
