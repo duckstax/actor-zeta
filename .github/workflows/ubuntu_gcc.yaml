@@ -46,7 +46,7 @@ jobs:
         run: |
           apt update && apt-get install -y \
             software-properties-common ca-certificates \
-            ninja-build make \
+            ninja-build make git \
             zlib1g-dev wget
 
           add-apt-repository ppa:ubuntu-toolchain-r/test
