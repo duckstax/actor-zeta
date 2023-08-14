@@ -34,9 +34,9 @@ jobs:
             configuration: {"UBUNTU_VERSION":"16.04", "TOOLCHAIN_VERSION":"4.9"}
 
     name: Run C++ benchmark example
-    runs-on: ubuntu-latest
-    container:
-      image: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
+    runs-on: ubuntu:${{matrix.configuration.UBUNTU_VERSION}} #ubuntu-latest
+#    container:
+#      image: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
 
     steps:
       - uses: actions/checkout@v2
