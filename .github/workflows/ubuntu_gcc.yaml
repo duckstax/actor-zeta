@@ -4,94 +4,120 @@ on: [push]
 
 jobs:
   benchmark:
-    strategy:
-      matrix:
-        cxx_standard: [11, 14, 17]
-        build_type: ["Release", "Debug"]
-        configuration: [
-          {"UBUNTU_VERSION":"16.04", "TOOLCHAIN_VERSION":"4.9"},
+#    strategy:
+#      matrix:
+#        cxx_standard: [11, 14, 17]
+#        build_type: ["Release", "Debug"]
+#        configuration: [
+#          {"UBUNTU_VERSION":"16.04", "TOOLCHAIN_VERSION":"4.9"},
+#
+#          {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"4.8"},
+#          {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"5"},
+#          {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"6"},
+#          {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"7"},
+#          {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"8"},
+#
+#          {"UBUNTU_VERSION":"20.04", "TOOLCHAIN_VERSION":"7"},
+#          {"UBUNTU_VERSION":"20.04", "TOOLCHAIN_VERSION":"8"},
+#          {"UBUNTU_VERSION":"20.04", "TOOLCHAIN_VERSION":"9"},
+#          {"UBUNTU_VERSION":"20.04", "TOOLCHAIN_VERSION":"10"},
+#
+#          {"UBUNTU_VERSION":"22.04", "TOOLCHAIN_VERSION":"9"},
+#          {"UBUNTU_VERSION":"22.04", "TOOLCHAIN_VERSION":"10"},
+#          {"UBUNTU_VERSION":"22.04", "TOOLCHAIN_VERSION":"11"},
+#          {"UBUNTU_VERSION":"22.04", "TOOLCHAIN_VERSION":"12"}
+#        ]
+#        exclude:
+#          - cxx_standard: 17
+#            configuration: {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"4.8"}
+#          - cxx_standard: 17
+#            configuration: {"UBUNTU_VERSION":"16.04", "TOOLCHAIN_VERSION":"4.9"}
+#
+#    runs-on: ubuntu-latest
+#    container:
+#      image: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
 
-          {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"4.8"},
-          {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"5"},
-          {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"6"},
-          {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"7"},
-          {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"8"},
-
-          {"UBUNTU_VERSION":"20.04", "TOOLCHAIN_VERSION":"7"},
-          {"UBUNTU_VERSION":"20.04", "TOOLCHAIN_VERSION":"8"},
-          {"UBUNTU_VERSION":"20.04", "TOOLCHAIN_VERSION":"9"},
-          {"UBUNTU_VERSION":"20.04", "TOOLCHAIN_VERSION":"10"},
-
-          {"UBUNTU_VERSION":"22.04", "TOOLCHAIN_VERSION":"9"},
-          {"UBUNTU_VERSION":"22.04", "TOOLCHAIN_VERSION":"10"},
-          {"UBUNTU_VERSION":"22.04", "TOOLCHAIN_VERSION":"11"},
-          {"UBUNTU_VERSION":"22.04", "TOOLCHAIN_VERSION":"12"}
-        ]
-        exclude:
-          - cxx_standard: 17
-            configuration: {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"4.8"}
-          - cxx_standard: 17
-            configuration: {"UBUNTU_VERSION":"16.04", "TOOLCHAIN_VERSION":"4.9"}
-
-    runs-on: ubuntu-latest
-    container:
-      image: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
-
+    name: Run C++ benchmark example
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install system dependencies
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        run: |
-          apt update && apt-get install -y \
-            software-properties-common ca-certificates \
-            ninja-build make git \
-            zlib1g-dev wget
+      - name: Cache Benchmark library
+        uses: actions/cache@v1
+        with:
+          path: benchmark
+          key: ${{ runner.os }}-googlebenchmark-v1.5.0
 
-          add-apt-repository ppa:ubuntu-toolchain-r/test
+      - name: Run benchmark
+        run: touch benchmark/benchmark_result.json
 
-          bash ./docker/gcc/pyinstall.sh $(cat /etc/os-release | grep -a UBUNTU_CODENAME | sed -e 's/UBUNTU_CODENAME=//g')
-
-          python3 -m pip install --upgrade pip
-          python3 -m pip install --no-cache-dir conan==1.59 cmake
-
-      - name: Install compiler
-        run: |
-          apt update && apt-get install -y gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
-          update-alternatives \
-            --install /usr/bin/gcc gcc /usr/bin/gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} 90 \
-            --slave /usr/bin/g++ g++ /usr/bin/g++-${{matrix.configuration.TOOLCHAIN_VERSION}} \
-            --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.configuration.TOOLCHAIN_VERSION}}
-
-          update-alternatives --config gcc
-
-      - name: Configure CMake
-        env:
-          CC: gcc-${{matrix.configuration.TOOLCHAIN_VERSION}}
-          CXX: g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
-          BUILD_TYPE: ${{matrix.build_type}}
-          CXX_STANDARD: ${{matrix.cxx_standard}}
-        run: |
-          mkdir -p build
-          cmake -B build -GNinja \
-            -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-            -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \
-            -DCMAKE_C_COMPILER=${CC} \
-            -DCMAKE_CXX_COMPILER=${CXX} \
-            -DALLOW_EXAMPLES=ON \
-            -DALLOW_TESTS=ON \
-            -DENABLE_TESTS_MEASUREMENTS=ON \
-            -DALLOW_BENCHMARK=ON \
-            -DEXCEPTIONS_DISABLE=ON \
-            -DRTTI_DISABLE=ON
-
-      - name: Build
-        run: cmake --build build
-
-      - name: Test
-        working-directory: build
-        run: ctest --rerun-failed --output-on-failure
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          name: C++ Benchmark
+          tool: 'googlecpp'
+          output-file-path: benchmark/benchmark_result.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
+          # Show alert with commit comment on detecting possible performance regression
+#          alert-threshold: '200%'
+#          comment-on-alert: true
+#          fail-on-alert: true
+#          alert-comment-cc-users: '@ktrz'
+#
+#
+#      - name: Install system dependencies
+#        env:
+#          DEBIAN_FRONTEND: noninteractive
+#        run: |
+#          apt update && apt-get install -y \
+#            software-properties-common ca-certificates \
+#            ninja-build make git \
+#            zlib1g-dev wget
+#
+#          add-apt-repository ppa:ubuntu-toolchain-r/test
+#
+#          bash ./docker/gcc/pyinstall.sh $(cat /etc/os-release | grep -a UBUNTU_CODENAME | sed -e 's/UBUNTU_CODENAME=//g')
+#
+#          python3 -m pip install --upgrade pip
+#          python3 -m pip install --no-cache-dir conan==1.59 cmake
+#
+#      - name: Install compiler
+#        run: |
+#          apt update && apt-get install -y gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
+#          update-alternatives \
+#            --install /usr/bin/gcc gcc /usr/bin/gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} 90 \
+#            --slave /usr/bin/g++ g++ /usr/bin/g++-${{matrix.configuration.TOOLCHAIN_VERSION}} \
+#            --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.configuration.TOOLCHAIN_VERSION}}
+#
+#          update-alternatives --config gcc
+#
+#      - name: Configure CMake
+#        env:
+#          CC: gcc-${{matrix.configuration.TOOLCHAIN_VERSION}}
+#          CXX: g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
+#          BUILD_TYPE: ${{matrix.build_type}}
+#          CXX_STANDARD: ${{matrix.cxx_standard}}
+#        run: |
+#          mkdir -p build
+#          cmake -B build -GNinja \
+#            -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+#            -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \
+#            -DCMAKE_C_COMPILER=${CC} \
+#            -DCMAKE_CXX_COMPILER=${CXX} \
+#            -DALLOW_EXAMPLES=ON \
+#            -DALLOW_TESTS=ON \
+#            -DENABLE_TESTS_MEASUREMENTS=ON \
+#            -DALLOW_BENCHMARK=ON \
+#            -DEXCEPTIONS_DISABLE=ON \
+#            -DRTTI_DISABLE=ON
+#
+#      - name: Build
+#        run: cmake --build build
+#
+#      - name: Test
+#        working-directory: build
+#        run: ctest --rerun-failed --output-on-failure
 
 #      - name: Cache Benchmark library
 #        uses: actions/cache@v1
@@ -99,14 +125,13 @@ jobs:
 #          path: build/bin
 #          key: ${{ runner.os }}-googlebenchmark-v1.5.0
 
-      - name: Run benchmark
-        run: cd build/bin && ./benchmark_actors_ping_pong_scheduled --benchmark_format=json | tee benchmark_result.json
-
-      - name: Store benchmark result
-        uses: benchmark-action/github-action-benchmark@v1
-        working-directory: build
-        with:
-          tool: 'googlecpp'
-          output-file-path: bin/benchmark_result.json
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          auto-push: false
+#      - name: Run benchmark
+#        run: cd build/bin && ./benchmark_actors_ping_pong_scheduled --benchmark_format=json | tee benchmark_result.json
+#
+#      - name: Store benchmark result
+#        uses: benchmark-action/github-action-benchmark@v1
+#        with:
+#          tool: 'googlecpp'
+#          output-file-path: bin/benchmark_result.json
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          auto-push: false
