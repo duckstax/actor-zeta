@@ -71,12 +71,13 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          apt update && apt-get install -y \
+          sudo apt update
+          sudo apt-get install -y \
             software-properties-common ca-certificates \
             ninja-build make git \
             zlib1g-dev wget
 
-          add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 
           bash ./docker/gcc/pyinstall.sh $(cat /etc/os-release | grep -a UBUNTU_CODENAME | sed -e 's/UBUNTU_CODENAME=//g')
 
