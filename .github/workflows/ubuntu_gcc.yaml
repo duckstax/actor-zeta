@@ -3,7 +3,7 @@ name: GCC Builds
 on: [push]
 
 jobs:
-  build:
+  benchmark:
     strategy:
       matrix:
         cxx_standard: [11, 14, 17]
