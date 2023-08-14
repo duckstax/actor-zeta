@@ -94,13 +94,15 @@ jobs:
         run: ctest --rerun-failed --output-on-failure
 
       - name: Run benchmark
-        working-directory: build
-        run: ./bin/benchmark_actors_ping_pong_scheduled --benchmark_format=json | tee benchmark_result.json
+        with:
+            path: build/bin
+            key: ${{ runner.os }}-googlebenchmark-v1.8.0
+        run: cd build/bin && ./benchmark_actors_ping_pong_scheduled --benchmark_format=json | tee benchmark_result.json
 
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
           tool: 'googlecpp'
-          output-file-path: ./build/benchmark_result.json
+          output-file-path: build/bin/benchmark_result.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: true
