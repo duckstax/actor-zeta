@@ -49,7 +49,7 @@ public:
             assert(counter_g == 2);                             \
         }                                                       \
     }                                                           \
-    BENCHMARK_REGISTER_F(fixture, bm_name)->DenseRange(0, 32, 8);
+    BENCHMARK_REGISTER_F(fixture, bm_name)->DenseRange(0, 8, 9);
 
 #define REGISTER_BENCHMARKS__(name, ...) \
     REGISTER_TEMPLATE_BENCHMARK(fixture_t, ping_pong_single_threaded##name, __VA_ARGS__);
