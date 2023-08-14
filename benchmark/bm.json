@@ -1,0 +1,180 @@
+{
+    "context": {
+      "date": "2023-08-14T15:54:48+00:00",
+      "host_name": "bcce37eb021a",
+      "executable": "./benchmark_actors_ping_pong_scheduled",
+      "num_cpus": 2,
+      "mhz_per_cpu": 2793,
+      "cpu_scaling_enabled": false,
+      "caches": [
+        {
+          "type": "Data",
+          "level": 1,
+          "size": 49152,
+          "num_sharing": 1
+        },
+        {
+          "type": "Instruction",
+          "level": 1,
+          "size": 32768,
+          "num_sharing": 1
+        },
+        {
+          "type": "Unified",
+          "level": 2,
+          "size": 1310720,
+          "num_sharing": 1
+        },
+        {
+          "type": "Unified",
+          "level": 3,
+          "size": 50331648,
+          "num_sharing": 2
+        }
+      ],
+      "load_avg": [1.74,1.17,0.52],
+      "library_build_type": "debug"
+    },
+    "benchmarks": [
+      {
+        "name": "fixture_t<int8_t>/ping_pong_single_threaded_1_int8_t/0",
+        "family_index": 0,
+        "per_family_instance_index": 0,
+        "run_name": "fixture_t<int8_t>/ping_pong_single_threaded_1_int8_t/0",
+        "run_type": "iteration",
+        "repetitions": 1,
+        "repetition_index": 0,
+        "threads": 1,
+        "iterations": 91826,
+        "real_time": 2.6947214220373633e+04,
+        "cpu_time": 8.7627393113061680e+03,
+        "time_unit": "ns"
+      },
+      {
+        "name": "fixture_t<int8_t, int8_t>/ping_pong_single_threaded_2_int8_t/0",
+        "family_index": 1,
+        "per_family_instance_index": 0,
+        "run_name": "fixture_t<int8_t, int8_t>/ping_pong_single_threaded_2_int8_t/0",
+        "run_type": "iteration",
+        "repetitions": 1,
+        "repetition_index": 0,
+        "threads": 1,
+        "iterations": 100000,
+        "real_time": 2.3349359130000383e+04,
+        "cpu_time": 7.3827969999999987e+03,
+        "time_unit": "ns"
+      },
+      {
+        "name": "fixture_t<int8_t, int8_t, int8_t>/ping_pong_single_threaded_3_int8_t/0",
+        "family_index": 2,
+        "per_family_instance_index": 0,
+        "run_name": "fixture_t<int8_t, int8_t, int8_t>/ping_pong_single_threaded_3_int8_t/0",
+        "run_type": "iteration",
+        "repetitions": 1,
+        "repetition_index": 0,
+        "threads": 1,
+        "iterations": 78374,
+        "real_time": 2.8067144894990386e+04,
+        "cpu_time": 9.0211575267307999e+03,
+        "time_unit": "ns"
+      },
+      {
+        "name": "fixture_t<int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_4_int8_t/0",
+        "family_index": 3,
+        "per_family_instance_index": 0,
+        "run_name": "fixture_t<int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_4_int8_t/0",
+        "run_type": "iteration",
+        "repetitions": 1,
+        "repetition_index": 0,
+        "threads": 1,
+        "iterations": 74381,
+        "real_time": 2.7909630510480245e+04,
+        "cpu_time": 9.0029227894220294e+03,
+        "time_unit": "ns"
+      },
+      {
+        "name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_5_int8_t/0",
+        "family_index": 4,
+        "per_family_instance_index": 0,
+        "run_name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_5_int8_t/0",
+        "run_type": "iteration",
+        "repetitions": 1,
+        "repetition_index": 0,
+        "threads": 1,
+        "iterations": 78023,
+        "real_time": 2.8274546505517756e+04,
+        "cpu_time": 9.1442113223023989e+03,
+        "time_unit": "ns"
+      },
+      {
+        "name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_6_int8_t/0",
+        "family_index": 5,
+        "per_family_instance_index": 0,
+        "run_name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_6_int8_t/0",
+        "run_type": "iteration",
+        "repetitions": 1,
+        "repetition_index": 0,
+        "threads": 1,
+        "iterations": 78258,
+        "real_time": 2.8210893927777401e+04,
+        "cpu_time": 8.9700822919062593e+03,
+        "time_unit": "ns"
+      },
+      {
+        "name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_7_int8_t/0",
+        "family_index": 6,
+        "per_family_instance_index": 0,
+        "run_name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_7_int8_t/0",
+        "run_type": "iteration",
+        "repetitions": 1,
+        "repetition_index": 0,
+        "threads": 1,
+        "iterations": 79358,
+        "real_time": 2.7964147748178613e+04,
+        "cpu_time": 9.0848786511756825e+03,
+        "time_unit": "ns"
+      },
+      {
+        "name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_8_int8_t/0",
+        "family_index": 7,
+        "per_family_instance_index": 0,
+        "run_name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_8_int8_t/0",
+        "run_type": "iteration",
+        "repetitions": 1,
+        "repetition_index": 0,
+        "threads": 1,
+        "iterations": 75012,
+        "real_time": 2.7772206660267650e+04,
+        "cpu_time": 9.0284914413693768e+03,
+        "time_unit": "ns"
+      },
+      {
+        "name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_9_int8_t/0",
+        "family_index": 8,
+        "per_family_instance_index": 0,
+        "run_name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_9_int8_t/0",
+        "run_type": "iteration",
+        "repetitions": 1,
+        "repetition_index": 0,
+        "threads": 1,
+        "iterations": 102366,
+        "real_time": 2.7467607115644052e+04,
+        "cpu_time": 8.9240529081921723e+03,
+        "time_unit": "ns"
+      },
+      {
+        "name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_10_int8_t/0",
+        "family_index": 9,
+        "per_family_instance_index": 0,
+        "run_name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_10_int8_t/0",
+        "run_type": "iteration",
+        "repetitions": 1,
+        "repetition_index": 0,
+        "threads": 1,
+        "iterations": 76338,
+        "real_time": 2.6693602897639386e+04,
+        "cpu_time": 8.5688844350126965e+03,
+        "time_unit": "ns"
+      }
+    ]
+  }

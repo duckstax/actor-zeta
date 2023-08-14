@@ -49,7 +49,7 @@ jobs:
           key: ${{ runner.os }}-googlebenchmark-v1.5.0
 
       - name: Run benchmark
-        run: touch benchmark/benchmark_result.json
+        run: cp benchmark/bm.json benchmark/benchmark_result.json
 
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
