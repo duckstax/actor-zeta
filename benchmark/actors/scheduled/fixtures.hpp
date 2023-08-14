@@ -52,7 +52,7 @@ public:
     BENCHMARK_REGISTER_F(fixture, bm_name)->DenseRange(0, 32, 8);
 
 #define REGISTER_BENCHMARKS__(name, ...) \
-    REGISTER_TEMPLATE_BENCHMARK(fixture_t, ping_pong_single_threaded_##name, __VA_ARGS__);
+    REGISTER_TEMPLATE_BENCHMARK(fixture_t, ping_pong_single_threaded##name, __VA_ARGS__);
 
 #define REGISTER_BENCHMARKS(type) \
     REGISTER_BENCHMARKS__(_1_##type,  type) \
