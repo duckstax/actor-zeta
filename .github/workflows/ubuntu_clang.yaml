@@ -1,6 +1,10 @@
 #on: [push, pull_request]
 #on: [push]
 
+permissions:
+  contents: write
+  deployments: write
+
 jobs:
   build:
     strategy:
