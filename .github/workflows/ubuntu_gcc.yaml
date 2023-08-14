@@ -97,7 +97,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: build/bin
-          key: ${{ runner.os }}-googlebenchmark-v1.8.0
+          key: ${{ runner.os }}-googlebenchmark-v1.5.0
 
       - name: Run benchmark
         run: cd build/bin && ./benchmark_actors_ping_pong_scheduled --benchmark_format=json | tee benchmark_result.json
