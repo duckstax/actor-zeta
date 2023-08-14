@@ -108,7 +108,7 @@ jobs:
           tool: 'googlecpp'
           output-file-path: build/bin/benchmark_result.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          auto-push: true
+          auto-push: false
         run: |
           pwd
           ls -la
