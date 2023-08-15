@@ -38,7 +38,7 @@ jobs:
 #    runs-on: ubuntu-${{matrix.configuration.UBUNTU_VERSION}}
 
     steps:
-      - name: Install system dependencies
+      - name: Install system dependencies 1
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
@@ -48,13 +48,6 @@ jobs:
             ninja-build make \
             zlib1g-dev wget unzip
 
-          add-apt-repository ppa:ubuntu-toolchain-r/test
-
-          bash ./docker/gcc/pyinstall.sh $(cat /etc/os-release | grep -a UBUNTU_CODENAME | sed -e 's/UBUNTU_CODENAME=//g')
-
-          python3 -m pip install --upgrade pip
-          python3 -m pip install --no-cache-dir conan==1.59 cmake
-
           wget https://github.com/git/git/archive/v2.18.0.zip -O git.zip
           unzip git.zip
           cd git-*
@@ -62,6 +55,18 @@ jobs:
           make prefix=/usr/local install
 
       - uses: actions/checkout@v2
+
+      - name: Install system dependencies 2
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          apt update
+          add-apt-repository ppa:ubuntu-toolchain-r/test
+
+          bash ./docker/gcc/pyinstall.sh $(cat /etc/os-release | grep -a UBUNTU_CODENAME | sed -e 's/UBUNTU_CODENAME=//g')
+
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --no-cache-dir conan==1.59 cmake
 
       - name: Install compiler
         run: |
