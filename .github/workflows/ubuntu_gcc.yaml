@@ -76,6 +76,8 @@ jobs:
           CXX_STANDARD: ${{matrix.cxx_standard}}
         run: |
           mkdir -p build
+          pwd
+          ls -lah
           cmake -B build -GNinja \
             -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
             -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \
