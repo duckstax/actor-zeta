@@ -111,7 +111,10 @@ jobs:
         run: ctest --rerun-failed --output-on-failure
 
       - name: Run benchmark
-        run: cd build/bin && ./benchmark_actors_ping_pong_scheduled --benchmark_format=json | tee benchmark_result.json
+        run: |
+          cd build/bin && ./benchmark_actors_ping_pong_scheduled --benchmark_format=json | tee benchmark_result.json
+          echo ${PWD}
+          git config --global --add safe.directory ${PWD}
 
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
