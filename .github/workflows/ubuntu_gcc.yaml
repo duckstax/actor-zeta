@@ -41,31 +41,16 @@ jobs:
       - name: Install system dependencies 1
         env:
           DEBIAN_FRONTEND: noninteractive
-          CC: gcc-${{matrix.configuration.TOOLCHAIN_VERSION}}
-          CXX: g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
         run: |
           apt update
           apt-get install -y \
             software-properties-common ca-certificates \
             ninja-build make \
-            zlib1g-dev wget unzip libssl-dev
+            zlib1g-dev wget
 
-          apt update
-          apt-get install -y ${CC} ${CXX}
-          update-alternatives \
-            --install /usr/bin/gcc gcc /usr/bin/${CC} 90 \
-            --slave /usr/bin/g++ g++ /usr/bin/${CXX} \
-            --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.configuration.TOOLCHAIN_VERSION}}
-
-          update-alternatives --config gcc
-
-          gcc --version
-
-          wget https://github.com/git/git/archive/v2.18.0.zip -O git.zip
-          unzip git.zip
-          cd git-*
-          make CC=gcc prefix=/usr/local all
-          make prefix=/usr/local install
+          add-apt-repository ppa:git-core/ppa
+          apt update && apt install -y git
+          git --version
 
       - uses: actions/checkout@v2
 
@@ -81,16 +66,20 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install --no-cache-dir conan==1.59 cmake
 
-###      - name: Install compiler
-###        run: |
-###          apt update
-###          apt-get install -y gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
-###          update-alternatives \
-###            --install /usr/bin/gcc gcc /usr/bin/gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} 90 \
-###            --slave /usr/bin/g++ g++ /usr/bin/g++-${{matrix.configuration.TOOLCHAIN_VERSION}} \
-###            --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.configuration.TOOLCHAIN_VERSION}}
-###
-###          update-alternatives --config gcc
+      - name: Install compiler
+        env:
+          CC: gcc-${{matrix.configuration.TOOLCHAIN_VERSION}}
+          CXX: g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
+        run: |
+          apt update
+          apt-get install -y ${CC} ${CXX}
+          update-alternatives \
+            --install /usr/bin/gcc gcc /usr/bin/${CC} 90 \
+            --slave /usr/bin/g++ g++ /usr/bin/${CXX} \
+            --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.configuration.TOOLCHAIN_VERSION}}
+
+          update-alternatives --config gcc
+          gcc --version
 
       - name: Configure CMake
         env:
