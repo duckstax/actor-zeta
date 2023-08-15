@@ -38,13 +38,6 @@ jobs:
 #    runs-on: ubuntu-${{matrix.configuration.UBUNTU_VERSION}}
 
     steps:
-      - name: Install git
-        run: |
-          apt update
-          apt-get install -y git
-
-      - uses: actions/checkout@v2
-
       - name: Install system dependencies
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -52,8 +45,8 @@ jobs:
           apt update
           apt-get install -y \
             software-properties-common ca-certificates \
-            ninja-build make git \
-            zlib1g-dev wget
+            ninja-build make \
+            zlib1g-dev wget unzip
 
           add-apt-repository ppa:ubuntu-toolchain-r/test
 
@@ -61,6 +54,14 @@ jobs:
 
           python3 -m pip install --upgrade pip
           python3 -m pip install --no-cache-dir conan==1.59 cmake
+
+          wget https://github.com/git/git/archive/v2.18.0.zip -O git.zip
+          unzip git.zip
+          cd git-*
+          make prefix=/usr/local all
+          make prefix=/usr/local install
+
+      - uses: actions/checkout@v2
 
       - name: Install compiler
         run: |
