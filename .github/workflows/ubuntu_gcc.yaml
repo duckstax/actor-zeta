@@ -32,10 +32,10 @@ jobs:
           - cxx_standard: 17
             configuration: {"UBUNTU_VERSION":"16.04", "TOOLCHAIN_VERSION":"4.9"}
 
-    runs-on: ubuntu-latest
-    container:
-      image: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
-#    runs-on: ubuntu-${{matrix.configuration.UBUNTU_VERSION}}
+#    runs-on: ubuntu-latest
+#    container:
+#      image: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
+    runs-on: ubuntu-${{matrix.configuration.UBUNTU_VERSION}}
 
     steps:
       - uses: actions/checkout@v2
