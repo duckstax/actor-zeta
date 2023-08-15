@@ -1,4 +1,4 @@
-#on: [push, pull_request]
+name: GCC Builds
 on: [push]
 
 jobs:
@@ -37,17 +37,27 @@ jobs:
       image: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Install system dependencies
+      - name: Install system dependencies before checkout
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          apt update && apt-get install -y \
+          apt update
+          apt-get install -y \
             software-properties-common ca-certificates \
             ninja-build make \
             zlib1g-dev wget
 
+          add-apt-repository ppa:git-core/ppa
+          apt update && apt install -y git
+          git --version
+
+      - uses: actions/checkout@v2
+
+      - name: Install system dependencies after checkout
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          apt update
           add-apt-repository ppa:ubuntu-toolchain-r/test
 
           bash ./docker/gcc/pyinstall.sh $(cat /etc/os-release | grep -a UBUNTU_CODENAME | sed -e 's/UBUNTU_CODENAME=//g')
@@ -56,14 +66,19 @@ jobs:
           python3 -m pip install --no-cache-dir conan==1.59 cmake
 
       - name: Install compiler
+        env:
+          CC: gcc-${{matrix.configuration.TOOLCHAIN_VERSION}}
+          CXX: g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
         run: |
-          apt update && apt-get install -y gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
+          apt update
+          apt-get install -y ${CC} ${CXX}
           update-alternatives \
-            --install /usr/bin/gcc gcc /usr/bin/gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} 90 \
-            --slave /usr/bin/g++ g++ /usr/bin/g++-${{matrix.configuration.TOOLCHAIN_VERSION}} \
+            --install /usr/bin/gcc gcc /usr/bin/${CC} 90 \
+            --slave /usr/bin/g++ g++ /usr/bin/${CXX} \
             --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.configuration.TOOLCHAIN_VERSION}}
 
           update-alternatives --config gcc
+          gcc --version
 
       - name: Configure CMake
         env:
@@ -91,3 +106,20 @@ jobs:
       - name: Test
         working-directory: build
         run: ctest --rerun-failed --output-on-failure
+
+      - name: Run benchmark
+        run: |
+          cd build/bin && ./benchmark_actors_ping_pong_scheduled --benchmark_format=json | tee benchmark_result.json
+          cd ../../ && echo ${PWD}
+          git config --global --add safe.directory ${PWD}
+          cat ~/.gitconfig
+
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          name: 'Benchmark actors_ping_pong_scheduled gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} ${{matrix.configuration.UBUNTU_VERSION}} ${{matrix.build_type}} c++-${{matrix.cxx_standard}}'
+          tool: 'googlecpp'
+          output-file-path: build/bin/benchmark_result.json
+          benchmark-data-dir-path: dev/bench/actors_ping_pong_scheduled/gcc_${{matrix.configuration.UBUNTU_VERSION}}_${{matrix.configuration.TOOLCHAIN_VERSION}}_${{matrix.build_type}}_${{matrix.cxx_standard}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
