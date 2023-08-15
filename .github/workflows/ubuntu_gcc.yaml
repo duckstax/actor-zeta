@@ -48,7 +48,7 @@ jobs:
           apt-get install -y \
             software-properties-common ca-certificates \
             ninja-build make \
-            zlib1g-dev wget unzip
+            zlib1g-dev wget unzip libssl-dev
 
           apt update
           apt-get install -y ${CC} ${CXX}
@@ -59,10 +59,12 @@ jobs:
 
           update-alternatives --config gcc
 
+          gcc --version
+
           wget https://github.com/git/git/archive/v2.18.0.zip -O git.zip
           unzip git.zip
           cd git-*
-          make prefix=/usr/local all
+          make CC=gcc prefix=/usr/local all
           make prefix=/usr/local install
 
       - uses: actions/checkout@v2
