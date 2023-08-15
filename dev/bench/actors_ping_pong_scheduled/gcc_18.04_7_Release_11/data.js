@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692110091205,
+  "lastUpdate": 1692111829977,
   "repoUrl": "https://github.com/duckstax/actor-zeta",
   "entries": {
     "Benchmark actors_ping_pong_scheduled gcc-7 18.04 Release c++-11": [
@@ -84,6 +84,90 @@ window.BENCHMARK_DATA = {
             "value": 32271.903847769503,
             "unit": "ns/iter",
             "extra": "iterations: 71418\ncpu: 9980.328488616291 ns\nthreads: 1"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "grem_snoort@protonmail.com",
+            "name": "GremSnoort",
+            "username": "GremSnoort"
+          },
+          "committer": {
+            "email": "grem_snoort@protonmail.com",
+            "name": "GremSnoort",
+            "username": "GremSnoort"
+          },
+          "distinct": true,
+          "id": "a399537583db8a03197a97a8f198d4629df94140",
+          "message": "rm redundant file",
+          "timestamp": "2023-08-15T17:57:42+03:00",
+          "tree_id": "3ad66e1340f7c9b7ea7b34a8ae8158a5059eed65",
+          "url": "https://github.com/duckstax/actor-zeta/commit/a399537583db8a03197a97a8f198d4629df94140"
+        },
+        "date": 1692111829349,
+        "tool": "googlecpp",
+        "benches": [
+          {
+            "name": "fixture_t<int8_t>/ping_pong_single_threaded_1_int8_t/0",
+            "value": 21974.181150000048,
+            "unit": "ns/iter",
+            "extra": "iterations: 100000\ncpu: 7776.314000000001 ns\nthreads: 1"
+          },
+          {
+            "name": "fixture_t<int8_t, int8_t>/ping_pong_single_threaded_2_int8_t/0",
+            "value": 21896.134658680734,
+            "unit": "ns/iter",
+            "extra": "iterations: 88832\ncpu: 7787.381799351585 ns\nthreads: 1"
+          },
+          {
+            "name": "fixture_t<int8_t, int8_t, int8_t>/ping_pong_single_threaded_3_int8_t/0",
+            "value": 22082.92374631403,
+            "unit": "ns/iter",
+            "extra": "iterations: 90553\ncpu: 8033.614568263891 ns\nthreads: 1"
+          },
+          {
+            "name": "fixture_t<int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_4_int8_t/0",
+            "value": 18108.500509999885,
+            "unit": "ns/iter",
+            "extra": "iterations: 100000\ncpu: 6574.395000000001 ns\nthreads: 1"
+          },
+          {
+            "name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_5_int8_t/0",
+            "value": 21665.767846525207,
+            "unit": "ns/iter",
+            "extra": "iterations: 89135\ncpu: 7752.051382734054 ns\nthreads: 1"
+          },
+          {
+            "name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_6_int8_t/0",
+            "value": 21991.595771708813,
+            "unit": "ns/iter",
+            "extra": "iterations: 88168\ncpu: 7795.711596043916 ns\nthreads: 1"
+          },
+          {
+            "name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_7_int8_t/0",
+            "value": 22386.620799442495,
+            "unit": "ns/iter",
+            "extra": "iterations: 88887\ncpu: 7924.652648868791 ns\nthreads: 1"
+          },
+          {
+            "name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_8_int8_t/0",
+            "value": 21850.599343638252,
+            "unit": "ns/iter",
+            "extra": "iterations: 87147\ncpu: 7766.267341388687 ns\nthreads: 1"
+          },
+          {
+            "name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_9_int8_t/0",
+            "value": 22023.81571183555,
+            "unit": "ns/iter",
+            "extra": "iterations: 87450\ncpu: 7766.317895940535 ns\nthreads: 1"
+          },
+          {
+            "name": "fixture_t<int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t>/ping_pong_single_threaded_10_int8_t/0",
+            "value": 22086.00719275172,
+            "unit": "ns/iter",
+            "extra": "iterations: 86754\ncpu: 7977.6010328054 ns\nthreads: 1"
           }
         ]
       }
