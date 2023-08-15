@@ -1,4 +1,3 @@
-#on: [push, pull_request]
 name: GCC Builds
 on: [push]
 
@@ -34,39 +33,10 @@ jobs:
             configuration: {"UBUNTU_VERSION":"16.04", "TOOLCHAIN_VERSION":"4.9"}
 
     runs-on: ubuntu-${{matrix.configuration.UBUNTU_VERSION}}
-#    container:
-#      image: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
 
     steps:
       - uses: actions/checkout@v2
 
-###      - name: Cache Benchmark library
-###        uses: actions/cache@v1
-###        with:
-###          path: benchmark
-###          key: ${{ runner.os }}-googlebenchmark-v1.5.0
-###
-###      - name: Run benchmark
-###        run: cp benchmark/bm.json benchmark/benchmark_result.json
-###
-###      - name: Store benchmark result
-###        uses: benchmark-action/github-action-benchmark@v1
-###        with:
-###          name: C++ Benchmark
-###          tool: 'googlecpp'
-###          output-file-path: benchmark/benchmark_result.json
-###          github-token: ${{ secrets.GITHUB_TOKEN }}
-###          auto-push: true
-
-
-
-          # Show alert with commit comment on detecting possible performance regression
-#          alert-threshold: '200%'
-#          comment-on-alert: true
-#          fail-on-alert: true
-#          alert-comment-cc-users: '@ktrz'
-#
-#
       - name: Install system dependencies
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -83,7 +53,7 @@ jobs:
 
           python3 -m pip install --upgrade pip
           python3 -m pip install --no-cache-dir conan==1.59 cmake
-#
+
       - name: Install compiler
         run: |
           sudo apt update
@@ -122,22 +92,14 @@ jobs:
         working-directory: build
         run: ctest --rerun-failed --output-on-failure
 
-###      - name: Cache Benchmark library
-###        uses: actions/cache@v1
-###        with:
-###          path: build/bin
-###          key: ${{ runner.os }}-googlebenchmark-v1.5.0
-
       - name: Run benchmark
-#        if: ${{matrix.configuration.UBUNTU_VERSION}} == '20.04' && ${{matrix.configuration.TOOLCHAIN_VERSION}} == '7' && ${{matrix.build_type}} == 'Release' && ${{matrix.cxx_standard}} == 17
         run: cd build/bin && ./benchmark_actors_ping_pong_scheduled --benchmark_format=json | tee benchmark_result.json
 
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
-#        if: ${{matrix.configuration.UBUNTU_VERSION}} == '20.04' && ${{matrix.configuration.TOOLCHAIN_VERSION}} == '7' && ${{matrix.build_type}} == 'Release' && ${{matrix.cxx_standard}} == 17
         with:
           tool: 'googlecpp'
           output-file-path: build/bin/benchmark_result.json
-          benchmark-data-dir-path: dev/bench/gcc_${{matrix.configuration.UBUNTU_VERSION}}_${{matrix.configuration.TOOLCHAIN_VERSION}}_${{matrix.build_type}}_${{matrix.cxx_standard}}
+          benchmark-data-dir-path: dev/bench/actors_ping_pong_scheduled/gcc_${{matrix.configuration.UBUNTU_VERSION}}_${{matrix.configuration.TOOLCHAIN_VERSION}}_${{matrix.build_type}}_${{matrix.cxx_standard}}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: true
