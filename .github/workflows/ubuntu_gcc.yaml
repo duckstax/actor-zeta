@@ -40,8 +40,8 @@ jobs:
     steps:
       - name: Install git
         run: |
-          sudo apt update
-          sudo apt-get install -y git
+          apt update
+          apt-get install -y git
 
       - uses: actions/checkout@v2
 
@@ -49,29 +49,29 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo apt update
-          sudo apt-get install -y \
+          apt update
+          apt-get install -y \
             software-properties-common ca-certificates \
             ninja-build make git \
             zlib1g-dev wget
 
-          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          add-apt-repository ppa:ubuntu-toolchain-r/test
 
-          sudo bash ./docker/gcc/pyinstall.sh $(cat /etc/os-release | grep -a UBUNTU_CODENAME | sed -e 's/UBUNTU_CODENAME=//g')
+          bash ./docker/gcc/pyinstall.sh $(cat /etc/os-release | grep -a UBUNTU_CODENAME | sed -e 's/UBUNTU_CODENAME=//g')
 
           python3 -m pip install --upgrade pip
           python3 -m pip install --no-cache-dir conan==1.59 cmake
 
       - name: Install compiler
         run: |
-          sudo apt update
-          sudo apt-get install -y gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
-          sudo update-alternatives \
+          apt update
+          apt-get install -y gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
+          update-alternatives \
             --install /usr/bin/gcc gcc /usr/bin/gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} 90 \
             --slave /usr/bin/g++ g++ /usr/bin/g++-${{matrix.configuration.TOOLCHAIN_VERSION}} \
             --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.configuration.TOOLCHAIN_VERSION}}
 
-          sudo update-alternatives --config gcc
+          update-alternatives --config gcc
 
       - name: Configure CMake
         env:
