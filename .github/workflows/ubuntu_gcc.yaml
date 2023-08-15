@@ -48,7 +48,6 @@ jobs:
             ninja-build make \
             zlib1g-dev wget unzip
 
-### Install compiler
           apt update
           apt-get install -y gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
           update-alternatives \
