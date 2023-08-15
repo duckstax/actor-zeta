@@ -98,6 +98,7 @@ jobs:
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
+          name: 'Benchmark actors_ping_pong_scheduled gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} ${{matrix.configuration.UBUNTU_VERSION}} ${{matrix.build_type}} c++-${{matrix.cxx_standard}}'
           tool: 'googlecpp'
           output-file-path: build/bin/benchmark_result.json
           benchmark-data-dir-path: dev/bench/actors_ping_pong_scheduled/gcc_${{matrix.configuration.UBUNTU_VERSION}}_${{matrix.configuration.TOOLCHAIN_VERSION}}_${{matrix.build_type}}_${{matrix.cxx_standard}}
