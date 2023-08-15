@@ -41,6 +41,8 @@ jobs:
       - name: Install system dependencies 1
         env:
           DEBIAN_FRONTEND: noninteractive
+          CC: gcc-${{matrix.configuration.TOOLCHAIN_VERSION}}
+          CXX: g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
         run: |
           apt update
           apt-get install -y \
@@ -49,10 +51,10 @@ jobs:
             zlib1g-dev wget unzip
 
           apt update
-          apt-get install -y gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
+          apt-get install -y ${CC} ${CXX}
           update-alternatives \
-            --install /usr/bin/gcc gcc /usr/bin/gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} 90 \
-            --slave /usr/bin/g++ g++ /usr/bin/g++-${{matrix.configuration.TOOLCHAIN_VERSION}} \
+            --install /usr/bin/gcc gcc /usr/bin/${CC} 90 \
+            --slave /usr/bin/g++ g++ /usr/bin/${CXX} \
             --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.configuration.TOOLCHAIN_VERSION}}
 
           update-alternatives --config gcc
