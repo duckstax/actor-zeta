@@ -38,6 +38,11 @@ jobs:
     runs-on: ubuntu-${{matrix.configuration.UBUNTU_VERSION}}
 
     steps:
+      - name: Install git
+        run: |
+          sudo apt update
+          sudo apt-get install -y git
+
       - uses: actions/checkout@v2
 
       - name: Install system dependencies
