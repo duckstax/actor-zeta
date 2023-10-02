@@ -1,4 +1,4 @@
-#on: [push, pull_request]
+name: GCC Builds
 on: [push]
 
 jobs:
@@ -37,17 +37,27 @@ jobs:
       image: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Install system dependencies
+      - name: Install system dependencies before checkout
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          apt update && apt-get install -y \
+          apt update
+          apt-get install -y \
             software-properties-common ca-certificates \
             ninja-build make \
             zlib1g-dev wget
 
+          add-apt-repository ppa:git-core/ppa
+          apt update && apt install -y git
+          git --version
+
+      - uses: actions/checkout@v2
+
+      - name: Install system dependencies after checkout
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          apt update
           add-apt-repository ppa:ubuntu-toolchain-r/test
 
           bash ./docker/gcc/pyinstall.sh $(cat /etc/os-release | grep -a UBUNTU_CODENAME | sed -e 's/UBUNTU_CODENAME=//g')
@@ -56,14 +66,19 @@ jobs:
           python3 -m pip install --no-cache-dir conan==1.59 cmake
 
       - name: Install compiler
+        env:
+          CC: gcc-${{matrix.configuration.TOOLCHAIN_VERSION}}
+          CXX: g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
         run: |
-          apt update && apt-get install -y gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} g++-${{matrix.configuration.TOOLCHAIN_VERSION}}
+          apt update
+          apt-get install -y ${CC} ${CXX}
           update-alternatives \
-            --install /usr/bin/gcc gcc /usr/bin/gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} 90 \
-            --slave /usr/bin/g++ g++ /usr/bin/g++-${{matrix.configuration.TOOLCHAIN_VERSION}} \
+            --install /usr/bin/gcc gcc /usr/bin/${CC} 90 \
+            --slave /usr/bin/g++ g++ /usr/bin/${CXX} \
             --slave /usr/bin/gcov gcov /usr/bin/gcov-${{matrix.configuration.TOOLCHAIN_VERSION}}
 
           update-alternatives --config gcc
+          gcc --version
 
       - name: Configure CMake
         env:
