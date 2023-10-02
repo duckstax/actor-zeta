@@ -91,3 +91,20 @@ jobs:
       - name: Test
         working-directory: build
         run: ctest --rerun-failed --output-on-failure
+
+      - name: Run benchmark
+        run: |
+          cd build/bin && ./benchmark_actors_ping_pong_scheduled --benchmark_format=json | tee benchmark_result.json
+          cd ../../ && echo ${PWD}
+          git config --global --add safe.directory ${PWD}
+          cat ~/.gitconfig
+
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          name: 'Benchmark actors_ping_pong_scheduled gcc-${{matrix.configuration.TOOLCHAIN_VERSION}} ${{matrix.configuration.UBUNTU_VERSION}} ${{matrix.build_type}} c++-${{matrix.cxx_standard}}'
+          tool: 'googlecpp'
+          output-file-path: build/bin/benchmark_result.json
+          benchmark-data-dir-path: dev/bench/actors_ping_pong_scheduled/gcc_${{matrix.configuration.UBUNTU_VERSION}}_${{matrix.configuration.TOOLCHAIN_VERSION}}_${{matrix.build_type}}_${{matrix.cxx_standard}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
