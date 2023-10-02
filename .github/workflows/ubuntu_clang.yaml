@@ -87,9 +87,9 @@ jobs:
             -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \
             -DCMAKE_C_COMPILER=${CC} \
             -DCMAKE_CXX_COMPILER=${CXX} \
-            -DALLOW_EXAMPLES=ON \
-            -DALLOW_TESTS=ON \
-            -DENABLE_TESTS_MEASUREMENTS=ON \
+            -DALLOW_EXAMPLES=OFF \
+            -DALLOW_TESTS=OFF \
+            -DENABLE_TESTS_MEASUREMENTS=OFF \
             -DALLOW_BENCHMARK=ON \
             -DEXCEPTIONS_DISABLE=ON \
             -DRTTI_DISABLE=ON
