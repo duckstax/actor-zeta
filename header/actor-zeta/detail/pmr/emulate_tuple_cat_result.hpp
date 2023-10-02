@@ -2,9 +2,10 @@
 
 #include <actor-zeta/config.hpp>
 
-#if CPP17_OR_GREATER
-
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+#if 1
+///CPP17_OR_GREATER
+///
+///#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
 #include <actor-zeta/detail/type_traits.hpp>
 
@@ -19,9 +20,10 @@
 
 namespace actor_zeta { namespace detail { namespace pmr {
 
-#if CPP17_OR_GREATER
-
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+#if 1
+///CPP17_OR_GREATER
+///
+///#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
     template<std::size_t i, typename _Tp>
     using tuple_element_t = typename std::tuple_element<i, _Tp>::type;

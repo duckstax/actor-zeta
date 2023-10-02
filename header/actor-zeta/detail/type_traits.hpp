@@ -71,9 +71,10 @@ namespace actor_zeta { namespace type_traits {
 
 #endif
 
-#if CPP17_OR_GREATER
+#if 1
+///CPP17_OR_GREATER
 
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+///#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
     template<bool v>
     using bool_constant = std::integral_constant<bool, v>;

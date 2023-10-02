@@ -9,28 +9,29 @@
 
 namespace actor_zeta { namespace detail { namespace pmr {
 
-#if CPP17_OR_GREATER
+#if 1
+///CPP17_OR_GREATER
 
-#if __has_include(<memory_resource>)
-
-    using std::pmr::get_default_resource;
-    using std::pmr::set_default_resource;
-    using std::pmr::new_delete_resource;
-    using std::pmr::null_memory_resource;
-
-#else
-
-    memory_resource* get_default_resource() noexcept;
-
-    memory_resource* set_default_resource(memory_resource* new_res) noexcept;
-
-    memory_resource* new_delete_resource() noexcept;
-
-    memory_resource* null_memory_resource() noexcept;
-
-#endif
-
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
+///#if __has_include(<memory_resource>)
+///
+///    using std::pmr::get_default_resource;
+///    using std::pmr::set_default_resource;
+///    using std::pmr::new_delete_resource;
+///    using std::pmr::null_memory_resource;
+///
+///#else
+///
+///    memory_resource* get_default_resource() noexcept;
+///
+///    memory_resource* set_default_resource(memory_resource* new_res) noexcept;
+///
+///    memory_resource* new_delete_resource() noexcept;
+///
+///    memory_resource* null_memory_resource() noexcept;
+///
+///#endif
+///
+///#elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
     class null_memory_resource_t final : public memory_resource {
         union holder;
