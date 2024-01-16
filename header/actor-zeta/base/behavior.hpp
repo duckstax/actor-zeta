@@ -29,7 +29,7 @@ namespace actor_zeta { namespace base {
         behavior_t(behavior_t&&) = default;
         behavior_t& operator=(behavior_t&&) = default;
 
-        behavior_t(actor_zeta::pmr::memory_resource* resource, id name, action handler) {
+        behavior_t(actor_zeta::pmr::memory_resource*, id name, action handler) {
             ///assert(id_.integer_value() == mailbox::detail::default_async_value);
             id_ = name;
             handler_ = std::move(handler);
@@ -72,7 +72,7 @@ namespace actor_zeta { namespace base {
 
     template<class F>
     behavior_t make_behavior(actor_zeta::pmr::memory_resource* resource, F&& f) {
-        return {resource, mailbox::message_id{}, std::move(action(std::forward<F>(f)))};
+        return {resource, mailbox::message_id{}, action(std::forward<F>(f))};
     }
     //// todo: rename behavior
     /*template<class F>
@@ -86,7 +86,7 @@ namespace actor_zeta { namespace base {
     }
 */
     template<class T>
-    void invoke(behavior_t& instance, T* ptr, mailbox::message* msg) {
+    void invoke(behavior_t& instance, T* , mailbox::message* msg) {
         instance(msg);
         /// todo: add error handling
         /*

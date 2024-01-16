@@ -1,5 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
-
+cmake_minimum_required(VERSION 3.5)
 PROJECT(actor-zeta LANGUAGES C CXX)
 
 message(STATUS "CMAKE_CXX_COMPILER_ID = ${CMAKE_CXX_COMPILER_ID}")
@@ -7,12 +6,12 @@ message(STATUS "CMAKE_C_COMPILER_ID = ${CMAKE_C_COMPILER_ID}")
 message(STATUS "STANDARD CPP = ${CMAKE_CXX_STANDARD}")
 message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 
-if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang"  AND UNIX AND NOT APPLE ) #------------------------------------- Clang
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
     list(APPEND CMAKE_MODULE_PATH "${LLVM_DIR}")
 endif() #--------------------------------------------------------------------------- Clang
 
-set(CMAKE_CXX_STANDARD 17 CACHE STRING "The C++ standard whose features are requested.")
+set(CMAKE_CXX_STANDARD 11 CACHE STRING "The C++ standard whose features are requested.")
 set(CMAKE_CXX_STANDARD_REQUIRED     ON)
 set(CMAKE_CXX_EXTENSIONS            OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS   ON)
@@ -32,18 +31,41 @@ message(STATUS "RTTI_DISABLE = ${RTTI_DISABLE}")
 message(STATUS "EXCEPTIONS_DISABLE = ${EXCEPTIONS_DISABLE}")
 
 if (NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Debug CACHE
-      STRING "Build type (default Debug):" FORCE)
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type (default Debug):" FORCE)
 endif()
 
 add_compile_options(
-  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:DEBUG>>:-fno-rtti;-Wall>"
-  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:RELEASE>>:-fno-rtti;-Wall>"
+  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:DEBUG>>:-fno-rtti;>"
+  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:RELEASE>>:-fno-rtti;>"
 )
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/
     ${CMAKE_CURRENT_SOURCE_DIR}/header)
+
+if ((CMAKE_CXX_COMPILER_ID MATCHES "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
+    add_compile_options(
+            -Wall
+            -Wextra
+            -Wpedantic
+
+            -Wcast-align
+            -Wcast-qual
+            -Wconversion
+            -Wctor-dtor-privacy
+            -Wenum-compare
+            -Wfloat-equal
+            -Wnon-virtual-dtor
+            -Wold-style-cast
+            -Woverloaded-virtual
+            -Wredundant-decls
+            -Wsign-conversion
+            -Wsign-promo
+    )
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    add_compile_options(/W4 /WX)
+endif ()
+
 
 ############## FINAL PROJECT CONFIG #################
 
@@ -76,7 +98,7 @@ file(GLOB ${PROJECT_NAME}_HEADERS
     header/*.h
 )
 
-if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+if ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") AND NOT APPLE) #------------------------------------- Clang
     ############## LLVM CONFIGURATION #################
     # https://github.com/nsumner/llvm-demo Example LLVM Build
 
@@ -127,7 +149,7 @@ if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #---------------------------------
         set(LIBCXX "libc++")
     endif()
 
-    if (${CLANG_LIBCPP_ABI} MATCHES "CLANG_LIBCPP_ABI-NOTFOUND")
+    if (CLANG_LIBCPP_ABI MATCHES "CLANG_LIBCPP_ABI-NOTFOUND")
     else()
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lc++abi")
     endif()
@@ -144,9 +166,6 @@ add_library(
     source/src.cpp
     ${${PROJECT_NAME}_HEADERS}
 )
-
-# Unneeded transitional variable
-set(REQ_LLVM_LIBRARIES "")
 
 find_package(Threads REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC
@@ -165,9 +184,11 @@ if (CONAN_EXPERIMENTAL_INCLUDE)
 endif ()
 include(conan.cmake)
 
-# https://docs.conan.io/1/reference/config_files/settings.yml.html#c-standard-libraries-aka-compiler-libcxx
-#conan_cmake_autodetect(CONAN_SETTINGS)
-set(CONAN_SETTINGS "build_type=${CMAKE_BUILD_TYPE};compiler.libcxx=${LIBCXX};compiler.cppstd=${CMAKE_CXX_STANDARD}")
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang"  AND UNIX AND NOT APPLE )
+    # https://docs.conan.io/1/reference/config_files/settings.yml.html#c-standard-libraries-aka-compiler-libcxx
+    #conan_cmake_autodetect(CONAN_SETTINGS)
+    set(CONAN_SETTINGS "build_type=${CMAKE_BUILD_TYPE};compiler.libcxx=${LIBCXX};compiler.cppstd=${CMAKE_CXX_STANDARD}")
+endif ()
 
 message(STATUS "CONAN_SETTINGS: ${CONAN_SETTINGS}")
 
