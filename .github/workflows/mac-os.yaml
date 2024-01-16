@@ -17,8 +17,7 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-            brew install ninja python        
-            python3 -m pip install --no-cache-dir conan==1.60 cmake 
+            brew install ninja python conan@1 cmake        
 
       - name: Configure CMake
         env:
