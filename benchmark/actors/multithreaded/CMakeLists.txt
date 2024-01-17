@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
 set(project benchmark_actors_multithreaded)
 if (CMAKE_VERSION VERSION_LESS 3.0)
