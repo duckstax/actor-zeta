@@ -35,9 +35,33 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 
 add_compile_options(
-  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:DEBUG>>:-fno-rtti;-Wall>"
-  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:RELEASE>>:-fno-rtti;-Wall>"
+  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:DEBUG>>:-fno-rtti;>"
+  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:RELEASE>>:-fno-rtti;>"
 )
+
+if ((CMAKE_CXX_COMPILER_ID MATCHES "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
+    add_compile_options(
+            -Wall
+            -Wextra
+            -Wpedantic
+
+            -Wcast-align
+            -Wcast-qual
+            -Wconversion
+            -Wctor-dtor-privacy
+            -Wenum-compare
+            -Wfloat-equal
+            -Wnon-virtual-dtor
+            -Wold-style-cast
+            -Woverloaded-virtual
+            -Wredundant-decls
+            -Wsign-conversion
+            -Wsign-promo
+    )
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    add_compile_options(/W4 /WX)
+endif ()
+
 
 if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" AND UNIX AND NOT APPLE ) #------------------------------------- Clang
     ############## LLVM CONFIGURATION #################

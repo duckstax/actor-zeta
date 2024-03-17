@@ -13,10 +13,6 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      #- uses: maxim-lobanov/setup-xcode@v1
-      #  with:
-      #    xcode-version: latest
-
       - uses: actions/checkout@v2
       - name: Install system dependencies
         run: |
@@ -31,8 +27,7 @@ jobs:
           mkdir -p build      
           cmake -B build -GNinja \
             -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-            -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \          
-            -DALLOW_EXAMPLES=ON \
+            -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \                  
             -DALLOW_TESTS=ON \
             -DENABLE_TESTS_MEASUREMENTS=ON \
             -DALLOW_BENCHMARK=ON \

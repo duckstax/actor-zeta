@@ -123,7 +123,7 @@ namespace actor_zeta { namespace base {
     void apply_impl_for_class(ClassPtr *ptr,F &&f, mailbox::message *ctx, type_traits::index_sequence<I...>) {
         using call_trait =  type_traits::get_callable_trait_t<type_traits::remove_reference_t<F>>;
         using args_type_list = typename call_trait::args_types;
-        using result_type = typename call_trait::result_type;
+        //using result_type = typename call_trait::result_type;
         ///using Tuple =  type_list_to_tuple_t<args_type_list>;
         auto &args = ctx->body();
         //(ptr->*f)(static_cast< forward_arg<args_type_list, I>>(std::get<I>(args))...);
