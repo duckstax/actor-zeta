@@ -17,7 +17,7 @@ add_executable(${PROJECT_NAME}
     ${${PROJECT_NAME}_SOURCES}
     ${${PROJECT_NAME}_HEADERS})
 
-if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #------------------------------------- Clang
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang"  AND UNIX AND NOT APPLE ) #------------------------------------- Clang
     target_link_libraries(${PROJECT_NAME}
         PUBLIC ${REQ_LLVM_LIBRARIES}
     )
