@@ -23,7 +23,6 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
             brew install ninja python conan@1 cmake    
-            echo 'export PATH="/usr/local/opt/conan@1/bin:$PATH"' >> /Users/runner/.bash_profile
 
       - name: Configure CMake
         env:
@@ -31,6 +30,7 @@ jobs:
           CXX_STANDARD: ${{matrix.cxx_standard}}
         run: |
           mkdir -p build
+          echo 'export PATH="/usr/local/opt/conan@1/bin:$PATH"' >> /Users/runner/.bash_profile &&
           cmake -B build -GNinja \
             -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
             -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \          
