@@ -20,8 +20,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install system dependencies
         run: |
-            brew install ninja python cmake
-            pip3 install conan
+            brew install ninja cmake
+            python3 -m pip install --no-cache-dir conan==1.62
 
       - name: Configure CMake
         env:
