@@ -22,7 +22,8 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-            brew install ninja python conan@1 cmake        
+            brew install ninja python conan@1 cmake    
+            echo 'export PATH="/usr/local/opt/conan@1/bin:$PATH"' >> /Users/runner/.bash_profile
 
       - name: Configure CMake
         env:
