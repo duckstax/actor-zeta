@@ -26,8 +26,8 @@ jobs:
         run: |
           mkdir -p build
           cmake -B build -GNinja \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_CXX_STANDARD=17 \
+            -DCMAKE_BUILD_TYPE=${{matrix.build_type}} \
+            -DCMAKE_CXX_STANDARD=${{matrix.cxx_standard}} \
             -DALLOW_EXAMPLES=ON \
             -DALLOW_TESTS=ON \
             -DENABLE_TESTS_MEASUREMENTS=ON \
