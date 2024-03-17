@@ -19,18 +19,16 @@ jobs:
 
       - uses: actions/checkout@v2
       - name: Install system dependencies
-        env:
-          DEBIAN_FRONTEND: noninteractive
         run: |
-            brew install ninja python conan@1 cmake    
+            brew install ninja python cmake
+            pip3 install conan
 
       - name: Configure CMake
         env:
           BUILD_TYPE: ${{matrix.build_type}}
           CXX_STANDARD: ${{matrix.cxx_standard}}
         run: |
-          mkdir -p build
-          echo 'export PATH="/usr/local/opt/conan@1/bin:$PATH"' >> /Users/runner/.bash_profile &&
+          mkdir -p build      
           cmake -B build -GNinja \
             -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
             -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \          
