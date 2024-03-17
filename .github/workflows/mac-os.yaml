@@ -5,10 +5,8 @@ jobs:
   build:
     strategy:
       matrix:
-        #cxx_standard: [11, 14, 17]
-        cxx_standard: [17]
-        #build_type: ["Release", "Debug"]
-        build_type: ["Release"]
+        cxx_standard: [11, 14, 17]
+        build_type: ["Release", "Debug"]
 
     runs-on: macos-latest
 
