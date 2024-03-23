@@ -122,12 +122,18 @@ if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #---------------------------------
     message(STATUS "Find CLANG_LIBCPP=${CLANG_LIBCPP}")
     message(STATUS "Find CLANG_LIBCPP_ABI=${CLANG_LIBCPP_ABI}")
     ### https://stackoverflow.com/questions/43662736/cmake-switch-between-clang-g-and-libc-libstdc
+
+    # Also change compiler library and libunwind from libgcc GCC implementation to LLVM's compiler-rt
+    # See https://clang.llvm.org/docs/Toolchain.html for details
+    # LINKFLAGS variable contains required link flags
     if (${CLANG_LIBCPP} MATCHES "CLANG_LIBCPP-NOTFOUND")
         set(LIBCXX "libstdc++11")
+        set(LINKFLAGS "")
     else()
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -rtlib=compiler-rt -unwindlib=libunwind")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
         set(LIBCXX "libc++")
+        set(LINKFLAGS "-stdlib=libc++ -rtlib=compiler-rt -unwindlib=libunwind")
     endif()
 
     if (${CLANG_LIBCPP_ABI} MATCHES "CLANG_LIBCPP_ABI-NOTFOUND")
@@ -137,6 +143,7 @@ if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #---------------------------------
 
 else() #---------------------------------------------------------------------------- GNU
     set(LIBCXX "libstdc++11")
+    set(LINKFLAGS "")
 endif() #--------------------------------------------------------------------------- Clang
 
 add_library(
@@ -190,7 +197,7 @@ conan_cmake_run(REQUIRES
     benchmark/1.8.0
     BASIC_SETUP CMAKE_TARGETS
     SETTINGS ${CONAN_SETTINGS}
-    ENV CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER}
+    ENV CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} LDFLAGS=${LINKFLAGS}
     BUILD missing
 )
 
