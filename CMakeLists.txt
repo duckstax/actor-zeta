@@ -130,8 +130,15 @@ if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #---------------------------------
         # Change compiler library and libunwind from libgcc GCC implementation to LLVM's compiler-rt
         # See https://clang.llvm.org/docs/Toolchain.html for details
         # LINKFLAGS variable contains required link flags
-        set(LINKFLAGS "-stdlib=libc++ -rtlib=compiler-rt -unwindlib=libunwind")
-        if (NOT APPLE)
+        set(LINKFLAGS "-stdlib=libc++ -rtlib=compiler-rt")
+
+        find_library(
+            LIBUNWIND_LIBRARY
+            NAMES libunwind.a
+            PATH_SUFFIXES lib lib64)
+
+        message(STATUS "Unwind found: ${LIBUNWIND_LIBRARY}")
+        if (NOT APPLE AND LIBUNWIND_LIBRARY)
             set(LINKFLAGS "${LINKFLAGS} -unwindlib=libunwind")
         endif()
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LINKFLAGS}")
