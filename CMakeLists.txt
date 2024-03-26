@@ -132,14 +132,19 @@ if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #---------------------------------
         # LINKFLAGS variable contains required link flags
         set(LINKFLAGS "-stdlib=libc++ -rtlib=compiler-rt")
 
-        find_library(
-            LIBUNWIND_LIBRARY
-            NAMES libunwind.a
-            PATH_SUFFIXES lib lib64)
+        if (NOT APPLE)
+            find_library(
+                LIBUNWIND_LIBRARY
+                NAMES libunwind.a
+                PATH_SUFFIXES lib lib64)
 
-        message(STATUS "Unwind found: ${LIBUNWIND_LIBRARY}")
-        if (NOT APPLE AND LIBUNWIND_LIBRARY)
-            set(LINKFLAGS "${LINKFLAGS} -unwindlib=libunwind")
+            if (LIBUNWIND_LIBRARY)
+                message(STATUS "libunwind found: ${LIBUNWIND_LIBRARY}, using libunwind")
+                set(LINKFLAGS "${LINKFLAGS} -unwindlib=libunwind")
+            else()
+                message(STATUS "libunwind not found, using libgcc")
+                set(LINKFLAGS "${LINKFLAGS} -unwindlib=libgcc")
+            endif()
         endif()
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LINKFLAGS}")
         set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${LINKFLAGS}")
