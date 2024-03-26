@@ -36,7 +36,7 @@ jobs:
       image: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install system dependencies
         env:
@@ -90,3 +90,7 @@ jobs:
       - name: Test
         working-directory: build
         run: ctest --rerun-failed --output-on-failure
+
+      - name: Analyze dependencies
+        working-directory: build
+        run: ldd bin/dataflow
