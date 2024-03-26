@@ -143,7 +143,7 @@ if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang") #---------------------------------
                 set(LINKFLAGS "${LINKFLAGS} -unwindlib=libunwind")
             else()
                 message(STATUS "libunwind not found, using libgcc")
-                set(LINKFLAGS "${LINKFLAGS} -unwindlib=libgcc")
+                set(LINKFLAGS "${LINKFLAGS} -unwindlib=libgcc -lgcc_s")
             endif()
         endif()
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LINKFLAGS}")
