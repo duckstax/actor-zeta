@@ -36,7 +36,7 @@ jobs:
       image: ubuntu:${{matrix.configuration.UBUNTU_VERSION}}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
 
       - name: Install system dependencies
         env:
