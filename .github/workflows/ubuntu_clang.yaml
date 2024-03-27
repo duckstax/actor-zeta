@@ -1,5 +1,4 @@
-#on: [push, pull_request]
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -66,9 +65,9 @@ jobs:
             | grep -Po "^Package: [a-zA-Z0-9-.\+ ]+$" \
             | sed -e 's/Package:/ /g' \
             | sed -e 's/[+\.a-zA-Z0-9-]*wasm[+\.a-zA-Z0-9-]*$/ /g' \
-            | sed -e 's/[+\.a-zA-Z0-9-]*-tools$/ /g' \
             | sed -e 's/[+\.a-zA-Z0-9-]*polly[+\.a-zA-Z0-9-]*$/ /g' \
             | sed -e 's/[+\.a-zA-Z0-9-]*python[+\.a-zA-Z0-9-]*$/ /g' \
+            | sed -e 's/.*-\(doc\|tools\|examples\|format\|tidy\|ocaml\|fuzzer\).*$/ /g' \
             > pkglist
 
           cat pkglist
@@ -100,3 +99,7 @@ jobs:
       - name: Test
         working-directory: build
         run: ctest --rerun-failed --output-on-failure
+
+      - name: Analyze dependencies
+        working-directory: build
+        run: ldd bin/dataflow

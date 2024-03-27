@@ -1,5 +1,4 @@
-#on: [push, pull_request]
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -91,3 +90,7 @@ jobs:
       - name: Test
         working-directory: build
         run: ctest --rerun-failed --output-on-failure
+
+      - name: Analyze dependencies
+        working-directory: build
+        run: ldd bin/dataflow
