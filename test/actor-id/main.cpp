@@ -83,7 +83,7 @@ public:
     actor_zeta::behavior_t behavior() {
         return actor_zeta::make_behavior(
             resource(),
-            [this](actor_zeta::message* msg) -> void {
+            [](actor_zeta::message* ) -> void {
 
             });
     }
