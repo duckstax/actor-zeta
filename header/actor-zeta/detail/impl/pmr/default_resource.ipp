@@ -34,16 +34,17 @@ namespace actor_zeta { namespace pmr {
 
     void*
     null_memory_resource_t::do_allocate(
-        std::size_t bytes,
-        std::size_t alignment) {
+        std::size_t /*bytes*/,
+        std::size_t /*alignment*/) {
         assert(false);
+				throw std::bad_alloc();
     }
 
     void
     null_memory_resource_t::do_deallocate(
-        void* p,
-        std::size_t bytes,
-        std::size_t alignment) {}
+        void* /*p*/,
+        std::size_t /*bytes*/,
+        std::size_t /*alignment*/) {}
 
     bool
     null_memory_resource_t::do_is_equal(
