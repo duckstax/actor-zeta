@@ -133,18 +133,18 @@ namespace actor_zeta { namespace pmr {
         : is_uses_allocator_predicate<std::is_nothrow_constructible, T, Alloc, Args...> {};
 
     template<typename T, typename... Args>
-    void uses_allocator_construct_impl(uses_alloc_0 a, T* ptr, Args&&... args) {
-        ::new ((void*) ptr) T(std::forward<Args>(args)...);
+    void uses_allocator_construct_impl(uses_alloc_0 , T* ptr, Args&&... args) {
+        ::new (reinterpret_cast<void*>(ptr)) T(std::forward<Args>(args)...);
     }
 
     template<typename T, typename Alloc, typename... Args>
     void uses_allocator_construct_impl(uses_alloc_1<Alloc> a, T* ptr, Args&&... args) {
-        ::new ((void*) ptr) T(actor_zeta::type_traits::allocator_arg, *a.a_, std::forward<Args>(args)...);
+        ::new (reinterpret_cast<void*>(ptr)) T(actor_zeta::type_traits::allocator_arg, *a.a_, std::forward<Args>(args)...);
     }
 
     template<typename T, typename Alloc, typename... Args>
     void uses_allocator_construct_impl(uses_alloc_2<Alloc> a, T* ptr, Args&&... args) {
-        ::new ((void*) ptr) T(std::forward<Args>(args)..., *a.a_);
+        ::new (reinterpret_cast<void*>(ptr)) T(std::forward<Args>(args)..., *a.a_);
     }
 
     template<typename T, typename Alloc, typename... Args>
