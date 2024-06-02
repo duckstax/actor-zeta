@@ -21,26 +21,18 @@ namespace actor_zeta { namespace detail {
     namespace rtt_test {
 
         static size_t default_ctor_ = 0;
-        static size_t copy_ctor_ = 0;
-        static size_t const_copy_ctor_ = 0;
         static size_t move_ctor_ = 0;
         static size_t templated_ctor_ = 0;
         static size_t dtor_ = 0;
 
         static size_t move_operator_ = 0;
-        static size_t const_copy_operator_ = 0;
-        static size_t copy_operator_ = 0;
 
         inline void clear() {
             default_ctor_ = 0;
-            copy_ctor_ = 0;
-            const_copy_ctor_ = 0;
             move_ctor_ = 0;
             templated_ctor_ = 0;
             dtor_ = 0;
             move_operator_ = 0;
-            const_copy_operator_ = 0;
-            copy_operator_ = 0;
         }
 
     } // namespace rtt_test
@@ -67,19 +59,12 @@ namespace actor_zeta { namespace detail {
         static_cast<T*>(object)->~T();
     }
 
-    template<typename T>
-    void create(void* creation_place, void* object) noexcept {
-        new (creation_place) T(std::forward<const T&>(*static_cast<T*>(object)));
-    }
-
     class rtt final {
         using destroyer_t = void (*)(void*);
-        using creator_t = void (*)(void*, void*);
 
         struct objects_t {
             std::size_t offset;
             destroyer_t destroyer;
-            creator_t creator;
         };
 
         actor_zeta::pmr::memory_resource* memory_resource_ = nullptr;
@@ -93,6 +78,7 @@ namespace actor_zeta { namespace detail {
         objects_t* objects_ = nullptr;
         std::size_t objects_idx_ = 0;
 
+        // TODO mark noexcept?
         auto clear() -> void {
             auto tmp = data_;
             for (std::size_t i = 0; i < objects_idx_; ++i) {
@@ -168,47 +154,10 @@ namespace actor_zeta { namespace detail {
             rtt_test::move_ctor_++;
 #endif
         }
-        rtt(const rtt& other)
-            : memory_resource_(other.memory_resource_)
-            , capacity_(other.capacity_)
-            , volume_(other.volume_)
-            , allocation(nullptr)
-            , data_(nullptr)
-            , objects_(nullptr)
-            , objects_idx_(0) {
-            if (capacity_ > 0) {
-                allocation = memory_resource_->allocate(capacity_ + capacity_ * sizeof(objects_t));
-                assert(allocation);
-                data_ = static_cast<char*>(allocation);
-                assert(data_);
-                for (std::size_t i = 0; i < other.objects_idx_; ++i) {
-                    assert(other.objects_[i].offset < capacity_);
-                    other.objects_[i].creator(
-                        static_cast<void*>(data_ + other.objects_[i].offset),
-                        static_cast<void*>(other.data_ + other.objects_[i].offset));
-                }
-                objects_ = static_cast<objects_t*>(static_cast<void*>(data_ + capacity_));
-                assert(objects_);
-                std::copy(other.objects_, other.objects_ + other.objects_idx_, objects_);
-                objects_idx_ = other.objects_idx_;
-            }
-#ifdef __ENABLE_TESTS_MEASUREMENTS__
-            rtt_test::const_copy_ctor_++;
-#endif
-        }
-        rtt(rtt& other)
-            : rtt(static_cast<const rtt&>(other)) {
-#ifdef __ENABLE_TESTS_MEASUREMENTS__
-            rtt_test::const_copy_ctor_--;
-            rtt_test::copy_ctor_++;
-#endif
-        }
-
-        ~rtt() {
+        rtt(const rtt& other) = delete;
+        rtt(rtt& other) = delete;
+        ~rtt() noexcept(noexcept(clear())){
             clear();
-#ifdef __ENABLE_TESTS_MEASUREMENTS__
-            rtt_test::dtor_++;
-#endif
         }
 
         rtt& operator=(rtt&& other) noexcept {
@@ -236,44 +185,8 @@ namespace actor_zeta { namespace detail {
 
             return *this;
         }
-        rtt& operator=(const rtt& other) noexcept {
-            clear();
-
-            memory_resource_ = other.memory_resource_;
-            capacity_ = other.capacity_;
-            volume_ = other.volume_;
-            if (capacity_ > 0) {
-                allocation = memory_resource_->allocate(capacity_ + capacity_ * sizeof(objects_t));
-                assert(allocation);
-                data_ = static_cast<char*>(allocation);
-                assert(data_);
-                for (std::size_t i = 0; i < other.objects_idx_; ++i) {
-                    other.objects_[i].creator(
-                        static_cast<void*>(data_ + other.objects_[i].offset),
-                        static_cast<void*>(other.data_ + other.objects_[i].offset));
-                }
-                objects_ = static_cast<objects_t*>(static_cast<void*>(data_ + capacity_));
-                assert(objects_);
-                std::copy(other.objects_, other.objects_ + other.objects_idx_, objects_);
-                objects_idx_ = other.objects_idx_;
-            }
-
-#ifdef __ENABLE_TESTS_MEASUREMENTS__
-            rtt_test::const_copy_operator_++;
-#endif
-
-            return *this;
-        }
-        rtt& operator=(rtt& other) noexcept {
-#ifdef __ENABLE_TESTS_MEASUREMENTS__
-            rtt& ret = operator=(static_cast<const rtt&>(other));
-            rtt_test::const_copy_operator_--;
-            rtt_test::copy_operator_++;
-            return ret;
-#else
-            return operator=(static_cast<const rtt&>(other));
-#endif
-        }
+        rtt& operator=(const rtt& other) = delete;
+        rtt& operator=(rtt& other) = delete;
 
         template<typename T>
         char* try_to_align(const T&) {
@@ -298,7 +211,7 @@ namespace actor_zeta { namespace detail {
             using raw_type = actor_zeta::type_traits::decay_t<T>;
             new (creation_place) raw_type(std::forward<T>(object));
             const auto new_offset = static_cast<std::size_t>(creation_place - data_);
-            objects_[objects_idx_++] = objects_t{new_offset, &destroy<raw_type>, &create<raw_type>};
+            objects_[objects_idx_++] = objects_t{new_offset, &destroy<raw_type>};
             volume_ = new_offset + sizeof(raw_type);
         }
 

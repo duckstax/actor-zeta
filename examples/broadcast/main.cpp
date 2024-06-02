@@ -23,14 +23,14 @@ using actor_zeta::pmr::memory_resource;
 class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
 public:
     enum class system_command : std::uint64_t {
-        broadcast = 0x00,
+        // broadcast = 0x00,
         create
     };
 
     supervisor_lite(memory_resource* ptr)
         : cooperative_supervisor<supervisor_lite>(ptr)
         , create_( actor_zeta::make_behavior(resource(), system_command::create, this, &supervisor_lite::create))
-        , broadcast_( actor_zeta::make_behavior(resource(), system_command::broadcast, this, &supervisor_lite::broadcast_impl))
+        // , broadcast_( actor_zeta::make_behavior(resource(), system_command::broadcast, this, &supervisor_lite::broadcast_impl))
         , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(2, 1000), thread_pool_deleter) {
         e_->start();
     }
@@ -54,10 +54,10 @@ public:
                         create_(msg);
                         break;
                     }
-                    case actor_zeta::make_message_id(system_command::broadcast): {
-                        broadcast_(msg);
-                        break;
-                    }
+                    // case actor_zeta::make_message_id(system_command::broadcast): {
+                    //     broadcast_(msg);
+                    //     break;
+                    // }
                 }
             });
     }
@@ -66,14 +66,24 @@ public:
 
     template<class Id = uint64_t, class... Args>
     void broadcast_on_worker(Id id, Args&&... args) {
-        auto msg = actor_zeta::make_message(
-            address(),
-            system_command::broadcast,
-            actor_zeta::make_message_ptr(
+        // auto msg = actor_zeta::make_message(
+        //     address(),
+        //     system_command::broadcast,
+        //     actor_zeta::make_message_ptr(
+        //         actor_zeta::address_t::empty_address(),
+        //         id,
+        //         std::forward<const Args&>(args)...));
+
+
+        auto msg_ptr = actor_zeta::make_message_ptr(
                 actor_zeta::address_t::empty_address(),
                 id,
-                std::forward<Args>(args)...));
-        enqueue(std::move(msg));
+                std::forward<const Args&>(args)...);
+        for (auto& i : actors_) {
+            i->enqueue(
+                actor_zeta::message_ptr(msg_ptr));
+        }
+        // enqueue(std::move(msg));
     }
 
     auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* { return e_.get(); }
@@ -85,16 +95,16 @@ protected:
     }
 
 private:
-    void broadcast_impl(actor_zeta::message* msg) {
-        actor_zeta::message_ptr tmp(msg);
-        auto address_tmp = address();
-        tmp->sender() = address_tmp;
-        for (auto& i : actors_) {
-            i->enqueue(actor_zeta::message_ptr(tmp->clone()));
-        }
-    }
+    // void broadcast_impl(actor_zeta::message* msg) {
+    //     actor_zeta::message_ptr tmp(msg);
+    //     auto address_tmp = address();
+    //     tmp->sender() = address_tmp;
+    //     for (auto& i : actors_) {
+    //         i->enqueue(actor_zeta::message_ptr(tmp->clone()));
+    //     }
+    // }
     actor_zeta::behavior_t create_;
-    actor_zeta::behavior_t broadcast_;
+    // actor_zeta::behavior_t broadcast_;
     std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor_t> actors_;
 };
@@ -121,10 +131,10 @@ public:
                         download_(msg);
                         break;
                     }
-                    case actor_zeta::make_message_id(command_t::work_data): {
-                        work_data_(msg);
-                        break;
-                    }
+                    // case actor_zeta::make_message_id(command_t::work_data): {
+                    //     work_data_(msg);
+                    //     break;
+                    // }
                 }
             });
     }

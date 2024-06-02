@@ -70,15 +70,17 @@ struct dummy {
         ++instances_count;
     }
 
-    dummy(dummy&&)
+    dummy(dummy&& other)
         : alive(true) {
-        ++instances_count;
+        other.alive = false;
     }
 
     ~dummy() noexcept(false) {
         if (alive) {
             alive = false;
         } else {
+            // was moved
+            return;
             //throw std::runtime_error(u8"Double destruction!");
         }
         --instances_count;
@@ -152,6 +154,25 @@ struct destructor_counter {
     }
 
     std::size_t& destruct_count;
+};
+
+
+struct movable_only {
+    movable_only(){}
+    movable_only(const movable_only&) = delete;
+    movable_only& operator=(const movable_only&) = delete;
+    movable_only(movable_only&& other){
+        alive = other.alive;
+        other.alive = false;
+        assert(alive);
+    }
+    movable_only& operator=(movable_only&& other){
+        alive = other.alive;
+        other.alive = false;
+        assert(alive);
+    }
+
+    bool alive {true};
 };
 
 template<typename... Ts>

@@ -4,9 +4,12 @@
 #include <actor-zeta/detail/rtt.hpp>
 
 #include "classes.hpp"
+#include "../utils/unused.hpp"
 
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/type_list.hpp>
+
+#include <memory>
 
 using actor_zeta::detail::rtt;
 
@@ -17,10 +20,10 @@ namespace rtt_test = actor_zeta::detail::rtt_test;
 TEST_CASE("rt_tuple") {
     SECTION("actor_zeta::detail::get f1") {
         auto f = [](
-                     __attribute__((unused)) int8_t a1,
-                     __attribute__((unused)) int16_t a2,
-                     __attribute__((unused)) char a3,
-                     __attribute__((unused)) std::string a4) {};
+                     UNUSED int8_t a1,
+                     UNUSED int16_t a2,
+                     UNUSED char a3,
+                     UNUSED std::string a4) {};
         rtt r(nullptr, int8_t(5), int16_t(10), char(3), std::string("dfkjgksdjgkasdg"));
         using call_trait = actor_zeta::type_traits::get_callable_trait_t<actor_zeta::type_traits::remove_reference_t<decltype(f)>>;
         using args_type_list = typename call_trait::args_types;
@@ -36,10 +39,10 @@ TEST_CASE("rt_tuple") {
 
     SECTION("actor_zeta::detail::get f2") { // @TODO !!! here is a type_traits mismatch: const type == type !!!
         auto f = [](
-                     __attribute__((unused)) const int8_t a1,
-                     __attribute__((unused)) const int16_t a2,
-                     __attribute__((unused)) const char a3,
-                     __attribute__((unused)) const std::string a4) {};
+                     UNUSED const int8_t a1,
+                     UNUSED const int16_t a2,
+                     UNUSED const char a3,
+                     UNUSED const std::string a4) {};
         rtt r(nullptr, int8_t(5), int16_t(10), char(3), std::string("dfkjgksdjgkasdg"));
         using call_trait = actor_zeta::type_traits::get_callable_trait_t<actor_zeta::type_traits::remove_reference_t<decltype(f)>>;
         using args_type_list = typename call_trait::args_types;
@@ -59,10 +62,10 @@ TEST_CASE("rt_tuple") {
 
     SECTION("actor_zeta::detail::get f3") {
         auto f = [](
-                     __attribute__((unused)) int8_t& a1,
-                     __attribute__((unused)) int16_t& a2,
-                     __attribute__((unused)) char& a3,
-                     __attribute__((unused)) std::string& a4) {};
+                     UNUSED int8_t& a1,
+                     UNUSED int16_t& a2,
+                     UNUSED char& a3,
+                     UNUSED std::string& a4) {};
         rtt r(nullptr, int8_t(5), int16_t(10), char(3), std::string("dfkjgksdjgkasdg"));
         using call_trait = actor_zeta::type_traits::get_callable_trait_t<actor_zeta::type_traits::remove_reference_t<decltype(f)>>;
         using args_type_list = typename call_trait::args_types;
@@ -78,10 +81,10 @@ TEST_CASE("rt_tuple") {
 
     SECTION("actor_zeta::detail::get f4") {
         auto f = [](
-                     __attribute__((unused)) const int8_t& a1,
-                     __attribute__((unused)) const int16_t& a2,
-                     __attribute__((unused)) const char& a3,
-                     __attribute__((unused)) const std::string& a4) {};
+                     UNUSED const int8_t& a1,
+                     UNUSED const int16_t& a2,
+                     UNUSED const char& a3,
+                     UNUSED const std::string& a4) {};
         rtt r(nullptr, int8_t(5), int16_t(10), char(3), std::string("dfkjgksdjgkasdg"));
         using call_trait = actor_zeta::type_traits::get_callable_trait_t<actor_zeta::type_traits::remove_reference_t<decltype(f)>>;
         using args_type_list = typename call_trait::args_types;
@@ -93,6 +96,67 @@ TEST_CASE("rt_tuple") {
         REQUIRE(std::is_same<decltype(actor_zeta::detail::get<1, args_type_list>(r)), const int16_t&>::value);
         REQUIRE(std::is_same<decltype(actor_zeta::detail::get<2, args_type_list>(r)), const char&>::value);
         REQUIRE(std::is_same<decltype(actor_zeta::detail::get<3, args_type_list>(r)), const std::string&>::value);
+    }
+
+    SECTION("actor_zeta::detail::get f5") {
+        auto f = [](
+                     UNUSED std::unique_ptr<int64_t>&& up1,
+                     UNUSED const int16_t* p2) {};
+
+        std::unique_ptr<int64_t> uptr = std::unique_ptr<int64_t>(new int64_t(64));
+        int16_t i16 = 16;
+        int16_t* p_i16 = &i16;
+
+        rtt r(nullptr, std::move(uptr), p_i16);
+        REQUIRE_FALSE(uptr);
+        using call_trait = actor_zeta::type_traits::get_callable_trait_t<actor_zeta::type_traits::remove_reference_t<decltype(f)>>;
+        using args_type_list = typename call_trait::args_types;
+
+        REQUIRE(actor_zeta::detail::get<1, args_type_list>(r) == p_i16);
+
+        REQUIRE(*actor_zeta::detail::get<0, args_type_list>(r) == 64);
+        REQUIRE(*actor_zeta::detail::get<1, args_type_list>(r) == i16);
+
+
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<0, args_type_list>(r)), std::unique_ptr<int64_t>&& >::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<1, args_type_list>(r)), const int16_t*>::value);
+    }
+
+    SECTION("actor_zeta::detail::get f6") {
+        struct pointer_test {
+                size_t d1;
+                size_t d2;
+                size_t d3;
+
+                bool operator==(const pointer_test& rhs) const {
+                        return d1 == rhs.d1 && d2 == rhs.d2 && d3 == rhs.d3;
+                }
+        };
+
+        auto f = [](
+                     UNUSED std::string* p1,
+                     UNUSED pointer_test* p2) {};
+
+        std::string* p_str = new std::string {"123456"};
+        pointer_test* p_dummy = new pointer_test{11111, 22222, 33333};
+
+
+        rtt r(nullptr, p_str, p_dummy);
+        using call_trait = actor_zeta::type_traits::get_callable_trait_t<actor_zeta::type_traits::remove_reference_t<decltype(f)>>;
+        using args_type_list = typename call_trait::args_types;
+
+        REQUIRE(actor_zeta::detail::get<0, args_type_list>(r) == p_str);
+        REQUIRE(actor_zeta::detail::get<1, args_type_list>(r) == p_dummy);
+
+        REQUIRE(*actor_zeta::detail::get<0, args_type_list>(r) == *p_str);
+        REQUIRE(*actor_zeta::detail::get<1, args_type_list>(r) == *p_dummy);
+
+
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<0, args_type_list>(r)), std::string*>::value);
+        REQUIRE(std::is_same<decltype(actor_zeta::detail::get<1, args_type_list>(r)), pointer_test*>::value);
+
+        delete p_str;
+        delete p_dummy;
     }
 
     SECTION("test_getSize") {
@@ -253,13 +317,9 @@ TEST_CASE("rt_tuple") {
             auto templated_rtt_ = rtt(nullptr, 87645);
             REQUIRE(rtt_test::default_ctor_ == 0);
             REQUIRE(rtt_test::templated_ctor_ == 1);
-            REQUIRE(rtt_test::copy_ctor_ == 0);
-            REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 0);
 
             REQUIRE(rtt_test::move_operator_ == 0);
-            REQUIRE(rtt_test::const_copy_operator_ == 0);
-            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 1);
         rtt_test::clear();
@@ -268,13 +328,9 @@ TEST_CASE("rt_tuple") {
             auto templated_rtt_ = rtt(nullptr, 87645, 1, 3, 356356, "aljehrgiauhg", std::vector<int>{1, 2, 3, 4, 5});
             REQUIRE(rtt_test::default_ctor_ == 0);
             REQUIRE(rtt_test::templated_ctor_ == 1);
-            REQUIRE(rtt_test::copy_ctor_ == 0);
-            REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 0);
 
             REQUIRE(rtt_test::move_operator_ == 0);
-            REQUIRE(rtt_test::const_copy_operator_ == 0);
-            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 1);
         rtt_test::clear();
@@ -283,13 +339,9 @@ TEST_CASE("rt_tuple") {
             auto default_rtt_ = rtt();
             REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 0);
-            REQUIRE(rtt_test::copy_ctor_ == 0);
-            REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 0);
 
             REQUIRE(rtt_test::move_operator_ == 0);
-            REQUIRE(rtt_test::const_copy_operator_ == 0);
-            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 1);
         rtt_test::clear();
@@ -299,13 +351,9 @@ TEST_CASE("rt_tuple") {
             auto copied_rtt_ = rtt(default_rtt_); // non-const lvalue
             REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 0);
-            REQUIRE(rtt_test::copy_ctor_ == 1);
-            REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 0);
 
             REQUIRE(rtt_test::move_operator_ == 0);
-            REQUIRE(rtt_test::const_copy_operator_ == 0);
-            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 2);
         rtt_test::clear();
@@ -315,13 +363,9 @@ TEST_CASE("rt_tuple") {
             auto const_copied_rtt_ = rtt(default_rtt_); // const lvalue
             REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 0);
-            REQUIRE(rtt_test::copy_ctor_ == 0);
-            REQUIRE(rtt_test::const_copy_ctor_ == 1);
             REQUIRE(rtt_test::move_ctor_ == 0);
 
             REQUIRE(rtt_test::move_operator_ == 0);
-            REQUIRE(rtt_test::const_copy_operator_ == 0);
-            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 2);
         rtt_test::clear();
@@ -331,13 +375,9 @@ TEST_CASE("rt_tuple") {
             auto moved_rtt_ = rtt(std::move(default_rtt_)); // move rvalue
             REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 0);
-            REQUIRE(rtt_test::copy_ctor_ == 0);
-            REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 1);
 
             REQUIRE(rtt_test::move_operator_ == 0);
-            REQUIRE(rtt_test::const_copy_operator_ == 0);
-            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 2);
         rtt_test::clear();
@@ -351,13 +391,9 @@ TEST_CASE("rt_tuple") {
 
             REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 2);
-            REQUIRE(rtt_test::copy_ctor_ == 0);
-            REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 0);
 
             REQUIRE(rtt_test::move_operator_ == 0);
-            REQUIRE(rtt_test::const_copy_operator_ == 0);
-            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 3);
         rtt_test::clear();
@@ -372,13 +408,9 @@ TEST_CASE("rt_tuple") {
 
             REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 2);
-            REQUIRE(rtt_test::copy_ctor_ == 0);
-            REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 3);
 
             REQUIRE(rtt_test::move_operator_ == 0);
-            REQUIRE(rtt_test::const_copy_operator_ == 0);
-            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 6);
         rtt_test::clear();
@@ -393,13 +425,9 @@ TEST_CASE("rt_tuple") {
 
             REQUIRE(rtt_test::default_ctor_ == 2);
             REQUIRE(rtt_test::templated_ctor_ == 2);
-            REQUIRE(rtt_test::copy_ctor_ == 1);
-            REQUIRE(rtt_test::const_copy_ctor_ == 1);
             REQUIRE(rtt_test::move_ctor_ == 0);
 
             REQUIRE(rtt_test::move_operator_ == 0);
-            REQUIRE(rtt_test::const_copy_operator_ == 0);
-            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 6);
         rtt_test::clear();
@@ -413,13 +441,9 @@ TEST_CASE("rt_tuple") {
 
             REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 2);
-            REQUIRE(rtt_test::copy_ctor_ == 1);
-            REQUIRE(rtt_test::const_copy_ctor_ == 1);
             REQUIRE(rtt_test::move_ctor_ == 0);
 
             REQUIRE(rtt_test::move_operator_ == 0);
-            REQUIRE(rtt_test::const_copy_operator_ == 0);
-            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 5);
         rtt_test::clear();
@@ -435,13 +459,8 @@ TEST_CASE("rt_tuple") {
 
             REQUIRE(rtt_test::default_ctor_ == 1);
             REQUIRE(rtt_test::templated_ctor_ == 2);
-            REQUIRE(rtt_test::copy_ctor_ == 1);
-            REQUIRE(rtt_test::const_copy_ctor_ == 1);
             REQUIRE(rtt_test::move_ctor_ == 2);
-
             REQUIRE(rtt_test::move_operator_ == 0);
-            REQUIRE(rtt_test::const_copy_operator_ == 0);
-            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 7);
         rtt_test::clear();
@@ -452,13 +471,9 @@ TEST_CASE("rt_tuple") {
             auto o2 = std::move(o1);
             REQUIRE(rtt_test::default_ctor_ == 0);
             REQUIRE(rtt_test::templated_ctor_ == 1);
-            REQUIRE(rtt_test::copy_ctor_ == 1);
-            REQUIRE(rtt_test::const_copy_ctor_ == 0);
             REQUIRE(rtt_test::move_ctor_ == 1);
 
             REQUIRE(rtt_test::move_operator_ == 0);
-            REQUIRE(rtt_test::const_copy_operator_ == 0);
-            REQUIRE(rtt_test::copy_operator_ == 0);
         }
         REQUIRE(rtt_test::dtor_ == 3);
         rtt_test::clear();
@@ -633,15 +648,11 @@ duckstax/actor-zeta/header/actor-zeta/detail/rtt_management.hpp:20:10: note: can
         REQUIRE(t.get<std::vector<char>>(1).empty());
     }
 
+    // MOVE RTT
+
     SECTION("The rtt transfer constructor transfers elements of one rtt into another, rather than inserting one rtt inside another rtt") {
         rtt moved(nullptr, 2.71, 3, false);
         rtt constructed(std::move(moved));
-        REQUIRE(constructed.size() == 3);
-    }
-
-    SECTION("The rtt copy constructor copies the elements of one rtt to another, rather than inserting one rtt inside another rtt") {
-        rtt copied(nullptr, 2.71, 3, false);
-        rtt constructed(copied);
         REQUIRE(constructed.size() == 3);
     }
 
@@ -652,54 +663,16 @@ duckstax/actor-zeta/header/actor-zeta/detail/rtt_management.hpp:20:10: note: can
 
     SECTION("Objects stored in the rtt are transferred when transferring the rtt") {
         REQUIRE(dummy::instances_count == 0);
-        rtt one(nullptr, dummy{});
-        REQUIRE(dummy::instances_count == 1);
-
-        rtt another(std::move(one));
-        REQUIRE(dummy::instances_count == 1);
-
-        one = std::move(another);
-        REQUIRE(dummy::instances_count == 1);
-    }
-
-    SECTION("The rtt copy constructor creates new instances of objects stored in the copied rtt and destroys them when the created rtt copy is destroyed") {
-        REQUIRE(dummy::instances_count == 0);
         {
-            rtt initial(nullptr, dummy{});
-
+            rtt one(nullptr, dummy{});
             REQUIRE(dummy::instances_count == 1);
-            {
-                rtt copy(initial);
-                REQUIRE(dummy::instances_count == 2);
-            }
+
+            rtt another(std::move(one));
+            REQUIRE(dummy::instances_count == 1);
+
+            one = std::move(another);
             REQUIRE(dummy::instances_count == 1);
         }
-        REQUIRE(dummy::instances_count == 0);
-    }
-
-    SECTION("The operator of the copying assignment of the rtt creates new instances of objects stored in the copied rtt and destroys them when this copy of the rtt is destroyed. ") {
-        REQUIRE(dummy::instances_count == 0);
-        {
-            rtt initial(nullptr, dummy{});
-
-            REQUIRE(dummy::instances_count == 1);
-            {
-                rtt copy(nullptr, dummy{});
-                copy = initial;
-                REQUIRE(dummy::instances_count == 2);
-            }
-            REQUIRE(dummy::instances_count == 1);
-        }
-        REQUIRE(dummy::instances_count == 0);
-    }
-
-    SECTION("Objects stored in the rtt are destroyed by copy assignment") {
-        REQUIRE(dummy::instances_count == 0);
-        rtt initial(nullptr, dummy{});
-        REQUIRE(dummy::instances_count == 1);
-
-        rtt other(nullptr, 1, 3.14, true);
-        initial = other;
         REQUIRE(dummy::instances_count == 0);
     }
 
@@ -732,7 +705,7 @@ duckstax/actor-zeta/header/actor-zeta/detail/rtt_management.hpp:20:10: note: can
         REQUIRE(source.size() == 0);
     }
 
-    SECTION("The size of the rtt-source after carrying assignment is equal to zero ") {
+    SECTION("The size of the rtt-source after carrying takeover assignment is equal to zero ") {
         rtt source(nullptr, std::string("move me"));
         rtt destination(nullptr, std::string("some items here"));
         destination = std::move(source);
@@ -745,56 +718,11 @@ duckstax/actor-zeta/header/actor-zeta/detail/rtt_management.hpp:20:10: note: can
         REQUIRE(source.volume() == 0);
     }
 
-    SECTION("The volume of the rtt-source after carrying assignment is equal to zero") {
+    SECTION("The volume of the rtt-source after carrying takeover assignment is equal to zero") {
         rtt source(nullptr, std::string("move me"));
         rtt destination(nullptr, std::string("some items here"));
         destination = std::move(source);
         REQUIRE(source.volume() == 0);
-    }
-
-    SECTION("Copying a rtt leads to the creation of real copies of the objects stored in it") {
-        rtt initial(nullptr, std::string("cat"));
-
-        auto copy = rtt(initial);
-        REQUIRE(copy.get<std::string>(0) == "cat");
-
-        initial.get<std::string>(0).append("harsis");
-        REQUIRE(copy.get<std::string>(0) == "cat");
-    }
-
-    SECTION("The copying assignment of the rtt leads to the creation of real copies of the objects stored in it.") {
-        rtt initial(nullptr, std::vector<std::string>(1, "dog"));
-
-        rtt copy(nullptr, std::string("qwerty"));
-        copy = initial;
-        REQUIRE(copy.get<std::vector<std::string>>(0) == std::vector<std::string>(1, "dog"));
-
-        initial.get<std::vector<std::string>>(0).push_back("horse");
-        REQUIRE(copy.get<std::vector<std::string>>(0) == std::vector<std::string>(1, "dog"));
-    }
-
-    SECTION("As a result of copy assignment, the volume of the copy is equal to the volume of the original") {
-        rtt initial(nullptr, std::string("cat"), 5, 3.14, std::vector<int>{1, 2});
-
-        rtt copy(nullptr, true, 2.71);
-        copy = initial;
-        REQUIRE(initial.volume() == copy.volume());
-    }
-
-    SECTION("As a result of copy assignment, the size of the copy is equal to the size of the original") {
-        rtt initial(nullptr, std::string("cat"), 5, 3.14, std::vector<int>{1, 2});
-
-        rtt copy(nullptr, 17);
-        copy = initial;
-        REQUIRE(initial.size() == copy.size());
-    }
-
-    SECTION("The result of a copy assignment of an empty rtt is an empty rtt") {
-        rtt initial(nullptr);
-
-        rtt copy(nullptr, std::string("123"), 'a');
-        copy = initial;
-        REQUIRE(copy.empty());
     }
 
     SECTION("Transferring rtt assignment does not lead to leaks") {
@@ -810,6 +738,15 @@ duckstax/actor-zeta/header/actor-zeta/detail/rtt_management.hpp:20:10: note: can
         }
         REQUIRE(dummy::instances_count == 0);
     }
+
+    SECTION("movable only objects"){
+        movable_only mv_only;
+        auto t = rtt(nullptr, std::move(mv_only));
+        REQUIRE_FALSE(mv_only.alive);
+        REQUIRE(t.get<movable_only>(0).alive);
+    }
+
+    // REFERENCES
 
     SECTION("Knows how to give references to immutable values by their indentation in the rtt") {
         const rtt t(nullptr, std::string("123"), 42, true);
