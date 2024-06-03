@@ -21,7 +21,6 @@ namespace actor_zeta { namespace base {
                 return scheduler::resume_result::done;
             }
             size_t handled_msgs = 0;
-            mailbox::message_ptr ptr;
             while (handled_msgs < max_throughput) {
                 auto ptr = mailbox().pop_front();
                 if (!ptr) {
@@ -60,10 +59,10 @@ namespace actor_zeta { namespace base {
             , supervisor_([](supervisor_abstract*ptr) { assert(ptr);return ptr; }(static_cast<supervisor_abstract*>(ptr)))
             , stack_(resource())
             , mailbox_(std::forward<Args>(args)...) {
-            mailbox().try_block(); //todo: bug
+            ///mailbox().try_block(); //todo: bug
         }
 
-        auto type_impl() const noexcept -> const char* const final {
+        const char* type_impl() const noexcept final {
             auto const *ptr = static_cast<const Actor*>(this);
             return ptr->make_type();
         }
@@ -88,12 +87,16 @@ namespace actor_zeta { namespace base {
                     } else {
                         supervisor()->scheduler()->enqueue(this);
                     }
-                    break;
+                    return true;
                 }
                 case detail::enqueue_result::success:
-                    break;
-                case detail::enqueue_result::queue_closed:
-                    break;
+                    return true;
+                case detail::enqueue_result::queue_closed: {
+                    return false ;
+                }
+                default: {
+                    return false ;
+                }
             }
         }
 

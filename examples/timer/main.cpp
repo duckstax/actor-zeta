@@ -59,7 +59,7 @@ public:
         e_->start();
     }
 
-    auto make_type() const noexcept -> const char* const {
+    auto make_type() const noexcept -> const char* {
         return "supervisor_lite";
     }
 
@@ -91,10 +91,11 @@ protected:
                 }
             });
     }
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
+    bool enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) final {
         {
             set_current_message(std::move(msg));
             behavior()(current_message());
+            return true;
         }
     }
 

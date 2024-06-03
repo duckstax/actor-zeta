@@ -35,7 +35,7 @@ public:
         constructor_counter++;
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "dummy_supervisor";
     }
 
@@ -92,10 +92,11 @@ public:
         return supervisor_.back();
     }
 
-    void enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) override {
+    bool enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) override {
         enqueue_base_counter++;
         set_current_message(std::move(msg));
         behavior()(current_message());
+        return true;
     }
 
 private:
@@ -165,7 +166,7 @@ public:
         constructor_counter++;
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "storage";
     }
 
@@ -319,7 +320,7 @@ public:
         init();
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "test_handlers";
     }
 

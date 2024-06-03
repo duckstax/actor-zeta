@@ -30,7 +30,7 @@ public:
 
     ~supervisor_lite() override = default;
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "supervisor_lite";
     }
 
@@ -54,11 +54,12 @@ protected:
             });
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
+    bool enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) final {
         {
             set_current_message(std::move(msg));
             behavior()(current_message());
         }
+        return true;
     }
 
 private:

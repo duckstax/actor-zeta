@@ -92,7 +92,7 @@ namespace actor_zeta { namespace base {
             return self()->make_scheduler();
         }
 
-        auto type_impl() const noexcept -> const char* const final {
+        const char* type_impl() const noexcept final {
             auto const* ptr = static_cast<const Supervisor*>(this);
             return ptr->make_type();
         }

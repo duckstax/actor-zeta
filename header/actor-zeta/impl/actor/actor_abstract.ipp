@@ -22,7 +22,7 @@ namespace actor_zeta { namespace base {
         return enqueue(std::move(msg), nullptr);
     }
 
-    auto actor_abstract::type() const noexcept -> const char* const {
+     const char* actor_abstract::type() const noexcept {
         return type_impl();
     }
 

@@ -156,7 +156,7 @@ public:
         memchecker_thread_.join();
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return name_.c_str();
     }
 
@@ -173,7 +173,7 @@ protected:
             });
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
+    bool enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) final {
         {
             auto ptr = msg.get();
             set_current_message(std::move(msg));
@@ -211,7 +211,7 @@ public:
         , consumer_latency_ms_(consumer_latency_ms) {
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return name_.c_str();
     }
 

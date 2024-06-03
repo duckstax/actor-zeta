@@ -41,7 +41,7 @@ public:
         });
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "network";
     }
 
@@ -79,9 +79,10 @@ public:
     auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* { return e_.get(); }
 
 protected:
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
+    bool enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) final {
         set_current_message(std::move(msg));
         behavior()(current_message());
+        return true;
     }
 
 private:
@@ -129,7 +130,7 @@ public:
             });
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "worker_t";
     }
 
