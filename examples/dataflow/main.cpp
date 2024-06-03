@@ -69,7 +69,7 @@ public:
     std::atomic_bool running_;
 
     void memchecker() const {
-        sdk::memory::checker_t checker(memory_limit_mb_, true);
+        sdk::memory::checker_t checker(static_cast<double>(memory_limit_mb_), true);
         while (running_) {
             checker.check();
             std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -81,7 +81,7 @@ public:
         for (size_t i = 0; i < datasize_; ++i) {
             data.data.push_back(static_cast<char>(i % 255));
         }
-        data.producer_index = idx;
+        data.producer_index = static_cast<int64_t>(idx);
         std::cout << std::this_thread::get_id() << " :: producer #" << idx << " started +++" << std::endl;
         int64_t counter = 0;
 
@@ -127,7 +127,7 @@ public:
     }
 
     void prepare() {
-        for (auto i = 1; i <= count_actors_; ++i) {
+        for (size_t i = 1; i <= count_actors_; ++i) {
             auto addr = spawn_actor([this, i](actor_test_t* ptr) {
                 actors_.emplace(i, ptr);
             },
@@ -197,6 +197,10 @@ class actor_test_t final : public actor_zeta::basic_actor<actor_test_t> {
     std::map<int64_t, int64_t> prev_index_;
     std::map<int, actor_zeta::address_t> address_book_;
 
+    const std::string name_;
+    actor_zeta::behavior_t add_address_;
+    actor_zeta::behavior_t process_data_;
+
     auto perform(command_t cmd) -> void {
         actor_zeta::send(address_book_.begin()->second, address(), cmd);
     }
@@ -204,11 +208,11 @@ class actor_test_t final : public actor_zeta::basic_actor<actor_test_t> {
 public:
     actor_test_t(supervisor_test_t* ptr, size_t consumer_latency_ms)
         : actor_zeta::basic_actor<actor_test_t>(ptr)
+        , sup_ptr_(ptr)
+        , consumer_latency_ms_(consumer_latency_ms)
         , name_(names::actor)
         , add_address_(actor_zeta::make_behavior(resource(), command_t::add_address, this, &actor_test_t::add_address))
-        , process_data_(actor_zeta::make_behavior(resource(), command_t::process_data, this, &actor_test_t::process_data))
-        , sup_ptr_(ptr)
-        , consumer_latency_ms_(consumer_latency_ms) {
+        , process_data_(actor_zeta::make_behavior(resource(), command_t::process_data, this, &actor_test_t::process_data)) {
     }
 
     const char* make_type() const noexcept {
@@ -258,11 +262,6 @@ public:
         //std::cout << std::this_thread::get_id() << " :: " << __func__ << " :: ms_dur " << ms_dur << " OUT >>>" << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(consumer_latency_ms_));
     }
-
-private:
-    const std::string name_;
-    actor_zeta::behavior_t add_address_;
-    actor_zeta::behavior_t process_data_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
