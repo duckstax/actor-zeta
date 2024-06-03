@@ -746,6 +746,56 @@ duckstax/actor-zeta/header/actor-zeta/detail/rtt_management.hpp:20:10: note: can
         REQUIRE(t.get<movable_only>(0).alive);
     }
 
+    SECTION("actor_zeta::detail::get custom uptr instances_count check") {
+        using type_t = dummy;
+        using type_ptr = std::unique_ptr<type_t>;
+        type_t::created_times = 0;
+        type_t::destroyed_times = 0;
+
+        auto f = [](
+                     UNUSED type_ptr&& up1,
+                     UNUSED const int16_t* p2) {};
+        using call_trait = actor_zeta::type_traits::get_callable_trait_t<actor_zeta::type_traits::remove_reference_t<decltype(f)>>;
+        using args_type_list = typename call_trait::args_types;
+
+        REQUIRE(type_t::instances_count == 0);
+        type_ptr uptr = type_ptr(new type_t());
+        REQUIRE(type_t::instances_count == 1);
+
+        REQUIRE(type_t::created_times == 1);
+        REQUIRE(type_t::destroyed_times == 0);
+
+        int16_t i16 = 16;
+        int16_t* p_i16 = &i16;
+
+        { // scoped in
+            rtt r(nullptr, std::move(uptr), p_i16);
+            REQUIRE(type_t::instances_count == 1);
+            REQUIRE(type_t::created_times == 1);
+            REQUIRE(type_t::destroyed_times == 0);
+            REQUIRE_FALSE(uptr);
+
+            REQUIRE(actor_zeta::detail::get<1, args_type_list>(r) == p_i16);
+
+            REQUIRE(type_t::instances_count == 1);
+            REQUIRE(type_t::created_times == 1);
+            REQUIRE(type_t::destroyed_times == 0);
+
+            REQUIRE(actor_zeta::detail::get<0, args_type_list>(r)->alive == true);
+            REQUIRE(type_t::instances_count == 1);
+            REQUIRE(type_t::created_times == 1);
+            REQUIRE(type_t::destroyed_times == 0);
+            REQUIRE(*actor_zeta::detail::get<1, args_type_list>(r) == i16);
+
+            REQUIRE(std::is_same<decltype(actor_zeta::detail::get<0, args_type_list>(r)), type_ptr&& >::value);
+            REQUIRE(std::is_same<decltype(actor_zeta::detail::get<1, args_type_list>(r)), const int16_t*>::value);
+        } // scoped out
+
+        REQUIRE(type_t::instances_count == 0);
+        REQUIRE(type_t::created_times == 1);
+        REQUIRE(type_t::destroyed_times == 1);
+    }
+
     // REFERENCES
 
     SECTION("Knows how to give references to immutable values by their indentation in the rtt") {
