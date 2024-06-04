@@ -59,7 +59,7 @@ public:
         e_->start();
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "supervisor_lite";
     }
 
