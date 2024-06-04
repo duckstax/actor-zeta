@@ -76,6 +76,15 @@ namespace actor_zeta { namespace base {
             return supervisor()->resource();
         }
 
+        void launch(scheduler::execution_unit* unit) {
+            assert(unit != nullptr);
+            auto delay_first_scheduling = mailbox().try_block();
+            if (!delay_first_scheduling) {
+                intrusive_ptr_add_ref(this);
+                unit->execute_later(this);
+            }
+        }
+
         bool enqueue_impl(mailbox::message_ptr msg, scheduler::execution_unit* e) final {
             assert(msg);
             switch (mailbox().push_back(std::move(msg))) {

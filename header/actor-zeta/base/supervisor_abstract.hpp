@@ -61,6 +61,7 @@ namespace actor_zeta { namespace base {
             auto allocate_byte_alignof = alignof(Actor_remove_pointer_type);
             void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
             auto* actor = new (buffer) Actor_remove_pointer_type(static_cast<Supervisor*>(this), std::forward<Args>(args)...);
+            actor->launch();
             auto address = actor->address();
             inserter(actor);
             return address;
