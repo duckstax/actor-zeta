@@ -35,7 +35,7 @@ public:
         constructor_counter++;
     }
 
-    auto make_type() const noexcept -> const char* const {
+    auto make_type() const noexcept {
         return "dummy_supervisor";
     }
 
@@ -165,7 +165,7 @@ public:
         constructor_counter++;
     }
 
-    auto make_type() const noexcept -> const char* const {
+    auto make_type() const noexcept {
         return "storage";
     }
 
@@ -319,7 +319,7 @@ public:
         init();
     }
 
-    auto make_type() const noexcept -> const char* const {
+    auto make_type() const noexcept {
         return "test_handlers";
     }
 

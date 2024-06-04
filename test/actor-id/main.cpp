@@ -33,7 +33,7 @@ public:
 
     void create() ;
 
-    auto make_type() const noexcept -> const char* const {
+    auto make_type() const noexcept {
         return "dummy_supervisor";
     }
 
@@ -76,7 +76,7 @@ public:
         : actor_zeta::basic_actor<storage_t>(ptr) {
     }
 
-    auto make_type() const noexcept -> const char* const {
+    auto make_type() const noexcept {
         return "storage";
     }
 
