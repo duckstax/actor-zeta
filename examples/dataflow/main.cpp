@@ -156,7 +156,7 @@ public:
         memchecker_thread_.join();
     }
 
-    auto make_type() const noexcept {
+    const char* make_type() const noexcept {
         return name_.c_str();
     }
 
