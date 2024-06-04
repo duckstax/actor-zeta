@@ -18,7 +18,7 @@ struct counter_args_t {
 };
 
 template<class Sup>
-auto set_done(Sup* sup_ptr_)->void {
+auto set_done(Sup* sup_ptr_) -> void {
 #ifdef BM_TRACE
     std::cout << std::this_thread::get_id() << " :: Going to sem done ... .. . " << reinterpret_cast<void*>(sup_ptr_) << std::endl;
 #endif
@@ -39,8 +39,8 @@ class actor_t final : public actor_zeta::basic_actor<actor_t> {
     }
 
 public:
-    template<class Supervisor, class ...Args>
-    actor_t(Supervisor* ptr, Args ...)
+    template<class Supervisor, class... Args>
+    actor_t(Supervisor* ptr, Args...)
         : actor_zeta::basic_actor<actor_t>(ptr)
         , add_address_(
             actor_zeta::make_behavior(
@@ -78,7 +78,7 @@ public:
                 }))
     {}
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "actor";
     }
 

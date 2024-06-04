@@ -50,7 +50,7 @@ public:
         return executor_.get();
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "dummy_supervisor_sub";
     }
 
@@ -116,7 +116,7 @@ public:
             resource());
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "dummy_supervisor";
     }
 
@@ -173,7 +173,7 @@ public:
         actor_counter++;
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "storage";
     }
 

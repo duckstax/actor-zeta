@@ -22,7 +22,7 @@ class dummy_supervisor final : public actor_zeta::cooperative_supervisor<dummy_s
 public:
     dummy_supervisor(memory_resource* ptr)
         : actor_zeta::cooperative_supervisor<dummy_supervisor>(ptr)
-        , create_( actor_zeta::make_behavior(resource(),command_t::create,this, &dummy_supervisor::create))
+        , create_(actor_zeta::make_behavior(resource(), command_t::create, this, &dummy_supervisor::create))
         , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
         scheduler()->start();
     }
@@ -31,9 +31,9 @@ public:
         return executor_.get();
     }
 
-    void create() ;
+    void create();
 
-    auto make_type() const noexcept {
+    const char* make_type() const noexcept {
         return "dummy_supervisor";
     }
 
@@ -76,7 +76,7 @@ public:
         : actor_zeta::basic_actor<storage_t>(ptr) {
     }
 
-    auto make_type() const noexcept {
+    const char* make_type() const noexcept {
         return "storage";
     }
 

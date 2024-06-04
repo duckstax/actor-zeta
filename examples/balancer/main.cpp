@@ -43,7 +43,7 @@ public:
         });
     }
 
-    auto make_type() const noexcept {
+    const char* make_type() const noexcept {
         return "collection";
     }
 
