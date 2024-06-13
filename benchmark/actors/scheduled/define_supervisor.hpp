@@ -68,7 +68,7 @@ public:
         e_->stop();
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "collection";
     }
 
