@@ -5,6 +5,7 @@
 #include <memory>
 #include <thread>
 #include <vector>
+#include <atomic>
 
 #include <actor-zeta.hpp>
 
