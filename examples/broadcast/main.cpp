@@ -110,7 +110,7 @@ private:
     actor_zeta::behavior_t broadcast_;
     std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor_t> actors_;
-    std::atomic_int64_t size_actors_{0};
+    std::atomic<int64_t> size_actors_{0};
 };
 
 class worker_t final : public actor_zeta::basic_actor<worker_t> {
