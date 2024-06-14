@@ -79,7 +79,7 @@ namespace actor_zeta { namespace detail {
         std::size_t objects_idx_ = 0;
 
         // TODO mark noexcept?
-        auto clear() -> void {
+        void clear() noexcept(false) {
             auto tmp = data_;
             for (std::size_t i = 0; i < objects_idx_; ++i) {
                 objects_[i].destroyer(tmp + objects_[i].offset);
