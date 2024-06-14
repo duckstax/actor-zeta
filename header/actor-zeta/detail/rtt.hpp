@@ -79,7 +79,7 @@ namespace actor_zeta { namespace detail {
         std::size_t objects_idx_ = 0;
 
         // TODO mark noexcept?
-        void clear() noexcept(false) {
+        void clear() {
             auto tmp = data_;
             for (std::size_t i = 0; i < objects_idx_; ++i) {
                 objects_[i].destroyer(tmp + objects_[i].offset);
@@ -156,7 +156,7 @@ namespace actor_zeta { namespace detail {
         }
         rtt(const rtt& other) = delete;
         rtt(rtt& other) = delete;
-        ~rtt() noexcept(noexcept(clear())){
+        ~rtt() {
             clear();
         }
 
