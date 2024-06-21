@@ -62,33 +62,42 @@ struct X {
 struct dummy {
     dummy()
         : alive(true) {
+        ++created_times;
         ++instances_count;
     }
 
     dummy(const dummy&)
         : alive(true) {
+        ++created_times;
         ++instances_count;
     }
 
-    dummy(dummy&&)
+    dummy(dummy&& other)
         : alive(true) {
-        ++instances_count;
+        other.alive = false;
     }
 
     ~dummy() noexcept(false) {
         if (alive) {
             alive = false;
         } else {
+            // was moved
+            return;
             //throw std::runtime_error(u8"Double destruction!");
         }
         --instances_count;
+        ++destroyed_times;
     }
 
     bool alive;
     static int instances_count;
+    static int created_times;
+    static int destroyed_times;
 };
 
 int dummy::instances_count = 0;
+int dummy::created_times = 0;
+int dummy::destroyed_times = 0;
 
 #ifndef __EXCEPTIONS_DISABLE__
 
@@ -152,6 +161,25 @@ struct destructor_counter {
     }
 
     std::size_t& destruct_count;
+};
+
+
+struct movable_only {
+    movable_only(){}
+    movable_only(const movable_only&) = delete;
+    movable_only& operator=(const movable_only&) = delete;
+    movable_only(movable_only&& other){
+        alive = other.alive;
+        other.alive = false;
+        assert(alive);
+    }
+    movable_only& operator=(movable_only&& other){
+        alive = other.alive;
+        other.alive = false;
+        assert(alive);
+    }
+
+    bool alive {true};
 };
 
 template<typename... Ts>
