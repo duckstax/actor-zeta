@@ -55,7 +55,7 @@ jobs:
 
           bash ./docker/gcc/pyinstall.sh $(cat /etc/os-release | grep -a UBUNTU_CODENAME | sed -e 's/UBUNTU_CODENAME=//g')
 
-          python3 -m pip install --ignore-installed pip==21.2.4 --disable-pip-version-check --no-warn-script-location
+          python3 -m pip install --upgrade "pip < 19.2"
           python3 -m pip install --no-cache-dir conan==1.59 cmake
 
       - name: Install compiler
