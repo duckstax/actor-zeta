@@ -51,8 +51,9 @@ jobs:
             ninja-build make \
             zlib1g-dev wget curl
           
-          curl -O https://bootstrap.pypa.io/pip/3.7/get-pip.py
+          curl -O https://bootstrap.pypa.io/pip/3.5/get-pip.py
           python3 get-pip.py
+          python3 -m pip install --upgrade "pip < 19.2"
           python3 -m pip install --no-cache-dir conan==1.59 cmake
 
           add-apt-repository ppa:ubuntu-toolchain-r/test
