@@ -57,7 +57,7 @@ jobs:
             zlib1g-dev wget
 
           add-apt-repository ppa:ubuntu-toolchain-r/test
-          python3 -m ensurepip --upgrade
+          python3 -m ensurepip --upgrade pip
           python3 -m pip install --no-cache-dir conan==1.59 cmake 
 
       - name: Install compiler
