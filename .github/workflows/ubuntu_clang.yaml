@@ -46,12 +46,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
-
-
       - name: Install system dependencies
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -63,7 +57,7 @@ jobs:
             zlib1g-dev wget
 
           add-apt-repository ppa:ubuntu-toolchain-r/test
-          python3 -m ensurepip --upgrade pip
+          python3 -m pip install --upgrade pip
           python3 -m pip install --no-cache-dir conan==1.59 cmake 
 
       - name: Install compiler
