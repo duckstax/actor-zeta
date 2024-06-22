@@ -49,16 +49,15 @@ jobs:
           apt update && apt-get install -y \
             software-properties-common ca-certificates \
             ninja-build make \
-            zlib1g-dev wget
+            zlib1g-dev wget curl
+          
+          curl -O https://bootstrap.pypa.io/pip/3.7/get-pip.py
+          python3 get-pip.py
+          python3 -m pip install --no-cache-dir conan==1.59 cmake
 
           add-apt-repository ppa:ubuntu-toolchain-r/test
 
           bash ./docker/gcc/pyinstall.sh $(cat /etc/os-release | grep -a UBUNTU_CODENAME | sed -e 's/UBUNTU_CODENAME=//g')
-          
-          curl -O https://bootstrap.pypa.io/pip/3.7/get-pip.py
-          python3 get-pip.py
-          python3 -m pip install --upgrade "pip < 21.0"
-          python3 -m pip install --no-cache-dir conan==1.59 cmake
 
       - name: Install compiler
         run: |
