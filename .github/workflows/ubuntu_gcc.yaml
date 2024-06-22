@@ -42,12 +42,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python 3.7
-        if: ${{ matrix.configuration.UBUNTU_VERSION == '16.04' }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.7'
-
       - name: Install system dependencies
         env:
           DEBIAN_FRONTEND: noninteractive
