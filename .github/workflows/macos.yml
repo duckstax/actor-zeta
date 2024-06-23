@@ -18,7 +18,7 @@ jobs:
       - name: Install system dependencies
         run: |
             brew install ninja cmake
-            python3 -m pip install --no-cache-dir conan==1.63
+            python3 -m pip install --no-cache-dir conan==1.63 --break-system-packages
 
       - name: Configure CMake
         env:

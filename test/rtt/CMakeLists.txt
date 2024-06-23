@@ -11,6 +11,8 @@ file(GLOB ${PROJECT_NAME}_SOURCES
 
 message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
 
+
+
 add_executable(${PROJECT_NAME}
     ${${PROJECT_NAME}_SOURCES}
     ${${PROJECT_NAME}_HEADERS})
@@ -19,6 +21,8 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC actor-zeta
     PUBLIC CONAN_PKG::catch2
 )
+
+target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}../utils")
 
 include(CTest)
 include(Catch)

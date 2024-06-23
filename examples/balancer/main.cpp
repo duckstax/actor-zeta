@@ -43,7 +43,7 @@ public:
         });
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "collection";
     }
 
@@ -106,7 +106,7 @@ public:
         ++count_collection_part;
     }
 
-    auto make_type() const noexcept -> const char* const {
+    const char* make_type() const noexcept {
         return "collection";
     }
 

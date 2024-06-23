@@ -11,10 +11,6 @@ namespace actor_zeta { namespace mailbox {
         return command_;
     }
 
-    auto message::clone() const -> message* {
-        return new message(sender_, command_, body_);
-    }
-
     message::operator bool() {
         return /*!command_ ||*/ bool(sender_) || !body_.empty();
     }
