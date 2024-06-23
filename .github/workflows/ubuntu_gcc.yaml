@@ -50,12 +50,23 @@ jobs:
             software-properties-common ca-certificates \
             ninja-build make \
             zlib1g-dev wget curl
-          
+
+      - name: Setup PIP Ubuntu 16.04
+        if: {{ matrix.configuration.UBUNTU_VERSION == '16.04'}}
+        run: |
           curl -O https://bootstrap.pypa.io/pip/3.5/get-pip.py
           python3 get-pip.py
           python3 -m pip install --upgrade "pip < 19.2"
           python3 -m pip install --no-cache-dir conan==1.59 cmake
 
+      - name: Setup PIP
+        if: {{ matrix.configuration.UBUNTU_VERSION != '16.04'}}
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --no-cache-dir conan==1.59 cmake
+
+      - name: Setup Compilator
+        run: |
           add-apt-repository ppa:ubuntu-toolchain-r/test
 
           bash ./docker/gcc/pyinstall.sh $(cat /etc/os-release | grep -a UBUNTU_CODENAME | sed -e 's/UBUNTU_CODENAME=//g')
