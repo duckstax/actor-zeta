@@ -52,7 +52,7 @@ jobs:
             zlib1g-dev wget curl
 
       - name: Setup PIP Ubuntu 16.04
-        if: {{ matrix.configuration.UBUNTU_VERSION == '16.04'}}
+        if: {{ ${{matrix.configuration.UBUNTU_VERSION}} == '16.04'}}
         run: |
           curl -O https://bootstrap.pypa.io/pip/3.5/get-pip.py
           python3 get-pip.py
@@ -60,7 +60,7 @@ jobs:
           python3 -m pip install --no-cache-dir conan==1.59 cmake
 
       - name: Setup PIP
-        if: {{ matrix.configuration.UBUNTU_VERSION != '16.04'}}
+        if: {{ ${{matrix.configuration.UBUNTU_VERSION}} != '16.04'}}
         run: |
           python3 -m pip install --upgrade pip
           python3 -m pip install --no-cache-dir conan==1.59 cmake
