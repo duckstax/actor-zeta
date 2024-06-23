@@ -11,7 +11,7 @@ jobs:
         cxx_standard: [11, 14, 17]
         build_type: ["Release", "Debug"]
         configuration: [
-          #{"UBUNTU_VERSION":"16.04", "TOOLCHAIN_VERSION":"4.9"},
+          {"UBUNTU_VERSION":"16.04", "TOOLCHAIN_VERSION":"4.9"},
 
           {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"4.8"},
           {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"5"},
@@ -32,8 +32,8 @@ jobs:
         exclude:
           - cxx_standard: 17
             configuration: {"UBUNTU_VERSION":"18.04", "TOOLCHAIN_VERSION":"4.8"}
-          #- cxx_standard: 17
-          #  configuration: {"UBUNTU_VERSION":"16.04", "TOOLCHAIN_VERSION":"4.9"}
+          - cxx_standard: 17
+            configuration: {"UBUNTU_VERSION":"16.04", "TOOLCHAIN_VERSION":"4.9"}
 
     runs-on: ubuntu-latest
     container:
