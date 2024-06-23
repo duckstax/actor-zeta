@@ -49,7 +49,7 @@ jobs:
           apt update && apt-get install -y \
             software-properties-common ca-certificates \
             ninja-build make \
-            zlib1g-dev wget curl
+            zlib1g-dev wget
 
       - name: Setup Compilator
         run: |
