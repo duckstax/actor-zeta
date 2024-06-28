@@ -51,7 +51,7 @@ struct count_copies_t {
     static int count;
     bool copied = false;
     count_copies_t() {}
-    count_copies_t(count_copies_t const& o) {
+    count_copies_t(count_copies_t const&) {
         count_copies_t::count++;
         copied = true;
         printf("%s :: %d\n", __func__, count_copies_t::count);
@@ -77,7 +77,7 @@ struct count_copies_alloc_v1_t {
     }
     count_copies_alloc_v1_t(
         actor_zeta::type_traits::allocator_arg_t, allocator_type const& a,
-        count_copies_alloc_v1_t const& o)
+        count_copies_alloc_v1_t const&)
         : alloc(a.resource()) {
         copied = true;
         count_copies_alloc_v1_t::count++;
@@ -92,7 +92,7 @@ struct count_copies_alloc_v1_t {
         printf("%s :: %d\n", __func__, count_copies_alloc_v1_t::count);
     }
     count_copies_alloc_v1_t(
-        count_copies_alloc_v1_t const& o,
+        count_copies_alloc_v1_t const&,
         allocator_type const& a)
         : alloc(a.resource()) {
         copied = true;

@@ -34,7 +34,6 @@ namespace actor_zeta { namespace mailbox {
         auto sender() const& noexcept -> base::address_t const&;
 
         auto body() -> actor_zeta::detail::rtt&;
-        auto clone() const -> message*;
         operator bool();
         void swap(message& other) noexcept;
         bool is_high_priority() const;

@@ -175,7 +175,7 @@ public:
         actor_counter++;
     }
 
-    auto make_type() const noexcept -> const char* {
+    const char* make_type() const noexcept {
         return "storage";
     }
 

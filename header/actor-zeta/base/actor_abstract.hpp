@@ -91,7 +91,7 @@ namespace actor_zeta { namespace base {
         ~actor_abstract() override;
 
         virtual bool enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*) = 0;
-        virtual  const char* type_impl()  const noexcept = 0;
+        virtual const char* type_impl()  const noexcept = 0;
 
     private:
 
