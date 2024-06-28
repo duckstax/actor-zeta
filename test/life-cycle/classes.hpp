@@ -92,10 +92,11 @@ public:
         return supervisor_.back();
     }
 
-    void enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) override {
+    bool enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) override {
         enqueue_base_counter++;
         set_current_message(std::move(msg));
         behavior()(current_message());
+        return true;
     }
 
 private:

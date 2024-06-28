@@ -78,8 +78,8 @@ namespace actor_zeta { namespace base {
 
         auto type() const noexcept -> const char*;
         auto id() const -> id_t;
-        auto enqueue(mailbox::message_ptr) -> void;
-        void enqueue(mailbox::message_ptr, scheduler::execution_unit*);
+        bool enqueue(mailbox::message_ptr);
+        bool enqueue(mailbox::message_ptr, scheduler::execution_unit*);
 
     protected:
         // prohibit copies, assignments, and heap allocations
@@ -90,8 +90,8 @@ namespace actor_zeta { namespace base {
         actor_abstract& operator=(const actor_abstract&) = delete;
         ~actor_abstract() override;
 
-        virtual void enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*) = 0;
-        virtual auto type_impl()  const noexcept -> const char* = 0;
+        virtual bool enqueue_impl(mailbox::message_ptr, scheduler::execution_unit*) = 0;
+        virtual const char* type_impl()  const noexcept = 0;
 
     private:
 

@@ -31,17 +31,17 @@ message(STATUS "RTTI_DISABLE = ${RTTI_DISABLE}")
 message(STATUS "EXCEPTIONS_DISABLE = ${EXCEPTIONS_DISABLE}")
 
 if (NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type (default Debug):" FORCE)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type (default Debug):" FORCE)
 endif()
 
 add_compile_options(
-  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:DEBUG>>:-fno-rtti;>"
-  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:RELEASE>>:-fno-rtti;>"
+        "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:DEBUG>>:-fno-rtti;>"
+        "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:RELEASE>>:-fno-rtti;>"
 )
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/
-    ${CMAKE_CURRENT_SOURCE_DIR}/header)
+        ${CMAKE_CURRENT_SOURCE_DIR}/
+        ${CMAKE_CURRENT_SOURCE_DIR}/header)
 
 if ((CMAKE_CXX_COMPILER_ID MATCHES "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
     add_compile_options(
@@ -69,32 +69,32 @@ endif ()
 ############## FINAL PROJECT CONFIG #################
 
 file(GLOB ${PROJECT_NAME}_HEADERS
-    header/actor-zeta/base/*.hpp
-    header/actor-zeta/base/*.h
+        header/actor-zeta/base/*.hpp
+        header/actor-zeta/base/*.h
 
-    header/actor-zeta/detail/queue/*.hpp
-    header/actor-zeta/detail/queue/*.h
+        header/actor-zeta/detail/queue/*.hpp
+        header/actor-zeta/detail/queue/*.h
 
-    header/actor-zeta/detail/pmr/*.hpp
-    header/actor-zeta/detail/pmr/*.h
+        header/actor-zeta/detail/pmr/*.hpp
+        header/actor-zeta/detail/pmr/*.h
 
-    header/actor-zeta/detail/*.hpp
-    header/actor-zeta/detail/*.h
+        header/actor-zeta/detail/*.hpp
+        header/actor-zeta/detail/*.h
 
-    header/actor-zeta/scheduler/policy/*.hpp
-    header/actor-zeta/scheduler/policy/*.h
+        header/actor-zeta/scheduler/policy/*.hpp
+        header/actor-zeta/scheduler/policy/*.h
 
-    header/actor-zeta/scheduler/*.hpp
-    header/actor-zeta/scheduler/*.h
+        header/actor-zeta/scheduler/*.hpp
+        header/actor-zeta/scheduler/*.h
 
-    header/actor-zeta/mailbox/*.hpp
-    header/actor-zeta/mailbox/*.h
+        header/actor-zeta/mailbox/*.hpp
+        header/actor-zeta/mailbox/*.h
 
-    header/actor-zeta/*.hpp
-    header/actor-zeta/*.h
+        header/actor-zeta/*.hpp
+        header/actor-zeta/*.h
 
-    header/*.hpp
-    header/*.h
+        header/*.hpp
+        header/*.h
 )
 
 if ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") AND NOT APPLE) #------------------------------------- Clang
@@ -106,12 +106,12 @@ if ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") AND NOT APPLE) #--------------------
     message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION} at ${LLVM_LIBRARY_DIRS}")
 
     find_library(CLANG_LIBCPP
-        NAMES libc++ c++
-        HINTS ${LLVM_LIBRARY_DIRS})
+            NAMES libc++ c++
+            HINTS ${LLVM_LIBRARY_DIRS})
 
     find_library(CLANG_LIBCPP_ABI
-        NAMES libc++abi c++abi
-        HINTS ${LLVM_LIBRARY_DIRS})
+            NAMES libc++abi c++abi
+            HINTS ${LLVM_LIBRARY_DIRS})
 
     message(STATUS "Found CLANG_LIBCPP=${CLANG_LIBCPP}")
     message(STATUS "Found CLANG_LIBCPP_ABI=${CLANG_LIBCPP_ABI}")
@@ -130,9 +130,9 @@ if ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") AND NOT APPLE) #--------------------
 
         if (NOT APPLE)
             find_library(
-                LIBUNWIND_LIBRARY
-                NAMES libunwind.a
-                PATH_SUFFIXES lib lib64)
+                    LIBUNWIND_LIBRARY
+                    NAMES libunwind.a
+                    PATH_SUFFIXES lib lib64)
 
             if (LIBUNWIND_LIBRARY)
                 message(STATUS "libunwind found: ${LIBUNWIND_LIBRARY}, using libunwind")
@@ -161,15 +161,15 @@ message(STATUS "Using shared linker flags : ${CMAKE_SHARED_LINKER_FLAGS}")
 message(STATUS "Using exe linker flags    : ${CMAKE_EXE_LINKER_FLAGS}")
 
 add_library(
-    ${PROJECT_NAME}
-    source/src.cpp
-    ${${PROJECT_NAME}_HEADERS}
+        ${PROJECT_NAME}
+        source/src.cpp
+        ${${PROJECT_NAME}_HEADERS}
 )
 
 find_package(Threads REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC
-    ${CMAKE_THREAD_LIBS_INIT}
-    ${CMAKE_DL_LIBS}
+        ${CMAKE_THREAD_LIBS_INIT}
+        ${CMAKE_DL_LIBS}
 )
 
 #################################################################
@@ -191,15 +191,18 @@ endif ()
 
 message(STATUS "CONAN_SETTINGS: ${CONAN_SETTINGS}")
 
+if(CONAN_EXPORTED)
+    conan_basic_setup(TARGETS)
+else()
 conan_cmake_run(REQUIRES
-    catch2/2.13.6
-    benchmark/1.8.0
-    BASIC_SETUP CMAKE_TARGETS
-    SETTINGS ${CONAN_SETTINGS}
-    ENV CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} LDFLAGS=${LINKFLAGS}
-    BUILD missing
+        catch2/2.13.6
+        benchmark/1.8.0
+        BASIC_SETUP CMAKE_TARGETS
+        SETTINGS ${CONAN_SETTINGS}
+        ENV CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} LDFLAGS=${LINKFLAGS}
+        BUILD missing
 )
-
+endif()
 # configuration
 #############################################################################################
 #conan

@@ -12,23 +12,23 @@
 
 namespace actor_zeta { namespace base {
 
-    actor_abstract::~actor_abstract() {
-    }
+    actor_abstract::~actor_abstract() {}
 
     auto actor_abstract::address() noexcept -> address_t {
         return address_t(this);
     }
 
-    void actor_abstract::enqueue(mailbox::message_ptr msg) {
-        enqueue(std::move(msg), nullptr);
+    bool actor_abstract::enqueue(mailbox::message_ptr msg) {
+        return enqueue(std::move(msg), nullptr);
     }
 
-    auto actor_abstract::type() const noexcept -> const char* {
+     const char* actor_abstract::type() const noexcept {
         return type_impl();
     }
 
-    void actor_abstract::enqueue(mailbox::message_ptr msg, scheduler::execution_unit* e) {
-        enqueue_impl(std::move(msg), e);
+
+    bool actor_abstract::enqueue(mailbox::message_ptr msg, scheduler::execution_unit* e) {
+        return enqueue_impl(std::move(msg), e);
     }
 
     auto actor_abstract::id() const -> id_t {

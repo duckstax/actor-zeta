@@ -61,6 +61,7 @@ namespace actor_zeta { namespace base {
             auto allocate_byte_alignof = alignof(Actor_remove_pointer_type);
             void* buffer = resource()->allocate(allocate_byte, allocate_byte_alignof);
             auto* actor = new (buffer) Actor_remove_pointer_type(static_cast<Supervisor*>(this), std::forward<Args>(args)...);
+            actor->launch(scheduler().);
             auto address = actor->address();
             inserter(actor);
             return address;
@@ -92,16 +93,16 @@ namespace actor_zeta { namespace base {
             return self()->make_scheduler();
         }
 
-        auto type_impl() const noexcept -> const char* final {
+        const char* type_impl() const noexcept final {
             auto const* ptr = static_cast<const Supervisor*>(this);
             return ptr->make_type();
         }
 
-        auto self() noexcept -> Supervisor* {
+        auto self() noexcept {
             return static_cast<Supervisor*>(this);
         }
 
-        auto self() const noexcept -> Supervisor* {
+        auto self() const noexcept {
             return static_cast<Supervisor*>(this);
         }
     };

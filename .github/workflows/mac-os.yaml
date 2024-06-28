@@ -1,0 +1,39 @@
+#on: [push, pull_request]
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        cxx_standard: [11, 14, 17]
+        build_type: ["Release", "Debug"]
+
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install system dependencies
+        run: |
+            brew install ninja cmake
+            python3 -m pip install --no-cache-dir conan==1.63
+
+      - name: Configure CMake
+        env:
+          BUILD_TYPE: ${{matrix.build_type}}
+          CXX_STANDARD: ${{matrix.cxx_standard}}
+        run: |
+          mkdir -p build
+          cmake -B build -GNinja \
+            -DCMAKE_BUILD_TYPE=${{matrix.build_type}} \
+            -DCMAKE_CXX_STANDARD=${{matrix.cxx_standard}} \
+            -DALLOW_EXAMPLES=ON \
+            -DALLOW_TESTS=ON \
+            -DENABLE_TESTS_MEASUREMENTS=ON \
+            -DALLOW_BENCHMARK=ON 
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Test
+        working-directory: build
+        run: ctest --rerun-failed --output-on-failure

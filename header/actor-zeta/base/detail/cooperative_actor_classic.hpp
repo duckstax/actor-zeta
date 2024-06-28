@@ -15,31 +15,26 @@ namespace actor_zeta { namespace base {
         : public actor_abstract
         , private scheduler::resumable {
     public:
-        scheduler::resume_result resume(scheduler::execution_unit* e, size_t max_throughput) final {
-            if (!activate(e)) {
+        using mailbox_t = typename Traits::mailbox_t;
+        scheduler::resume_result resume(scheduler::execution_unit* unit, size_t max_throughput) final {
+            if (!activate(unit)) {
                 return scheduler::resume_result::done;
             }
-            static constexpr size_t quantum = 3;
             size_t handled_msgs = 0;
-            mailbox::message_ptr ptr;
-
-            auto handle_async = [this, max_throughput, &handled_msgs](mailbox::message& x) -> detail::task_result {
-                reactivate(x);
-                return ++handled_msgs < max_throughput
-                           ? detail::task_result::resume
-                           : detail::task_result::stop_all;
-            };
-
             while (handled_msgs < max_throughput) {
-                inbox().fetch_more();
-                auto prev_handled_msgs = handled_msgs;
-                high(inbox()).new_round(quantum * 3, handle_async);
-                normal(inbox()).new_round(quantum, handle_async);
-                if (handled_msgs == prev_handled_msgs && inbox().try_block()) {
-                    return scheduler::resume_result::awaiting;
+                auto ptr = mailbox().pop_front();
+                if (!ptr) {
+                    if (mailbox().try_block()) {
+                        return scheduler::resume_result::awaiting;
+                    }
+                    continue;
                 }
+                reactivate(*ptr);
+                ++handled_msgs;
+                return scheduler::resume_result::done;
             }
-            if (inbox().try_block()) {
+
+            if (mailbox().try_block()) {
                 return scheduler::resume_result::awaiting;
             }
             return scheduler::resume_result::resume;
@@ -57,19 +52,17 @@ namespace actor_zeta { namespace base {
 
     protected:
         template<
-            class Supervisor,
+            class Supervisor,class ...Args,
             class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, Supervisor>::value>>// todo: check Supervisoar is a pointer
-        cooperative_actor(Supervisor* ptr)
+        cooperative_actor(Supervisor* ptr,Args&&... args)
             : actor_abstract()
             , supervisor_([](supervisor_abstract*ptr) { assert(ptr);return ptr; }(static_cast<supervisor_abstract*>(ptr)))
             , stack_(resource())
-            , inbox_(mailbox::priority_message(),
-                     high_priority_queue(mailbox::high_priority_message()),
-                     normal_priority_queue(mailbox::normal_priority_message())) {
-            inbox().try_block(); //todo: bug
+            , mailbox_(std::forward<Args>(args)...) {
+            ///mailbox().try_block(); //todo: bug
         }
 
-        auto type_impl() const noexcept -> const char* final {
+        const char* type_impl() const noexcept final {
             auto const *ptr = static_cast<const Actor*>(this);
             return ptr->make_type();
         }
@@ -83,9 +76,18 @@ namespace actor_zeta { namespace base {
             return supervisor()->resource();
         }
 
-        void enqueue_impl(mailbox::message_ptr msg, scheduler::execution_unit* e) final {
+        void launch(scheduler::execution_unit* unit) {
+            assert(unit != nullptr);
+            auto delay_first_scheduling = mailbox().try_block();
+            if (!delay_first_scheduling) {
+                intrusive_ptr_add_ref(this);
+                unit->execute_later(this);
+            }
+        }
+
+        bool enqueue_impl(mailbox::message_ptr msg, scheduler::execution_unit* e) final {
             assert(msg);
-            switch (inbox().push_back(std::move(msg))) {
+            switch (mailbox().push_back(std::move(msg))) {
                 case detail::enqueue_result::unblocked_reader: {
                     intrusive_ptr_add_ref(this);
                     if (e != nullptr) {
@@ -94,12 +96,16 @@ namespace actor_zeta { namespace base {
                     } else {
                         supervisor()->scheduler()->enqueue(this);
                     }
-                    break;
+                    return true;
                 }
                 case detail::enqueue_result::success:
-                    break;
-                case detail::enqueue_result::queue_closed:
-                    break;
+                    return true;
+                case detail::enqueue_result::queue_closed: {
+                    return false ;
+                }
+                default: {
+                    return false ;
+                }
             }
         }
 
@@ -158,8 +164,8 @@ namespace actor_zeta { namespace base {
             return static_cast<Actor*>(this);
         }
 
-        inline traits::inbox_t& inbox() {
-            return inbox_;
+        inline mailbox_t& mailbox() {
+            return mailbox_;
         }
 
         bool activate(scheduler::execution_unit* ctx) {
@@ -204,7 +210,7 @@ namespace actor_zeta { namespace base {
         detail::hfsm stack_;
         scheduler::execution_unit* executor_;
         mailbox::message* current_message_;
-        typename Traits::inbox_t inbox_;
+        mailbox_t mailbox_;
     };
 
 }} // namespace actor_zeta::base
