@@ -23,21 +23,47 @@ option(ALLOW_BENCHMARK              "ALLOW BENCHMARK"           OFF)
 option(RTTI_DISABLE                 "RTTI DISABLE"              ON)
 option(EXCEPTIONS_DISABLE           "EXCEPTIONS DISABLE"        ON)
 
+if (NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type (default Debug):" FORCE)
+endif()
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+
+    if (EXCEPTIONS_DISABLE)
+        message("Disable C++ exceptions.")
+        string(REGEX REPLACE "/EH[a-z]+" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+        add_compile_definitions(__EXCEPTIONS_DISABLE__)
+    endif ()
+
+    if (RTTI_DISABLE)
+        message("Disable RTTI.")
+        string(REGEX REPLACE "/GR" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
+    endif ()
+
+else (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+
+    if (EXCEPTIONS_DISABLE)
+        message("Disable C++ exceptions.")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
+        add_compile_definitions(__EXCEPTIONS_DISABLE__)
+    endif ()
+
+    if (RTTI_DISABLE)
+        message("Disable RTTI.")
+        string(REGEX REPLACE "-frtti" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+    endif ()
+
+endif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+
 message(STATUS "ALLOW_EXAMPLES = ${ALLOW_EXAMPLES}")
 message(STATUS "ALLOW_TESTS = ${ALLOW_TESTS}")
 message(STATUS "ENABLE_TESTS_MEASUREMENTS = ${ENABLE_TESTS_MEASUREMENTS}")
 message(STATUS "ALLOW_BENCHMARK = ${ALLOW_BENCHMARK}")
 message(STATUS "RTTI_DISABLE = ${RTTI_DISABLE}")
 message(STATUS "EXCEPTIONS_DISABLE = ${EXCEPTIONS_DISABLE}")
-
-if (NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type (default Debug):" FORCE)
-endif()
-
-add_compile_options(
-  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:DEBUG>>:-fno-rtti;>"
-  "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:RELEASE>>:-fno-rtti;>"
-)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/
@@ -191,15 +217,18 @@ endif ()
 
 message(STATUS "CONAN_SETTINGS: ${CONAN_SETTINGS}")
 
-conan_cmake_run(REQUIRES
-    catch2/2.13.6
-    benchmark/1.8.0
-    BASIC_SETUP CMAKE_TARGETS
-    SETTINGS ${CONAN_SETTINGS}
-    ENV CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} LDFLAGS=${LINKFLAGS}
-    BUILD missing
-)
-
+if(CONAN_EXPORTED)
+    conan_basic_setup(TARGETS)
+else()
+    conan_cmake_run(REQUIRES
+            catch2/2.13.6
+            benchmark/1.8.0
+            BASIC_SETUP CMAKE_TARGETS
+            SETTINGS ${CONAN_SETTINGS}
+            ENV CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} LDFLAGS=${LINKFLAGS}
+            BUILD missing
+    )
+endif()
 # configuration
 #############################################################################################
 #conan
