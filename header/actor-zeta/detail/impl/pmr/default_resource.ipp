@@ -37,7 +37,10 @@ namespace actor_zeta { namespace pmr {
         std::size_t /*bytes*/,
         std::size_t /*alignment*/) {
         assert(false);
-				throw std::bad_alloc();
+#ifndef __EXCEPTIONS_DISABLE__
+        throw std::bad_alloc();
+#endif
+
     }
 
     void
