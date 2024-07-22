@@ -27,7 +27,7 @@ if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type (default Debug):" FORCE)
 endif()
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
 
     if (EXCEPTIONS_DISABLE)
         message("Disable C++ exceptions.")
@@ -42,7 +42,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
     endif ()
 
-else (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+else ((CMAKE_CXX_COMPILER_ID MATCHES "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
 
     if (EXCEPTIONS_DISABLE)
         message("Disable C++ exceptions.")
@@ -56,7 +56,7 @@ else (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
     endif ()
 
-endif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+endif()
 
 message(STATUS "ALLOW_EXAMPLES = ${ALLOW_EXAMPLES}")
 message(STATUS "ALLOW_TESTS = ${ALLOW_TESTS}")
