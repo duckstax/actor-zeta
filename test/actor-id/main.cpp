@@ -27,6 +27,8 @@ public:
         scheduler()->start();
     }
 
+    ~dummy_supervisor()=default;
+
     auto scheduler_test() noexcept -> actor_zeta::test::scheduler_test_t* {
         return executor_.get();
     }

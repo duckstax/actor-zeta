@@ -39,13 +39,14 @@ namespace actor_zeta { namespace pmr {
                 return resource;
             }(resource)) {}
 
-        template<typename T>
-        void operator()(T* target, std::size_t size = 1) {
+        template<typename Target>
+        void operator()(Target* target, std::size_t size = 1) {
             assert(target);
+            assert(resource_);
             for (std::size_t i = 0; i < size; ++i) {
-                target[i].~T();
+                deallocate_ptr(resource_, &target);
             }
-            deallocate_ptr(resource_, &target);
+
         }
     };
 }} // namespace actor_zeta
