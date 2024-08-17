@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/detail/aligned_allocate.hpp>
+#include <actor-zeta/detail/pmr/aligned_allocate.hpp>
 
 #if defined(__GNUC__) && !defined(__APPLE__)
 #include <features.h>
