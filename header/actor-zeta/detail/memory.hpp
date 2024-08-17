@@ -18,14 +18,11 @@ namespace actor_zeta { namespace pmr {
     }
 
     template<class Target>
-    void deallocate_ptr(actor_zeta::pmr::memory_resource* resource, Target** target) {
+    void deallocate_ptr(actor_zeta::pmr::memory_resource* resource, Target* target) {
         assert(resource);
         assert(target);
-        if (*target) {
-            (*target)->~Target();
-            resource->deallocate(*target, sizeof(Target));
-            *target = nullptr;
-        }
+        (target)->~Target();
+        resource->deallocate(target, sizeof(Target));
     }
 
     class deleter_t final {
@@ -43,10 +40,7 @@ namespace actor_zeta { namespace pmr {
         void operator()(Target* target, std::size_t size = 1) {
             assert(target);
             assert(resource_);
-            for (std::size_t i = 0; i < size; ++i) {
-                deallocate_ptr(resource_, &target);
-            }
-
+            deallocate_ptr(resource_, target);
         }
     };
 }} // namespace actor_zeta
