@@ -35,6 +35,11 @@ public:
         constructor_counter++;
     }
 
+    ~dummy_supervisor() {
+        destructor_counter++;
+    }
+
+
     const char* make_type() const noexcept {
         return "dummy_supervisor";
     }
@@ -62,7 +67,6 @@ public:
 
     void create_storage();
     void create_test_handlers();
-    ~dummy_supervisor() override = default;
 
     void start() {}
     void stop() {}
