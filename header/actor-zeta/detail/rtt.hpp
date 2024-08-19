@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/detail/aligned_allocate.hpp>
+#include <actor-zeta/detail/pmr/aligned_allocate.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/type_list.hpp>
 #include <actor-zeta/detail/type_traits.hpp>

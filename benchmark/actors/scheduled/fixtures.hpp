@@ -17,11 +17,11 @@
 template<class... Params_local>
 class fixture_t : public ::benchmark::Fixture {
 protected:
-    std::unique_ptr<supervisor_t<Params_local...>, actor_zeta::deleter> sup_;
+    std::unique_ptr<supervisor_t<Params_local...>, actor_zeta::pmr::deleter_t> sup_;
 
 public:
     fixture_t()
-        : sup_(nullptr, actor_zeta::deleter(nullptr)) {}
+        : sup_(nullptr, actor_zeta::pmr::deleter_t(nullptr)) {}
 
     virtual void SetUp(__attribute__((unused)) const ::benchmark::State& state) final {     
         auto* resource = actor_zeta::pmr::get_default_resource();
