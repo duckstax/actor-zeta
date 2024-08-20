@@ -5,7 +5,7 @@
 #include "actor-zeta/detail/memory.hpp"
 
 namespace actor_zeta {
-
+/*
     template<
         class ParentSupervisor,
         class ChildrenSupervisor,
@@ -32,5 +32,5 @@ namespace actor_zeta {
 
         return {supervisor, actor_zeta::pmr::deleter_t(ptr)};
     }
-
+*/
 } // namespace actor_zeta

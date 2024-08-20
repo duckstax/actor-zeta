@@ -25,7 +25,7 @@ namespace actor_zeta { namespace base {
 
         class id_t final {
         public:
-            id_t() = default;
+            id_t() = delete;
 
             explicit id_t(actor_abstract* impl) noexcept
                 : impl_{impl} {
@@ -85,7 +85,7 @@ namespace actor_zeta { namespace base {
         // prohibit copies, assignments, and heap allocations
         void* operator new(size_t);
         void* operator new[](size_t);
-        actor_abstract() = default;///delete;
+        actor_abstract() = delete;
         actor_abstract(const actor_abstract&) = delete;
         actor_abstract& operator=(const actor_abstract&) = delete;
         ~actor_abstract() override;

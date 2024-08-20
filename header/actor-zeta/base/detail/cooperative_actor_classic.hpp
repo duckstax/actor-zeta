@@ -10,8 +10,8 @@
 
 namespace actor_zeta { namespace base {
 
-    template<class Actor, class Traits>
-    class cooperative_actor<Actor, Traits, actor_type::classic>
+    template<class Supervisor, class Actor, class Traits>
+    class cooperative_actor<Supervisor,Actor, Traits, actor_type::classic>
         : public actor_abstract
         , private scheduler::resumable {
     public:
@@ -55,13 +55,15 @@ namespace actor_zeta { namespace base {
             deref();
         }
 
+        template<class Target>
+        static Target* check_ptr(Target* ptr) {
+            assert(ptr);
+            return ptr;
+        }
+
     protected:
-        template<
-            class Supervisor,
-            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, Supervisor>::value>>// todo: check Supervisoar is a pointer
         cooperative_actor(Supervisor* ptr)
-            : actor_abstract()
-            , supervisor_([](supervisor_abstract*ptr) { assert(ptr);return ptr; }(static_cast<supervisor_abstract*>(ptr)))
+            : supervisor_(check_ptr(ptr))
             , stack_(resource())
             , inbox_(mailbox::priority_message(),
                      high_priority_queue(mailbox::high_priority_message()),
@@ -192,15 +194,15 @@ namespace actor_zeta { namespace base {
             return executor_;
         }
 
-        auto supervisor() noexcept -> supervisor_abstract* {
+        auto supervisor() noexcept -> Supervisor* {
             return supervisor_;
         }
 
-        auto supervisor() const noexcept -> const supervisor_abstract* {
+        auto supervisor() const noexcept -> const Supervisor* {
             return supervisor_;
         }
 
-        supervisor_abstract* supervisor_;
+        Supervisor* supervisor_;
         detail::hfsm stack_;
         scheduler::execution_unit* executor_;
         mailbox::message* current_message_;

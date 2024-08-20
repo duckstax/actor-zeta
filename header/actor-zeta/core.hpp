@@ -19,14 +19,11 @@ namespace actor_zeta {
 
     using base::actor_abstract;
     using base::address_t;
-    using base::cooperative_supervisor;
     using base::make_handler;
-    using base::supervisor_abstract;
     using base::basic_actor;
     using base::behavior_t;
     using base::make_behavior;
     using base::actor_t;
-    using base::supervisor_t;
 
     using mailbox::message;
     using mailbox::message_ptr;
@@ -37,35 +34,5 @@ namespace actor_zeta {
     using scheduler::scheduler_abstract_t;
     using scheduler::scheduler_t;
     using scheduler::work_sharing;
-
-/*
-    template<
-        class T,
-        class = type_traits::enable_if_t<std::is_base_of<actor_abstract, T>::value>>
-    actor_t make_actor(intrusive_ptr<T> ptr){
-
-    }
-
-    template<
-        class T,
-        class = type_traits::enable_if_t<std::is_base_of<actor_abstract, T>::value>>
-    actor_t make_actor(T* ptr){
-
-    }
-
-
-    template<
-        class T,
-        class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
-    supervisor_t make_supervisor(intrusive_ptr<T> ptr){
-
-    }
-
-    template<
-        class T,
-        class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
-    supervisor_t make_supervisor(T* ptr){
-
-    }
-*/
+    
 } // namespace actor_zeta

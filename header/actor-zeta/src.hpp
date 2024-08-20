@@ -11,7 +11,6 @@
 #include <actor-zeta/impl/actor/address.ipp>
 #include <actor-zeta/impl/actor/behavior.ipp>
 #include <actor-zeta/impl/actor/cooperative_actor.ipp>
-#include <actor-zeta/impl/actor/supervisor_abstract.ipp>
 
 #include <actor-zeta/impl/clock/clock.ipp>
 #include <actor-zeta/impl/clock/thread_safe_clock.ipp>
