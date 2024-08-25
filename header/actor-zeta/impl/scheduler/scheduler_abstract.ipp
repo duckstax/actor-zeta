@@ -8,7 +8,6 @@
 #include <memory>
 #include <thread>
 
-#include <actor-zeta/scheduler/execution_unit.hpp>
 #include <actor-zeta/scheduler/resumable.hpp>
 
 namespace actor_zeta { namespace scheduler {
@@ -22,11 +21,10 @@ namespace actor_zeta { namespace scheduler {
     }
 
     void cleanup_and_release(resumable* ptr) {
-        class dummy_unit : public execution_unit {
+        class dummy_unit {
         public:
-            dummy_unit()
-                : execution_unit() {}
-            void execute_later(resumable* job) override {
+            dummy_unit() = default;
+            void execute_later(resumable* job) {
                 resumables.push_back(job);
             }
             std::vector<resumable*> resumables;

@@ -24,7 +24,6 @@ namespace actor_zeta { namespace test {
     ///protected:
         void start() override;
         void stop() override;
-    protected:
         void enqueue(scheduler::resumable* ptr) override;
 
     private:

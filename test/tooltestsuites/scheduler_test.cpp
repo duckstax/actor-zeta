@@ -3,20 +3,19 @@
 #include "scheduler_test.hpp"
 // clang-format on
 
-#include <actor-zeta/scheduler/execution_unit.hpp>
 #include <limits>
 
 namespace actor_zeta { namespace test {
 
     namespace {
 
-        class dummy_worker : public scheduler::execution_unit {
+        class dummy_worker {
         public:
             dummy_worker(scheduler_test_t* parent)
                 : parent_(parent) {
             }
 
-            void execute_later(scheduler::resumable* ptr) override {
+            void execute_later(scheduler::resumable* ptr) {
                 parent_->jobs.push_back(ptr);
             }
 
@@ -54,7 +53,7 @@ namespace actor_zeta { namespace test {
         auto job = jobs.front();
         jobs.pop_front();
         dummy_worker worker{this};
-        switch (job->resume(&worker, 1)) {
+        switch (job->resume( 1)) {
             case scheduler::resume_result::resume:
                 jobs.push_front(job);
                 break;

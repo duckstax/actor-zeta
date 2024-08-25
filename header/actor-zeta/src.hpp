@@ -23,7 +23,6 @@
 #include <actor-zeta/impl/scheduler/policy/unprofiled.ipp>
 
 #include <actor-zeta/impl/scheduler/policy/work_sharing.ipp>
-#include <actor-zeta/impl/scheduler/execution_unit.ipp>
 #include <actor-zeta/impl/scheduler/resumable.ipp>
 #include <actor-zeta/impl/scheduler/scheduler_abstract.ipp>
 

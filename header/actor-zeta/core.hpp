@@ -8,7 +8,6 @@
 #include <actor-zeta/impl/handler.ipp>
 // clang-format on
 
-#include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/scheduler/policy/work_sharing.hpp>
 #include <actor-zeta/scheduler/scheduler.hpp>
@@ -23,7 +22,6 @@ namespace actor_zeta {
     using base::basic_actor;
     using base::behavior_t;
     using base::make_behavior;
-    using base::actor_t;
 
     using mailbox::message;
     using mailbox::message_ptr;

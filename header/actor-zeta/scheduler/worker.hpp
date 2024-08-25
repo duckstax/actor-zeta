@@ -5,7 +5,6 @@
 #include <thread>
 
 #include "actor-zeta/detail/launch_thread.hpp"
-#include "execution_unit.hpp"
 #include "resumable.hpp"
 
 namespace actor_zeta { namespace scheduler {
@@ -14,7 +13,7 @@ namespace actor_zeta { namespace scheduler {
     class scheduler_t;
 
     template<class Policy>
-    class worker final : public execution_unit {
+    class worker final {
     public:
         using job_ptr = resumable*;
         using scheduler_ptr = scheduler_t<Policy>*;
@@ -42,7 +41,7 @@ namespace actor_zeta { namespace scheduler {
             policy_.external_enqueue(this, job);
         }
 
-        void execute_later(job_ptr job) override {
+        void execute_later(job_ptr job) {
             assert(job != nullptr);
             policy_.internal_enqueue(this, job);
         }

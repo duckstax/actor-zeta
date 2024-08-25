@@ -6,8 +6,6 @@
 #include <actor-zeta/base/address.hpp>
 #include <actor-zeta/mailbox/message.hpp>
 #include <actor-zeta/scheduler/scheduler_abstract.hpp>
-#include <actor-zeta/scheduler/execution_unit.hpp>
-#include <actor-zeta/base/supervisor_abstract.hpp>
 #include <actor-zeta/base/cooperative_actor.hpp>
 // clang-format on
 

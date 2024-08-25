@@ -55,7 +55,7 @@ namespace actor_zeta { namespace scheduler {
                 : public resumable
                 , public ref_counted {
             public:
-                resume_result resume(execution_unit* ptr, size_t) override {
+                resume_result resume(execution_unit* ptr, size_t) {
                     assert(ptr != nullptr);
                     std::unique_lock<std::mutex> guard(mtx);
                     last_worker = ptr;
