@@ -7,7 +7,7 @@
 TEST_CASE("life-cycle") {
     auto* mr_ptr = actor_zeta::pmr::get_default_resource();
     {
-        auto supervisor_ = actor_zeta::spawn_supervisor<dummy_supervisor>(mr_ptr, 1, 100);
+        auto supervisor = std::unique_ptr<dummy_supervisor>(new dummy_supervisor(mr_ptr, 1, 100));
 
         REQUIRE(dummy_supervisor::constructor_counter == 1);
 

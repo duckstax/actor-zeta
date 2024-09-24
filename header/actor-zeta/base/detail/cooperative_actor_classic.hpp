@@ -7,6 +7,7 @@
 #include <actor-zeta/base/forwards.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
 #include <actor-zeta/scheduler/resumable.hpp>
+#include <actor-zeta/detail/memory.hpp>
 
 namespace actor_zeta { namespace base {
 
@@ -15,6 +16,8 @@ namespace actor_zeta { namespace base {
         : public actor_abstract
         , public scheduler::resumable {
     public:
+        using uptr = std::unique_ptr<cooperative_actor<Actor, Traits, actor_type::classic>,actor_zeta::pmr::deleter_t>;
+
         scheduler::resume_result resume(size_t max_throughput) final {
             static constexpr size_t quantum = 3;
             size_t handled_msgs = 0;

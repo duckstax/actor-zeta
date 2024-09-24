@@ -21,17 +21,24 @@ namespace actor_zeta { namespace base {
     class actor_abstract : public ref_counted {
     public:
         // allow placement new (only)
-        void* operator new(std::size_t, void* ptr) {
+        void* operator new(size_t size, void* ptr) noexcept {
             return ptr;
         }
 
+        /*void operator delete(void* ptr, void*) noexcept {
+
+        }
+        */
         // prohibit copies, assignments, and heap allocations
-        //void* operator new(size_t) = delete;
-        //void* operator new[](size_t) = delete;
-        //void operator delete(void*) = delete;
-        //void operator delete[](void*) = delete;
+        /*
+        void* operator new(size_t) = delete;
+        void* operator new[](size_t) = delete;
+        void operator delete(void*) = delete;
+        void operator delete[](void*) = delete;
+         */
 
         explicit actor_abstract(pmr::memory_resource*);
+        virtual ~actor_abstract();
 
         auto address() noexcept -> address_t;
 
@@ -90,7 +97,7 @@ namespace actor_zeta { namespace base {
 
         auto type() const noexcept -> const char*;
         auto id() const -> id_t;
-        auto enqueue(mailbox::message_ptr) -> void;
+        void enqueue(mailbox::message_ptr);
         actor_zeta::pmr::memory_resource* resource() const noexcept;
 
     protected:

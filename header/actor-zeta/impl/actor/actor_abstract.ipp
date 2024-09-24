@@ -12,14 +12,17 @@
 
 namespace actor_zeta { namespace base {
 
-    actor_abstract::actor_abstract(pmr::memory_resource*resource):resource_(resource){}
+    actor_abstract::actor_abstract(pmr::memory_resource*resource)
+            : resource_(resource){}
+
+    actor_abstract::~actor_abstract() {}
 
     auto actor_abstract::address() noexcept -> address_t {
         return address_t(this);
     }
 
     void actor_abstract::enqueue(mailbox::message_ptr msg) {
-        enqueue(std::move(msg));
+        enqueue_impl(std::move(msg));
     }
 
     auto actor_abstract::type() const noexcept -> const char* {

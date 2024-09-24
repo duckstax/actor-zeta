@@ -16,8 +16,7 @@ enum class dummy_supervisor_command : uint64_t {
     create_test_handlers = 2
 };
 
-class dummy_supervisor final
-    : public actor_zeta::cooperative_supervisor<dummy_supervisor> {
+class dummy_supervisor final {
 public:
     static uint64_t constructor_counter;
     static uint64_t destructor_counter;
@@ -26,12 +25,12 @@ public:
     static uint64_t add_supervisor_impl_counter;
     static uint64_t enqueue_base_counter;
 
-    explicit dummy_supervisor(actor_zeta::pmr::memory_resource* mr, uint64_t threads, uint64_t throughput)
-        : actor_zeta::cooperative_supervisor<dummy_supervisor>(mr)
-        , create_storage_(actor_zeta::make_behavior(resource(), dummy_supervisor_command::create_storage, this, &dummy_supervisor::create_storage))
-        , create_test_handlers_(actor_zeta::make_behavior(resource(), dummy_supervisor_command::create_test_handlers, this, &dummy_supervisor::create_test_handlers))
+    explicit dummy_supervisor(actor_zeta::pmr::memory_resource* resource, uint64_t threads, uint64_t throughput)
+        : resource_(resource)
+        , create_storage_(actor_zeta::make_behavior(resource_, dummy_supervisor_command::create_storage, this, &dummy_supervisor::create_storage))
+        , create_test_handlers_(actor_zeta::make_behavior(resource_, dummy_supervisor_command::create_test_handlers, this, &dummy_supervisor::create_test_handlers))
         , executor_(new actor_zeta::test::scheduler_test_t(threads, throughput)) {
-        scheduler()->start();
+        scheduler_test()->start();
         constructor_counter++;
     }
 
@@ -39,14 +38,9 @@ public:
         destructor_counter++;
     }
 
-
-    const char* make_type() const noexcept {
-        return "dummy_supervisor";
-    }
-
     actor_zeta::behavior_t behavior() {
         return actor_zeta::make_behavior(
-            resource(),
+            resource_,
             [this](actor_zeta::message* msg) -> void {
                 switch (msg->command()) {
                     case actor_zeta::make_message_id(dummy_supervisor_command::create_storage): {
@@ -63,6 +57,10 @@ public:
 
     auto scheduler_test() noexcept -> actor_zeta::test::scheduler_test_t* {
         return executor_.get();
+    }
+
+    actor_zeta::pmr::memory_resource* resource() const noexcept {
+        return resource_;
     }
 
     void create_storage();
@@ -85,29 +83,37 @@ public:
         return supervisor_.size();
     }
 
-    auto last_actor() -> actor_zeta::actor_t& {
+    auto last_storage() -> storage_t& {
         assert(actors_count() > 0);
         TRACE("+++");
-        return actors_.back();
+        return storages_.back();
     }
 
-    auto last_supervisor() -> actor_zeta::supervisor_t& {
+    auto last_test_handler() -> test_handlers& {
+        assert(actors_count() > 0);
+        TRACE("+++");
+        return test_handlers_.back();
+    }
+
+    auto last_supervisor() -> dummy_supervisor& {
         assert(supervisors_count() > 0);
         return supervisor_.back();
     }
 
-    void enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) override {
+    void enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*)  {
         enqueue_base_counter++;
-        set_current_message(std::move(msg));
-        behavior()(current_message());
+        auto tmp_msg =  (std::move(msg));
+        behavior()(tmp_msg.get());
     }
 
 private:
+    actor_zeta::pmr::memory_resource* resource_;
     actor_zeta::behavior_t create_storage_;
     actor_zeta::behavior_t create_test_handlers_;
     std::unique_ptr<actor_zeta::test::scheduler_test_t> executor_;
-    std::list<actor_zeta::actor_t> actors_;
-    std::list<actor_zeta::supervisor_t> supervisor_;
+    std::list<storage_t> storages_;
+    std::list<test_handlers> test_handlers_;
+    std::list<dummy_supervisor> supervisor_;
 };
 
 uint64_t dummy_supervisor::constructor_counter = 0;
@@ -141,7 +147,7 @@ public:
 
 public:
     explicit storage_t(dummy_supervisor* ptr)
-        : actor_zeta::basic_actor<storage_t>(ptr)
+        : actor_zeta::basic_actor<storage_t>(ptr->resource())
         , init_(actor_zeta::make_behavior(
               resource(),
               storage_names::init, this,
@@ -282,7 +288,7 @@ public:
 
 public:
     test_handlers(dummy_supervisor* ptr)
-        : actor_zeta::basic_actor<test_handlers>(ptr)
+        : actor_zeta::basic_actor<test_handlers>(ptr->resource())
         , ptr_0_(actor_zeta::make_behavior(
               resource(),
               test_handlers_names::ptr_0,
@@ -383,18 +389,26 @@ uint64_t test_handlers::ptr_2_counter = 0;
 uint64_t test_handlers::ptr_3_counter = 0;
 uint64_t test_handlers::ptr_4_counter = 0;
 
+template<
+    class Target,
+    class... Args>
+auto spawn(actor_zeta::pmr::memory_resource* resource, Args&&... args) noexcept -> std::unique_ptr<Target, actor_zeta::pmr::deleter_t> {
+    using type = typename std::decay<Target>::type;
+    auto* target_ptr = actor_zeta::pmr::allocate_ptr<type>(resource, std::forward<Args&&>(args)...);
+    return std::unique_ptr<Target, actor_zeta::pmr::deleter_t>{target_ptr, actor_zeta::pmr::deleter_t{resource}};
+}
+
 void dummy_supervisor::create_storage() {
-    spawn_actor([this](storage_t* ptr) {
-        TRACE("+++");
-        actors_.emplace_back(ptr);
-        add_actor_impl_counter++;
-    });
+    TRACE("+++");
+    auto uptr =  spawn<storage_t>(resource(), static_cast<dummy_supervisor*>(this));
+    storages_.emplace_back(uptr);
+    add_actor_impl_counter++;
 }
 
 void dummy_supervisor::create_test_handlers() {
-    spawn_actor([this](test_handlers* ptr) {
-        TRACE("+++");
-        actors_.emplace_back(ptr);
-        add_actor_impl_counter++;
-    });
+    TRACE("+++");
+    auto uptr =  spawn<test_handlers>(resource(), static_cast<dummy_supervisor*>(this));
+    test_handlers_.emplace_back(uptr);
+    add_actor_impl_counter++;
+
 }

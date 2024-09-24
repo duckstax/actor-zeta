@@ -7,10 +7,9 @@
 #include <set>
 #include <string>
 
-#include <actor-zeta.hpp>
-#include "actor-zeta/detail/memory_resource.hpp"
 #include "actor-zeta/detail/memory.hpp"
 #include "test/tooltestsuites/scheduler_test.hpp"
+#include <actor-zeta.hpp>
 
 using actor_zeta::pmr::memory_resource;
 class dummy_supervisor;
@@ -20,17 +19,16 @@ enum class command_t {
     create = 0x00
 };
 
-
 template<
     class Target,
     class... Args>
-auto  spawn(actor_zeta::pmr::memory_resource*resource,Args&&... args)noexcept -> std::unique_ptr<Target,actor_zeta::pmr::deleter_t>{
+auto spawn(actor_zeta::pmr::memory_resource* resource, Args&&... args) noexcept -> std::unique_ptr<Target, actor_zeta::pmr::deleter_t> {
     using type = typename std::decay<Target>::type;
-    auto*target_ptr = actor_zeta::pmr::allocate_ptr<type>(resource,std::forward<Args&&>(args)...);
-    return std::unique_ptr<Target,actor_zeta::pmr::deleter_t>{target_ptr,actor_zeta::pmr::deleter_t{resource}};
+    auto* target_ptr = actor_zeta::pmr::allocate_ptr<type>(resource, std::forward<Args&&>(args)...);
+    return std::unique_ptr<Target, actor_zeta::pmr::deleter_t>{target_ptr, actor_zeta::pmr::deleter_t{resource}};
 }
 
-class dummy_supervisor final  {
+class dummy_supervisor final {
 public:
     dummy_supervisor(memory_resource* resource_ptr)
         : resource_(resource_ptr)
@@ -50,7 +48,6 @@ public:
     void create();
 
 protected:
-
     actor_zeta::behavior_t behavior() {
         return actor_zeta::make_behavior(
             resource_,
@@ -75,10 +72,9 @@ private:
     actor_zeta::pmr::memory_resource* resource_;
     actor_zeta::behavior_t create_;
     std::unique_ptr<actor_zeta::test::scheduler_test_t> executor_;
-    std::list<std::unique_ptr<storage_t,actor_zeta::pmr::deleter_t>> storage_;
+    std::list<std::unique_ptr<storage_t, actor_zeta::pmr::deleter_t>> storage_;
     std::set<int64_t> ids_;
 };
-
 
 class storage_t final : public actor_zeta::basic_actor<storage_t> {
 public:
@@ -93,7 +89,7 @@ public:
     actor_zeta::behavior_t behavior() {
         return actor_zeta::make_behavior(
             resource(),
-            [](actor_zeta::message* ) -> void {
+            [](actor_zeta::message*) -> void {
 
             });
     }
@@ -102,7 +98,7 @@ public:
 };
 
 void dummy_supervisor::create() {
-    auto uptr = spawn<storage_t>( resource_,reinterpret_cast<dummy_supervisor*>(this));
+    auto uptr = spawn<storage_t>(resource_, reinterpret_cast<dummy_supervisor*>(this));
     REQUIRE(ids_.find(reinterpret_cast<int64_t>(uptr.get())) == ids_.end());
     ids_.insert(reinterpret_cast<int64_t>(uptr.get()));
     ///scheduler_test()->enqueue(uptr.get());
@@ -111,7 +107,7 @@ void dummy_supervisor::create() {
 
 TEST_CASE("actor id match") {
     auto* resource = actor_zeta::pmr::get_default_resource();
-    auto supervisor =  std::unique_ptr<dummy_supervisor>(new dummy_supervisor(resource) );
+    auto supervisor = std::unique_ptr<dummy_supervisor>(new dummy_supervisor(resource));
     for (auto i = 0; i < 1000; ++i) { //todo: 10000000
         supervisor->create();
     }

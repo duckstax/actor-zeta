@@ -37,7 +37,7 @@ namespace actor_zeta { namespace pmr {
             }(resource)) {}
 
         template<typename Target>
-        void operator()(Target* target, std::size_t size = 1) {
+        void operator()(Target* target) {
             assert(target);
             assert(resource_);
             deallocate_ptr(resource_, target);
