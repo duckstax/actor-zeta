@@ -8,8 +8,11 @@
 #include <atomic>
 
 #include <actor-zeta.hpp>
+#include <actor-zeta/scheduler/scheduler.hpp>
+#include <actor-zeta/detail/memory.hpp>
+#include <actor-zeta/scheduler/sharing_scheduler.hpp>
 
-auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
+auto thread_pool_deleter = [](actor_zeta::scheduler_t* ptr) {
     ptr->stop();
     delete ptr;
 };
@@ -21,7 +24,7 @@ class supervisor_lite;
 class worker_t;
 using actor_zeta::pmr::memory_resource;
 /// non thread safe
-class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
+class supervisor_lite final : public actor_zeta::actor_abstract {
 public:
     enum class system_command : std::uint64_t {
         broadcast = 0x00,
@@ -29,18 +32,18 @@ public:
     };
 
     supervisor_lite(memory_resource* ptr)
-        : cooperative_supervisor<supervisor_lite>(ptr)
+        : actor_zeta::actor_abstract(ptr)
         , create_(actor_zeta::make_behavior(resource(), system_command::create, this, &supervisor_lite::create))
         , broadcast_(actor_zeta::make_behavior(resource(), system_command::broadcast, this, &supervisor_lite::broadcast_impl))
-        , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(2, 1000), thread_pool_deleter) {
+        , e_(actor_zeta::scheduler::make_sharing_scheduler(ptr,2, 1000)) {
         e_->start();
     }
 
     void create() {
-        spawn_actor([this](worker_t* ptr) {
-            actors_.emplace_back(ptr);
-            ++size_actors_;
-        });
+        auto ptr = std::move(actor_zeta::spawn<worker_t>(resource()));
+        actors_.emplace_back(ptr);
+        ++size_actors_;
+
     }
 
     const char* make_type() const noexcept {
@@ -86,12 +89,12 @@ public:
         enqueue(std::move(msg));
     }
 
-    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* { return e_.get(); }
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_t* { return e_.get(); }
 
 protected:
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
-        set_current_message(std::move(msg));
-        behavior()(current_message());
+    void enqueue_impl(actor_zeta::message_ptr msg) override {
+        auto tmp = std::move(msg);
+        behavior()(tmp.get());
     }
 
 private:
@@ -108,8 +111,8 @@ private:
 
     actor_zeta::behavior_t create_;
     actor_zeta::behavior_t broadcast_;
-    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
-    std::vector<actor_zeta::actor_t> actors_;
+    std::unique_ptr<actor_zeta::scheduler_t, actor_zeta::pmr::deleter_t> e_;
+    std::vector<std::unique_ptr<worker_t,actor_zeta::pmr::deleter_t>> actors_;
     std::atomic<int64_t> size_actors_{0};
 };
 

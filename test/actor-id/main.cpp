@@ -10,6 +10,7 @@
 #include "actor-zeta/detail/memory.hpp"
 #include "test/tooltestsuites/scheduler_test.hpp"
 #include <actor-zeta.hpp>
+#include <actor-zeta/make.hpp>
 
 using actor_zeta::pmr::memory_resource;
 class dummy_supervisor;
@@ -18,15 +19,6 @@ class storage_t;
 enum class command_t {
     create = 0x00
 };
-
-template<
-    class Target,
-    class... Args>
-auto spawn(actor_zeta::pmr::memory_resource* resource, Args&&... args) noexcept -> std::unique_ptr<Target, actor_zeta::pmr::deleter_t> {
-    using type = typename std::decay<Target>::type;
-    auto* target_ptr = actor_zeta::pmr::allocate_ptr<type>(resource, std::forward<Args&&>(args)...);
-    return std::unique_ptr<Target, actor_zeta::pmr::deleter_t>{target_ptr, actor_zeta::pmr::deleter_t{resource}};
-}
 
 class dummy_supervisor final {
 public:
@@ -61,7 +53,7 @@ protected:
             });
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void {
+    auto enqueue_impl(actor_zeta::message_ptr msg) -> void {
         {
             auto tmp = std::move(msg);
             behavior()(tmp.get());
@@ -98,7 +90,7 @@ public:
 };
 
 void dummy_supervisor::create() {
-    auto uptr = spawn<storage_t>(resource_, reinterpret_cast<dummy_supervisor*>(this));
+    auto uptr = actor_zeta::spawn<storage_t>(resource_, reinterpret_cast<dummy_supervisor*>(this));
     REQUIRE(ids_.find(reinterpret_cast<int64_t>(uptr.get())) == ids_.end());
     ids_.insert(reinterpret_cast<int64_t>(uptr.get()));
     ///scheduler_test()->enqueue(uptr.get());

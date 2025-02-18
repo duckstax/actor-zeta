@@ -8,15 +8,15 @@
 #include <vector>
 
 #include <actor-zeta.hpp>
+#include <actor-zeta/scheduler/scheduler.hpp>
 #include <actor-zeta/clock/clock_thread_safe.hpp>
 
 constexpr static uint64_t command_alarm = 0;
 static std::atomic<uint64_t> alarm_counter{0};
 
-template<class Policy>
-class advanced_scheduler_t final : public actor_zeta::scheduler_t<Policy> {
+class advanced_scheduler_t final : public actor_zeta::scheduler::scheduler_t {
 public:
-    using super = actor_zeta::scheduler_t<Policy>;
+    using super = actor_zeta::scheduler_t;
 
     advanced_scheduler_t(size_t num_worker_threads, size_t max_throughput_param)
         : super(num_worker_threads, max_throughput_param) {}
@@ -47,10 +47,10 @@ auto thread_pool_deleter = [](shared_work* ptr) {
 };
 
 /// non thread safe
-class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
+class supervisor_lite final : public actor_zeta::actor_abstract {
 public:
     supervisor_lite(actor_zeta::pmr::memory_resource* ptr)
-        : actor_zeta::cooperative_supervisor<supervisor_lite>(ptr)
+        : actor_abstract(ptr)
         , alarm_( actor_zeta::make_behavior(resource(), command_alarm, this, &supervisor_lite::alarm))
         , e_(new shared_work(
                  1,
@@ -63,7 +63,7 @@ public:
         return "supervisor_lite";
     }
 
-    ~supervisor_lite() override = default;
+    ~supervisor_lite() = default;
 
     void alarm() {
         alarm_counter += 1;
@@ -73,7 +73,7 @@ public:
         return e_->clock();
     }
 
-    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* { return e_.get(); }
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_t* { return e_.get(); }
 
 protected:
     actor_zeta::behavior_t behavior() {
@@ -91,11 +91,16 @@ protected:
                 }
             });
     }
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
+
+    void enqueue_impl(actor_zeta::message_ptr msg) {
         {
-            set_current_message(std::move(msg));
-            behavior()(current_message());
+            auto tmp = std::move(msg);
+            behavior()(tmp.get());
         }
+    }
+
+    const char* type_impl() const noexcept {
+        return "supervisor_lite";
     }
 
 private:
@@ -105,7 +110,7 @@ private:
 
 int main() {
     auto* mr_ptr = actor_zeta::pmr::get_default_resource();
-    auto supervisor = actor_zeta::spawn_supervisor<supervisor_lite>(mr_ptr);
+    auto supervisor = actor_zeta::make<supervisor_lite>(mr_ptr);
 
     supervisor->clock().schedule_message(supervisor->clock().now() + std::chrono::seconds(60), supervisor->address(), actor_zeta::make_message(actor_zeta::address_t::empty_address(), command_alarm));
 

@@ -10,9 +10,7 @@ namespace actor_zeta { namespace pmr {
     template<class Target, class... Args>
     Target* allocate_ptr(actor_zeta::pmr::memory_resource* resource, Args&&... args) {
         assert(resource);
-        auto size = sizeof(Target);
-        auto align = alignof(Target);
-        auto* buffer = resource->allocate(size, align);
+        auto* buffer = resource->allocate(sizeof(Target), alignof(Target));
         auto* target_ptr = new (buffer) Target(std::forward<Args&&>(args)...);
         return target_ptr;
     }
@@ -22,13 +20,10 @@ namespace actor_zeta { namespace pmr {
         assert(resource);
         assert(target);
         (target)->~Target();
-        resource->deallocate(target, sizeof(Target));
+        resource->deallocate(target, sizeof(Target), alignof(Target));
     }
 
     class deleter_t final {
-    private:
-        actor_zeta::pmr::memory_resource* resource_;
-
     public:
         explicit deleter_t(actor_zeta::pmr::memory_resource* resource)
             : resource_([](pmr::memory_resource* resource) {
@@ -42,5 +37,8 @@ namespace actor_zeta { namespace pmr {
             assert(resource_);
             deallocate_ptr(resource_, target);
         }
+
+    private:
+        actor_zeta::pmr::memory_resource* resource_;
     };
-}} // namespace actor_zeta
+}} // namespace actor_zeta::pmr

@@ -1,17 +1,17 @@
 #pragma once
 
 #include <new>
-#include <utility>
 #include <string>
+#include <utility>
 
 #include "forwards.hpp"
-#include <actor-zeta/scheduler/forwards.hpp>
+#include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/intrusive_ptr.hpp>
+#include <actor-zeta/detail/memory.hpp>
+#include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/mailbox/message.hpp>
-#include <actor-zeta/detail/callable_trait.hpp>
-#include <actor-zeta/detail/memory_resource.hpp>
-#include <actor-zeta/detail/memory.hpp>
+#include <actor-zeta/scheduler/forwards.hpp>
 
 namespace actor_zeta { namespace base {
     ///
@@ -21,7 +21,7 @@ namespace actor_zeta { namespace base {
     class actor_abstract : public ref_counted {
     public:
         // allow placement new (only)
-        void* operator new(size_t size, void* ptr) noexcept {
+        void* operator new(size_t, void* ptr) noexcept {
             return ptr;
         }
 
@@ -40,7 +40,7 @@ namespace actor_zeta { namespace base {
         explicit actor_abstract(pmr::memory_resource*);
         virtual ~actor_abstract();
 
-        auto address() noexcept -> address_t;
+        address_t address() noexcept;
 
         class id_t final {
         public:
@@ -98,7 +98,12 @@ namespace actor_zeta { namespace base {
         auto type() const noexcept -> const char*;
         auto id() const -> id_t;
         void enqueue(mailbox::message_ptr);
-        actor_zeta::pmr::memory_resource* resource() const noexcept;
+        pmr::memory_resource* resource() const noexcept;
+
+        template<class T>
+        pmr::polymorphic_allocator<T> allocator() const noexcept {
+            return {resource_};
+        }
 
     protected:
         actor_abstract() = delete;
@@ -106,10 +111,10 @@ namespace actor_zeta { namespace base {
         actor_abstract& operator=(const actor_abstract&) = delete;
 
         virtual void enqueue_impl(mailbox::message_ptr) = 0;
-        virtual auto type_impl()  const noexcept -> const char* = 0;
-    private:
-        actor_zeta::pmr::memory_resource * resource_;
+        virtual const char* type_impl() const noexcept = 0;
 
+    private:
+        actor_zeta::pmr::memory_resource* resource_;
     };
 
 }} // namespace actor_zeta::base

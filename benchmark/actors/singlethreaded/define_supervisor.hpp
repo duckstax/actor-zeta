@@ -37,7 +37,7 @@
         }                                                                                                                                               \
                                                                                                                                                         \
     protected:                                                                                                                                          \
-        auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* override {                                                                  \
+        auto scheduler_impl() noexcept -> actor_zeta::scheduler_t* override {                                                                  \
             return nullptr;                                                                                                                             \
         }                                                                                                                                               \
                                                                                                                                                         \

@@ -15,7 +15,7 @@ std::atomic_int count_balancer{0};
 std::atomic_int count_insert{0};
 std::atomic_int count_find{0};
 
-auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
+auto thread_pool_deleter = [](actor_zeta::scheduler_t* ptr) {
     ptr->stop();
     delete ptr;
 };
@@ -31,7 +31,7 @@ enum class collection_method : uint64_t {
 
 class collection_t final : public actor_zeta::cooperative_supervisor<collection_t> {
 public:
-    collection_t(actor_zeta::pmr::memory_resource* resource, actor_zeta::scheduler_abstract_t* scheduler)
+    collection_t(actor_zeta::pmr::memory_resource* resource, actor_zeta::scheduler_t* scheduler)
         : actor_zeta::cooperative_supervisor<collection_t>(resource)
         , e_(scheduler) {
         ++count_collection;
@@ -69,7 +69,7 @@ public:
             });
     }
 
-    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* {
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_t* {
         return e_;
     }
 
@@ -80,7 +80,7 @@ protected:
     }
 
 private:
-    actor_zeta::scheduler_abstract_t* e_;
+    actor_zeta::scheduler_t* e_;
     uint32_t cursor_ = 0;
     std::vector<actor_zeta::actor_t> actors_;
 };
@@ -147,7 +147,7 @@ static constexpr auto sleep_time = std::chrono::milliseconds(60);
 
 auto main() -> int {
     auto* resource = actor_zeta::pmr::get_default_resource();
-    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> scheduler(
+    std::unique_ptr<actor_zeta::scheduler_t, decltype(thread_pool_deleter)> scheduler(
         new actor_zeta::scheduler_t<actor_zeta::work_sharing>(1, 100),
         thread_pool_deleter);
     auto collection = actor_zeta::spawn_supervisor<collection_t>(resource, scheduler.get());

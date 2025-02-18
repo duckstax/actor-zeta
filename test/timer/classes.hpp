@@ -34,7 +34,7 @@ public:
         return "supervisor_lite";
     }
 
-    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* { return executor_.get(); }
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_t* { return executor_.get(); }
 
 protected:
     void alarm() {
@@ -54,7 +54,7 @@ protected:
             });
     }
 
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
+    auto enqueue_impl(actor_zeta::message_ptr msg) -> void final {
         {
             set_current_message(std::move(msg));
             behavior()(current_message());

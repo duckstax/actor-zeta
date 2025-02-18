@@ -12,12 +12,12 @@
 
 namespace actor_zeta { namespace base {
 
-    actor_abstract::actor_abstract(pmr::memory_resource*resource)
-            : resource_(resource){}
+    actor_abstract::actor_abstract(pmr::memory_resource* resource)
+        : resource_([](pmr::memory_resource* resource){assert(resource);return resource;}(resource)) {}
 
     actor_abstract::~actor_abstract() {}
 
-    auto actor_abstract::address() noexcept -> address_t {
+    address_t actor_abstract::address() noexcept {
         return address_t(this);
     }
 
@@ -28,7 +28,6 @@ namespace actor_zeta { namespace base {
     auto actor_abstract::type() const noexcept -> const char* {
         return type_impl();
     }
-
 
     auto actor_abstract::id() const -> id_t {
         return id_t{const_cast<actor_abstract*>(this)};

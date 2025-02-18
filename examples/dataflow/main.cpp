@@ -48,7 +48,7 @@ struct data_t {
     }
 };
 
-auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
+auto thread_pool_deleter = [](actor_zeta::scheduler_t* ptr) {
     ptr->stop();
     delete ptr;
 };
@@ -160,7 +160,7 @@ public:
         return name_.c_str();
     }
 
-    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* {
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_t* {
         return e_.get();
     }
 
@@ -184,7 +184,7 @@ protected:
 
 private:
     const std::string name_;
-    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
+    std::unique_ptr<actor_zeta::scheduler_t, decltype(thread_pool_deleter)> e_;
     std::map<int, actor_zeta::address_t> address_book_;
     std::map<int, actor_test_t*> actors_;
     std::thread memchecker_thread_;

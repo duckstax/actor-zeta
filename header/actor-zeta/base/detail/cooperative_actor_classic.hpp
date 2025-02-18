@@ -5,20 +5,22 @@
 #include <actor-zeta/base/actor_abstract.hpp>
 #include <actor-zeta/base/behavior.hpp>
 #include <actor-zeta/base/forwards.hpp>
+#include <actor-zeta/detail/memory.hpp>
 #include <actor-zeta/detail/type_traits.hpp>
 #include <actor-zeta/scheduler/resumable.hpp>
-#include <actor-zeta/detail/memory.hpp>
+#include <actor-zeta/detail/ignore_unused.hpp>
 
 namespace actor_zeta { namespace base {
 
     template<class Actor, class Traits>
     class cooperative_actor<Actor, Traits, actor_type::classic>
         : public actor_abstract
-        , public scheduler::resumable {
+        , public scheduler::resumable_t {
     public:
-        using uptr = std::unique_ptr<cooperative_actor<Actor, Traits, actor_type::classic>,actor_zeta::pmr::deleter_t>;
+        using uptr = std::unique_ptr<cooperative_actor<Actor, Traits, actor_type::classic>, actor_zeta::pmr::deleter_t>;
 
-        scheduler::resume_result resume(size_t max_throughput) final {
+        scheduler::resume_result resume(actor_zeta::scheduler::scheduler_t*scheduler,size_t max_throughput) final {
+            detail::ignore_unused(scheduler);
             static constexpr size_t quantum = 3;
             size_t handled_msgs = 0;
             mailbox::message_ptr ptr;
@@ -74,11 +76,6 @@ namespace actor_zeta { namespace base {
         auto type_impl() const noexcept -> const char* final {
             auto const* ptr = static_cast<const Actor*>(this);
             return ptr->make_type();
-        }
-
-        template<class T>
-        typename Traits::template allocator_type<T> allocator() const noexcept {
-            return Traits::template allocator_type<T>(resource());
         }
 
         void enqueue_impl(mailbox::message_ptr msg) final {
