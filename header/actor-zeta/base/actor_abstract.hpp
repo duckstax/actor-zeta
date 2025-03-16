@@ -1,52 +1,42 @@
 #pragma once
 
-#include <new>
 #include <string>
-#include <utility>
 
 #include "forwards.hpp"
-#include <actor-zeta/detail/callable_trait.hpp>
-#include <actor-zeta/detail/intrusive_ptr.hpp>
-#include <actor-zeta/detail/memory.hpp>
 #include <actor-zeta/detail/memory_resource.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
 #include <actor-zeta/mailbox/message.hpp>
-#include <actor-zeta/scheduler/forwards.hpp>
 
 namespace actor_zeta { namespace base {
     ///
     /// @brief Abstract concept of an actor
     ///
 
-    class actor_abstract : public ref_counted {
+    class actor_abstract_t : public ref_counted {
     public:
-        // allow placement new (only)
-        void* operator new(size_t, void* ptr) noexcept {
+        struct placement_tag {};
+        constexpr static placement_tag placement = {};
+
+        static void* operator new(size_t, void* ptr, placement_tag) noexcept {
             return ptr;
         }
 
-        /*void operator delete(void* ptr, void*) noexcept {
+        static void operator delete(void*, void*, placement_tag) noexcept {}
 
-        }
-        */
-        // prohibit copies, assignments, and heap allocations
-        /*
-        void* operator new(size_t) = delete;
-        void* operator new[](size_t) = delete;
-        void operator delete(void*) = delete;
-        void operator delete[](void*) = delete;
-         */
+        static void operator delete(void* ptr) noexcept;
 
-        explicit actor_abstract(pmr::memory_resource*);
-        virtual ~actor_abstract();
+        static void* operator new(size_t, void* ptr) = delete;
+        static void* operator new(size_t) = delete;
+        static void* operator new[](size_t) = delete;
+        static void operator delete[](void*) = delete;
 
-        address_t address() noexcept;
+        virtual ~actor_abstract_t();
 
         class id_t final {
         public:
             id_t() = delete;
 
-            explicit id_t(actor_abstract* impl) noexcept
+            explicit id_t(actor_abstract_t* impl) noexcept
                 : impl_{impl} {
             }
 
@@ -92,11 +82,11 @@ namespace actor_zeta { namespace base {
             }
 
         private:
-            actor_abstract* impl_{nullptr};
+            actor_abstract_t* impl_{nullptr};
         };
 
-        auto type() const noexcept -> const char*;
-        auto id() const -> id_t;
+        address_t address() noexcept;
+        id_t id() const;
         void enqueue(mailbox::message_ptr);
         pmr::memory_resource* resource() const noexcept;
 
@@ -106,12 +96,15 @@ namespace actor_zeta { namespace base {
         }
 
     protected:
-        actor_abstract() = delete;
-        actor_abstract(const actor_abstract&) = delete;
-        actor_abstract& operator=(const actor_abstract&) = delete;
+        explicit actor_abstract_t(pmr::memory_resource* resource);
+
+        actor_abstract_t() = delete;
+        actor_abstract_t(const actor_abstract_t&) = delete;
+        actor_abstract_t& operator=(const actor_abstract_t&) = delete;
+        actor_abstract_t(actor_abstract_t&&) = delete;
+        actor_abstract_t& operator=(actor_abstract_t&&) = delete;
 
         virtual void enqueue_impl(mailbox::message_ptr) = 0;
-        virtual const char* type_impl() const noexcept = 0;
 
     private:
         actor_zeta::pmr::memory_resource* resource_;

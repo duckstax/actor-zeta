@@ -2,7 +2,7 @@
 
 namespace actor_zeta { namespace base {
 
-    class actor_abstract;
+    class actor_abstract_t;
 
     class address_t;
 

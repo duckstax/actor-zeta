@@ -14,7 +14,7 @@
 
 namespace actor_zeta {
 
-    using base::actor_abstract;
+    using base::actor_abstract_t;
     using base::address_t;
     using base::make_handler;
     using base::basic_actor;

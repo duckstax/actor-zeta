@@ -68,10 +68,6 @@ public:
         e_->stop();
     }
 
-    const char* make_type() const noexcept {
-        return "collection";
-    }
-
     void prepare() {
         auto address_0 = base_t::spawn_actor([this](Actor* ptr) {
             actors_.emplace(name_t::actor_0, ptr);

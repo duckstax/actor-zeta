@@ -6,6 +6,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include <list>
 
 #include "actor-zeta/detail/memory.hpp"
 #include "test/tooltestsuites/scheduler_test.hpp"
@@ -72,10 +73,6 @@ class storage_t final : public actor_zeta::basic_actor<storage_t> {
 public:
     explicit storage_t(dummy_supervisor* ptr)
         : actor_zeta::basic_actor<storage_t>(ptr->resource()) {
-    }
-
-    const char* make_type() const noexcept {
-        return "storage";
     }
 
     actor_zeta::behavior_t behavior() {

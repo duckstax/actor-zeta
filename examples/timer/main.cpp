@@ -59,10 +59,6 @@ public:
         e_->start();
     }
 
-    const char* make_type() const noexcept {
-        return "supervisor_lite";
-    }
-
     ~supervisor_lite() = default;
 
     void alarm() {
@@ -97,10 +93,6 @@ protected:
             auto tmp = std::move(msg);
             behavior()(tmp.get());
         }
-    }
-
-    const char* type_impl() const noexcept {
-        return "supervisor_lite";
     }
 
 private:

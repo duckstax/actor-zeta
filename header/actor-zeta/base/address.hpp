@@ -7,11 +7,11 @@
 
 namespace actor_zeta { namespace base {
     ///
-    /// @brief A compact location expressor
+    /// @brief
     ///
 
     template<class Target>
-    actor_abstract* safe_cast_ptr(Target* ptr) {
+    actor_abstract_t* safe_cast_ptr(Target* ptr) {
         assert(ptr != nullptr);
         return ptr;
     }
@@ -30,18 +30,18 @@ namespace actor_zeta { namespace base {
 
         static auto empty_address() -> address_t;
 
-        inline actor_abstract* operator->() const noexcept {
+        inline actor_abstract_t* operator->() const noexcept {
             return ptr_;
         }
 
         operator bool() const noexcept;
         auto operator!() const noexcept -> bool;
         void swap(address_t& other);
-        actor_abstract* get() const;
+        actor_abstract_t* get() const;
 
     private:
         address_t() noexcept;
-        actor_abstract* ptr_;
+        actor_abstract_t* ptr_;
     };
 
     static_assert(!std::is_default_constructible<address_t>::value, "");

@@ -4,8 +4,8 @@
 #include "classes.hpp"
 #include <actor-zeta.hpp>
 
-inline void enqueue(actor_zeta::scheduler_t* scheduler, actor_zeta::scheduler::resumable* ptr) {
-    scheduler->enqueue(ptr);
+inline void enqueue(actor_zeta::scheduler_t* scheduler, actor_zeta::scheduler::resumable_t* ptr) {
+    scheduler->schedule(ptr);
 }
 
 TEST_CASE("life-cycle") {
@@ -14,7 +14,7 @@ TEST_CASE("life-cycle") {
         // singal actor
         {
             REQUIRE(test_handlers::ptr_0_counter == 0);
-            auto actor = spawn<test_handlers>(resource.get());
+            auto actor = actor_zeta::spawn<test_handlers>(resource.get());
             actor_zeta::send(actor.get(), actor->address(), test_handlers_names::ptr_0);
             actor->resume(10);
             REQUIRE(test_handlers::ptr_0_counter == 1);
@@ -22,7 +22,7 @@ TEST_CASE("life-cycle") {
         }
         // singal supervisor
         {
-            auto supervisor = spawn<dummy_supervisor>(resource.get(), 1, 100);
+            auto supervisor = actor_zeta::spawn<dummy_supervisor>(resource.get(), 1, 100);
             REQUIRE(dummy_supervisor::constructor_counter == 1);
             actor_zeta::send(supervisor.get(), supervisor->address(), dummy_supervisor_command::create_storage);
             actor_zeta::send(supervisor.get(), supervisor->address(), dummy_supervisor_command::create_test_handlers);
