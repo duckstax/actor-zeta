@@ -2,7 +2,6 @@
 #include <catch2/catch.hpp>
 
 #include "classes.hpp"
-#include "test/life-cycle/classes.hpp"
 
 #include <cassert>
 
@@ -27,7 +26,39 @@ constexpr static auto create_supervisor_id = actor_zeta::make_message_id(1);
 constexpr static auto create_supervisor_custom_resource_id = actor_zeta::make_message_id(2);
 
 class dummy_supervisor;
-class storage_t;
+
+class storage_t final : public actor_zeta::basic_actor<storage_t> {
+public:
+    storage_t(dummy_supervisor* ptr);
+
+    ~storage_t() override = default;
+
+    actor_zeta::behavior_t behavior() {
+        return actor_zeta::make_behavior(
+            resource(),
+            [this](actor_zeta::message* msg) -> void {
+                switch (msg->command()) {
+                    case update_id: {
+                        update_(msg);
+                        break;
+                    }
+                    case find_id: {
+                        find_(msg);
+                        break;
+                    }
+                    case remove_id: {
+                        remove_(msg);
+                        break;
+                    }
+                }
+            });
+    }
+
+private:
+    actor_zeta::behavior_t update_;
+    actor_zeta::behavior_t find_;
+    actor_zeta::behavior_t remove_;
+};
 
 class dummy_supervisor_sub final : public actor_zeta::actor_abstract_t {
 public:
@@ -150,6 +181,15 @@ private:
     std::vector<actor_zeta::supervisor_t> supervisor_;
 };
 
+
+ storage_t::storage_t(dummy_supervisor* ptr): actor_zeta::basic_actor<storage_t>(ptr->resource())
+        , update_(actor_zeta::make_behavior(resource(), update_id, []() -> void {}))
+        , find_(actor_zeta::make_behavior(resource(), find_id, []() -> void {}))
+        , remove_(actor_zeta::make_behavior(resource(), remove_id, []() -> void {})) {
+    REQUIRE(std::string("storage") == type());
+    actor_counter++;
+}
+
 dummy_supervisor_sub::dummy_supervisor_sub(dummy_supervisor* ptr): actor_zeta::actor_abstract_t(ptr->resource())
        , executor_(new actor_zeta::test::scheduler_test_t(1, 1)) {
     ///auto * ptr_sheduler = scheduler();
@@ -157,46 +197,6 @@ dummy_supervisor_sub::dummy_supervisor_sub(dummy_supervisor* ptr): actor_zeta::a
     executor_->start();
     supervisor_sub_counter++;
 }
-
-class storage_t final : public actor_zeta::basic_actor<storage_t> {
-public:
-    storage_t(dummy_supervisor* ptr)
-        : actor_zeta::basic_actor<storage_t>(ptr->resource())
-        , update_(actor_zeta::make_behavior(resource(), update_id, []() -> void {}))
-        , find_(actor_zeta::make_behavior(resource(), find_id, []() -> void {}))
-        , remove_(actor_zeta::make_behavior(resource(), remove_id, []() -> void {})) {
-        REQUIRE(std::string("storage") == type());
-        actor_counter++;
-    }
-
-    ~storage_t() override = default;
-
-    actor_zeta::behavior_t behavior() {
-        return actor_zeta::make_behavior(
-            resource(),
-            [this](actor_zeta::message* msg) -> void {
-                switch (msg->command()) {
-                    case update_id: {
-                        update_(msg);
-                        break;
-                    }
-                    case find_id: {
-                        find_(msg);
-                        break;
-                    }
-                    case remove_id: {
-                        remove_(msg);
-                        break;
-                    }
-                }
-            });
-    }
-
-private:
-    actor_zeta::behavior_t update_;
-    actor_zeta::behavior_t find_;
-    actor_zeta::behavior_t remove_;
-};
 
 TEST_CASE("spawn base supervisor") {
     supervisor_counter = 0;

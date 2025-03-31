@@ -12,6 +12,12 @@
 
 namespace actor_zeta { namespace base {
 
+    template<class Target>
+    Target* check_ptr(Target* ptr) {
+        assert(ptr);
+        return ptr;
+    }
+
     template<class Actor, class Traits>
     class cooperative_actor<Actor, Traits, actor_type::classic>
          : public actor_abstract_t
@@ -114,12 +120,6 @@ namespace actor_zeta { namespace base {
         }
 
     private:
-        template<class Target>
-        static Target* check_ptr(Target* ptr) {
-            assert(ptr);
-            return ptr;
-        }
-
         auto self() noexcept -> Actor* {
             return static_cast<Actor*>(this);
         }
