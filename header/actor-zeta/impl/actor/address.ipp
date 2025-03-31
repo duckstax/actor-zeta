@@ -16,15 +16,6 @@ namespace actor_zeta { namespace base {
         : ptr_(nullptr) {
     }
 
-    address_t::address_t(actor_abstract* ptr)
-        : ptr_(ptr) {
-        assert(ptr != nullptr);
-    }
-
-    address_t::address_t(supervisor_abstract* ptr)
-        : ptr_(ptr) {
-        assert(ptr != nullptr);
-    }
 
     bool address_t::operator!() const noexcept {
         return !(static_cast<bool>(ptr_));
@@ -64,7 +55,7 @@ namespace actor_zeta { namespace base {
         std::swap(ptr_, other.ptr_);
     }
 
-    actor_abstract* address_t::get() const {
+    actor_abstract_t* address_t::get() const {
         return ptr_;
     }
 

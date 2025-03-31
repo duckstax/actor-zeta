@@ -78,10 +78,6 @@ public:
                 }))
     {}
 
-    const char* make_type() const noexcept {
-        return "actor";
-    }
-
     actor_zeta::behavior_t behavior() {
         return actor_zeta::make_behavior(
             resource(),

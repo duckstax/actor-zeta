@@ -8,7 +8,7 @@
 
 #include <actor-zeta.hpp>
 
-auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
+auto thread_pool_deleter = [](actor_zeta::scheduler_t* ptr) {
     ptr->stop();
     delete ptr;
 };
@@ -55,7 +55,7 @@ auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
         }                                                                                                                                               \
                                                                                                                                                         \
     protected:                                                                                                                                          \
-        auto scheduler_impl() noexcept -> actor_zeta::scheduler_abstract_t* override {                                                                  \
+        auto scheduler_impl() noexcept -> actor_zeta::scheduler_t* override {                                                                  \
             return e_.get();                                                                                                                            \
         }                                                                                                                                               \
                                                                                                                                                         \
@@ -70,7 +70,7 @@ auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
                                                                                                                                                         \
     private:                                                                                                                                            \
         base_single_t sync_;                                                                                                                            \
-        std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;                                                            \
+        std::unique_ptr<actor_zeta::scheduler_t, decltype(thread_pool_deleter)> e_;                                                            \
         std::map<name_t, actor_zeta::address_t> address_book_;                                                                                          \
         std::map<name_t, actor_name*> actors_;                                                                                                          \
     };                                                                                                                                                  \

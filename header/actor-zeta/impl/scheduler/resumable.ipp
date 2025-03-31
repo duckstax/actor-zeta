@@ -4,10 +4,8 @@
 
 namespace actor_zeta { namespace scheduler {
 
-    resumable::resumable() {
-    }
+    resumable_t::resumable_t() {}
 
-    resumable::~resumable() {
-    }
+    resumable_t::~resumable_t() {}
 
 }} // namespace actor_zeta::scheduler

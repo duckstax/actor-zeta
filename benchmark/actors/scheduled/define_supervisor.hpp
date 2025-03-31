@@ -12,7 +12,7 @@
 #include "enums.hpp"
 #include "define_actor.hpp"
 
-auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
+auto thread_pool_deleter = [](actor_zeta::scheduler_t* ptr) {
     ptr->stop();
     delete ptr;
 };
@@ -52,7 +52,7 @@ template<class... Args>
 class supervisor_t final : public actor_zeta::cooperative_supervisor<supervisor_t<Args...>> {
     using base_t = actor_zeta::cooperative_supervisor<supervisor_t<Args...>>;
     using Actor = actor_t;
-    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
+    std::unique_ptr<actor_zeta::scheduler_t, decltype(thread_pool_deleter)> e_;
     std::map<name_t, actor_zeta::address_t> address_book_;
     std::map<name_t, Actor*> actors_;
     base_single_t sync_;
@@ -66,10 +66,6 @@ public:
     }
     virtual ~supervisor_t() {
         e_->stop();
-    }
-
-    const char* make_type() const noexcept {
-        return "collection";
     }
 
     void prepare() {
@@ -124,7 +120,7 @@ public:
             });
     }
 
-    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* {
+    auto make_scheduler() noexcept -> actor_zeta::scheduler_t* {
         return e_.get();
     }
 
