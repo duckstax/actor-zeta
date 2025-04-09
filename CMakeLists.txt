@@ -200,44 +200,46 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 
 #################################################################
 
-# configuration
-#############################################################################################
-#conan
+# without test there is no need for conan
+if (ALLOW_TESTS)
+    # configuration
+    #############################################################################################
+    #conan
+    if (CONAN_EXPERIMENTAL_INCLUDE)
+        set(CONAN_SYSTEM_INCLUDES "On")
+    endif ()
 
-if (CONAN_EXPERIMENTAL_INCLUDE)
-    set(CONAN_SYSTEM_INCLUDES "On")
+    if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
+        file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/master/conan.cmake"
+                "${CMAKE_BINARY_DIR}/conan.cmake")
+    endif()
+
+    include(${CMAKE_BINARY_DIR}/conan.cmake)
+
+    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang"  AND UNIX AND NOT APPLE )
+        # https://docs.conan.io/1/reference/config_files/settings.yml.html#c-standard-libraries-aka-compiler-libcxx
+        #conan_cmake_autodetect(CONAN_SETTINGS)
+        set(CONAN_SETTINGS "build_type=${CMAKE_BUILD_TYPE};compiler.libcxx=${LIBCXX};compiler.cppstd=${CMAKE_CXX_STANDARD}")
+    endif ()
+
+    message(STATUS "CONAN_SETTINGS: ${CONAN_SETTINGS}")
+
+    if(CONAN_EXPORTED)
+        conan_basic_setup(TARGETS)
+    else()
+        conan_cmake_run(REQUIRES
+                catch2/2.13.6
+                benchmark/1.8.0
+                BASIC_SETUP CMAKE_TARGETS
+                SETTINGS ${CONAN_SETTINGS}
+                ENV CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} LDFLAGS=${LINKFLAGS}
+                BUILD missing
+        )
+    endif()
+    # configuration
+    #############################################################################################
+    #conan
 endif ()
-
-if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
-    file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/master/conan.cmake"
-            "${CMAKE_BINARY_DIR}/conan.cmake")
-endif()
-
-include(${CMAKE_BINARY_DIR}/conan.cmake)
-
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang"  AND UNIX AND NOT APPLE )
-    # https://docs.conan.io/1/reference/config_files/settings.yml.html#c-standard-libraries-aka-compiler-libcxx
-    #conan_cmake_autodetect(CONAN_SETTINGS)
-    set(CONAN_SETTINGS "build_type=${CMAKE_BUILD_TYPE};compiler.libcxx=${LIBCXX};compiler.cppstd=${CMAKE_CXX_STANDARD}")
-endif ()
-
-message(STATUS "CONAN_SETTINGS: ${CONAN_SETTINGS}")
-
-if(CONAN_EXPORTED)
-    conan_basic_setup(TARGETS)
-else()
-    conan_cmake_run(REQUIRES
-            catch2/2.13.6
-            benchmark/1.8.0
-            BASIC_SETUP CMAKE_TARGETS
-            SETTINGS ${CONAN_SETTINGS}
-            ENV CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} LDFLAGS=${LINKFLAGS}
-            BUILD missing
-    )
-endif()
-# configuration
-#############################################################################################
-#conan
 
 if (ALLOW_EXAMPLES)
     add_subdirectory(examples)
