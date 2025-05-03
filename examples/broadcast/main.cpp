@@ -1,15 +1,18 @@
 #include <cassert>
 
+#include <atomic>
 #include <chrono>
 #include <iostream>
 #include <memory>
 #include <thread>
 #include <vector>
-#include <atomic>
 
 #include <actor-zeta.hpp>
+#include <actor-zeta/detail/memory.hpp>
+#include <actor-zeta/scheduler/scheduler.hpp>
+#include <actor-zeta/scheduler/sharing_scheduler.hpp>
 
-auto thread_pool_deleter = [](actor_zeta::scheduler_abstract_t* ptr) {
+auto thread_pool_deleter = [](actor_zeta::scheduler_t* ptr) {
     ptr->stop();
     delete ptr;
 };
@@ -21,7 +24,7 @@ class supervisor_lite;
 class worker_t;
 using actor_zeta::pmr::memory_resource;
 /// non thread safe
-class supervisor_lite final : public actor_zeta::cooperative_supervisor<supervisor_lite> {
+class supervisor_lite final : public actor_zeta::actor_abstract_t {
 public:
     enum class system_command : std::uint64_t {
         broadcast = 0x00,
@@ -29,22 +32,17 @@ public:
     };
 
     supervisor_lite(memory_resource* ptr)
-        : cooperative_supervisor<supervisor_lite>(ptr)
+        : actor_zeta::actor_abstract_t(ptr)
         , create_(actor_zeta::make_behavior(resource(), system_command::create, this, &supervisor_lite::create))
         , broadcast_(actor_zeta::make_behavior(resource(), system_command::broadcast, this, &supervisor_lite::broadcast_impl))
-        , e_(new actor_zeta::scheduler_t<actor_zeta::work_sharing>(2, 1000), thread_pool_deleter) {
+        , e_(actor_zeta::scheduler::make_sharing_scheduler(ptr, 2, 1000)) {
         e_->start();
     }
 
     void create() {
-        spawn_actor([this](worker_t* ptr) {
-            actors_.emplace_back(ptr);
-            ++size_actors_;
-        });
-    }
-
-    const char* make_type() const noexcept {
-        return "network";
+        auto ptr = actor_zeta::spawn<worker_t>(resource());
+        actors_.emplace_back(std::move(ptr));
+        ++size_actors_;
     }
 
     actor_zeta::behavior_t behavior() {
@@ -63,8 +61,6 @@ public:
                 }
             });
     }
-
-    ~supervisor_lite() override = default;
 
     template<class Id = uint64_t, class... Args>
     void broadcast_on_worker(Id id, Args&&... args) {
@@ -86,30 +82,28 @@ public:
         enqueue(std::move(msg));
     }
 
-    auto make_scheduler() noexcept -> actor_zeta::scheduler_abstract_t* { return e_.get(); }
-
 protected:
-    auto enqueue_impl(actor_zeta::message_ptr msg, actor_zeta::execution_unit*) -> void final {
-        set_current_message(std::move(msg));
-        behavior()(current_message());
+    void enqueue_impl(actor_zeta::message_ptr msg) override {
+        auto tmp = std::move(msg);
+        behavior()(tmp.get());
     }
 
 private:
-    int64_t size_actor() noexcept {
+    std::size_t size_actor() noexcept {
         return size_actors_.load();
     }
 
     void broadcast_impl(std::vector<actor_zeta::message_ptr>& msg) {
         auto msgs = std::move(msg);
         for (std::size_t i = 0, end = size_actor(); i != end; ++i) {
-            actors_[i]->enqueue(std::move(msgs[i]));
+            actor_zeta::send(actors_[i].get(), std::move(msgs[i]));
         }
     }
 
     actor_zeta::behavior_t create_;
     actor_zeta::behavior_t broadcast_;
-    std::unique_ptr<actor_zeta::scheduler_abstract_t, decltype(thread_pool_deleter)> e_;
-    std::vector<actor_zeta::actor_t> actors_;
+    std::unique_ptr<actor_zeta::scheduler_t, actor_zeta::pmr::deleter_t> e_;
+    std::vector<std::unique_ptr<worker_t, actor_zeta::pmr::deleter_t>> actors_;
     std::atomic<int64_t> size_actors_{0};
 };
 
@@ -120,7 +114,7 @@ public:
         work_data
     };
 
-    worker_t(supervisor_lite* ptr)
+    worker_t(actor_zeta::pmr::memory_resource* ptr)
         : actor_zeta::basic_actor<worker_t>(ptr)
         , download_(actor_zeta::make_behavior(resource(), command_t::download, this, &worker_t::download))
         , work_data_(actor_zeta::make_behavior(resource(), command_t::work_data, this, &worker_t::work_data)) {
@@ -143,9 +137,6 @@ public:
             });
     }
 
-    const char* make_type() const noexcept {
-        return "worker_t";
-    }
 
     void download(const std::string& url, const std::string& /*user*/, const std::string& /*password*/) {
         tmp_ = url;
@@ -157,8 +148,6 @@ public:
         counter_work_data++;
     }
 
-    ~worker_t() override = default;
-
 private:
     actor_zeta::behavior_t download_;
     actor_zeta::behavior_t work_data_;
@@ -167,7 +156,7 @@ private:
 
 int main() {
     auto* mr_ptr = actor_zeta::pmr::get_default_resource();
-    auto supervisor = actor_zeta::spawn_supervisor<supervisor_lite>(mr_ptr);
+    auto supervisor = actor_zeta::spawn<supervisor_lite>(mr_ptr);
 
     int const actors = 10;
 
